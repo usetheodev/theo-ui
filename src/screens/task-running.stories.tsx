@@ -1,18 +1,18 @@
 import type { Story } from "@ladle/react";
 import { Folder, Search, Sparkles, X } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../components/button/button.js";
-import { ChatComposer } from "../components/chat-composer/chat-composer.js";
-import { ChatMessage } from "../components/chat-message/chat-message.js";
-import { ChatThread } from "../components/chat-thread/chat-thread.js";
-import { ContextCard } from "../components/context-card/context-card.js";
-import { FolderContextCard } from "../components/folder-context-card/folder-context-card.js";
-import { ProgressChecklist } from "../components/progress-checklist/progress-checklist.js";
-import { Sidebar } from "../components/sidebar/sidebar.js";
-import { TaskHeader } from "../components/task-header/task-header.js";
-import { ToolCall } from "../components/tool-call/tool-call.js";
-import { ToolResult } from "../components/tool-result/tool-result.js";
-import { TopNav } from "../components/topnav/topnav.js";
+import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import { TaskHeader } from "../components/composites/task-header/task-header.js";
+import { Button } from "../components/primitives/button/button.js";
+import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
+import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
+import { ContextCard } from "../components/primitives/context-card/context-card.js";
+import { FolderContextCard } from "../components/primitives/folder-context-card/folder-context-card.js";
+import { ProgressChecklist } from "../components/primitives/progress-checklist/progress-checklist.js";
+import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
+import { ToolCall } from "../components/primitives/tool-call/tool-call.js";
+import { ToolResult } from "../components/primitives/tool-result/tool-result.js";
+import { TopNav } from "../components/primitives/topnav/topnav.js";
 
 export default { title: "Screens / Task Running" };
 

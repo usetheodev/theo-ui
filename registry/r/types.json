@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "types",
+  "type": "registry:lib",
+  "title": "Theo UI shared types",
+  "description": "Type aliases reused across primitives — IconComponent (lucide-compatible) and friends.",
+  "files": [
+    {
+      "path": "lib/types.ts",
+      "type": "registry:lib",
+      "target": "lib/types.ts",
+      "content": "import type { ComponentType, SVGProps } from \"react\";\n\n/**\n * IconComponent — shape compatible with both lucide-react icons and custom React SVG components.\n *\n * Centralizing this here avoids TS2322 noise from `exactOptionalPropertyTypes` when mapping\n * icons through Record<...> structures.\n */\nexport type IconComponent = ComponentType<SVGProps<SVGSVGElement> & { className?: string }>;\n"
+    }
+  ]
+}

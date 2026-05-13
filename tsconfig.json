@@ -24,6 +24,13 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", ".ladle/**/*", "vitest.config.ts", "tsup.config.ts", "tailwind.config.ts"],
+  "include": [
+    "src/**/*",
+    "scripts/**/*",
+    ".ladle/**/*",
+    "vitest.config.ts",
+    "tsup.config.ts",
+    "tailwind.config.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,64 +1,196 @@
 import type { Story } from "@ladle/react";
+import {
+  Boxes,
+  Brush,
+  CheckCircle2,
+  Flame,
+  GitBranch,
+  Layers,
+  Library,
+  Palette,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+
+export default { title: "Welcome" };
+
+const STATS = [
+  { value: "36", label: "Primitives" },
+  { value: "12", label: "Composites" },
+  { value: "07", label: "Screens" },
+  { value: "03", label: "Themes" },
+  { value: "21", label: "Registry items" },
+  { value: "122", label: "Tests" },
+];
+
+const SECTIONS = [
+  {
+    icon: Palette,
+    title: "Foundations",
+    description: "Colors, typography, spacing, elevation, motion.",
+    path: "?story=foundations-colors--palette",
+    cta: "Open colors",
+  },
+  {
+    icon: Brush,
+    title: "Themes",
+    description: "Switch between Violet Forge, Classic Paper, Aurora Terminal.",
+    path: "?story=themes-themeswitcher--all-themes",
+    cta: "Try themes",
+  },
+  {
+    icon: Library,
+    title: "Primitives",
+    description: "Atomic components — Button, Badge, Card, ChatMessage, AgentEvent…",
+    path: "?story=primitives-foundations-button--variants",
+    cta: "Explore primitives",
+  },
+  {
+    icon: Layers,
+    title: "Composites",
+    description: "Assembled blocks — DeploymentRow, ProjectCard, AgentTimeline…",
+    path: "?story=composites-paas-deploymentrow--list",
+    cta: "Explore composites",
+  },
+  {
+    icon: Boxes,
+    title: "Screens",
+    description: "Full theokit compositions — Chat, Cowork, Code workspaces…",
+    path: "?story=screens-chat-home--default",
+    cta: "View screens",
+  },
+];
+
+const HIGHLIGHTS = [
+  {
+    icon: Sparkles,
+    title: "AI-agent first",
+    body: "Built for tools that orchestrate LLM agents — chat messages, tool calls, agent timelines, permission modals.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "TS strict + Radix",
+    body: "Type-safe, accessible by default. Composables wrap Radix primitives; nothing reinvents the wheel.",
+  },
+  {
+    icon: GitBranch,
+    title: "Shadcn registry",
+    body: "Each component ships as a registry item. Consumers copy code via `npx shadcn add`, no opaque runtime.",
+  },
+  {
+    icon: Flame,
+    title: "Violet Forge identity",
+    body: "Theo violet primary + burnt sienna accent. Geist Sans/Mono by default. Three built-in themes, runtime-swappable.",
+  },
+];
 
 export const Default: Story = () => (
-  <div className="space-y-12">
-    <header className="space-y-4">
-      <p className="font-mono text-label-caps text-primary-glow uppercase">@usetheo/ui</p>
-      <h1 className="text-balance font-display text-display-xl">
-        Violet Forge. <span className="text-accent">Forged for AI agents.</span>
+  <div className="grid gap-12">
+    {/* Hero */}
+    <header className="relative grid gap-6 overflow-hidden rounded-3xl border bg-card bg-hero-glow px-10 py-12">
+      <span className="font-mono text-label-caps text-primary uppercase tracking-wider">
+        @usetheo/ui · 0.0.0
+      </span>
+      <h1 className="text-balance font-display text-display-2xl tracking-tight">
+        Forged for <span className="text-accent">AI agents</span>.
       </h1>
-      <p className="max-w-2xl text-body-lg text-muted-foreground">
-        Framework-agnostic React component library. Editorial typography (Boska + Switzer),
-        dark-first violet palette, burnt-sienna accents. Built to be consumed by{" "}
-        <code className="text-primary">theo-code</code> and{" "}
-        <code className="text-primary">theo-agents</code>.
+      <p className="max-w-2xl text-balance text-body-lg text-muted-foreground">
+        Framework-agnostic React component library with a dark-first violet palette, burnt-sienna
+        accents, editorial typography, and a shadcn-compatible registry. Built to power{" "}
+        <code className="font-mono text-primary">theo-code</code>,{" "}
+        <code className="font-mono text-primary">theo-agents</code>, and any tool that needs to
+        render an AI agent in production.
       </p>
-    </header>
-
-    <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <Swatch token="primary" value="#7C3AED" label="Theo violet — primary" />
-      <Swatch token="accent" value="#C96442" label="Burnt sienna — accent" />
-      <Swatch token="background" value="#0E0B14 / #FAF9F7" label="Charcoal / warm off-white" />
-      <Swatch token="success" value="#22E58C / #16A34A" label="Success" />
-      <Swatch token="warning" value="#F59E0B / #D97706" label="Warning" />
-      <Swatch token="destructive" value="#FF4F6D / #DC2626" label="Destructive" />
-    </section>
-
-    <section className="space-y-4">
-      <h2 className="font-display text-headline">Typography</h2>
-      <div className="space-y-2 rounded-xl border bg-card p-8 shadow-md">
-        <p className="font-display text-display-2xl">Display 2xl</p>
-        <p className="font-display text-display-xl">Display xl</p>
-        <p className="font-display text-headline">Headline</p>
-        <p className="text-title-lg">Title lg — Switzer 700</p>
-        <p className="text-body-md">Body md — the workhorse, Switzer 500.</p>
-        <p className="text-body-sm text-muted-foreground">Body sm — secondary copy.</p>
-        <p className="font-mono text-code-md">$ theo deploy api web worker</p>
-      </div>
-    </section>
-
-    <section className="space-y-4">
-      <h2 className="font-display text-headline">Elevation</h2>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {(["sm", "md", "lg", "glow"] as const).map((s) => (
-          <div key={s} className={`rounded-xl border bg-card p-6 text-label-caps shadow-${s}`}>
-            shadow-{s}
+      <dl className="mt-2 grid grid-cols-3 gap-6 md:grid-cols-6">
+        {STATS.map((s) => (
+          <div key={s.label} className="grid gap-0.5">
+            <dt className="font-mono text-label-caps text-muted-foreground uppercase tracking-wider">
+              {s.label}
+            </dt>
+            <dd className="font-bold font-display text-display-md tabular-nums">{s.value}</dd>
           </div>
         ))}
+      </dl>
+    </header>
+
+    {/* Sections */}
+    <section className="grid gap-4">
+      <h2 className="font-display text-headline tracking-tight">Start exploring</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {SECTIONS.map((s) => {
+          const Icon = s.icon;
+          return (
+            <a
+              key={s.title}
+              href={s.path}
+              className="group flex flex-col gap-3 rounded-2xl border bg-card p-6 transition-shadow duration-base ease-out-soft hover:border-primary/40 hover:shadow-glow"
+            >
+              <span className="grid size-10 place-items-center rounded-lg bg-primary/15 text-primary">
+                <Icon className="size-5" />
+              </span>
+              <div className="grid gap-1">
+                <h3 className="font-display text-title-lg">{s.title}</h3>
+                <p className="text-body-sm text-muted-foreground">{s.description}</p>
+              </div>
+              <span className="mt-auto inline-flex items-center gap-1.5 font-mono text-label-caps text-primary uppercase tracking-wider">
+                {s.cta} →
+              </span>
+            </a>
+          );
+        })}
       </div>
     </section>
+
+    {/* Highlights */}
+    <section className="grid gap-4">
+      <h2 className="font-display text-headline tracking-tight">What makes it tick</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {HIGHLIGHTS.map((h) => {
+          const Icon = h.icon;
+          return (
+            <div
+              key={h.title}
+              className="grid grid-cols-[auto_1fr] items-start gap-4 rounded-2xl border bg-card p-5"
+            >
+              <span className="grid size-10 place-items-center rounded-lg bg-accent/15 text-accent">
+                <Icon className="size-5" />
+              </span>
+              <div className="grid gap-1">
+                <h3 className="font-display text-title-md">{h.title}</h3>
+                <p className="text-body-sm text-muted-foreground">{h.body}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    {/* Quickstart */}
+    <section className="grid gap-3">
+      <h2 className="font-display text-headline tracking-tight">Quickstart</h2>
+      <pre className="overflow-x-auto rounded-2xl border bg-card p-5 font-mono text-code-md">
+        {`pnpm add @usetheo/ui
+
+# in your app root
+import { ThemeProvider, builtinThemes, Button } from "@usetheo/ui";
+import "@usetheo/ui/tokens.css";
+import "@usetheo/ui/styles.css";
+
+<ThemeProvider themes={builtinThemes}>
+  <Button><Rocket /> Deploy</Button>
+</ThemeProvider>`}
+      </pre>
+    </section>
+
+    <footer className="flex items-center justify-between gap-4 border-border/40 border-t pt-6">
+      <p className="flex items-center gap-2 text-body-sm text-muted-foreground">
+        <CheckCircle2 className="size-3.5 text-success" /> All checks green · typecheck · lint · 122
+        tests
+      </p>
+      <p className="text-body-sm text-muted-foreground">
+        <Rocket className="-mt-0.5 inline size-3.5" /> Forge violet · since 2026
+      </p>
+    </footer>
   </div>
 );
-
-function Swatch({ token, value, label }: { token: string; value: string; label: string }) {
-  return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-md">
-      <div className="h-24 w-full" style={{ backgroundColor: `hsl(var(--${token}))` }} />
-      <div className="space-y-1 p-4">
-        <p className="font-mono text-label-caps text-muted-foreground uppercase">--{token}</p>
-        <p className="text-title-md">{label}</p>
-        <p className="font-mono text-code-sm text-muted-foreground">{value}</p>
-      </div>
-    </div>
-  );
-}

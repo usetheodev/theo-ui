@@ -1,7 +1,7 @@
 import type { GlobalProvider } from "@ladle/react";
 import "../src/styles/global.css";
-import { ThemeProvider } from "../src/themes/theme-provider.js";
 import { builtinThemes } from "../src/themes/index.js";
+import { ThemeProvider } from "../src/themes/theme-provider.js";
 
 export const Provider: GlobalProvider = ({ children, globalState }) => {
   const mode = globalState.theme === "dark" ? "dark" : "light";

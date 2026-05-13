@@ -4,7 +4,7 @@ import type { Theme } from "./types.js";
  * Violet Forge — the default Theo theme.
  *
  * Identity: Theo violet primary (#7C3AED), burnt sienna accent (#C96442),
- * warm off-white / charcoal violet-tinted base, Geist Sans + Geist Mono.
+ * warm off-white / charcoal violet-tinted base, Boska + Switzer + JetBrains Mono.
  *
  * Source of truth for `data-theme` overrides. Mirrors values declared in
  * src/styles/tokens.css for the default `:root`.
@@ -12,7 +12,7 @@ import type { Theme } from "./types.js";
 export const violetForge: Theme = {
   name: "violet-forge",
   label: "Violet Forge",
-  description: "Theo default — violet primary, burnt sienna accent, Geist.",
+  description: "Theo default — violet primary, burnt sienna accent, Geist Sans + Geist Mono.",
   fonts: {
     display: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',

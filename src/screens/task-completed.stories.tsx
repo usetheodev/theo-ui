@@ -1,17 +1,17 @@
 import type { Story } from "@ladle/react";
 import { ExternalLink, FileSpreadsheet, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { ArtifactPreview } from "../components/artifact-preview/artifact-preview.js";
-import { Badge } from "../components/badge/badge.js";
-import { Button } from "../components/button/button.js";
-import { ChatComposer } from "../components/chat-composer/chat-composer.js";
-import { ChatMessage } from "../components/chat-message/chat-message.js";
-import { ChatThread } from "../components/chat-thread/chat-thread.js";
-import { CreatedFilesCard } from "../components/created-files-card/created-files-card.js";
-import { ProgressChecklist } from "../components/progress-checklist/progress-checklist.js";
-import { Sidebar } from "../components/sidebar/sidebar.js";
-import { TaskHeader } from "../components/task-header/task-header.js";
-import { TopNav } from "../components/topnav/topnav.js";
+import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import { TaskHeader } from "../components/composites/task-header/task-header.js";
+import { ArtifactPreview } from "../components/primitives/artifact-preview/artifact-preview.js";
+import { Badge } from "../components/primitives/badge/badge.js";
+import { Button } from "../components/primitives/button/button.js";
+import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
+import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
+import { CreatedFilesCard } from "../components/primitives/created-files-card/created-files-card.js";
+import { ProgressChecklist } from "../components/primitives/progress-checklist/progress-checklist.js";
+import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
+import { TopNav } from "../components/primitives/topnav/topnav.js";
 
 export default { title: "Screens / Task Completed" };
 

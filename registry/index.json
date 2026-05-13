@@ -4,6 +4,12 @@
   "homepage": "https://usetheo.dev",
   "items": [
     {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "User/team avatar with safe fallback to initials. Sizes xs..xl, tones muted/primary/accent."
+    },
+    {
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
@@ -26,6 +32,12 @@
       "type": "registry:ui",
       "title": "Card",
       "description": "Surface container with Header / Title / Description / Body / Footer composition."
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Tri-state checkbox built on Radix Checkbox."
     },
     {
       "name": "cn",
@@ -52,16 +64,34 @@
       "description": "Custom domains list with status, TLS state, primary marker, and inline DNS verification record."
     },
     {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "EmptyState",
+      "description": "Placeholder for empty lists/first-run with icon, title, description, action."
+    },
+    {
       "name": "env-var-editor",
       "type": "registry:block",
       "title": "EnvVarEditor",
       "description": "Editor for environment variables with mask toggle, scopes, copy & remove actions."
     },
     {
+      "name": "form-field",
+      "type": "registry:ui",
+      "title": "FormField",
+      "description": "Accessible form row with Label/Control/Hint/Error composition. Auto-wires htmlFor + aria-describedby."
+    },
+    {
       "name": "input",
       "type": "registry:ui",
       "title": "Input",
       "description": "Text input with violet focus ring and Violet Forge typography."
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Form label built on Radix Label. Required asterisk when needed."
     },
     {
       "name": "metrics-panel",
@@ -82,6 +112,12 @@
       "description": "Project listing card with status, framework, branch, last commit, and region."
     },
     {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "RadioGroup",
+      "description": "Radio group built on Radix RadioGroup."
+    },
+    {
       "name": "rollback-ui",
       "type": "registry:block",
       "title": "RollbackUI",
@@ -94,10 +130,28 @@
       "description": "Custom scroller with Violet Forge thumb (violet glow on hover). Built on Radix ScrollArea for cross-browser consistency."
     },
     {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Styled wrapper around Radix Select with grouped options and indicator."
+    },
+    {
       "name": "sidebar",
       "type": "registry:ui",
       "title": "Sidebar",
       "description": "Vertical navigation shell. Sidebar.Header, Section, Item, Footer."
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Animated placeholder block for loading states."
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Binary toggle with violet glow when active."
     },
     {
       "name": "tabs",
@@ -106,10 +160,22 @@
       "description": "Underline-style tabs (violet active underline) built on Radix Tabs."
     },
     {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Multi-line input matching Input visuals."
+    },
+    {
       "name": "theme-provider",
       "type": "registry:lib",
       "title": "ThemeProvider",
       "description": "React provider for runtime theme + mode switching. Injects CSS vars per registered theme, persists in localStorage, lazy-loads font URLs."
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Theme-aware transient notification built on Radix Toast. Ships with <Toaster> + useToast() hook."
     },
     {
       "name": "tokens",
@@ -128,6 +194,12 @@
       "type": "registry:ui",
       "title": "TopNav",
       "description": "Horizontal app bar with breadcrumbs, mode switcher (Chat/Cowork/Code), action slots."
+    },
+    {
+      "name": "types",
+      "type": "registry:lib",
+      "title": "Theo UI shared types",
+      "description": "Type aliases reused across primitives — IconComponent (lucide-compatible) and friends."
     }
   ]
 }

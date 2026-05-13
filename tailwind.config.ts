@@ -70,21 +70,34 @@ export default {
         sans: "var(--font-body)",
         mono: "var(--font-mono)",
       },
+      /* Geist-inspired Violet Forge typescale.
+       *
+       * Three strict weights: 400 (body), 500 (UI), 600 (display/headings).
+       * Letter-spacing scales with size — aggressive negative on display.
+       * Mirrors the Vercel/Geist vocabulary while keeping Theo's identity.
+       *
+       * Reference: referencia/open-design/design-systems/vercel/DESIGN.md §3
+       */
       fontSize: {
-        "display-2xl": ["68px", { lineHeight: "1.05", letterSpacing: "-0.035em", fontWeight: "800" }],
-        "display-xl": ["52px", { lineHeight: "1.08", letterSpacing: "-0.03em", fontWeight: "700" }],
-        "display-lg": ["40px", { lineHeight: "1.12", letterSpacing: "-0.025em", fontWeight: "700" }],
-        "display-md": ["32px", { lineHeight: "1.15", letterSpacing: "-0.02em", fontWeight: "600" }],
-        headline: ["26px", { lineHeight: "1.25", letterSpacing: "-0.015em", fontWeight: "600" }],
-        "title-lg": ["20px", { lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600" }],
-        "title-md": ["17px", { lineHeight: "1.4", letterSpacing: "-0.005em", fontWeight: "600" }],
-        "body-lg": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
-        "body-md": ["14px", { lineHeight: "1.55", fontWeight: "400" }],
-        "body-sm": ["13px", { lineHeight: "1.5", fontWeight: "400" }],
-        label: ["12px", { lineHeight: "1.2", letterSpacing: "0.02em", fontWeight: "600" }],
-        "label-caps": ["11px", { lineHeight: "1.2", letterSpacing: "0.08em", fontWeight: "600" }],
-        "code-md": ["13px", { lineHeight: "1.6", fontWeight: "400" }],
-        "code-sm": ["12px", { lineHeight: "1.6", fontWeight: "400" }],
+        // Display tier — aggressive compression, content-led headlines
+        "display-2xl": ["64px", { lineHeight: "1", letterSpacing: "-0.0464em", fontWeight: "600" }],
+        "display-xl": ["48px", { lineHeight: "1.05", letterSpacing: "-0.05em", fontWeight: "600" }],
+        "display-lg": ["40px", { lineHeight: "1.1", letterSpacing: "-0.05em", fontWeight: "600" }],
+        "display-md": ["32px", { lineHeight: "1.2", letterSpacing: "-0.04em", fontWeight: "600" }],
+        headline: ["28px", { lineHeight: "1.25", letterSpacing: "-0.035em", fontWeight: "600" }],
+        // Title tier — section / card heads
+        "title-lg": ["24px", { lineHeight: "1.33", letterSpacing: "-0.04em", fontWeight: "600" }],
+        "title-md": ["20px", { lineHeight: "1.4", letterSpacing: "-0.03em", fontWeight: "600" }],
+        // Body tier — reads at default weight, tight tracking still applies modestly
+        "body-lg": ["18px", { lineHeight: "1.56", letterSpacing: "-0.01em", fontWeight: "400" }],
+        "body-md": ["15px", { lineHeight: "1.5", letterSpacing: "-0.005em", fontWeight: "400" }],
+        "body-sm": ["14px", { lineHeight: "1.43", fontWeight: "400" }],
+        // Label tier — used on buttons, nav, secondary actions
+        label: ["14px", { lineHeight: "1.43", fontWeight: "500" }],
+        "label-caps": ["12px", { lineHeight: "1.33", letterSpacing: "0.04em", fontWeight: "500" }],
+        // Mono — code surfaces, technical labels
+        "code-md": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+        "code-sm": ["13px", { lineHeight: "1.54", fontWeight: "500" }],
       },
       borderRadius: {
         none: "var(--radius-none)",

@@ -1,17 +1,17 @@
 import type { Story } from "@ladle/react";
 import { GitBranch } from "lucide-react";
 import { useState } from "react";
-import { AgentTimeline } from "../components/agent-timeline/agent-timeline.js";
-import { Button } from "../components/button/button.js";
-import { ChatComposer } from "../components/chat-composer/chat-composer.js";
-import { DiffViewer } from "../components/diff-viewer/diff-viewer.js";
-import { ModelSelector } from "../components/model-selector/model-selector.js";
-import { PreviewPanel } from "../components/preview-panel/preview-panel.js";
-import { RunStats } from "../components/run-stats/run-stats.js";
-import { RunningTasksPanel } from "../components/running-tasks-panel/running-tasks-panel.js";
-import { Sidebar } from "../components/sidebar/sidebar.js";
-import { TerminalPanel } from "../components/terminal-panel/terminal-panel.js";
-import { TopNav } from "../components/topnav/topnav.js";
+import { AgentTimeline } from "../components/composites/agent-timeline/agent-timeline.js";
+import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import { PreviewPanel } from "../components/composites/preview-panel/preview-panel.js";
+import { Button } from "../components/primitives/button/button.js";
+import { DiffViewer } from "../components/primitives/diff-viewer/diff-viewer.js";
+import { ModelSelector } from "../components/primitives/model-selector/model-selector.js";
+import { RunStats } from "../components/primitives/run-stats/run-stats.js";
+import { RunningTasksPanel } from "../components/primitives/running-tasks-panel/running-tasks-panel.js";
+import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
+import { TerminalPanel } from "../components/primitives/terminal-panel/terminal-panel.js";
+import { TopNav } from "../components/primitives/topnav/topnav.js";
 import type { AgentEvent } from "../types/agent.js";
 
 export default { title: "Screens / Code Workspace" };

@@ -20,24 +20,29 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-feature-settings: "ss01", "cv11";
+    /* OpenType ligatures globally — Geist's "liga" feature is structural
+     * and gives the Vercel-tight glyph combinations. */
+    font-feature-settings: "liga" 1, "ss01" 1;
   }
 
-  /* Display headings use the theme's display font */
+  /* Display headings inherit theme display font (Geist by default).
+   * Per-size tracking is set in tailwind.config.ts; this is the safety net. */
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    font-weight: 600;
   }
 
-  /* Code blocks and inline code use JetBrains Mono */
+  /* Code surfaces: use the mono token + tabular numerals so columns of
+   * numbers line up in tables/logs/metrics. */
   code,
   pre,
   kbd,
   samp {
     font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1, "liga" 1;
   }
 
   /* Focus ring — violet (signature) */
