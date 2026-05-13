@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../../primitives/button/button.js";
 import { PermissionModal } from "./permission-modal.js";
 
-export default { title: "Composites / Cowork / PermissionModal" };
+export default { title: "Composites / Infra / PermissionModal" };
 
 export const Default: Story = () => {
   const [open, setOpen] = useState(false);

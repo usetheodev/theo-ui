@@ -35,7 +35,7 @@ interface ProgressChecklistProps extends Omit<HTMLAttributes<HTMLDivElement>, "t
 }
 
 /**
- * ProgressChecklist — Cowork right-inspector checklist.
+ * ProgressChecklist — right-inspector checklist.
  *
  * Visual: vertical list of steps with status dot, label, optional progress bar.
  * Matches WIREMOCKS §3 / §4 ("Progresso") with checkmarks and pulse on running.

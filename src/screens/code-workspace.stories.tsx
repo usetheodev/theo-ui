@@ -89,7 +89,7 @@ export const Default: Story = () => {
               onChange={setMode}
               options={[
                 { value: "chat", label: "Chat" },
-                { value: "cowork", label: "Cowork" },
+                { value: "infra", label: "Infra" },
                 { value: "code", label: "Code" },
               ]}
             />

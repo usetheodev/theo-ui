@@ -3,12 +3,15 @@
   "name": "rule-types",
   "type": "registry:lib",
   "title": "Theo UI rule types",
-  "description": "Rule domain type — behavior instruction injected into the system prompt.",
+  "description": "Rule domain type \u2014 behavior instruction injected into the system prompt.",
   "files": [
     {
       "path": "types/rule.ts",
       "type": "registry:lib",
       "target": "types/rule.ts"
     }
+  ],
+  "registryDependencies": [
+    "mode-types"
   ]
 }

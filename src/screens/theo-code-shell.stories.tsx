@@ -21,8 +21,8 @@ export const StartingInChat: Story = () => (
   </div>
 );
 
-export const StartingInCowork: Story = () => (
+export const StartingInInfra: Story = () => (
   <div className="dark -m-12 h-[860px]">
-    <TheoCodeShell initialMode="cowork" />
+    <TheoCodeShell initialMode="infra" />
   </div>
 );

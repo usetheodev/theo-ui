@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { StepsRail } from "./steps-rail.js";
 
-export default { title: "Primitives / Cowork / StepsRail" };
+export default { title: "Primitives / Files / StepsRail" };
 
 export const FiveSteps: Story = () => (
   <div className="flex h-[420px]">

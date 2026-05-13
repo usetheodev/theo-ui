@@ -16,7 +16,7 @@ import { TopNav } from "../components/primitives/topnav/topnav.js";
 export default { title: "Screens / Task Starting" };
 
 export const Default: Story = () => {
-  const [mode, setMode] = useState("cowork");
+  const [mode, setMode] = useState("infra");
   const [prompt, setPrompt] = useState("");
   return (
     <div className="-m-12 flex h-[820px] overflow-hidden bg-background">
@@ -53,7 +53,7 @@ export const Default: Story = () => {
               onChange={setMode}
               options={[
                 { value: "chat", label: "Chat" },
-                { value: "cowork", label: "Cowork" },
+                { value: "infra", label: "Infra" },
                 { value: "code", label: "Código" },
               ]}
             />
@@ -81,7 +81,7 @@ export const Default: Story = () => {
             hint="Preparando ambiente local e verificando permissões."
           />
           <ChatComposer
-            mode="cowork"
+            mode="infra"
             value={prompt}
             onValueChange={setPrompt}
             trailingActions={<Button variant="secondary">Fila</Button>}

@@ -16,7 +16,7 @@ interface ContextCardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 /**
  * ContextCard — generic "informational" card for the right inspector.
  *
- * Used as the "Contexto" card on Cowork screens: illustration / icon, title,
+ * Used as the "Contexto" card on Files screens: illustration / icon, title,
  * short description. Inert by design — no actions.
  */
 const ContextCard = forwardRef<HTMLElement, ContextCardProps>(

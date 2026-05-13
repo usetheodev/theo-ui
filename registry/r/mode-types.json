@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mode-types",
+  "type": "registry:lib",
+  "title": "Theo UI mode types",
+  "description": "Shared Mode type — top-level density / domain a session is operating in (chat, code, infra).",
+  "files": [
+    {
+      "path": "types/mode.ts",
+      "type": "registry:lib",
+      "target": "types/mode.ts",
+      "content": "/**\n * Mode — top-level density / domain the agent session is operating in.\n *\n * `chat`  — conversational Q&A, lean UI.\n * `code`  — code agent: read/plan/edit/verify inside the repo.\n * `infra` — operate the deployed system: metrics, deploys, logs, rollback.\n *\n * Used everywhere resources can be scoped per-mode (Skills, Agents, Rules,\n * SystemPrompt overrides, Sessions, …). `modes?: Mode[]` on a resource means\n * \"only available in these modes\"; omitting `modes` means \"available\n * globally\".\n */\nexport type Mode = \"chat\" | \"code\" | \"infra\";\n\nexport const ALL_MODES: ReadonlyArray<Mode> = [\"chat\", \"code\", \"infra\"];\n\n/** Friendly label per mode — render in chips, headers, badges. */\nexport const MODE_LABEL: Record<Mode, string> = {\n  chat: \"Chat\",\n  code: \"Code\",\n  infra: \"Infra\",\n};\n"
+    }
+  ]
+}

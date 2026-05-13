@@ -30,7 +30,7 @@ interface CreatedFilesCardProps extends Omit<HTMLAttributes<HTMLElement>, "title
  * CreatedFilesCard — surfaces files produced by a completed task.
  *
  * From WIREMOCKS §2: each file is a card-like row with icon + name + destination.
- * Used as social proof of delivery in Cowork Task Completed views.
+ * Used as social proof of delivery in Task Completed views.
  */
 const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
   ({ className, title = "Files created", files, cta, ...props }, ref) => (

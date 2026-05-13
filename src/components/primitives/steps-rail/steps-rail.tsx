@@ -22,7 +22,7 @@ interface StepsRailProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 /**
  * StepsRail — vertical numbered rail with connecting line.
  *
- * Mirrors the wiremock `cowork_home` right rail: 5 numbered dots, current
+ * Mirrors the file-organisation wiremock right rail: 5 numbered dots, current
  * highlighted, line connecting them.
  */
 const StepsRail = forwardRef<HTMLElement, StepsRailProps>(

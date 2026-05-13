@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { FolderContextCard } from "./folder-context-card.js";
 
-export default { title: "Primitives / Cowork / FolderContextCard" };
+export default { title: "Primitives / Files / FolderContextCard" };
 
 export const Tree: Story = () => (
   <FolderContextCard

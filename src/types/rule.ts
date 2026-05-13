@@ -1,3 +1,5 @@
+import type { Mode } from "./mode.js";
+
 /**
  * Rule — a user-authored behavior instruction injected into the system prompt.
  *
@@ -22,6 +24,8 @@ export interface Rule {
   state: RuleState;
   /** Optional tags for grouping ("testing", "style", "security"). */
   tags?: string[];
+  /** Modes this rule applies to. Omit / empty = global (every mode). */
+  modes?: Mode[];
   /** ISO timestamp / friendly label of last edit. */
   updatedAt?: string;
 }

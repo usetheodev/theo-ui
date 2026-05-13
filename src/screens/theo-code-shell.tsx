@@ -2,48 +2,75 @@ import {
   Activity,
   Bookmark,
   Bot,
+  Check,
   Cog,
   Eye,
   FileEdit,
   FileSearch,
   FileText,
   GitBranch,
+  Globe,
+  Hammer,
   History,
+  KeyRound,
+  Layers,
   ListChecks,
+  type LucideIcon,
+  MessageSquare,
+  Moon,
+  Palette,
   Pencil,
   PlusCircle,
+  Rocket,
   RotateCcw,
   ScrollText,
   Search,
   Sparkles,
+  Sun,
   Terminal,
   ThumbsUp,
+  Webhook,
   X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AgentComposer } from "../components/composites/agent-composer/agent-composer.js";
 import {
   AgentStream,
   type AgentStreamItem,
 } from "../components/composites/agent-stream/agent-stream.js";
 import {
+  type Deployment,
+  DeploymentRow,
+} from "../components/composites/deployment-row/deployment-row.js";
+import { type Domain, DomainConfig } from "../components/composites/domain-config/domain-config.js";
+import {
+  type EnvVar,
+  EnvVarEditor,
+} from "../components/composites/env-var-editor/env-var-editor.js";
+import {
+  type RollbackTarget,
+  RollbackUI,
+} from "../components/composites/rollback-ui/rollback-ui.js";
+import {
   type AgentDraft,
   AgentEditor,
 } from "../components/primitives/agent-editor/agent-editor.js";
 import { AgentProfile } from "../components/primitives/agent-profile/agent-profile.js";
 import { AuditLogEntry } from "../components/primitives/audit-log-entry/audit-log-entry.js";
+import {
+  BuildLogStream,
+  type LogLine,
+} from "../components/primitives/build-log-stream/build-log-stream.js";
 import { Button } from "../components/primitives/button/button.js";
 import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { ContextWindowBar } from "../components/primitives/context-window-bar/context-window-bar.js";
-import { CreatedFilesCard } from "../components/primitives/created-files-card/created-files-card.js";
 import { DiffViewer } from "../components/primitives/diff-viewer/diff-viewer.js";
-import { FolderContextCard } from "../components/primitives/folder-context-card/folder-context-card.js";
 import { IntentSelector } from "../components/primitives/intent-selector/intent-selector.js";
 import { LaneBoard } from "../components/primitives/lane-board/lane-board.js";
 import type { MentionItem } from "../components/primitives/mention-menu/mention-menu.js";
+import { MetricsPanel } from "../components/primitives/metrics-panel/metrics-panel.js";
 import { ModelSelector } from "../components/primitives/model-selector/model-selector.js";
-import { ProgressChecklist } from "../components/primitives/progress-checklist/progress-checklist.js";
 import { ProjectSwitcher } from "../components/primitives/project-switcher/project-switcher.js";
 import { RuleCard } from "../components/primitives/rule-card/rule-card.js";
 import { RuleEditor } from "../components/primitives/rule-editor/rule-editor.js";
@@ -60,9 +87,11 @@ import { SystemPromptEditor } from "../components/primitives/system-prompt-edito
 import { TokenUsageChart } from "../components/primitives/token-usage-chart/token-usage-chart.js";
 import { TopNav } from "../components/primitives/topnav/topnav.js";
 import { cn } from "../lib/cn.js";
-import { ThemeSwitcher } from "../themes/theme-switcher.js";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useTheme } from "../themes/theme-provider.js";
 import type { AgentEvent } from "../types/agent.js";
 import type { Message } from "../types/chat.js";
+import { MODE_LABEL, type Mode } from "../types/mode.js";
 import type { Rule } from "../types/rule.js";
 
 /**
@@ -70,7 +99,7 @@ import type { Rule } from "../types/rule.js";
  *
  * Single composed component containing the full app chrome (Sidebar + TopNav
  * + mode-aware main pane + workspace overlay Sheets). The ModeSwitcher in
- * TopNav.Center swaps the main pane composition between chat/cowork/code
+ * TopNav.Center swaps the main pane composition between chat/code/infra
  * without unmounting the sidebar or topnav. Mode = view-state of the active
  * session.
  *
@@ -79,7 +108,6 @@ import type { Rule } from "../types/rule.js";
  * structure to real Tauri commands.
  */
 
-type Mode = "chat" | "cowork" | "code";
 type Intent = "edit" | "plan" | "review";
 
 const SESSIONS: Array<{
@@ -99,9 +127,9 @@ const SESSIONS: Array<{
   },
   {
     id: "s2",
-    title: "Integrate API client with retries",
+    title: "Rollback deploy after 5xx spike",
     status: "completed",
-    mode: "cowork",
+    mode: "infra",
     timestamp: "14m ago",
   },
   {
@@ -259,6 +287,283 @@ const MEMORY_MENTIONS: MentionItem[] = [
   },
 ];
 
+/** Per-mode workspace items rendered in the Sidebar "Workspace" section. */
+type WorkspaceItemId =
+  | "memory"
+  | "conversations"
+  | "observability"
+  | "subagents"
+  | "hooks"
+  | "deployments"
+  | "builds"
+  | "environments"
+  | "domains"
+  | "secrets"
+  | "audit";
+
+interface WorkspaceItem {
+  id: WorkspaceItemId;
+  label: string;
+  icon: LucideIcon;
+}
+
+const WORKSPACE_BY_MODE: Record<Mode, WorkspaceItem[]> = {
+  chat: [
+    { id: "memory", label: "Memory", icon: History },
+    { id: "conversations", label: "Conversations", icon: MessageSquare },
+  ],
+  code: [
+    { id: "memory", label: "Memory", icon: History },
+    { id: "observability", label: "Observability", icon: Activity },
+    { id: "subagents", label: "Sub-agents", icon: Bot },
+    { id: "hooks", label: "Hooks", icon: Webhook },
+  ],
+  infra: [
+    { id: "deployments", label: "Deployments", icon: Rocket },
+    { id: "builds", label: "Builds", icon: Hammer },
+    { id: "environments", label: "Environments", icon: Layers },
+    { id: "domains", label: "Domains", icon: Globe },
+    { id: "secrets", label: "Secrets", icon: KeyRound },
+    { id: "audit", label: "Audit log", icon: ScrollText },
+  ],
+};
+
+// ───────── Mocks for PaaS workspaces (driven by theo/api domain types) ─────────
+
+const DOMAINS_LIB: Domain[] = [
+  {
+    id: "d1",
+    hostname: "acme-web.usetheo.app",
+    status: "verified",
+    primary: true,
+    tls: true,
+  },
+  {
+    id: "d2",
+    hostname: "www.acme.com",
+    status: "verified",
+    tls: true,
+  },
+  {
+    id: "d3",
+    hostname: "preview.acme.com",
+    status: "pending",
+    tls: false,
+    verificationRecord: {
+      type: "CNAME",
+      name: "_theo-verify.preview",
+      value: "verify.usetheo.app",
+    },
+  },
+];
+
+const SECRETS_LIB: EnvVar[] = [
+  {
+    id: "e1",
+    key: "DATABASE_URL",
+    value: "postgres://acme:hunter2@db.usetheo.dev:5432/acme",
+    masked: true,
+    scope: "production",
+  },
+  { id: "e2", key: "LOG_LEVEL", value: "info", scope: "all" },
+  {
+    id: "e3",
+    key: "STRIPE_SECRET_KEY",
+    value: "sk_test_redacted_demo_placeholder",
+    masked: true,
+    scope: "production",
+  },
+  {
+    id: "e4",
+    key: "REDIS_URL",
+    value: "redis://default:hunter3@redis.usetheo.dev:6379",
+    masked: true,
+    scope: "staging",
+  },
+  {
+    id: "e5",
+    key: "THEO_DEPLOY_ID",
+    value: "dpl_8f3jka9dfsdfasdf",
+    readonly: true,
+    scope: "production",
+  },
+];
+
+const ENVIRONMENTS_LIB = [
+  { name: "production", status: "live", projectCount: 3, region: "iad1" },
+  { name: "staging", status: "live", projectCount: 3, region: "iad1" },
+  { name: "preview", status: "transient", projectCount: 7, region: "iad1" },
+];
+
+const AUDIT_LIB = [
+  {
+    id: "a1",
+    actor: { kind: "user" as const, name: "alfredo@usetheo.dev" },
+    action: "rollback",
+    target: "acme-web → v1.2.3",
+    timestamp: "9:51 PM",
+    severity: "warning" as const,
+  },
+  {
+    id: "a2",
+    actor: { kind: "agent" as const, name: "Theo Operator" },
+    action: "deploy",
+    target: "acme-web → 8f3jka9",
+    timestamp: "9:48 PM",
+  },
+  {
+    id: "a3",
+    actor: { kind: "system" as const, name: "theo-api" },
+    action: "auto_scale",
+    target: "ledger-svc · 2 → 4 replicas",
+    timestamp: "8:30 PM",
+  },
+  {
+    id: "a4",
+    actor: { kind: "user" as const, name: "alfredo@usetheo.dev" },
+    action: "secret.set",
+    target: "STRIPE_SECRET_KEY · production",
+    timestamp: "yesterday",
+  },
+];
+
+const INFRA_MESSAGES: Message[] = [
+  {
+    id: "im1",
+    role: "user",
+    content: "Why did p95 latency spike at 21:48?",
+    timestamp: "9:50 PM",
+  },
+  {
+    id: "im2",
+    role: "assistant",
+    content:
+      "Looking at the metrics now. The spike correlates with deploy dpl_8f3 going live (commit 8f3jka9). I'll fetch the build log and compare to the previous green deploy.",
+    timestamp: "9:50 PM",
+    model: "Opus 4.7",
+  },
+  {
+    id: "im3",
+    role: "user",
+    content: "Rollback to last green if confirmed.",
+    timestamp: "9:51 PM",
+  },
+  {
+    id: "im4",
+    role: "assistant",
+    content:
+      "On it — preparing rollback to v1.2.3 (commit 7d2bca). I'll ask you to confirm before flipping traffic.",
+    timestamp: "9:51 PM",
+    model: "Opus 4.7",
+  },
+];
+
+const RECENT_DEPLOYS: Deployment[] = [
+  {
+    id: "d1",
+    status: "live",
+    environment: "production",
+    branch: "main",
+    commitSha: "8f3jka9",
+    commitMessage: "feat(api): batch payments endpoint",
+    author: { name: "claude" },
+    duration: "1m 22s",
+    timeAgo: "12m ago",
+  },
+  {
+    id: "d2",
+    status: "live",
+    environment: "preview",
+    branch: "claude/alignment-grid",
+    commitSha: "a2b1cd4",
+    commitMessage: "feat: alignment grid demo",
+    author: { name: "claude" },
+    duration: "58s",
+    timeAgo: "1h ago",
+  },
+  {
+    id: "d3",
+    status: "failed",
+    environment: "production",
+    branch: "main",
+    commitSha: "8f3jka9",
+    commitMessage: "feat(api): batch payments endpoint",
+    author: { name: "claude" },
+    duration: "23s",
+    timeAgo: "2h ago",
+  },
+];
+
+const INFRA_LOGS: LogLine[] = [
+  {
+    id: "l1",
+    timestamp: "21:48:14",
+    level: "info",
+    message: "Build started · main@8f3jka9",
+    source: "build",
+  },
+  {
+    id: "l2",
+    timestamp: "21:48:42",
+    level: "success",
+    message: "pnpm install · ok (24s)",
+    source: "build",
+  },
+  {
+    id: "l3",
+    timestamp: "21:49:05",
+    level: "success",
+    message: "pnpm build · ok (38s)",
+    source: "build",
+  },
+  {
+    id: "l4",
+    timestamp: "21:49:18",
+    level: "info",
+    message: "Deploying to prod · region iad1",
+    source: "deploy",
+  },
+  {
+    id: "l5",
+    timestamp: "21:49:42",
+    level: "warn",
+    message: "p95 latency 320ms (baseline 180ms)",
+    source: "monitor",
+  },
+  {
+    id: "l6",
+    timestamp: "21:50:08",
+    level: "error",
+    message: "Error rate 0.42% — threshold 0.1% breached",
+    source: "monitor",
+  },
+];
+
+const ROLLBACK_HISTORY: RollbackTarget[] = [
+  {
+    id: "rb1",
+    version: "v1.3.0",
+    commitSha: "8f3jka9",
+    commitMessage: "feat(api): batch payments endpoint",
+    deployedAt: "12m ago",
+    isCurrent: true,
+  },
+  {
+    id: "rb2",
+    version: "v1.2.3",
+    commitSha: "7d2bca1",
+    commitMessage: "fix(auth): refresh token expiry",
+    deployedAt: "3h ago",
+  },
+  {
+    id: "rb3",
+    version: "v1.2.2",
+    commitSha: "5e1ab09",
+    commitMessage: "chore(deps): bump react",
+    deployedAt: "1d ago",
+  },
+];
+
 const DEFAULT_SYSTEM_PROMPT = `You are Theo Code, an autonomous coding agent.
 
 Operate inside the active workspace. Use the available tools to read, plan, edit, and verify code changes. Always run typecheck and tests after substantive edits.
@@ -274,6 +579,7 @@ const SKILLS_LIB: Skill[] = [
     state: "enabled",
     allowedTools: ["Read", "Grep"],
     triggers: ["explain diff", "summarize change"],
+    modes: ["code"],
   },
   {
     id: "sk2",
@@ -283,6 +589,7 @@ const SKILLS_LIB: Skill[] = [
     state: "enabled",
     allowedTools: ["Bash"],
     triggers: ["run tests", "verify"],
+    modes: ["code", "infra"],
   },
   {
     id: "sk3",
@@ -292,6 +599,35 @@ const SKILLS_LIB: Skill[] = [
     state: "disabled",
     allowedTools: ["Read", "Grep"],
     triggers: ["audit", "scan"],
+    modes: ["code"],
+  },
+  {
+    id: "sk4",
+    name: "incident-summarizer",
+    description: "Build a postmortem skeleton from a deploy + log window.",
+    source: "user",
+    state: "enabled",
+    allowedTools: ["Read"],
+    triggers: ["summarize incident", "postmortem"],
+    modes: ["infra"],
+  },
+  {
+    id: "sk5",
+    name: "deploy-status",
+    description: "Show recent deploys per environment with health.",
+    source: "builtin",
+    state: "enabled",
+    allowedTools: ["Bash"],
+    triggers: ["deploy status"],
+    modes: ["infra"],
+  },
+  {
+    id: "sk6",
+    name: "web-search",
+    description: "Look up docs / Stack Overflow.",
+    source: "builtin",
+    state: "enabled",
+    triggers: ["search the web", "look up"],
   },
 ];
 
@@ -305,6 +641,7 @@ const AGENTS_LIB: AgentDraft[] = [
     model: "opus-4-7",
     allowedTools: ["Read", "Edit", "Write", "Bash", "Grep"],
     skillIds: ["sk2"],
+    modes: ["code"],
   },
   {
     id: "ag2",
@@ -314,6 +651,7 @@ const AGENTS_LIB: AgentDraft[] = [
     tone: "info",
     model: "sonnet-4-6",
     allowedTools: ["Read", "Grep"],
+    modes: ["code"],
   },
   {
     id: "ag3",
@@ -324,6 +662,29 @@ const AGENTS_LIB: AgentDraft[] = [
     model: "sonnet-4-6",
     allowedTools: ["Read", "Grep"],
     skillIds: ["sk1", "sk2"],
+    modes: ["code"],
+  },
+  {
+    id: "ag4",
+    name: "Operator",
+    initials: "OP",
+    description: "Watches metrics, rolls back, manages env + secrets.",
+    tone: "accent",
+    model: "opus-4-7",
+    allowedTools: ["Bash", "Read"],
+    skillIds: ["sk4", "sk5"],
+    modes: ["infra"],
+  },
+  {
+    id: "ag5",
+    name: "Researcher",
+    initials: "RS",
+    description: "Q&A and exploration. Reads, never edits.",
+    tone: "muted",
+    model: "haiku-4-5",
+    allowedTools: ["Read", "Grep"],
+    skillIds: ["sk6"],
+    modes: ["chat"],
   },
 ];
 
@@ -344,6 +705,7 @@ const RULES_LIB: Rule[] = [
     scope: "project",
     state: "enabled",
     tags: ["style"],
+    modes: ["code"],
     updatedAt: "1w ago",
   },
   {
@@ -353,15 +715,37 @@ const RULES_LIB: Rule[] = [
     scope: "project",
     state: "enabled",
     tags: ["typescript"],
+    modes: ["code"],
     updatedAt: "3w ago",
   },
   {
     id: "r4",
+    title: "Never push to prod without staging deploy",
+    body: "Every production deploy must be preceded by a staging deploy that passes its smoke tests. No exceptions.",
+    scope: "global",
+    state: "enabled",
+    tags: ["safety"],
+    modes: ["infra"],
+    updatedAt: "1mo ago",
+  },
+  {
+    id: "r5",
+    title: "Rollback before debug",
+    body: "If error rate breaches 0.1% threshold, roll back first, investigate second.",
+    scope: "global",
+    state: "enabled",
+    tags: ["incident"],
+    modes: ["infra"],
+    updatedAt: "2mo ago",
+  },
+  {
+    id: "r6",
     title: "Never modify migrations after merge",
     body: "Once a migration is in main, treat it as immutable. New changes go in a new migration.",
     scope: "global",
     state: "disabled",
     tags: ["database"],
+    modes: ["code", "infra"],
     updatedAt: "1mo ago",
   },
 ];
@@ -631,15 +1015,7 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
   const [prompt, setPrompt] = useState("");
   const [model, setModel] = useState("opus-4-7");
   const [openPanel, setOpenPanel] = useState<
-    | null
-    | "memory"
-    | "observability"
-    | "subagents"
-    | "settings"
-    | "system-prompt"
-    | "skills"
-    | "agents"
-    | "rules"
+    null | WorkspaceItemId | "settings" | "system-prompt" | "skills" | "agents" | "rules"
   >(null);
 
   const activeSession = useMemo(
@@ -662,14 +1038,24 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
         </Sidebar.Header>
 
         <div className="flex flex-1 flex-col overflow-y-auto">
-          <Sidebar.Section title="Sessions">
+          {/* Mode context badge — shows what's being filtered */}
+          <div className="flex items-center gap-2 px-5 py-2 font-mono text-label text-muted-foreground">
+            <span className="size-1.5 rounded-full bg-primary" aria-hidden />
+            Filtering by <span className="font-medium text-foreground">{MODE_LABEL[mode]}</span>
+          </div>
+          <Sidebar.Section title={`${MODE_LABEL[mode]} sessions`}>
             <button
               type="button"
               className="mb-1 flex items-center gap-2 rounded-md px-2 py-2 text-left text-body-sm text-primary hover:bg-primary/10"
             >
               <PlusCircle className="size-4" /> New session
             </button>
-            {SESSIONS.map((s) => (
+            {SESSIONS.filter((s) => s.mode === mode).length === 0 ? (
+              <p className="px-2 py-2 text-body-sm text-muted-foreground">
+                No {MODE_LABEL[mode].toLowerCase()} sessions yet.
+              </p>
+            ) : null}
+            {SESSIONS.filter((s) => s.mode === mode).map((s) => (
               <SessionListItem
                 key={s.id}
                 title={s.title}
@@ -683,16 +1069,12 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
             ))}
           </Sidebar.Section>
 
-          <Sidebar.Section title="Workspace">
-            <Sidebar.Item icon={History} onClick={() => setOpenPanel("memory")}>
-              Memory
-            </Sidebar.Item>
-            <Sidebar.Item icon={Activity} onClick={() => setOpenPanel("observability")}>
-              Observability
-            </Sidebar.Item>
-            <Sidebar.Item icon={Bot} onClick={() => setOpenPanel("subagents")}>
-              Sub-agents
-            </Sidebar.Item>
+          <Sidebar.Section title={`${MODE_LABEL[mode]} workspace`}>
+            {WORKSPACE_BY_MODE[mode].map((w) => (
+              <Sidebar.Item key={w.id} icon={w.icon} onClick={() => setOpenPanel(w.id)}>
+                {w.label}
+              </Sidebar.Item>
+            ))}
           </Sidebar.Section>
 
           <Sidebar.Section title="Customize">
@@ -725,7 +1107,10 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
             </div>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <ThemeSwitcher />
+            <div className="flex items-center gap-1">
+              <ThemeIconPicker />
+              <DarkModeToggle />
+            </div>
             <Button
               size="sm"
               variant="ghost"
@@ -752,8 +1137,8 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
               onChange={(v) => setMode(v as Mode)}
               options={[
                 { value: "chat", label: "Chat" },
-                { value: "cowork", label: "Cowork" },
                 { value: "code", label: "Code" },
+                { value: "infra", label: "Infra" },
               ]}
             />
           </TopNav.Center>
@@ -761,7 +1146,6 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
             <Button size="sm" variant="secondary">
               <GitBranch className="size-4" /> main ← claude/alignment-grid
             </Button>
-            <Button size="sm">Create PR</Button>
           </TopNav.Right>
         </TopNav>
 
@@ -775,8 +1159,8 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
             setModel={setModel}
           />
         )}
-        {mode === "cowork" && (
-          <CoworkMode
+        {mode === "code" && (
+          <CodeMode
             prompt={prompt}
             setPrompt={setPrompt}
             intent={intent}
@@ -785,8 +1169,8 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
             setModel={setModel}
           />
         )}
-        {mode === "code" && (
-          <CodeMode
+        {mode === "infra" && (
+          <InfraMode
             prompt={prompt}
             setPrompt={setPrompt}
             intent={intent}
@@ -904,10 +1288,195 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
       </Sheet>
 
       {/* ───────── CUSTOMIZE SHEETS ───────── */}
-      <SystemPromptSheet open={openPanel === "system-prompt"} onClose={() => setOpenPanel(null)} />
-      <SkillsSheet open={openPanel === "skills"} onClose={() => setOpenPanel(null)} />
-      <AgentsSheet open={openPanel === "agents"} onClose={() => setOpenPanel(null)} />
-      <RulesSheet open={openPanel === "rules"} onClose={() => setOpenPanel(null)} />
+      <SystemPromptSheet
+        open={openPanel === "system-prompt"}
+        onClose={() => setOpenPanel(null)}
+        currentMode={mode}
+      />
+      <SkillsSheet
+        open={openPanel === "skills"}
+        onClose={() => setOpenPanel(null)}
+        currentMode={mode}
+      />
+      <AgentsSheet
+        open={openPanel === "agents"}
+        onClose={() => setOpenPanel(null)}
+        currentMode={mode}
+      />
+      <RulesSheet
+        open={openPanel === "rules"}
+        onClose={() => setOpenPanel(null)}
+        currentMode={mode}
+      />
+
+      {/* ───────── INFRA WORKSPACE SHEETS ───────── */}
+      <Sheet open={openPanel === "deployments"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[680px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Deployments</Sheet.Title>
+            <Sheet.Description>
+              Recent deploys across all environments. Source: <code>GET /api/v1/deploys</code>.
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body className="grid gap-2">
+            {RECENT_DEPLOYS.map((d) => (
+              <DeploymentRow key={d.id} deployment={d} />
+            ))}
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      <Sheet open={openPanel === "builds"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[760px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Builds</Sheet.Title>
+            <Sheet.Description>
+              Live build stream for the active deploy. Source:{" "}
+              <code>GET /api/v1/builds/{"{id}"}/logs/stream</code>.
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body>
+            <BuildLogStream lines={INFRA_LOGS} filterable />
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      <Sheet open={openPanel === "environments"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[560px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Environments</Sheet.Title>
+            <Sheet.Description>
+              Active environments per project. Source: <code>GET /api/v1/environments</code>.
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body className="grid gap-2">
+            {ENVIRONMENTS_LIB.map((e) => (
+              <article
+                key={e.name}
+                className="flex items-center justify-between gap-3 rounded-lg border border-border/40 bg-card/40 p-3"
+              >
+                <div className="flex items-center gap-3">
+                  <Layers className="size-4 text-muted-foreground" aria-hidden />
+                  <div className="grid">
+                    <span className="font-medium font-mono text-body-sm uppercase tracking-wider">
+                      {e.name}
+                    </span>
+                    <span className="font-mono text-label text-muted-foreground">
+                      {e.projectCount} projects · {e.region}
+                    </span>
+                  </div>
+                </div>
+                <span
+                  className={cn(
+                    "inline-flex h-5 items-center rounded-md px-2 font-medium font-mono text-label tracking-tight",
+                    e.status === "live"
+                      ? "bg-success/15 text-success"
+                      : "bg-warning/15 text-warning",
+                  )}
+                >
+                  {e.status}
+                </span>
+              </article>
+            ))}
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      <Sheet open={openPanel === "domains"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[720px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Domains</Sheet.Title>
+            <Sheet.Description>
+              Custom domains + DNS verification. Source: <code>GET /api/v1/domains</code>.
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body>
+            <DomainConfig
+              domains={DOMAINS_LIB}
+              onAdd={() => undefined}
+              onRemove={() => undefined}
+              onSetPrimary={() => undefined}
+            />
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      <Sheet open={openPanel === "secrets"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[760px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Secrets</Sheet.Title>
+            <Sheet.Description>
+              Environment variables per scope. Source: <code>GET /api/v1/secrets</code>.
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body>
+            <EnvVarEditor vars={SECRETS_LIB} onAdd={() => undefined} onRemove={() => undefined} />
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      <Sheet open={openPanel === "audit"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[640px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Audit log</Sheet.Title>
+            <Sheet.Description>
+              Privileged actions (rollback, secret writes, scale, evict). Source:{" "}
+              <code>GET /api/v1/audit</code>.
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body className="grid gap-2">
+            {AUDIT_LIB.map((entry) => (
+              <AuditLogEntry key={entry.id} entry={entry} />
+            ))}
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      {/* ───────── CHAT WORKSPACE SHEET ───────── */}
+      <Sheet open={openPanel === "conversations"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[520px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Conversations</Sheet.Title>
+            <Sheet.Description>Archived chats — restore or branch from any one.</Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body className="grid gap-2">
+            {SESSIONS.filter((s) => s.mode === "chat").map((s) => (
+              <article
+                key={s.id}
+                className="flex items-center justify-between gap-3 rounded-lg border border-border/40 bg-card/40 p-3"
+              >
+                <div className="grid">
+                  <span className="font-medium text-body-sm">{s.title}</span>
+                  <span className="font-mono text-label text-muted-foreground">
+                    {s.timestamp} · {s.status}
+                  </span>
+                </div>
+                <Button size="sm" variant="ghost">
+                  Open
+                </Button>
+              </article>
+            ))}
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
+
+      {/* ───────── CODE WORKSPACE SHEET — Hooks ───────── */}
+      <Sheet open={openPanel === "hooks"} onOpenChange={(o) => !o && setOpenPanel(null)}>
+        <Sheet.Content side="right" className="w-[560px] max-w-none">
+          <Sheet.Header>
+            <Sheet.Title>Hooks</Sheet.Title>
+            <Sheet.Description>
+              Pre/post-action hooks (pre-commit, post-edit, on-error, …).
+            </Sheet.Description>
+          </Sheet.Header>
+          <Sheet.Body>
+            <p className="text-body-sm text-muted-foreground">
+              No hooks configured yet. Hooks let you run commands at specific points in the agent
+              loop — e.g. <code>format on file_write</code>, <code>notify on error</code>.
+            </p>
+          </Sheet.Body>
+        </Sheet.Content>
+      </Sheet>
 
       <Sheet open={openPanel === "settings"} onOpenChange={(o) => !o && setOpenPanel(null)}>
         <Sheet.Content side="left" className="w-[420px] max-w-none">
@@ -973,20 +1542,21 @@ function ChatMode({ prompt, setPrompt, intent, setIntent, model, setModel }: Mod
   );
 }
 
-function CoworkMode({ prompt, setPrompt, intent, setIntent, model, setModel }: ModeProps) {
+function InfraMode({ prompt, setPrompt, intent, setIntent, model, setModel }: ModeProps) {
   return (
-    <div className="grid min-h-0 flex-1 grid-cols-[1fr_320px] overflow-hidden">
-      <div className="flex min-w-0 flex-col">
+    <div className="grid min-h-0 flex-1 grid-cols-[1fr_1fr] overflow-hidden">
+      {/* Left: agent interaction column */}
+      <section className="flex min-w-0 flex-col overflow-hidden border-border/40 border-r">
         <div className="flex-1 overflow-y-auto px-6 py-6">
           <ChatThread>
-            {MESSAGES.map((m) => (
+            {INFRA_MESSAGES.map((m) => (
               <ChatMessage key={m.id} message={m} />
             ))}
           </ChatThread>
         </div>
-        <div className="border-border/40 border-t px-6 py-3">
+        <div className="grid gap-3 border-border/40 border-t px-4 py-3">
           <AgentComposer
-            mode="cowork"
+            mode="infra"
             value={prompt}
             onValueChange={setPrompt}
             onSubmit={() => setPrompt("")}
@@ -1003,33 +1573,52 @@ function CoworkMode({ prompt, setPrompt, intent, setIntent, model, setModel }: M
             trailingActions={<ModelSelector value={model} onChange={setModel} options={MODELS} />}
           />
         </div>
-      </div>
-      <aside className="grid auto-rows-min gap-3 overflow-y-auto border-border/40 border-l p-4">
-        <FolderContextCard
-          title="src/components/AlignmentGrid"
-          entries={[
-            { id: "f1", name: "AlignmentGrid.tsx", kind: "file" },
-            { id: "f2", name: "AlignmentGrid.test.tsx", kind: "file" },
-            { id: "f3", name: "index.ts", kind: "file" },
-            { id: "f4", name: "tokens.css", kind: "file" },
+      </section>
+
+      {/* Right: infra workbench — metrics, deployments, build logs, rollback */}
+      <section className="flex min-w-0 flex-col gap-4 overflow-y-auto p-4">
+        <MetricsPanel
+          title="Live service · acme-web (prod)"
+          description="Last 5 minutes"
+          metrics={[
+            { label: "Requests/s", value: "1.2", unit: "k" },
+            { label: "p95 latency", value: "182", unit: "ms" },
+            { label: "Error rate", value: "0.03", unit: "%" },
+            { label: "CPU", value: "42", unit: "%" },
           ]}
+          columns={4}
         />
-        <CreatedFilesCard
-          files={[
-            { id: "c1", name: "AlignmentGrid.tsx", size: "6.2 KB" },
-            { id: "c2", name: "PanelGrid.tsx", size: "2.1 KB" },
-            { id: "c3", name: "AlignmentGrid.test.tsx", size: "1.8 KB" },
-          ]}
-        />
-        <ProgressChecklist
-          steps={[
-            { id: "1", label: "Scaffold component", status: "done" },
-            { id: "2", label: "Wire to design tokens", status: "done" },
-            { id: "3", label: "Write tests", status: "running" },
-            { id: "4", label: "Run typecheck", status: "pending" },
-          ]}
-        />
-      </aside>
+
+        <div className="grid gap-2">
+          <header className="flex items-baseline justify-between">
+            <h3 className="font-display text-title-md tracking-tight">Recent deployments</h3>
+            <button
+              type="button"
+              className="font-mono text-label text-muted-foreground hover:text-foreground"
+            >
+              View all →
+            </button>
+          </header>
+          <div className="grid gap-2">
+            {RECENT_DEPLOYS.map((d) => (
+              <DeploymentRow key={d.id} deployment={d} />
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-2">
+          <header className="flex items-baseline justify-between">
+            <h3 className="font-display text-title-md tracking-tight">Live build · main</h3>
+            <span className="font-mono text-label text-success">deploying</span>
+          </header>
+          <BuildLogStream lines={INFRA_LOGS} />
+        </div>
+
+        <div className="grid gap-2">
+          <h3 className="font-display text-title-md tracking-tight">Rollback target</h3>
+          <RollbackUI history={ROLLBACK_HISTORY} onRollback={() => undefined} />
+        </div>
+      </section>
     </div>
   );
 }
@@ -1129,25 +1718,73 @@ function CodeMode({ prompt, setPrompt, intent, setIntent, model, setModel }: Mod
 interface PanelSheetProps {
   open: boolean;
   onClose: () => void;
+  currentMode: Mode;
 }
 
-function SystemPromptSheet({ open, onClose }: PanelSheetProps) {
-  const [override, setOverride] = useState("");
+/** Whether a resource with `modes?: Mode[]` is visible in the current mode. */
+function matchesMode(modes: Mode[] | undefined, current: Mode): boolean {
+  if (!modes || modes.length === 0) return true;
+  return modes.includes(current);
+}
+
+function SystemPromptSheet({ open, onClose, currentMode }: PanelSheetProps) {
+  // Per-mode overrides. Empty string for a mode = "inherit the base".
+  const [overrides, setOverrides] = useState<Record<Mode, string>>({
+    chat: "",
+    code: "",
+    infra: "",
+  });
+  const [activeMode, setActiveMode] = useState<Mode>(currentMode);
+
+  useEffect(() => {
+    setActiveMode(currentMode);
+  }, [currentMode]);
+
+  const override = overrides[activeMode];
+  const setOverride = (next: string) => setOverrides((prev) => ({ ...prev, [activeMode]: next }));
+
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
       <Sheet.Content side="right" className="w-[640px] max-w-none">
         <Sheet.Header>
-          <Sheet.Title>System Prompt</Sheet.Title>
-          <Sheet.Description>
-            The base identity injected on every turn. Override it project-wide here.
-          </Sheet.Description>
+          <div className="flex items-baseline justify-between gap-3">
+            <div>
+              <Sheet.Title>System Prompt</Sheet.Title>
+              <Sheet.Description>Base identity + optional per-mode override.</Sheet.Description>
+            </div>
+          </div>
         </Sheet.Header>
-        <Sheet.Body>
+        <Sheet.Body className="grid gap-4">
+          <div
+            role="tablist"
+            aria-label="Override per mode"
+            className="inline-flex items-center gap-0.5 self-start rounded-md border border-border/40 bg-muted/30 p-0.5 font-mono text-label"
+          >
+            {(["chat", "code", "infra"] as Mode[]).map((m) => (
+              <button
+                key={m}
+                type="button"
+                role="tab"
+                aria-selected={activeMode === m}
+                onClick={() => setActiveMode(m)}
+                className={cn(
+                  "rounded px-3 py-1",
+                  activeMode === m
+                    ? "bg-card font-medium text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {MODE_LABEL[m]}
+                {overrides[m] ? <span className="ml-1 text-primary">•</span> : null}
+              </button>
+            ))}
+          </div>
           <SystemPromptEditor
             defaultPrompt={DEFAULT_SYSTEM_PROMPT}
             override={override}
             onOverrideChange={setOverride}
             tokenEstimate={Math.ceil((override || DEFAULT_SYSTEM_PROMPT).length / 4)}
+            title={`System prompt · ${MODE_LABEL[activeMode]}`}
           />
         </Sheet.Body>
       </Sheet.Content>
@@ -1157,9 +1794,12 @@ function SystemPromptSheet({ open, onClose }: PanelSheetProps) {
 
 type CrudView<T> = { mode: "list" } | { mode: "edit"; item: T } | { mode: "new" };
 
-function SkillsSheet({ open, onClose }: PanelSheetProps) {
+function SkillsSheet({ open, onClose, currentMode }: PanelSheetProps) {
   const [items, setItems] = useState(SKILLS_LIB);
   const [view, setView] = useState<CrudView<Skill>>({ mode: "list" });
+
+  const visible = items.filter((s) => matchesMode(s.modes, currentMode));
+  const hiddenCount = items.length - visible.length;
 
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
@@ -1169,7 +1809,12 @@ function SkillsSheet({ open, onClose }: PanelSheetProps) {
             <div>
               <Sheet.Title>Skills</Sheet.Title>
               <Sheet.Description>
-                Reusable capabilities the agent can invoke by name.
+                Reusable capabilities for <strong>{MODE_LABEL[currentMode]}</strong> mode.
+                {hiddenCount > 0 ? (
+                  <span className="ml-1 font-mono text-label text-muted-foreground">
+                    · {hiddenCount} hidden in other modes
+                  </span>
+                ) : null}
               </Sheet.Description>
             </div>
             <div className="flex items-center gap-2">
@@ -1190,33 +1835,36 @@ function SkillsSheet({ open, onClose }: PanelSheetProps) {
         <Sheet.Body>
           {view.mode === "list" ? (
             <div className="grid gap-2">
-              {items.map((s) => (
-                <SkillCard
+              {visible.length === 0 ? (
+                <p className="text-body-sm text-muted-foreground">
+                  No skills active in {MODE_LABEL[currentMode]} mode yet. Create one above.
+                </p>
+              ) : null}
+              {visible.map((s) => (
+                <button
                   key={s.id}
-                  skill={s}
-                  onToggle={(id, next) =>
-                    setItems((prev) =>
-                      prev.map((it) => (it.id === id ? { ...it, state: next } : it)),
-                    )
-                  }
-                />
+                  type="button"
+                  onClick={() => setView({ mode: "edit", item: s })}
+                  className="text-left"
+                >
+                  <SkillCard
+                    skill={s}
+                    onToggle={(id, next) =>
+                      setItems((prev) =>
+                        prev.map((it) => (it.id === id ? { ...it, state: next } : it)),
+                      )
+                    }
+                  />
+                </button>
               ))}
-              <div className="mt-2 grid gap-2">
-                {items.map((s) => (
-                  <button
-                    key={`edit-${s.id}`}
-                    type="button"
-                    onClick={() => setView({ mode: "edit", item: s })}
-                    className="inline-flex items-center gap-2 self-start rounded-md px-2 py-1 font-mono text-label text-muted-foreground hover:bg-muted hover:text-foreground"
-                  >
-                    <Pencil className="size-3" /> Edit {s.name}
-                  </button>
-                ))}
-              </div>
             </div>
           ) : (
             <SkillEditor
-              initial={view.mode === "edit" ? view.item : undefined}
+              initial={
+                view.mode === "edit"
+                  ? view.item
+                  : { modes: [currentMode], state: "enabled", source: "user" }
+              }
               onSave={(draft) => {
                 if (view.mode === "edit") {
                   setItems((prev) =>
@@ -1246,9 +1894,12 @@ function SkillsSheet({ open, onClose }: PanelSheetProps) {
   );
 }
 
-function AgentsSheet({ open, onClose }: PanelSheetProps) {
+function AgentsSheet({ open, onClose, currentMode }: PanelSheetProps) {
   const [items, setItems] = useState(AGENTS_LIB);
   const [view, setView] = useState<CrudView<AgentDraft>>({ mode: "list" });
+
+  const visible = items.filter((a) => matchesMode(a.modes, currentMode));
+  const hiddenCount = items.length - visible.length;
 
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
@@ -1258,7 +1909,12 @@ function AgentsSheet({ open, onClose }: PanelSheetProps) {
             <div>
               <Sheet.Title>Agents</Sheet.Title>
               <Sheet.Description>
-                Personas: a name + system prompt + tool allowlist + linked skills.
+                Personas active in <strong>{MODE_LABEL[currentMode]}</strong> mode.
+                {hiddenCount > 0 ? (
+                  <span className="ml-1 font-mono text-label text-muted-foreground">
+                    · {hiddenCount} hidden in other modes
+                  </span>
+                ) : null}
               </Sheet.Description>
             </div>
             <div className="flex items-center gap-2">
@@ -1279,7 +1935,12 @@ function AgentsSheet({ open, onClose }: PanelSheetProps) {
         <Sheet.Body>
           {view.mode === "list" ? (
             <div className="grid gap-2">
-              {items.map((a) => (
+              {visible.length === 0 ? (
+                <p className="text-body-sm text-muted-foreground">
+                  No agents active in {MODE_LABEL[currentMode]} mode. Create one above.
+                </p>
+              ) : null}
+              {visible.map((a) => (
                 <button
                   key={a.id}
                   type="button"
@@ -1319,9 +1980,12 @@ function AgentsSheet({ open, onClose }: PanelSheetProps) {
             </div>
           ) : (
             <AgentEditor
-              initial={view.mode === "edit" ? view.item : undefined}
+              initial={view.mode === "edit" ? view.item : { modes: [currentMode], tone: "primary" }}
               models={MODELS}
-              skills={SKILLS_LIB.map((s) => ({ id: s.id, label: s.name }))}
+              skills={SKILLS_LIB.filter((s) => matchesMode(s.modes, currentMode)).map((s) => ({
+                id: s.id,
+                label: s.name,
+              }))}
               onSave={(draft) => {
                 if (view.mode === "edit") {
                   setItems((prev) =>
@@ -1349,9 +2013,12 @@ function AgentsSheet({ open, onClose }: PanelSheetProps) {
   );
 }
 
-function RulesSheet({ open, onClose }: PanelSheetProps) {
+function RulesSheet({ open, onClose, currentMode }: PanelSheetProps) {
   const [items, setItems] = useState(RULES_LIB);
   const [view, setView] = useState<CrudView<Rule>>({ mode: "list" });
+
+  const visible = items.filter((r) => matchesMode(r.modes, currentMode));
+  const hiddenCount = items.length - visible.length;
 
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
@@ -1361,7 +2028,12 @@ function RulesSheet({ open, onClose }: PanelSheetProps) {
             <div>
               <Sheet.Title>Rules</Sheet.Title>
               <Sheet.Description>
-                Behavior instructions injected into every system prompt.
+                Behavior instructions active in <strong>{MODE_LABEL[currentMode]}</strong> mode.
+                {hiddenCount > 0 ? (
+                  <span className="ml-1 font-mono text-label text-muted-foreground">
+                    · {hiddenCount} hidden in other modes
+                  </span>
+                ) : null}
               </Sheet.Description>
             </div>
             <div className="flex items-center gap-2">
@@ -1382,7 +2054,12 @@ function RulesSheet({ open, onClose }: PanelSheetProps) {
         <Sheet.Body>
           {view.mode === "list" ? (
             <div className="grid gap-2">
-              {items.map((r) => (
+              {visible.length === 0 ? (
+                <p className="text-body-sm text-muted-foreground">
+                  No rules active in {MODE_LABEL[currentMode]} mode. Create one above.
+                </p>
+              ) : null}
+              {visible.map((r) => (
                 <RuleCard
                   key={r.id}
                   rule={r}
@@ -1401,7 +2078,11 @@ function RulesSheet({ open, onClose }: PanelSheetProps) {
             </div>
           ) : (
             <RuleEditor
-              initial={view.mode === "edit" ? view.item : undefined}
+              initial={
+                view.mode === "edit"
+                  ? view.item
+                  : { modes: [currentMode], scope: "global", state: "enabled" }
+              }
               onSave={(draft) => {
                 if (view.mode === "edit") {
                   setItems((prev) =>
@@ -1433,5 +2114,80 @@ function RulesSheet({ open, onClose }: PanelSheetProps) {
         </Sheet.Body>
       </Sheet.Content>
     </Sheet>
+  );
+}
+
+// ─────────── ICON-ONLY THEME PICKER ───────────
+// Inline implementation used in the sidebar footer where we want JUST the
+// palette icon (no theme label), avoiding any CSS overrides on ThemeSwitcher.
+
+function ThemeIconPicker() {
+  const { theme, themes, setTheme } = useTheme();
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          aria-label={`Theme: ${theme.label}`}
+          className={cn(
+            "inline-flex size-9 items-center justify-center rounded-lg border border-border/60 bg-card text-foreground",
+            "transition-colors hover:bg-muted",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          )}
+        >
+          <Palette className="size-4 text-primary" aria-hidden />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="end"
+          sideOffset={6}
+          className={cn(
+            "z-50 min-w-[16rem] overflow-hidden rounded-lg border bg-popover p-1 text-popover-foreground shadow-md",
+            "data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in",
+            "data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out",
+          )}
+        >
+          {themes.map((t) => (
+            <DropdownMenu.Item
+              key={t.name}
+              onSelect={() => setTheme(t.name)}
+              className={cn(
+                "flex cursor-pointer items-start justify-between gap-3 rounded-md px-2 py-2",
+                "focus:bg-muted focus:outline-none data-[highlighted]:bg-muted",
+              )}
+            >
+              <span className="flex min-w-0 flex-col">
+                <span className="font-medium text-body-sm">{t.label}</span>
+                {t.description ? (
+                  <span className="text-body-sm text-muted-foreground">{t.description}</span>
+                ) : null}
+              </span>
+              {t.name === theme.name ? (
+                <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
+              ) : null}
+            </DropdownMenu.Item>
+          ))}
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
+  );
+}
+
+function DarkModeToggle() {
+  const { mode, toggleMode } = useTheme();
+  return (
+    <button
+      type="button"
+      onClick={toggleMode}
+      aria-label={`Switch to ${mode === "light" ? "dark" : "light"} mode`}
+      className={cn(
+        "inline-flex size-9 items-center justify-center rounded-lg border border-border/60 bg-card text-foreground",
+        "transition-colors hover:bg-muted",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      )}
+    >
+      {mode === "light" ? <Moon className="size-4" /> : <Sun className="size-4" />}
+    </button>
   );
 }

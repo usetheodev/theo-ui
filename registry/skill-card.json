@@ -3,9 +3,15 @@
   "name": "skill-card",
   "type": "registry:ui",
   "title": "SkillCard",
-  "description": "Single Skill row — name, source badge, optional triggers and allowed-tools chips, enable toggle.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "types"],
+  "description": "Single Skill row \u2014 name, source badge, optional triggers and allowed-tools chips, enable toggle.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types",
+    "mode-types"
+  ],
   "files": [
     {
       "path": "components/primitives/skill-card/skill-card.tsx",

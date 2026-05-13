@@ -2,7 +2,7 @@ import type { Story } from "@ladle/react";
 import { BookOpen, Wrench } from "lucide-react";
 import { ContextCard } from "./context-card.js";
 
-export default { title: "Primitives / Cowork / ContextCard" };
+export default { title: "Primitives / Files / ContextCard" };
 
 export const Default: Story = () => (
   <div className="grid max-w-sm gap-3">

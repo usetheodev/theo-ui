@@ -19,7 +19,7 @@ interface RecentFoldersListProps
 }
 
 /**
- * RecentFoldersList — recently-used folders for the Cowork home picker.
+ * RecentFoldersList — recently-used folders for the Files picker.
  *
  * Visual: a stack of rows with folder icon + name + path (smaller, muted),
  * active row highlighted with violet bg.
