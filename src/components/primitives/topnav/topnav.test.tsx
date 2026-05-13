@@ -53,15 +53,15 @@ describe("TopNav", () => {
     it("marks the active option with aria-selected", () => {
       render(
         <TopNav.ModeSwitcher
-          value="cowork"
+          value="infra"
           options={[
             { value: "chat", label: "Chat" },
-            { value: "cowork", label: "Cowork" },
+            { value: "infra", label: "Infra" },
             { value: "code", label: "Code" },
           ]}
         />,
       );
-      expect(screen.getByRole("tab", { name: "Cowork" })).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByRole("tab", { name: "Infra" })).toHaveAttribute("aria-selected", "true");
       expect(screen.getByRole("tab", { name: "Chat" })).toHaveAttribute("aria-selected", "false");
     });
 

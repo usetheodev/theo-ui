@@ -15,7 +15,7 @@ export const States: Story = () => (
     <SessionListItem
       title="Integrate API client with retries"
       status="completed"
-      mode="cowork"
+      mode="infra"
       timestamp="14m ago"
     />
     <SessionListItem
@@ -40,7 +40,7 @@ export const States: Story = () => (
     <SessionListItem
       title="Cancelled refactor"
       status="cancelled"
-      mode="cowork"
+      mode="infra"
       timestamp="3d ago"
     />
   </div>

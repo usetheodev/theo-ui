@@ -82,6 +82,7 @@ const registryNameFromTarget = (specifier: string): string | undefined => {
   if (specifier === "@/lib/types") return "types";
   if (specifier === "@/types/chat") return "chat-types";
   if (specifier === "@/types/rule") return "rule-types";
+  if (specifier === "@/types/mode") return "mode-types";
   return undefined;
 };
 

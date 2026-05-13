@@ -120,7 +120,7 @@ interface ModeSwitcherProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChan
 }
 
 /**
- * TopNav.ModeSwitcher — segmented control (Chat / Cowork / Code) inspired by the
+ * TopNav.ModeSwitcher — segmented control (Chat / Code / Infra) inspired by the
  * referencia wiremocks. Stateless: pass `value` + `onChange`.
  */
 const ModeSwitcher = forwardRef<HTMLDivElement, ModeSwitcherProps>(

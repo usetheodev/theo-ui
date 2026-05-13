@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
+import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
 import { Button } from "../button/button.js";
 import { FormField } from "../form-field/form-field.js";
 import { Input } from "../input/input.js";
@@ -49,6 +50,7 @@ export function SkillEditor({
   const [allowedToolsRaw, setAllowedToolsRaw] = useState(initial?.allowedTools?.join(", ") ?? "");
   const [triggersRaw, setTriggersRaw] = useState(initial?.triggers?.join(", ") ?? "");
   const [enabled, setEnabled] = useState<SkillState>(initial?.state ?? "enabled");
+  const [modes, setModes] = useState<Mode[]>(initial?.modes ?? []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset only when skill identity changes
   useEffect(() => {
@@ -59,7 +61,11 @@ export function SkillEditor({
     setAllowedToolsRaw(initial?.allowedTools?.join(", ") ?? "");
     setTriggersRaw(initial?.triggers?.join(", ") ?? "");
     setEnabled(initial?.state ?? "enabled");
+    setModes(initial?.modes ?? []);
   }, [initial?.id]);
+
+  const toggleMode = (m: Mode) =>
+    setModes((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
 
   const canSave = name.trim().length > 0;
   const handleSubmit = (e: React.FormEvent) => {
@@ -80,6 +86,7 @@ export function SkillEditor({
         .split(",")
         .map((t) => t.trim())
         .filter(Boolean),
+      modes: modes.length > 0 ? modes : undefined,
     });
   };
 
@@ -167,6 +174,36 @@ export function SkillEditor({
           />
         </FormField.Control>
         <FormField.Hint>Optional keywords / patterns for auto-discovery.</FormField.Hint>
+      </FormField>
+
+      <FormField>
+        <FormField.Label>Active modes</FormField.Label>
+        <div className="flex flex-wrap gap-1.5">
+          {ALL_MODES.map((m) => {
+            const on = modes.includes(m);
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => toggleMode(m)}
+                aria-pressed={on}
+                className={cn(
+                  "inline-flex h-7 items-center rounded-full border px-3 font-mono text-body-sm transition-colors",
+                  on
+                    ? "border-primary bg-primary/15 text-primary"
+                    : "border-border/60 bg-card text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {MODE_LABEL[m]}
+              </button>
+            );
+          })}
+        </div>
+        <FormField.Hint>
+          {modes.length === 0
+            ? "Empty = global (available in every mode)."
+            : `Only visible in: ${modes.map((m) => MODE_LABEL[m]).join(", ")}.`}
+        </FormField.Hint>
       </FormField>
 
       <div className="flex items-center gap-3">

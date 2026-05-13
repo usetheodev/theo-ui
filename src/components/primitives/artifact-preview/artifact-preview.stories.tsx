@@ -2,7 +2,7 @@ import type { Story } from "@ladle/react";
 import { Button } from "../button/button.js";
 import { ArtifactPreview } from "./artifact-preview.js";
 
-export default { title: "Primitives / Cowork / ArtifactPreview" };
+export default { title: "Primitives / Files / ArtifactPreview" };
 
 export const Spreadsheet: Story = () => (
   <ArtifactPreview

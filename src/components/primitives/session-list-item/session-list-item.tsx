@@ -5,7 +5,7 @@ import { cn } from "../../../lib/cn.js";
 /**
  * SessionListItem — single row in the sidebar's Sessions list for a code agent
  * app. Richer than the generic `Sidebar.Item`: shows a status dot, the agent
- * mode last used (chat/cowork/code), and a relative timestamp.
+ * mode last used (chat/code/infra), and a relative timestamp.
  *
  *   <SessionListItem
  *     title="Build the alignment grid demo"
@@ -20,7 +20,7 @@ import { cn } from "../../../lib/cn.js";
  */
 
 export type SessionRunStatus = "running" | "queued" | "completed" | "failed" | "cancelled";
-export type SessionMode = "chat" | "cowork" | "code";
+export type SessionMode = "chat" | "code" | "infra";
 
 const STATUS_CLASS: Record<SessionRunStatus, string> = {
   running: "bg-success animate-pulse",
@@ -40,8 +40,8 @@ const STATUS_LABEL: Record<SessionRunStatus, string> = {
 
 const MODE_CLASS: Record<SessionMode, string> = {
   chat: "bg-primary/15 text-primary",
-  cowork: "bg-accent/15 text-accent",
   code: "bg-success/15 text-success",
+  infra: "bg-accent/15 text-accent",
 };
 
 interface SessionListItemProps

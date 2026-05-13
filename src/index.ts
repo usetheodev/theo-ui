@@ -99,6 +99,7 @@ export { SkillEditor } from "./components/primitives/skill-editor/index.js";
 export { RuleCard } from "./components/primitives/rule-card/index.js";
 export { RuleEditor } from "./components/primitives/rule-editor/index.js";
 export type { Rule, RuleScope, RuleState } from "./types/rule.js";
+export { ALL_MODES, MODE_LABEL, type Mode } from "./types/mode.js";
 export { CostMeter } from "./components/primitives/cost-meter/index.js";
 export {
   TaskNode,
@@ -234,7 +235,7 @@ export { RunStats } from "./components/primitives/run-stats/index.js";
 export { ToolCall } from "./components/primitives/tool-call/index.js";
 export { ToolResult } from "./components/primitives/tool-result/index.js";
 
-// Cowork atoms
+// Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";
 export {
   FolderContextCard,
@@ -303,7 +304,7 @@ export {
 export { AgentTimeline } from "./components/composites/agent-timeline/index.js";
 export { TaskHeader } from "./components/composites/task-header/index.js";
 
-// Cowork composites
+// Permission & approval composites
 export { PermissionModal } from "./components/composites/permission-modal/index.js";
 
 // Code workspace composites

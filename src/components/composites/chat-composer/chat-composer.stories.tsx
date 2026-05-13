@@ -25,12 +25,12 @@ export const Chat: Story = () => {
   );
 };
 
-export const Cowork: Story = () => {
+export const Infra: Story = () => {
   const [v, setV] = useState("");
   const [m, setM] = useState("sonnet-4-6");
   return (
     <ChatComposer
-      mode="cowork"
+      mode="infra"
       className="max-w-2xl"
       value={v}
       onValueChange={setV}

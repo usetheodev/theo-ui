@@ -2,7 +2,7 @@ import type { Story } from "@ladle/react";
 import { useState } from "react";
 import { RecentFoldersList } from "./recent-folders-list.js";
 
-export default { title: "Primitives / Cowork / RecentFoldersList" };
+export default { title: "Primitives / Files / RecentFoldersList" };
 
 const FOLDERS = [
   { id: "1", name: "Downloads", path: "/Users/Alfredo/Downloads" },

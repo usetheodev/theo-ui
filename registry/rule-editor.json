@@ -3,7 +3,7 @@
   "name": "rule-editor",
   "type": "registry:ui",
   "title": "RuleEditor",
-  "description": "Form for creating or editing a Rule — title, markdown body, scope, tags, enabled toggle.",
+  "description": "Form for creating or editing a Rule \u2014 title, markdown body, scope, tags, enabled toggle.",
   "dependencies": [],
   "registryDependencies": [
     "cn",
@@ -13,7 +13,8 @@
     "input",
     "select",
     "switch",
-    "textarea"
+    "textarea",
+    "mode-types"
   ],
   "files": [
     {

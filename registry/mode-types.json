@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mode-types",
+  "type": "registry:lib",
+  "title": "Theo UI mode types",
+  "description": "Shared Mode type — top-level density / domain a session is operating in (chat, code, infra).",
+  "files": [
+    {
+      "path": "types/mode.ts",
+      "type": "registry:lib",
+      "target": "types/mode.ts"
+    }
+  ]
+}

@@ -41,7 +41,7 @@ interface TaskHeaderProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   status?: TaskStatus;
   /**
    * If provided, a chevron is shown next to the title and clicking it fires this callback.
-   * Used as the "expand task metadata" affordance in the Cowork shell.
+   * Used as the "expand task metadata" affordance in the Infra shell.
    */
   onToggle?: () => void;
   /** Right-side actions (e.g. cancel task, close panel). */

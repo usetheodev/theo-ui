@@ -16,7 +16,7 @@ import { TopNav } from "../components/primitives/topnav/topnav.js";
 export default { title: "Screens / Task Completed" };
 
 export const ExpenseReport: Story = () => {
-  const [mode, setMode] = useState("cowork");
+  const [mode, setMode] = useState("infra");
   const [prompt, setPrompt] = useState("");
   return (
     <div className="-m-12 flex h-[820px] overflow-hidden bg-background">
@@ -53,7 +53,7 @@ export const ExpenseReport: Story = () => {
               onChange={setMode}
               options={[
                 { value: "chat", label: "Chat" },
-                { value: "cowork", label: "Cowork" },
+                { value: "infra", label: "Infra" },
                 { value: "code", label: "Code" },
               ]}
             />
@@ -118,7 +118,7 @@ export const ExpenseReport: Story = () => {
                 },
               ]}
             />
-            <ChatComposer mode="cowork" value={prompt} onValueChange={setPrompt} />
+            <ChatComposer mode="infra" value={prompt} onValueChange={setPrompt} />
           </section>
 
           {/* Right: artifact preview */}

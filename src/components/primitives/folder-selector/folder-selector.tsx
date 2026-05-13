@@ -8,7 +8,7 @@ interface FolderSelectorProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   path: string;
   /**
    * Render in compact mode (smaller height, no chevron padding).
-   * Default is the full-width composer variant used in Cowork home.
+   * Default is the full-width composer variant used in the Files panel.
    */
   compact?: boolean;
 }

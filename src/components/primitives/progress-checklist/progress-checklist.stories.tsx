@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { ProgressChecklist } from "./progress-checklist.js";
 
-export default { title: "Primitives / Cowork / ProgressChecklist" };
+export default { title: "Primitives / Files / ProgressChecklist" };
 
 export const Default: Story = () => (
   <ProgressChecklist

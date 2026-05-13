@@ -56,7 +56,7 @@ const SECTIONS = [
   {
     icon: Boxes,
     title: "Screens",
-    description: "Full theokit compositions — Chat, Cowork, Code workspaces…",
+    description: "Full theokit compositions — Chat, Code, Infra workspaces…",
     path: "?story=screens-chat-home--default",
     cta: "View screens",
   },

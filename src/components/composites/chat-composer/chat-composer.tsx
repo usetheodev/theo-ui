@@ -4,7 +4,7 @@ import type { HTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { Button } from "../../primitives/button/button.js";
 
-export type ComposerMode = "chat" | "cowork" | "code";
+export type ComposerMode = "chat" | "code" | "infra";
 
 interface ChatComposerProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSubmit"> {
   mode?: ComposerMode;
@@ -17,7 +17,7 @@ interface ChatComposerProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSub
   running?: boolean;
   onStop?: () => void;
   /**
-   * Slot above the textarea — used for the folder selector in Cowork mode.
+   * Slot above the textarea — used for the folder selector in Infra mode.
    */
   contextSlot?: ReactNode;
   /**
@@ -45,15 +45,15 @@ interface ChatComposerProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSub
 
 const defaultPlaceholder: Record<ComposerMode, string> = {
   chat: "Como posso ajudar você hoje?",
-  cowork: "Como posso ajudar você com esses arquivos hoje?",
   code: "Type / for commands",
+  infra: "Ask about deploys, metrics, env, or rollback…",
 };
 
 /**
- * ChatComposer — message input area, shared by Chat / Cowork / Code modes.
+ * ChatComposer — message input area, shared by Chat / Code / Infra modes.
  *
  * Visual:
- *   - chat / cowork → soft card with violet ring on focus, generous padding
+ *   - chat / infra → soft card with violet ring on focus, generous padding
  *   - code          → compact dense form with mono font, slash prefix hint
  *
  * Stateless: caller controls `value` + handles `onSubmit`. Submit fires on Enter

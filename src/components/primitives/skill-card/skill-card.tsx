@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { IconComponent } from "../../../lib/types.js";
+import type { Mode } from "../../../types/mode.js";
 
 export type SkillSource = "builtin" | "project" | "user" | "plugin";
 export type SkillState = "enabled" | "disabled";
@@ -25,6 +26,8 @@ export interface Skill {
   /** Optional trigger keywords / patterns for discovery. */
   triggers?: string[];
   state?: SkillState;
+  /** Modes this skill is visible in. Omit / empty = global (all modes). */
+  modes?: Mode[];
 }
 
 interface SkillCardProps extends HTMLAttributes<HTMLDivElement> {

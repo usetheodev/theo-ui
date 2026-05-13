@@ -8,7 +8,7 @@ import { TopNav } from "./topnav.js";
 export default { title: "Primitives / Layout / TopNav" };
 
 export const Default: Story = () => {
-  const [mode, setMode] = useState("cowork");
+  const [mode, setMode] = useState("infra");
   return (
     <div className="-m-12 overflow-hidden">
       <TopNav>
@@ -27,7 +27,7 @@ export const Default: Story = () => {
             onChange={setMode}
             options={[
               { value: "chat", label: "Chat" },
-              { value: "cowork", label: "Cowork" },
+              { value: "infra", label: "Infra" },
               { value: "code", label: "Code" },
             ]}
           />

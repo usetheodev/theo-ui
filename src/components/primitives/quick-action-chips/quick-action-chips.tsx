@@ -21,7 +21,7 @@ interface QuickActionChipsProps extends Omit<HTMLAttributes<HTMLDivElement>, "on
  * QuickActionChips — row of intent chips below a hero composer.
  *
  * Used in Chat Home ("Escrever / Aprender / Código / Assuntos pessoais")
- * and Cowork Home.
+ * and the Files panel.
  */
 const QuickActionChips = forwardRef<HTMLDivElement, QuickActionChipsProps>(
   ({ className, actions, onSelect, ...props }, ref) => (
