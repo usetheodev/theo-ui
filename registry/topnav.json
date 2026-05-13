@@ -8,7 +8,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/topnav/topnav.tsx",
+      "path": "components/primitives/topnav/topnav.tsx",
       "type": "registry:ui",
       "target": "components/ui/topnav.tsx"
     }

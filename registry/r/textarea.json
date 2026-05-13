@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "type": "registry:ui",
+  "title": "Textarea",
+  "description": "Multi-line input matching Input visuals.",
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/textarea/textarea.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/textarea.tsx",
+      "content": "import { forwardRef } from \"react\";\nimport type { TextareaHTMLAttributes } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\nexport interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}\n\n/**\n * Textarea — multi-line input mirror of Input.\n *\n * Matches Input visuals (violet focus ring, --input border, --card bg).\n * Default minimum height of 96px; consumer can override via className.\n */\nconst Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(\n  ({ className, rows = 3, ...props }, ref) => (\n    <textarea\n      ref={ref}\n      rows={rows}\n      className={cn(\n        \"flex min-h-[6rem] w-full resize-y rounded-md border border-input bg-card px-3 py-2\",\n        \"text-body-md text-foreground placeholder:text-muted-foreground\",\n        \"transition-[box-shadow,border-color] duration-base ease-out-soft\",\n        \"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background\",\n        \"focus-visible:border-primary\",\n        \"disabled:cursor-not-allowed disabled:opacity-50\",\n        className,\n      )}\n      {...props}\n    />\n  ),\n);\nTextarea.displayName = \"Textarea\";\n\nexport { Textarea };\n"
+    }
+  ]
+}

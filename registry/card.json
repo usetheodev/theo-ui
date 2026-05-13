@@ -7,7 +7,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/card/card.tsx",
+      "path": "components/primitives/card/card.tsx",
       "type": "registry:ui",
       "target": "components/ui/card.tsx"
     }

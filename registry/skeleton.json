@@ -1,0 +1,9 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "Animated placeholder block for loading states.",
+  "registryDependencies": ["cn"],
+  "files": [{ "path": "components/primitives/skeleton/skeleton.tsx", "type": "registry:ui", "target": "components/ui/skeleton.tsx" }]
+}

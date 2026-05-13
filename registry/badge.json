@@ -8,7 +8,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/badge/badge.tsx",
+      "path": "components/primitives/badge/badge.tsx",
       "type": "registry:ui",
       "target": "components/ui/badge.tsx"
     }

@@ -8,7 +8,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/tabs/tabs.tsx",
+      "path": "components/primitives/tabs/tabs.tsx",
       "type": "registry:ui",
       "target": "components/ui/tabs.tsx"
     }

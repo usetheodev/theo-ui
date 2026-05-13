@@ -1,0 +1,10 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "type": "registry:ui",
+  "title": "Label",
+  "description": "Form label built on Radix Label. Required asterisk when needed.",
+  "dependencies": ["@radix-ui/react-label"],
+  "registryDependencies": ["cn"],
+  "files": [{ "path": "components/primitives/label/label.tsx", "type": "registry:ui", "target": "components/ui/label.tsx" }]
+}

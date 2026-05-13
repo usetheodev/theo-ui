@@ -2,7 +2,7 @@
 export default {
   stories: "src/**/*.stories.{ts,tsx,js,jsx}",
   defaultStory: "welcome--default",
-  appendToHead: `<link rel="preconnect" href="https://api.fontshare.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
+  appendToHead: `<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
   addons: {
     theme: {
       enabled: true,
@@ -20,6 +20,10 @@ export default {
     },
     a11y: {
       enabled: true,
+    },
+    source: {
+      enabled: true,
+      defaultState: false,
     },
     rtl: {
       enabled: false,

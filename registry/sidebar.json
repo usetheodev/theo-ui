@@ -7,7 +7,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/sidebar/sidebar.tsx",
+      "path": "components/primitives/sidebar/sidebar.tsx",
       "type": "registry:ui",
       "target": "components/ui/sidebar.tsx"
     }

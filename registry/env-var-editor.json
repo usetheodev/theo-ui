@@ -8,7 +8,7 @@
   "registryDependencies": ["cn", "badge", "button", "input"],
   "files": [
     {
-      "path": "components/env-var-editor/env-var-editor.tsx",
+      "path": "components/composites/env-var-editor/env-var-editor.tsx",
       "type": "registry:block",
       "target": "components/blocks/env-var-editor.tsx"
     }

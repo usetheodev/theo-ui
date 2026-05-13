@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "type": "registry:ui",
+  "title": "Toast",
+  "description": "Theme-aware transient notification built on Radix Toast. Ships with <Toaster> + useToast() hook.",
+  "dependencies": ["@radix-ui/react-toast", "class-variance-authority", "lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    { "path": "components/primitives/toast/toast.tsx", "type": "registry:ui", "target": "components/ui/toast.tsx" },
+    { "path": "components/primitives/toast/toaster.tsx", "type": "registry:ui", "target": "components/ui/toaster.tsx" }
+  ]
+}

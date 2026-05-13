@@ -7,7 +7,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/build-log-stream/build-log-stream.tsx",
+      "path": "components/primitives/build-log-stream/build-log-stream.tsx",
       "type": "registry:block",
       "target": "components/blocks/build-log-stream.tsx"
     }

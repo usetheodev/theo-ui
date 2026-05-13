@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "type": "registry:ui",
+  "title": "EmptyState",
+  "description": "Placeholder for empty lists/first-run with icon, title, description, action.",
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/empty-state/empty-state.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/empty-state.tsx",
+      "content": "import { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport type { IconComponent } from \"@/lib/types\";\n\ninterface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, \"title\"> {\n  /** Icon shown above the title. */\n  icon?: IconComponent;\n  title: ReactNode;\n  description?: ReactNode;\n  /** Optional action slot (typically <Button>). */\n  action?: ReactNode;\n  /** Hint shown above the title (e.g. uppercase eyebrow). */\n  eyebrow?: ReactNode;\n  /** Bordered dashed surface (placeholder vibe). Default true. */\n  dashed?: boolean;\n}\n\n/**\n * EmptyState — visual placeholder for empty lists / first-run screens.\n *\n * Composition: icon + eyebrow + title + description + action. All slots are\n * optional except title.\n */\nconst EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(\n  (\n    { className, icon: Icon, title, description, action, eyebrow, dashed = true, ...props },\n    ref,\n  ) => (\n    <div\n      ref={ref}\n      className={cn(\n        \"grid place-items-center gap-3 rounded-2xl border bg-card px-6 py-12 text-center\",\n        dashed ? \"border-border/60 border-dashed\" : \"border-border/40\",\n        className,\n      )}\n      {...props}\n    >\n      {Icon ? (\n        <span className=\"grid size-12 place-items-center rounded-2xl bg-primary/10 text-primary\">\n          <Icon className=\"size-6\" aria-hidden />\n        </span>\n      ) : null}\n      {eyebrow ? (\n        <p className=\"font-mono text-label-caps text-muted-foreground uppercase\">{eyebrow}</p>\n      ) : null}\n      <h3 className=\"font-display text-foreground text-title-md\">{title}</h3>\n      {description ? (\n        <p className=\"max-w-md text-body-sm text-muted-foreground\">{description}</p>\n      ) : null}\n      {action ? <div className=\"mt-2\">{action}</div> : null}\n    </div>\n  ),\n);\nEmptyState.displayName = \"EmptyState\";\n\nexport { EmptyState };\n"
+    }
+  ]
+}

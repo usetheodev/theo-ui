@@ -1,0 +1,10 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select",
+  "type": "registry:ui",
+  "title": "Select",
+  "description": "Styled wrapper around Radix Select with grouped options and indicator.",
+  "dependencies": ["@radix-ui/react-select", "lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [{ "path": "components/primitives/select/select.tsx", "type": "registry:ui", "target": "components/ui/select.tsx" }]
+}

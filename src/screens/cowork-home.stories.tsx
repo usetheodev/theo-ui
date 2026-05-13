@@ -1,13 +1,13 @@
 import type { Story } from "@ladle/react";
 import { BookOpen, Code2, Folder, Lightbulb, Palette, Search, Sparkles, User } from "lucide-react";
 import { useState } from "react";
-import { ChatComposer } from "../components/chat-composer/chat-composer.js";
-import { FolderSelector } from "../components/folder-selector/folder-selector.js";
-import { ModelSelector } from "../components/model-selector/model-selector.js";
-import { QuickActionChips } from "../components/quick-action-chips/quick-action-chips.js";
-import { Sidebar } from "../components/sidebar/sidebar.js";
-import { StepsRail } from "../components/steps-rail/steps-rail.js";
-import { TopNav } from "../components/topnav/topnav.js";
+import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import { FolderSelector } from "../components/primitives/folder-selector/folder-selector.js";
+import { ModelSelector } from "../components/primitives/model-selector/model-selector.js";
+import { QuickActionChips } from "../components/primitives/quick-action-chips/quick-action-chips.js";
+import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
+import { StepsRail } from "../components/primitives/steps-rail/steps-rail.js";
+import { TopNav } from "../components/primitives/topnav/topnav.js";
 
 /**
  * Cowork Home — composição matching referencia/stitch/cowork_home_theo_style.

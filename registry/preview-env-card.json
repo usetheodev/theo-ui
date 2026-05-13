@@ -8,7 +8,7 @@
   "registryDependencies": ["cn", "badge", "deployment-row"],
   "files": [
     {
-      "path": "components/preview-env-card/preview-env-card.tsx",
+      "path": "components/composites/preview-env-card/preview-env-card.tsx",
       "type": "registry:block",
       "target": "components/blocks/preview-env-card.tsx"
     }

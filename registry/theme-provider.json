@@ -4,7 +4,7 @@
   "type": "registry:lib",
   "title": "ThemeProvider",
   "description": "React provider for runtime theme + mode switching. Injects CSS vars per registered theme, persists in localStorage, lazy-loads font URLs.",
-  "registryDependencies": ["tokens"],
+  "registryDependencies": ["cn", "tokens"],
   "files": [
     {
       "path": "themes/types.ts",

@@ -13,9 +13,9 @@
  * Reference: https://ui.shadcn.com/docs/registry
  */
 
-import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { join, dirname, resolve } from "node:path";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -23,6 +23,10 @@ const ROOT = resolve(__dirname, "..");
 const REGISTRY_DIR = join(ROOT, "registry");
 const OUT_DIR = join(REGISTRY_DIR, "r");
 const SRC_DIR = join(ROOT, "src");
+
+const writeStdout = (message: string): void => {
+  process.stdout.write(`${message}\n`);
+};
 
 interface RegistryFile {
   path: string;
@@ -49,23 +53,81 @@ interface BuiltRegistryItem extends RegistryDescriptor {
   files: Array<RegistryFile & { content: string }>;
 }
 
+const stripExtension = (value: string): string => value.replace(/\.(tsx|ts|jsx|js|css)$/, "");
+
+const toPosix = (value: string): string => value.split("\\").join("/");
+
+function consumerImportForTarget(target: string): string {
+  const withoutExtension = stripExtension(toPosix(target));
+  if (withoutExtension.startsWith("components/ui/")) {
+    return `@/${withoutExtension}`;
+  }
+  if (withoutExtension.startsWith("components/blocks/")) {
+    return `@/${withoutExtension}`;
+  }
+  if (withoutExtension.startsWith("lib/")) {
+    return `@/${withoutExtension}`;
+  }
+  return withoutExtension.startsWith(".") ? withoutExtension : `@/${withoutExtension}`;
+}
+
+function buildSourceImportMap(descriptors: RegistryDescriptor[]): Map<string, string> {
+  const map = new Map<string, string>();
+
+  for (const descriptor of descriptors) {
+    for (const file of descriptor.files) {
+      if (!file.target) continue;
+      const sourceKey = stripExtension(toPosix(file.path));
+      map.set(sourceKey, consumerImportForTarget(file.target));
+    }
+  }
+
+  return map;
+}
+
+function rewriteRegistryImports(
+  content: string,
+  sourcePathFromSrc: string,
+  sourceImportMap: Map<string, string>,
+): string {
+  const sourceDir = dirname(sourcePathFromSrc);
+
+  return content.replace(/from\s+["']([^"']+)["']/g, (match, specifier: string) => {
+    if (!specifier.startsWith(".")) return match;
+
+    const resolvedFromSrc = stripExtension(
+      toPosix(relative(SRC_DIR, resolve(SRC_DIR, sourceDir, specifier)).replace(/^\.\//, "")),
+    );
+    const mapped = sourceImportMap.get(resolvedFromSrc);
+    if (mapped) return match.replace(specifier, mapped);
+
+    return match.replace(specifier, stripExtension(specifier));
+  });
+}
+
 async function main(): Promise<void> {
   await mkdir(OUT_DIR, { recursive: true });
 
-  const descriptorFiles = (await readdir(REGISTRY_DIR)).filter(
-    (f) => f.endsWith(".json") && f !== "index.json",
-  );
+  const descriptorFiles = (await readdir(REGISTRY_DIR))
+    .filter((f) => f.endsWith(".json") && f !== "index.json")
+    .sort();
 
   if (descriptorFiles.length === 0) {
     console.warn("No registry descriptors found in registry/*.json. Index will be empty.");
   }
 
+  const descriptors = await Promise.all(
+    descriptorFiles.map(async (descriptorFile) => {
+      const descriptorPath = join(REGISTRY_DIR, descriptorFile);
+      const descriptor = JSON.parse(await readFile(descriptorPath, "utf-8")) as RegistryDescriptor;
+      return { descriptorFile, descriptor };
+    }),
+  );
+  const sourceImportMap = buildSourceImportMap(descriptors.map(({ descriptor }) => descriptor));
+
   const built: BuiltRegistryItem[] = [];
 
-  for (const descriptorFile of descriptorFiles) {
-    const descriptorPath = join(REGISTRY_DIR, descriptorFile);
-    const descriptor = JSON.parse(await readFile(descriptorPath, "utf-8")) as RegistryDescriptor;
-
+  for (const { descriptorFile, descriptor } of descriptors) {
     const builtFiles: BuiltRegistryItem["files"] = [];
     for (const file of descriptor.files) {
       const sourcePath = join(SRC_DIR, file.path);
@@ -74,7 +136,8 @@ async function main(): Promise<void> {
           `Registry descriptor ${descriptorFile} references missing file: src/${file.path}`,
         );
       }
-      const content = await readFile(sourcePath, "utf-8");
+      const sourceContent = await readFile(sourcePath, "utf-8");
+      const content = rewriteRegistryImports(sourceContent, file.path, sourceImportMap);
       builtFiles.push({ ...file, content });
     }
 
@@ -82,7 +145,7 @@ async function main(): Promise<void> {
     const outPath = join(OUT_DIR, `${descriptor.name}.json`);
     await writeFile(outPath, JSON.stringify(item, null, 2));
     built.push(item);
-    console.log(`✓ ${descriptor.name} → registry/r/${descriptor.name}.json`);
+    writeStdout(`Built ${descriptor.name} -> registry/r/${descriptor.name}.json`);
   }
 
   // Update the index with the names of everything built.
@@ -99,7 +162,7 @@ async function main(): Promise<void> {
   };
   await writeFile(join(REGISTRY_DIR, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
 
-  console.log(`\n${built.length} registry item(s) built.`);
+  writeStdout(`\n${built.length} registry item(s) built.`);
 }
 
 main().catch((err: unknown) => {

@@ -8,7 +8,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/button/button.tsx",
+      "path": "components/primitives/button/button.tsx",
       "type": "registry:ui",
       "target": "components/ui/button.tsx"
     }

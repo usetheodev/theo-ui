@@ -1,10 +1,10 @@
 import type { Story } from "@ladle/react";
 import { Github, Mail } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../components/button/button.js";
-import { Input } from "../components/input/input.js";
-import { LoginSplit } from "../components/login-split/login-split.js";
-import { SocialAuthRow } from "../components/social-auth-row/social-auth-row.js";
+import { Button } from "../components/primitives/button/button.js";
+import { Input } from "../components/primitives/input/input.js";
+import { LoginSplit } from "../components/primitives/login-split/login-split.js";
+import { SocialAuthRow } from "../components/primitives/social-auth-row/social-auth-row.js";
 
 export default { title: "Screens / Login Split" };
 

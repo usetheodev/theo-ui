@@ -8,7 +8,7 @@
   "registryDependencies": ["cn", "badge", "deployment-row"],
   "files": [
     {
-      "path": "components/project-card/project-card.tsx",
+      "path": "components/composites/project-card/project-card.tsx",
       "type": "registry:block",
       "target": "components/blocks/project-card.tsx"
     }

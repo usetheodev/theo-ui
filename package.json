@@ -4,9 +4,7 @@
   "description": "Theo UI — biblioteca de componentes React framework-agnostic com design system Violet Forge. Foco em interfaces para AI agents e developer tools.",
   "license": "Apache-2.0",
   "type": "module",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,11 +13,7 @@
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css"
   },
-  "files": [
-    "dist",
-    "src",
-    "registry"
-  ],
+  "files": ["dist", "src", "registry"],
   "scripts": {
     "build": "tsup",
     "dev": "ladle serve",
@@ -27,24 +21,37 @@
     "ladle:preview": "ladle preview",
     "typecheck": "tsc --noEmit",
     "lint": "biome check src",
+    "lint:ci": "biome ci src scripts .ladle",
     "lint:fix": "biome check --write src",
-    "format": "biome format --write src",
+    "format": "biome format --write src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
+    "format:check": "biome format src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "registry:build": "tsx scripts/build-registry.ts"
+    "registry:build": "tsx scripts/build-registry.ts",
+    "registry:validate": "tsx scripts/validate-registry.ts",
+    "quality:structure": "tsx scripts/validate-quality-gates.ts",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm ladle:build",
+    "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-popover": "^1.1.6",
+    "@radix-ui/react-radio-group": "^1.3.8",
     "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-toast": "^1.2.15",
     "@radix-ui/react-tooltip": "^1.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -78,20 +85,8 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "esbuild"
-    ]
+    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"]
   },
-  "keywords": [
-    "react",
-    "components",
-    "ui",
-    "design-system",
-    "shadcn",
-    "theo",
-    "paas"
-  ],
+  "keywords": ["react", "components", "ui", "design-system", "shadcn", "theo", "paas"],
   "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
 }

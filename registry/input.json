@@ -7,7 +7,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/input/input.tsx",
+      "path": "components/primitives/input/input.tsx",
       "type": "registry:ui",
       "target": "components/ui/input.tsx"
     }

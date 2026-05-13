@@ -8,7 +8,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/scroll-area/scroll-area.tsx",
+      "path": "components/primitives/scroll-area/scroll-area.tsx",
       "type": "registry:ui",
       "target": "components/ui/scroll-area.tsx"
     }

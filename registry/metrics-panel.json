@@ -8,7 +8,7 @@
   "registryDependencies": ["cn"],
   "files": [
     {
-      "path": "components/metrics-panel/metrics-panel.tsx",
+      "path": "components/primitives/metrics-panel/metrics-panel.tsx",
       "type": "registry:block",
       "target": "components/blocks/metrics-panel.tsx"
     }

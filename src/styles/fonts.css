@@ -1,14 +1,15 @@
 /* Theo UI — font loading.
  *
- * Default theme (Violet Forge): Geist Sans + Geist Mono — proprietary-but-OSS
- * by Vercel, optimized for product UIs (refined Inter). Excellent legibility,
- * clean numerals (tabular-nums), 100–900 weight range.
+ * Default theme (Violet Forge): Geist Sans + Geist Mono.
+ * Vercel-inspired typographic vocabulary — tight letter-spacing on display,
+ * 3 strict weights (400/500/600), OpenType "liga" enabled globally. Geist is
+ * Vercel's open-source font, optimized for product UIs and code surfaces.
  *
- * Loaded via Google Fonts CDN. In production consider self-host to control
+ * Loaded via Google Fonts. In production consider self-host to control
  * preloading, font-display strategy, and reduce external dependencies.
  *
- * Additional theme fonts (Inter, Switzer, Boska, JetBrains Mono, etc.) are
- * loaded on demand by individual themes — see src/themes/.
+ * Additional theme fonts (Inter, etc.) are loaded on demand by individual
+ * themes — see src/themes/.
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");
