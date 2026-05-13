@@ -88,6 +88,12 @@
       "description": "Deployment history with two-step rollback confirmation. Aligns with the < 5s rollback promise."
     },
     {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "ScrollArea",
+      "description": "Custom scroller with Violet Forge thumb (violet glow on hover). Built on Radix ScrollArea for cross-browser consistency."
+    },
+    {
       "name": "sidebar",
       "type": "registry:ui",
       "title": "Sidebar",
@@ -98,6 +104,12 @@
       "type": "registry:ui",
       "title": "Tabs",
       "description": "Underline-style tabs (violet active underline) built on Radix Tabs."
+    },
+    {
+      "name": "theme-provider",
+      "type": "registry:lib",
+      "title": "ThemeProvider",
+      "description": "React provider for runtime theme + mode switching. Injects CSS vars per registered theme, persists in localStorage, lazy-loads font URLs."
     },
     {
       "name": "tokens",
