@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skill-card",
+  "type": "registry:ui",
+  "title": "SkillCard",
+  "description": "Single Skill row — name, source badge, optional triggers and allowed-tools chips, enable toggle.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "types"],
+  "files": [
+    {
+      "path": "components/primitives/skill-card/skill-card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/skill-card.tsx"
+    }
+  ]
+}

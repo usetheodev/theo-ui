@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skill-editor",
+  "type": "registry:ui",
+  "title": "SkillEditor",
+  "description": "Form for creating or editing a Skill — name, description, instructions, source, allowed tools, triggers, enabled.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn",
+    "skill-card",
+    "button",
+    "form-field",
+    "input",
+    "select",
+    "switch",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/skill-editor/skill-editor.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/skill-editor.tsx"
+    }
+  ]
+}

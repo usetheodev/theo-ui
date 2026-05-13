@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-editor",
+  "type": "registry:ui",
+  "title": "AgentEditor",
+  "description": "Form for creating or editing an Agent persona — name, tone, description, model, system prompt, allowed tools, linked skills.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn",
+    "agent-profile",
+    "button",
+    "form-field",
+    "input",
+    "select",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/agent-editor/agent-editor.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-editor.tsx"
+    }
+  ]
+}

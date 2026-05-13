@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-streaming",
+  "type": "registry:ui",
+  "title": "AgentStreaming",
+  "description": "Inline indicator that the agent is producing a response — pulsing dots or streamed partial text.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/primitives/agent-streaming/agent-streaming.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-streaming.tsx"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-message",
+  "type": "registry:ui",
+  "title": "ChatMessage",
+  "description": "Single user / assistant message row with role-aware bubble styling.",
+  "dependencies": [],
+  "registryDependencies": ["cn", "chat-types"],
+  "files": [
+    {
+      "path": "components/primitives/chat-message/chat-message.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message.tsx"
+    }
+  ]
+}

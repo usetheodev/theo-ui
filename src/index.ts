@@ -95,6 +95,10 @@ export {
   type SkillState,
 } from "./components/primitives/skill-card/index.js";
 export { SkillsList } from "./components/primitives/skills-list/index.js";
+export { SkillEditor } from "./components/primitives/skill-editor/index.js";
+export { RuleCard } from "./components/primitives/rule-card/index.js";
+export { RuleEditor } from "./components/primitives/rule-editor/index.js";
+export type { Rule, RuleScope, RuleState } from "./types/rule.js";
 export { CostMeter } from "./components/primitives/cost-meter/index.js";
 export {
   TaskNode,
@@ -144,6 +148,10 @@ export {
   type AgentProfileDescriptor,
 } from "./components/primitives/agent-profile/index.js";
 export {
+  AgentEditor,
+  type AgentDraft,
+} from "./components/primitives/agent-editor/index.js";
+export {
   SubAgentDispatch,
   type SubAgentRun,
   type SubAgentState,
@@ -171,15 +179,47 @@ export {
 } from "./components/primitives/token-usage-chart/index.js";
 export { AutoCompactNotice } from "./components/primitives/auto-compact-notice/index.js";
 export { AgentHandoff, type HandoffParty } from "./components/primitives/agent-handoff/index.js";
+export { AgentStreaming } from "./components/primitives/agent-streaming/index.js";
+export {
+  ApprovalCard,
+  type ApprovalSeverity,
+} from "./components/primitives/approval-card/index.js";
+export {
+  AgentErrorCard,
+  type AgentErrorKind,
+} from "./components/primitives/agent-error-card/index.js";
+export {
+  ToolCallCard,
+  type ToolCallStatus,
+} from "./components/primitives/tool-call-card/index.js";
 
 // Layout shells (atomic — internal subparts only)
 export { Sidebar } from "./components/primitives/sidebar/index.js";
 export { TopNav } from "./components/primitives/topnav/index.js";
+export { Sheet, sheetVariants } from "./components/primitives/sheet/index.js";
+export {
+  ProjectSwitcher,
+  type ProjectStatus,
+} from "./components/primitives/project-switcher/index.js";
+export {
+  SessionListItem,
+  type SessionMode,
+  type SessionRunStatus,
+} from "./components/primitives/session-list-item/index.js";
 
 // Chat atoms
 export { ChatMessage } from "./components/primitives/chat-message/index.js";
 export { ChatThread } from "./components/primitives/chat-thread/index.js";
 export { ModelSelector, type ModelOption } from "./components/primitives/model-selector/index.js";
+export {
+  IntentSelector,
+  type IntentOption,
+} from "./components/primitives/intent-selector/index.js";
+export {
+  MentionMenu,
+  type MentionItem,
+  type MentionTrigger,
+} from "./components/primitives/mention-menu/index.js";
 export { FolderSelector } from "./components/primitives/folder-selector/index.js";
 export { AttachmentChip } from "./components/primitives/attachment-chip/index.js";
 export {
@@ -253,6 +293,11 @@ export {
   ChatComposer,
   type ComposerMode,
 } from "./components/composites/chat-composer/index.js";
+export { AgentComposer } from "./components/composites/agent-composer/index.js";
+export {
+  AgentStream,
+  type AgentStreamItem,
+} from "./components/composites/agent-stream/index.js";
 
 // Agent composites
 export { AgentTimeline } from "./components/composites/agent-timeline/index.js";

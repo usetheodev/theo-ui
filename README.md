@@ -210,7 +210,6 @@ docs/              design-system, quality-gates, architecture, design-audit
 - [x] 12 PaaS composites
 - [x] Theme system (3 themes, runtime-swappable)
 - [x] Quality Gates with structural enforcement
-- [ ] Preview in `theo-agents` integration
 - [ ] First public release on npm
 - [ ] Per-component docs site
 

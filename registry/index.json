@@ -4,6 +4,48 @@
   "homepage": "https://usetheo.dev",
   "items": [
     {
+      "name": "agent-composer",
+      "type": "registry:ui",
+      "title": "AgentComposer",
+      "description": "ChatComposer + slash-command / @file / #memory mention triggers. Detects triggers in the value and renders a MentionMenu above."
+    },
+    {
+      "name": "agent-editor",
+      "type": "registry:ui",
+      "title": "AgentEditor",
+      "description": "Form for creating or editing an Agent persona — name, tone, description, model, system prompt, allowed tools, linked skills."
+    },
+    {
+      "name": "agent-error-card",
+      "type": "registry:ui",
+      "title": "AgentErrorCard",
+      "description": "Inline error / blocked-state card for an agent stream — rate-limit, context-overflow, auth, tool-failure, network."
+    },
+    {
+      "name": "agent-profile",
+      "type": "registry:ui",
+      "title": "AgentProfile",
+      "description": "Persona selector — avatar chip + dropdown listing available agent personas (Coder, Planner, Reviewer, …)."
+    },
+    {
+      "name": "agent-stream",
+      "type": "registry:ui",
+      "title": "AgentStream",
+      "description": "Conversation surface for a code agent — interleaves chat messages, tool calls, approvals, errors, and streaming indicator."
+    },
+    {
+      "name": "agent-streaming",
+      "type": "registry:ui",
+      "title": "AgentStreaming",
+      "description": "Inline indicator that the agent is producing a response — pulsing dots or streamed partial text."
+    },
+    {
+      "name": "approval-card",
+      "type": "registry:ui",
+      "title": "ApprovalCard",
+      "description": "Inline pause-and-ask card for an agent stream. Approve / Deny / Always-allow with info / warning / destructive severities."
+    },
+    {
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
@@ -32,6 +74,24 @@
       "type": "registry:ui",
       "title": "Card",
       "description": "Surface container with Header / Title / Description / Body / Footer composition."
+    },
+    {
+      "name": "chat-composer",
+      "type": "registry:ui",
+      "title": "ChatComposer",
+      "description": "Textarea-based message composer with mode (chat / cowork / code), slots for leading/trailing actions, and send/stop affordances."
+    },
+    {
+      "name": "chat-message",
+      "type": "registry:ui",
+      "title": "ChatMessage",
+      "description": "Single user / assistant message row with role-aware bubble styling."
+    },
+    {
+      "name": "chat-types",
+      "type": "registry:lib",
+      "title": "Theo UI chat types",
+      "description": "Shared chat domain types: Message, MessageRole, Attachment."
     },
     {
       "name": "checkbox",
@@ -88,10 +148,22 @@
       "description": "Text input with violet focus ring and Violet Forge typography."
     },
     {
+      "name": "intent-selector",
+      "type": "registry:ui",
+      "title": "IntentSelector",
+      "description": "Dropdown chip for picking the agent's intent (edit/plan/review). Mirrors ModelSelector."
+    },
+    {
       "name": "label",
       "type": "registry:ui",
       "title": "Label",
       "description": "Form label built on Radix Label. Required asterisk when needed."
+    },
+    {
+      "name": "mention-menu",
+      "type": "registry:ui",
+      "title": "MentionMenu",
+      "description": "Keyboard-navigable popover for slash-command / @file / #memory triggers inside an agent composer."
     },
     {
       "name": "metrics-panel",
@@ -112,6 +184,12 @@
       "description": "Project listing card with status, framework, branch, last commit, and region."
     },
     {
+      "name": "project-switcher",
+      "type": "registry:ui",
+      "title": "ProjectSwitcher",
+      "description": "Sidebar header showing the active workspace + branch + status dot for a code agent app."
+    },
+    {
       "name": "radio-group",
       "type": "registry:ui",
       "title": "RadioGroup",
@@ -122,6 +200,24 @@
       "type": "registry:block",
       "title": "RollbackUI",
       "description": "Deployment history with two-step rollback confirmation. Aligns with the < 5s rollback promise."
+    },
+    {
+      "name": "rule-card",
+      "type": "registry:ui",
+      "title": "RuleCard",
+      "description": "Single rule row — title, scope badge, body preview, tags, and toggle/edit/delete affordances."
+    },
+    {
+      "name": "rule-editor",
+      "type": "registry:ui",
+      "title": "RuleEditor",
+      "description": "Form for creating or editing a Rule — title, markdown body, scope, tags, enabled toggle."
+    },
+    {
+      "name": "rule-types",
+      "type": "registry:lib",
+      "title": "Theo UI rule types",
+      "description": "Rule domain type — behavior instruction injected into the system prompt."
     },
     {
       "name": "scroll-area",
@@ -136,6 +232,18 @@
       "description": "Styled wrapper around Radix Select with grouped options and indicator."
     },
     {
+      "name": "session-list-item",
+      "type": "registry:ui",
+      "title": "SessionListItem",
+      "description": "Rich sidebar row for a single agent session: status dot, mode pill, timestamp, optional unread count."
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "Slide-in side panel built on Radix Dialog. Supports right/left/top/bottom edges."
+    },
+    {
       "name": "sidebar",
       "type": "registry:ui",
       "title": "Sidebar",
@@ -148,10 +256,28 @@
       "description": "Animated placeholder block for loading states."
     },
     {
+      "name": "skill-card",
+      "type": "registry:ui",
+      "title": "SkillCard",
+      "description": "Single Skill row — name, source badge, optional triggers and allowed-tools chips, enable toggle."
+    },
+    {
+      "name": "skill-editor",
+      "type": "registry:ui",
+      "title": "SkillEditor",
+      "description": "Form for creating or editing a Skill — name, description, instructions, source, allowed tools, triggers, enabled."
+    },
+    {
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
       "description": "Binary toggle with violet glow when active."
+    },
+    {
+      "name": "system-prompt-editor",
+      "type": "registry:ui",
+      "title": "SystemPromptEditor",
+      "description": "Two-pane editor for the agent system prompt — vendor default vs user override + token estimate."
     },
     {
       "name": "tabs",
@@ -182,6 +308,12 @@
       "type": "registry:lib",
       "title": "Violet Forge tokens",
       "description": "Design system CSS variables (light + dark) for the Theo UI 'Violet Forge' theme."
+    },
+    {
+      "name": "tool-call-card",
+      "type": "registry:ui",
+      "title": "ToolCallCard",
+      "description": "Single agent tool invocation rendered inside the stream: tool name, target, status badge, expandable output body."
     },
     {
       "name": "tooltip",

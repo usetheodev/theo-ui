@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-composer",
+  "type": "registry:ui",
+  "title": "ChatComposer",
+  "description": "Textarea-based message composer with mode (chat / cowork / code), slots for leading/trailing actions, and send/stop affordances.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "button"],
+  "files": [
+    {
+      "path": "components/composites/chat-composer/chat-composer.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-composer.tsx"
+    }
+  ]
+}

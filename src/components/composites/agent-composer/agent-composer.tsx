@@ -1,0 +1,182 @@
+import { useMemo, useState } from "react";
+import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
+import { cn } from "../../../lib/cn.js";
+import {
+  type MentionItem,
+  MentionMenu,
+  type MentionTrigger,
+} from "../../primitives/mention-menu/mention-menu.js";
+import { ChatComposer } from "../chat-composer/chat-composer.js";
+
+/**
+ * AgentComposer — ChatComposer + slash-command / @file / #memory triggers.
+ *
+ * Wraps ChatComposer and watches the value for three trigger characters:
+ *   `/` → slash commands (`/clear`, `/help`, …)
+ *   `@` → file references (`@src/components/Foo.tsx`)
+ *   `#` → memory entries (`#alignment-grid`)
+ *
+ * Detection is string-based — no textarea ref required. A trigger is active
+ * iff the value ends with a token of the form `[\s|^]([/@#])[^\s]*` (i.e. a
+ * trigger char preceded by start-of-string or whitespace, with no space
+ * after).
+ *
+ * The consumer provides the candidate items per trigger. On selection the
+ * trailing token is replaced with the chosen value plus a trailing space.
+ */
+
+type ItemsProvider = (query: string) => MentionItem[];
+
+interface AgentComposerProps extends ComponentProps<typeof ChatComposer> {
+  /** Items shown when `/` is the active trigger. */
+  commands?: MentionItem[] | ItemsProvider;
+  /** Items shown when `@` is the active trigger. */
+  files?: MentionItem[] | ItemsProvider;
+  /** Items shown when `#` is the active trigger. */
+  memories?: MentionItem[] | ItemsProvider;
+  /**
+   * What text gets inserted when an item is picked. Defaults to
+   * `${trigger}${item.label}` (assumes `label` is a string). Override to
+   * insert a token different from the visible label (e.g. include path,
+   * id, …).
+   */
+  resolveInsertText?: (item: MentionItem, trigger: MentionTrigger) => string;
+  /** Optional slot for the empty-state copy per trigger. */
+  emptyLabels?: Partial<Record<MentionTrigger, ReactNode>>;
+  /** Outer wrapper className (the relative positioning anchor for the menu). */
+  containerClassName?: string;
+}
+
+const TRIGGER_CHARS: ReadonlyArray<MentionTrigger> = ["/", "@", "#"];
+
+const TRIGGER_RE = /(^|\s)([/@#])([^\s]*)$/;
+
+interface DetectedTrigger {
+  trigger: MentionTrigger;
+  query: string;
+  /** Index in the value where the trigger char starts. */
+  start: number;
+}
+
+function detectTrigger(value: string): DetectedTrigger | null {
+  const match = value.match(TRIGGER_RE);
+  if (!match) return null;
+  const leading = match[1] ?? "";
+  const triggerChar = match[2] as MentionTrigger;
+  const query = match[3] ?? "";
+  if (!TRIGGER_CHARS.includes(triggerChar)) return null;
+  // start = position of the trigger char itself
+  const start = (match.index ?? 0) + leading.length;
+  return { trigger: triggerChar, query, start };
+}
+
+function resolveItems(
+  source: MentionItem[] | ItemsProvider | undefined,
+  query: string,
+): MentionItem[] {
+  if (!source) return [];
+  if (typeof source === "function") return source(query);
+  if (!query) return source;
+  const q = query.toLowerCase();
+  return source.filter((item) => {
+    const haystack = `${typeof item.label === "string" ? item.label : ""} ${
+      typeof item.description === "string" ? item.description : ""
+    }`.toLowerCase();
+    return haystack.includes(q);
+  });
+}
+
+function defaultInsertText(item: MentionItem, trigger: MentionTrigger): string {
+  const label = typeof item.label === "string" ? item.label : "";
+  // If the visible label already starts with the trigger char (e.g. "/clear"),
+  // use it as-is so we don't end up with "//clear".
+  if (label.startsWith(trigger)) return label;
+  return `${trigger}${label}`;
+}
+
+export function AgentComposer({
+  value,
+  onValueChange,
+  commands,
+  files,
+  memories,
+  resolveInsertText = defaultInsertText,
+  emptyLabels,
+  containerClassName,
+  className,
+  textareaProps,
+  ...chatComposerProps
+}: AgentComposerProps) {
+  // Trigger detection + manual dismiss state.
+  // We honour `dismissed` so the user can Esc the menu and keep typing after
+  // a trigger char without the menu re-appearing.
+  const [dismissedAt, setDismissedAt] = useState<number | null>(null);
+
+  const detected = useMemo(() => detectTrigger(value), [value]);
+  const isDismissed = detected !== null && dismissedAt === detected.start;
+  const activeTrigger = isDismissed ? null : (detected?.trigger ?? null);
+  const query = isDismissed ? "" : (detected?.query ?? "");
+
+  const items = useMemo(() => {
+    if (!activeTrigger || !detected) return [];
+    if (activeTrigger === "/") return resolveItems(commands, query);
+    if (activeTrigger === "@") return resolveItems(files, query);
+    if (activeTrigger === "#") return resolveItems(memories, query);
+    return [];
+  }, [activeTrigger, detected, commands, files, memories, query]);
+
+  const handleSelect = (item: MentionItem) => {
+    if (!detected) return;
+    const before = value.slice(0, detected.start);
+    const insert = resolveInsertText(item, detected.trigger);
+    onValueChange(`${before}${insert} `);
+    setDismissedAt(null);
+  };
+
+  const handleClose = () => {
+    if (detected) setDismissedAt(detected.start);
+  };
+
+  const interceptKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (activeTrigger) {
+      // Let MentionMenu's global key handler take Arrow/Enter/Esc.
+      if (["ArrowDown", "ArrowUp", "Enter", "Escape"].includes(e.key)) {
+        if (e.key === "Enter") e.preventDefault(); // also prevent form submit
+        return;
+      }
+    }
+    // Mirror ChatComposer's default Enter-to-submit when menu is closed.
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      (e.currentTarget.form as HTMLFormElement | null)?.requestSubmit();
+    }
+    textareaProps?.onKeyDown?.(e);
+  };
+
+  return (
+    <div className={cn("relative", containerClassName)}>
+      <MentionMenu
+        open={!!activeTrigger && items !== null}
+        trigger={(activeTrigger ?? "/") as MentionTrigger}
+        items={items}
+        onSelect={handleSelect}
+        onClose={handleClose}
+        emptyLabel={activeTrigger ? emptyLabels?.[activeTrigger] : undefined}
+      />
+      <ChatComposer
+        value={value}
+        onValueChange={(next) => {
+          // If user clears the trigger token, drop the dismissed marker too.
+          if (!detectTrigger(next)) setDismissedAt(null);
+          onValueChange(next);
+        }}
+        className={className}
+        textareaProps={{
+          ...textareaProps,
+          onKeyDown: interceptKeyDown,
+        }}
+        {...chatComposerProps}
+      />
+    </div>
+  );
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-call-card",
+  "type": "registry:ui",
+  "title": "ToolCallCard",
+  "description": "Single agent tool invocation rendered inside the stream: tool name, target, status badge, expandable output body.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "types"],
+  "files": [
+    {
+      "path": "components/primitives/tool-call-card/tool-call-card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tool-call-card.tsx"
+    }
+  ]
+}

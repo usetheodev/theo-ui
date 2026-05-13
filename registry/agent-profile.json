@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-profile",
+  "type": "registry:ui",
+  "title": "AgentProfile",
+  "description": "Persona selector — avatar chip + dropdown listing available agent personas (Coder, Planner, Reviewer, …).",
+  "dependencies": ["@radix-ui/react-dropdown-menu", "lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/primitives/agent-profile/agent-profile.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-profile.tsx"
+    }
+  ]
+}

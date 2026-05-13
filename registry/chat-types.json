@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-types",
+  "type": "registry:lib",
+  "title": "Theo UI chat types",
+  "description": "Shared chat domain types: Message, MessageRole, Attachment.",
+  "files": [
+    {
+      "path": "types/chat.ts",
+      "type": "registry:lib",
+      "target": "types/chat.ts"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rule-types",
+  "type": "registry:lib",
+  "title": "Theo UI rule types",
+  "description": "Rule domain type — behavior instruction injected into the system prompt.",
+  "files": [
+    {
+      "path": "types/rule.ts",
+      "type": "registry:lib",
+      "target": "types/rule.ts",
+      "content": "/**\n * Rule — a user-authored behavior instruction injected into the system prompt.\n *\n * Equivalent to a single markdown file under `.claude/rules/` in Claude Code:\n * short imperative text the user writes once and the agent follows always.\n * Rules can be scoped (`global` = applies to every session; `project` = only\n * inside the current workspace) and toggled on/off without deletion.\n */\n\nexport type RuleScope = \"global\" | \"project\";\nexport type RuleState = \"enabled\" | \"disabled\";\n\nexport interface Rule {\n  id: string;\n  /** Short title shown in the list. */\n  title: string;\n  /** Markdown body — the actual instruction injected into the prompt. */\n  body: string;\n  /** Where this rule applies. */\n  scope: RuleScope;\n  /** Whether the rule is currently active. */\n  state: RuleState;\n  /** Optional tags for grouping (\"testing\", \"style\", \"security\"). */\n  tags?: string[];\n  /** ISO timestamp / friendly label of last edit. */\n  updatedAt?: string;\n}\n"
+    }
+  ]
+}
