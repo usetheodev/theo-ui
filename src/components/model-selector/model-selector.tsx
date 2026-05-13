@@ -35,7 +35,7 @@ const ModelSelector = forwardRef<HTMLButtonElement, ModelSelectorProps>(
             type="button"
             className={cn(
               "inline-flex h-8 items-center gap-2 rounded-full border border-border/60 bg-card px-3",
-              "font-sans text-body-sm font-medium text-foreground",
+              "font-medium font-sans text-body-sm text-foreground",
               "transition-colors duration-base ease-out-soft",
               "hover:bg-muted",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
@@ -77,7 +77,7 @@ const ModelSelector = forwardRef<HTMLButtonElement, ModelSelectorProps>(
                 </span>
                 <span className="flex items-center gap-2">
                   {opt.tag ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 font-mono text-label text-accent uppercase">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 font-mono text-accent text-label uppercase">
                       {opt.tag === "smart" ? <Sparkles className="size-3" /> : null}
                       {opt.tag}
                     </span>

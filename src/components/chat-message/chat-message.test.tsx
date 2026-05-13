@@ -36,11 +36,14 @@ describe("ChatMessage", () => {
     render(<ChatMessage message={assistant} />);
     expect(screen.getByLabelText("assistant message")).toBeInTheDocument();
     expect(screen.getByText("Opus 4.6")).toBeInTheDocument();
-    expect(screen.getByText("Swapping the back-out curve for a hard-stop snap.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Swapping the back-out curve for a hard-stop snap."),
+    ).toBeInTheDocument();
   });
 
   it("falls back to 'Assistant' label when model missing", () => {
-    render(<ChatMessage message={{ ...assistant, model: undefined }} />);
+    const { model: _model, ...rest } = assistant;
+    render(<ChatMessage message={rest} />);
     expect(screen.getByText("Assistant")).toBeInTheDocument();
   });
 

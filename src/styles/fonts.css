@@ -1,12 +1,14 @@
 /* Theo UI — font loading.
  *
- * Boska + Switzer hospedadas via Fontshare (Indian Type Foundry, OSS).
- * JetBrains Mono via Google Fonts (Apache 2.0).
+ * Default theme (Violet Forge): Geist Sans + Geist Mono — proprietary-but-OSS
+ * by Vercel, optimized for product UIs (refined Inter). Excellent legibility,
+ * clean numerals (tabular-nums), 100–900 weight range.
  *
- * Em produção, considere self-host das fontes para evitar dependência externa
- * e melhorar performance (preload, font-display).
+ * Loaded via Google Fonts CDN. In production consider self-host to control
+ * preloading, font-display strategy, and reduce external dependencies.
+ *
+ * Additional theme fonts (Inter, Switzer, Boska, JetBrains Mono, etc.) are
+ * loaded on demand by individual themes — see src/themes/.
  */
 
-@import url("https://api.fontshare.com/v2/css?f[]=boska@400,500,700,900&display=swap");
-@import url("https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");

@@ -1,8 +1,8 @@
 import { Mic, Paperclip, Send, Square } from "lucide-react";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
-import { Button } from "../button/button.js";
 import { cn } from "../../lib/cn.js";
+import { Button } from "../button/button.js";
 
 export type ComposerMode = "chat" | "cowork" | "code";
 
@@ -128,9 +128,7 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
             "w-full resize-none bg-transparent px-4 py-3",
             "placeholder:text-muted-foreground",
             "focus:outline-none",
-            isCode
-              ? "font-mono text-code-md"
-              : "font-sans text-body-md min-h-[3.5rem]",
+            isCode ? "font-mono text-code-md" : "min-h-[3.5rem] font-sans text-body-md",
             textareaProps?.className,
           )}
         />
@@ -163,12 +161,7 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
                 <Square />
               </Button>
             ) : (
-              <Button
-                type="submit"
-                size="icon"
-                disabled={!value.trim()}
-                aria-label="Send message"
-              >
+              <Button type="submit" size="icon" disabled={!value.trim()} aria-label="Send message">
                 <Send />
               </Button>
             )}

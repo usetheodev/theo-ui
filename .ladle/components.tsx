@@ -1,14 +1,15 @@
 import type { GlobalProvider } from "@ladle/react";
 import "../src/styles/global.css";
+import { ThemeProvider } from "../src/themes/theme-provider.js";
+import { builtinThemes } from "../src/themes/index.js";
 
 export const Provider: GlobalProvider = ({ children, globalState }) => {
-  const themeClass = globalState.theme === "dark" ? "dark" : "";
+  const mode = globalState.theme === "dark" ? "dark" : "light";
   return (
-    <div
-      className={`${themeClass} min-h-screen bg-background text-foreground bg-dotted-violet`}
-      data-theme={globalState.theme}
-    >
-      <div className="container py-12">{children}</div>
-    </div>
+    <ThemeProvider themes={builtinThemes} defaultMode={mode} storageKey={null}>
+      <div className="min-h-screen bg-background bg-dotted-violet text-foreground">
+        <div className="container py-12">{children}</div>
+      </div>
+    </ThemeProvider>
   );
 };

@@ -1,0 +1,82 @@
+import type { Theme } from "./types.js";
+
+/**
+ * Aurora Terminal — dark-first, cyan-aurora primary, Geist Mono everywhere.
+ *
+ * Identity: deep oceanic background, cyan-aurora primary, aurora-pink accent.
+ * Headers use Geist with heavier tracking; body uses Geist Mono for full
+ * "developer console" feel. Suits CLI/devtools showcase.
+ */
+export const auroraTerminal: Theme = {
+  name: "aurora-terminal",
+  label: "Aurora Terminal",
+  description: "Dark sci-fi developer console — cyan-aurora + Geist Mono body.",
+  fonts: {
+    display: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
+  },
+  fontUrls: [
+    "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
+  ],
+  light: {
+    background: "220 30% 96%",
+    foreground: "222 47% 11%",
+    card: "0 0% 100%",
+    "card-foreground": "222 47% 11%",
+    popover: "0 0% 100%",
+    "popover-foreground": "222 47% 11%",
+    primary: "178 78% 41%",
+    "primary-deep": "180 100% 25%",
+    "primary-glow": "180 89% 70%",
+    "primary-foreground": "222 47% 11%",
+    secondary: "210 40% 96%",
+    "secondary-foreground": "222 47% 11%",
+    accent: "340 82% 60%",
+    "accent-deep": "340 80% 50%",
+    "accent-foreground": "0 0% 100%",
+    muted: "214 32% 91%",
+    "muted-foreground": "215 16% 47%",
+    border: "214 32% 91%",
+    input: "214 32% 91%",
+    ring: "178 78% 41%",
+    success: "152 79% 42%",
+    "success-foreground": "0 0% 100%",
+    warning: "33 92% 44%",
+    "warning-foreground": "0 0% 100%",
+    destructive: "0 72% 51%",
+    "destructive-foreground": "0 0% 100%",
+    info: "217 91% 60%",
+    "info-foreground": "0 0% 100%",
+  },
+  dark: {
+    background: "224 36% 7%",
+    foreground: "220 30% 96%",
+    card: "224 35% 10%",
+    "card-foreground": "220 30% 96%",
+    popover: "224 35% 10%",
+    "popover-foreground": "220 30% 96%",
+    primary: "178 71% 60%",
+    "primary-deep": "180 100% 35%",
+    "primary-glow": "180 89% 80%",
+    "primary-foreground": "224 36% 7%",
+    secondary: "222 30% 14%",
+    "secondary-foreground": "220 30% 96%",
+    accent: "340 90% 65%",
+    "accent-deep": "340 80% 50%",
+    "accent-foreground": "224 36% 7%",
+    muted: "222 30% 14%",
+    "muted-foreground": "215 20% 65%",
+    border: "222 28% 18%",
+    input: "222 30% 14%",
+    ring: "178 71% 60%",
+    success: "152 79% 52%",
+    "success-foreground": "224 36% 7%",
+    warning: "38 92% 50%",
+    "warning-foreground": "224 36% 7%",
+    destructive: "350 100% 65%",
+    "destructive-foreground": "224 36% 7%",
+    info: "213 100% 70%",
+    "info-foreground": "224 36% 7%",
+  },
+};

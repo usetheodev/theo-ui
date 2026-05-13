@@ -98,7 +98,7 @@ const ChatMessage = forwardRef<HTMLElement, ChatMessageProps>(
               </span>
             ) : null}
           </header>
-          <div className="text-body-md leading-relaxed text-foreground">{message.content}</div>
+          <div className="text-body-md text-foreground leading-relaxed">{message.content}</div>
           {actions ? <div className="mt-3 flex items-center gap-1">{actions}</div> : null}
         </div>
       </article>

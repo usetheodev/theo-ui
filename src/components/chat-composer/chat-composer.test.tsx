@@ -59,12 +59,7 @@ describe("ChatComposer", () => {
 
   it("replaces Send with Stop when running=true", () => {
     render(
-      <ChatComposer
-        value="x"
-        onValueChange={() => undefined}
-        running
-        onStop={() => undefined}
-      />,
+      <ChatComposer value="x" onValueChange={() => undefined} running onStop={() => undefined} />,
     );
     expect(screen.getByRole("button", { name: "Stop generation" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Send message" })).not.toBeInTheDocument();

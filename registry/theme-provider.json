@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-provider",
+  "type": "registry:lib",
+  "title": "ThemeProvider",
+  "description": "React provider for runtime theme + mode switching. Injects CSS vars per registered theme, persists in localStorage, lazy-loads font URLs.",
+  "registryDependencies": ["tokens"],
+  "files": [
+    {
+      "path": "themes/types.ts",
+      "type": "registry:lib",
+      "target": "themes/types.ts"
+    },
+    {
+      "path": "themes/violet-forge.ts",
+      "type": "registry:lib",
+      "target": "themes/violet-forge.ts"
+    },
+    {
+      "path": "themes/classic-paper.ts",
+      "type": "registry:lib",
+      "target": "themes/classic-paper.ts"
+    },
+    {
+      "path": "themes/aurora-terminal.ts",
+      "type": "registry:lib",
+      "target": "themes/aurora-terminal.ts"
+    },
+    {
+      "path": "themes/theme-provider.tsx",
+      "type": "registry:lib",
+      "target": "themes/theme-provider.tsx"
+    },
+    {
+      "path": "themes/theme-switcher.tsx",
+      "type": "registry:lib",
+      "target": "themes/theme-switcher.tsx"
+    },
+    {
+      "path": "themes/index.ts",
+      "type": "registry:lib",
+      "target": "themes/index.ts"
+    }
+  ]
+}

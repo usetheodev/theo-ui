@@ -1,10 +1,11 @@
 import { File, FileCode, FileImage, FileSpreadsheet, FileText, X } from "lucide-react";
 import { forwardRef } from "react";
-import type { ComponentType, HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { cn } from "../../lib/cn.js";
+import type { IconComponent } from "../../lib/types.js";
 import type { Attachment } from "../../types/chat.js";
 
-const typeIcon: Record<string, ComponentType<{ className?: string }>> = {
+const typeIcon: Record<string, IconComponent> = {
   image: FileImage,
   spreadsheet: FileSpreadsheet,
   code: FileCode,
@@ -24,7 +25,7 @@ interface AttachmentChipProps extends HTMLAttributes<HTMLDivElement> {
  */
 const AttachmentChip = forwardRef<HTMLDivElement, AttachmentChipProps>(
   ({ className, attachment, onRemove, ...props }, ref) => {
-    const Icon = (attachment.type && typeIcon[attachment.type]) ?? File;
+    const Icon: IconComponent = (attachment.type ? typeIcon[attachment.type] : undefined) ?? File;
     return (
       <div
         ref={ref}

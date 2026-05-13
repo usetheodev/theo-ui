@@ -23,12 +23,13 @@
     font-feature-settings: "ss01", "cv11";
   }
 
-  /* Display headings use Boska serif */
+  /* Display headings use the theme's display font */
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    font-weight: 700;
   }
 
   /* Code blocks and inline code use JetBrains Mono */
@@ -49,5 +50,34 @@
   ::selection {
     background-color: hsl(var(--primary) / 0.25);
     color: hsl(var(--foreground));
+  }
+
+  /* Native scrollbar fallback (Violet Forge).
+   * Used for native browser scroll on elements that don't wrap in <ScrollArea>.
+   * Components that DO use <ScrollArea> hide the native scrollbar via Radix.
+   */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 0.25);
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 9999px;
+    transition: background-color var(--duration-fast) var(--ease-out-soft);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary) / 0.5);
+  }
+  *::-webkit-scrollbar-thumb:active {
+    background-color: hsl(var(--primary) / 0.75);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
   }
 }
