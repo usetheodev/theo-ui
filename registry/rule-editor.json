@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rule-editor",
+  "type": "registry:ui",
+  "title": "RuleEditor",
+  "description": "Form for creating or editing a Rule — title, markdown body, scope, tags, enabled toggle.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn",
+    "rule-types",
+    "button",
+    "form-field",
+    "input",
+    "select",
+    "switch",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/rule-editor/rule-editor.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/rule-editor.tsx"
+    }
+  ]
+}

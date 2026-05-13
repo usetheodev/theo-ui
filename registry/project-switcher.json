@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "project-switcher",
+  "type": "registry:ui",
+  "title": "ProjectSwitcher",
+  "description": "Sidebar header showing the active workspace + branch + status dot for a code agent app.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/primitives/project-switcher/project-switcher.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/project-switcher.tsx"
+    }
+  ]
+}

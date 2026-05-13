@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "system-prompt-editor",
+  "type": "registry:ui",
+  "title": "SystemPromptEditor",
+  "description": "Two-pane editor for the agent system prompt — vendor default vs user override + token estimate.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/primitives/system-prompt-editor/system-prompt-editor.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/system-prompt-editor.tsx"
+    }
+  ]
+}

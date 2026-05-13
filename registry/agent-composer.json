@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-composer",
+  "type": "registry:ui",
+  "title": "AgentComposer",
+  "description": "ChatComposer + slash-command / @file / #memory mention triggers. Detects triggers in the value and renders a MentionMenu above.",
+  "dependencies": [],
+  "registryDependencies": ["cn", "chat-composer", "mention-menu"],
+  "files": [
+    {
+      "path": "components/composites/agent-composer/agent-composer.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-composer.tsx"
+    }
+  ]
+}

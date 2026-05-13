@@ -14,15 +14,19 @@
 
 @layer base {
   :root {
-    /* Base palette ------------------------------------------------------- */
-    --background: 36 26% 97%; /* #FAF9F7  warm off-white */
-    --foreground: 261 27% 7%; /* #0E0B14  charcoal violet-tinted */
+    /* Base palette ------------------------------------------------------- *
+     * Neutrals are 100% desaturated (Vercel-style). Color comes from the
+     * primary (violet) + accent (burnt sienna) tokens below — never from
+     * surface tints.
+     */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 0 0% 4%; /* #0A0A0A */
 
     --card: 0 0% 100%; /* #FFFFFF */
-    --card-foreground: 261 27% 7%;
+    --card-foreground: 0 0% 4%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 261 27% 7%;
+    --popover-foreground: 0 0% 4%;
 
     /* Primary — Theo violet (equity) ------------------------------------- */
     --primary: 262 83% 58%; /* #7C3AED */
@@ -30,9 +34,9 @@
     --primary-glow: 263 90% 76%; /* #A78BFA — hover halo */
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary — warm muted -------------------------------------------- */
-    --secondary: 36 18% 92%; /* #EFECE6 */
-    --secondary-foreground: 261 27% 7%;
+    /* Secondary — neutral muted ----------------------------------------- */
+    --secondary: 0 0% 96%; /* #F5F5F5 */
+    --secondary-foreground: 0 0% 4%;
 
     /* Accent — burnt sienna --------------------------------------------- */
     --accent: 15 54% 53%; /* #C96442 */
@@ -40,12 +44,12 @@
     --accent-foreground: 0 0% 100%;
 
     /* Muted ------------------------------------------------------------- */
-    --muted: 36 18% 92%;
-    --muted-foreground: 268 8% 35%; /* #5A5260 */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%; /* #737373 */
 
     /* Surfaces, borders, inputs ----------------------------------------- */
-    --border: 261 18% 11%; /* #1A1622 — near-black violet-tinted */
-    --input: 36 18% 88%; /* #E5E2DC */
+    --border: 0 0% 91%; /* #E8E8E8 — Vercel-style hairline */
+    --input: 0 0% 91%;
     --ring: 262 83% 58%; /* matches primary */
 
     /* Semantics --------------------------------------------------------- */
@@ -110,45 +114,49 @@
     --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
-  /* Dark mode — dominante --------------------------------------------- */
+  /* Dark mode — dominante --------------------------------------------- *
+   * Vercel-aligned grayscale: pure neutrals (0% saturation) for every
+   * surface and text layer. Color only in primary (violet), accent (burnt
+   * sienna), and semantic tokens (success/warning/destructive/info).
+   */
   [data-theme="dark"],
   .dark {
-    --background: 261 27% 7%; /* #0E0B14 */
-    --foreground: 36 26% 95%; /* #F5F2EE */
+    --background: 0 0% 4%; /* #0A0A0A */
+    --foreground: 0 0% 96%; /* #F5F5F5 */
 
-    --card: 261 26% 9%; /* #15111E */
-    --card-foreground: 36 26% 95%;
+    --card: 0 0% 7%; /* #121212 */
+    --card-foreground: 0 0% 96%;
 
-    --popover: 261 26% 9%;
-    --popover-foreground: 36 26% 95%;
+    --popover: 0 0% 9%; /* #171717 */
+    --popover-foreground: 0 0% 96%;
 
     --primary: 262 83% 58%;
     --primary-deep: 263 70% 42%;
     --primary-glow: 263 90% 76%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 261 18% 11%; /* #1A1622 */
-    --secondary-foreground: 36 26% 95%;
+    --secondary: 0 0% 11%; /* #1C1C1C */
+    --secondary-foreground: 0 0% 96%;
 
     --accent: 15 54% 53%;
     --accent-deep: 15 55% 40%;
     --accent-foreground: 0 0% 100%;
 
-    --muted: 261 18% 11%;
-    --muted-foreground: 261 12% 63%; /* #9890A8 */
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 60%; /* #999 — Vercel gray-500 */
 
-    --border: 263 17% 16%; /* #26212F */
-    --input: 261 18% 11%;
+    --border: 0 0% 16%; /* #292929 */
+    --input: 0 0% 11%;
     --ring: 262 83% 58%;
 
     --success: 152 79% 52%; /* #22E58C */
-    --success-foreground: 261 27% 7%;
+    --success-foreground: 0 0% 4%;
     --warning: 38 92% 50%; /* #F59E0B */
-    --warning-foreground: 261 27% 7%;
+    --warning-foreground: 0 0% 4%;
     --destructive: 350 100% 65%; /* #FF4F6D */
-    --destructive-foreground: 261 27% 7%;
+    --destructive-foreground: 0 0% 4%;
     --info: 213 100% 70%; /* #5FB3FF */
-    --info-foreground: 261 27% 7%;
+    --info-foreground: 0 0% 4%;
 
     /* In dark mode, shadows are heavier ink (against the dark surface) and
      * the glow brightens. Both still derive from theme tokens.

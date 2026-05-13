@@ -68,6 +68,9 @@ function consumerImportForTarget(target: string): string {
   if (withoutExtension.startsWith("lib/")) {
     return `@/${withoutExtension}`;
   }
+  if (withoutExtension.startsWith("types/")) {
+    return `@/${withoutExtension}`;
+  }
   return withoutExtension.startsWith(".") ? withoutExtension : `@/${withoutExtension}`;
 }
 

@@ -5,7 +5,7 @@ const hsl = (token: string) => `hsl(var(${token}) / <alpha-value>)`;
 
 export default {
   darkMode: ["class", '[data-theme="dark"]'],
-  content: ["./src/**/*.{ts,tsx}", "./.ladle/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{ts,tsx}", "./.ladle/**/*.{ts,tsx}", "./playground/**/*.{ts,tsx,html}"],
   theme: {
     container: {
       center: true,

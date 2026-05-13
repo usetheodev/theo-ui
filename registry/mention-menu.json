@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mention-menu",
+  "type": "registry:ui",
+  "title": "MentionMenu",
+  "description": "Keyboard-navigable popover for slash-command / @file / #memory triggers inside an agent composer.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "types"],
+  "files": [
+    {
+      "path": "components/primitives/mention-menu/mention-menu.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/mention-menu.tsx"
+    }
+  ]
+}

@@ -80,6 +80,8 @@ const registryNameFromTarget = (specifier: string): string | undefined => {
     return specifier.replace("@/components/blocks/", "");
   if (specifier === "@/lib/cn") return "cn";
   if (specifier === "@/lib/types") return "types";
+  if (specifier === "@/types/chat") return "chat-types";
+  if (specifier === "@/types/rule") return "rule-types";
   return undefined;
 };
 

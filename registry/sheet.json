@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sheet",
+  "type": "registry:ui",
+  "title": "Sheet",
+  "description": "Slide-in side panel built on Radix Dialog. Supports right/left/top/bottom edges.",
+  "dependencies": ["@radix-ui/react-dialog", "class-variance-authority", "lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/primitives/sheet/sheet.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/sheet.tsx"
+    }
+  ]
+}

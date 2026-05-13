@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-stream",
+  "type": "registry:ui",
+  "title": "AgentStream",
+  "description": "Conversation surface for a code agent — interleaves chat messages, tool calls, approvals, errors, and streaming indicator.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn",
+    "types",
+    "chat-types",
+    "chat-message",
+    "tool-call-card",
+    "approval-card",
+    "agent-error-card",
+    "agent-streaming"
+  ],
+  "files": [
+    {
+      "path": "components/composites/agent-stream/agent-stream.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-stream.tsx"
+    }
+  ]
+}

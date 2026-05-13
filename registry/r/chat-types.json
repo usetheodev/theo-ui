@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-types",
+  "type": "registry:lib",
+  "title": "Theo UI chat types",
+  "description": "Shared chat domain types: Message, MessageRole, Attachment.",
+  "files": [
+    {
+      "path": "types/chat.ts",
+      "type": "registry:lib",
+      "target": "types/chat.ts",
+      "content": "import type { ReactNode } from \"react\";\n\nexport type MessageRole = \"user\" | \"assistant\" | \"system\";\n\nexport interface Attachment {\n  id: string;\n  name: string;\n  size?: string;\n  type?: string;\n}\n\nexport interface Message {\n  id: string;\n  role: MessageRole;\n  content: string | ReactNode;\n  timestamp?: string;\n  /**\n   * Model that produced this message (assistant role only).\n   * e.g. \"Opus 4.6\", \"Sonnet 4.6\", \"GPT-5.4\".\n   */\n  model?: string;\n  attachments?: Attachment[];\n}\n"
+    }
+  ]
+}

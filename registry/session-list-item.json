@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "session-list-item",
+  "type": "registry:ui",
+  "title": "SessionListItem",
+  "description": "Rich sidebar row for a single agent session: status dot, mode pill, timestamp, optional unread count.",
+  "dependencies": [],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/primitives/session-list-item/session-list-item.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/session-list-item.tsx"
+    }
+  ]
+}

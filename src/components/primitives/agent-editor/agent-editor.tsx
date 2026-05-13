@@ -1,0 +1,265 @@
+import { useEffect, useState } from "react";
+import type { HTMLAttributes } from "react";
+import { cn } from "../../../lib/cn.js";
+import type { AgentProfileDescriptor } from "../agent-profile/agent-profile.js";
+import { Button } from "../button/button.js";
+import { FormField } from "../form-field/form-field.js";
+import { Input } from "../input/input.js";
+import { Select } from "../select/select.js";
+import { Textarea } from "../textarea/textarea.js";
+
+/**
+ * AgentEditor — form for creating or editing an Agent persona.
+ */
+
+export interface AgentDraft extends Omit<AgentProfileDescriptor, "id"> {
+  id?: string;
+  systemPrompt?: string;
+  model?: string;
+  allowedTools?: string[];
+  skillIds?: string[];
+}
+
+interface AgentEditorProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSubmit" | "onChange"> {
+  initial?: Partial<AgentDraft>;
+  models?: Array<{ id: string; label: string }>;
+  skills?: Array<{ id: string; label: string }>;
+  onSave: (draft: AgentDraft) => void;
+  onCancel?: () => void;
+  onDelete?: () => void;
+}
+
+const TONES: Array<{ id: NonNullable<AgentProfileDescriptor["tone"]>; label: string }> = [
+  { id: "primary", label: "Primary (violet)" },
+  { id: "accent", label: "Accent (sienna)" },
+  { id: "success", label: "Success (green)" },
+  { id: "warning", label: "Warning (amber)" },
+  { id: "info", label: "Info (blue)" },
+  { id: "muted", label: "Muted (neutral)" },
+];
+
+export function AgentEditor({
+  className,
+  initial,
+  models,
+  skills,
+  onSave,
+  onCancel,
+  onDelete,
+  ...formProps
+}: AgentEditorProps) {
+  const [name, setName] = useState(initial?.name ?? "");
+  const [initials, setInitials] = useState(initial?.initials ?? "");
+  const [description, setDescription] = useState(
+    typeof initial?.description === "string" ? initial.description : "",
+  );
+  const [tone, setTone] = useState<NonNullable<AgentProfileDescriptor["tone"]>>(
+    initial?.tone ?? "primary",
+  );
+  const [model, setModel] = useState<string>(initial?.model ?? models?.[0]?.id ?? "");
+  const [systemPrompt, setSystemPrompt] = useState(initial?.systemPrompt ?? "");
+  const [allowedToolsRaw, setAllowedToolsRaw] = useState(initial?.allowedTools?.join(", ") ?? "");
+  const [skillsSelected, setSkillsSelected] = useState<Set<string>>(
+    new Set(initial?.skillIds ?? []),
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset only when agent identity changes
+  useEffect(() => {
+    setName(initial?.name ?? "");
+    setInitials(initial?.initials ?? "");
+    setDescription(typeof initial?.description === "string" ? initial.description : "");
+    setTone(initial?.tone ?? "primary");
+    setModel(initial?.model ?? models?.[0]?.id ?? "");
+    setSystemPrompt(initial?.systemPrompt ?? "");
+    setAllowedToolsRaw(initial?.allowedTools?.join(", ") ?? "");
+    setSkillsSelected(new Set(initial?.skillIds ?? []));
+  }, [initial?.id]);
+
+  const canSave = name.trim().length > 0;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSave) return;
+    onSave({
+      id: initial?.id,
+      name: name.trim(),
+      initials: initials.trim() || undefined,
+      description: description.trim() || undefined,
+      tone,
+      model: model || undefined,
+      systemPrompt: systemPrompt.trim() || undefined,
+      allowedTools: allowedToolsRaw
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      skillIds: Array.from(skillsSelected),
+    });
+  };
+
+  const toggleSkill = (id: string) => {
+    setSkillsSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className={cn("flex h-full flex-col gap-4", className)}
+      {...formProps}
+    >
+      <div className="grid grid-cols-[1fr_auto] gap-3">
+        <FormField>
+          <FormField.Label>Name</FormField.Label>
+          <FormField.Control>
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Coder"
+              required
+            />
+          </FormField.Control>
+        </FormField>
+        <FormField className="w-24">
+          <FormField.Label>Initials</FormField.Label>
+          <FormField.Control>
+            <Input
+              value={initials}
+              onChange={(e) => setInitials(e.target.value.slice(0, 2).toUpperCase())}
+              placeholder="CO"
+              maxLength={2}
+              className="text-center font-mono uppercase"
+            />
+          </FormField.Control>
+        </FormField>
+      </div>
+
+      <FormField>
+        <FormField.Label>Description</FormField.Label>
+        <FormField.Control>
+          <Input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Writes code, edits files, runs verification."
+          />
+        </FormField.Control>
+      </FormField>
+
+      <div className="grid grid-cols-2 gap-3">
+        <FormField>
+          <FormField.Label>Tone</FormField.Label>
+          <FormField.Control>
+            <Select
+              value={tone}
+              onValueChange={(v) => setTone(v as NonNullable<AgentProfileDescriptor["tone"]>)}
+            >
+              <Select.Trigger>
+                <Select.Value />
+              </Select.Trigger>
+              <Select.Content>
+                {TONES.map((t) => (
+                  <Select.Item key={t.id} value={t.id}>
+                    {t.label}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select>
+          </FormField.Control>
+        </FormField>
+        {models && models.length > 0 ? (
+          <FormField>
+            <FormField.Label>Model</FormField.Label>
+            <FormField.Control>
+              <Select value={model} onValueChange={setModel}>
+                <Select.Trigger>
+                  <Select.Value />
+                </Select.Trigger>
+                <Select.Content>
+                  {models.map((m) => (
+                    <Select.Item key={m.id} value={m.id}>
+                      {m.label}
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select>
+            </FormField.Control>
+          </FormField>
+        ) : null}
+      </div>
+
+      <FormField className="flex-1">
+        <FormField.Label>System prompt override</FormField.Label>
+        <FormField.Control>
+          <Textarea
+            value={systemPrompt}
+            onChange={(e) => setSystemPrompt(e.target.value)}
+            rows={6}
+            placeholder="You are the Coder. You write code, edit files, and run verification…"
+            className="min-h-[10rem] flex-1 font-mono text-code-sm"
+          />
+        </FormField.Control>
+        <FormField.Hint>Leave empty to inherit the workspace default.</FormField.Hint>
+      </FormField>
+
+      <FormField>
+        <FormField.Label>Allowed tools</FormField.Label>
+        <FormField.Control>
+          <Input
+            value={allowedToolsRaw}
+            onChange={(e) => setAllowedToolsRaw(e.target.value)}
+            placeholder="Read, Edit, Bash"
+          />
+        </FormField.Control>
+      </FormField>
+
+      {skills && skills.length > 0 ? (
+        <FormField>
+          <FormField.Label>Linked skills</FormField.Label>
+          <div className="flex flex-wrap gap-1.5">
+            {skills.map((s) => {
+              const on = skillsSelected.has(s.id);
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => toggleSkill(s.id)}
+                  aria-pressed={on}
+                  className={cn(
+                    "inline-flex h-7 items-center rounded-full border px-3 font-mono text-body-sm transition-colors",
+                    on
+                      ? "border-primary bg-primary/15 text-primary"
+                      : "border-border/60 bg-card text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {s.label}
+                </button>
+              );
+            })}
+          </div>
+        </FormField>
+      ) : null}
+
+      <footer className="flex items-center justify-between gap-2 border-border/40 border-t pt-4">
+        <div>
+          {onDelete ? (
+            <Button type="button" variant="ghost" onClick={onDelete}>
+              Delete
+            </Button>
+          ) : null}
+        </div>
+        <div className="flex items-center gap-2">
+          {onCancel ? (
+            <Button type="button" variant="secondary" onClick={onCancel}>
+              Cancel
+            </Button>
+          ) : null}
+          <Button type="submit" disabled={!canSave}>
+            {initial?.id ? "Save changes" : "Create agent"}
+          </Button>
+        </div>
+      </footer>
+    </form>
+  );
+}
