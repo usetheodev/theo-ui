@@ -1,0 +1,96 @@
+{
+  "name": "@usetheo/ui",
+  "version": "0.0.0",
+  "description": "Theo UI — biblioteca de componentes React framework-agnostic com design system Violet Forge. Foco em interfaces para AI agents e developer tools.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./tokens.css": "./dist/tokens.css"
+  },
+  "files": [
+    "dist",
+    "src",
+    "registry"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "ladle serve",
+    "ladle:build": "ladle build",
+    "ladle:preview": "ladle preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check src",
+    "lint:fix": "biome check --write src",
+    "format": "biome format --write src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "registry:build": "tsx scripts/build-registry.ts"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-popover": "^1.1.6",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-tooltip": "^1.1.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.471.0",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@ladle/react": "^4.1.2",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "happy-dom": "^16.3.0",
+    "postcss": "^8.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "@swc/core",
+      "esbuild"
+    ]
+  },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "design-system",
+    "shadcn",
+    "theo",
+    "paas"
+  ],
+  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
+}

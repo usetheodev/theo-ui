@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "preview-env-card",
+  "type": "registry:block",
+  "title": "PreviewEnvCard",
+  "description": "Full-stack preview environment card surfacing one PR with all its services + URLs + statuses.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "badge", "deployment-row"],
+  "files": [
+    {
+      "path": "components/preview-env-card/preview-env-card.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/preview-env-card.tsx"
+    }
+  ]
+}

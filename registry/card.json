@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card",
+  "type": "registry:ui",
+  "title": "Card",
+  "description": "Surface container with Header / Title / Description / Body / Footer composition.",
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/card/card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/card.tsx"
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "theo-ui",
+  "homepage": "https://usetheo.dev",
+  "items": [
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Status / tag indicator with optional pulsing Badge.Dot for deployment states."
+    },
+    {
+      "name": "build-log-stream",
+      "type": "registry:block",
+      "title": "BuildLogStream",
+      "description": "Terminal-like log viewer with level coloring (info/warn/error/success/debug) and chip filters."
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Primitive action button with Violet Forge variants (primary glow, accent burnt-sienna, ghost, link, destructive)."
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Surface container with Header / Title / Description / Body / Footer composition."
+    },
+    {
+      "name": "cn",
+      "type": "registry:lib",
+      "title": "cn (Tailwind class merger)",
+      "description": "Theo UI standard class merger: clsx + tailwind-merge."
+    },
+    {
+      "name": "deployment-row",
+      "type": "registry:block",
+      "title": "DeploymentRow",
+      "description": "Single deployment list row with status badge, commit SHA, branch, author, duration."
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Modal overlay built on Radix Dialog. Composed via Dialog.Header, Title, Description, Body, Footer."
+    },
+    {
+      "name": "domain-config",
+      "type": "registry:block",
+      "title": "DomainConfig",
+      "description": "Custom domains list with status, TLS state, primary marker, and inline DNS verification record."
+    },
+    {
+      "name": "env-var-editor",
+      "type": "registry:block",
+      "title": "EnvVarEditor",
+      "description": "Editor for environment variables with mask toggle, scopes, copy & remove actions."
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Text input with violet focus ring and Violet Forge typography."
+    },
+    {
+      "name": "metrics-panel",
+      "type": "registry:block",
+      "title": "MetricsPanel",
+      "description": "Grid of metric tiles with delta arrows and CSS-only sparklines. No chart lib dependency."
+    },
+    {
+      "name": "preview-env-card",
+      "type": "registry:block",
+      "title": "PreviewEnvCard",
+      "description": "Full-stack preview environment card surfacing one PR with all its services + URLs + statuses."
+    },
+    {
+      "name": "project-card",
+      "type": "registry:block",
+      "title": "ProjectCard",
+      "description": "Project listing card with status, framework, branch, last commit, and region."
+    },
+    {
+      "name": "rollback-ui",
+      "type": "registry:block",
+      "title": "RollbackUI",
+      "description": "Deployment history with two-step rollback confirmation. Aligns with the < 5s rollback promise."
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Vertical navigation shell. Sidebar.Header, Section, Item, Footer."
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Underline-style tabs (violet active underline) built on Radix Tabs."
+    },
+    {
+      "name": "tokens",
+      "type": "registry:lib",
+      "title": "Violet Forge tokens",
+      "description": "Design system CSS variables (light + dark) for the Theo UI 'Violet Forge' theme."
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Inverse-surface tooltip built on Radix Tooltip with shorthand <Tooltip label='…'> wrapper."
+    },
+    {
+      "name": "topnav",
+      "type": "registry:ui",
+      "title": "TopNav",
+      "description": "Horizontal app bar with breadcrumbs, mode switcher (Chat/Cowork/Code), action slots."
+    }
+  ]
+}

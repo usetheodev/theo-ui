@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "env-var-editor",
+  "type": "registry:block",
+  "title": "EnvVarEditor",
+  "description": "Editor for environment variables with mask toggle, scopes, copy & remove actions.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "badge", "button", "input"],
+  "files": [
+    {
+      "path": "components/env-var-editor/env-var-editor.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/env-var-editor.tsx"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "type": "registry:ui",
+  "title": "Dialog",
+  "description": "Modal overlay built on Radix Dialog. Composed via Dialog.Header, Title, Description, Body, Footer.",
+  "dependencies": ["@radix-ui/react-dialog", "lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/dialog/dialog.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/dialog.tsx"
+    }
+  ]
+}

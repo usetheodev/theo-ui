@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "Text input with violet focus ring and Violet Forge typography.",
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/input/input.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/input.tsx"
+    }
+  ]
+}

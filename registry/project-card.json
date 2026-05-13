@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "project-card",
+  "type": "registry:block",
+  "title": "ProjectCard",
+  "description": "Project listing card with status, framework, branch, last commit, and region.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "badge", "deployment-row"],
+  "files": [
+    {
+      "path": "components/project-card/project-card.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/project-card.tsx"
+    }
+  ]
+}

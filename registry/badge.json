@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "Status / tag indicator with optional pulsing Badge.Dot for deployment states.",
+  "dependencies": ["class-variance-authority"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/badge/badge.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/badge.tsx"
+    }
+  ]
+}

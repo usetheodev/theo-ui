@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "type": "registry:ui",
+  "title": "Tooltip",
+  "description": "Inverse-surface tooltip built on Radix Tooltip with shorthand <Tooltip label='…'> wrapper.",
+  "dependencies": [
+    "@radix-ui/react-tooltip"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/tooltip/tooltip.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tooltip.tsx",
+      "content": "import * as TooltipPrimitive from \"@radix-ui/react-tooltip\";\nimport { forwardRef } from \"react\";\nimport type { ComponentPropsWithoutRef, ElementRef, ReactNode } from \"react\";\nimport { cn } from \"../../lib/cn.js\";\n\n/**\n * Tooltip — built on Radix Tooltip.\n *\n * Visual: dark surface in light mode (and inverse in dark) with rounded-md,\n * shadow-md, text-body-sm. 8px delay-show default.\n *\n * Wrap your app in <Tooltip.Provider> once (or use the default delayDuration here).\n */\n\nconst Provider = TooltipPrimitive.Provider;\nconst Root = TooltipPrimitive.Root;\nconst Trigger = TooltipPrimitive.Trigger;\n\nconst Content = forwardRef<\n  ElementRef<typeof TooltipPrimitive.Content>,\n  ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>\n>(({ className, sideOffset = 6, ...props }, ref) => (\n  <TooltipPrimitive.Portal>\n    <TooltipPrimitive.Content\n      ref={ref}\n      sideOffset={sideOffset}\n      className={cn(\n        \"z-50 overflow-hidden rounded-md border border-border/40 bg-foreground px-2.5 py-1.5\",\n        \"text-background text-body-sm shadow-md\",\n        \"data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-[state=delayed-open]:animate-in\",\n        \"data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out\",\n        \"data-[side=top]:slide-in-from-bottom-1 data-[side=bottom]:slide-in-from-top-1\",\n        \"data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1\",\n        className,\n      )}\n      {...props}\n    />\n  </TooltipPrimitive.Portal>\n));\nContent.displayName = \"Tooltip.Content\";\n\ninterface TooltipProps extends ComponentPropsWithoutRef<typeof TooltipPrimitive.Root> {\n  label: ReactNode;\n  side?: \"top\" | \"right\" | \"bottom\" | \"left\";\n  align?: \"start\" | \"center\" | \"end\";\n  children: ReactNode;\n}\n\n/**\n * Shorthand: <Tooltip label=\"…\"><Button>…</Button></Tooltip>\n * Wraps Provider + Root + Trigger asChild + Content for the common case.\n * For advanced usage (controlled state, custom content), use Tooltip.Root etc. directly.\n */\nconst Tooltip = ({\n  label,\n  side = \"top\",\n  align = \"center\",\n  delayDuration = 200,\n  children,\n  ...rootProps\n}: TooltipProps) =>\n  (\n    <Provider delayDuration={delayDuration}>\n      <Root {...rootProps}>\n        <Trigger asChild>{children}</Trigger>\n        <Content side={side} align={align}>\n          {label}\n        </Content>\n      </Root>\n    </Provider>\n  ) as ReturnType<typeof Provider>;\n\nconst TooltipWithStatics = Tooltip as typeof Tooltip & {\n  Provider: typeof Provider;\n  Root: typeof Root;\n  Trigger: typeof Trigger;\n  Content: typeof Content;\n};\nTooltipWithStatics.Provider = Provider;\nTooltipWithStatics.Root = Root;\nTooltipWithStatics.Trigger = Trigger;\nTooltipWithStatics.Content = Content;\n\nexport { TooltipWithStatics as Tooltip };\n"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "topnav",
+  "type": "registry:ui",
+  "title": "TopNav",
+  "description": "Horizontal app bar with breadcrumbs, mode switcher (Chat/Cowork/Code), action slots.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/topnav/topnav.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/topnav.tsx"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cn",
+  "type": "registry:lib",
+  "title": "cn (Tailwind class merger)",
+  "description": "Theo UI standard class merger: clsx + tailwind-merge.",
+  "dependencies": ["clsx", "tailwind-merge"],
+  "files": [
+    {
+      "path": "lib/cn.ts",
+      "type": "registry:lib",
+      "target": "lib/cn.ts"
+    }
+  ]
+}

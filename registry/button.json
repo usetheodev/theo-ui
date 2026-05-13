@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "description": "Primitive action button with Violet Forge variants (primary glow, accent burnt-sienna, ghost, link, destructive).",
+  "dependencies": ["@radix-ui/react-slot", "class-variance-authority"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/button/button.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/button.tsx"
+    }
+  ]
+}

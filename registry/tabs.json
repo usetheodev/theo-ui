@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "type": "registry:ui",
+  "title": "Tabs",
+  "description": "Underline-style tabs (violet active underline) built on Radix Tabs.",
+  "dependencies": ["@radix-ui/react-tabs"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/tabs/tabs.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tabs.tsx"
+    }
+  ]
+}

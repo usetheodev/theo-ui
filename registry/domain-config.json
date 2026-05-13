@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "domain-config",
+  "type": "registry:block",
+  "title": "DomainConfig",
+  "description": "Custom domains list with status, TLS state, primary marker, and inline DNS verification record.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "badge", "button", "input"],
+  "files": [
+    {
+      "path": "components/domain-config/domain-config.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/domain-config.tsx"
+    }
+  ]
+}

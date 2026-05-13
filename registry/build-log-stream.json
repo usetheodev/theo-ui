@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "build-log-stream",
+  "type": "registry:block",
+  "title": "BuildLogStream",
+  "description": "Terminal-like log viewer with level coloring (info/warn/error/success/debug) and chip filters.",
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/build-log-stream/build-log-stream.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/build-log-stream.tsx"
+    }
+  ]
+}

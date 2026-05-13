@@ -1,0 +1,85 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+import { TopNav } from "./topnav.js";
+
+describe("TopNav", () => {
+  it("renders left / center / right slots", () => {
+    render(
+      <TopNav>
+        <TopNav.Left>L</TopNav.Left>
+        <TopNav.Center>C</TopNav.Center>
+        <TopNav.Right>R</TopNav.Right>
+      </TopNav>,
+    );
+    expect(screen.getByText("L")).toBeInTheDocument();
+    expect(screen.getByText("C")).toBeInTheDocument();
+    expect(screen.getByText("R")).toBeInTheDocument();
+  });
+
+  describe("Breadcrumbs", () => {
+    it("renders all items with the last marked aria-current=page", () => {
+      render(
+        <TopNav.Breadcrumbs
+          items={[
+            { label: "acme", href: "/acme" },
+            { label: "api", href: "/acme/api" },
+            { label: "deployments" },
+          ]}
+        />,
+      );
+      expect(screen.getByRole("link", { name: "acme" })).toHaveAttribute("href", "/acme");
+      expect(screen.getByRole("link", { name: "api" })).toHaveAttribute("href", "/acme/api");
+      const current = screen.getByText("deployments");
+      expect(current).toHaveAttribute("aria-current", "page");
+    });
+
+    it("does not render link for the last item even if href is provided", () => {
+      render(
+        <TopNav.Breadcrumbs
+          items={[
+            { label: "acme", href: "/acme" },
+            { label: "api", href: "/acme/api" },
+          ]}
+        />,
+      );
+      // 'api' is last → rendered as span, not link
+      expect(screen.queryByRole("link", { name: "api" })).not.toBeInTheDocument();
+      expect(screen.getByText("api")).toHaveAttribute("aria-current", "page");
+    });
+  });
+
+  describe("ModeSwitcher", () => {
+    it("marks the active option with aria-selected", () => {
+      render(
+        <TopNav.ModeSwitcher
+          value="cowork"
+          options={[
+            { value: "chat", label: "Chat" },
+            { value: "cowork", label: "Cowork" },
+            { value: "code", label: "Code" },
+          ]}
+        />,
+      );
+      expect(screen.getByRole("tab", { name: "Cowork" })).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByRole("tab", { name: "Chat" })).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("fires onChange with the clicked option value", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <TopNav.ModeSwitcher
+          value="chat"
+          options={[
+            { value: "chat", label: "Chat" },
+            { value: "code", label: "Code" },
+          ]}
+          onChange={onChange}
+        />,
+      );
+      await user.click(screen.getByRole("tab", { name: "Code" }));
+      expect(onChange).toHaveBeenCalledWith("code");
+    });
+  });
+});

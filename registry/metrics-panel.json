@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "metrics-panel",
+  "type": "registry:block",
+  "title": "MetricsPanel",
+  "description": "Grid of metric tiles with delta arrows and CSS-only sparklines. No chart lib dependency.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/metrics-panel/metrics-panel.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/metrics-panel.tsx"
+    }
+  ]
+}

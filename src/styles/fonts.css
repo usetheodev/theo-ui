@@ -1,0 +1,12 @@
+/* Theo UI — font loading.
+ *
+ * Boska + Switzer hospedadas via Fontshare (Indian Type Foundry, OSS).
+ * JetBrains Mono via Google Fonts (Apache 2.0).
+ *
+ * Em produção, considere self-host das fontes para evitar dependência externa
+ * e melhorar performance (preload, font-display).
+ */
+
+@import url("https://api.fontshare.com/v2/css?f[]=boska@400,500,700,900&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");

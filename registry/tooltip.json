@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "type": "registry:ui",
+  "title": "Tooltip",
+  "description": "Inverse-surface tooltip built on Radix Tooltip with shorthand <Tooltip label='…'> wrapper.",
+  "dependencies": ["@radix-ui/react-tooltip"],
+  "registryDependencies": ["cn"],
+  "files": [
+    {
+      "path": "components/tooltip/tooltip.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tooltip.tsx"
+    }
+  ]
+}

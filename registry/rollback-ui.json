@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rollback-ui",
+  "type": "registry:block",
+  "title": "RollbackUI",
+  "description": "Deployment history with two-step rollback confirmation. Aligns with the < 5s rollback promise.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "badge", "button"],
+  "files": [
+    {
+      "path": "components/rollback-ui/rollback-ui.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/rollback-ui.tsx"
+    }
+  ]
+}
