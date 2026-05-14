@@ -8,8 +8,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
+    "badge",
     "cn",
-    "badge"
+    "tailwind-preset"
   ],
   "files": [
     {

@@ -562,6 +562,12 @@
       "description": "Built on Radix Tabs with active-underline styling and focus-visible ring."
     },
     {
+      "name": "tailwind-preset",
+      "type": "registry:lib",
+      "title": "Theo UI Tailwind preset",
+      "description": "Type scale, fontFamily, colors and motion tokens consumed by every Theo UI component. Add to tailwind.config.ts#presets before installing any other component."
+    },
+    {
       "name": "task-header",
       "type": "registry:ui",
       "title": "TaskHeader",

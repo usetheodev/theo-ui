@@ -5,7 +5,8 @@
   "title": "Textarea",
   "description": "Multi-line input mirror of Input.",
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

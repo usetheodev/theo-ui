@@ -9,9 +9,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
+    "button",
     "cn",
-    "types",
-    "button"
+    "tailwind-preset",
+    "types"
   ],
   "files": [
     {

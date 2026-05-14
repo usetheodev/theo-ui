@@ -9,7 +9,8 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

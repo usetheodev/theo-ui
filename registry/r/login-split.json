@@ -6,7 +6,8 @@
   "description": "50/50 split shell for authentication screens — form pane on the left, illustration on the right.",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

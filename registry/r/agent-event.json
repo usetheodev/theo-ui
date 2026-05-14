@@ -10,6 +10,7 @@
   "registryDependencies": [
     "agent-types",
     "cn",
+    "tailwind-preset",
     "types"
   ],
   "files": [

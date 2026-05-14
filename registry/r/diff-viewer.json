@@ -6,7 +6,8 @@
   "description": "Unified diff rendering, no external dep.",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

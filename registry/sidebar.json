@@ -5,7 +5,8 @@
   "title": "Sidebar",
   "description": "Vertical navigation shell with header, sections, items (active / count), and footer slots.",
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

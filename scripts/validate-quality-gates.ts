@@ -93,6 +93,41 @@ async function validateComponentStructure(): Promise<void> {
   }
 }
 
+/**
+ * Every `registry:ui` and `registry:block` must declare `tailwind-preset`
+ * as a `registryDependency` (D3 / BLOCKER-002 remediation). Without the
+ * preset, copy-paste consumers receive markup that uses utility classes
+ * (`text-body-md`, `text-display-2xl`, `font-display`, …) that Tailwind
+ * doesn't ship by default, so the component renders unstyled.
+ *
+ * The preset itself and `registry:lib` items (types, cn, tokens, theme-*)
+ * are exempt.
+ */
+async function validateRegistryPresetDep(): Promise<void> {
+  const descriptorFiles = (await readdir(join(ROOT, "registry")))
+    .filter((file) => file.endsWith(".json") && file !== "index.json")
+    .sort();
+
+  for (const descriptorFile of descriptorFiles) {
+    const descriptor = await readJson<{
+      name: string;
+      type: string;
+      registryDependencies?: string[];
+    }>(join(ROOT, "registry", descriptorFile));
+
+    if (descriptor.type !== "registry:ui" && descriptor.type !== "registry:block") continue;
+    if (descriptor.name === "tailwind-preset") continue;
+
+    const deps = new Set(descriptor.registryDependencies ?? []);
+    if (!deps.has("tailwind-preset")) {
+      fail(
+        descriptor.name,
+        `registry:${descriptor.type === "registry:block" ? "block" : "ui"} item must declare \`tailwind-preset\` in registryDependencies (run \`pnpm tsx scripts/add-tailwind-preset-dep.ts\`)`,
+      );
+    }
+  }
+}
+
 async function validateRegistryStoriesAndTests(): Promise<void> {
   const descriptorFiles = (await readdir(join(ROOT, "registry")))
     .filter((file) => file.endsWith(".json") && file !== "index.json")
@@ -149,7 +184,10 @@ async function validatePublicExports(): Promise<void> {
 function validateDesignSystemFidelity(): void {
   const tokens = readFileSync(join(ROOT, "src/styles/tokens.css"), "utf-8");
   const theme = readFileSync(join(ROOT, "src/themes/violet-forge.ts"), "utf-8");
-  const tailwind = readFileSync(join(ROOT, "tailwind.config.ts"), "utf-8");
+  /* The typescale source of truth moved to src/styles/tailwind-preset.ts
+   * (D3 / BLOCKER-002). tailwind.config.ts now imports the preset, so
+   * the gate audits the preset directly. */
+  const preset = readFileSync(join(ROOT, "src/styles/tailwind-preset.ts"), "utf-8");
 
   /* Normative fonts for the Violet Forge identity (Geist Sans + Geist Mono,
    * Vercel-inspired). Decided 2026-05-13 — see docs/design-system.md and the
@@ -162,7 +200,7 @@ function validateDesignSystemFidelity(): void {
 
   /* Vercel-inspired type scale — aggressive negative tracking at display sizes,
    * 3 strict weights (400 body / 500 UI / 600 display). Source of truth lives
-   * in tailwind.config.ts; this gate prevents accidental drift. */
+   * in tailwind-preset.ts; this gate prevents accidental drift. */
   const requiredTypeScale = [
     '"display-2xl": ["64px"',
     '"display-xl": ["48px"',
@@ -175,7 +213,7 @@ function validateDesignSystemFidelity(): void {
     '"body-md": ["15px"',
   ];
   for (const token of requiredTypeScale) {
-    if (!tailwind.includes(token)) fail("tailwind.config.ts", `type scale drift: missing ${token}`);
+    if (!preset.includes(token)) fail("tailwind-preset.ts", `type scale drift: missing ${token}`);
   }
 }
 
@@ -621,6 +659,7 @@ async function main(): Promise<void> {
   await validateCompoundPattern();
   await validateComponentStructure();
   await validateRegistryStoriesAndTests();
+  await validateRegistryPresetDep();
   await validatePublicExports();
   await validateCountConsistency();
   await validateArchitectureCensus();
