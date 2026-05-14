@@ -59,15 +59,20 @@ const readJson = async <T>(path: string): Promise<T> =>
 const stripExtension = (value: string): string => value.replace(/\.(tsx|ts|jsx|js|css)$/, "");
 
 const importSpecifiers = (content: string): string[] => {
+  // Strip block + line comments before scanning for imports. Without this,
+  // CSS `/* ... @import "@usetheo/ui/fonts-cdn.css" ... */` narrative
+  // comments are falsely treated as runtime imports.
+  const stripped = content.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+
   const specs: string[] = [];
   const patterns = [/from\s+["']([^"']+)["']/g, /import\s+["']([^"']+)["']/g];
 
   for (const pattern of patterns) {
     let match: RegExpExecArray | null;
-    match = pattern.exec(content);
+    match = pattern.exec(stripped);
     while (match !== null) {
       if (match[1]) specs.push(match[1]);
-      match = pattern.exec(content);
+      match = pattern.exec(stripped);
     }
   }
 

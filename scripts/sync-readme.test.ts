@@ -48,10 +48,10 @@ describe("parseExportsFromIndex", () => {
 
   it("handles multi-line export bodies", () => {
     const src = [
-      `export {`,
-      `  ContextWindowBar,`,
-      `  CapabilityIndicator,`,
-      `  type Capability,`,
+      "export {",
+      "  ContextWindowBar,",
+      "  CapabilityIndicator,",
+      "  type Capability,",
       `} from "./components/primitives/context-window-bar/index.js";`,
     ].join("\n");
     expect(parseExportsFromIndex(src)).toEqual({
