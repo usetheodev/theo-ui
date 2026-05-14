@@ -6,14 +6,15 @@
   "description": "The canonical conversation surface for a code agent.",
   "dependencies": [],
   "registryDependencies": [
-    "cn",
-    "types",
-    "chat-types",
-    "chat-message",
-    "tool-call-card",
-    "approval-card",
     "agent-error-card",
-    "agent-streaming"
+    "agent-streaming",
+    "approval-card",
+    "chat-message",
+    "chat-types",
+    "cn",
+    "tailwind-preset",
+    "tool-call-card",
+    "types"
   ],
   "files": [
     {

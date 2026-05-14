@@ -90,6 +90,22 @@ interface ThemeProviderProps {
 }
 
 /**
+ * Storage failure diagnostic — dev-only one-line warn so engineers see
+ * something when localStorage throws (Safari private mode, blocked
+ * third-party cookies, sandboxed iframes). In production we stay silent;
+ * runtime behavior is fail-safe (state still lives in memory).
+ *
+ * Per HIGH-006: silent catches diverge from the "fail loud" principle
+ * declared in the global CLAUDE.md. We accept silence in prod because the
+ * fallback is correct, but we surface a single warn per call site in dev.
+ */
+function warnStorageFailure(scope: string, err: unknown): void {
+  if (typeof process === "undefined" || process.env.NODE_ENV === "production") return;
+  // biome-ignore lint/suspicious/noConsole: dev-only diagnostic for storage failures (HIGH-006)
+  console.warn(`[@usetheo/ui] theme storage failure (${scope}):`, err);
+}
+
+/**
  * ThemeProvider — central registry + runtime switcher for Theo themes.
  *
  * Behavior:
@@ -130,7 +146,8 @@ function ThemeProvider({
     if (typeof window === "undefined" || !storageKey) return defaultTheme;
     try {
       return window.localStorage.getItem(`${storageKey}:name`) ?? defaultTheme;
-    } catch {
+    } catch (err) {
+      warnStorageFailure("read theme name", err);
       return defaultTheme;
     }
   });
@@ -140,7 +157,8 @@ function ThemeProvider({
     try {
       const stored = window.localStorage.getItem(`${storageKey}:mode`);
       return stored === "dark" || stored === "light" ? stored : defaultMode;
-    } catch {
+    } catch (err) {
+      warnStorageFailure("read theme mode", err);
       return defaultMode;
     }
   });
@@ -167,8 +185,11 @@ function ThemeProvider({
     try {
       window.localStorage.setItem(`${storageKey}:name`, themeName);
       window.localStorage.setItem(`${storageKey}:mode`, mode);
-    } catch {
-      /* storage may fail in private mode; not critical */
+    } catch (err) {
+      // Storage may fail in private mode; behavior remains correct (state
+      // lives in memory). Per HIGH-006 we surface a one-time dev warning so
+      // the engineer sees something instead of complete silence.
+      warnStorageFailure("persist theme + mode", err);
     }
   }, [themeName, mode, storageKey]);
 

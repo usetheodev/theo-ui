@@ -95,10 +95,10 @@ export {
   type SkillSource,
   type SkillState,
 } from "./components/primitives/skill-card/index.js";
-export { SkillsList } from "./components/primitives/skills-list/index.js";
-export { SkillEditor } from "./components/primitives/skill-editor/index.js";
+export { SkillsList } from "./components/composites/skills-list/index.js";
+export { SkillEditor } from "./components/composites/skill-editor/index.js";
 export { RuleCard } from "./components/primitives/rule-card/index.js";
-export { RuleEditor } from "./components/primitives/rule-editor/index.js";
+export { RuleEditor } from "./components/composites/rule-editor/index.js";
 export type { Rule, RuleScope, RuleState } from "./types/rule.js";
 export { ALL_MODES, MODE_LABEL, type Mode } from "./types/mode.js";
 export { CostMeter } from "./components/primitives/cost-meter/index.js";
@@ -130,13 +130,13 @@ export {
   type CronJob,
   type CronJobStatus,
 } from "./components/primitives/cron-job-card/index.js";
-export { CronJobsList } from "./components/primitives/cron-jobs-list/index.js";
+export { CronJobsList } from "./components/composites/cron-jobs-list/index.js";
 export {
   MCPServerCard,
   type MCPServer,
   type MCPServerStatus,
 } from "./components/primitives/mcp-server-card/index.js";
-export { MCPServerList } from "./components/primitives/mcp-server-list/index.js";
+export { MCPServerList } from "./components/composites/mcp-server-list/index.js";
 export {
   ModelCard,
   modelCapabilityPresets,
@@ -152,7 +152,7 @@ export {
 export {
   AgentEditor,
   type AgentDraft,
-} from "./components/primitives/agent-editor/index.js";
+} from "./components/composites/agent-editor/index.js";
 export {
   SubAgentDispatch,
   type SubAgentRun,
@@ -185,7 +185,7 @@ export { AgentStreaming } from "./components/primitives/agent-streaming/index.js
 export {
   ApprovalCard,
   type ApprovalSeverity,
-} from "./components/primitives/approval-card/index.js";
+} from "./components/composites/approval-card/index.js";
 export {
   AgentErrorCard,
   type AgentErrorKind,

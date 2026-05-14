@@ -6,8 +6,9 @@
   "description": "Single chat turn rendered as user bubble, assistant card, or system callout with accent border.",
   "dependencies": [],
   "registryDependencies": [
+    "chat-types",
     "cn",
-    "chat-types"
+    "tailwind-preset"
   ],
   "files": [
     {

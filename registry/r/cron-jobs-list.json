@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "cron-jobs-list",
-  "type": "registry:ui",
+  "type": "registry:block",
   "title": "CronJobsList",
   "description": "Grid of CronJobCards with a sticky \"new job\" action.",
   "dependencies": [
@@ -9,13 +9,14 @@
   ],
   "registryDependencies": [
     "cn",
-    "cron-job-card"
+    "cron-job-card",
+    "tailwind-preset"
   ],
   "files": [
     {
-      "path": "components/primitives/cron-jobs-list/cron-jobs-list.tsx",
-      "type": "registry:ui",
-      "target": "components/ui/cron-jobs-list.tsx",
+      "path": "components/composites/cron-jobs-list/cron-jobs-list.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/cron-jobs-list.tsx",
       "content": "import { Plus } from \"lucide-react\";\nimport { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport { type CronJob, CronJobCard } from \"@/components/ui/cron-job-card\";\n\ninterface CronJobsListProps extends Omit<HTMLAttributes<HTMLDivElement>, \"title\"> {\n  jobs: CronJob[];\n  title?: ReactNode;\n  onAdd?: () => void;\n  onRunNow?: (id: string) => void;\n  onToggle?: (id: string, enabled: boolean) => void;\n  onRemove?: (id: string) => void;\n}\n\n/**\n * CronJobsList — grid of CronJobCards with a sticky \"new job\" action.\n */\nconst CronJobsList = forwardRef<HTMLDivElement, CronJobsListProps>(\n  (\n    { className, jobs, title = \"Scheduled jobs\", onAdd, onRunNow, onToggle, onRemove, ...props },\n    ref,\n  ) => (\n    <section\n      ref={ref}\n      className={cn(\"grid gap-3\", className)}\n      aria-label=\"Scheduled agent jobs\"\n      {...props}\n    >\n      <header className=\"flex items-baseline justify-between\">\n        {title ? <h3 className=\"font-display text-title-md tracking-tight\">{title}</h3> : <span />}\n        <div className=\"flex items-center gap-3\">\n          <span className=\"font-mono text-label text-muted-foreground\">\n            {jobs.length} {jobs.length === 1 ? \"job\" : \"jobs\"}\n          </span>\n          {onAdd ? (\n            <button\n              type=\"button\"\n              onClick={onAdd}\n              className=\"inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 font-sans text-label text-primary-foreground hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n            >\n              <Plus className=\"size-3.5\" /> New job\n            </button>\n          ) : null}\n        </div>\n      </header>\n      {jobs.length === 0 ? (\n        <p className=\"rounded-xl border border-border/60 border-dashed bg-muted/30 px-4 py-8 text-center font-sans text-body-sm text-muted-foreground\">\n          No scheduled jobs yet.\n        </p>\n      ) : (\n        <div className=\"grid grid-cols-1 gap-3 md:grid-cols-2\">\n          {jobs.map((job) => (\n            <CronJobCard\n              key={job.id}\n              job={job}\n              {...(onRunNow ? { onRunNow } : {})}\n              {...(onToggle ? { onToggle } : {})}\n              {...(onRemove ? { onRemove } : {})}\n            />\n          ))}\n        </div>\n      )}\n    </section>\n  ),\n);\nCronJobsList.displayName = \"CronJobsList\";\n\nexport { CronJobsList };\n"
     }
   ]

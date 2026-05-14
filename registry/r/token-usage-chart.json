@@ -6,7 +6,8 @@
   "description": "Stacked-bar chart of input vs output tokens over time.",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

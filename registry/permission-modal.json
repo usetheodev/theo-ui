@@ -10,7 +10,8 @@
   "registryDependencies": [
     "button",
     "dialog",
-    "permission-types"
+    "permission-types",
+    "tailwind-preset"
   ],
   "files": [
     {
