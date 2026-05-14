@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixture `tailwind.config.ts` + `postcss.config.cjs`** — `tests/fixture-shadcn-app/` now has a real Tailwind toolchain with `safelist` covering the full Violet Forge typescale (forces compilation of every preset entry as proof of capability, independent of fixture App.tsx usage).
 - `validateDesignSystemFidelity` audits `src/styles/tailwind-preset.ts` instead of `tailwind.config.ts` (typescale now lives in the preset).
 
+### Changed (HIGH-002 / T4.1 — self-hosted fonts as default)
+- **`src/styles/fonts.css` no longer `@import`s from `fonts.googleapis.com`.** Now declares six `@font-face` rules pointing at `./fonts/geist-{400,500,600}.woff2` and `./fonts/geist-mono-{400,500,600}.woff2`. Total asset budget: ~290 KB of woff2 next to the CSS. Eliminates the render-blocking third-party fetch that previously hit `fonts.googleapis.com` on every cold page load — fixes GDPR / CSP friction for the enterprise audience.
+- `src/styles/fonts-cdn.css` (NEW) — opt-in entrypoint that preserves the legacy Google Fonts CDN behavior. Consumers who prefer not to host static assets can `@import "@usetheo/ui/fonts-cdn.css"` instead of `@usetheo/ui/fonts.css` / `@usetheo/ui/styles.css`.
+- `tsup.config.ts` `onSuccess` now also copies `src/styles/fonts/*.woff2` → `dist/fonts/` and `src/styles/fonts-cdn.css` → `dist/fonts-cdn.css`. The relative URLs in `fonts.css` (`./fonts/geist-400.woff2`) resolve correctly inside `node_modules/@usetheo/ui/dist/`.
+- Geist OFL license shipped at `src/styles/fonts/LICENSE-GEIST.txt` → `dist/fonts/LICENSE-GEIST.txt`. Apache-2.0 + OFL is a clean dual-license combination.
+- New `geist` devDependency: used only as the source of woff2 artifacts at install time; not bundled into `dist/index.js`.
+- `validateDocsTypography` now asserts that `src/styles/fonts.css` contains `@font-face` and does NOT `@import` from `fonts.googleapis.com`, and that `src/styles/fonts-cdn.css` exists.
+
 ### Removed (HIGH-001 / T3.1)
 - `package.json#files` no longer ships `src/` or the unbuilt `registry/*.json` descriptors. New set: `dist`, `registry/r`, `registry/index.json`, `LICENSE`, `CHANGELOG.md`. `npm pack --dry-run` reports 122 files / 353 KB (was 675 files / 570 KB). 102 `.test.tsx` and 114 `.stories.tsx` + `src/screens/` no longer enter the published tarball.
 
