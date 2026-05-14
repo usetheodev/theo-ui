@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-checklist",
+  "type": "registry:ui",
+  "title": "ProgressChecklist",
+  "description": "right-inspector checklist.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "task-types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/progress-checklist/progress-checklist.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/progress-checklist.tsx"
+    }
+  ]
+}

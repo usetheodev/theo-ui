@@ -3,9 +3,14 @@
   "name": "tool-call-card",
   "type": "registry:ui",
   "title": "ToolCallCard",
-  "description": "Single agent tool invocation rendered inside the stream: tool name, target, status badge, expandable output body.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "types"],
+  "description": "single agent tool invocation rendered inside the stream.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
   "files": [
     {
       "path": "components/primitives/tool-call-card/tool-call-card.tsx",

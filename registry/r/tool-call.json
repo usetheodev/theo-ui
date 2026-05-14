@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-call",
+  "type": "registry:ui",
+  "title": "ToolCall",
+  "description": "collapsible row representing an agent tool invocation.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/tool-call/tool-call.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tool-call.tsx",
+      "content": "import { ChevronRight, Wrench } from \"lucide-react\";\nimport { forwardRef, useState } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\ninterface ToolCallProps extends HTMLAttributes<HTMLDivElement> {\n  /** Tool name e.g. \"bash\", \"read_file\", \"edit_file\". */\n  name?: string;\n  /**\n   * Summary label e.g. \"Ran 2 commands\", \"Read 18 files\".\n   */\n  summary: ReactNode;\n  /**\n   * Collapsible payload (e.g. command, stdout, file list).\n   */\n  detail?: ReactNode;\n  defaultOpen?: boolean;\n  /**\n   * If true, hides the wrench icon (useful when grouping by name elsewhere).\n   */\n  hideIcon?: boolean;\n}\n\n/**\n * ToolCall — collapsible row representing an agent tool invocation.\n *\n * Visual: subtle muted container, wrench icon, summary in body text,\n * chevron rotates on expand. Pairs with `<ToolResult>` for the rendered output.\n *\n * Typical usage inside a ChatMessage assistant body:\n *\n *   <ToolCall summary=\"Read 18 files\" detail={<ToolResult>{output}</ToolResult>} />\n */\nconst ToolCall = forwardRef<HTMLDivElement, ToolCallProps>(\n  ({ className, name, summary, detail, defaultOpen, hideIcon, ...props }, ref) => {\n    const [open, setOpen] = useState(defaultOpen ?? false);\n    const expandable = detail !== undefined;\n    return (\n      <div\n        ref={ref}\n        className={cn(\"rounded-md border border-border/40 bg-muted/30\", className)}\n        {...props}\n      >\n        <button\n          type=\"button\"\n          onClick={() => expandable && setOpen((v) => !v)}\n          aria-expanded={expandable ? open : undefined}\n          disabled={!expandable}\n          className={cn(\n            \"flex w-full items-center gap-2 px-3 py-2 text-left\",\n            \"font-sans text-body-sm text-foreground\",\n            \"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background\",\n            expandable && \"cursor-pointer hover:bg-muted/60\",\n          )}\n        >\n          {!hideIcon ? <Wrench className=\"size-3.5 shrink-0 text-primary\" aria-hidden /> : null}\n          {name ? (\n            <span className=\"font-mono text-code-sm text-muted-foreground\">{name}</span>\n          ) : null}\n          <span className=\"flex-1 truncate\">{summary}</span>\n          {expandable ? (\n            <ChevronRight\n              className={cn(\n                \"size-3.5 text-muted-foreground transition-transform\",\n                open && \"rotate-90\",\n              )}\n              aria-hidden\n            />\n          ) : null}\n        </button>\n        {expandable && open ? (\n          <div className=\"border-border/40 border-t bg-card px-3 py-2\">{detail}</div>\n        ) : null}\n      </div>\n    );\n  },\n);\nToolCall.displayName = \"ToolCall\";\n\nexport { ToolCall };\n"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-event",
+  "type": "registry:ui",
+  "title": "AgentEvent",
+  "description": "single event row in the agent timeline.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "agent-types",
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/agent-event/agent-event.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-event.tsx"
+    }
+  ]
+}

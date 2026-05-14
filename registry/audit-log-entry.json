@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "audit-log-entry",
+  "type": "registry:ui",
+  "title": "AuditLogEntry",
+  "description": "one row in the agent audit log.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/audit-log-entry/audit-log-entry.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/audit-log-entry.tsx"
+    }
+  ]
+}

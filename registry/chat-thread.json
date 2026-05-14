@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-thread",
+  "type": "registry:ui",
+  "title": "ChatThread",
+  "description": "simple vertical container that applies spacing + scroll.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/chat-thread/chat-thread.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-thread.tsx"
+    }
+  ]
+}

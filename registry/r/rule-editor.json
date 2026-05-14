@@ -3,7 +3,7 @@
   "name": "rule-editor",
   "type": "registry:ui",
   "title": "RuleEditor",
-  "description": "Form for creating or editing a Rule — title, markdown body, scope, tags, enabled toggle.",
+  "description": "form for creating or editing a Rule (behavior instruction",
   "dependencies": [],
   "registryDependencies": [
     "cn",

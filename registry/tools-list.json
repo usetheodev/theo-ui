@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tools-list",
+  "type": "registry:ui",
+  "title": "ToolsList",
+  "description": "surface every tool the agent could call, with its enablement",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/tools-list/tools-list.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tools-list.tsx"
+    }
+  ]
+}

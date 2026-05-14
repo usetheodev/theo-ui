@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "permission-modal",
+  "type": "registry:ui",
+  "title": "PermissionModal",
+  "description": "local-files access prompt built on Dialog.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "dialog",
+    "permission-types"
+  ],
+  "files": [
+    {
+      "path": "components/composites/permission-modal/permission-modal.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/permission-modal.tsx"
+    }
+  ]
+}

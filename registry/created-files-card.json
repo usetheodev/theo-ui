@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "created-files-card",
+  "type": "registry:ui",
+  "title": "CreatedFilesCard",
+  "description": "surfaces files produced by a completed task.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/created-files-card/created-files-card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/created-files-card.tsx"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "terminal-panel",
+  "type": "registry:ui",
+  "title": "TerminalPanel",
+  "description": "minimal terminal output viewer.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/terminal-panel/terminal-panel.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/terminal-panel.tsx"
+    }
+  ]
+}

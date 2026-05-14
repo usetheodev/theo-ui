@@ -3,7 +3,7 @@
   "name": "approval-card",
   "type": "registry:ui",
   "title": "ApprovalCard",
-  "description": "Inline pause-and-ask card for an agent stream. Approve / Deny / Always-allow with info / warning / destructive severities.",
+  "description": "inline pause-and-ask card for an agent stream.",
   "dependencies": [
     "class-variance-authority",
     "lucide-react"

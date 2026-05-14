@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hook-event-log",
+  "type": "registry:ui",
+  "title": "HookEventLog",
+  "description": "chronological list of hook firings, with result tone, the",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/hook-event-log/hook-event-log.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/hook-event-log.tsx"
+    }
+  ]
+}

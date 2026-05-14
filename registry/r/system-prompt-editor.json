@@ -3,7 +3,7 @@
   "name": "system-prompt-editor",
   "type": "registry:ui",
   "title": "SystemPromptEditor",
-  "description": "Two-pane editor for the agent system prompt — vendor default vs user override + token estimate.",
+  "description": "surface the agent's system prompt with a clear",
   "dependencies": [
     "lucide-react"
   ],

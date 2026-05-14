@@ -3,8 +3,15 @@
   "name": "theme-provider",
   "type": "registry:lib",
   "title": "ThemeProvider",
-  "description": "React provider for runtime theme + mode switching. Injects CSS vars per registered theme, persists in localStorage, lazy-loads font URLs.",
-  "registryDependencies": ["cn", "tokens"],
+  "description": "Theme + dark mode provider with built-in Violet Forge, Classic Paper, and Aurora Terminal themes.",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "tokens"
+  ],
   "files": [
     {
       "path": "themes/types.ts",

@@ -3,7 +3,7 @@
   "name": "mention-menu",
   "type": "registry:ui",
   "title": "MentionMenu",
-  "description": "Keyboard-navigable popover for slash-command / @file / #memory triggers inside an agent composer.",
+  "description": "keyboard-navigable popover for slash-command / @file / #memory",
   "dependencies": [
     "lucide-react"
   ],

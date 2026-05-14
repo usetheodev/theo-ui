@@ -1,3 +1,4 @@
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   Activity,
   Bookmark,
@@ -87,7 +88,6 @@ import { SystemPromptEditor } from "../components/primitives/system-prompt-edito
 import { TokenUsageChart } from "../components/primitives/token-usage-chart/token-usage-chart.js";
 import { TopNav } from "../components/primitives/topnav/topnav.js";
 import { cn } from "../lib/cn.js";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "../themes/theme-provider.js";
 import type { AgentEvent } from "../types/agent.js";
 import type { Message } from "../types/chat.js";

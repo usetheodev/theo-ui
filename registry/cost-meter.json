@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cost-meter",
+  "type": "registry:ui",
+  "title": "CostMeter",
+  "description": "gauge for token spend.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/cost-meter/cost-meter.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/cost-meter.tsx"
+    }
+  ]
+}

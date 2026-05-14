@@ -3,7 +3,7 @@
   "name": "agent-stream",
   "type": "registry:ui",
   "title": "AgentStream",
-  "description": "Conversation surface for a code agent — interleaves chat messages, tool calls, approvals, errors, and streaming indicator.",
+  "description": "the canonical conversation surface for a code agent.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

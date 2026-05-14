@@ -44,7 +44,7 @@ interface ChatComposerProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSub
 }
 
 const defaultPlaceholder: Record<ComposerMode, string> = {
-  chat: "Como posso ajudar você hoje?",
+  chat: "How can I help you today?",
   code: "Type / for commands",
   infra: "Ask about deploys, metrics, env, or rollback…",
 };

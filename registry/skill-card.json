@@ -3,7 +3,7 @@
   "name": "skill-card",
   "type": "registry:ui",
   "title": "SkillCard",
-  "description": "Single Skill row \u2014 name, source badge, optional triggers and allowed-tools chips, enable toggle.",
+  "description": "single skill entry showing what it does, where it came from,",
   "dependencies": [
     "lucide-react"
   ],

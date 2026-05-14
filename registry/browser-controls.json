@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "browser-controls",
+  "type": "registry:ui",
+  "title": "BrowserControls",
+  "description": "back/forward/reload + URL bar.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/browser-controls/browser-controls.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/browser-controls.tsx"
+    }
+  ]
+}

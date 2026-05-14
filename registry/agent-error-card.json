@@ -3,9 +3,13 @@
   "name": "agent-error-card",
   "type": "registry:ui",
   "title": "AgentErrorCard",
-  "description": "Inline error / blocked-state card for an agent stream — rate-limit, context-overflow, auth, tool-failure, network.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn"],
+  "description": "inline error / blocked-state card for an agent stream.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/agent-error-card/agent-error-card.tsx",

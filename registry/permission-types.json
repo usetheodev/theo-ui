@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "permission-types",
+  "type": "registry:lib",
+  "title": "Theo UI permission types",
+  "description": "Shared TypeScript types for permission requests, scopes, and decisions.",
+  "files": [
+    {
+      "path": "types/permission.ts",
+      "type": "registry:lib",
+      "target": "types/permission.ts"
+    }
+  ]
+}

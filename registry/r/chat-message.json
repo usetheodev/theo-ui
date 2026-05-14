@@ -3,7 +3,7 @@
   "name": "chat-message",
   "type": "registry:ui",
   "title": "ChatMessage",
-  "description": "Single user / assistant message row with role-aware bubble styling.",
+  "description": "single chat turn.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

@@ -3,9 +3,14 @@
   "name": "rule-card",
   "type": "registry:ui",
   "title": "RuleCard",
-  "description": "Single rule row — title, scope badge, body preview, tags, and toggle/edit/delete affordances.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "rule-types"],
+  "description": "single Rule row in the Rules list.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "rule-types"
+  ],
   "files": [
     {
       "path": "components/primitives/rule-card/rule-card.tsx",

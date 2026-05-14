@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-timeline",
+  "type": "registry:ui",
+  "title": "AgentTimeline",
+  "description": "vertical list of agent events.",
+  "dependencies": [],
+  "registryDependencies": [
+    "agent-event",
+    "agent-types",
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/composites/agent-timeline/agent-timeline.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-timeline.tsx"
+    }
+  ]
+}

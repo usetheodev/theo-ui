@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cron-job-card",
+  "type": "registry:ui",
+  "title": "CronJobCard",
+  "description": "one scheduled agent job.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/cron-job-card/cron-job-card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/cron-job-card.tsx"
+    }
+  ]
+}

@@ -3,9 +3,14 @@
   "name": "chat-composer",
   "type": "registry:ui",
   "title": "ChatComposer",
-  "description": "Textarea-based message composer with mode (chat / cowork / code), slots for leading/trailing actions, and send/stop affordances.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "button"],
+  "description": "message input area, shared by Chat / Code / Infra modes.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "button"
+  ],
   "files": [
     {
       "path": "components/composites/chat-composer/chat-composer.tsx",

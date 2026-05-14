@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "capability-indicator",
+  "type": "registry:ui",
+  "title": "CapabilityIndicator",
+  "description": "row of chips showing what the agent can currently do.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/capability-indicator/capability-indicator.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/capability-indicator.tsx",
+      "content": "import {\n  AlertCircle,\n  Eye,\n  Network,\n  Pencil,\n  Rocket,\n  Sparkles,\n  Terminal,\n  Trash2,\n} from \"lucide-react\";\nimport { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport type { IconComponent } from \"@/lib/types\";\n\nexport type CapabilityState = \"enabled\" | \"disabled\" | \"blocked\" | \"active\";\n\nexport interface Capability {\n  id: string;\n  /** Visible label. */\n  label: ReactNode;\n  /** Optional icon override. */\n  icon?: IconComponent;\n  /** Default state. */\n  state?: CapabilityState;\n  /** Tooltip / longer description. */\n  hint?: ReactNode;\n}\n\ninterface CapabilityIndicatorProps extends HTMLAttributes<HTMLDivElement> {\n  capabilities: Capability[];\n}\n\n/**\n * CapabilityIndicator — row of chips showing what the agent can currently do.\n *\n * Critical for transparency: the user should always see (e.g. in a top bar)\n * whether the agent has read/write/exec/network access enabled. The \"active\"\n * state pulses when a capability is in use.\n */\nconst stateClasses: Record<CapabilityState, string> = {\n  enabled: \"border-success/40 bg-success/10 text-success\",\n  active: \"border-primary/50 bg-primary/15 text-primary\",\n  disabled: \"border-border/40 bg-muted text-muted-foreground line-through\",\n  blocked: \"border-destructive/40 bg-destructive/10 text-destructive\",\n};\n\nconst CapabilityIndicator = forwardRef<HTMLUListElement, CapabilityIndicatorProps>(\n  ({ className, capabilities, ...props }, ref) => (\n    <ul\n      ref={ref}\n      aria-label=\"Agent capabilities\"\n      className={cn(\"flex flex-wrap items-center gap-1.5\", className)}\n      {...(props as React.HTMLAttributes<HTMLUListElement>)}\n    >\n      {capabilities.map((c) => {\n        const Icon = c.icon ?? AlertCircle;\n        const state = c.state ?? \"enabled\";\n        return (\n          <li\n            key={c.id}\n            title={typeof c.hint === \"string\" ? c.hint : undefined}\n            className={cn(\n              \"inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5\",\n              \"font-sans text-label\",\n              \"transition-colors\",\n              stateClasses[state],\n            )}\n          >\n            <Icon\n              aria-hidden\n              className={cn(\"size-3 shrink-0\", state === \"active\" && \"animate-pulse\")}\n            />\n            {c.label}\n          </li>\n        );\n      })}\n    </ul>\n  ),\n);\nCapabilityIndicator.displayName = \"CapabilityIndicator\";\n\n/** Common capability presets — re-use these so apps don't reinvent labels. */\nexport const capabilityPresets = {\n  read: { id: \"read\", label: \"Read files\", icon: Eye } as const,\n  write: { id: \"write\", label: \"Write files\", icon: Pencil } as const,\n  delete: { id: \"delete\", label: \"Delete files\", icon: Trash2 } as const,\n  bash: { id: \"bash\", label: \"Run shell\", icon: Terminal } as const,\n  network: { id: \"network\", label: \"Network\", icon: Network } as const,\n  deploy: { id: \"deploy\", label: \"Deploy\", icon: Rocket } as const,\n  llm: { id: \"llm\", label: \"Sub-agents\", icon: Sparkles } as const,\n};\n\nexport { CapabilityIndicator };\n"
+    }
+  ]
+}

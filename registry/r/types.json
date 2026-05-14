@@ -3,7 +3,7 @@
   "name": "types",
   "type": "registry:lib",
   "title": "Theo UI shared types",
-  "description": "Type aliases reused across primitives — IconComponent (lucide-compatible) and friends.",
+  "description": "Shared TypeScript helper types (IconComponent, etc.) used across Theo UI.",
   "files": [
     {
       "path": "lib/types.ts",

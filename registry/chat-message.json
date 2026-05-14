@@ -3,9 +3,12 @@
   "name": "chat-message",
   "type": "registry:ui",
   "title": "ChatMessage",
-  "description": "Single user / assistant message row with role-aware bubble styling.",
+  "description": "single chat turn.",
   "dependencies": [],
-  "registryDependencies": ["cn", "chat-types"],
+  "registryDependencies": [
+    "cn",
+    "chat-types"
+  ],
   "files": [
     {
       "path": "components/primitives/chat-message/chat-message.tsx",

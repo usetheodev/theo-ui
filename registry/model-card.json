@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-card",
+  "type": "registry:ui",
+  "title": "ModelCard",
+  "description": "full info on a model: vendor, context, output cap, pricing,",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/model-card/model-card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/model-card.tsx"
+    }
+  ]
+}

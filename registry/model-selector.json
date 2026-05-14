@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-selector",
+  "type": "registry:ui",
+  "title": "ModelSelector",
+  "description": "chip dropdown for picking the active LLM.",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/model-selector/model-selector.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/model-selector.tsx"
+    }
+  ]
+}

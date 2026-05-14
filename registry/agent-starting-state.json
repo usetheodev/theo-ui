@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-starting-state",
+  "type": "registry:ui",
+  "title": "AgentStartingState",
+  "description": "full-width skeleton shown while the agent boots.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/agent-starting-state/agent-starting-state.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-starting-state.tsx"
+    }
+  ]
+}

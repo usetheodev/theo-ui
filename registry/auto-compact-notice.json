@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auto-compact-notice",
+  "type": "registry:ui",
+  "title": "AutoCompactNotice",
+  "description": "inline banner warning the user that the agent is",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/auto-compact-notice/auto-compact-notice.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/auto-compact-notice.tsx"
+    }
+  ]
+}
