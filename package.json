@@ -13,7 +13,403 @@
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./fonts.css": "./dist/fonts.css",
-    "./fonts-cdn.css": "./dist/fonts-cdn.css"
+    "./fonts-cdn.css": "./dist/fonts-cdn.css",
+    "./agent-composer": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-editor": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-error-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-event": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-handoff": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-profile": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-starting-state": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-stream": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-streaming": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./agent-timeline": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./approval-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./artifact-preview": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./attachment-chip": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./audit-log-entry": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./auto-compact-notice": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./avatar": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./badge": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./browser-controls": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./build-log-stream": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./button": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./capability-indicator": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./chat-composer": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./chat-message": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./chat-thread": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./checkbox": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./command-palette": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./context-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./context-window-bar": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./cost-meter": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./created-files-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./cron-job-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./cron-jobs-list": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./deployment-row": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dialog": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./diff-viewer": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./domain-config": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./empty-state": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./env-var-editor": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./folder-context-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./folder-selector": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./form-field": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./hook-config": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./hook-event-log": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./input": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./intent-selector": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./label": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./lane-board": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./login-split": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mcp-server-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mcp-server-list": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./memory-editor": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mention-menu": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./metrics-panel": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./model-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./model-selector": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./permission-matrix": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./permission-modal": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./preview-env-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./preview-panel": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./progress-checklist": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./project-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./project-switcher": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./quick-action-chips": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./radio-group": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./recent-folders-list": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./rollback-ui": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./rule-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./rule-editor": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./run-stats": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./running-tasks-panel": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./scroll-area": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./select": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./session-list-item": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./session-timeline": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./sheet": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./sidebar": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./skeleton": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./skill-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./skill-editor": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./skills-list": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./social-auth-row": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./steps-rail": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./sub-agent-dispatch": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./switch": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./system-prompt-editor": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tabs": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./task-header": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./task-plan": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./terminal-panel": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./textarea": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./toast": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./token-usage-chart": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tool-call": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tool-call-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tool-result": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tools-list": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tooltip": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./topnav": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
   "scripts": {
