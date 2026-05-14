@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **BLOCKER-001 (2026-05-14): `validateComponentStructure` gate regex was broken.** The previous check `/from\s+["'](?:\.\.\/)+(?:primitives|composites)\//` matched the literal segments `primitives/`/`composites/` in the import specifier, which **never** appears for sibling imports of the form `"../button/button.js"` (the segment is in the resolved path, not the specifier). 8 primitives (`agent-editor`, `rule-editor`, `skill-editor`, `approval-card`, `form-field`, `cron-jobs-list`, `skills-list`, `mcp-server-list`) value-imported other primitives undetected. Replaced with `scripts/lib/import-graph.ts` (path-resolved, multi-line aware, type-vs-value aware) + 15 meta-tests in `scripts/lib/import-graph.test.ts`. Gate now flags 22 distinct sibling-primitive value-imports.
+
 ### Added
+- `scripts/lib/import-graph.ts` — shared utilities (`parseImports`, `parseImportsDetailed`, `resolveSpecifierToLayer`, `findPrimitiveOffenses`, `importsScreen`, `GLOBAL_PROVIDER_PRIMITIVES`) consumed by `validate-quality-gates.ts`. Exported via named exports for reuse by future gates.
+- `scripts/lib/import-graph.test.ts` — 15 meta-tests (RED-then-GREEN) covering: sibling value-import detection, type-only allowance, cross-layer barrel resolution, multi-line imports, global provider allowlist, composite-imports-screen guard.
+- `vitest.config.ts` now also collects `scripts/**/*.{test,spec}.ts` so meta-tests run under `pnpm test`.
 - `src/test/a11y.ts` — shared `expectNoA11yViolations(ui)` helper used by 30+ primitive smoke tests.
 - `src/welcome.stats.ts` (generated) — single source of truth for badge / welcome / architecture counts.
 - Quality gates: `validateCompoundPattern`, `validateAxeCoverage`, `validateCountConsistency`, `validateArchitectureCensus`, `validateNoStrayArtifacts`. All hard-fail.
