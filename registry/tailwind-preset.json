@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tailwind-preset",
+  "type": "registry:lib",
+  "title": "Theo UI Tailwind preset",
+  "description": "Type scale, fontFamily, colors and motion tokens consumed by every Theo UI component. Add to tailwind.config.ts#presets before installing any other component.",
+  "dependencies": [
+    "tailwindcss",
+    "tailwindcss-animate"
+  ],
+  "files": [
+    {
+      "path": "styles/tailwind-preset.ts",
+      "type": "registry:lib",
+      "target": "styles/tailwind-preset.ts"
+    }
+  ]
+}

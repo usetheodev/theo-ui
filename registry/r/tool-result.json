@@ -6,7 +6,8 @@
   "description": "Formatted output of a tool invocation.",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

@@ -6,7 +6,8 @@
   "description": "Shows how much of the model's context window has been",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

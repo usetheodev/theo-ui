@@ -9,7 +9,8 @@
   ],
   "registryDependencies": [
     "cn",
-    "cron-job-card"
+    "cron-job-card",
+    "tailwind-preset"
   ],
   "files": [
     {

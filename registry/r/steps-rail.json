@@ -6,7 +6,8 @@
   "description": "Vertical numbered rail with connecting line.",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

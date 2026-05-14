@@ -5,7 +5,8 @@
   "title": "BuildLogStream",
   "description": "Terminal-like log viewer with timestamps + level coloring.",
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

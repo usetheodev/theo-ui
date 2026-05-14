@@ -8,7 +8,8 @@
   "registryDependencies": [
     "agent-event",
     "agent-types",
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

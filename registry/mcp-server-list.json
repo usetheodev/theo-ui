@@ -9,7 +9,8 @@
   ],
   "registryDependencies": [
     "cn",
-    "mcp-server-card"
+    "mcp-server-card",
+    "tailwind-preset"
   ],
   "files": [
     {

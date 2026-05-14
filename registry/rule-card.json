@@ -9,7 +9,8 @@
   ],
   "registryDependencies": [
     "cn",
-    "rule-types"
+    "rule-types",
+    "tailwind-preset"
   ],
   "files": [
     {

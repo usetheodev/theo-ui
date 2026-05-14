@@ -6,14 +6,15 @@
   "description": "Form for creating or editing an Agent persona.",
   "dependencies": [],
   "registryDependencies": [
-    "cn",
     "agent-profile",
     "button",
+    "cn",
     "form-field",
     "input",
+    "mode-types",
     "select",
-    "textarea",
-    "mode-types"
+    "tailwind-preset",
+    "textarea"
   ],
   "files": [
     {
