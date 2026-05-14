@@ -438,7 +438,8 @@
     "quality:structure": "tsx scripts/validate-quality-gates.ts",
     "quality:bundle": "tsx scripts/validate-bundle-size.ts",
     "quality:bundle:update": "tsx scripts/validate-bundle-size.ts --update",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm ladle:build",
+    "quality:a11y": "vitest run src/test/ladle-axe.test.tsx",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {

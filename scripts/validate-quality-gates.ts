@@ -368,7 +368,10 @@ function validateScriptsAndCi(): void {
     "format:check",
     "registry:build",
     "registry:validate",
+    "sync:exports",
     "quality:structure",
+    "quality:bundle",
+    "quality:a11y",
     "quality:gates",
     "ladle:build",
   ];
