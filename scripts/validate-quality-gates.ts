@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { type LayerMembership, findPrimitiveOffenses, importsScreen } from "./lib/import-graph.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -33,11 +34,36 @@ const listDirectories = async (path: string): Promise<string[]> =>
 const readJson = async <T>(path: string): Promise<T> =>
   JSON.parse(await readFile(path, "utf-8")) as T;
 
-const hasImportFromTheoComponent = (content: string): boolean =>
-  /from\s+["'](?:\.\.\/)+(?:primitives|composites)\//.test(content) ||
-  /from\s+["'](?:\.\.\/)+components\/(?:primitives|composites)\//.test(content);
-
+/**
+ * Validate the mechanical taxonomy rule from `docs/architecture.md`:
+ *
+ *   - A primitive MUST NOT value-import another primitive (sibling).
+ *   - A primitive MAY type-import another primitive (architecture.md §"Notes":
+ *     "type imports across primitives/composites … don't add code at runtime").
+ *   - A composite MAY import primitives via barrel; MUST NOT import screens.
+ *
+ * The previous implementation used the regex
+ *   /from\s+["'](?:\.\.\/)+(?:primitives|composites)\//
+ * which only matched specifiers containing the literal segments
+ * `primitives/` or `composites/`. Sibling imports like `"../button/button.js"`
+ * resolve to `src/components/primitives/button/...` but the SPECIFIER itself
+ * contains no such segment, so the regex silently accepted them.
+ *
+ * This new implementation resolves each specifier to an absolute path and
+ * checks layer membership — making the gate robust against any path scheme
+ * future refactors might introduce. See `scripts/lib/import-graph.ts` for
+ * the helpers and `scripts/lib/import-graph.test.ts` for the meta-tests.
+ *
+ * BLOCKER-001 (2026-05-14): documented in CHANGELOG `Unreleased > Fixed`.
+ */
 async function validateComponentStructure(): Promise<void> {
+  const primitivesRoot = join(ROOT, "src/components/primitives");
+  const compositesRoot = join(ROOT, "src/components/composites");
+  const layers: LayerMembership = {
+    primitives: new Set(existsSync(primitivesRoot) ? await listDirectories(primitivesRoot) : []),
+    composites: new Set(existsSync(compositesRoot) ? await listDirectories(compositesRoot) : []),
+  };
+
   for (const layer of ["primitives", "composites"] as const) {
     const layerRoot = join(ROOT, "src/components", layer);
     for (const name of await listDirectories(layerRoot)) {
@@ -48,14 +74,20 @@ async function validateComponentStructure(): Promise<void> {
       if (!existsSync(implementation)) fail(`${layer}/${name}`, `missing ${name}.tsx`);
       if (!existsSync(index)) fail(`${layer}/${name}`, "missing index.ts");
 
-      if (existsSync(implementation)) {
-        const content = await readFile(implementation, "utf-8");
-        if (layer === "primitives" && hasImportFromTheoComponent(content)) {
-          fail(`${layer}/${name}`, "primitive imports another Theo component");
+      if (!existsSync(implementation)) continue;
+      const content = await readFile(implementation, "utf-8");
+
+      if (layer === "primitives") {
+        const offenses = findPrimitiveOffenses(implementation, name, content, layers);
+        for (const offense of offenses) {
+          fail(
+            `${layer}/${name}`,
+            `primitive value-imports sibling primitive "${offense.targetName}" at line ${offense.line}. Move to composites/ or split. See docs/architecture.md (taxonomy rule).`,
+          );
         }
-        if (layer === "composites" && /from\s+["'](?:\.\.\/)+screens\//.test(content)) {
-          fail(`${layer}/${name}`, "composite imports a screen");
-        }
+      }
+      if (layer === "composites" && importsScreen(implementation, content)) {
+        fail(`${layer}/${name}`, "composite imports a screen");
       }
     }
   }
