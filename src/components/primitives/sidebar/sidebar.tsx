@@ -5,6 +5,7 @@ import type {
   ElementType,
   HTMLAttributes,
   ReactNode,
+  Ref,
 } from "react";
 import { cn } from "../../../lib/cn.js";
 
@@ -120,7 +121,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
     if (as === "a") {
       return (
         <a
-          ref={ref as React.Ref<HTMLAnchorElement>}
+          ref={ref as Ref<HTMLAnchorElement>}
           href={href}
           className={classes}
           aria-current={active ? "page" : undefined}
@@ -133,7 +134,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
 
     return (
       <button
-        ref={ref as React.Ref<HTMLButtonElement>}
+        ref={ref as Ref<HTMLButtonElement>}
         type="button"
         className={classes}
         aria-pressed={active ? "true" : undefined}

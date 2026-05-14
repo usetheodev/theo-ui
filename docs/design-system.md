@@ -266,6 +266,19 @@ Signature dot grid + radial glow, plus paper grain for warm-light themes.
 - Pull in third-party fonts that compete with Geist (Inter, Roboto, Space Grotesk, Geist already covers).
 - Material-style heavy blur shadows — use pointed `--shadow-glow` violet on CTAs only.
 
+### Anti-glass guideline (named principle)
+
+**Surfaces never use `backdrop-filter: blur(...)`.** Dialog overlays, dropdowns,
+popovers, sheets, and tooltips render against opaque tokens (`--background/80`,
+`--card`, `--popover`). The "frosted glass" / liquid-glass aesthetic is a
+recurring trend in DS exploration but conflicts with the Violet Forge identity
+(Vercel-aligned neutrals + content-led density) and creates layered blur
+performance cost on low-end GPUs (CSS `backdrop-filter` triggers a paint
+isolation layer that compounds with each nested blurred element).
+
+If a brief argues for blur, escalate via RFC. Until then, all surfaces stay
+opaque.
+
 ---
 
 ## Theme system

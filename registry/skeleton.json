@@ -5,7 +5,8 @@
   "title": "Skeleton",
   "description": "Placeholder block shown while content is loading.",
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

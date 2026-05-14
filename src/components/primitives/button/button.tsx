@@ -22,7 +22,10 @@ import { cn } from "../../../lib/cn.js";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg",
-    "font-bold font-sans tracking-tight",
+    // NIT-004: `font-medium` (500) aligns with the design-system.md UI weight.
+    // Previously `font-bold` (700) exceeded the normative 400/500/600 weight
+    // range declared for Geist Sans in the Violet Forge identity.
+    "font-medium font-sans tracking-tight",
     "transition-[box-shadow,background-color,color,transform] duration-base ease-out-soft",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
     "disabled:pointer-events-none disabled:opacity-50",

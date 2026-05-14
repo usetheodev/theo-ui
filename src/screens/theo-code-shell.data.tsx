@@ -29,12 +29,12 @@ import {
   Terminal,
   Webhook,
 } from "lucide-react";
+import type { AgentDraft } from "../components/composites/agent-editor/agent-editor.js";
 import type { AgentStreamItem } from "../components/composites/agent-stream/agent-stream.js";
 import type { Deployment } from "../components/composites/deployment-row/deployment-row.js";
 import type { Domain } from "../components/composites/domain-config/domain-config.js";
 import type { EnvVar } from "../components/composites/env-var-editor/env-var-editor.js";
 import type { RollbackTarget } from "../components/composites/rollback-ui/rollback-ui.js";
-import type { AgentDraft } from "../components/primitives/agent-editor/agent-editor.js";
 import type { LogLine } from "../components/primitives/build-log-stream/build-log-stream.js";
 import type { MentionItem } from "../components/primitives/mention-menu/mention-menu.js";
 import type { SessionRunStatus } from "../components/primitives/session-list-item/session-list-item.js";

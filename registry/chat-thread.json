@@ -6,7 +6,8 @@
   "description": "Simple vertical container that applies spacing + scroll.",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

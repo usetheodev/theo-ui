@@ -11,12 +11,12 @@ Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-s
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-421%20passing-success?style=flat-square)](#quality-gates)
+[![tests](https://img.shields.io/badge/tests-453%20passing-success?style=flat-square)](#quality-gates)
 [![components](https://img.shields.io/badge/components-102-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
-[Quickstart](#quickstart) · [Components](#component-catalog) · [Themes](#themes) · [Design System](./docs/design-system.md) · [Quality Gates](./docs/quality-gates.md)
+[Quickstart](#quickstart) · [Components](#component-catalog) · [Themes](#themes) · [Design System](./docs/design-system.md) · [Quality Gates](./docs/quality-gates.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
 
 </div>
 
@@ -99,26 +99,25 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (88) — building blocks
+**Primitives** (81) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
 <!-- BEGIN:primitives -->
-`AgentEditor` · `AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState`
-`AgentStreaming` · `ApprovalCard` · `ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice`
-`Avatar` · `Badge` · `BrowserControls` · `BuildLogStream` · `Button` · `CapabilityIndicator`
-`Card` · `ChatMessage` · `ChatThread` · `Checkbox` · `ContextCard` · `ContextWindowBar`
-`CostMeter` · `CreatedFilesCard` · `CronJobCard` · `CronJobsList` · `Dialog` · `DiffViewer`
-`EmptyState` · `FolderContextCard` · `FolderSelector` · `FormField` · `HookConfig` · `HookEventLog`
-`Input` · `IntentSelector` · `Label` · `LaneBoard` · `LoginSplit` · `MCPServerCard`
-`MCPServerList` · `MemoryEditor` · `MentionMenu` · `MetricsPanel` · `ModelCard` · `ModelSelector`
-`PermissionMatrix` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips` · `RadioGroup` · `RecentFoldersList`
-`RuleCard` · `RuleEditor` · `RunStats` · `RunningTasksPanel` · `ScrollArea` · `ScrollBar`
-`Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar` · `Skeleton`
-`SkillCard` · `SkillEditor` · `SkillsList` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch`
-`Switch` · `SystemPromptEditor` · `Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel`
-`Textarea` · `Toast` · `Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard`
-`ToolResult` · `ToolsList` · `Tooltip` · `TopNav`
+`AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState` · `AgentStreaming`
+`ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice` · `Avatar` · `Badge`
+`BrowserControls` · `BuildLogStream` · `Button` · `CapabilityIndicator` · `Card` · `ChatMessage`
+`ChatThread` · `Checkbox` · `ContextCard` · `ContextWindowBar` · `CostMeter` · `CreatedFilesCard`
+`CronJobCard` · `Dialog` · `DiffViewer` · `EmptyState` · `FolderContextCard` · `FolderSelector`
+`FormField` · `HookConfig` · `HookEventLog` · `Input` · `IntentSelector` · `Label`
+`LaneBoard` · `LoginSplit` · `MCPServerCard` · `MemoryEditor` · `MentionMenu` · `MetricsPanel`
+`ModelCard` · `ModelSelector` · `PermissionMatrix` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
+`RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunningTasksPanel` · `ScrollArea`
+`ScrollBar` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
+`Skeleton` · `SkillCard` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch`
+`SystemPromptEditor` · `Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea`
+`Toast` · `Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult`
+`ToolsList` · `Tooltip` · `TopNav`
 <!-- END:primitives -->
 
 </details>
@@ -126,12 +125,12 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 <details>
 <summary>
 <!-- BEGIN:composites-count -->
-**Composites** (14) — assembled flows
+**Composites** (21) — assembled flows
 <!-- END:composites-count -->
 </summary>
 
 <!-- BEGIN:composites -->
-`AgentComposer` · `AgentStream` · `AgentTimeline` · `ChatComposer` · `CommandPalette` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `RollbackUI` · `TaskHeader`
+`AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `CommandPalette` · `CronJobsList` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `MCPServerList` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `TaskHeader`
 <!-- END:composites -->
 
 </details>
@@ -254,6 +253,29 @@ scripts/           build-registry, validate-registry, sync-readme, validate-qual
 docs/              design-system, quality-gates, architecture, design-audit
 tests/             fixture-shadcn-app/ (registry install integration test)
 ```
+
+---
+
+## Bundle & module format
+
+- **ESM-only** — `@usetheo/ui` ships a single `dist/index.js` (ESM) plus
+  per-component `dist/components/.../index.d.ts` type declarations. No CJS
+  build. Consumers running on CommonJS Node need to transpile or use a
+  bundler. This is intentional: the four-pillar audience (modern Vite,
+  Next 14+, Astro, Remix) is ESM-first.
+- **Tree-shaking via the barrel** — modern bundlers (Vite, esbuild, Rollup,
+  webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and tree-shake
+  unused components from the barrel import (`import { Button } from
+  "@usetheo/ui"` drops every other component from the final bundle). No
+  per-component subpath exports are needed for this to work.
+- **CSS distribution** — `dist/styles.css` is the recommended single import
+  (combines tokens, fonts self-hosted, Tailwind base/components/utilities).
+  `@usetheo/ui/tokens.css`, `@usetheo/ui/fonts.css`, and
+  `@usetheo/ui/fonts-cdn.css` (opt-in) are available for finer control.
+- **Self-hosted fonts** — Geist Sans + Geist Mono ship as woff2 under
+  `dist/fonts/` (~290 KB total). Opt into Google Fonts CDN with
+  `@import "@usetheo/ui/fonts-cdn.css"` instead of the default if you
+  prefer not to host static assets.
 
 ---
 

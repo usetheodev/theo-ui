@@ -65,6 +65,7 @@ const ITEMS_TO_INSTALL = [
   "types",
   "chat-types",
   "tokens",
+  "tailwind-preset",
   "badge",
   "button",
   "card",
@@ -74,6 +75,27 @@ const ITEMS_TO_INSTALL = [
   "tabs",
   "deployment-row",
   "command-palette",
+];
+
+/**
+ * Utility classes the preset MUST emit when the build runs against a file
+ * that uses them. If any of these is missing from the compiled CSS, the
+ * preset is broken (BLOCKER-002 regression). Each class corresponds to a
+ * Geist-inspired typescale entry in the preset.
+ */
+const REQUIRED_TAILWIND_CLASSES = [
+  ".text-body-md",
+  ".text-body-sm",
+  ".text-body-lg",
+  ".text-display-2xl",
+  ".text-title-lg",
+  ".text-label-caps",
+  ".text-code-sm",
+  ".font-display",
+  ".font-mono",
+  ".bg-primary",
+  ".text-foreground",
+  ".rounded-lg",
 ];
 
 async function readBuiltItem(name: string): Promise<RegistryItem> {
@@ -192,6 +214,17 @@ export function App() {
     process.exit(1);
   }
 
+  // Create the Tailwind input CSS for the fixture (D4 / BLOCKER-003).
+  // The preset is consumed via the `tailwind.config.ts` next to this src/.
+  const globalCss = `@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+`;
+  await writeFile(join(SRC, "styles/global.css"), globalCss);
+  writeStdout("+ wrote src/styles/global.css (Tailwind entry)");
+
   // Run typecheck.
   writeStdout("Running tsc --noEmit in fixture…");
   try {
@@ -205,6 +238,36 @@ export function App() {
     );
     process.exit(1);
   }
+
+  // Build CSS with Tailwind CLI — the real proof that the preset works.
+  // Without this, BLOCKER-002 (typescale not shipped) goes undetected by `tsc`.
+  writeStdout("Running tailwindcss build in fixture…");
+  const cssOutPath = join(FIXTURE, "dist", "test.css");
+  await mkdir(dirname(cssOutPath), { recursive: true });
+  try {
+    execSync(
+      `pnpm exec tailwindcss -i ./src/styles/global.css -o ${cssOutPath} --config ./tailwind.config.ts`,
+      {
+        cwd: FIXTURE,
+        stdio: ["ignore", "inherit", "inherit"],
+      },
+    );
+  } catch (err) {
+    process.stderr.write(`Tailwind build FAILED: ${String(err)}\n`);
+    process.exit(1);
+  }
+
+  const compiledCss = await readFile(cssOutPath, "utf-8");
+  const missingClasses = REQUIRED_TAILWIND_CLASSES.filter((cls) => !compiledCss.includes(cls));
+  if (missingClasses.length > 0) {
+    process.stderr.write(
+      `Tailwind output missing ${missingClasses.length} required utility classes:\n${missingClasses
+        .map((c) => `  - ${c}`)
+        .join("\n")}\nThe preset is not delivering the Violet Forge typescale to consumers.\n`,
+    );
+    process.exit(1);
+  }
+  writeStdout(`+ compiled CSS contains all ${REQUIRED_TAILWIND_CLASSES.length} required classes`);
 
   writeStdout(`\nFixture install test PASSED for ${ITEMS_TO_INSTALL.length} items.`);
 }

@@ -6,7 +6,8 @@
   "description": "Single row in the sidebar's Sessions list for a code agent",
   "dependencies": [],
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

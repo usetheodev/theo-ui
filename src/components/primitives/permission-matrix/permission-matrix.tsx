@@ -51,7 +51,7 @@ const cycle = (cur: PermissionDecisionKind): PermissionDecisionKind =>
  *
  * One PermissionRule per row. Click the decision pill to cycle Allow → Ask → Deny.
  *
- * Design decision (T8.2, 2026-05-14): PermissionMatrix stays in `primitives/`
+ * Design decision (2026-05-14): PermissionMatrix stays in `primitives/`
  * — not `composites/` — even though it renders inputs and a select. The native
  * `<input>` / `<select>` elements use Theo design tokens directly (border-input,
  * ring, font-mono) so visual parity with `Input` / `Select` primitives is

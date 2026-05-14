@@ -1,9 +1,11 @@
 #!/usr/bin/env tsx
+import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFileSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { type LayerMembership, findPrimitiveOffenses, importsScreen } from "./lib/import-graph.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -33,11 +35,36 @@ const listDirectories = async (path: string): Promise<string[]> =>
 const readJson = async <T>(path: string): Promise<T> =>
   JSON.parse(await readFile(path, "utf-8")) as T;
 
-const hasImportFromTheoComponent = (content: string): boolean =>
-  /from\s+["'](?:\.\.\/)+(?:primitives|composites)\//.test(content) ||
-  /from\s+["'](?:\.\.\/)+components\/(?:primitives|composites)\//.test(content);
-
+/**
+ * Validate the mechanical taxonomy rule from `docs/architecture.md`:
+ *
+ *   - A primitive MUST NOT value-import another primitive (sibling).
+ *   - A primitive MAY type-import another primitive (architecture.md §"Notes":
+ *     "type imports across primitives/composites … don't add code at runtime").
+ *   - A composite MAY import primitives via barrel; MUST NOT import screens.
+ *
+ * The previous implementation used the regex
+ *   /from\s+["'](?:\.\.\/)+(?:primitives|composites)\//
+ * which only matched specifiers containing the literal segments
+ * `primitives/` or `composites/`. Sibling imports like `"../button/button.js"`
+ * resolve to `src/components/primitives/button/...` but the SPECIFIER itself
+ * contains no such segment, so the regex silently accepted them.
+ *
+ * This new implementation resolves each specifier to an absolute path and
+ * checks layer membership — making the gate robust against any path scheme
+ * future refactors might introduce. See `scripts/lib/import-graph.ts` for
+ * the helpers and `scripts/lib/import-graph.test.ts` for the meta-tests.
+ *
+ * BLOCKER-001 (2026-05-14): documented in CHANGELOG `Unreleased > Fixed`.
+ */
 async function validateComponentStructure(): Promise<void> {
+  const primitivesRoot = join(ROOT, "src/components/primitives");
+  const compositesRoot = join(ROOT, "src/components/composites");
+  const layers: LayerMembership = {
+    primitives: new Set(existsSync(primitivesRoot) ? await listDirectories(primitivesRoot) : []),
+    composites: new Set(existsSync(compositesRoot) ? await listDirectories(compositesRoot) : []),
+  };
+
   for (const layer of ["primitives", "composites"] as const) {
     const layerRoot = join(ROOT, "src/components", layer);
     for (const name of await listDirectories(layerRoot)) {
@@ -48,16 +75,159 @@ async function validateComponentStructure(): Promise<void> {
       if (!existsSync(implementation)) fail(`${layer}/${name}`, `missing ${name}.tsx`);
       if (!existsSync(index)) fail(`${layer}/${name}`, "missing index.ts");
 
-      if (existsSync(implementation)) {
-        const content = await readFile(implementation, "utf-8");
-        if (layer === "primitives" && hasImportFromTheoComponent(content)) {
-          fail(`${layer}/${name}`, "primitive imports another Theo component");
-        }
-        if (layer === "composites" && /from\s+["'](?:\.\.\/)+screens\//.test(content)) {
-          fail(`${layer}/${name}`, "composite imports a screen");
+      if (!existsSync(implementation)) continue;
+      const content = await readFile(implementation, "utf-8");
+
+      if (layer === "primitives") {
+        const offenses = findPrimitiveOffenses(implementation, name, content, layers);
+        for (const offense of offenses) {
+          fail(
+            `${layer}/${name}`,
+            `primitive value-imports sibling primitive "${offense.targetName}" at line ${offense.line}. Move to composites/ or split. See docs/architecture.md (taxonomy rule).`,
+          );
         }
       }
+      if (layer === "composites" && importsScreen(implementation, content)) {
+        fail(`${layer}/${name}`, "composite imports a screen");
+      }
     }
+  }
+}
+
+/**
+ * Every `registry:ui` and `registry:block` must declare `tailwind-preset`
+ * as a `registryDependency` (D3 / BLOCKER-002 remediation). Without the
+ * preset, copy-paste consumers receive markup that uses utility classes
+ * (`text-body-md`, `text-display-2xl`, `font-display`, …) that Tailwind
+ * doesn't ship by default, so the component renders unstyled.
+ *
+ * The preset itself and `registry:lib` items (types, cn, tokens, theme-*)
+ * are exempt.
+ */
+async function validateRegistryPresetDep(): Promise<void> {
+  const descriptorFiles = (await readdir(join(ROOT, "registry")))
+    .filter((file) => file.endsWith(".json") && file !== "index.json")
+    .sort();
+
+  for (const descriptorFile of descriptorFiles) {
+    const descriptor = await readJson<{
+      name: string;
+      type: string;
+      registryDependencies?: string[];
+    }>(join(ROOT, "registry", descriptorFile));
+
+    if (descriptor.type !== "registry:ui" && descriptor.type !== "registry:block") continue;
+    if (descriptor.name === "tailwind-preset") continue;
+
+    const deps = new Set(descriptor.registryDependencies ?? []);
+    if (!deps.has("tailwind-preset")) {
+      fail(
+        descriptor.name,
+        `registry:${descriptor.type === "registry:block" ? "block" : "ui"} item must declare \`tailwind-preset\` in registryDependencies (run \`pnpm tsx scripts/add-tailwind-preset-dep.ts\`)`,
+      );
+    }
+  }
+}
+
+/**
+ * Detect drift between `package.json#exports` and what `pnpm sync:exports`
+ * would emit (HIGH-005 follow-up / T3.2). If a contributor hand-edits the
+ * exports map and forgets to update `scripts/sync-exports.ts`, this gate
+ * fires.
+ *
+ * The canonical map is computed by `buildExports` in
+ * `scripts/sync-exports.ts` from `src/index.ts` exports. We import the
+ * helper directly (pure function) and diff against the live package.json.
+ */
+async function validateExportsMap(): Promise<void> {
+  const { buildExports, extractComponentSubpaths } = await import("./sync-exports.js");
+  const pkg = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8")) as {
+    exports?: Record<string, unknown>;
+  };
+  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+  const expected = buildExports(extractComponentSubpaths(indexContent));
+  const actual = pkg.exports ?? {};
+  const expectedJson = JSON.stringify(expected);
+  const actualJson = JSON.stringify(actual);
+  if (expectedJson !== actualJson) {
+    fail("package.json#exports", "drifts from canonical set; run `pnpm sync:exports`.");
+  }
+
+  // T3.2 functional proof: every subpath must resolve to a file that exists
+  // on disk under dist/. Without dist/ built, skip (the build gate runs
+  // separately). With dist/ present, broken-symlink-like exports are caught
+  // before npm publish.
+  const distRoot = join(ROOT, "dist");
+  if (!existsSync(distRoot)) return;
+  for (const [subpath, value] of Object.entries(actual)) {
+    const target =
+      typeof value === "string" ? value : ((value as { import?: string }).import ?? null);
+    if (!target) continue;
+    if (!target.startsWith("./dist/")) continue;
+    const absolute = join(ROOT, target);
+    if (!existsSync(absolute)) {
+      fail(
+        "package.json#exports",
+        `subpath "${subpath}" → "${target}" but the file does not exist on disk (run \`pnpm build\`).`,
+      );
+    }
+  }
+}
+
+/**
+ * Inspect what `npm pack` would publish and fail if forbidden artifacts
+ * appear. Catches HIGH-001 regressions (re-adding `"src"` to files etc.).
+ *
+ * Forbidden patterns in the published tarball:
+ *   - any *.test.* / *.spec.* / *.stories.* file
+ *   - anything under src/screens/
+ *   - referencia/ (internal exploration archive)
+ *   - playground/ (live demo only)
+ *   - .ladle/ (story config)
+ *   - tests/ (fixture app)
+ *
+ * Also fails when the total size exceeds 5 MB — early signal that something
+ * accidentally got added.
+ */
+async function validateNpmTarball(): Promise<void> {
+  let pack: { files?: Array<{ path: string }>; size?: number } | undefined;
+  try {
+    const raw = execSync("npm pack --dry-run --json", { cwd: ROOT, encoding: "utf-8" });
+    const parsed = JSON.parse(raw) as Array<{
+      files?: Array<{ path: string }>;
+      size?: number;
+    }>;
+    pack = parsed[0];
+  } catch (err) {
+    fail("npm pack", `failed to run \`npm pack --dry-run --json\`: ${String(err)}`);
+    return;
+  }
+  if (!pack) {
+    fail("npm pack", "`npm pack --dry-run --json` returned empty payload");
+    return;
+  }
+
+  const forbiddenPatterns: Array<{ matcher: RegExp; label: string }> = [
+    { matcher: /\.(test|spec)\.(t|j)sx?$/, label: "test file" },
+    { matcher: /\.stories\.(t|j)sx?$/, label: "Ladle story" },
+    { matcher: /^src\/screens\//, label: "internal screen" },
+    { matcher: /^referencia\//, label: "exploration archive" },
+    { matcher: /^playground\//, label: "playground demo" },
+    { matcher: /^\.ladle\//, label: "Ladle config" },
+    { matcher: /^tests\//, label: "fixture app" },
+  ];
+
+  for (const file of pack.files ?? []) {
+    for (const { matcher, label } of forbiddenPatterns) {
+      if (matcher.test(file.path)) {
+        fail("npm pack", `forbidden ${label} in tarball: ${file.path}`);
+      }
+    }
+  }
+
+  const MAX_SIZE = 5 * 1024 * 1024;
+  if ((pack.size ?? 0) > MAX_SIZE) {
+    fail("npm pack", `tarball is ${pack.size} bytes (>${MAX_SIZE}). Audit the \`files\` array.`);
   }
 }
 
@@ -117,7 +287,10 @@ async function validatePublicExports(): Promise<void> {
 function validateDesignSystemFidelity(): void {
   const tokens = readFileSync(join(ROOT, "src/styles/tokens.css"), "utf-8");
   const theme = readFileSync(join(ROOT, "src/themes/violet-forge.ts"), "utf-8");
-  const tailwind = readFileSync(join(ROOT, "tailwind.config.ts"), "utf-8");
+  /* The typescale source of truth moved to src/styles/tailwind-preset.ts
+   * (D3 / BLOCKER-002). tailwind.config.ts now imports the preset, so
+   * the gate audits the preset directly. */
+  const preset = readFileSync(join(ROOT, "src/styles/tailwind-preset.ts"), "utf-8");
 
   /* Normative fonts for the Violet Forge identity (Geist Sans + Geist Mono,
    * Vercel-inspired). Decided 2026-05-13 — see docs/design-system.md and the
@@ -130,7 +303,7 @@ function validateDesignSystemFidelity(): void {
 
   /* Vercel-inspired type scale — aggressive negative tracking at display sizes,
    * 3 strict weights (400 body / 500 UI / 600 display). Source of truth lives
-   * in tailwind.config.ts; this gate prevents accidental drift. */
+   * in tailwind-preset.ts; this gate prevents accidental drift. */
   const requiredTypeScale = [
     '"display-2xl": ["64px"',
     '"display-xl": ["48px"',
@@ -143,7 +316,47 @@ function validateDesignSystemFidelity(): void {
     '"body-md": ["15px"',
   ];
   for (const token of requiredTypeScale) {
-    if (!tailwind.includes(token)) fail("tailwind.config.ts", `type scale drift: missing ${token}`);
+    if (!preset.includes(token)) fail("tailwind-preset.ts", `type scale drift: missing ${token}`);
+  }
+
+  /* HIGH-002 / D6: fonts.css must self-host via @font-face (default), not
+   * load from Google Fonts CDN. The CDN path lives in fonts-cdn.css (opt-in).
+   */
+  const fontsCss = readFileSync(join(ROOT, "src/styles/fonts.css"), "utf-8");
+  if (!fontsCss.includes("@font-face")) {
+    fail("fonts.css", "default fonts.css must declare @font-face (self-hosted Geist).");
+  }
+  // Strip block comments so we only audit declarations, not narrative.
+  const stripped = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "");
+  if (/@import\s+url\(["']?https?:[^"')]*fonts\.googleapis\.com/.test(stripped)) {
+    fail(
+      "fonts.css",
+      "default fonts.css must not @import from fonts.googleapis.com (use fonts-cdn.css for opt-in CDN).",
+    );
+  }
+  // The CDN entrypoint must continue to exist so consumers can opt in.
+  const fontsCdnPath = join(ROOT, "src/styles/fonts-cdn.css");
+  if (!existsSync(fontsCdnPath)) {
+    fail("fonts-cdn.css", "missing opt-in CDN entrypoint at src/styles/fonts-cdn.css");
+  }
+
+  // T4.1 runtime-metric proof: when `dist/` exists, the shipped CSS
+  // entrypoints must not @import from fonts.googleapis.com. This is the
+  // post-build guarantee a consumer experiences after `npm install`.
+  // Narrative comments mentioning the CDN are fine; only @import url(...)
+  // declarations fire the gate.
+  const distFontsCss = join(ROOT, "dist/fonts.css");
+  const distStylesCss = join(ROOT, "dist/styles.css");
+  for (const path of [distFontsCss, distStylesCss]) {
+    if (!existsSync(path)) continue;
+    const content = readFileSync(path, "utf-8");
+    const stripped2 = content.replace(/\/\*[\s\S]*?\*\//g, "");
+    if (/@import\s+url\(["']?https?:[^"')]*fonts\.googleapis\.com/.test(stripped2)) {
+      fail(
+        `dist/${path.split("/").pop()}`,
+        "shipped CSS still @import-s from fonts.googleapis.com (HIGH-002 regression). Default ships must be self-hosted.",
+      );
+    }
   }
 }
 
@@ -155,7 +368,10 @@ function validateScriptsAndCi(): void {
     "format:check",
     "registry:build",
     "registry:validate",
+    "sync:exports",
     "quality:structure",
+    "quality:bundle",
+    "quality:a11y",
     "quality:gates",
     "ladle:build",
   ];
@@ -369,7 +585,9 @@ async function validateCountConsistency(): Promise<void> {
   }
 
   // welcome.stats.ts must match the same numbers.
-  const statsPath = join(ROOT, "src/welcome.stats.ts");
+  // Moved to .ladle/generated/ (HIGH-003 / T3.3) so the generated file does
+  // not ship in the npm tarball alongside hand-written source under `src/`.
+  const statsPath = join(ROOT, ".ladle/generated/welcome.stats.ts");
   if (existsSync(statsPath)) {
     const stats = readFileSync(statsPath, "utf-8");
     const sp = stats.match(/primitives:\s*(\d+)/);
@@ -377,7 +595,7 @@ async function validateCountConsistency(): Promise<void> {
     if (sp?.[1] && sc?.[1]) {
       if (Number(sp[1]) !== Number(primMatch[1]) || Number(sc[1]) !== Number(compMatch[1])) {
         fail(
-          "src/welcome.stats.ts",
+          ".ladle/generated/welcome.stats.ts",
           `welcome STATS (${sp[1]}P + ${sc[1]}C) diverge from README catalog (${primMatch[1]}P + ${compMatch[1]}C); run \`pnpm sync:readme\``,
         );
       }
@@ -589,6 +807,9 @@ async function main(): Promise<void> {
   await validateCompoundPattern();
   await validateComponentStructure();
   await validateRegistryStoriesAndTests();
+  await validateRegistryPresetDep();
+  await validateExportsMap();
+  await validateNpmTarball();
   await validatePublicExports();
   await validateCountConsistency();
   await validateArchitectureCensus();

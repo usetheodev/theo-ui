@@ -5,7 +5,8 @@
   "title": "Input",
   "description": "Text input primitive with focus ring, error state, and form-field composition support.",
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {

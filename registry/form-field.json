@@ -5,11 +5,12 @@
   "title": "FormField",
   "description": "Composition wrapper for accessible form rows.",
   "dependencies": [
+    "@radix-ui/react-label",
     "lucide-react"
   ],
   "registryDependencies": [
     "cn",
-    "label"
+    "tailwind-preset"
   ],
   "files": [
     {

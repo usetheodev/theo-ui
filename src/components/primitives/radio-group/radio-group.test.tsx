@@ -48,4 +48,10 @@ describe("RadioGroup", () => {
       </RadioGroup>,
     );
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(RadioGroup.displayName).toBe("RadioGroup");
+    expect(RadioGroup.Item.displayName).toBe("RadioGroup.Item");
+  });
 });

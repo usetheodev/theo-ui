@@ -5,14 +5,15 @@
   "title": "Skeleton",
   "description": "Placeholder block shown while content is loading.",
   "registryDependencies": [
-    "cn"
+    "cn",
+    "tailwind-preset"
   ],
   "files": [
     {
       "path": "components/primitives/skeleton/skeleton.tsx",
       "type": "registry:ui",
       "target": "components/ui/skeleton.tsx",
-      "content": "import { forwardRef } from \"react\";\nimport type { HTMLAttributes } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\n/**\n * Skeleton — placeholder block shown while content is loading.\n *\n * Uses --muted as base + a subtle shimmer that respects the violet theme.\n * Compose multiple Skeletons to mirror your component layout while loading.\n */\nconst Skeleton = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  ({ className, ...props }, ref) => (\n    <div\n      ref={ref}\n      role=\"status\"\n      aria-live=\"polite\"\n      aria-label=\"Loading\"\n      className={cn(\"animate-pulse rounded-md bg-muted\", className)}\n      {...props}\n    />\n  ),\n);\nSkeleton.displayName = \"Skeleton\";\n\nexport { Skeleton };\n"
+      "content": "import { forwardRef } from \"react\";\nimport type { HTMLAttributes } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\n/**\n * Skeleton — placeholder block shown while content is loading.\n *\n * Uses --muted as base + a subtle shimmer that respects the violet theme.\n * Compose multiple Skeletons to mirror your component layout while loading.\n *\n * Accessibility (LOW-004): the default `role=\"status\"` + `aria-live=\"polite\"`\n * announces \"Loading\" to screen readers. In loops or grids where many\n * Skeletons mount simultaneously, this can be noisy. Override per-instance\n * with `aria-live=\"off\"` and/or `aria-hidden` when only one container-level\n * loading announcement is desired:\n *\n *   <div role=\"status\" aria-live=\"polite\" aria-label=\"Loading deployments\">\n *     {placeholders.map(id => (\n *       <Skeleton key={id} aria-live=\"off\" aria-hidden=\"true\" className=\"h-8\" />\n *     ))}\n *   </div>\n */\nconst Skeleton = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  ({ className, ...props }, ref) => (\n    <div\n      ref={ref}\n      role=\"status\"\n      aria-live=\"polite\"\n      aria-label=\"Loading\"\n      className={cn(\"animate-pulse rounded-md bg-muted\", className)}\n      {...props}\n    />\n  ),\n);\nSkeleton.displayName = \"Skeleton\";\n\nexport { Skeleton };\n"
     }
   ]
 }

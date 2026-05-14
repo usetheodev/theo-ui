@@ -1,5 +1,6 @@
 import type { Story } from "@ladle/react";
 import { ArrowRight, Download, Loader2, Rocket, Trash2 } from "lucide-react";
+import type { ReactNode } from "react";
 import { Button } from "./button.js";
 
 export default {
@@ -85,7 +86,7 @@ export const States: Story = () => (
   </div>
 );
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
+function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="grid grid-cols-[140px_1fr] items-center gap-6">
       <span className="font-mono text-label-caps text-muted-foreground uppercase">{label}</span>

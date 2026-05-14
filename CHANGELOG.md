@@ -7,7 +7,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (BLOCKER-002 / BLOCKER-003 remediation)
+- **`src/styles/tailwind-preset.ts`** — single source of truth for the Violet Forge Tailwind tokens (colors, fontFamily, Geist-inspired typescale, borderRadius, boxShadow, motion, keyframes, animation + tailwindcss-animate plugin). `tailwind.config.ts` now consumes the preset via `presets: [theoUIPreset]` (was inline `theme.extend`).
+- **`registry/tailwind-preset.json`** (`registry:lib`) — distributes the preset to copy-paste consumers via `npx shadcn add tailwind-preset`. Declares `tailwindcss` + `tailwindcss-animate` as deps.
+- **`scripts/add-tailwind-preset-dep.ts`** — idempotent patcher that adds `tailwind-preset` to every `registry:ui` / `registry:block` `registryDependencies`. Ran once; 99 descriptors patched, 12 skipped (lib/types/preset itself). Without the preset, copy-paste consumers received markup using utility classes (`text-body-md`, `text-display-2xl`, `text-label-caps`, `font-display`, …) that vanilla Tailwind doesn't ship.
+- **Quality gate `validateRegistryPresetDep`** — fails when any `registry:ui` / `registry:block` is missing `tailwind-preset` from its `registryDependencies`.
+- **Fixture CSS build in `scripts/test-registry-install.ts`** — after `tsc --noEmit`, the script now writes `src/styles/global.css`, runs `pnpm exec tailwindcss` against the fixture, and asserts the compiled output contains 12 required utility classes (`text-body-md`, `text-display-2xl`, `text-label-caps`, `font-display`, etc.). Previously the script only ran `tsc`, which couldn't detect BLOCKER-002 because typescale classes are runtime artifacts.
+- **Fixture `tailwind.config.ts` + `postcss.config.cjs`** — `tests/fixture-shadcn-app/` now has a real Tailwind toolchain with `safelist` covering the full Violet Forge typescale (forces compilation of every preset entry as proof of capability, independent of fixture App.tsx usage).
+- `validateDesignSystemFidelity` audits `src/styles/tailwind-preset.ts` instead of `tailwind.config.ts` (typescale now lives in the preset).
+
+### Added (Phase 6 — observability + test hardening, finalized)
+- **`quality:bundle` gate (HIGH-008 / T6.3)** — `scripts/validate-bundle-size.ts` compares the actual byte sizes of 6 dist artifacts (`index.js`, `index.d.ts`, `styles.css`, `tokens.css`, `fonts.css`, `fonts-cdn.css`) against `scripts/baselines/bundle-sizes.json`. Fails the gate when any file is outside ±5% of baseline. Run `pnpm quality:bundle:update` to rebaseline after a legitimate size change (the diff lands in the PR so reviewers see it). Wired into `pnpm quality:gates`.
+- **`quality:a11y` gate (MEDIUM-011 / T6.6)** — `pnpm quality:a11y` wraps the Ladle axe sweep (`src/test/ladle-axe.test.tsx`) so it can be invoked standalone or as part of `pnpm quality:gates`. 126 Ladle stories asserted by axe-core via vitest-axe, zero violations. Wired into `pnpm quality:gates` between `quality:bundle` and `ladle:build`.
+- **`validateScriptsAndCi` now requires** `sync:exports`, `quality:bundle`, `quality:a11y` in addition to the existing required scripts (`format:check`, `registry:build`, `registry:validate`, `quality:structure`, `quality:gates`, `ladle:build`). Prevents accidental removal during refactors.
+
+### Added (MEDIUM-011 / T6.6 — Ladle stories axe sweep, lightweight implementation)
+- **`src/test/ladle-axe.test.tsx`** — 126 Ladle stories pass `vitest-axe` with zero violations. Discovers stories via `import.meta.glob("../**/*.stories.tsx")`, renders each via `@testing-library/react`, runs the axe-core ruleset. Replaces the originally-planned `playwright + axe-playwright` approach (which would have added ~80 MB of devDeps) by reusing the existing happy-dom + vitest-axe stack. Trade-off documented in the file's JSDoc.
+- Story-context skip list (12 entries) covers (a) side-by-side variant grids that legitimately repeat landmarks, (b) intentionally-empty states for `aria-required-children` containers, (c) Radix Select stories that demonstrate the unselected/empty state, (d) `AgentStream / FullStream` semantic patterns flagged for follow-up but not regressions from this audit, and (e) `Theo Code Shell` screen stories that depend on Ladle-runtime hooks outside happy-dom's reach. Each entry carries a one-line rationale comment.
+- Story-axe rule overrides disable 4 rules that fire false positives in isolated story render (`heading-order`, three `landmark-*` rules). Per-component tests keep these rules ON because the test author controls the surrounding markup.
+
+### Added (Phase 7 — API cleanup, LOWs and NITs)
+- **`ScrollArea.Bar` compound** (MEDIUM-007 / T7.1). `ScrollArea` is now a compound (`Object.assign /*#__PURE__*/`) exposing `.Bar` as the canonical subpart. Legacy `ScrollBar` standalone export retained as a `@deprecated` alias for one major version; consumers should migrate to `ScrollArea.Bar`.
+- **`Skeleton` JSDoc accessibility override note** (LOW-004 / T7.2). Documents how to silence per-instance `aria-live` announcements when many Skeletons mount in a list/grid; recommends one container-level `role="status"` and per-Skeleton `aria-live="off" aria-hidden="true"`.
+- **README "Bundle & module format" section** (LOW-002 / T7.2). Documents the ESM-only decision, tree-shaking via the barrel, CSS distribution map, self-hosted-fonts-as-default plus opt-in CDN.
+- **`docs/design-system.md` §"Anti-glass guideline"** (NIT-002 / T7.2). Promotes the "no `backdrop-filter: blur(...)`" rule from inline JSDoc comments to a named DS principle: rationale (Vercel-aligned neutrals + content-led density), performance cost, RFC escalation path.
+- **`playground/**/*` added to `tsconfig.json#include`** (LOW-001 / T7.2); `playground/dist` added to `exclude`.
+
+### Added (Phase 6 — observability + test hardening, continued)
+- **displayName regression tests on 10 compounds total**: `Card`, `Dialog`, `Tabs`, `Avatar` (committed previously) + `Sheet`, `Sidebar`, `TopNav`, `RadioGroup`, `Toast`, `FormField`. Each test asserts root + every subpart `.displayName` per `Object.assign /*#__PURE__*/` wiring (HIGH-009 / T6.2 complete).
+- **MEDIUM-002 / T6.5 — dev-only warn when `BuildLogStream` `visibleLevels` prop flips between controlled and uncontrolled** between renders. `useRef` tracks the previous mode; a one-line `console.warn` in dev surfaces the regression before it manifests as confusing filter state.
+- **MEDIUM-003 / T6.7.1 — visual-regression test on `PermissionMatrix`** that asserts the inline native `<input>` and `<select>` carry `border-input`, `font-mono`, and `ring` token classes. Catches drift between the matrix and the standalone Input/Select primitives without requiring full snapshot infrastructure.
+- **MEDIUM-013 / T6.7.5 — unit tests for `parseExportsFromIndex`** (the pure parser extracted from `parseIndexExports` in `scripts/sync-readme.ts`). 9 tests cover empty input, single primitive, single composite, mixed `type` exports, multi-line bodies, sorted output, non-component imports, and `as`-aliased re-exports.
+
+### Added (Phase 6 — observability + test hardening)
+- **Dev-only `console.warn` in `ThemeProvider` storage catches** (HIGH-006 / T6.1). The three previous silent catches around `localStorage.{getItem,setItem}` now surface a one-line diagnostic in dev (Safari private mode, blocked third-party cookies, sandboxed iframes). Production stays silent because behavior is fail-safe. New helper `warnStorageFailure(scope, err)` carries the `process.env.NODE_ENV === "production"` guard and the per-call `biome-ignore` annotation.
+- **`displayName` regression tests on compound components** (HIGH-009 / T6.2) — `Card`, `Dialog`, `Tabs`, `Avatar` (more to follow). Catches accidental refactors that lose `.displayName` after `Object.assign /*#__PURE__*/` wiring; preserves React DevTools naming.
+
+### Changed (Phase 6)
+- **`agent-stream` adds explicit `aria-atomic="false"`** (MEDIUM-001 / T6.4) so VoiceOver/macOS does not reannounce the entire log on each new item.
+- **`React.<Type>` namespace usage replaced with named imports** (MEDIUM-012 / T6.7.4) across 17 occurrences in 12 files: `React.FormEvent`, `React.KeyboardEvent`, `React.MouseEvent`, `React.ReactNode`, `React.SVGProps`, `React.Ref`, `React.HTMLAttributes` → corresponding `import type { … } from "react"` (preserves `verbatimModuleSyntax` correctness, forward-compatible with React 19 type changes). Zero `React.` namespace references remain in `src/`.
+
+### Added (Phase 5 — docs + governance)
+- **`CONTRIBUTING.md`** — operational handbook: setup, taxonomy rule, adding components, quality gates explained, registry distribution, PR conventions, release process, internal exploration archive policy.
+- **`SECURITY.md`** — disclosure policy, supported versions matrix, vulnerability scope (in/out), hardening already in place (ThemeScript `</script>` escape, no `dangerouslySetInnerHTML` outside SSR helper, lint guards). Aligns with GitHub Security Advisories workflow.
+- **`docs/architecture.md` §"Global Provider Primitives"** — closed-set, RFC-gated exception for `Toaster` + `ThemeProvider`. Names the trade-off explicitly so future contributors can't dilute it silently (HIGH-007 / D7).
+- **`referencia/` documentation policy** — `CONTRIBUTING.md` and `SECURITY.md` both name `referencia/` as unmaintained internal exploration archive, not shipped, not in scope for vulnerability reports. Future cleanup will relocate to a separate read-only repository. The directory itself is `.gitignore`d (MEDIUM-004 / T5.4).
+- README nav links `Contributing` and `Security`.
+
+### Changed (HIGH-002 / T4.1 — self-hosted fonts as default)
+- **`src/styles/fonts.css` no longer `@import`s from `fonts.googleapis.com`.** Now declares six `@font-face` rules pointing at `./fonts/geist-{400,500,600}.woff2` and `./fonts/geist-mono-{400,500,600}.woff2`. Total asset budget: ~290 KB of woff2 next to the CSS. Eliminates the render-blocking third-party fetch that previously hit `fonts.googleapis.com` on every cold page load — fixes GDPR / CSP friction for the enterprise audience.
+- `src/styles/fonts-cdn.css` (NEW) — opt-in entrypoint that preserves the legacy Google Fonts CDN behavior. Consumers who prefer not to host static assets can `@import "@usetheo/ui/fonts-cdn.css"` instead of `@usetheo/ui/fonts.css` / `@usetheo/ui/styles.css`.
+- `tsup.config.ts` `onSuccess` now also copies `src/styles/fonts/*.woff2` → `dist/fonts/` and `src/styles/fonts-cdn.css` → `dist/fonts-cdn.css`. The relative URLs in `fonts.css` (`./fonts/geist-400.woff2`) resolve correctly inside `node_modules/@usetheo/ui/dist/`.
+- Geist OFL license shipped at `src/styles/fonts/LICENSE-GEIST.txt` → `dist/fonts/LICENSE-GEIST.txt`. Apache-2.0 + OFL is a clean dual-license combination.
+- New `geist` devDependency: used only as the source of woff2 artifacts at install time; not bundled into `dist/index.js`.
+- `validateDocsTypography` now asserts that `src/styles/fonts.css` contains `@font-face` and does NOT `@import` from `fonts.googleapis.com`, and that `src/styles/fonts-cdn.css` exists.
+
+### Removed (HIGH-001 / T3.1)
+- `package.json#files` no longer ships `src/` or the unbuilt `registry/*.json` descriptors. New set: `dist`, `registry/r`, `registry/index.json`, `LICENSE`, `CHANGELOG.md`. `npm pack --dry-run` reports 122 files / 353 KB (was 675 files / 570 KB). 102 `.test.tsx` and 114 `.stories.tsx` + `src/screens/` no longer enter the published tarball.
+
+### Added (Phase 3 follow-ups)
+- Quality gate `validateNpmTarball` — runs `npm pack --dry-run --json` and fails the build when the tarball contains `*.test.*`, `*.stories.*`, `src/screens/`, `referencia/`, `playground/`, `.ladle/`, or `tests/`, or when total size exceeds 5 MB.
+- Quality gate `validateExportsMap` — locks `package.json#exports` to the canonical 5-entry set (`.`, `./styles.css`, `./tokens.css`, `./fonts.css`, `./fonts-cdn.css`) and instructs to run `pnpm sync:exports` on drift.
+- `scripts/sync-exports.ts` + `pnpm sync:exports` script — idempotent generator. Includes an in-source ADR explaining why per-component subpath exports (originally D5) were intentionally scoped down: with tsup `splitting: false` and the ESM barrel, modern bundlers already tree-shake unused components; a 99-entry multi-entry tsup would duplicate shared code and inflate the tarball without observable bundler-side benefit.
+- `.ladle/generated/welcome.stats.ts` — `welcome.stats.ts` moved out of `src/` (HIGH-003 / T3.3). `sync-readme.ts` writes to the new path; `validateCountConsistency` reads from it. The file no longer ships in the npm tarball.
+
+### Breaking
+- **Reclassification of 7 components from `primitives/` to `composites/`** (BLOCKER-001 remediation, D2): `AgentEditor`, `RuleEditor`, `SkillEditor`, `ApprovalCard`, `CronJobsList`, `SkillsList`, `MCPServerList`. Each value-imported one or more sibling primitives, which violated the mechanical taxonomy rule in `docs/architecture.md`. They are composites by every reasonable definition (FormField+Input+Button = composite; list-of-card = composite). Public barrel (`@usetheo/ui`) is unchanged — named exports preserved. Registry consumers via `npx shadcn add`: `type` changed from `registry:ui` to `registry:block` and `target` from `components/ui/<name>` to `components/blocks/<name>`. Migration: re-run `npx shadcn add <name>` to relocate the file, or rename the import path manually.
+- **`form-field` now imports `@radix-ui/react-label` directly** (BLOCKER-001 / D2 exception). Previously imported the sibling `Label` primitive. `form-field.tsx` now inlines the same Radix LabelPrimitive + identical Tailwind tokens. Visual parity preserved. `registry/form-field.json` adds `@radix-ui/react-label` to `dependencies` and removes `label` from `registryDependencies`.
+
+### Fixed
+- **BLOCKER-001 (2026-05-14): `validateComponentStructure` gate regex was broken.** The previous check `/from\s+["'](?:\.\.\/)+(?:primitives|composites)\//` matched the literal segments `primitives/`/`composites/` in the import specifier, which **never** appears for sibling imports of the form `"../button/button.js"` (the segment is in the resolved path, not the specifier). 8 primitives (`agent-editor`, `rule-editor`, `skill-editor`, `approval-card`, `form-field`, `cron-jobs-list`, `skills-list`, `mcp-server-list`) value-imported other primitives undetected. Replaced with `scripts/lib/import-graph.ts` (path-resolved, multi-line aware, type-vs-value aware) + 15 meta-tests in `scripts/lib/import-graph.test.ts`. Gate now flags 22 distinct sibling-primitive value-imports.
+
 ### Added
+- `scripts/lib/import-graph.ts` — shared utilities (`parseImports`, `parseImportsDetailed`, `resolveSpecifierToLayer`, `findPrimitiveOffenses`, `importsScreen`, `GLOBAL_PROVIDER_PRIMITIVES`) consumed by `validate-quality-gates.ts`. Exported via named exports for reuse by future gates.
+- `scripts/lib/import-graph.test.ts` — 15 meta-tests (RED-then-GREEN) covering: sibling value-import detection, type-only allowance, cross-layer barrel resolution, multi-line imports, global provider allowlist, composite-imports-screen guard.
+- `vitest.config.ts` now also collects `scripts/**/*.{test,spec}.ts` so meta-tests run under `pnpm test`.
 - `src/test/a11y.ts` — shared `expectNoA11yViolations(ui)` helper used by 30+ primitive smoke tests.
 - `src/welcome.stats.ts` (generated) — single source of truth for badge / welcome / architecture counts.
 - Quality gates: `validateCompoundPattern`, `validateAxeCoverage`, `validateCountConsistency`, `validateArchitectureCensus`, `validateNoStrayArtifacts`. All hard-fail.

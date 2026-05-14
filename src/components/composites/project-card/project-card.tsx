@@ -1,6 +1,6 @@
 import { Activity, GitBranch, GitCommit } from "lucide-react";
 import { forwardRef } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 import { cn } from "../../../lib/cn.js";
 import { Badge } from "../../primitives/badge/index.js";
 import type { DeploymentStatus } from "../deployment-row/deployment-row.js";
@@ -126,7 +126,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
 
     return (
       <Tag
-        ref={ref as React.Ref<HTMLAnchorElement & HTMLDivElement>}
+        ref={ref as Ref<HTMLAnchorElement & HTMLDivElement>}
         href={href}
         className={cn(
           "group relative flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm",

@@ -38,4 +38,11 @@ describe("Avatar", () => {
       </Avatar>,
     );
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(Avatar.displayName).toBe("Avatar");
+    expect(Avatar.Image.displayName).toBe("Avatar.Image");
+    expect(Avatar.Fallback.displayName).toBe("Avatar.Fallback");
+  });
 });

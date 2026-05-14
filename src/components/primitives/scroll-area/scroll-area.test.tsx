@@ -87,4 +87,10 @@ describe("ScrollArea", () => {
       </ScrollArea>,
     );
   });
+
+  // MEDIUM-007 / T7.1: ScrollArea.Bar compound pattern.
+  it("exposes ScrollArea.Bar as the canonical compound surface", () => {
+    expect(ScrollArea.displayName).toBe("ScrollArea");
+    expect(ScrollArea.Bar.displayName).toBe("ScrollArea.Bar");
+  });
 });

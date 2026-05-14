@@ -61,4 +61,13 @@ describe("Toast", () => {
       </Toaster>,
     );
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(Toast.displayName).toBe("Toast");
+    expect(Toast.Title.displayName).toBe("Toast.Title");
+    expect(Toast.Description.displayName).toBe("Toast.Description");
+    expect(Toast.Close.displayName).toBe("Toast.Close");
+    expect(Toast.Action.displayName).toBe("Toast.Action");
+  });
 });

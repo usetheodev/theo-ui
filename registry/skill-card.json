@@ -9,8 +9,9 @@
   ],
   "registryDependencies": [
     "cn",
-    "types",
-    "mode-types"
+    "mode-types",
+    "tailwind-preset",
+    "types"
   ],
   "files": [
     {

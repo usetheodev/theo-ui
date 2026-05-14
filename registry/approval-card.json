@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "approval-card",
-  "type": "registry:ui",
+  "type": "registry:block",
   "title": "ApprovalCard",
   "description": "Inline pause-and-ask card for an agent stream.",
   "dependencies": [
@@ -9,15 +9,16 @@
     "lucide-react"
   ],
   "registryDependencies": [
+    "button",
     "cn",
-    "types",
-    "button"
+    "tailwind-preset",
+    "types"
   ],
   "files": [
     {
-      "path": "components/primitives/approval-card/approval-card.tsx",
-      "type": "registry:ui",
-      "target": "components/ui/approval-card.tsx"
+      "path": "components/composites/approval-card/approval-card.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/approval-card.tsx"
     }
   ]
 }

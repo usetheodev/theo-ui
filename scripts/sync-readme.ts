@@ -110,8 +110,16 @@ async function gatherCounts(): Promise<Counts> {
  * (Form & input, Surface, App chrome, etc.) is editorial and lives between
  * the BEGIN/END markers manually.
  */
-async function parseIndexExports(): Promise<{ primitives: string[]; composites: string[] }> {
-  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+/**
+ * Pure parser — extracted from `parseIndexExports` so it can be unit-tested
+ * without touching the filesystem (MEDIUM-013 / T6.7.5). Given the verbatim
+ * content of `src/index.ts`, returns the named value exports grouped by
+ * layer (primitives vs composites).
+ */
+export function parseExportsFromIndex(indexContent: string): {
+  primitives: string[];
+  composites: string[];
+} {
   const primitives: string[] = [];
   const composites: string[] = [];
 
@@ -141,6 +149,11 @@ async function parseIndexExports(): Promise<{ primitives: string[]; composites: 
   primitives.sort();
   composites.sort();
   return { primitives, composites };
+}
+
+async function parseIndexExports(): Promise<{ primitives: string[]; composites: string[] }> {
+  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+  return parseExportsFromIndex(indexContent);
 }
 
 function renderBadgeLine(counts: Counts): string {
@@ -269,10 +282,12 @@ async function main(): Promise<void> {
   //    in step 1 leave the working tree untouched.
   await writeFile(join(ROOT, "README.md"), readme);
   await writeFile(archPath, architecture);
-  await writeFile(join(ROOT, "src/welcome.stats.ts"), welcomeStats);
+  // Generated output lives outside `src/` so it does not enter the npm
+  // tarball when consumers install the lib (HIGH-003 / T3.3).
+  await writeFile(join(ROOT, ".ladle/generated/welcome.stats.ts"), welcomeStats);
 
   writeStdout(
-    `synced README.md + architecture.md + welcome.stats.ts: ${counts.components} components (${counts.primitives}P + ${counts.composites}C), ${counts.tests} tests, ${counts.registryItems} registry items, ${counts.screens} screens`,
+    `synced README.md + architecture.md + .ladle/generated/welcome.stats.ts: ${counts.components} components (${counts.primitives}P + ${counts.composites}C), ${counts.tests} tests, ${counts.registryItems} registry items, ${counts.screens} screens`,
   );
 }
 

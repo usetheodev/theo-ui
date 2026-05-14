@@ -66,19 +66,19 @@ but **must not import their own consumers** (no circular deps).
 > `validateArchitectureCensus` quality gate fails the build if they drift.
 
 <!-- BEGIN:primitives-census -->
-### Primitives (88)
+### Primitives (81)
 <!-- END:primitives-census -->
 
 <!-- BEGIN:primitives-list -->
-`AgentEditor`, `AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `ApprovalCard`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `Avatar`, `Badge`, `BrowserControls`, `BuildLogStream`, `Button`, `CapabilityIndicator`, `Card`, `ChatMessage`, `ChatThread`, `Checkbox`, `ContextCard`, `ContextWindowBar`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `CronJobsList`, `Dialog`, `DiffViewer`, `EmptyState`, `FolderContextCard`, `FolderSelector`, `FormField`, `HookConfig`, `HookEventLog`, `Input`, `IntentSelector`, `Label`, `LaneBoard`, `LoginSplit`, `MCPServerCard`, `MCPServerList`, `MemoryEditor`, `MentionMenu`, `MetricsPanel`, `ModelCard`, `ModelSelector`, `PermissionMatrix`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RadioGroup`, `RecentFoldersList`, `RuleCard`, `RuleEditor`, `RunStats`, `RunningTasksPanel`, `ScrollArea`, `ScrollBar`, `Select`, `SessionListItem`, `SessionTimeline`, `Sheet`, `Sidebar`, `Skeleton`, `SkillCard`, `SkillEditor`, `SkillsList`, `SocialAuthRow`, `StepsRail`, `SubAgentDispatch`, `Switch`, `SystemPromptEditor`, `Tabs`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `Textarea`, `Toast`, `Toaster`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `Tooltip`, `TopNav`
+`AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `Avatar`, `Badge`, `BrowserControls`, `BuildLogStream`, `Button`, `CapabilityIndicator`, `Card`, `ChatMessage`, `ChatThread`, `Checkbox`, `ContextCard`, `ContextWindowBar`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `Dialog`, `DiffViewer`, `EmptyState`, `FolderContextCard`, `FolderSelector`, `FormField`, `HookConfig`, `HookEventLog`, `Input`, `IntentSelector`, `Label`, `LaneBoard`, `LoginSplit`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `MetricsPanel`, `ModelCard`, `ModelSelector`, `PermissionMatrix`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RadioGroup`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunningTasksPanel`, `ScrollArea`, `ScrollBar`, `Select`, `SessionListItem`, `SessionTimeline`, `Sheet`, `Sidebar`, `Skeleton`, `SkillCard`, `SocialAuthRow`, `StepsRail`, `SubAgentDispatch`, `Switch`, `SystemPromptEditor`, `Tabs`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `Textarea`, `Toast`, `Toaster`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `Tooltip`, `TopNav`
 <!-- END:primitives-list -->
 
 <!-- BEGIN:composites-census -->
-### Composites (14)
+### Composites (21)
 <!-- END:composites-census -->
 
 <!-- BEGIN:composites-list -->
-`AgentComposer`, `AgentStream`, `AgentTimeline`, `ChatComposer`, `CommandPalette`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `RollbackUI`, `TaskHeader`
+`AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `CommandPalette`, `CronJobsList`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `MCPServerList`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `TaskHeader`
 <!-- END:composites-list -->
 
 ### Notes
@@ -124,9 +124,44 @@ but **must not import their own consumers** (no circular deps).
   "to customize it". Always re-export Radix and add Theo styling on top.
 - **Implicit coupling via context**: a primitive should not require a parent
   to mount a context provider. If the context is needed, the consumer must
-  be a composite (or document the requirement loudly).
+  be a composite (or document the requirement loudly — see "Global Provider
+  Primitives" below).
 - **Side effects on import**: primitives must be pure ES modules with no
   top-level state, network calls, or DOM mutation.
+
+---
+
+## Global Provider Primitives (named exceptions)
+
+The "no implicit context coupling" anti-pattern above admits a tightly-scoped
+exception for app-wide context providers that ship across all shadcn-aligned
+design systems as primitives. Moving them to `composites/` would break the
+mental model consumers already have, and they semantically belong to
+neither layer — they are root infrastructure.
+
+Allowed exceptions (closed set, edit requires RFC):
+
+| Name | Location | Why |
+|---|---|---|
+| `Toaster` | `src/components/primitives/toast/toaster.tsx` | Toast viewport + provider. Consumer mounts once at the app root; descendants use `useToast()`. Same pattern as shadcn, Sonner, react-hot-toast. |
+| `ThemeProvider` | `src/themes/theme-provider.tsx` | Theme registry + runtime switcher. Mounted once; descendants use `useTheme()`. |
+
+Rules for global provider primitives:
+- Must document the "mount at app root" requirement loudly in JSDoc.
+- Must expose the matching hook (`useToast`, `useTheme`) from the same barrel.
+- Must throw a clear, named error when the hook runs without the provider
+  mounted (fail-fast — no silent return of stale state).
+- The `validateComponentStructure` quality gate has these names on an
+  explicit allowlist (`GLOBAL_PROVIDER_PRIMITIVES` in
+  `scripts/lib/import-graph.ts`); the gate ignores cross-imports to/from
+  them when computing taxonomy offenses.
+
+Adding a new global provider primitive requires:
+1. A written RFC that justifies why the provider cannot live in
+   `composites/` (typical reasons: idiomatic shadcn placement, root-level
+   mount semantics, hook-first API).
+2. Adding the name to `GLOBAL_PROVIDER_PRIMITIVES`.
+3. Updating this table.
 
 ---
 

@@ -6,6 +6,7 @@
   "description": "Visual placeholder for empty lists / first-run screens.",
   "registryDependencies": [
     "cn",
+    "tailwind-preset",
     "types"
   ],
   "files": [

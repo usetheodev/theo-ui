@@ -1,3 +1,4 @@
+import * as LabelPrimitive from "@radix-ui/react-label";
 import { AlertCircle } from "lucide-react";
 import {
   Children,
@@ -8,9 +9,14 @@ import {
   useContext,
   useId,
 } from "react";
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  ElementRef,
+  HTMLAttributes,
+  ReactElement,
+  ReactNode,
+} from "react";
 import { cn } from "../../../lib/cn.js";
-import { Label } from "../label/label.js";
 
 /**
  * FormField — composition wrapper for accessible form rows.
@@ -73,17 +79,35 @@ const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
 );
 FormFieldRoot.displayName = "FormField";
 
-interface FormFieldLabelProps extends HTMLAttributes<HTMLLabelElement> {
+interface FormFieldLabelProps extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {
   required?: boolean;
 }
 
-const FormFieldLabel = forwardRef<HTMLLabelElement, FormFieldLabelProps>(
-  ({ children, ...props }, ref) => {
+// Inlined label markup (was importing `<Label>` from sibling primitive).
+// BLOCKER-001 / D2: form-field stays in primitives/ but cannot cross-import.
+// Uses the same Radix LabelPrimitive primitive that the standalone `<Label>`
+// uses, with identical Tailwind tokens — visual parity is preserved.
+const FormFieldLabel = forwardRef<ElementRef<typeof LabelPrimitive.Root>, FormFieldLabelProps>(
+  ({ className, required, children, ...props }, ref) => {
     const { fieldId } = useFormField();
     return (
-      <Label ref={ref} htmlFor={fieldId} {...props}>
+      <LabelPrimitive.Root
+        ref={ref}
+        htmlFor={fieldId}
+        className={cn(
+          "inline-flex items-center gap-1 font-medium font-sans text-body-sm text-foreground",
+          "peer-disabled:cursor-not-allowed peer-disabled:opacity-60",
+          className,
+        )}
+        {...props}
+      >
         {children}
-      </Label>
+        {required ? (
+          <span className="text-destructive" aria-hidden="true">
+            *
+          </span>
+        ) : null}
+      </LabelPrimitive.Root>
     );
   },
 );

@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "skills-list",
-  "type": "registry:ui",
+  "type": "registry:block",
   "title": "SkillsList",
   "description": "Grid of SkillCards with optional search + source filter chips.",
   "dependencies": [
@@ -9,13 +9,14 @@
   ],
   "registryDependencies": [
     "cn",
-    "skill-card"
+    "skill-card",
+    "tailwind-preset"
   ],
   "files": [
     {
-      "path": "components/primitives/skills-list/skills-list.tsx",
-      "type": "registry:ui",
-      "target": "components/ui/skills-list.tsx"
+      "path": "components/composites/skills-list/skills-list.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/skills-list.tsx"
     }
   ]
 }
