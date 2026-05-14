@@ -339,6 +339,25 @@ function validateDesignSystemFidelity(): void {
   if (!existsSync(fontsCdnPath)) {
     fail("fonts-cdn.css", "missing opt-in CDN entrypoint at src/styles/fonts-cdn.css");
   }
+
+  // T4.1 runtime-metric proof: when `dist/` exists, the shipped CSS
+  // entrypoints must not @import from fonts.googleapis.com. This is the
+  // post-build guarantee a consumer experiences after `npm install`.
+  // Narrative comments mentioning the CDN are fine; only @import url(...)
+  // declarations fire the gate.
+  const distFontsCss = join(ROOT, "dist/fonts.css");
+  const distStylesCss = join(ROOT, "dist/styles.css");
+  for (const path of [distFontsCss, distStylesCss]) {
+    if (!existsSync(path)) continue;
+    const content = readFileSync(path, "utf-8");
+    const stripped2 = content.replace(/\/\*[\s\S]*?\*\//g, "");
+    if (/@import\s+url\(["']?https?:[^"')]*fonts\.googleapis\.com/.test(stripped2)) {
+      fail(
+        `dist/${path.split("/").pop()}`,
+        "shipped CSS still @import-s from fonts.googleapis.com (HIGH-002 regression). Default ships must be self-hosted.",
+      );
+    }
+  }
 }
 
 function validateScriptsAndCi(): void {
