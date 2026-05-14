@@ -65,5 +65,15 @@ docs/audit/**/raw
 .scratch
 .tmp
 
+# Backups, temporary build artefacts, merge residue
+*.bak
+*.tmp
+*.orig
+*.rej
+
+# Local agent / AI tool configuration
+.claude/
+.aider*
+
 # External reference repos kept locally for inspiration (open-design, ui, stitch)
 referencia/
