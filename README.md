@@ -16,7 +16,7 @@ Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-s
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
-[Quickstart](#quickstart) · [Components](#component-catalog) · [Themes](#themes) · [Design System](./docs/design-system.md) · [Quality Gates](./docs/quality-gates.md)
+[Quickstart](#quickstart) · [Components](#component-catalog) · [Themes](#themes) · [Design System](./docs/design-system.md) · [Quality Gates](./docs/quality-gates.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
 
 </div>
 
