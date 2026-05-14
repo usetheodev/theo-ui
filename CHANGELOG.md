@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixture `tailwind.config.ts` + `postcss.config.cjs`** — `tests/fixture-shadcn-app/` now has a real Tailwind toolchain with `safelist` covering the full Violet Forge typescale (forces compilation of every preset entry as proof of capability, independent of fixture App.tsx usage).
 - `validateDesignSystemFidelity` audits `src/styles/tailwind-preset.ts` instead of `tailwind.config.ts` (typescale now lives in the preset).
 
+### Added (Phase 6 — observability + test hardening, finalized)
+- **`quality:bundle` gate (HIGH-008 / T6.3)** — `scripts/validate-bundle-size.ts` compares the actual byte sizes of 6 dist artifacts (`index.js`, `index.d.ts`, `styles.css`, `tokens.css`, `fonts.css`, `fonts-cdn.css`) against `scripts/baselines/bundle-sizes.json`. Fails the gate when any file is outside ±5% of baseline. Run `pnpm quality:bundle:update` to rebaseline after a legitimate size change (the diff lands in the PR so reviewers see it). Wired into `pnpm quality:gates`.
+
+### Deferred (documented, not implemented in this audit cycle)
+- **MEDIUM-011 / T6.6 — Ladle-level axe-playwright sweep.** Would add `playwright` + `axe-playwright` devDeps (~80 MB on install) and a new script that visits every Ladle story under a headless browser. Rationale for deferral: `vitest-axe` already covers ≥30 interactive primitives at component level inside Vitest (gate `validateAxeCoverage`), and the marginal value of a Ladle-level sweep is regression detection in story-only state — meaningful but not BLOCKER. Re-evaluate before `1.0.0`. Tracked as MEDIUM-011 in the deep review report.
+
 ### Added (Phase 7 — API cleanup, LOWs and NITs)
 - **`ScrollArea.Bar` compound** (MEDIUM-007 / T7.1). `ScrollArea` is now a compound (`Object.assign /*#__PURE__*/`) exposing `.Bar` as the canonical subpart. Legacy `ScrollBar` standalone export retained as a `@deprecated` alias for one major version; consumers should migrate to `ScrollArea.Bar`.
 - **`Skeleton` JSDoc accessibility override note** (LOW-004 / T7.2). Documents how to silence per-instance `aria-live` announcements when many Skeletons mount in a list/grid; recommends one container-level `role="status"` and per-Skeleton `aria-live="off" aria-hidden="true"`.

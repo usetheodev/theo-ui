@@ -40,7 +40,9 @@
     "test:registry": "tsx scripts/test-registry-install.ts",
     "test:coverage": "vitest run --coverage",
     "quality:structure": "tsx scripts/validate-quality-gates.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm ladle:build",
+    "quality:bundle": "tsx scripts/validate-bundle-size.ts",
+    "quality:bundle:update": "tsx scripts/validate-bundle-size.ts --update",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm ladle:build",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
