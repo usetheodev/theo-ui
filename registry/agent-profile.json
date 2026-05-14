@@ -3,9 +3,14 @@
   "name": "agent-profile",
   "type": "registry:ui",
   "title": "AgentProfile",
-  "description": "Persona selector — avatar chip + dropdown listing available agent personas (Coder, Planner, Reviewer, …).",
-  "dependencies": ["@radix-ui/react-dropdown-menu", "lucide-react"],
-  "registryDependencies": ["cn"],
+  "description": "switcher between multiple agent profiles (coder, planner,",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/agent-profile/agent-profile.tsx",

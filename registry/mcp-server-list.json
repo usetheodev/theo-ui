@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mcp-server-list",
+  "type": "registry:ui",
+  "title": "McpServerList",
+  "description": "grouped MCP server inventory with status filter chips.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "mcp-server-card"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/mcp-server-list/mcp-server-list.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/mcp-server-list.tsx"
+    }
+  ]
+}

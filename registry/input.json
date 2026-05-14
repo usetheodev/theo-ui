@@ -3,8 +3,10 @@
   "name": "input",
   "type": "registry:ui",
   "title": "Input",
-  "description": "Text input with violet focus ring and Violet Forge typography.",
-  "registryDependencies": ["cn"],
+  "description": "text input primitive.",
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/input/input.tsx",

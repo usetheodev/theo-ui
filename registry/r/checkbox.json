@@ -3,7 +3,7 @@
   "name": "checkbox",
   "type": "registry:ui",
   "title": "Checkbox",
-  "description": "Tri-state checkbox built on Radix Checkbox.",
+  "description": "built on Radix Checkbox.",
   "dependencies": [
     "@radix-ui/react-checkbox",
     "lucide-react"

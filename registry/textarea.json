@@ -3,7 +3,15 @@
   "name": "textarea",
   "type": "registry:ui",
   "title": "Textarea",
-  "description": "Multi-line input matching Input visuals.",
-  "registryDependencies": ["cn"],
-  "files": [{ "path": "components/primitives/textarea/textarea.tsx", "type": "registry:ui", "target": "components/ui/textarea.tsx" }]
+  "description": "multi-line input mirror of Input.",
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/textarea/textarea.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/textarea.tsx"
+    }
+  ]
 }

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "preview-panel",
+  "type": "registry:ui",
+  "title": "PreviewPanel",
+  "description": "browser preview with controls + integrated logs slot.",
+  "dependencies": [],
+  "registryDependencies": [
+    "browser-controls",
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/composites/preview-panel/preview-panel.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/preview-panel.tsx"
+    }
+  ]
+}

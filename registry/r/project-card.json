@@ -3,7 +3,7 @@
   "name": "project-card",
   "type": "registry:block",
   "title": "ProjectCard",
-  "description": "Project listing card with status, framework, branch, last commit, and region.",
+  "description": "surface for a project in a project listing.",
   "dependencies": [
     "lucide-react"
   ],

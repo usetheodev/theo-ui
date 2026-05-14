@@ -3,9 +3,15 @@
   "name": "preview-env-card",
   "type": "registry:block",
   "title": "PreviewEnvCard",
-  "description": "Full-stack preview environment card surfacing one PR with all its services + URLs + statuses.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "badge", "deployment-row"],
+  "description": "preview environment card surfacing all services from one PR.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "badge",
+    "deployment-row"
+  ],
   "files": [
     {
       "path": "components/composites/preview-env-card/preview-env-card.tsx",

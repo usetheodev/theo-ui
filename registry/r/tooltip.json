@@ -3,7 +3,7 @@
   "name": "tooltip",
   "type": "registry:ui",
   "title": "Tooltip",
-  "description": "Inverse-surface tooltip built on Radix Tooltip with shorthand <Tooltip label='…'> wrapper.",
+  "description": "built on Radix Tooltip.",
   "dependencies": [
     "@radix-ui/react-tooltip"
   ],

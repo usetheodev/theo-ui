@@ -3,7 +3,7 @@
   "name": "textarea",
   "type": "registry:ui",
   "title": "Textarea",
-  "description": "Multi-line input matching Input visuals.",
+  "description": "multi-line input mirror of Input.",
   "registryDependencies": [
     "cn"
   ],

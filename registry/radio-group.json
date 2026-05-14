@@ -3,8 +3,19 @@
   "name": "radio-group",
   "type": "registry:ui",
   "title": "RadioGroup",
-  "description": "Radio group built on Radix RadioGroup.",
-  "dependencies": ["@radix-ui/react-radio-group", "lucide-react"],
-  "registryDependencies": ["cn"],
-  "files": [{ "path": "components/primitives/radio-group/radio-group.tsx", "type": "registry:ui", "target": "components/ui/radio-group.tsx" }]
+  "description": "built on Radix RadioGroup.",
+  "dependencies": [
+    "@radix-ui/react-radio-group",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/radio-group/radio-group.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/radio-group.tsx"
+    }
+  ]
 }

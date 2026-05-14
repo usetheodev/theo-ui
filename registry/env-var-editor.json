@@ -3,9 +3,16 @@
   "name": "env-var-editor",
   "type": "registry:block",
   "title": "EnvVarEditor",
-  "description": "Editor for environment variables with mask toggle, scopes, copy & remove actions.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "badge", "button", "input"],
+  "description": "table-like editor for environment variables.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "badge",
+    "button",
+    "input"
+  ],
   "files": [
     {
       "path": "components/composites/env-var-editor/env-var-editor.tsx",

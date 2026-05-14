@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "login-split",
+  "type": "registry:ui",
+  "title": "LoginSplit",
+  "description": "50/50 split layout shell.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/login-split/login-split.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/login-split.tsx"
+    }
+  ]
+}

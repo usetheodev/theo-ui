@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "task-types",
+  "type": "registry:lib",
+  "title": "Theo UI task types",
+  "description": "Shared TypeScript types for task plans, steps, and progress state.",
+  "files": [
+    {
+      "path": "types/task.ts",
+      "type": "registry:lib",
+      "target": "types/task.ts"
+    }
+  ]
+}

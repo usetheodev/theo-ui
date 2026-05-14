@@ -3,7 +3,7 @@
   "name": "cn",
   "type": "registry:lib",
   "title": "cn (Tailwind class merger)",
-  "description": "Theo UI standard class merger: clsx + tailwind-merge.",
+  "description": "Merge Tailwind classes with conflict resolution.",
   "dependencies": [
     "clsx",
     "tailwind-merge"

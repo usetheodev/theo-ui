@@ -3,8 +3,10 @@
   "name": "card",
   "type": "registry:ui",
   "title": "Card",
-  "description": "Surface container with Header / Title / Description / Body / Footer composition.",
-  "registryDependencies": ["cn"],
+  "description": "surface container for grouping related content.",
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/card/card.tsx",

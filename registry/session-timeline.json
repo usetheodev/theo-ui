@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "session-timeline",
+  "type": "registry:ui",
+  "title": "SessionTimeline",
+  "description": "historical view of past agent sessions with per-row",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/session-timeline/session-timeline.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/session-timeline.tsx"
+    }
+  ]
+}

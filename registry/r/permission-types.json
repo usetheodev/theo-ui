@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "permission-types",
+  "type": "registry:lib",
+  "title": "Theo UI permission types",
+  "description": "Shared TypeScript types for permission requests, scopes, and decisions.",
+  "files": [
+    {
+      "path": "types/permission.ts",
+      "type": "registry:lib",
+      "target": "types/permission.ts",
+      "content": "export type PermissionOperation = \"read\" | \"write\" | \"delete\";\nexport type PermissionDecision = \"denied\" | \"allowed_once\" | \"always_allowed\";\n\nexport interface PermissionRequest {\n  /** Absolute path to the resource (file or folder). */\n  path: string;\n  /** Operations the agent wants to perform on the resource. */\n  operations: PermissionOperation[];\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-thread",
+  "type": "registry:ui",
+  "title": "ChatThread",
+  "description": "simple vertical container that applies spacing + scroll.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/chat-thread/chat-thread.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-thread.tsx",
+      "content": "import { forwardRef } from \"react\";\nimport type { HTMLAttributes } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\n/**\n * ChatThread — simple vertical container that applies spacing + scroll.\n *\n * No virtualization or stickiness. Wrap with your own scroller for long threads.\n */\nconst ChatThread = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  ({ className, ...props }, ref) => (\n    <div\n      ref={ref}\n      role=\"log\"\n      aria-live=\"polite\"\n      aria-relevant=\"additions\"\n      className={cn(\"flex flex-col gap-6\", className)}\n      {...props}\n    />\n  ),\n);\nChatThread.displayName = \"ChatThread\";\n\nexport { ChatThread };\n"
+    }
+  ]
+}

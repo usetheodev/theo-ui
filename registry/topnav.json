@@ -3,9 +3,13 @@
   "name": "topnav",
   "type": "registry:ui",
   "title": "TopNav",
-  "description": "Horizontal app bar with breadcrumbs, mode switcher (Chat/Cowork/Code), action slots.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn"],
+  "description": "horizontal app bar (64px).",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/topnav/topnav.tsx",

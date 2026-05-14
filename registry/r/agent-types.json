@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-types",
+  "type": "registry:lib",
+  "title": "Theo UI agent types",
+  "description": "Shared TypeScript types for the agent timeline, events, and statuses.",
+  "files": [
+    {
+      "path": "types/agent.ts",
+      "type": "registry:lib",
+      "target": "types/agent.ts",
+      "content": "import type { ReactNode } from \"react\";\n\nexport type AgentEventType =\n  | \"command\"\n  | \"file_read\"\n  | \"file_write\"\n  | \"edit\"\n  | \"lint\"\n  | \"typecheck\"\n  | \"build\"\n  | \"tool\";\n\nexport type AgentEventStatus = \"pending\" | \"running\" | \"success\" | \"failed\";\n\nexport interface AgentEvent {\n  id: string;\n  type: AgentEventType;\n  label: string;\n  /** File path when the event is file-related. */\n  path?: string;\n  /** Diff stats for edit/write events. */\n  diff?: { added: number; removed: number };\n  status: AgentEventStatus;\n  timestamp?: string;\n  /** Optional expandable detail (e.g. command output, diff snippet). */\n  detail?: ReactNode;\n}\n"
+    }
+  ]
+}

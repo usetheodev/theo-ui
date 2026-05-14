@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-call",
+  "type": "registry:ui",
+  "title": "ToolCall",
+  "description": "collapsible row representing an agent tool invocation.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/tool-call/tool-call.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tool-call.tsx"
+    }
+  ]
+}

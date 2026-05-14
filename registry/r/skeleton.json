@@ -3,7 +3,7 @@
   "name": "skeleton",
   "type": "registry:ui",
   "title": "Skeleton",
-  "description": "Animated placeholder block for loading states.",
+  "description": "placeholder block shown while content is loading.",
   "registryDependencies": [
     "cn"
   ],

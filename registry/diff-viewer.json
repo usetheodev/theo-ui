@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "diff-viewer",
+  "type": "registry:ui",
+  "title": "DiffViewer",
+  "description": "unified diff rendering, no external dep.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/diff-viewer/diff-viewer.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/diff-viewer.tsx"
+    }
+  ]
+}

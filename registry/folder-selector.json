@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "folder-selector",
+  "type": "registry:ui",
+  "title": "FolderSelector",
+  "description": "chip showing the active working directory.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/folder-selector/folder-selector.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/folder-selector.tsx"
+    }
+  ]
+}

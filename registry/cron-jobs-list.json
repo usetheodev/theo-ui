@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cron-jobs-list",
+  "type": "registry:ui",
+  "title": "CronJobsList",
+  "description": "grid of CronJobCards with a sticky \"new job\" action.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "cron-job-card"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/cron-jobs-list/cron-jobs-list.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/cron-jobs-list.tsx"
+    }
+  ]
+}

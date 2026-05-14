@@ -3,7 +3,7 @@
   "name": "dialog",
   "type": "registry:ui",
   "title": "Dialog",
-  "description": "Modal overlay built on Radix Dialog. Composed via Dialog.Header, Title, Description, Body, Footer.",
+  "description": "modal overlay built on Radix Dialog.",
   "dependencies": [
     "@radix-ui/react-dialog",
     "lucide-react"

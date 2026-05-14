@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "recent-folders-list",
+  "type": "registry:ui",
+  "title": "RecentFoldersList",
+  "description": "recently-used folders for the Files picker.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/recent-folders-list/recent-folders-list.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/recent-folders-list.tsx"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "steps-rail",
+  "type": "registry:ui",
+  "title": "StepsRail",
+  "description": "vertical numbered rail with connecting line.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/steps-rail/steps-rail.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/steps-rail.tsx"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "name": "rule-card",
   "type": "registry:ui",
   "title": "RuleCard",
-  "description": "Single rule row — title, scope badge, body preview, tags, and toggle/edit/delete affordances.",
+  "description": "single Rule row in the Rules list.",
   "dependencies": [
     "lucide-react"
   ],

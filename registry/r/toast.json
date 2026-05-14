@@ -3,7 +3,7 @@
   "name": "toast",
   "type": "registry:ui",
   "title": "Toast",
-  "description": "Theme-aware transient notification built on Radix Toast. Ships with <Toaster> + useToast() hook.",
+  "description": "transient notification built on Radix Toast.",
   "dependencies": [
     "@radix-ui/react-toast",
     "class-variance-authority",

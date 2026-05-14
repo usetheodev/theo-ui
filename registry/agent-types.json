@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-types",
+  "type": "registry:lib",
+  "title": "Theo UI agent types",
+  "description": "Shared TypeScript types for the agent timeline, events, and statuses.",
+  "files": [
+    {
+      "path": "types/agent.ts",
+      "type": "registry:lib",
+      "target": "types/agent.ts"
+    }
+  ]
+}

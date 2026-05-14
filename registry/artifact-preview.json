@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "artifact-preview",
+  "type": "registry:ui",
+  "title": "ArtifactPreview",
+  "description": "shell for previewing a generated artifact (XLSX, PDF, image…).",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/artifact-preview/artifact-preview.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/artifact-preview.tsx"
+    }
+  ]
+}

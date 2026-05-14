@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hook-config",
+  "type": "registry:ui",
+  "title": "HookConfig",
+  "description": "editor for lifecycle hooks (PreToolUse, PostToolUse, Stop…).",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/hook-config/hook-config.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/hook-config.tsx"
+    }
+  ]
+}

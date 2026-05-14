@@ -3,8 +3,10 @@
   "name": "sidebar",
   "type": "registry:ui",
   "title": "Sidebar",
-  "description": "Vertical navigation shell. Sidebar.Header, Section, Item, Footer.",
-  "registryDependencies": ["cn"],
+  "description": "vertical navigation shell.",
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/sidebar/sidebar.tsx",

@@ -7,7 +7,7 @@ interface ToolCallProps extends HTMLAttributes<HTMLDivElement> {
   /** Tool name e.g. "bash", "read_file", "edit_file". */
   name?: string;
   /**
-   * Summary label e.g. "Executou 2 comandos", "Leu 18 arquivos".
+   * Summary label e.g. "Ran 2 commands", "Read 18 files".
    */
   summary: ReactNode;
   /**
@@ -29,7 +29,7 @@ interface ToolCallProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Typical usage inside a ChatMessage assistant body:
  *
- *   <ToolCall summary="Leu 18 arquivos" detail={<ToolResult>{output}</ToolResult>} />
+ *   <ToolCall summary="Read 18 files" detail={<ToolResult>{output}</ToolResult>} />
  */
 const ToolCall = forwardRef<HTMLDivElement, ToolCallProps>(
   ({ className, name, summary, detail, defaultOpen, hideIcon, ...props }, ref) => {

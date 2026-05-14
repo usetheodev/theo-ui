@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "task-types",
+  "type": "registry:lib",
+  "title": "Theo UI task types",
+  "description": "Shared TypeScript types for task plans, steps, and progress state.",
+  "files": [
+    {
+      "path": "types/task.ts",
+      "type": "registry:lib",
+      "target": "types/task.ts",
+      "content": "export type TaskStatus =\n  | \"idle\"\n  | \"permission_required\"\n  | \"starting\"\n  | \"running\"\n  | \"verifying\"\n  | \"completed\"\n  | \"failed\";\n\nexport type TaskStepStatus = \"pending\" | \"running\" | \"done\" | \"skipped\";\n\nexport interface TaskStep {\n  id: string;\n  label: string;\n  status: TaskStepStatus;\n  /** 0..1 progress for in-flight steps. */\n  progress?: number;\n}\n"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "name": "chat-types",
   "type": "registry:lib",
   "title": "Theo UI chat types",
-  "description": "Shared chat domain types: Message, MessageRole, Attachment.",
+  "description": "Shared TypeScript types for chat messages, roles, and attachments.",
   "files": [
     {
       "path": "types/chat.ts",

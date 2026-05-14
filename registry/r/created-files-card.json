@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "created-files-card",
+  "type": "registry:ui",
+  "title": "CreatedFilesCard",
+  "description": "surfaces files produced by a completed task.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/created-files-card/created-files-card.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/created-files-card.tsx",
+      "content": "import { Cloud, FileSpreadsheet, Folder } from \"lucide-react\";\nimport { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport type { IconComponent } from \"@/lib/types\";\n\nexport interface CreatedFile {\n  id: string;\n  name: string;\n  /** Optional size for display, e.g. \"42 KB\". */\n  size?: string;\n  /** Icon override. */\n  icon?: IconComponent;\n  /** Optional destination metadata (e.g. \"Google Drive · /Reports\"). */\n  destination?: ReactNode;\n  /** Optional URL to open the file. */\n  href?: string;\n}\n\ninterface CreatedFilesCardProps extends Omit<HTMLAttributes<HTMLElement>, \"title\"> {\n  title?: ReactNode;\n  files: CreatedFile[];\n  /**\n   * Optional CTA shown at the bottom (e.g. \"Move to Google Drive\").\n   */\n  cta?: ReactNode;\n}\n\n/**\n * CreatedFilesCard — surfaces files produced by a completed task.\n *\n * From WIREMOCKS §2: each file is a card-like row with icon + name + destination.\n * Used as social proof of delivery in Task Completed views.\n */\nconst CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(\n  ({ className, title = \"Files created\", files, cta, ...props }, ref) => (\n    <section\n      ref={ref}\n      className={cn(\"rounded-xl border border-primary/40 bg-primary/5 p-4\", className)}\n      {...props}\n    >\n      <header className=\"mb-3 flex items-center gap-2\">\n        <Cloud className=\"size-4 text-primary\" aria-hidden />\n        <h3 className=\"font-display text-title-md tracking-tight\">{title}</h3>\n      </header>\n      <ul className=\"grid gap-2\">\n        {files.map((file) => {\n          const Icon = file.icon ?? FileSpreadsheet;\n          const RowTag = file.href ? \"a\" : \"div\";\n          return (\n            <li key={file.id}>\n              <RowTag\n                href={file.href}\n                target={file.href ? \"_blank\" : undefined}\n                rel={file.href ? \"noreferrer\" : undefined}\n                className={cn(\n                  \"flex items-center gap-3 rounded-md border border-border/40 bg-card px-3 py-2\",\n                  file.href &&\n                    \"transition-colors hover:border-primary/40 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n                )}\n              >\n                <Icon className=\"size-5 shrink-0 text-primary\" aria-hidden />\n                <div className=\"min-w-0 flex-1\">\n                  <p className=\"truncate font-mono text-code-md text-foreground\">{file.name}</p>\n                  {file.destination ? (\n                    <p className=\"flex items-center gap-1 truncate text-body-sm text-muted-foreground\">\n                      <Folder className=\"size-3 shrink-0\" aria-hidden /> {file.destination}\n                    </p>\n                  ) : null}\n                </div>\n                {file.size ? (\n                  <span className=\"font-mono text-code-sm text-muted-foreground\">{file.size}</span>\n                ) : null}\n              </RowTag>\n            </li>\n          );\n        })}\n      </ul>\n      {cta ? <div className=\"mt-3 flex justify-end\">{cta}</div> : null}\n    </section>\n  ),\n);\nCreatedFilesCard.displayName = \"CreatedFilesCard\";\n\nexport { CreatedFilesCard };\n"
+    }
+  ]
+}

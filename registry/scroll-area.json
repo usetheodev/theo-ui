@@ -3,9 +3,13 @@
   "name": "scroll-area",
   "type": "registry:ui",
   "title": "ScrollArea",
-  "description": "Custom scroller with Violet Forge thumb (violet glow on hover). Built on Radix ScrollArea for cross-browser consistency.",
-  "dependencies": ["@radix-ui/react-scroll-area"],
-  "registryDependencies": ["cn"],
+  "description": "custom scroller with Violet Forge styling.",
+  "dependencies": [
+    "@radix-ui/react-scroll-area"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/scroll-area/scroll-area.tsx",

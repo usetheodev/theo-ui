@@ -3,9 +3,14 @@
   "name": "deployment-row",
   "type": "registry:block",
   "title": "DeploymentRow",
-  "description": "Single deployment list row with status badge, commit SHA, branch, author, duration.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "badge"],
+  "description": "one row in a deployment list (table-ish layout).",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "badge"
+  ],
   "files": [
     {
       "path": "components/composites/deployment-row/deployment-row.tsx",

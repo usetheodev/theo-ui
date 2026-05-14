@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "social-auth-row",
+  "type": "registry:ui",
+  "title": "SocialAuthRow",
+  "description": "row of OAuth provider buttons.",
+  "dependencies": [],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/social-auth-row/social-auth-row.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/social-auth-row.tsx"
+    }
+  ]
+}

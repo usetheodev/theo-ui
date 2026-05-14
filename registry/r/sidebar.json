@@ -3,7 +3,7 @@
   "name": "sidebar",
   "type": "registry:ui",
   "title": "Sidebar",
-  "description": "Vertical navigation shell. Sidebar.Header, Section, Item, Footer.",
+  "description": "vertical navigation shell.",
   "registryDependencies": [
     "cn"
   ],

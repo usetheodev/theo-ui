@@ -3,9 +3,14 @@
   "name": "dialog",
   "type": "registry:ui",
   "title": "Dialog",
-  "description": "Modal overlay built on Radix Dialog. Composed via Dialog.Header, Title, Description, Body, Footer.",
-  "dependencies": ["@radix-ui/react-dialog", "lucide-react"],
-  "registryDependencies": ["cn"],
+  "description": "modal overlay built on Radix Dialog.",
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/dialog/dialog.tsx",

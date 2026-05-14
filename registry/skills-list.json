@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skills-list",
+  "type": "registry:ui",
+  "title": "SkillsList",
+  "description": "grid of SkillCards with optional search + source filter chips.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "skill-card"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/skills-list/skills-list.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/skills-list.tsx"
+    }
+  ]
+}

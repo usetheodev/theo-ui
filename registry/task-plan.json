@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "task-plan",
+  "type": "registry:ui",
+  "title": "TaskPlan",
+  "description": "hierarchical task plan, à la Claude \"plan mode\".",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/task-plan/task-plan.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/task-plan.tsx"
+    }
+  ]
+}

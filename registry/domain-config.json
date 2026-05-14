@@ -3,9 +3,16 @@
   "name": "domain-config",
   "type": "registry:block",
   "title": "DomainConfig",
-  "description": "Custom domains list with status, TLS state, primary marker, and inline DNS verification record.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "badge", "button", "input"],
+  "description": "manage custom domains for a project.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "badge",
+    "button",
+    "input"
+  ],
   "files": [
     {
       "path": "components/composites/domain-config/domain-config.tsx",

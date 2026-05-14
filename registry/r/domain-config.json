@@ -3,7 +3,7 @@
   "name": "domain-config",
   "type": "registry:block",
   "title": "DomainConfig",
-  "description": "Custom domains list with status, TLS state, primary marker, and inline DNS verification record.",
+  "description": "manage custom domains for a project.",
   "dependencies": [
     "lucide-react"
   ],

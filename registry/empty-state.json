@@ -3,7 +3,16 @@
   "name": "empty-state",
   "type": "registry:ui",
   "title": "EmptyState",
-  "description": "Placeholder for empty lists/first-run with icon, title, description, action.",
-  "registryDependencies": ["cn", "types"],
-  "files": [{ "path": "components/primitives/empty-state/empty-state.tsx", "type": "registry:ui", "target": "components/ui/empty-state.tsx" }]
+  "description": "visual placeholder for empty lists / first-run screens.",
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/empty-state/empty-state.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/empty-state.tsx"
+    }
+  ]
 }

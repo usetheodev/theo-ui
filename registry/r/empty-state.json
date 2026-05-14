@@ -3,7 +3,7 @@
   "name": "empty-state",
   "type": "registry:ui",
   "title": "EmptyState",
-  "description": "Placeholder for empty lists/first-run with icon, title, description, action.",
+  "description": "visual placeholder for empty lists / first-run screens.",
   "registryDependencies": [
     "cn",
     "types"

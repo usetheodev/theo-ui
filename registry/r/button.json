@@ -3,7 +3,7 @@
   "name": "button",
   "type": "registry:ui",
   "title": "Button",
-  "description": "Primitive action button with Violet Forge variants (primary glow, accent burnt-sienna, ghost, link, destructive).",
+  "description": "primitive action element in the Violet Forge design system.",
   "dependencies": [
     "@radix-ui/react-slot",
     "class-variance-authority"

@@ -3,7 +3,7 @@
   "name": "deployment-row",
   "type": "registry:block",
   "title": "DeploymentRow",
-  "description": "Single deployment list row with status badge, commit SHA, branch, author, duration.",
+  "description": "one row in a deployment list (table-ish layout).",
   "dependencies": [
     "lucide-react"
   ],

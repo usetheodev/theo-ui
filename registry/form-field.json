@@ -3,8 +3,19 @@
   "name": "form-field",
   "type": "registry:ui",
   "title": "FormField",
-  "description": "Accessible form row with Label/Control/Hint/Error composition. Auto-wires htmlFor + aria-describedby.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "label"],
-  "files": [{ "path": "components/primitives/form-field/form-field.tsx", "type": "registry:ui", "target": "components/ui/form-field.tsx" }]
+  "description": "composition wrapper for accessible form rows.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "label"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/form-field/form-field.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/form-field.tsx"
+    }
+  ]
 }

@@ -3,7 +3,7 @@
   "name": "build-log-stream",
   "type": "registry:block",
   "title": "BuildLogStream",
-  "description": "Terminal-like log viewer with level coloring (info/warn/error/success/debug) and chip filters.",
+  "description": "terminal-like log viewer with timestamps + level coloring.",
   "registryDependencies": [
     "cn"
   ],

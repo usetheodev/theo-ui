@@ -3,9 +3,15 @@
   "name": "intent-selector",
   "type": "registry:ui",
   "title": "IntentSelector",
-  "description": "Dropdown chip for picking the agent's intent (edit/plan/review). Mirrors ModelSelector.",
-  "dependencies": ["@radix-ui/react-dropdown-menu", "lucide-react"],
-  "registryDependencies": ["cn", "types"],
+  "description": "chip dropdown for picking the agent's intent for the next",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
   "files": [
     {
       "path": "components/primitives/intent-selector/intent-selector.tsx",

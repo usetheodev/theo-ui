@@ -14,7 +14,7 @@ function Harness({ onSubmit }: { onSubmit?: (v: string) => void }) {
 describe("ChatComposer", () => {
   it("renders placeholder for default chat mode", () => {
     render(<Harness />);
-    expect(screen.getByPlaceholderText("Como posso ajudar você hoje?")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("How can I help you today?")).toBeInTheDocument();
   });
 
   it("renders Send disabled when empty", () => {
@@ -25,7 +25,7 @@ describe("ChatComposer", () => {
   it("enables Send when value is non-empty", async () => {
     const user = userEvent.setup();
     render(<Harness />);
-    await user.type(screen.getByPlaceholderText("Como posso ajudar você hoje?"), "hi");
+    await user.type(screen.getByPlaceholderText("How can I help you today?"), "hi");
     expect(screen.getByRole("button", { name: "Send message" })).toBeEnabled();
   });
 
@@ -33,7 +33,7 @@ describe("ChatComposer", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
     render(<Harness onSubmit={onSubmit} />);
-    await user.type(screen.getByPlaceholderText("Como posso ajudar você hoje?"), "build it");
+    await user.type(screen.getByPlaceholderText("How can I help you today?"), "build it");
     await user.click(screen.getByRole("button", { name: "Send message" }));
     expect(onSubmit).toHaveBeenCalledWith("build it");
   });
@@ -42,7 +42,7 @@ describe("ChatComposer", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
     render(<Harness onSubmit={onSubmit} />);
-    const textarea = screen.getByPlaceholderText("Como posso ajudar você hoje?");
+    const textarea = screen.getByPlaceholderText("How can I help you today?");
     await user.type(textarea, "hello{Enter}");
     expect(onSubmit).toHaveBeenCalledWith("hello");
   });
@@ -51,7 +51,7 @@ describe("ChatComposer", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
     render(<Harness onSubmit={onSubmit} />);
-    const textarea = screen.getByPlaceholderText("Como posso ajudar você hoje?");
+    const textarea = screen.getByPlaceholderText("How can I help you today?");
     await user.type(textarea, "line1{Shift>}{Enter}{/Shift}line2");
     expect(onSubmit).not.toHaveBeenCalled();
     expect(textarea).toHaveValue("line1\nline2");

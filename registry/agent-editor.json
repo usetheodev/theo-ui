@@ -3,7 +3,7 @@
   "name": "agent-editor",
   "type": "registry:ui",
   "title": "AgentEditor",
-  "description": "Form for creating or editing an Agent persona \u2014 name, tone, description, model, system prompt, allowed tools, linked skills.",
+  "description": "form for creating or editing an Agent persona.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

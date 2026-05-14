@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-handoff",
+  "type": "registry:ui",
+  "title": "AgentHandoff",
+  "description": "visual marker of one agent delegating to another.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/agent-handoff/agent-handoff.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-handoff.tsx"
+    }
+  ]
+}

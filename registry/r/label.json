@@ -3,7 +3,7 @@
   "name": "label",
   "type": "registry:ui",
   "title": "Label",
-  "description": "Form label built on Radix Label. Required asterisk when needed.",
+  "description": "form field label built on Radix Label.",
   "dependencies": [
     "@radix-ui/react-label"
   ],

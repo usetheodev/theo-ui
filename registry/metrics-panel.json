@@ -3,9 +3,13 @@
   "name": "metrics-panel",
   "type": "registry:block",
   "title": "MetricsPanel",
-  "description": "Grid of metric tiles with delta arrows and CSS-only sparklines. No chart lib dependency.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn"],
+  "description": "grid of metric tiles for observability dashboards.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/metrics-panel/metrics-panel.tsx",

@@ -3,8 +3,19 @@
   "name": "checkbox",
   "type": "registry:ui",
   "title": "Checkbox",
-  "description": "Tri-state checkbox built on Radix Checkbox.",
-  "dependencies": ["@radix-ui/react-checkbox", "lucide-react"],
-  "registryDependencies": ["cn"],
-  "files": [{ "path": "components/primitives/checkbox/checkbox.tsx", "type": "registry:ui", "target": "components/ui/checkbox.tsx" }]
+  "description": "built on Radix Checkbox.",
+  "dependencies": [
+    "@radix-ui/react-checkbox",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/checkbox/checkbox.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/checkbox.tsx"
+    }
+  ]
 }

@@ -3,7 +3,7 @@
   "name": "env-var-editor",
   "type": "registry:block",
   "title": "EnvVarEditor",
-  "description": "Editor for environment variables with mask toggle, scopes, copy & remove actions.",
+  "description": "table-like editor for environment variables.",
   "dependencies": [
     "lucide-react"
   ],

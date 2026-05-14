@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "run-stats",
+  "type": "registry:ui",
+  "title": "RunStats",
+  "description": "inline metric row shown after an agent run.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/run-stats/run-stats.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/run-stats.tsx"
+    }
+  ]
+}

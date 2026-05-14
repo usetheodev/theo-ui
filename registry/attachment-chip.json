@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "attachment-chip",
+  "type": "registry:ui",
+  "title": "AttachmentChip",
+  "description": "file pill shown in chat composer or message attachments row.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "chat-types",
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/attachment-chip/attachment-chip.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/attachment-chip.tsx"
+    }
+  ]
+}

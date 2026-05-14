@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "memory-editor",
+  "type": "registry:ui",
+  "title": "MemoryEditor",
+  "description": "three-layer Markdown memory editor (global / project /",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/memory-editor/memory-editor.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/memory-editor.tsx"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "name": "tabs",
   "type": "registry:ui",
   "title": "Tabs",
-  "description": "Underline-style tabs (violet active underline) built on Radix Tabs.",
+  "description": "built on Radix Tabs.",
   "dependencies": [
     "@radix-ui/react-tabs"
   ],

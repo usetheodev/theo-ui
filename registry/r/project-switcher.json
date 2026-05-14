@@ -3,7 +3,7 @@
   "name": "project-switcher",
   "type": "registry:ui",
   "title": "ProjectSwitcher",
-  "description": "Sidebar header showing the active workspace + branch + status dot for a code agent app.",
+  "description": "sidebar header for a code agent app.",
   "dependencies": [
     "lucide-react"
   ],

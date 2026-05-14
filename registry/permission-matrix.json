@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "permission-matrix",
+  "type": "registry:ui",
+  "title": "PermissionMatrix",
+  "description": "tool × path × decision grid for fine-grained access",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/permission-matrix/permission-matrix.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/permission-matrix.tsx"
+    }
+  ]
+}

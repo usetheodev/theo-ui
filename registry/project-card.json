@@ -3,9 +3,15 @@
   "name": "project-card",
   "type": "registry:block",
   "title": "ProjectCard",
-  "description": "Project listing card with status, framework, branch, last commit, and region.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "badge", "deployment-row"],
+  "description": "surface for a project in a project listing.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "badge",
+    "deployment-row"
+  ],
   "files": [
     {
       "path": "components/composites/project-card/project-card.tsx",

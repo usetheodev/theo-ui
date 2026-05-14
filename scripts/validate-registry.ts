@@ -83,6 +83,9 @@ const registryNameFromTarget = (specifier: string): string | undefined => {
   if (specifier === "@/types/chat") return "chat-types";
   if (specifier === "@/types/rule") return "rule-types";
   if (specifier === "@/types/mode") return "mode-types";
+  if (specifier === "@/types/agent") return "agent-types";
+  if (specifier === "@/types/permission") return "permission-types";
+  if (specifier === "@/types/task") return "task-types";
   return undefined;
 };
 
@@ -144,6 +147,8 @@ async function main(): Promise<void> {
     if (!descriptors.has(name)) addFailure("index.json", `references missing descriptor "${name}"`);
   }
 
+  const BUILTIN_RUNTIMES = new Set(["react", "react-dom", "react/jsx-runtime"]);
+
   for (const [name, descriptor] of descriptors) {
     const builtPath = join(OUT_DIR, `${name}.json`);
     if (!existsSync(builtPath)) {
@@ -153,6 +158,8 @@ async function main(): Promise<void> {
 
     const built = await readJson<RegistryDescriptor>(builtPath);
     const dependencySet = new Set(descriptor.registryDependencies ?? []);
+    const declaredPackages = new Set(descriptor.dependencies ?? []);
+    const usedPackages = new Set<string>();
 
     for (const file of built.files) {
       if (!file.content) {
@@ -166,6 +173,7 @@ async function main(): Promise<void> {
             `registry/r/${name}.json`,
             `contains consumer-unsafe relative import "${specifier}"`,
           );
+          continue;
         }
         if (specifier.endsWith(".js")) {
           addFailure(
@@ -174,13 +182,29 @@ async function main(): Promise<void> {
           );
         }
 
-        const dependencyName = registryNameFromTarget(stripExtension(specifier));
-        if (dependencyName && dependencyName !== name && !dependencySet.has(dependencyName)) {
-          addFailure(
-            `${name}.json`,
-            `imports ${specifier} but registryDependencies is missing "${dependencyName}"`,
-          );
+        if (specifier.startsWith("@/") || specifier.startsWith(".") || specifier.startsWith("/")) {
+          const dependencyName = registryNameFromTarget(stripExtension(specifier));
+          if (dependencyName && dependencyName !== name && !dependencySet.has(dependencyName)) {
+            addFailure(
+              `${name}.json`,
+              `imports ${specifier} but registryDependencies is missing "${dependencyName}"`,
+            );
+          }
+          continue;
         }
+
+        // External package import — extract package name (handle @scope/pkg/subpath).
+        const pkg = specifier.startsWith("@")
+          ? specifier.split("/").slice(0, 2).join("/")
+          : specifier.split("/")[0];
+        if (!pkg || BUILTIN_RUNTIMES.has(pkg)) continue;
+        usedPackages.add(pkg);
+      }
+    }
+
+    for (const pkg of usedPackages) {
+      if (!declaredPackages.has(pkg)) {
+        addFailure(`${name}.json`, `imports "${pkg}" but dependencies array is missing it`);
       }
     }
   }

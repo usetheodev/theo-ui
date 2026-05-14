@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "task-header",
+  "type": "registry:ui",
+  "title": "TaskHeader",
+  "description": "title bar for a task pane.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "cn",
+    "task-types"
+  ],
+  "files": [
+    {
+      "path": "components/composites/task-header/task-header.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/task-header.tsx",
+      "content": "import { ChevronDown } from \"lucide-react\";\nimport { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport type { TaskStatus } from \"@/types/task\";\nimport { Badge } from \"@/components/ui/badge\";\n\nconst statusVariant: Record<\n  TaskStatus,\n  \"default\" | \"primary\" | \"warning\" | \"success\" | \"destructive\"\n> = {\n  idle: \"default\",\n  permission_required: \"warning\",\n  starting: \"primary\",\n  running: \"primary\",\n  verifying: \"primary\",\n  completed: \"success\",\n  failed: \"destructive\",\n};\nconst statusDot: Record<TaskStatus, \"primary\" | \"success\" | \"warning\" | \"destructive\" | \"muted\"> = {\n  idle: \"muted\",\n  permission_required: \"warning\",\n  starting: \"primary\",\n  running: \"primary\",\n  verifying: \"primary\",\n  completed: \"success\",\n  failed: \"destructive\",\n};\nconst statusLabel: Record<TaskStatus, string> = {\n  idle: \"Idle\",\n  permission_required: \"Permission required\",\n  starting: \"Starting up\",\n  running: \"Running\",\n  verifying: \"Verifying\",\n  completed: \"Completed\",\n  failed: \"Failed\",\n};\n\ninterface TaskHeaderProps extends Omit<HTMLAttributes<HTMLElement>, \"title\"> {\n  title: ReactNode;\n  status?: TaskStatus;\n  /**\n   * If provided, a chevron is shown next to the title and clicking it fires this callback.\n   * Used as the \"expand task metadata\" affordance in the Infra shell.\n   */\n  onToggle?: () => void;\n  /** Right-side actions (e.g. cancel task, close panel). */\n  actions?: ReactNode;\n}\n\n/**\n * TaskHeader — title bar for a task pane.\n *\n * Visual: display-md title with chevron + optional status badge with pulse + actions slot.\n */\nconst TaskHeader = forwardRef<HTMLElement, TaskHeaderProps>(\n  ({ className, title, status, onToggle, actions, ...props }, ref) => (\n    <header\n      ref={ref}\n      className={cn(\n        \"flex items-center justify-between gap-3 rounded-xl border border-border/40 bg-card px-4 py-3\",\n        className,\n      )}\n      {...props}\n    >\n      <div className=\"flex min-w-0 items-center gap-2\">\n        <h2 className=\"truncate font-display text-title-lg tracking-tight\">{title}</h2>\n        {onToggle ? (\n          <button\n            type=\"button\"\n            onClick={onToggle}\n            aria-label=\"Toggle task details\"\n            className=\"rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n          >\n            <ChevronDown className=\"size-4\" />\n          </button>\n        ) : null}\n      </div>\n      <div className=\"flex items-center gap-2\">\n        {status ? (\n          <Badge variant={statusVariant[status]}>\n            <Badge.Dot\n              tone={statusDot[status]}\n              pulse={status === \"running\" || status === \"starting\" || status === \"verifying\"}\n            />\n            {statusLabel[status]}\n          </Badge>\n        ) : null}\n        {actions}\n      </div>\n    </header>\n  ),\n);\nTaskHeader.displayName = \"TaskHeader\";\n\nexport { TaskHeader };\n"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "name": "badge",
   "type": "registry:ui",
   "title": "Badge",
-  "description": "Status / tag indicator with optional pulsing Badge.Dot for deployment states.",
+  "description": "small status / tag indicator.",
   "dependencies": [
     "class-variance-authority"
   ],

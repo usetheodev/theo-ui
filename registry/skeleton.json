@@ -3,7 +3,15 @@
   "name": "skeleton",
   "type": "registry:ui",
   "title": "Skeleton",
-  "description": "Animated placeholder block for loading states.",
-  "registryDependencies": ["cn"],
-  "files": [{ "path": "components/primitives/skeleton/skeleton.tsx", "type": "registry:ui", "target": "components/ui/skeleton.tsx" }]
+  "description": "placeholder block shown while content is loading.",
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/skeleton/skeleton.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/skeleton.tsx"
+    }
+  ]
 }

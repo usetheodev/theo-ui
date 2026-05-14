@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "running-tasks-panel",
+  "type": "registry:ui",
+  "title": "RunningTasksPanel",
+  "description": "split list of Running vs Completed tasks.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/running-tasks-panel/running-tasks-panel.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/running-tasks-panel.tsx"
+    }
+  ]
+}

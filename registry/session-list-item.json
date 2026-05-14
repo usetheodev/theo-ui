@@ -3,9 +3,11 @@
   "name": "session-list-item",
   "type": "registry:ui",
   "title": "SessionListItem",
-  "description": "Rich sidebar row for a single agent session: status dot, mode pill, timestamp, optional unread count.",
+  "description": "single row in the sidebar's Sessions list for a code agent",
   "dependencies": [],
-  "registryDependencies": ["cn"],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/session-list-item/session-list-item.tsx",

@@ -3,9 +3,15 @@
   "name": "rollback-ui",
   "type": "registry:block",
   "title": "RollbackUI",
-  "description": "Deployment history with two-step rollback confirmation. Aligns with the < 5s rollback promise.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["cn", "badge", "button"],
+  "description": "instant rollback selector showing recent versions.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "badge",
+    "button"
+  ],
   "files": [
     {
       "path": "components/composites/rollback-ui/rollback-ui.tsx",

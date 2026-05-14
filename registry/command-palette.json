@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command-palette",
+  "type": "registry:ui",
+  "title": "CommandPalette",
+  "description": "Cmd+K-style global launcher.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "dialog",
+    "types"
+  ],
+  "files": [
+    {
+      "path": "components/composites/command-palette/command-palette.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/command-palette.tsx"
+    }
+  ]
+}

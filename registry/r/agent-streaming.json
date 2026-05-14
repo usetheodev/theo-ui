@@ -3,7 +3,7 @@
   "name": "agent-streaming",
   "type": "registry:ui",
   "title": "AgentStreaming",
-  "description": "Inline indicator that the agent is producing a response — pulsing dots or streamed partial text.",
+  "description": "inline \"agent is thinking / typing\" indicator.",
   "dependencies": [
     "lucide-react"
   ],

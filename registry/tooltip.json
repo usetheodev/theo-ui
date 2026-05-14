@@ -3,9 +3,13 @@
   "name": "tooltip",
   "type": "registry:ui",
   "title": "Tooltip",
-  "description": "Inverse-surface tooltip built on Radix Tooltip with shorthand <Tooltip label='…'> wrapper.",
-  "dependencies": ["@radix-ui/react-tooltip"],
-  "registryDependencies": ["cn"],
+  "description": "built on Radix Tooltip.",
+  "dependencies": [
+    "@radix-ui/react-tooltip"
+  ],
+  "registryDependencies": [
+    "cn"
+  ],
   "files": [
     {
       "path": "components/primitives/tooltip/tooltip.tsx",

@@ -3,7 +3,7 @@
   "name": "mode-types",
   "type": "registry:lib",
   "title": "Theo UI mode types",
-  "description": "Shared Mode type — top-level density / domain a session is operating in (chat, code, infra).",
+  "description": "Shared Mode type — \"chat\" | \"code\" | \"infra\" — controlling app shell density and surfaces.",
   "files": [
     {
       "path": "types/mode.ts",

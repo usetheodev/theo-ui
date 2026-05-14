@@ -3,7 +3,7 @@
   "name": "card",
   "type": "registry:ui",
   "title": "Card",
-  "description": "Surface container with Header / Title / Description / Body / Footer composition.",
+  "description": "surface container for grouping related content.",
   "registryDependencies": [
     "cn"
   ],

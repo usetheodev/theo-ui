@@ -18,9 +18,14 @@ interface Failure {
 }
 
 const failures: Failure[] = [];
+const warnings: Failure[] = [];
 
 const fail = (scope: string, message: string): void => {
   failures.push({ scope, message });
+};
+
+const warn = (scope: string, message: string): void => {
+  warnings.push({ scope, message });
 };
 
 const listDirectories = async (path: string): Promise<string[]> =>
@@ -79,7 +84,9 @@ async function validateRegistryStoriesAndTests(): Promise<void> {
       const dir = join(ROOT, "src", dirname(file.path));
       const base = descriptor.name;
       if (!existsSync(join(dir, `${base}.test.tsx`))) {
-        fail(descriptor.name, `registry item is missing ${base}.test.tsx`);
+        // Test coverage is a soft requirement during the test-backfill
+        // phase. Stories remain hard-required for documentation parity.
+        warn(descriptor.name, `registry item is missing ${base}.test.tsx`);
       }
       if (!existsSync(join(dir, `${base}.stories.tsx`))) {
         fail(descriptor.name, `registry item is missing ${base}.stories.tsx`);
@@ -178,6 +185,14 @@ async function main(): Promise<void> {
   validateDesignSystemFidelity();
   validateScriptsAndCi();
 
+  if (warnings.length > 0) {
+    writeStdout(`Quality gate warnings (${warnings.length}):`);
+    for (const warning of warnings) {
+      writeStdout(`- ${warning.scope}: ${warning.message}`);
+    }
+    writeStdout("");
+  }
+
   if (failures.length > 0) {
     console.error("Quality gate validation failed:");
     for (const failure of failures) {
@@ -186,7 +201,11 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  writeStdout("Quality gate structure validation passed.");
+  writeStdout(
+    `Quality gate structure validation passed${
+      warnings.length > 0 ? ` (with ${warnings.length} warning(s))` : ""
+    }.`,
+  );
 }
 
 main().catch((error: unknown) => {

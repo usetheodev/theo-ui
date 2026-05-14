@@ -3,7 +3,7 @@
   "name": "preview-env-card",
   "type": "registry:block",
   "title": "PreviewEnvCard",
-  "description": "Full-stack preview environment card surfacing one PR with all its services + URLs + statuses.",
+  "description": "preview environment card surfacing all services from one PR.",
   "dependencies": [
     "lucide-react"
   ],

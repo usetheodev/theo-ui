@@ -7,307 +7,607 @@
       "name": "agent-composer",
       "type": "registry:ui",
       "title": "AgentComposer",
-      "description": "ChatComposer + slash-command / @file / #memory mention triggers. Detects triggers in the value and renders a MentionMenu above."
+      "description": "ChatComposer + slash-command / @file / #memory triggers."
     },
     {
       "name": "agent-editor",
       "type": "registry:ui",
       "title": "AgentEditor",
-      "description": "Form for creating or editing an Agent persona — name, tone, description, model, system prompt, allowed tools, linked skills."
+      "description": "form for creating or editing an Agent persona."
     },
     {
       "name": "agent-error-card",
       "type": "registry:ui",
       "title": "AgentErrorCard",
-      "description": "Inline error / blocked-state card for an agent stream — rate-limit, context-overflow, auth, tool-failure, network."
+      "description": "inline error / blocked-state card for an agent stream."
+    },
+    {
+      "name": "agent-event",
+      "type": "registry:ui",
+      "title": "AgentEvent",
+      "description": "single event row in the agent timeline."
+    },
+    {
+      "name": "agent-handoff",
+      "type": "registry:ui",
+      "title": "AgentHandoff",
+      "description": "visual marker of one agent delegating to another."
     },
     {
       "name": "agent-profile",
       "type": "registry:ui",
       "title": "AgentProfile",
-      "description": "Persona selector — avatar chip + dropdown listing available agent personas (Coder, Planner, Reviewer, …)."
+      "description": "switcher between multiple agent profiles (coder, planner,"
+    },
+    {
+      "name": "agent-starting-state",
+      "type": "registry:ui",
+      "title": "AgentStartingState",
+      "description": "full-width skeleton shown while the agent boots."
     },
     {
       "name": "agent-stream",
       "type": "registry:ui",
       "title": "AgentStream",
-      "description": "Conversation surface for a code agent — interleaves chat messages, tool calls, approvals, errors, and streaming indicator."
+      "description": "the canonical conversation surface for a code agent."
     },
     {
       "name": "agent-streaming",
       "type": "registry:ui",
       "title": "AgentStreaming",
-      "description": "Inline indicator that the agent is producing a response — pulsing dots or streamed partial text."
+      "description": "inline \"agent is thinking / typing\" indicator."
+    },
+    {
+      "name": "agent-timeline",
+      "type": "registry:ui",
+      "title": "AgentTimeline",
+      "description": "vertical list of agent events."
+    },
+    {
+      "name": "agent-types",
+      "type": "registry:lib",
+      "title": "Theo UI agent types",
+      "description": "Shared TypeScript types for the agent timeline, events, and statuses."
     },
     {
       "name": "approval-card",
       "type": "registry:ui",
       "title": "ApprovalCard",
-      "description": "Inline pause-and-ask card for an agent stream. Approve / Deny / Always-allow with info / warning / destructive severities."
+      "description": "inline pause-and-ask card for an agent stream."
+    },
+    {
+      "name": "artifact-preview",
+      "type": "registry:ui",
+      "title": "ArtifactPreview",
+      "description": "shell for previewing a generated artifact (XLSX, PDF, image…)."
+    },
+    {
+      "name": "attachment-chip",
+      "type": "registry:ui",
+      "title": "AttachmentChip",
+      "description": "file pill shown in chat composer or message attachments row."
+    },
+    {
+      "name": "audit-log-entry",
+      "type": "registry:ui",
+      "title": "AuditLogEntry",
+      "description": "one row in the agent audit log."
+    },
+    {
+      "name": "auto-compact-notice",
+      "type": "registry:ui",
+      "title": "AutoCompactNotice",
+      "description": "inline banner warning the user that the agent is"
     },
     {
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
-      "description": "User/team avatar with safe fallback to initials. Sizes xs..xl, tones muted/primary/accent."
+      "description": "user/team avatar with safe fallback to initials."
     },
     {
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
-      "description": "Status / tag indicator with optional pulsing Badge.Dot for deployment states."
+      "description": "small status / tag indicator."
+    },
+    {
+      "name": "browser-controls",
+      "type": "registry:ui",
+      "title": "BrowserControls",
+      "description": "back/forward/reload + URL bar."
     },
     {
       "name": "build-log-stream",
       "type": "registry:block",
       "title": "BuildLogStream",
-      "description": "Terminal-like log viewer with level coloring (info/warn/error/success/debug) and chip filters."
+      "description": "terminal-like log viewer with timestamps + level coloring."
     },
     {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
-      "description": "Primitive action button with Violet Forge variants (primary glow, accent burnt-sienna, ghost, link, destructive)."
+      "description": "primitive action element in the Violet Forge design system."
+    },
+    {
+      "name": "capability-indicator",
+      "type": "registry:ui",
+      "title": "CapabilityIndicator",
+      "description": "row of chips showing what the agent can currently do."
     },
     {
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
-      "description": "Surface container with Header / Title / Description / Body / Footer composition."
+      "description": "surface container for grouping related content."
     },
     {
       "name": "chat-composer",
       "type": "registry:ui",
       "title": "ChatComposer",
-      "description": "Textarea-based message composer with mode (chat / cowork / code), slots for leading/trailing actions, and send/stop affordances."
+      "description": "message input area, shared by Chat / Code / Infra modes."
     },
     {
       "name": "chat-message",
       "type": "registry:ui",
       "title": "ChatMessage",
-      "description": "Single user / assistant message row with role-aware bubble styling."
+      "description": "single chat turn."
+    },
+    {
+      "name": "chat-thread",
+      "type": "registry:ui",
+      "title": "ChatThread",
+      "description": "simple vertical container that applies spacing + scroll."
     },
     {
       "name": "chat-types",
       "type": "registry:lib",
       "title": "Theo UI chat types",
-      "description": "Shared chat domain types: Message, MessageRole, Attachment."
+      "description": "Shared TypeScript types for chat messages, roles, and attachments."
     },
     {
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
-      "description": "Tri-state checkbox built on Radix Checkbox."
+      "description": "built on Radix Checkbox."
     },
     {
       "name": "cn",
       "type": "registry:lib",
       "title": "cn (Tailwind class merger)",
-      "description": "Theo UI standard class merger: clsx + tailwind-merge."
+      "description": "Merge Tailwind classes with conflict resolution."
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:ui",
+      "title": "CommandPalette",
+      "description": "Cmd+K-style global launcher."
+    },
+    {
+      "name": "context-card",
+      "type": "registry:ui",
+      "title": "ContextCard",
+      "description": "generic \"informational\" card for the right inspector."
+    },
+    {
+      "name": "context-window-bar",
+      "type": "registry:ui",
+      "title": "ContextWindowBar",
+      "description": "shows how much of the model's context window has been"
+    },
+    {
+      "name": "cost-meter",
+      "type": "registry:ui",
+      "title": "CostMeter",
+      "description": "gauge for token spend."
+    },
+    {
+      "name": "created-files-card",
+      "type": "registry:ui",
+      "title": "CreatedFilesCard",
+      "description": "surfaces files produced by a completed task."
+    },
+    {
+      "name": "cron-job-card",
+      "type": "registry:ui",
+      "title": "CronJobCard",
+      "description": "one scheduled agent job."
+    },
+    {
+      "name": "cron-jobs-list",
+      "type": "registry:ui",
+      "title": "CronJobsList",
+      "description": "grid of CronJobCards with a sticky \"new job\" action."
     },
     {
       "name": "deployment-row",
       "type": "registry:block",
       "title": "DeploymentRow",
-      "description": "Single deployment list row with status badge, commit SHA, branch, author, duration."
+      "description": "one row in a deployment list (table-ish layout)."
     },
     {
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
-      "description": "Modal overlay built on Radix Dialog. Composed via Dialog.Header, Title, Description, Body, Footer."
+      "description": "modal overlay built on Radix Dialog."
+    },
+    {
+      "name": "diff-viewer",
+      "type": "registry:ui",
+      "title": "DiffViewer",
+      "description": "unified diff rendering, no external dep."
     },
     {
       "name": "domain-config",
       "type": "registry:block",
       "title": "DomainConfig",
-      "description": "Custom domains list with status, TLS state, primary marker, and inline DNS verification record."
+      "description": "manage custom domains for a project."
     },
     {
       "name": "empty-state",
       "type": "registry:ui",
       "title": "EmptyState",
-      "description": "Placeholder for empty lists/first-run with icon, title, description, action."
+      "description": "visual placeholder for empty lists / first-run screens."
     },
     {
       "name": "env-var-editor",
       "type": "registry:block",
       "title": "EnvVarEditor",
-      "description": "Editor for environment variables with mask toggle, scopes, copy & remove actions."
+      "description": "table-like editor for environment variables."
+    },
+    {
+      "name": "folder-context-card",
+      "type": "registry:ui",
+      "title": "FolderContextCard",
+      "description": "file/folder tree fragment for the right inspector."
+    },
+    {
+      "name": "folder-selector",
+      "type": "registry:ui",
+      "title": "FolderSelector",
+      "description": "chip showing the active working directory."
     },
     {
       "name": "form-field",
       "type": "registry:ui",
       "title": "FormField",
-      "description": "Accessible form row with Label/Control/Hint/Error composition. Auto-wires htmlFor + aria-describedby."
+      "description": "composition wrapper for accessible form rows."
+    },
+    {
+      "name": "hook-config",
+      "type": "registry:ui",
+      "title": "HookConfig",
+      "description": "editor for lifecycle hooks (PreToolUse, PostToolUse, Stop…)."
+    },
+    {
+      "name": "hook-event-log",
+      "type": "registry:ui",
+      "title": "HookEventLog",
+      "description": "chronological list of hook firings, with result tone, the"
     },
     {
       "name": "input",
       "type": "registry:ui",
       "title": "Input",
-      "description": "Text input with violet focus ring and Violet Forge typography."
+      "description": "text input primitive."
     },
     {
       "name": "intent-selector",
       "type": "registry:ui",
       "title": "IntentSelector",
-      "description": "Dropdown chip for picking the agent's intent (edit/plan/review). Mirrors ModelSelector."
+      "description": "chip dropdown for picking the agent's intent for the next"
     },
     {
       "name": "label",
       "type": "registry:ui",
       "title": "Label",
-      "description": "Form label built on Radix Label. Required asterisk when needed."
+      "description": "form field label built on Radix Label."
+    },
+    {
+      "name": "lane-board",
+      "type": "registry:ui",
+      "title": "LaneBoard",
+      "description": "kanban-style task board with 4 lanes matching the claw-code"
+    },
+    {
+      "name": "login-split",
+      "type": "registry:ui",
+      "title": "LoginSplit",
+      "description": "50/50 split layout shell."
+    },
+    {
+      "name": "mcp-server-card",
+      "type": "registry:ui",
+      "title": "McpServerCard",
+      "description": "one MCP server entry showing connection status, the tools"
+    },
+    {
+      "name": "mcp-server-list",
+      "type": "registry:ui",
+      "title": "McpServerList",
+      "description": "grouped MCP server inventory with status filter chips."
+    },
+    {
+      "name": "memory-editor",
+      "type": "registry:ui",
+      "title": "MemoryEditor",
+      "description": "three-layer Markdown memory editor (global / project /"
     },
     {
       "name": "mention-menu",
       "type": "registry:ui",
       "title": "MentionMenu",
-      "description": "Keyboard-navigable popover for slash-command / @file / #memory triggers inside an agent composer."
+      "description": "keyboard-navigable popover for slash-command / @file / #memory"
     },
     {
       "name": "metrics-panel",
       "type": "registry:block",
       "title": "MetricsPanel",
-      "description": "Grid of metric tiles with delta arrows and CSS-only sparklines. No chart lib dependency."
+      "description": "grid of metric tiles for observability dashboards."
     },
     {
       "name": "mode-types",
       "type": "registry:lib",
       "title": "Theo UI mode types",
-      "description": "Shared Mode type — top-level density / domain a session is operating in (chat, code, infra)."
+      "description": "Shared Mode type — \"chat\" | \"code\" | \"infra\" — controlling app shell density and surfaces."
+    },
+    {
+      "name": "model-card",
+      "type": "registry:ui",
+      "title": "ModelCard",
+      "description": "full info on a model: vendor, context, output cap, pricing,"
+    },
+    {
+      "name": "model-selector",
+      "type": "registry:ui",
+      "title": "ModelSelector",
+      "description": "chip dropdown for picking the active LLM."
+    },
+    {
+      "name": "permission-matrix",
+      "type": "registry:ui",
+      "title": "PermissionMatrix",
+      "description": "tool × path × decision grid for fine-grained access"
+    },
+    {
+      "name": "permission-modal",
+      "type": "registry:ui",
+      "title": "PermissionModal",
+      "description": "local-files access prompt built on Dialog."
+    },
+    {
+      "name": "permission-types",
+      "type": "registry:lib",
+      "title": "Theo UI permission types",
+      "description": "Shared TypeScript types for permission requests, scopes, and decisions."
     },
     {
       "name": "preview-env-card",
       "type": "registry:block",
       "title": "PreviewEnvCard",
-      "description": "Full-stack preview environment card surfacing one PR with all its services + URLs + statuses."
+      "description": "preview environment card surfacing all services from one PR."
+    },
+    {
+      "name": "preview-panel",
+      "type": "registry:ui",
+      "title": "PreviewPanel",
+      "description": "browser preview with controls + integrated logs slot."
+    },
+    {
+      "name": "progress-checklist",
+      "type": "registry:ui",
+      "title": "ProgressChecklist",
+      "description": "right-inspector checklist."
     },
     {
       "name": "project-card",
       "type": "registry:block",
       "title": "ProjectCard",
-      "description": "Project listing card with status, framework, branch, last commit, and region."
+      "description": "surface for a project in a project listing."
     },
     {
       "name": "project-switcher",
       "type": "registry:ui",
       "title": "ProjectSwitcher",
-      "description": "Sidebar header showing the active workspace + branch + status dot for a code agent app."
+      "description": "sidebar header for a code agent app."
+    },
+    {
+      "name": "quick-action-chips",
+      "type": "registry:ui",
+      "title": "QuickActionChips",
+      "description": "row of intent chips below a hero composer."
     },
     {
       "name": "radio-group",
       "type": "registry:ui",
       "title": "RadioGroup",
-      "description": "Radio group built on Radix RadioGroup."
+      "description": "built on Radix RadioGroup."
+    },
+    {
+      "name": "recent-folders-list",
+      "type": "registry:ui",
+      "title": "RecentFoldersList",
+      "description": "recently-used folders for the Files picker."
     },
     {
       "name": "rollback-ui",
       "type": "registry:block",
       "title": "RollbackUI",
-      "description": "Deployment history with two-step rollback confirmation. Aligns with the < 5s rollback promise."
+      "description": "instant rollback selector showing recent versions."
     },
     {
       "name": "rule-card",
       "type": "registry:ui",
       "title": "RuleCard",
-      "description": "Single rule row — title, scope badge, body preview, tags, and toggle/edit/delete affordances."
+      "description": "single Rule row in the Rules list."
     },
     {
       "name": "rule-editor",
       "type": "registry:ui",
       "title": "RuleEditor",
-      "description": "Form for creating or editing a Rule — title, markdown body, scope, tags, enabled toggle."
+      "description": "form for creating or editing a Rule (behavior instruction"
     },
     {
       "name": "rule-types",
       "type": "registry:lib",
       "title": "Theo UI rule types",
-      "description": "Rule domain type — behavior instruction injected into the system prompt."
+      "description": "Shared TypeScript types for Rules — user-authored behavior instructions injected into the system prompt."
+    },
+    {
+      "name": "run-stats",
+      "type": "registry:ui",
+      "title": "RunStats",
+      "description": "inline metric row shown after an agent run."
+    },
+    {
+      "name": "running-tasks-panel",
+      "type": "registry:ui",
+      "title": "RunningTasksPanel",
+      "description": "split list of Running vs Completed tasks."
     },
     {
       "name": "scroll-area",
       "type": "registry:ui",
       "title": "ScrollArea",
-      "description": "Custom scroller with Violet Forge thumb (violet glow on hover). Built on Radix ScrollArea for cross-browser consistency."
+      "description": "custom scroller with Violet Forge styling."
     },
     {
       "name": "select",
       "type": "registry:ui",
       "title": "Select",
-      "description": "Styled wrapper around Radix Select with grouped options and indicator."
+      "description": "styled wrapper around Radix Select."
     },
     {
       "name": "session-list-item",
       "type": "registry:ui",
       "title": "SessionListItem",
-      "description": "Rich sidebar row for a single agent session: status dot, mode pill, timestamp, optional unread count."
+      "description": "single row in the sidebar's Sessions list for a code agent"
+    },
+    {
+      "name": "session-timeline",
+      "type": "registry:ui",
+      "title": "SessionTimeline",
+      "description": "historical view of past agent sessions with per-row"
     },
     {
       "name": "sheet",
       "type": "registry:ui",
       "title": "Sheet",
-      "description": "Slide-in side panel built on Radix Dialog. Supports right/left/top/bottom edges."
+      "description": "slide-in side panel built on Radix Dialog."
     },
     {
       "name": "sidebar",
       "type": "registry:ui",
       "title": "Sidebar",
-      "description": "Vertical navigation shell. Sidebar.Header, Section, Item, Footer."
+      "description": "vertical navigation shell."
     },
     {
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
-      "description": "Animated placeholder block for loading states."
+      "description": "placeholder block shown while content is loading."
     },
     {
       "name": "skill-card",
       "type": "registry:ui",
       "title": "SkillCard",
-      "description": "Single Skill row — name, source badge, optional triggers and allowed-tools chips, enable toggle."
+      "description": "single skill entry showing what it does, where it came from,"
     },
     {
       "name": "skill-editor",
       "type": "registry:ui",
       "title": "SkillEditor",
-      "description": "Form for creating or editing a Skill — name, description, instructions, source, allowed tools, triggers, enabled."
+      "description": "form for creating or editing a Skill."
+    },
+    {
+      "name": "skills-list",
+      "type": "registry:ui",
+      "title": "SkillsList",
+      "description": "grid of SkillCards with optional search + source filter chips."
+    },
+    {
+      "name": "social-auth-row",
+      "type": "registry:ui",
+      "title": "SocialAuthRow",
+      "description": "row of OAuth provider buttons."
+    },
+    {
+      "name": "steps-rail",
+      "type": "registry:ui",
+      "title": "StepsRail",
+      "description": "vertical numbered rail with connecting line."
+    },
+    {
+      "name": "sub-agent-dispatch",
+      "type": "registry:ui",
+      "title": "SubAgentDispatch",
+      "description": "visualization for a Task() / sub-agent invocation."
     },
     {
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
-      "description": "Binary toggle with violet glow when active."
+      "description": "built on Radix Switch."
     },
     {
       "name": "system-prompt-editor",
       "type": "registry:ui",
       "title": "SystemPromptEditor",
-      "description": "Two-pane editor for the agent system prompt — vendor default vs user override + token estimate."
+      "description": "surface the agent's system prompt with a clear"
     },
     {
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "Underline-style tabs (violet active underline) built on Radix Tabs."
+      "description": "built on Radix Tabs."
+    },
+    {
+      "name": "task-header",
+      "type": "registry:ui",
+      "title": "TaskHeader",
+      "description": "title bar for a task pane."
+    },
+    {
+      "name": "task-plan",
+      "type": "registry:ui",
+      "title": "TaskPlan",
+      "description": "hierarchical task plan, à la Claude \"plan mode\"."
+    },
+    {
+      "name": "task-types",
+      "type": "registry:lib",
+      "title": "Theo UI task types",
+      "description": "Shared TypeScript types for task plans, steps, and progress state."
+    },
+    {
+      "name": "terminal-panel",
+      "type": "registry:ui",
+      "title": "TerminalPanel",
+      "description": "minimal terminal output viewer."
     },
     {
       "name": "textarea",
       "type": "registry:ui",
       "title": "Textarea",
-      "description": "Multi-line input matching Input visuals."
+      "description": "multi-line input mirror of Input."
     },
     {
       "name": "theme-provider",
       "type": "registry:lib",
       "title": "ThemeProvider",
-      "description": "React provider for runtime theme + mode switching. Injects CSS vars per registered theme, persists in localStorage, lazy-loads font URLs."
+      "description": "Theme + dark mode provider with built-in Violet Forge, Classic Paper, and Aurora Terminal themes."
     },
     {
       "name": "toast",
       "type": "registry:ui",
       "title": "Toast",
-      "description": "Theme-aware transient notification built on Radix Toast. Ships with <Toaster> + useToast() hook."
+      "description": "transient notification built on Radix Toast."
+    },
+    {
+      "name": "token-usage-chart",
+      "type": "registry:ui",
+      "title": "TokenUsageChart",
+      "description": "stacked-bar chart of input vs output tokens over time."
     },
     {
       "name": "tokens",
@@ -319,25 +619,43 @@
       "name": "tool-call-card",
       "type": "registry:ui",
       "title": "ToolCallCard",
-      "description": "Single agent tool invocation rendered inside the stream: tool name, target, status badge, expandable output body."
+      "description": "single agent tool invocation rendered inside the stream."
+    },
+    {
+      "name": "tool-call",
+      "type": "registry:ui",
+      "title": "ToolCall",
+      "description": "collapsible row representing an agent tool invocation."
+    },
+    {
+      "name": "tool-result",
+      "type": "registry:ui",
+      "title": "ToolResult",
+      "description": "formatted output of a tool invocation."
+    },
+    {
+      "name": "tools-list",
+      "type": "registry:ui",
+      "title": "ToolsList",
+      "description": "surface every tool the agent could call, with its enablement"
     },
     {
       "name": "tooltip",
       "type": "registry:ui",
       "title": "Tooltip",
-      "description": "Inverse-surface tooltip built on Radix Tooltip with shorthand <Tooltip label='…'> wrapper."
+      "description": "built on Radix Tooltip."
     },
     {
       "name": "topnav",
       "type": "registry:ui",
       "title": "TopNav",
-      "description": "Horizontal app bar with breadcrumbs, mode switcher (Chat/Cowork/Code), action slots."
+      "description": "horizontal app bar (64px)."
     },
     {
       "name": "types",
       "type": "registry:lib",
       "title": "Theo UI shared types",
-      "description": "Type aliases reused across primitives — IconComponent (lucide-compatible) and friends."
+      "description": "Shared TypeScript helper types (IconComponent, etc.) used across Theo UI."
     }
   ]
 }
