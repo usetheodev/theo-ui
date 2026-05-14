@@ -84,11 +84,9 @@ const AvatarFallback = forwardRef<
 ));
 AvatarFallback.displayName = "Avatar.Fallback";
 
-const Avatar = AvatarRoot as typeof AvatarRoot & {
-  Image: typeof AvatarImage;
-  Fallback: typeof AvatarFallback;
-};
-Avatar.Image = AvatarImage;
-Avatar.Fallback = AvatarFallback;
+const Avatar = /*#__PURE__*/ Object.assign(AvatarRoot, {
+  Image: AvatarImage,
+  Fallback: AvatarFallback,
+});
 
 export { Avatar, avatarVariants };

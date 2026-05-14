@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Textarea } from "./textarea.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Textarea", () => {
   it("renders a textarea with the provided rows", () => {
     render(<Textarea aria-label="Notes" rows={5} />);
@@ -27,5 +28,9 @@ describe("Textarea", () => {
   it("respects the disabled attribute", () => {
     render(<Textarea aria-label="Notes" disabled />);
     expect(screen.getByRole("textbox", { name: "Notes" })).toBeDisabled();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Textarea aria-label="Notes" rows={5} />);
   });
 });

@@ -173,6 +173,30 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
             ))}
           </div>
         </div>
+        {/* Screen-reader fallback: the SVG is decorative-ish for AT users.
+         * `<title>` per bar is unreliably exposed across NVDA/VoiceOver/JAWS,
+         * so we ship an `sr-only` table with the same data. Sighted users
+         * never see this; AT users can navigate the values cell-by-cell.
+         * Reference: WCAG 1.1.1 (Non-text content). */}
+        <table className="sr-only">
+          <caption>Token usage by period — input vs output</caption>
+          <thead>
+            <tr>
+              <th scope="col">Period</th>
+              <th scope="col">Input tokens</th>
+              <th scope="col">Output tokens</th>
+            </tr>
+          </thead>
+          <tbody>
+            {series.map((p) => (
+              <tr key={`a11y-${p.label}`}>
+                <td>{p.label}</td>
+                <td>{p.input}</td>
+                <td>{p.output}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         {showLegend ? (
           <footer className="mt-3 flex items-center gap-4 font-mono text-label text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">

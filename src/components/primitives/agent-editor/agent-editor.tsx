@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
@@ -67,19 +67,11 @@ export function AgentEditor({
   );
   const [modes, setModes] = useState<Mode[]>(initial?.modes ?? []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reset only when agent identity changes
-  useEffect(() => {
-    setName(initial?.name ?? "");
-    setInitials(initial?.initials ?? "");
-    setDescription(typeof initial?.description === "string" ? initial.description : "");
-    setTone(initial?.tone ?? "primary");
-    setModel(initial?.model ?? models?.[0]?.id ?? "");
-    setSystemPrompt(initial?.systemPrompt ?? "");
-    setAllowedToolsRaw(initial?.allowedTools?.join(", ") ?? "");
-    setSkillsSelected(new Set(initial?.skillIds ?? []));
-    setModes(initial?.modes ?? []);
-  }, [initial?.id]);
-
+  // Note: state is only seeded once on mount. To reset the form when editing a
+  // different agent, use the React `key` pattern at the call site:
+  //   <AgentEditor key={agent.id} initial={agent} ... />
+  // This is the idiomatic React way (over a useEffect that watches prop deltas
+  // and writes setters) — it guarantees a clean component instance per entity.
   const toggleMode = (m: Mode) =>
     setModes((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
 

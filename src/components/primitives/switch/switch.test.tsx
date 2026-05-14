@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Switch } from "./switch.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Switch", () => {
   it("renders a switch with accessible name", () => {
     render(<Switch aria-label="Auto-accept" />);
@@ -28,5 +29,9 @@ describe("Switch", () => {
     render(<Switch aria-label="Off" disabled onCheckedChange={onCheckedChange} />);
     await user.click(screen.getByRole("switch"));
     expect(onCheckedChange).not.toHaveBeenCalled();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Switch aria-label="Auto-accept" />);
   });
 });

@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Button } from "../button/button.js";
 import { EmptyState } from "./empty-state.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("EmptyState", () => {
   it("renders title (required)", () => {
     render(<EmptyState title="No projects yet" />);
@@ -34,5 +35,9 @@ describe("EmptyState", () => {
     );
     await user.click(screen.getByRole("button", { name: "New" }));
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<EmptyState title="No projects yet" />);
   });
 });

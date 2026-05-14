@@ -25,7 +25,7 @@
     "playground:preview": "vite preview --config playground/vite.config.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome check src",
-    "lint:ci": "biome ci src scripts .ladle",
+    "lint:ci": "biome ci src scripts .ladle playground",
     "lint:fix": "biome check --write src",
     "format": "biome format --write src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
     "format:check": "biome format src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",

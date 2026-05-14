@@ -122,8 +122,12 @@
    * Vercel-aligned grayscale: pure neutrals (0% saturation) for every
    * surface and text layer. Color only in primary (violet), accent (burnt
    * sienna), and semantic tokens (success/warning/destructive/info).
+   *
+   * Activated exclusively via the `.dark` class on `<html>` (set by
+   * `ThemeProvider`, `ThemeScript`, or consumers manually). The previous
+   * `[data-theme="dark"]` companion selector was dead — `data-theme` holds
+   * the theme NAME, never the literal `"dark"`.
    */
-[data-theme="dark"],
 .dark {
   --background: 0 0% 4%; /* #0A0A0A */
   --foreground: 0 0% 96%; /* #F5F5F5 */

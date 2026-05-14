@@ -127,19 +127,13 @@ const ToastAction = forwardRef<
 ));
 ToastAction.displayName = "Toast.Action";
 
-const Toast = ToastRoot as typeof ToastRoot & {
-  Title: typeof ToastTitle;
-  Description: typeof ToastDescription;
-  Close: typeof ToastClose;
-  Action: typeof ToastAction;
-  Provider: typeof ToastPrimitive.Provider;
-  Viewport: typeof ToastPrimitive.Viewport;
-};
-Toast.Title = ToastTitle;
-Toast.Description = ToastDescription;
-Toast.Close = ToastClose;
-Toast.Action = ToastAction;
-Toast.Provider = ToastPrimitive.Provider;
-Toast.Viewport = ToastPrimitive.Viewport;
+const Toast = /*#__PURE__*/ Object.assign(ToastRoot, {
+  Title: ToastTitle,
+  Description: ToastDescription,
+  Close: ToastClose,
+  Action: ToastAction,
+  Provider: ToastPrimitive.Provider,
+  Viewport: ToastPrimitive.Viewport,
+});
 
 export { Toast, toastVariants, type ToastVariant };

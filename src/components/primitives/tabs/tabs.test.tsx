@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { Tabs } from "./tabs.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 function Example() {
   return (
     <Tabs defaultValue="overview">
@@ -40,5 +41,9 @@ describe("Tabs", () => {
     overview.focus();
     await user.keyboard("{ArrowRight}");
     expect(screen.getByRole("tab", { name: "Deployments" })).toHaveFocus();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Example />);
   });
 });

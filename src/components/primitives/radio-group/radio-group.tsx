@@ -48,9 +48,8 @@ const RadioGroupItem = forwardRef<
 ));
 RadioGroupItem.displayName = "RadioGroup.Item";
 
-const RadioGroup = RadioGroupRoot as typeof RadioGroupRoot & {
-  Item: typeof RadioGroupItem;
-};
-RadioGroup.Item = RadioGroupItem;
+const RadioGroup = /*#__PURE__*/ Object.assign(RadioGroupRoot, {
+  Item: RadioGroupItem,
+});
 
 export { RadioGroup };

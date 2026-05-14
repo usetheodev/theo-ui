@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Badge } from "./badge.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Badge", () => {
   it("renders content", () => {
     render(<Badge>Live</Badge>);
@@ -29,5 +30,9 @@ describe("Badge", () => {
     expect(dot).not.toBeNull();
     expect(dot?.className).toContain("animate-pulse-glow");
     expect(dot?.className).toContain("bg-success");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Badge>Live</Badge>);
   });
 });

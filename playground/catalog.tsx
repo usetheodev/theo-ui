@@ -9,62 +9,62 @@
  * the high-traffic surfaces a real consumer would assemble first.
  */
 import {
-  // Theme
-  ThemeSwitcher,
+  // Agent transparency (verified subset)
+  AgentEvent,
+  // Types
+  type AgentEventModel,
+  // Composites (verified)
+  AgentTimeline,
   // Foundations
   Avatar,
   Badge,
+  // Code workspace
+  BuildLogStream,
   Button,
+  type Capability,
+  CapabilityIndicator,
   Card,
+  ChatComposer,
+  // Chat
+  ChatMessage,
+  ChatThread,
   Checkbox,
+  type CommandItem,
+  CommandPalette,
+  ContextWindowBar,
+  type Deployment,
+  DeploymentRow,
   Dialog,
+  DiffViewer,
   EmptyState,
   FormField,
   Input,
   Label,
-  RadioGroup,
-  ScrollArea,
-  Select,
-  Skeleton,
-  Switch,
-  Tabs,
-  Textarea,
-  Tooltip,
-  // App chrome
-  Sheet,
-  Sidebar,
-  TopNav,
-  // Agent transparency (verified subset)
-  AgentEvent,
-  CapabilityIndicator,
-  ContextWindowBar,
-  RunStats,
-  TokenUsageChart,
-  // Chat
-  ChatMessage,
-  ChatThread,
-  ModelSelector,
-  QuickActionChips,
-  // Code workspace
-  BuildLogStream,
-  DiffViewer,
-  MetricsPanel,
-  TerminalPanel,
-  // Composites (verified)
-  AgentTimeline,
-  ChatComposer,
-  CommandPalette,
-  DeploymentRow,
-  PermissionModal,
-  // Types
-  type AgentEventModel,
-  type Capability,
-  type CommandItem,
-  type Deployment,
   type LogLine,
   type Message,
   type Metric,
+  MetricsPanel,
+  ModelSelector,
+  PermissionModal,
+  QuickActionChips,
+  RadioGroup,
+  RunStats,
+  ScrollArea,
+  Select,
+  // App chrome
+  Sheet,
+  Sidebar,
+  Skeleton,
+  Switch,
+  Tabs,
+  TerminalPanel,
+  Textarea,
+  // Theme
+  ThemeSwitcher,
+  TokenUsageChart,
   type TokenUsagePoint,
+  Tooltip,
+  TopNav,
 } from "@usetheo/ui";
 import {
   Bot,
@@ -360,8 +360,8 @@ function SurfaceDemo() {
           <Tabs.Content value="logs">
             <ScrollArea className="h-32 rounded-md border border-border/40 p-2">
               <ul className="grid gap-1 font-mono text-code-sm">
-                {Array.from({ length: 20 }, (_, i) => (
-                  <li key={`scroll-${i}-line`}>line {i}</li>
+                {Array.from({ length: 20 }, (_, i) => `line-${i}`).map((id, i) => (
+                  <li key={id}>line {i}</li>
                 ))}
               </ul>
             </ScrollArea>
@@ -435,7 +435,7 @@ function AgentTransparencyDemo() {
       <Example label="AgentTimeline + AgentEvent (single)">
         <div className="grid gap-3">
           <AgentTimeline events={mockEvents} collapsible />
-          <AgentEvent event={mockEvents[1]!} />
+          {mockEvents[1] ? <AgentEvent event={mockEvents[1]} /> : null}
         </div>
       </Example>
       <Example label="ContextWindowBar / RunStats / TokenUsageChart / CapabilityIndicator">

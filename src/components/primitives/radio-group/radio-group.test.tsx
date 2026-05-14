@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { RadioGroup } from "./radio-group.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("RadioGroup", () => {
   it("renders each item as a radio with accessible name", () => {
     render(
@@ -37,5 +38,14 @@ describe("RadioGroup", () => {
     );
     await user.click(screen.getByRole("radio", { name: "B" }));
     expect(onValueChange).toHaveBeenCalledWith("b");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <RadioGroup defaultValue="a" aria-label="Plan">
+        <RadioGroup.Item value="a" id="a" aria-label="A" />
+        <RadioGroup.Item value="b" id="b" aria-label="B" />
+      </RadioGroup>,
+    );
   });
 });

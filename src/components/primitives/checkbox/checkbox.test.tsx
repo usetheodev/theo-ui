@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "./checkbox.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Checkbox", () => {
   it("renders with role=checkbox", () => {
     render(<Checkbox aria-label="Accept" />);
@@ -36,5 +37,9 @@ describe("Checkbox", () => {
     render(<Checkbox aria-label="Off" disabled onCheckedChange={onCheckedChange} />);
     await user.click(screen.getByRole("checkbox"));
     expect(onCheckedChange).not.toHaveBeenCalled();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Checkbox aria-label="Accept" />);
   });
 });

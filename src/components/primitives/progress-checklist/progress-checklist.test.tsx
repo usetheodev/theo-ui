@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { TaskStep } from "../../../types/task.js";
 import { ProgressChecklist } from "./progress-checklist.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const steps: TaskStep[] = [
   { id: "1", label: "Read files", status: "done" },
   { id: "2", label: "Apply diff", status: "running", progress: 0.6 },
@@ -21,5 +22,9 @@ describe("ProgressChecklist", () => {
   it("renders without a title", () => {
     render(<ProgressChecklist steps={steps} />);
     expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<ProgressChecklist title="Progress" steps={steps} />);
   });
 });

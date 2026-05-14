@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
@@ -47,16 +47,9 @@ export function RuleEditor({
   const [enabled, setEnabled] = useState<RuleState>(initial?.state ?? "enabled");
   const [modes, setModes] = useState<Mode[]>(initial?.modes ?? []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: only reset when rule identity changes
-  useEffect(() => {
-    setTitle(initial?.title ?? "");
-    setBody(initial?.body ?? "");
-    setScope(initial?.scope ?? "global");
-    setTagsRaw(initial?.tags?.join(", ") ?? "");
-    setEnabled(initial?.state ?? "enabled");
-    setModes(initial?.modes ?? []);
-  }, [initial?.id]);
-
+  // Note: state is only seeded once on mount. To reset the form when editing
+  // a different rule, use the React `key` pattern at the call site:
+  //   <RuleEditor key={rule.id} initial={rule} ... />
   const toggleMode = (m: Mode) =>
     setModes((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
 

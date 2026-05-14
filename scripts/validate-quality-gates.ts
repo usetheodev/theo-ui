@@ -24,10 +24,6 @@ const fail = (scope: string, message: string): void => {
   failures.push({ scope, message });
 };
 
-const warn = (scope: string, message: string): void => {
-  warnings.push({ scope, message });
-};
-
 const listDirectories = async (path: string): Promise<string[]> =>
   (await readdir(path, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
@@ -84,9 +80,9 @@ async function validateRegistryStoriesAndTests(): Promise<void> {
       const dir = join(ROOT, "src", dirname(file.path));
       const base = descriptor.name;
       if (!existsSync(join(dir, `${base}.test.tsx`))) {
-        // Test coverage is a soft requirement during the test-backfill
-        // phase. Stories remain hard-required for documentation parity.
-        warn(descriptor.name, `registry item is missing ${base}.test.tsx`);
+        // Hard-fail (D5): test-backfill phase ended; every registry component
+        // ships with a smoke test.
+        fail(descriptor.name, `registry item is missing ${base}.test.tsx`);
       }
       if (!existsSync(join(dir, `${base}.stories.tsx`))) {
         fail(descriptor.name, `registry item is missing ${base}.stories.tsx`);
@@ -249,25 +245,12 @@ function validateReadmeDrift(): void {
     "Dialog",
     "ScrollBar",
     "ScrollArea",
-    "Boska",
-    "Switzer",
-    "JetBrains",
     "Inter",
-    "Berkeley",
-    "Departure",
-    "Söhne",
-    "Migra",
-    "Monaspace",
-    "Neon",
-    "PP",
-    "Editorial",
-    "New",
-    "General",
-    "Industrial",
     "Aurora",
     "Terminal",
     "Furnace",
     "Console",
+    "Quickstart",
   ]);
 
   // Find capitalized words in backticks that aren't in exportedNames or whitelist.
@@ -335,6 +318,265 @@ async function validateCompositeBarrel(): Promise<void> {
   }
 }
 
+async function validateCompoundPattern(): Promise<void> {
+  // T4.1 / BLOCKER-004 — every compound component (Root + sub-components
+  // exposed as `Root.Sub`) must assemble via `Object.assign /*#__PURE__*/`
+  // and NOT via the `Root as typeof Root & {...}` + `Root.Sub = Sub` mutation
+  // pattern. Mutation in module scope blocks tree-shaking because the marker
+  // is missing; Object.assign with the PURE hint is recognized as side-effect
+  // free by every modern bundler.
+  //
+  // CHANGELOG (Unreleased > Changed) declares this migration; the gate keeps
+  // it honest by failing on regression.
+  for (const layer of ["primitives", "composites"] as const) {
+    const layerRoot = join(ROOT, "src/components", layer);
+    if (!existsSync(layerRoot)) continue;
+    for (const name of await listDirectories(layerRoot)) {
+      const impl = join(layerRoot, name, `${name}.tsx`);
+      if (!existsSync(impl)) continue;
+      const content = await readFile(impl, "utf-8");
+      const mutation = /const\s+\w+\s*=\s*\w+(?:Root|Primitive)\s+as\s+typeof\s+\w+\s*&\s*\{/;
+      if (mutation.test(content)) {
+        fail(
+          `${layer}/${name}`,
+          "compound component uses mutation cast (`X as typeof X & {...}; X.Sub = Sub`); use `/*#__PURE__*/ Object.assign(Root, { Sub: ... })` per CHANGELOG 2026-05-13",
+        );
+      }
+    }
+  }
+}
+
+async function validateCountConsistency(): Promise<void> {
+  // T4.3 / HIGH-009 — the "components-N" badge in README.md must equal the
+  // sum of "Primitives (P)" + "Composites (C)" in the catalog section. They
+  // diverged historically because `sync-readme.ts` mixed dir count (badge)
+  // and named-export count (catalog) — D1 unifies on named exports.
+  const readme = readFileSync(join(ROOT, "README.md"), "utf-8");
+  const badgeMatch = readme.match(/components-(\d+)/);
+  const primMatch = readme.match(/\*\*Primitives\*\*\s*\((\d+)\)/);
+  const compMatch = readme.match(/\*\*Composites\*\*\s*\((\d+)\)/);
+  if (!badgeMatch?.[1] || !primMatch?.[1] || !compMatch?.[1]) {
+    fail("README.md", "could not parse components badge / Primitives / Composites counts");
+    return;
+  }
+  const badge = Number(badgeMatch[1]);
+  const sum = Number(primMatch[1]) + Number(compMatch[1]);
+  if (badge !== sum) {
+    fail(
+      "README.md",
+      `components badge (${badge}) does not match Primitives (${primMatch[1]}) + Composites (${compMatch[1]}) = ${sum}; run \`pnpm sync:readme\``,
+    );
+  }
+
+  // welcome.stats.ts must match the same numbers.
+  const statsPath = join(ROOT, "src/welcome.stats.ts");
+  if (existsSync(statsPath)) {
+    const stats = readFileSync(statsPath, "utf-8");
+    const sp = stats.match(/primitives:\s*(\d+)/);
+    const sc = stats.match(/composites:\s*(\d+)/);
+    if (sp?.[1] && sc?.[1]) {
+      if (Number(sp[1]) !== Number(primMatch[1]) || Number(sc[1]) !== Number(compMatch[1])) {
+        fail(
+          "src/welcome.stats.ts",
+          `welcome STATS (${sp[1]}P + ${sc[1]}C) diverge from README catalog (${primMatch[1]}P + ${compMatch[1]}C); run \`pnpm sync:readme\``,
+        );
+      }
+    }
+  }
+}
+
+async function validateArchitectureCensus(): Promise<void> {
+  // T4.3 / BLOCKER-002 — docs/architecture.md "Current census" must match
+  // src/index.ts named exports exactly. We compare both the headline counts
+  // and the full list to catch drift like the 36/12 → 88/14 regression.
+  const archPath = join(ROOT, "docs/architecture.md");
+  if (!existsSync(archPath)) return;
+  const arch = readFileSync(archPath, "utf-8");
+  const indexContent = readFileSync(join(ROOT, "src/index.ts"), "utf-8");
+
+  // Reuse the same parser logic as sync-readme.ts (kept in sync manually but
+  // simple enough that the duplication is cheaper than a shared module).
+  const pattern =
+    /export\s+{([^}]+)}\s+from\s+["']\.\/components\/(primitives|composites)\/[^/"']+/g;
+  const expected: { primitives: Set<string>; composites: Set<string> } = {
+    primitives: new Set(),
+    composites: new Set(),
+  };
+  for (const match of indexContent.matchAll(pattern)) {
+    const body = match[1];
+    const layer = match[2] as "primitives" | "composites" | undefined;
+    if (!body || !layer) continue;
+    for (const raw of body.split(",")) {
+      const cleaned = raw.trim().replace(/^type\s+/, "");
+      if (raw.trim().startsWith("type ")) continue;
+      const name = cleaned.split(/\s+as\s+/)[0]?.trim();
+      if (name && /^[A-Z][A-Za-z0-9]+$/.test(name)) expected[layer].add(name);
+    }
+  }
+
+  // Census headlines
+  const primHead = arch.match(/### Primitives \((\d+)\)/);
+  const compHead = arch.match(/### Composites \((\d+)\)/);
+  if (primHead?.[1] && Number(primHead[1]) !== expected.primitives.size) {
+    fail(
+      "docs/architecture.md",
+      `Primitives census shows (${primHead[1]}) but src/index.ts exports ${expected.primitives.size}; run \`pnpm sync:readme\``,
+    );
+  }
+  if (compHead?.[1] && Number(compHead[1]) !== expected.composites.size) {
+    fail(
+      "docs/architecture.md",
+      `Composites census shows (${compHead[1]}) but src/index.ts exports ${expected.composites.size}; run \`pnpm sync:readme\``,
+    );
+  }
+
+  // Listed names — check that the BEGIN:primitives-list region covers every export.
+  const primListMatch = arch.match(
+    /<!-- BEGIN:primitives-list -->\s*([\s\S]*?)\s*<!-- END:primitives-list -->/,
+  );
+  if (primListMatch?.[1]) {
+    const ticked = new Set<string>();
+    for (const m of primListMatch[1].matchAll(/`([A-Z][A-Za-z0-9]+)`/g)) {
+      if (m[1]) ticked.add(m[1]);
+    }
+    for (const name of expected.primitives) {
+      if (!ticked.has(name)) {
+        fail(
+          "docs/architecture.md",
+          `primitives-list region missing \`${name}\`; run \`pnpm sync:readme\``,
+        );
+      }
+    }
+  }
+
+  const compListMatch = arch.match(
+    /<!-- BEGIN:composites-list -->\s*([\s\S]*?)\s*<!-- END:composites-list -->/,
+  );
+  if (compListMatch?.[1]) {
+    const ticked = new Set<string>();
+    for (const m of compListMatch[1].matchAll(/`([A-Z][A-Za-z0-9]+)`/g)) {
+      if (m[1]) ticked.add(m[1]);
+    }
+    for (const name of expected.composites) {
+      if (!ticked.has(name)) {
+        fail(
+          "docs/architecture.md",
+          `composites-list region missing \`${name}\`; run \`pnpm sync:readme\``,
+        );
+      }
+    }
+  }
+}
+
+async function validateAxeCoverage(): Promise<void> {
+  // T6.3 / HIGH-007 — ≥30 interactive primitives must run vitest-axe in their
+  // test file. We grep for `toHaveNoViolations` / `expectNoA11yViolations` /
+  // `axe(` against an explicit list of interactive primitives. The list is
+  // hardcoded so adding a new interactive primitive is a conscious decision —
+  // missing coverage fails the gate before merge.
+  const INTERACTIVE_PRIMITIVES = [
+    "avatar",
+    "badge",
+    "button",
+    "card",
+    "checkbox",
+    "dialog",
+    "empty-state",
+    "form-field",
+    "input",
+    "label",
+    "radio-group",
+    "scroll-area",
+    "select",
+    "sheet",
+    "sidebar",
+    "switch",
+    "tabs",
+    "textarea",
+    "toast",
+    "tooltip",
+    "topnav",
+    "agent-event",
+    "agent-streaming",
+    "approval-card",
+    "attachment-chip",
+    "audit-log-entry",
+    "cron-job-card",
+    "mcp-server-card",
+    "mention-menu",
+    "model-selector",
+    "permission-matrix",
+    "progress-checklist",
+    "quick-action-chips",
+    "skill-card",
+    "token-usage-chart",
+  ];
+  const MIN_COVERAGE = 30;
+  const coveragePattern = /toHaveNoViolations|expectNoA11yViolations|from\s+["']vitest-axe["']/;
+  let covered = 0;
+  const uncovered: string[] = [];
+  for (const name of INTERACTIVE_PRIMITIVES) {
+    const testPath = join(ROOT, "src/components/primitives", name, `${name}.test.tsx`);
+    if (!existsSync(testPath)) {
+      uncovered.push(`${name} (missing test file)`);
+      continue;
+    }
+    const content = readFileSync(testPath, "utf-8");
+    if (coveragePattern.test(content)) {
+      covered++;
+    } else {
+      uncovered.push(name);
+    }
+  }
+  if (covered < MIN_COVERAGE) {
+    fail(
+      "a11y coverage",
+      `only ${covered}/${INTERACTIVE_PRIMITIVES.length} interactive primitives have a vitest-axe assertion; minimum is ${MIN_COVERAGE}. Missing: ${uncovered.join(", ")}`,
+    );
+  }
+}
+
+async function validateNoStrayArtifacts(): Promise<void> {
+  // T4.4 / MEDIUM-016/017 — block `.bak`, `.json.tmp`, `.orig`, `.rej`
+  // residue from reappearing. The patterns already live in `.gitignore` so
+  // these files never land in commits, but they pollute IDEs, file pickers,
+  // and ad-hoc `find` / `grep` invocations. This gate keeps the working
+  // tree clean even before commit.
+  const skipDirs = new Set([
+    "node_modules",
+    "dist",
+    "build",
+    ".git",
+    ".ladle",
+    ".vite",
+    ".cache",
+    "playground/dist",
+    "referencia",
+  ]);
+  const offenders = new Set([".bak", ".tmp", ".orig", ".rej"]);
+
+  async function walk(dir: string): Promise<void> {
+    const entries = await readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        if (skipDirs.has(entry.name)) continue;
+        const next = join(dir, entry.name);
+        if ([...skipDirs].some((skip) => next.endsWith(`/${skip}`))) continue;
+        await walk(next);
+      } else if (entry.isFile()) {
+        for (const ext of offenders) {
+          if (entry.name.endsWith(ext) || entry.name.endsWith(`.json${ext}`)) {
+            fail("working tree", `stray artifact: ${join(dir, entry.name)} (matches ${ext})`);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  await walk(ROOT);
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(ROOT, "docs/quality-gates.md"))) {
     fail("docs", "missing docs/quality-gates.md");
@@ -344,9 +586,14 @@ async function main(): Promise<void> {
   validateReadmeDrift();
   validateDocsTypography();
   await validateCompositeBarrel();
+  await validateCompoundPattern();
   await validateComponentStructure();
   await validateRegistryStoriesAndTests();
   await validatePublicExports();
+  await validateCountConsistency();
+  await validateArchitectureCensus();
+  await validateAxeCoverage();
+  await validateNoStrayArtifacts();
   validateDesignSystemFidelity();
   validateScriptsAndCi();
 

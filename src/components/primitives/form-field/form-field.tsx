@@ -1,6 +1,14 @@
 import { AlertCircle } from "lucide-react";
-import { createContext, forwardRef, useContext, useId } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  createContext,
+  forwardRef,
+  isValidElement,
+  useContext,
+  useId,
+} from "react";
+import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import { Label } from "../label/label.js";
 
@@ -84,22 +92,23 @@ FormFieldLabel.displayName = "FormField.Label";
 const FormFieldControl = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ children, ...props }, ref) => {
     const { fieldId, hintId, errorId, hasError } = useFormField();
-    // Inject id + aria-describedby + aria-invalid on the SINGLE child input.
-    const child = (children as React.ReactElement) ?? null;
     const described = hasError ? errorId : hintId;
+    // Children.only enforces exactly one child element (the form control) so we
+    // can safely clone it with the wiring props (id + aria-describedby + aria-invalid).
+    // The previous implementation spread the element object directly which relied
+    // on React's internal `$$typeof` invariant and silently dropped `ref` — the
+    // cloneElement path preserves both `ref` and `key`.
+    const only = Children.only(children) as ReactElement;
+    const cloned = isValidElement(only)
+      ? cloneElement(only, {
+          id: fieldId,
+          "aria-describedby": described,
+          "aria-invalid": hasError || undefined,
+        } as Partial<typeof only.props>)
+      : only;
     return (
       <div ref={ref} {...props}>
-        {child && typeof child === "object"
-          ? {
-              ...child,
-              props: {
-                ...(child.props ?? {}),
-                id: fieldId,
-                "aria-describedby": described,
-                "aria-invalid": hasError || undefined,
-              },
-            }
-          : child}
+        {cloned}
       </div>
     );
   },
@@ -144,15 +153,11 @@ const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParag
 );
 FormFieldError.displayName = "FormField.Error";
 
-const FormField = FormFieldRoot as typeof FormFieldRoot & {
-  Label: typeof FormFieldLabel;
-  Control: typeof FormFieldControl;
-  Hint: typeof FormFieldHint;
-  Error: typeof FormFieldError;
-};
-FormField.Label = FormFieldLabel;
-FormField.Control = FormFieldControl;
-FormField.Hint = FormFieldHint;
-FormField.Error = FormFieldError;
+const FormField = /*#__PURE__*/ Object.assign(FormFieldRoot, {
+  Label: FormFieldLabel,
+  Control: FormFieldControl,
+  Hint: FormFieldHint,
+  Error: FormFieldError,
+});
 
 export { FormField };

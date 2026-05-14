@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { type MentionItem, MentionMenu } from "./mention-menu.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const items: MentionItem[] = [
   { id: "1", label: "/clear", description: "Reset session" },
   { id: "2", label: "/help", description: "Show help" },
@@ -98,5 +99,11 @@ describe("MentionMenu", () => {
     );
     fireEvent.keyDown(window, { key: "Enter" });
     expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <MentionMenu open={true} trigger="/" items={items} onSelect={() => {}} onClose={() => {}} />,
+    );
   });
 });

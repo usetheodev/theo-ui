@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { Input } from "./input.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Input", () => {
   it("renders with placeholder", () => {
     render(<Input placeholder="acme-api" />);
@@ -33,5 +34,9 @@ describe("Input", () => {
     const input = screen.getByPlaceholderText("x");
     await user.type(input, "hello");
     expect(input).toHaveValue("");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Input placeholder="acme-api" />);
   });
 });

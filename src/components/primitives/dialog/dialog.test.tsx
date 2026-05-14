@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Button } from "../button/button.js";
 import { Dialog } from "./dialog.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 function Example() {
   return (
     <Dialog>
@@ -47,5 +48,9 @@ describe("Dialog", () => {
     await user.click(screen.getByRole("button", { name: "Open" }));
     await user.click(screen.getByRole("button", { name: "Cancel" }));
     expect(screen.queryByText("Delete project")).not.toBeInTheDocument();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Example />);
   });
 });

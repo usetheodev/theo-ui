@@ -14,7 +14,6 @@ export const Default: Story = () => {
       <CommandPalette
         open={open}
         onOpenChange={setOpen}
-        // biome-ignore lint/suspicious/noConsole: demo story sink
         onSelect={(id) => console.log("selected", id)}
         items={[
           {

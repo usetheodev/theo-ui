@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { type QuickAction, QuickActionChips } from "./quick-action-chips.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const actions: QuickAction[] = [
   { id: "write", label: "Write", primary: true },
   { id: "learn", label: "Learn" },
@@ -21,5 +22,9 @@ describe("QuickActionChips", () => {
     render(<QuickActionChips actions={actions} onSelect={onSelect} />);
     await user.click(screen.getByRole("button", { name: "Learn" }));
     expect(onSelect).toHaveBeenCalledWith("learn");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<QuickActionChips actions={actions} />);
   });
 });

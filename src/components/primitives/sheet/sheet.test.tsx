@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { Sheet } from "./sheet.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 function Example({ side }: { side?: "right" | "left" | "top" | "bottom" }) {
   return (
     <Sheet>
@@ -54,5 +55,9 @@ describe("Sheet", () => {
     await user.click(screen.getByText("Open"));
     await user.click(screen.getByText("Done"));
     expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Example />);
   });
 });

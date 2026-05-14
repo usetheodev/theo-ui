@@ -3,7 +3,15 @@
   "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": true },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["dist", "node_modules", "referencia", "docs/audit", ".ladle/dist"]
+    "ignore": [
+      "dist",
+      "node_modules",
+      "referencia",
+      "docs/audit",
+      ".ladle/dist",
+      "tests/fixture-shadcn-app/src",
+      "playground/dist"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -31,7 +39,7 @@
       },
       "suspicious": {
         "noExplicitAny": "error",
-        "noConsole": { "level": "warn", "options": { "allow": ["warn", "error"] } }
+        "noConsole": { "level": "error", "options": { "allow": [] } }
       },
       "nursery": {
         "useSortedClasses": {
@@ -53,5 +61,17 @@
       "trailingCommas": "all",
       "arrowParentheses": "always"
     }
-  }
+  },
+  "overrides": [
+    {
+      "include": ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts", "scripts/**/*.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    }
+  ]
 }

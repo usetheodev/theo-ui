@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Select } from "./select.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 function Example({ onValueChange }: { onValueChange?: (v: string) => void }) {
   return (
     <Select onValueChange={onValueChange}>
@@ -38,5 +39,9 @@ describe("Select", () => {
     await user.click(screen.getByLabelText("Region"));
     await user.click(screen.getByRole("option", { name: /São Paulo/ }));
     expect(onValueChange).toHaveBeenCalledWith("gru1");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<Example />);
   });
 });

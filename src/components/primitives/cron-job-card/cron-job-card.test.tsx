@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { type CronJob, CronJobCard } from "./cron-job-card.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const job: CronJob = {
   id: "j1",
   name: "Refresh issues",
@@ -32,5 +33,9 @@ describe("CronJobCard", () => {
     const runBtn = screen.getByRole("button", { name: /run now/i });
     await user.click(runBtn);
     expect(onRunNow).toHaveBeenCalledWith("j1");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<CronJobCard job={job} />);
   });
 });

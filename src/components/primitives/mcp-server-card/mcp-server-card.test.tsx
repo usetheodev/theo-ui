@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { type MCPServer, MCPServerCard } from "./mcp-server-card.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const server: MCPServer = {
   id: "s1",
   name: "postgres",
@@ -42,5 +43,9 @@ describe("MCPServerCard", () => {
     } else {
       expect(onRestart).not.toHaveBeenCalled();
     }
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<MCPServerCard server={server} />);
   });
 });

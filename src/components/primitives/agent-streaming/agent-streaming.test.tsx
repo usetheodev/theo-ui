@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AgentStreaming } from "./agent-streaming.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("AgentStreaming", () => {
   it("renders the default thinking placeholder", () => {
     render(<AgentStreaming />);
@@ -18,5 +19,9 @@ describe("AgentStreaming", () => {
   it("renders the model chip when provided", () => {
     render(<AgentStreaming model="Opus 4.7" />);
     expect(screen.getByText("Opus 4.7")).toBeInTheDocument();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<AgentStreaming />);
   });
 });

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { ApprovalCard } from "./approval-card.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("ApprovalCard", () => {
   it("renders title and request", () => {
     render(
@@ -51,5 +52,16 @@ describe("ApprovalCard", () => {
       />,
     );
     expect(screen.getByRole("alertdialog", { name: "Delete folder?" })).toBeInTheDocument();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <ApprovalCard
+        title="Run destructive command?"
+        request="rm -rf node_modules"
+        onApprove={() => {}}
+        onDeny={() => {}}
+      />,
+    );
   });
 });

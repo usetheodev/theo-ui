@@ -50,6 +50,16 @@ const cycle = (cur: PermissionDecisionKind): PermissionDecisionKind =>
  * control. Used as the "permissions" tab in the agent settings.
  *
  * One PermissionRule per row. Click the decision pill to cycle Allow → Ask → Deny.
+ *
+ * Design decision (T8.2, 2026-05-14): PermissionMatrix stays in `primitives/`
+ * — not `composites/` — even though it renders inputs and a select. The native
+ * `<input>` / `<select>` elements use Theo design tokens directly (border-input,
+ * ring, font-mono) so visual parity with `Input` / `Select` primitives is
+ * preserved. Reason for keeping it primitive: a consumer installing
+ * `permission-matrix` from the registry gets a single self-contained file with
+ * no transitive Theo dependencies — opposite trade-off from `EnvVarEditor`
+ * which is intentionally a composite. Both shapes are valid; we ship one of
+ * each so consumers can pick the dependency profile that fits their app.
  */
 const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
   (

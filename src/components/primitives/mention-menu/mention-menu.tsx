@@ -126,7 +126,10 @@ export function MentionMenu({
       )}
       data-state="open"
     >
-      <header className="flex items-center justify-between gap-2 border-border/40 border-b bg-muted/30 px-3 py-2">
+      <div
+        role="presentation"
+        className="flex items-center justify-between gap-2 border-border/40 border-b bg-muted/30 px-3 py-2"
+      >
         <span className="inline-flex items-center gap-1.5 font-mono text-label text-muted-foreground uppercase tracking-wider">
           <TriggerIcon className="size-3" aria-hidden="true" />
           {resolvedTitle}
@@ -134,16 +137,18 @@ export function MentionMenu({
         <span className="font-mono text-label text-muted-foreground tabular-nums">
           {items.length}
         </span>
-      </header>
+      </div>
       {items.length === 0 ? (
-        <div className="px-3 py-4 text-body-sm text-muted-foreground">{emptyLabel}</div>
+        <div role="presentation" className="px-3 py-4 text-body-sm text-muted-foreground">
+          {emptyLabel}
+        </div>
       ) : (
-        <ul ref={listRef} className="max-h-[18rem] overflow-y-auto py-1">
+        <ul ref={listRef} role="presentation" className="max-h-[18rem] overflow-y-auto py-1">
           {items.map((item, idx) => {
             const Icon = item.icon;
             const active = idx === activeIndex;
             return (
-              <li key={item.id}>
+              <li key={item.id} role="presentation">
                 <button
                   type="button"
                   role="menuitem"

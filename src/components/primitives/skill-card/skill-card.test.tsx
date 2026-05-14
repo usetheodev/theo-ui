@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { type Skill, SkillCard } from "./skill-card.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const skill: Skill = {
   id: "sk1",
   name: "diff-explainer",
@@ -27,5 +28,9 @@ describe("SkillCard", () => {
     render(<SkillCard skill={skill} onToggle={onToggle} />);
     await user.click(screen.getByRole("button", { name: /enabled/i }));
     expect(onToggle).toHaveBeenCalledWith("sk1", "disabled");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<SkillCard skill={skill} />);
   });
 });

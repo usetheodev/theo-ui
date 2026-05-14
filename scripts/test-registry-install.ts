@@ -40,7 +40,41 @@ interface RegistryItem {
   registryDependencies?: string[];
 }
 
-const ITEMS_TO_INSTALL = ["cn", "types", "tokens", "button"];
+// Stratified sample (T5.2) — one representative per dependency profile.
+// Covers the realistic failure modes a consumer hits, without paying the
+// 110-item full-suite cost on every CI run.
+//
+// Items + their registryDependencies are listed here in topo order so that a
+// later item's deps are already on disk by the time we install it.
+//
+//   cn               lib zero-deps
+//   types            lib types-only
+//   chat-types       types from src/types/ (path rewriting)
+//   tokens           CSS-only
+//   badge            CVA only (dep of deployment-row)
+//   button           CVA + Radix Slot + cn (most common shape)
+//   card             compound component via Object.assign
+//   dialog           Radix Portal + multi-subpart compound
+//   avatar           Radix simple compound
+//   toast            Radix Toast + multi-file (toast.tsx + toaster.tsx)
+//   tabs             Radix compound with roving focus
+//   deployment-row   composite that imports badge + types (registry:block → /blocks/)
+//   command-palette  composite using cmdk + dialog (cross-layer)
+const ITEMS_TO_INSTALL = [
+  "cn",
+  "types",
+  "chat-types",
+  "tokens",
+  "badge",
+  "button",
+  "card",
+  "dialog",
+  "avatar",
+  "toast",
+  "tabs",
+  "deployment-row",
+  "command-palette",
+];
 
 async function readBuiltItem(name: string): Promise<RegistryItem> {
   const raw = await readFile(join(REGISTRY_OUT, `${name}.json`), "utf-8");
@@ -68,17 +102,78 @@ async function main(): Promise<void> {
     await installItem(item);
   }
 
-  // Create a sample consumer file that exercises the Button + cn import paths.
-  const mainTsx = `import { Button } from "@/components/ui/button";
+  // Create a sample consumer file that exercises the stratified item set —
+  // every dependency profile (zero-deps lib, CVA, Radix Portal, cmdk, composite)
+  // is touched so `tsc --noEmit` catches path-rewrite or peer-resolution bugs.
+  const mainTsx = `import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { type Deployment, DeploymentRow } from "@/components/blocks/deployment-row";
+import { Dialog } from "@/components/ui/dialog";
+import { Tabs } from "@/components/ui/tabs";
+import { Toast } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/cn";
+import type { Message } from "@/types/chat";
+import type { IconComponent } from "@/lib/types";
+import { useState } from "react";
+
+const sample: Deployment = {
+  id: "d1",
+  status: "live",
+  environment: "production",
+  branch: "main",
+  commitSha: "abc123",
+  commitMessage: "feat",
+  author: { name: "you" },
+  duration: "1m",
+  timeAgo: "1m ago",
+};
+
+const message: Message = { id: "m1", role: "user", content: "hi" };
 
 export function App() {
+  const [open, setOpen] = useState(false);
+  // Touch every type to prove the rewrites resolved.
+  const icon: IconComponent | undefined = undefined;
   return (
-    <div className={cn("p-4")}>
-      <Button variant="primary" size="md">
-        Deploy
-      </Button>
-    </div>
+    <Toaster>
+      <Card>
+        <Card.Header>
+          <Card.Title>Smoke</Card.Title>
+        </Card.Header>
+        <Card.Body className={cn("p-4")}>
+          <Avatar size="md">
+            <Avatar.Fallback>YO</Avatar.Fallback>
+          </Avatar>
+          <Button variant="primary" size="md" onClick={() => setOpen(true)}>
+            Deploy
+          </Button>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog.Content>
+              <Dialog.Title>Title</Dialog.Title>
+            </Dialog.Content>
+          </Dialog>
+          <Tabs defaultValue="a">
+            <Tabs.List>
+              <Tabs.Trigger value="a">A</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="a">Hello {message.content}</Tabs.Content>
+          </Tabs>
+          <DeploymentRow deployment={sample} />
+          <CommandPalette
+            open={false}
+            onOpenChange={() => {}}
+            items={[{ id: "x", label: "X", icon }]}
+            onSelect={() => {}}
+          />
+          <Toast.Provider>
+            <Toast.Viewport />
+          </Toast.Provider>
+        </Card.Body>
+      </Card>
+    </Toaster>
   );
 }
 `;

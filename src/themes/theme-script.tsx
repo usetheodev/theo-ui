@@ -10,8 +10,12 @@
  * Place this in `<head>` ABOVE `<body>`. The component does not need to live
  * inside `<ThemeProvider>`.
  *
- * Security: the inline script is built from `JSON.stringify`-encoded literals
- * (no user input), so it is not a `dangerouslySetInnerHTML` XSS vector.
+ * Security: every interpolated value is passed through `safe()`, which both
+ * `JSON.stringify`s the value AND escapes `<` to `<`. The `<` escape is
+ * REQUIRED because `JSON.stringify` alone does NOT escape `/`, so a payload
+ * like `"</script><script>alert(1)</script>"` would otherwise break out of
+ * the inline `<script>` tag even though it stays inside a JS string literal.
+ * (The browser tokenizes `</script>` at the HTML layer before JS parses.)
  *
  * Example (Next.js App Router): see docs/design-system.md → SSR section.
  * Pass `defaultTheme` and `defaultMode` to align with the consumer's
@@ -34,14 +38,32 @@ interface ThemeScriptProps {
   storageKey?: string | null;
 }
 
+/**
+ * Encode a value for safe embedding inside an inline `<script>` block.
+ *
+ * `JSON.stringify` does NOT escape `/` by default, so `"</script>"` survives
+ * as the literal three-character sequence inside the resulting string. When
+ * that string is then rendered inside `<script>...</script>`, the browser's
+ * HTML tokenizer sees `</script>` and ends the script tag — regardless of
+ * whether the JS parser would have kept it inside a string. Escaping `<` to
+ * its Unicode escape `<` preserves JS semantics (the JS parser still
+ * resolves the escape to `<`) while making the HTML tokenizer happy.
+ *
+ * Reference: OWASP "JSON-in-script" guidance; React's own server-renderer
+ * applies the same escape for inline JSON.
+ */
+function safe(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
 function buildScript(
   defaultTheme: string,
   defaultMode: ThemeMode,
   storageKey: string | null,
 ): string {
-  const k = JSON.stringify(storageKey);
-  const t = JSON.stringify(defaultTheme);
-  const m = JSON.stringify(defaultMode);
+  const k = safe(storageKey);
+  const t = safe(defaultTheme);
+  const m = safe(defaultMode);
   return `(function(){try{var k=${k};var d=document.documentElement;var t=null;var m=null;if(k){t=localStorage.getItem(k+":name");m=localStorage.getItem(k+":mode");}d.setAttribute("data-theme",t||${t});d.setAttribute("data-mode",m||${m});if((m||${m})==="dark"){d.classList.add("dark");}}catch(e){}})();`;
 }
 

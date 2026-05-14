@@ -32,8 +32,25 @@ describe("ThemeScript", () => {
   it("encodes defaults safely (no script injection via theme name)", () => {
     const { container } = render(<ThemeScript defaultTheme={`"><script>x</script>`} />);
     const script = container.querySelector("script");
-    // JSON.stringify escapes the dangerous payload — the literal `</script>`
-    // does not appear unescaped inside the inline script body.
     expect(script?.innerHTML).not.toContain("</script>x</script>");
+  });
+
+  it("escapes `</script>` payload inside defaultTheme (BLOCKER-001)", () => {
+    const payload = "</script><script>alert(1)</script>";
+    const { container } = render(<ThemeScript defaultTheme={payload} />);
+    const script = container.querySelector("script");
+    const html = script?.innerHTML ?? "";
+    // No literal `</script>` may appear inside the inline script body — the
+    // HTML tokenizer would end the script tag there even though the value
+    // sits inside a JS string literal. The `<` must be Unicode-escaped.
+    expect(html).not.toMatch(/<\/script\s*>/i);
+    expect(html).toContain("\\u003c/script");
+  });
+
+  it("escapes `</script>` payload inside storageKey (BLOCKER-001)", () => {
+    const { container } = render(<ThemeScript storageKey={"</script>"} />);
+    const html = container.querySelector("script")?.innerHTML ?? "";
+    expect(html).not.toMatch(/<\/script\s*>/i);
+    expect(html).toContain("\\u003c/script");
   });
 });

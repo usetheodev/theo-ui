@@ -11,8 +11,8 @@ Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-s
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-389%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-99-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-421%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-102-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -93,7 +93,7 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**99 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
+**102 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
@@ -188,6 +188,16 @@ Define your own theme by extending `Theme` from `@usetheo/ui` — see [`docs/des
 
 Full spec: [`docs/design-system.md`](./docs/design-system.md). Visual audit of competitors (Vercel, Railway, Render, Fly.io, Netlify, Coolify): [`docs/design-audit.md`](./docs/design-audit.md).
 
+### Self-hosting fonts
+
+By default `@usetheo/ui/styles.css` `@import`s Geist + Geist Mono from `fonts.googleapis.com`. For GDPR-sensitive deployments or strict CSP environments, self-host instead:
+
+1. Download Geist from [Vercel](https://vercel.com/font) (or the `geist` npm package).
+2. Drop the assets into your `public/fonts/` folder.
+3. In your app's global CSS, comment the `@usetheo/ui/styles.css` `@import` rule for Google Fonts (or import `@usetheo/ui/tokens.css` only) and add your own `@font-face` blocks for `Geist` and `Geist Mono`.
+
+The CSS variables (`--font-body`, `--font-display`, `--font-mono`) are already wired to consume whichever `@font-face` rules are present — no component changes needed.
+
 ---
 
 ## Quality Gates
@@ -200,7 +210,7 @@ pnpm quality:gates
 
 Runs in order: `format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `ladle:build`.
 
-The structural validator ([`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts)) enforces taxonomy (primitive vs composite by import graph), registry/test/story presence per item, public-export surface, design-system fidelity (Geist fonts + Vercel type scale), governance files (LICENSE + CHANGELOG), README ↔ exports drift, docs typography drift, and composite-via-barrel imports. Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
+The structural validator ([`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts)) enforces taxonomy (primitive vs composite by import graph), registry/test/story presence per item (test gate is **hard-fail**), public-export surface, design-system fidelity (Geist fonts + Vercel type scale), governance files (LICENSE + CHANGELOG), README ↔ exports drift, docs typography drift, composite-via-barrel imports, compound-pattern uniformity (`Object.assign /*#__PURE__*/`), README/architecture census consistency, vitest-axe coverage on ≥30 interactive primitives, and zero stray `*.bak` / `*.json.tmp` artifacts in the working tree. Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 ---
 

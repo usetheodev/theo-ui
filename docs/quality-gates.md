@@ -92,10 +92,11 @@ A registry item passes only if:
 - The item can be installed alone into a clean fixture app.
 - The item does not require private Theo app code.
 
-Current known risk: descriptors target `components/ui/*.tsx`, while source files
-often import `../../../lib/cn.js` or sibling Theo paths. The registry builder
-must rewrite those imports or descriptors must target a folder structure where
-they resolve.
+**Resolved (2026-05)**: `scripts/build-registry.ts` rewrites relative imports
+into consumer-app `@/...` paths via `sourceImportMap`, so descriptors targeting
+`components/ui/*.tsx` install cleanly even though source uses `../../../lib/cn.js`.
+A failing fixture-install test (`scripts/test-registry-install.ts`) keeps this
+honest by running `tsc --noEmit` against a real consumer fixture.
 
 ---
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
@@ -52,18 +52,9 @@ export function SkillEditor({
   const [enabled, setEnabled] = useState<SkillState>(initial?.state ?? "enabled");
   const [modes, setModes] = useState<Mode[]>(initial?.modes ?? []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reset only when skill identity changes
-  useEffect(() => {
-    setName(initial?.name ?? "");
-    setDescription(typeof initial?.description === "string" ? initial.description : "");
-    setInstructions(initial?.instructions ?? "");
-    setSource(initial?.source ?? "user");
-    setAllowedToolsRaw(initial?.allowedTools?.join(", ") ?? "");
-    setTriggersRaw(initial?.triggers?.join(", ") ?? "");
-    setEnabled(initial?.state ?? "enabled");
-    setModes(initial?.modes ?? []);
-  }, [initial?.id]);
-
+  // Note: state is only seeded once on mount. To reset the form when editing
+  // a different skill, use the React `key` pattern at the call site:
+  //   <SkillEditor key={skill.id} initial={skill} ... />
   const toggleMode = (m: Mode) =>
     setModes((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
 

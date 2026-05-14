@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Avatar } from "./avatar.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Avatar", () => {
   it("renders fallback text", async () => {
     render(
@@ -28,5 +29,13 @@ describe("Avatar", () => {
       </Avatar>,
     );
     expect(container.querySelector('[class*="bg-primary"]')).not.toBeNull();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <Avatar>
+        <Avatar.Fallback delayMs={0}>AA</Avatar.Fallback>
+      </Avatar>,
+    );
   });
 });

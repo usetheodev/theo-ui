@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ScrollArea } from "./scroll-area.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 /**
  * Note: in happy-dom there is no real layout, so Radix ScrollArea with the
  * default `type="hover"` won't mount a scrollbar (it relies on overflow
@@ -77,5 +78,13 @@ describe("ScrollArea", () => {
       </ScrollArea>,
     );
     expect(container.querySelector(".custom-scroller")).not.toBeNull();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <ScrollArea className="h-40">
+        <p>scroll content</p>
+      </ScrollArea>,
+    );
   });
 });

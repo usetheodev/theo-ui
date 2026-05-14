@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Toast } from "./toast.js";
 import { Toaster, useToast } from "./toaster.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 function FireToast({
   variant,
   title,
@@ -51,5 +52,13 @@ describe("Toast", () => {
       }),
     ).toThrow(/useToast must be used inside <Toaster>/);
     spy.mockRestore();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <Toaster>
+        <FireToast title="Deployed" description="Build #128 succeeded" variant="success" />
+      </Toaster>,
+    );
   });
 });

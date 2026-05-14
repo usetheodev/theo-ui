@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Card } from "./card.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("Card", () => {
   it("renders composed children", () => {
     render(
@@ -30,5 +31,20 @@ describe("Card", () => {
   it("uses muted color on Card.Description", () => {
     render(<Card.Description>desc</Card.Description>);
     expect(screen.getByText("desc").className).toContain("text-muted-foreground");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <Card>
+        <Card.Header>
+          <Card.Title>acme-api</Card.Title>
+          <Card.Description>Production · main</Card.Description>
+        </Card.Header>
+        <Card.Body>v1.2.0 deployed 2 hours ago</Card.Body>
+        <Card.Footer>
+          <span>View logs</span>
+        </Card.Footer>
+      </Card>,
+    );
   });
 });
