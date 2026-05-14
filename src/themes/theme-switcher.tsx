@@ -24,6 +24,13 @@ function ThemeSwitcher({ className, showModeToggle = true }: ThemeSwitcherProps)
 
   return (
     <div className={cn("inline-flex items-center gap-1", className)}>
+      {/* LOW-006: announce theme + mode changes to assistive tech. The
+       * Provider applies tokens via `data-theme`/`data-mode` (visual cue),
+       * but screen-reader users get no feedback without this aria-live
+       * region. Polite so it doesn't interrupt the user's flow. */}
+      <span aria-live="polite" aria-atomic="true" className="sr-only">
+        Theme: {theme.label}, mode: {mode}
+      </span>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <button
