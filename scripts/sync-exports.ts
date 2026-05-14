@@ -2,25 +2,26 @@
 /**
  * Generate / validate `package.json#exports`.
  *
- * Decision history for HIGH-005:
+ * Strategy (T3.2 / HIGH-005):
  *
- *   Original plan (D5): emit `./<name>` subpath per component pointing at
- *   `./dist/components/<layer>/<name>/index.js`. Investigated; rejected
- *   because tsup `splitting: false` produces a single `dist/index.js`. To
- *   ship per-component dist files we would need either (a) 99-entry tsup
- *   build, multiplying tarball size and duplicating shared code, or
- *   (b) `splitting: true`, which yields opaque chunk filenames that defeat
- *   the consumer-friendliness goal. Both trade-offs are worse than the
- *   status quo: a single ESM barrel + Tailwind preset means modern bundlers
- *   (Vite, esbuild, Rollup, webpack 5, Bun) already tree-shake `Button`
- *   without touching `Dialog`.
+ * The package ships a single ESM barrel (`dist/index.js`). For consumer-
+ * friendly subpath imports (`import { Button } from "@usetheo/ui/button"`),
+ * we emit one `./<name>` entry per exported component — each pointing at
+ * the same barrel + canonical type declarations. Modern bundlers (Vite,
+ * esbuild, Rollup, webpack 5, Bun) tree-shake `Button` from the barrel
+ * regardless of which form the consumer used.
  *
- *   Implemented decision: keep `.` as the canonical entrypoint; only emit
- *   subpaths for genuinely separable artifacts (CSS files, the Tailwind
- *   preset). Document the rationale in README "Bundle size" section.
+ * Why this instead of per-component bundles: tsup `splitting: false`
+ * produces one `dist/index.js`. To literally split into 99 dist files we
+ * would need a 99-entry build, duplicating shared code (cn, types, Radix
+ * runtime) into every chunk and inflating the tarball. The subpath
+ * convenience and the per-file isolation are decoupled: subpath gives
+ * consumers a clean import API, tree-shaking gives them a small bundle.
+ * Both are now satisfied.
  *
- * This script remains so `pnpm sync:exports` is idempotent and a quality
- * gate can detect drift.
+ * Drift detection: `validateExportsMap` compares the rendered map against
+ * the live `package.json#exports`. Run `pnpm sync:exports` whenever
+ * `src/index.ts` adds or removes a component export.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
@@ -39,7 +40,7 @@ interface ExportEntry {
   import?: string;
 }
 
-const CANONICAL_EXPORTS: Record<string, ExportEntry | string> = {
+const BASE_EXPORTS: Record<string, ExportEntry | string> = {
   ".": {
     types: "./dist/index.d.ts",
     import: "./dist/index.js",
@@ -50,17 +51,54 @@ const CANONICAL_EXPORTS: Record<string, ExportEntry | string> = {
   "./fonts-cdn.css": "./dist/fonts-cdn.css",
 };
 
+/**
+ * Extract `./<name>` subpaths from `src/index.ts`. We expect lines like
+ * `export { X } from "./components/<layer>/<name>/index.js";` — the
+ * `<name>` segment becomes the subpath identifier.
+ */
+function extractComponentSubpaths(indexContent: string): string[] {
+  const names = new Set<string>();
+  const pattern = /from\s+["']\.\/components\/(?:primitives|composites)\/([^/]+)\/index\.js["']/g;
+  let match: RegExpExecArray | null;
+  match = pattern.exec(indexContent);
+  while (match !== null) {
+    if (match[1]) names.add(match[1]);
+    match = pattern.exec(indexContent);
+  }
+  return Array.from(names).sort();
+}
+
+function buildExports(componentSubpaths: string[]): Record<string, ExportEntry | string> {
+  const map: Record<string, ExportEntry | string> = { ...BASE_EXPORTS };
+  for (const name of componentSubpaths) {
+    map[`./${name}`] = {
+      types: "./dist/index.d.ts",
+      import: "./dist/index.js",
+    };
+  }
+  return map;
+}
+
 async function main(): Promise<void> {
   const pkgPath = join(ROOT, "package.json");
   const pkg = JSON.parse(await readFile(pkgPath, "utf-8")) as PackageJson;
-  pkg.exports = CANONICAL_EXPORTS;
+  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+  const subpaths = extractComponentSubpaths(indexContent);
+  const exports = buildExports(subpaths);
+  pkg.exports = exports;
   await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
   process.stdout.write(
-    `Synced package.json#exports: ${Object.keys(CANONICAL_EXPORTS).length} canonical entries\n`,
+    `Synced package.json#exports: ${Object.keys(exports).length} entries (${subpaths.length} component subpaths + ${Object.keys(BASE_EXPORTS).length} base entries)\n`,
   );
 }
 
-main().catch((err: unknown) => {
-  console.error(err);
-  process.exit(1);
-});
+export { BASE_EXPORTS, buildExports, extractComponentSubpaths };
+
+// Only run main when invoked as the entrypoint (CLI). Importers
+// (validateExportsMap) get the pure functions without side effects.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((err: unknown) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

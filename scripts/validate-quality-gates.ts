@@ -131,32 +131,46 @@ async function validateRegistryPresetDep(): Promise<void> {
 
 /**
  * Detect drift between `package.json#exports` and what `pnpm sync:exports`
- * would emit (HIGH-005 follow-up). If a contributor hand-edits the exports
- * map and forgets to update `scripts/sync-exports.ts`, this gate fires.
+ * would emit (HIGH-005 follow-up / T3.2). If a contributor hand-edits the
+ * exports map and forgets to update `scripts/sync-exports.ts`, this gate
+ * fires.
  *
- * The canonical map lives in `scripts/sync-exports.ts` (CANONICAL_EXPORTS).
- * Here we re-derive it by reading the script, executing the same logic, and
- * diff-comparing against the live package.json.
+ * The canonical map is computed by `buildExports` in
+ * `scripts/sync-exports.ts` from `src/index.ts` exports. We import the
+ * helper directly (pure function) and diff against the live package.json.
  */
 async function validateExportsMap(): Promise<void> {
+  const { buildExports, extractComponentSubpaths } = await import("./sync-exports.js");
   const pkg = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8")) as {
     exports?: Record<string, unknown>;
   };
-  const expected: Record<string, unknown> = {
-    ".": { types: "./dist/index.d.ts", import: "./dist/index.js" },
-    "./styles.css": "./dist/styles.css",
-    "./tokens.css": "./dist/tokens.css",
-    "./fonts.css": "./dist/fonts.css",
-    "./fonts-cdn.css": "./dist/fonts-cdn.css",
-  };
+  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+  const expected = buildExports(extractComponentSubpaths(indexContent));
   const actual = pkg.exports ?? {};
   const expectedJson = JSON.stringify(expected);
   const actualJson = JSON.stringify(actual);
   if (expectedJson !== actualJson) {
-    fail(
-      "package.json#exports",
-      `drifts from canonical set; run \`pnpm sync:exports\`. Expected: ${expectedJson}. Got: ${actualJson}.`,
-    );
+    fail("package.json#exports", "drifts from canonical set; run `pnpm sync:exports`.");
+  }
+
+  // T3.2 functional proof: every subpath must resolve to a file that exists
+  // on disk under dist/. Without dist/ built, skip (the build gate runs
+  // separately). With dist/ present, broken-symlink-like exports are caught
+  // before npm publish.
+  const distRoot = join(ROOT, "dist");
+  if (!existsSync(distRoot)) return;
+  for (const [subpath, value] of Object.entries(actual)) {
+    const target =
+      typeof value === "string" ? value : ((value as { import?: string }).import ?? null);
+    if (!target) continue;
+    if (!target.startsWith("./dist/")) continue;
+    const absolute = join(ROOT, target);
+    if (!existsSync(absolute)) {
+      fail(
+        "package.json#exports",
+        `subpath "${subpath}" → "${target}" but the file does not exist on disk (run \`pnpm build\`).`,
+      );
+    }
   }
 }
 
