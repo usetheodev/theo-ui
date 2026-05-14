@@ -193,6 +193,15 @@ historical artifact for design decisions. Feel free to add to it, feel
 free to ignore it. Future cleanup may move it to a separate read-only
 repository.
 
+**Note on the name (NIT-003):** the folder is in pt-BR (`referencia/`)
+because the early design phase happened in Portuguese. It is intentionally
+not renamed to `references/`: (a) the directory is `.gitignore`d so it
+never appears in the published package or in tooling output, (b) all
+CHANGELOG and audit cross-references already point at the existing name,
+(c) the audit consensus (see deep-review report) is to relocate the
+content to a separate repo rather than rename in-place. The name stays
+until that move happens.
+
 ---
 
 ## Release process
