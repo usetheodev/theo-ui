@@ -12,9 +12,10 @@
     },
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
-    "./fonts.css": "./dist/fonts.css"
+    "./fonts.css": "./dist/fonts.css",
+    "./fonts-cdn.css": "./dist/fonts-cdn.css"
   },
-  "files": ["dist", "src", "registry", "LICENSE", "CHANGELOG.md"],
+  "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
   "scripts": {
     "build": "tsup",
     "dev": "ladle serve",
@@ -35,6 +36,7 @@
     "registry:build": "tsx scripts/build-registry.ts",
     "registry:validate": "tsx scripts/validate-registry.ts",
     "sync:readme": "tsx scripts/sync-readme.ts",
+    "sync:exports": "tsx scripts/sync-exports.ts",
     "test:registry": "tsx scripts/test-registry-install.ts",
     "test:coverage": "vitest run --coverage",
     "quality:structure": "tsx scripts/validate-quality-gates.ts",

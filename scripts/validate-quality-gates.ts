@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFileSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
@@ -125,6 +126,94 @@ async function validateRegistryPresetDep(): Promise<void> {
         `registry:${descriptor.type === "registry:block" ? "block" : "ui"} item must declare \`tailwind-preset\` in registryDependencies (run \`pnpm tsx scripts/add-tailwind-preset-dep.ts\`)`,
       );
     }
+  }
+}
+
+/**
+ * Detect drift between `package.json#exports` and what `pnpm sync:exports`
+ * would emit (HIGH-005 follow-up). If a contributor hand-edits the exports
+ * map and forgets to update `scripts/sync-exports.ts`, this gate fires.
+ *
+ * The canonical map lives in `scripts/sync-exports.ts` (CANONICAL_EXPORTS).
+ * Here we re-derive it by reading the script, executing the same logic, and
+ * diff-comparing against the live package.json.
+ */
+async function validateExportsMap(): Promise<void> {
+  const pkg = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8")) as {
+    exports?: Record<string, unknown>;
+  };
+  const expected: Record<string, unknown> = {
+    ".": { types: "./dist/index.d.ts", import: "./dist/index.js" },
+    "./styles.css": "./dist/styles.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./fonts-cdn.css": "./dist/fonts-cdn.css",
+  };
+  const actual = pkg.exports ?? {};
+  const expectedJson = JSON.stringify(expected);
+  const actualJson = JSON.stringify(actual);
+  if (expectedJson !== actualJson) {
+    fail(
+      "package.json#exports",
+      `drifts from canonical set; run \`pnpm sync:exports\`. Expected: ${expectedJson}. Got: ${actualJson}.`,
+    );
+  }
+}
+
+/**
+ * Inspect what `npm pack` would publish and fail if forbidden artifacts
+ * appear. Catches HIGH-001 regressions (re-adding `"src"` to files etc.).
+ *
+ * Forbidden patterns in the published tarball:
+ *   - any *.test.* / *.spec.* / *.stories.* file
+ *   - anything under src/screens/
+ *   - referencia/ (internal exploration archive)
+ *   - playground/ (live demo only)
+ *   - .ladle/ (story config)
+ *   - tests/ (fixture app)
+ *
+ * Also fails when the total size exceeds 5 MB — early signal that something
+ * accidentally got added.
+ */
+async function validateNpmTarball(): Promise<void> {
+  let pack: { files?: Array<{ path: string }>; size?: number } | undefined;
+  try {
+    const raw = execSync("npm pack --dry-run --json", { cwd: ROOT, encoding: "utf-8" });
+    const parsed = JSON.parse(raw) as Array<{
+      files?: Array<{ path: string }>;
+      size?: number;
+    }>;
+    pack = parsed[0];
+  } catch (err) {
+    fail("npm pack", `failed to run \`npm pack --dry-run --json\`: ${String(err)}`);
+    return;
+  }
+  if (!pack) {
+    fail("npm pack", "`npm pack --dry-run --json` returned empty payload");
+    return;
+  }
+
+  const forbiddenPatterns: Array<{ matcher: RegExp; label: string }> = [
+    { matcher: /\.(test|spec)\.(t|j)sx?$/, label: "test file" },
+    { matcher: /\.stories\.(t|j)sx?$/, label: "Ladle story" },
+    { matcher: /^src\/screens\//, label: "internal screen" },
+    { matcher: /^referencia\//, label: "exploration archive" },
+    { matcher: /^playground\//, label: "playground demo" },
+    { matcher: /^\.ladle\//, label: "Ladle config" },
+    { matcher: /^tests\//, label: "fixture app" },
+  ];
+
+  for (const file of pack.files ?? []) {
+    for (const { matcher, label } of forbiddenPatterns) {
+      if (matcher.test(file.path)) {
+        fail("npm pack", `forbidden ${label} in tarball: ${file.path}`);
+      }
+    }
+  }
+
+  const MAX_SIZE = 5 * 1024 * 1024;
+  if ((pack.size ?? 0) > MAX_SIZE) {
+    fail("npm pack", `tarball is ${pack.size} bytes (>${MAX_SIZE}). Audit the \`files\` array.`);
   }
 }
 
@@ -439,7 +528,9 @@ async function validateCountConsistency(): Promise<void> {
   }
 
   // welcome.stats.ts must match the same numbers.
-  const statsPath = join(ROOT, "src/welcome.stats.ts");
+  // Moved to .ladle/generated/ (HIGH-003 / T3.3) so the generated file does
+  // not ship in the npm tarball alongside hand-written source under `src/`.
+  const statsPath = join(ROOT, ".ladle/generated/welcome.stats.ts");
   if (existsSync(statsPath)) {
     const stats = readFileSync(statsPath, "utf-8");
     const sp = stats.match(/primitives:\s*(\d+)/);
@@ -447,7 +538,7 @@ async function validateCountConsistency(): Promise<void> {
     if (sp?.[1] && sc?.[1]) {
       if (Number(sp[1]) !== Number(primMatch[1]) || Number(sc[1]) !== Number(compMatch[1])) {
         fail(
-          "src/welcome.stats.ts",
+          ".ladle/generated/welcome.stats.ts",
           `welcome STATS (${sp[1]}P + ${sc[1]}C) diverge from README catalog (${primMatch[1]}P + ${compMatch[1]}C); run \`pnpm sync:readme\``,
         );
       }
@@ -660,6 +751,8 @@ async function main(): Promise<void> {
   await validateComponentStructure();
   await validateRegistryStoriesAndTests();
   await validateRegistryPresetDep();
+  await validateExportsMap();
+  await validateNpmTarball();
   await validatePublicExports();
   await validateCountConsistency();
   await validateArchitectureCensus();

@@ -269,10 +269,12 @@ async function main(): Promise<void> {
   //    in step 1 leave the working tree untouched.
   await writeFile(join(ROOT, "README.md"), readme);
   await writeFile(archPath, architecture);
-  await writeFile(join(ROOT, "src/welcome.stats.ts"), welcomeStats);
+  // Generated output lives outside `src/` so it does not enter the npm
+  // tarball when consumers install the lib (HIGH-003 / T3.3).
+  await writeFile(join(ROOT, ".ladle/generated/welcome.stats.ts"), welcomeStats);
 
   writeStdout(
-    `synced README.md + architecture.md + welcome.stats.ts: ${counts.components} components (${counts.primitives}P + ${counts.composites}C), ${counts.tests} tests, ${counts.registryItems} registry items, ${counts.screens} screens`,
+    `synced README.md + architecture.md + .ladle/generated/welcome.stats.ts: ${counts.components} components (${counts.primitives}P + ${counts.composites}C), ${counts.tests} tests, ${counts.registryItems} registry items, ${counts.screens} screens`,
   );
 }
 
