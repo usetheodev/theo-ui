@@ -1,6 +1,7 @@
 import type { Story } from "@ladle/react";
 import { Github, Mail } from "lucide-react";
 import { useState } from "react";
+import type { SVGProps } from "react";
 import { Button } from "../components/primitives/button/button.js";
 import { Input } from "../components/primitives/input/input.js";
 import { LoginSplit } from "../components/primitives/login-split/login-split.js";
@@ -8,7 +9,7 @@ import { SocialAuthRow } from "../components/primitives/social-auth-row/social-a
 
 export default { title: "Screens / Login Split" };
 
-const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+const GoogleIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
     <title>Google</title>
     <path d="M12 11v3.4h5.5c-.2 1.4-1.6 4-5.5 4-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.7 4 14.6 3 12 3 7 3 3 7 3 12s4 9 9 9c5.2 0 8.7-3.7 8.7-8.9 0-.6-.1-1.1-.2-1.6L12 11z" />

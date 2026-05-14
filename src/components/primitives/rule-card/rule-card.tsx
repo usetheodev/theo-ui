@@ -1,6 +1,6 @@
 import { Globe, Pencil, Trash2 } from "lucide-react";
 import { forwardRef } from "react";
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, MouseEvent } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { Rule, RuleScope, RuleState } from "../../../types/rule.js";
 
@@ -34,15 +34,15 @@ interface RuleCardProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "onS
 
 const RuleCard = forwardRef<HTMLElement, RuleCardProps>(
   ({ className, rule, onSelect, onEdit, onDelete, onToggle, ...props }, ref) => {
-    const handleEdit = (e: React.MouseEvent) => {
+    const handleEdit = (e: MouseEvent) => {
       e.stopPropagation();
       (onEdit ?? onSelect)?.(rule.id);
     };
-    const handleDelete = (e: React.MouseEvent) => {
+    const handleDelete = (e: MouseEvent) => {
       e.stopPropagation();
       onDelete?.(rule.id);
     };
-    const handleToggle = (e: React.MouseEvent) => {
+    const handleToggle = (e: MouseEvent) => {
       e.stopPropagation();
       onToggle?.(rule.id, rule.state === "enabled" ? "disabled" : "enabled");
     };

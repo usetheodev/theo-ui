@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixture `tailwind.config.ts` + `postcss.config.cjs`** — `tests/fixture-shadcn-app/` now has a real Tailwind toolchain with `safelist` covering the full Violet Forge typescale (forces compilation of every preset entry as proof of capability, independent of fixture App.tsx usage).
 - `validateDesignSystemFidelity` audits `src/styles/tailwind-preset.ts` instead of `tailwind.config.ts` (typescale now lives in the preset).
 
+### Added (Phase 6 — observability + test hardening)
+- **Dev-only `console.warn` in `ThemeProvider` storage catches** (HIGH-006 / T6.1). The three previous silent catches around `localStorage.{getItem,setItem}` now surface a one-line diagnostic in dev (Safari private mode, blocked third-party cookies, sandboxed iframes). Production stays silent because behavior is fail-safe. New helper `warnStorageFailure(scope, err)` carries the `process.env.NODE_ENV === "production"` guard and the per-call `biome-ignore` annotation.
+- **`displayName` regression tests on compound components** (HIGH-009 / T6.2) — `Card`, `Dialog`, `Tabs`, `Avatar` (more to follow). Catches accidental refactors that lose `.displayName` after `Object.assign /*#__PURE__*/` wiring; preserves React DevTools naming.
+
+### Changed (Phase 6)
+- **`agent-stream` adds explicit `aria-atomic="false"`** (MEDIUM-001 / T6.4) so VoiceOver/macOS does not reannounce the entire log on each new item.
+- **`React.<Type>` namespace usage replaced with named imports** (MEDIUM-012 / T6.7.4) across 17 occurrences in 12 files: `React.FormEvent`, `React.KeyboardEvent`, `React.MouseEvent`, `React.ReactNode`, `React.SVGProps`, `React.Ref`, `React.HTMLAttributes` → corresponding `import type { … } from "react"` (preserves `verbatimModuleSyntax` correctness, forward-compatible with React 19 type changes). Zero `React.` namespace references remain in `src/`.
+
 ### Added (Phase 5 — docs + governance)
 - **`CONTRIBUTING.md`** — operational handbook: setup, taxonomy rule, adding components, quality gates explained, registry distribution, PR conventions, release process, internal exploration archive policy.
 - **`SECURITY.md`** — disclosure policy, supported versions matrix, vulnerability scope (in/out), hardening already in place (ThemeScript `</script>` escape, no `dangerouslySetInnerHTML` outside SSR helper, lint guards). Aligns with GitHub Security Advisories workflow.

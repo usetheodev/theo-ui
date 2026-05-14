@@ -1,6 +1,6 @@
 import { CheckCircle2, Circle, CircleDashed, CircleX, Loader2 } from "lucide-react";
 import { forwardRef } from "react";
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 
 export type PlanNodeStatus = "pending" | "running" | "done" | "skipped" | "failed";
@@ -90,9 +90,9 @@ TaskNode.displayName = "TaskNode";
 interface TaskPlanProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   nodes: PlanNode[];
   /** Header title. */
-  title?: React.ReactNode;
+  title?: ReactNode;
   /** Summary line shown next to the title (e.g. "3 of 7 done"). */
-  summary?: React.ReactNode;
+  summary?: ReactNode;
 }
 
 /**
