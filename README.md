@@ -256,6 +256,29 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 ---
 
+## Bundle & module format
+
+- **ESM-only** — `@usetheo/ui` ships a single `dist/index.js` (ESM) plus
+  per-component `dist/components/.../index.d.ts` type declarations. No CJS
+  build. Consumers running on CommonJS Node need to transpile or use a
+  bundler. This is intentional: the four-pillar audience (modern Vite,
+  Next 14+, Astro, Remix) is ESM-first.
+- **Tree-shaking via the barrel** — modern bundlers (Vite, esbuild, Rollup,
+  webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and tree-shake
+  unused components from the barrel import (`import { Button } from
+  "@usetheo/ui"` drops every other component from the final bundle). No
+  per-component subpath exports are needed for this to work.
+- **CSS distribution** — `dist/styles.css` is the recommended single import
+  (combines tokens, fonts self-hosted, Tailwind base/components/utilities).
+  `@usetheo/ui/tokens.css`, `@usetheo/ui/fonts.css`, and
+  `@usetheo/ui/fonts-cdn.css` (opt-in) are available for finer control.
+- **Self-hosted fonts** — Geist Sans + Geist Mono ship as woff2 under
+  `dist/fonts/` (~290 KB total). Opt into Google Fonts CDN with
+  `@import "@usetheo/ui/fonts-cdn.css"` instead of the default if you
+  prefer not to host static assets.
+
+---
+
 ## License
 
 [Apache-2.0](./LICENSE) © [usetheo.dev](https://usetheo.dev)

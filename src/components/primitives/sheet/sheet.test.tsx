@@ -60,4 +60,15 @@ describe("Sheet", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Example />);
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on subparts", () => {
+    expect(Sheet.Overlay.displayName).toBe("Sheet.Overlay");
+    expect(Sheet.Content.displayName).toBe("Sheet.Content");
+    expect(Sheet.Header.displayName).toBe("Sheet.Header");
+    expect(Sheet.Body.displayName).toBe("Sheet.Body");
+    expect(Sheet.Footer.displayName).toBe("Sheet.Footer");
+    expect(Sheet.Title.displayName).toBe("Sheet.Title");
+    expect(Sheet.Description.displayName).toBe("Sheet.Description");
+  });
 });

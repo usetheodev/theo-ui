@@ -118,4 +118,14 @@ describe("TopNav", () => {
       expect(await axe(container)).toHaveNoViolations();
     });
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(TopNav.displayName).toBe("TopNav");
+    expect(TopNav.Left.displayName).toBe("TopNav.Left");
+    expect(TopNav.Center.displayName).toBe("TopNav.Center");
+    expect(TopNav.Right.displayName).toBe("TopNav.Right");
+    expect(TopNav.Breadcrumbs.displayName).toBe("TopNav.Breadcrumbs");
+    expect(TopNav.ModeSwitcher.displayName).toBe("TopNav.ModeSwitcher");
+  });
 });

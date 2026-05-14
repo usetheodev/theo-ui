@@ -110,8 +110,16 @@ async function gatherCounts(): Promise<Counts> {
  * (Form & input, Surface, App chrome, etc.) is editorial and lives between
  * the BEGIN/END markers manually.
  */
-async function parseIndexExports(): Promise<{ primitives: string[]; composites: string[] }> {
-  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+/**
+ * Pure parser — extracted from `parseIndexExports` so it can be unit-tested
+ * without touching the filesystem (MEDIUM-013 / T6.7.5). Given the verbatim
+ * content of `src/index.ts`, returns the named value exports grouped by
+ * layer (primitives vs composites).
+ */
+export function parseExportsFromIndex(indexContent: string): {
+  primitives: string[];
+  composites: string[];
+} {
   const primitives: string[] = [];
   const composites: string[] = [];
 
@@ -141,6 +149,11 @@ async function parseIndexExports(): Promise<{ primitives: string[]; composites: 
   primitives.sort();
   composites.sort();
   return { primitives, composites };
+}
+
+async function parseIndexExports(): Promise<{ primitives: string[]; composites: string[] }> {
+  const indexContent = await readFile(join(ROOT, "src/index.ts"), "utf-8");
+  return parseExportsFromIndex(indexContent);
 }
 
 function renderBadgeLine(counts: Counts): string {

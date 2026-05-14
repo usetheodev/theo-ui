@@ -118,4 +118,13 @@ describe("FormField", () => {
       </FormField>,
     );
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(FormField.displayName).toBe("FormField");
+    expect(FormField.Label.displayName).toBe("FormField.Label");
+    expect(FormField.Control.displayName).toBe("FormField.Control");
+    expect(FormField.Hint.displayName).toBe("FormField.Hint");
+    expect(FormField.Error.displayName).toBe("FormField.Error");
+  });
 });

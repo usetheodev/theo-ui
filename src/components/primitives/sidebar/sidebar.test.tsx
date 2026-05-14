@@ -105,4 +105,13 @@ describe("Sidebar", () => {
     );
     expect(await axe(container)).toHaveNoViolations();
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(Sidebar.displayName).toBe("Sidebar");
+    expect(Sidebar.Header.displayName).toBe("Sidebar.Header");
+    expect(Sidebar.Section.displayName).toBe("Sidebar.Section");
+    expect(Sidebar.Item.displayName).toBe("Sidebar.Item");
+    expect(Sidebar.Footer.displayName).toBe("Sidebar.Footer");
+  });
 });

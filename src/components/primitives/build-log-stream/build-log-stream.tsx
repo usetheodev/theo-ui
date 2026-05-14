@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 
@@ -89,6 +89,28 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
     const [internalLevels, setInternalLevels] = useState<Set<LogLevel>>(new Set());
     const levels = visibleLevels ?? internalLevels;
     const updateLevels = onVisibleLevelsChange ?? setInternalLevels;
+
+    // MEDIUM-002 / T6.5: warn (dev-only) when a consumer flips between
+    // controlled and uncontrolled — React's own warning handles `value`/
+    // `defaultValue` on form inputs but doesn't see our custom prop pair.
+    const wasControlled = useRef<boolean | null>(null);
+    useEffect(() => {
+      if (typeof process === "undefined" || process.env.NODE_ENV === "production") return;
+      const isControlled = visibleLevels !== undefined;
+      if (wasControlled.current === null) {
+        wasControlled.current = isControlled;
+        return;
+      }
+      if (wasControlled.current !== isControlled) {
+        // biome-ignore lint/suspicious/noConsole: dev-only diagnostic (MEDIUM-002)
+        console.warn(
+          `[@usetheo/ui] BuildLogStream: \`visibleLevels\` prop switched between ${
+            wasControlled.current ? "controlled" : "uncontrolled"
+          } and ${isControlled ? "controlled" : "uncontrolled"} between renders. Pick one mode and keep it consistent.`,
+        );
+        wasControlled.current = isControlled;
+      }
+    }, [visibleLevels]);
 
     const filtered = useMemo(() => {
       if (levels.size === 0) return lines;
