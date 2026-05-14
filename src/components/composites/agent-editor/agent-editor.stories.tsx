@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { AgentEditor } from "./agent-editor.js";
 
-export default { title: "Primitives / Agent / AgentEditor" };
+export default { title: "Composites / Agent / AgentEditor" };
 
 const MODELS = [
   { id: "opus-4-7", label: "Opus 4.7" },

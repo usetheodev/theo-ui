@@ -2,12 +2,12 @@ import { useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
-import type { AgentProfileDescriptor } from "../agent-profile/agent-profile.js";
-import { Button } from "../button/button.js";
-import { FormField } from "../form-field/form-field.js";
-import { Input } from "../input/input.js";
-import { Select } from "../select/select.js";
-import { Textarea } from "../textarea/textarea.js";
+import type { AgentProfileDescriptor } from "../../primitives/agent-profile/index.js";
+import { Button } from "../../primitives/button/index.js";
+import { FormField } from "../../primitives/form-field/index.js";
+import { Input } from "../../primitives/input/index.js";
+import { Select } from "../../primitives/select/index.js";
+import { Textarea } from "../../primitives/textarea/index.js";
 
 /**
  * AgentEditor — form for creating or editing an Agent persona.

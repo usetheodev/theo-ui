@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import { forwardRef, useMemo, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { type Skill, SkillCard, type SkillState } from "../skill-card/skill-card.js";
+import { type Skill, SkillCard, type SkillState } from "../../primitives/skill-card/index.js";
 
 interface SkillsListProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   skills: Skill[];

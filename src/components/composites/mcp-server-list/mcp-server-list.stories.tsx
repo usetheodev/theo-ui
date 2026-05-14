@@ -1,8 +1,8 @@
 import type { Story } from "@ladle/react";
-import type { MCPServer } from "../mcp-server-card/mcp-server-card.js";
+import type { MCPServer } from "../../primitives/mcp-server-card/index.js";
 import { MCPServerList } from "./mcp-server-list.js";
 
-export default { title: "Primitives / Agent / MCPServerList" };
+export default { title: "Composites / Agent / MCPServerList" };
 
 const SERVERS: MCPServer[] = [
   {

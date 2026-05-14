@@ -19,11 +19,11 @@ export interface WelcomeStats {
 }
 
 export const STATS: WelcomeStats = {
-  primitives: 88,
-  composites: 14,
+  primitives: 81,
+  composites: 21,
   components: 102,
   themes: 3,
   screens: 7,
   registryItems: 110,
-  tests: 421,
+  tests: 453,
 };

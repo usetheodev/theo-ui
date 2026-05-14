@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import type { Skill } from "../skill-card/skill-card.js";
+import type { Skill } from "../../primitives/skill-card/index.js";
 import { SkillsList } from "./skills-list.js";
 
 const skills: Skill[] = [

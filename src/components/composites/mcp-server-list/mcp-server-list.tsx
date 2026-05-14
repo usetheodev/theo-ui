@@ -6,7 +6,7 @@ import {
   type MCPServer,
   MCPServerCard,
   type MCPServerStatus,
-} from "../mcp-server-card/mcp-server-card.js";
+} from "../../primitives/mcp-server-card/index.js";
 
 interface MCPServerListProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   servers: MCPServer[];

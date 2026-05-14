@@ -1,8 +1,8 @@
 import type { Story } from "@ladle/react";
-import type { CronJob } from "../cron-job-card/cron-job-card.js";
+import type { CronJob } from "../../primitives/cron-job-card/index.js";
 import { CronJobsList } from "./cron-jobs-list.js";
 
-export default { title: "Primitives / Agent / CronJobsList" };
+export default { title: "Composites / Agent / CronJobsList" };
 
 const JOBS: CronJob[] = [
   {

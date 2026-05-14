@@ -11,7 +11,7 @@
     },
     {
       "name": "agent-editor",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "AgentEditor",
       "description": "Form for creating or editing an Agent persona."
     },
@@ -71,7 +71,7 @@
     },
     {
       "name": "approval-card",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "ApprovalCard",
       "description": "Inline pause-and-ask card for an agent stream."
     },
@@ -215,7 +215,7 @@
     },
     {
       "name": "cron-jobs-list",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "CronJobsList",
       "description": "Grid of CronJobCards with a sticky \"new job\" action."
     },
@@ -323,7 +323,7 @@
     },
     {
       "name": "mcp-server-list",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "McpServerList",
       "description": "Grouped MCP server inventory with status filter chips."
     },
@@ -443,7 +443,7 @@
     },
     {
       "name": "rule-editor",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "RuleEditor",
       "description": "Form for creating or editing a Rule (behavior instruction"
     },
@@ -515,13 +515,13 @@
     },
     {
       "name": "skill-editor",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "SkillEditor",
       "description": "Form for creating or editing a Skill."
     },
     {
       "name": "skills-list",
-      "type": "registry:ui",
+      "type": "registry:block",
       "title": "SkillsList",
       "description": "Grid of SkillCards with optional search + source filter chips."
     },

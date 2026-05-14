@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+- **Reclassification of 7 components from `primitives/` to `composites/`** (BLOCKER-001 remediation, D2): `AgentEditor`, `RuleEditor`, `SkillEditor`, `ApprovalCard`, `CronJobsList`, `SkillsList`, `MCPServerList`. Each value-imported one or more sibling primitives, which violated the mechanical taxonomy rule in `docs/architecture.md`. They are composites by every reasonable definition (FormField+Input+Button = composite; list-of-card = composite). Public barrel (`@usetheo/ui`) is unchanged — named exports preserved. Registry consumers via `npx shadcn add`: `type` changed from `registry:ui` to `registry:block` and `target` from `components/ui/<name>` to `components/blocks/<name>`. Migration: re-run `npx shadcn add <name>` to relocate the file, or rename the import path manually.
+- **`form-field` now imports `@radix-ui/react-label` directly** (BLOCKER-001 / D2 exception). Previously imported the sibling `Label` primitive. `form-field.tsx` now inlines the same Radix LabelPrimitive + identical Tailwind tokens. Visual parity preserved. `registry/form-field.json` adds `@radix-ui/react-label` to `dependencies` and removes `label` from `registryDependencies`.
+
 ### Fixed
 - **BLOCKER-001 (2026-05-14): `validateComponentStructure` gate regex was broken.** The previous check `/from\s+["'](?:\.\.\/)+(?:primitives|composites)\//` matched the literal segments `primitives/`/`composites/` in the import specifier, which **never** appears for sibling imports of the form `"../button/button.js"` (the segment is in the resolved path, not the specifier). 8 primitives (`agent-editor`, `rule-editor`, `skill-editor`, `approval-card`, `form-field`, `cron-jobs-list`, `skills-list`, `mcp-server-list`) value-imported other primitives undetected. Replaced with `scripts/lib/import-graph.ts` (path-resolved, multi-line aware, type-vs-value aware) + 15 meta-tests in `scripts/lib/import-graph.test.ts`. Gate now flags 22 distinct sibling-primitive value-imports.
 

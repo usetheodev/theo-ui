@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import type { CronJob } from "../cron-job-card/cron-job-card.js";
+import type { CronJob } from "../../primitives/cron-job-card/index.js";
 import { CronJobsList } from "./cron-jobs-list.js";
 
 const jobs: CronJob[] = [

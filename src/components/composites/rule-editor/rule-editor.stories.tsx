@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Rule } from "../../../types/rule.js";
 import { RuleEditor } from "./rule-editor.js";
 
-export default { title: "Primitives / Agent / RuleEditor" };
+export default { title: "Composites / Agent / RuleEditor" };
 
 const sample: Rule = {
   id: "r1",

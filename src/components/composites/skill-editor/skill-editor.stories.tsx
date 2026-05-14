@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { SkillEditor } from "./skill-editor.js";
 
-export default { title: "Primitives / Agent / SkillEditor" };
+export default { title: "Composites / Agent / SkillEditor" };
 
 export const NewSkill: Story = () => (
   <div className="max-w-2xl rounded-xl border border-border/40 bg-card p-6">

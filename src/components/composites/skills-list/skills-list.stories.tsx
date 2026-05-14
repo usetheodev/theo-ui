@@ -1,9 +1,9 @@
 import type { Story } from "@ladle/react";
 import { useState } from "react";
-import type { Skill } from "../skill-card/skill-card.js";
+import type { Skill } from "../../primitives/skill-card/index.js";
 import { SkillsList } from "./skills-list.js";
 
-export default { title: "Primitives / Agent / SkillsList" };
+export default { title: "Composites / Agent / SkillsList" };
 
 const INITIAL: Skill[] = [
   {

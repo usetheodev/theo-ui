@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { ApprovalCard } from "./approval-card.js";
 
-export default { title: "Primitives / Agent / ApprovalCard" };
+export default { title: "Composites / Agent / ApprovalCard" };
 
 export const Severities: Story = () => (
   <div className="grid max-w-2xl gap-3">

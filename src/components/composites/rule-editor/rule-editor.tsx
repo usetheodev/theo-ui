@@ -3,12 +3,12 @@ import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
 import type { Rule, RuleScope, RuleState } from "../../../types/rule.js";
-import { Button } from "../button/button.js";
-import { FormField } from "../form-field/form-field.js";
-import { Input } from "../input/input.js";
-import { Select } from "../select/select.js";
-import { Switch } from "../switch/switch.js";
-import { Textarea } from "../textarea/textarea.js";
+import { Button } from "../../primitives/button/index.js";
+import { FormField } from "../../primitives/form-field/index.js";
+import { Input } from "../../primitives/input/index.js";
+import { Select } from "../../primitives/select/index.js";
+import { Switch } from "../../primitives/switch/index.js";
+import { Textarea } from "../../primitives/textarea/index.js";
 
 /**
  * RuleEditor — form for creating or editing a Rule (behavior instruction

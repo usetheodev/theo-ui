@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { IconComponent } from "../../../lib/types.js";
-import { Button } from "../button/button.js";
+import { Button } from "../../primitives/button/index.js";
 
 /**
  * ApprovalCard — inline pause-and-ask card for an agent stream.
