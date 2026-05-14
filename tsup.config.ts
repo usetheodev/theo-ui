@@ -1,3 +1,4 @@
+import { copyFile } from "node:fs/promises";
 import { defineConfig } from "tsup";
 
 export default defineConfig({
@@ -9,6 +10,11 @@ export default defineConfig({
   splitting: false,
   treeshake: true,
   external: ["react", "react-dom"],
-  onSuccess:
-    "cp src/styles/tokens.css dist/tokens.css && cp src/styles/fonts.css dist/fonts.css && cp src/styles/global.css dist/styles.css",
+  // Portable: Node fs APIs work on Linux, macOS, and Windows (the previous `cp`
+  // shell invocation broke under Windows native shells).
+  onSuccess: async () => {
+    await copyFile("src/styles/tokens.css", "dist/tokens.css");
+    await copyFile("src/styles/fonts.css", "dist/fonts.css");
+    await copyFile("src/styles/global.css", "dist/styles.css");
+  },
 });

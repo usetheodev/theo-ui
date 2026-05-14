@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { type AuditEntry, AuditLogEntry } from "./audit-log-entry.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const baseEntry: AuditEntry = {
   id: "1",
   actor: { kind: "agent", name: "coder" },
@@ -28,5 +29,9 @@ describe("AuditLogEntry", () => {
     render(<AuditLogEntry entry={{ ...baseEntry, id: "2", severity: "warning" }} />);
     render(<AuditLogEntry entry={{ ...baseEntry, id: "3", severity: "error" }} />);
     expect(screen.getAllByText("coder")).toHaveLength(2);
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<AuditLogEntry entry={baseEntry} />);
   });
 });

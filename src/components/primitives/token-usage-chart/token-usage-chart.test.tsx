@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 import { TokenUsageChart, type TokenUsagePoint } from "./token-usage-chart.js";
 
 const points: TokenUsagePoint[] = [
@@ -10,19 +11,43 @@ const points: TokenUsagePoint[] = [
 describe("TokenUsageChart", () => {
   it("renders the default title and the legend", () => {
     render(<TokenUsageChart points={points} />);
-    expect(screen.getByText(/Token usage/i)).toBeInTheDocument();
-    expect(screen.getByText(/Input/)).toBeInTheDocument();
-    expect(screen.getByText(/Output/)).toBeInTheDocument();
+    // The default title appears as the heading (the sr-only table caption
+    // also contains "Token usage" — we target the heading specifically).
+    expect(screen.getByRole("heading", { name: /Token usage/i })).toBeInTheDocument();
+    // Legend labels (singular "Input" / "Output") live in <footer>.
+    expect(screen.getByText("Input")).toBeInTheDocument();
+    expect(screen.getByText("Output")).toBeInTheDocument();
   });
 
   it("can hide the legend via showLegend=false", () => {
     render(<TokenUsageChart points={points} showLegend={false} />);
-    expect(screen.queryByText(/Input/)).not.toBeInTheDocument();
+    // Legend text disappears; the sr-only table header "Input tokens" is the
+    // only remaining occurrence — assert the legend variant is gone.
+    expect(screen.queryByText("Input")).not.toBeInTheDocument();
   });
 
   it("renders an SVG bar for each point", () => {
     const { container } = render(<TokenUsageChart points={points} />);
     const rects = container.querySelectorAll("svg rect");
     expect(rects.length).toBeGreaterThanOrEqual(points.length);
+  });
+
+  // HIGH-013 — Screen readers need a tabular fallback because the SVG <title>
+  // tooltip is unreliably exposed across NVDA / VoiceOver / JAWS. The sr-only
+  // <table> exposes the same numeric series cell-by-cell.
+  it("exposes an sr-only data table for screen readers", () => {
+    render(<TokenUsageChart points={points} />);
+    const table = screen.getByRole("table");
+    expect(within(table).getByText(/Token usage by period/i)).toBeInTheDocument();
+    // header row + one row per binned point
+    const rows = within(table).getAllByRole("row");
+    expect(rows.length).toBe(points.length + 1);
+    // Numbers from the original series are present in the table
+    expect(within(table).getByText("12000")).toBeInTheDocument();
+    expect(within(table).getByText("4000")).toBeInTheDocument();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<TokenUsageChart points={points} />);
   });
 });

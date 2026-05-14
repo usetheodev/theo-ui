@@ -1,11 +1,14 @@
 import type { Theme } from "./types.js";
 
 /**
- * Classic Paper — light-only, Inter + JetBrains Mono.
+ * Classic Paper — light-primary with deep-navy dark mirror; Inter + JetBrains Mono.
  *
  * Identity: warm paper background, deep navy foreground, indigo primary
  * (closer to traditional dashboard SaaS), Inter throughout. Maximizes
  * legibility and familiarity — use when reading endurance > differentiation.
+ *
+ * Provides a full `dark` palette mirror so consumers toggling `.dark` still
+ * get a coherent surface (it is not "light-only" by accident).
  */
 export const classicPaper: Theme = {
   name: "classic-paper",

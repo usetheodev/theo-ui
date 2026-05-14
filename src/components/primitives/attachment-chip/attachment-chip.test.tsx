@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { AttachmentChip } from "./attachment-chip.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 describe("AttachmentChip", () => {
   it("renders the attachment name and size", () => {
     render(
@@ -25,5 +26,13 @@ describe("AttachmentChip", () => {
     render(<AttachmentChip attachment={{ id: "att-42", name: "data.json" }} onRemove={onRemove} />);
     await user.click(screen.getByRole("button", { name: /Remove data\.json/ }));
     expect(onRemove).toHaveBeenCalledWith("att-42");
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(
+      <AttachmentChip
+        attachment={{ id: "a1", name: "report.csv", type: "spreadsheet", size: "12 KB" }}
+      />,
+    );
   });
 });

@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `src/test/a11y.ts` — shared `expectNoA11yViolations(ui)` helper used by 30+ primitive smoke tests.
+- `src/welcome.stats.ts` (generated) — single source of truth for badge / welcome / architecture counts.
+- Quality gates: `validateCompoundPattern`, `validateAxeCoverage`, `validateCountConsistency`, `validateArchitectureCensus`, `validateNoStrayArtifacts`. All hard-fail.
+- `vitest-axe` `toHaveNoViolations` assertion in 30 interactive primitives (button, dialog, checkbox, switch, tabs, toast, command-palette, agent-event, audit-log-entry, permission-matrix, mention-menu, …).
+- `TokenUsageChart` `sr-only <table>` fallback exposing input/output per period to screen readers (HIGH-013).
+- `tests/fixture-shadcn-app/package.json` peers for Radix Dialog/Toast/Avatar/Tabs + cmdk so the registry install fixture can exercise composites.
 - `LICENSE` file (Apache-2.0) at repository root.
 - `CHANGELOG.md` (this file).
 - `<ThemeScript>` component for SSR-safe theme initialization in Next/Astro/Remix.
@@ -43,7 +49,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stories with `console.log` / `console.warn` annotated with `biome-ignore` to keep `noConsole` Biome rule meaningful in production code.
 
 ### Security
-- N/A this release.
+- **`ThemeScript` XSS hardening (BLOCKER-001)**: `buildScript` now escapes `<` to `<` on every interpolated value (`defaultTheme`, `defaultMode`, `storageKey`). Without the escape, a payload containing `</script>` would terminate the inline `<script>` tag at the HTML tokenizer layer — even though it sat inside a JS string literal — and execute attacker JS. New tests cover the `</script>` payload explicitly. The prior security comment ("no user input") is replaced by a per-call escape so the safety property holds regardless of how the props are sourced.
+
+### Changed (audit remediation 2026-05-14)
+- Compound pattern: `Toast`, `Avatar`, `RadioGroup`, `FormField` migrated to `/*#__PURE__*/ Object.assign(Root, {...})` — finishing the migration declared in the prior CHANGELOG entry. New `validateCompoundPattern` quality gate blocks the legacy `Root as typeof Root & {...}; Root.X = X` mutation pattern across all compound components.
+- `FormField.Control` rebuilt on `React.cloneElement` + `React.Children.only` (was spread-element-as-object). Now preserves `ref` and `key` on the wrapped child; throws explicit errors on zero / multiple children (was silent breakage).
+- `AgentEditor`, `SkillEditor`, `RuleEditor` no longer reset their form state via `useEffect [initial?.id]`. Use the React `key` prop at the call site (`<AgentEditor key={agent.id} initial={agent} ... />`) to remount on entity change — the idiomatic pattern.
+- Tailwind `darkMode` set to `"class"` alone; the dead `[data-theme="dark"]` selector (which never matched because `ThemeProvider` sets `data-theme` to the theme NAME, not `"dark"`) was removed from both `tailwind.config.ts` and `tokens.css`.
+- `tsup.config.ts` `onSuccess` now uses `node:fs/promises.copyFile` instead of POSIX `cp`. Build is portable across macOS / Linux / Windows.
+- `validateRegistryStoriesAndTests` upgrades the missing-test check from warning to hard fail. The test-backfill phase has ended.
+- `scripts/sync-readme.ts` is the single source of truth for component counts. Reads `src/index.ts` named exports and writes README badges + welcome STATS + `architecture.md` census atomically (compute everything in memory, write at the end).
+- Test count is now derived by static `it(`/`test(` parsing — no longer spawns `pnpm test` inside `sync:readme`.
+- `docs/architecture.md`: `BEGIN:primitives-list` / `BEGIN:composites-list` regions auto-regenerated; census matches reality (88 primitives + 14 composites = 102 components, was stale at 36/12).
+- `src/screens/theo-code-shell.tsx` split: ~900 lines of mock data + helper types moved to sibling `theo-code-shell.data.tsx`. Main file dropped from 2193 → 1298 LoC.
+- `lint:ci` scope widened to `playground` + `tests/fixture-shadcn-app/src`.
+- `biome.json` `noConsole` raised to `error` with `allow: []`; stories / tests / scripts opt out via `overrides`.
+- `validateReadmeDrift` whitelist trimmed (`Boska`, `Switzer`, `JetBrains`, `Berkeley`, `Departure`, `Söhne`, `Migra`, `Monaspace`, `Neon`, `PP`, `Editorial`, `New`, `General`, `Industrial` removed — fonts/styles deprecated in earlier sprints).
+- `ThemeProvider` JSDoc corrected: `defaultMode` documents `"dark"` (matches the actual default since the dark-first migration).
+- `classic-paper` JSDoc clarified ("light-primary with deep-navy dark mirror") — was misleadingly described as "light-only" despite shipping a full dark palette.
+- `docs/quality-gates.md` Gate 2 "Current known risk" replaced with a "Resolved (2026-05)" note — `scripts/build-registry.ts` already rewrites relative imports.
+- `MentionMenu` markup: `<header>` → `<div role="presentation">`, `<ul>`/`<li>` wrappers get `role="presentation"` so `role="menu"` only contains `role="menuitem"` children (axe `aria-required-children` regression fix).
+- `test-registry-install.ts` covers a stratified sample of 13 items (was 4): lib (cn, types, chat-types), CSS (tokens), CVA (badge, button), compound (card, dialog, avatar, tabs), Radix multi-file (toast), cmdk composite (command-palette), block composite (deployment-row).
+
+### Fixed (audit remediation 2026-05-14)
+- README components badge (`components-N`) is now equal to "Primitives (P)" + "Composites (C)" — the historical badge used directory count while the catalog used named exports (badge said 99, catalog summed to 102).
+- `welcome.stories.tsx` hero STATS regenerated from source — was hardcoded to 36/12/07/03/21/122 while the reality is 88/14/7/3/110/389+.
+- 95× `registry/*.json.tmp` + 2× `*.bak` files deleted from working tree. New `validateNoStrayArtifacts` gate blocks regression.
+
+### Removed
+- N/A.
 
 ## [0.0.0]
 

@@ -75,7 +75,7 @@ interface ThemeProviderProps {
   children: ReactNode;
   /** Theme to start with. Defaults to `violet-forge`. */
   defaultTheme?: string;
-  /** Mode to start with. Defaults to `light`. */
+  /** Mode to start with. Defaults to `"dark"` (library is dark-first). */
   defaultMode?: ThemeMode;
   /**
    * Available themes. Always includes `violet-forge` even if omitted.

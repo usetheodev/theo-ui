@@ -11,13 +11,30 @@ expect.extend(axeMatchers);
 // the suite stays hermetic and fast (no minutes-long teardowns waiting for
 // aborted fetches).
 beforeAll(() => {
-  if (typeof globalThis.fetch === "function") {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(() =>
-        Promise.resolve(new Response("", { status: 200, headers: { "content-type": "text/css" } })),
-      ),
-    );
+  // Stub fetch unconditionally — happy-dom always provides one. Without this,
+  // every render that touches ThemeProvider tries to fetch Google Fonts and
+  // the test pool's teardown waits for those abort signals to resolve.
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(() =>
+      Promise.resolve(new Response("", { status: 200, headers: { "content-type": "text/css" } })),
+    ),
+  );
+
+  // Block link[rel="stylesheet"] external fetches. happy-dom resolves stylesheets
+  // independently of `globalThis.fetch`, so we patch the prototype to no-op
+  // `href` assignment for link elements.
+  if (typeof HTMLLinkElement !== "undefined") {
+    const proto = HTMLLinkElement.prototype as unknown as { href?: string };
+    Object.defineProperty(proto, "href", {
+      configurable: true,
+      get() {
+        return "";
+      },
+      set() {
+        /* no-op in tests */
+      },
+    });
   }
 });
 

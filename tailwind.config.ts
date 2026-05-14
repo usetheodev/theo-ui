@@ -4,7 +4,11 @@ import animate from "tailwindcss-animate";
 const hsl = (token: string) => `hsl(var(${token}) / <alpha-value>)`;
 
 export default {
-  darkMode: ["class", '[data-theme="dark"]'],
+  // Dark mode activates exclusively via the `.dark` class on `<html>`. Both
+  // `ThemeProvider` and `ThemeScript` set this class. The previous second
+  // selector `[data-theme="dark"]` was dead: `ThemeProvider` sets `data-theme`
+  // to the theme NAME (e.g. `"violet-forge"`), never the literal `"dark"`.
+  darkMode: "class",
   content: ["./src/**/*.{ts,tsx}", "./.ladle/**/*.{ts,tsx}", "./playground/**/*.{ts,tsx,html}"],
   theme: {
     container: {

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import type { AgentEvent as AgentEventModel } from "../../../types/agent.js";
 import { AgentEvent } from "./agent-event.js";
 
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 const baseEvent: AgentEventModel = {
   id: "e1",
   label: "Read src/index.ts",
@@ -36,5 +37,9 @@ describe("AgentEvent", () => {
   it("renders without expand affordance when not collapsible", () => {
     render(<AgentEvent event={baseEvent} />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  it("has no a11y violations", async () => {
+    await expectNoA11yViolations(<AgentEvent event={baseEvent} />);
   });
 });

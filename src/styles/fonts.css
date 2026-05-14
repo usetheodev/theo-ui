@@ -5,11 +5,23 @@
  * 3 strict weights (400/500/600), OpenType "liga" enabled globally. Geist is
  * Vercel's open-source font, optimized for product UIs and code surfaces.
  *
- * Loaded via Google Fonts. In production consider self-host to control
- * preloading, font-display strategy, and reduce external dependencies.
- *
  * Additional theme fonts (Inter, etc.) are loaded on demand by individual
  * themes — see src/themes/.
+ *
+ * ── Self-hosting opt-out ───────────────────────────────────────────────────
+ * The CDN `@import` below is the easiest path but ships a third-party fetch
+ * to `fonts.googleapis.com` on every page load. For GDPR-sensitive products
+ * or strict CSP environments, comment the `@import` below and replace it
+ * with local `@font-face` declarations pointing to assets you ship.
+ *
+ *   1. Download Geist + Geist Mono from https://vercel.com/font (or npm
+ *      `geist` package) into `public/fonts/`.
+ *   2. Comment out the `@import` below.
+ *   3. Add `@font-face { font-family: "Geist"; src: url(/fonts/...) ... }`
+ *      blocks for the weights you need.
+ *
+ * The default behavior remains CDN-loading so the Quickstart in the README
+ * works zero-config.
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");

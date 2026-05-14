@@ -19,7 +19,6 @@ export const Chat: Story = () => {
       className="max-w-2xl"
       value={v}
       onValueChange={setV}
-      // biome-ignore lint/suspicious/noConsole: demo story sink
       onSubmit={(x) => console.log("submit", x)}
       trailingActions={<ModelSelector value={m} onChange={setM} options={MODELS} />}
     />
