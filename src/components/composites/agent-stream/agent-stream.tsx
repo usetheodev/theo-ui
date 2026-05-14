@@ -5,9 +5,9 @@ import type { IconComponent } from "../../../lib/types.js";
 import type { Message } from "../../../types/chat.js";
 import { AgentErrorCard, type AgentErrorKind } from "../../primitives/agent-error-card/index.js";
 import { AgentStreaming } from "../../primitives/agent-streaming/index.js";
-import { ApprovalCard, type ApprovalSeverity } from "../../primitives/approval-card/index.js";
 import { ChatMessage } from "../../primitives/chat-message/index.js";
 import { ToolCallCard, type ToolCallStatus } from "../../primitives/tool-call-card/index.js";
+import { ApprovalCard, type ApprovalSeverity } from "../approval-card/index.js";
 
 /**
  * AgentStream — the canonical conversation surface for a code agent.

@@ -20,15 +20,17 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AgentComposer } from "../components/composites/agent-composer/agent-composer.js";
+import {
+  type AgentDraft,
+  AgentEditor,
+} from "../components/composites/agent-editor/agent-editor.js";
 import { AgentStream } from "../components/composites/agent-stream/agent-stream.js";
 import { DeploymentRow } from "../components/composites/deployment-row/deployment-row.js";
 import { DomainConfig } from "../components/composites/domain-config/domain-config.js";
 import { EnvVarEditor } from "../components/composites/env-var-editor/env-var-editor.js";
 import { RollbackUI } from "../components/composites/rollback-ui/rollback-ui.js";
-import {
-  type AgentDraft,
-  AgentEditor,
-} from "../components/primitives/agent-editor/agent-editor.js";
+import { RuleEditor } from "../components/composites/rule-editor/rule-editor.js";
+import { SkillEditor } from "../components/composites/skill-editor/skill-editor.js";
 import { AgentProfile } from "../components/primitives/agent-profile/agent-profile.js";
 import { AuditLogEntry } from "../components/primitives/audit-log-entry/audit-log-entry.js";
 import { BuildLogStream } from "../components/primitives/build-log-stream/build-log-stream.js";
@@ -43,13 +45,11 @@ import { MetricsPanel } from "../components/primitives/metrics-panel/metrics-pan
 import { ModelSelector } from "../components/primitives/model-selector/model-selector.js";
 import { ProjectSwitcher } from "../components/primitives/project-switcher/project-switcher.js";
 import { RuleCard } from "../components/primitives/rule-card/rule-card.js";
-import { RuleEditor } from "../components/primitives/rule-editor/rule-editor.js";
 import { RunStats } from "../components/primitives/run-stats/run-stats.js";
 import { SessionListItem } from "../components/primitives/session-list-item/session-list-item.js";
 import { Sheet } from "../components/primitives/sheet/sheet.js";
 import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
 import { type Skill, SkillCard } from "../components/primitives/skill-card/skill-card.js";
-import { SkillEditor } from "../components/primitives/skill-editor/skill-editor.js";
 import { SystemPromptEditor } from "../components/primitives/system-prompt-editor/system-prompt-editor.js";
 import { TokenUsageChart } from "../components/primitives/token-usage-chart/token-usage-chart.js";
 import { TopNav } from "../components/primitives/topnav/topnav.js";
