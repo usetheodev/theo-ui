@@ -3,7 +3,7 @@
   "name": "project-card",
   "type": "registry:block",
   "title": "ProjectCard",
-  "description": "surface for a project in a project listing.",
+  "description": "Surface for a project in a project listing.",
   "dependencies": [
     "lucide-react"
   ],

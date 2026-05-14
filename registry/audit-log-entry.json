@@ -3,7 +3,7 @@
   "name": "audit-log-entry",
   "type": "registry:ui",
   "title": "AuditLogEntry",
-  "description": "one row in the agent audit log.",
+  "description": "One row in the agent audit log.",
   "dependencies": [
     "lucide-react"
   ],

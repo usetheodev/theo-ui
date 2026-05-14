@@ -3,7 +3,7 @@
   "name": "context-card",
   "type": "registry:ui",
   "title": "ContextCard",
-  "description": "generic \"informational\" card for the right inspector.",
+  "description": "Generic \"informational\" card for the right inspector.",
   "dependencies": [
     "lucide-react"
   ],

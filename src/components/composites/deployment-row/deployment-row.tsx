@@ -2,7 +2,7 @@ import { GitCommit } from "lucide-react";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/badge.js";
+import { Badge } from "../../primitives/badge/index.js";
 
 export type DeploymentStatus =
   | "queued"
@@ -97,25 +97,25 @@ const DeploymentRow = forwardRef<HTMLDivElement, DeploymentRowProps>(
           </p>
           <p className="mt-0.5 flex flex-wrap items-center gap-2 text-body-sm text-muted-foreground">
             <span className="font-mono text-code-sm">{deployment.environment}</span>
-            <span aria-hidden>·</span>
+            <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1 font-mono text-code-sm">
               <GitCommit className="size-3" /> {deployment.commitSha.slice(0, 7)}
             </span>
-            <span aria-hidden>·</span>
+            <span aria-hidden="true">·</span>
             <span className="font-mono text-code-sm">{deployment.branch}</span>
             {deployment.author ? (
               <>
-                <span aria-hidden>·</span>
+                <span aria-hidden="true">·</span>
                 <span>by {deployment.author.name}</span>
               </>
             ) : null}
             {deployment.duration ? (
               <>
-                <span aria-hidden>·</span>
+                <span aria-hidden="true">·</span>
                 <span className="font-mono text-code-sm">{deployment.duration}</span>
               </>
             ) : null}
-            <span aria-hidden>·</span>
+            <span aria-hidden="true">·</span>
             <span>{deployment.timeAgo}</span>
           </p>
         </div>

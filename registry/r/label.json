@@ -3,7 +3,7 @@
   "name": "label",
   "type": "registry:ui",
   "title": "Label",
-  "description": "form field label built on Radix Label.",
+  "description": "Form field label built on Radix Label.",
   "dependencies": [
     "@radix-ui/react-label"
   ],
@@ -15,7 +15,7 @@
       "path": "components/primitives/label/label.tsx",
       "type": "registry:ui",
       "target": "components/ui/label.tsx",
-      "content": "import * as LabelPrimitive from \"@radix-ui/react-label\";\nimport { forwardRef } from \"react\";\nimport type { ComponentPropsWithoutRef, ElementRef } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\n/**\n * Label — form field label built on Radix Label.\n *\n * Behaviors:\n *   - Clicking the label focuses the associated `htmlFor` input.\n *   - Adds a small red asterisk when `required` is set.\n *   - Inherits disabled visuals from the wrapper (`peer-disabled`).\n */\ninterface LabelProps extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {\n  required?: boolean;\n}\n\nconst Label = forwardRef<ElementRef<typeof LabelPrimitive.Root>, LabelProps>(\n  ({ className, required, children, ...props }, ref) => (\n    <LabelPrimitive.Root\n      ref={ref}\n      className={cn(\n        \"inline-flex items-center gap-1 font-medium font-sans text-body-sm text-foreground\",\n        \"peer-disabled:cursor-not-allowed peer-disabled:opacity-60\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n      {required ? (\n        <span className=\"text-destructive\" aria-hidden>\n          *\n        </span>\n      ) : null}\n    </LabelPrimitive.Root>\n  ),\n);\nLabel.displayName = \"Label\";\n\nexport { Label };\n"
+      "content": "import * as LabelPrimitive from \"@radix-ui/react-label\";\nimport { forwardRef } from \"react\";\nimport type { ComponentPropsWithoutRef, ElementRef } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\n/**\n * Label — form field label built on Radix Label.\n *\n * Behaviors:\n *   - Clicking the label focuses the associated `htmlFor` input.\n *   - Adds a small red asterisk when `required` is set.\n *   - Inherits disabled visuals from the wrapper (`peer-disabled`).\n */\ninterface LabelProps extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {\n  required?: boolean;\n}\n\nconst Label = forwardRef<ElementRef<typeof LabelPrimitive.Root>, LabelProps>(\n  ({ className, required, children, ...props }, ref) => (\n    <LabelPrimitive.Root\n      ref={ref}\n      className={cn(\n        \"inline-flex items-center gap-1 font-medium font-sans text-body-sm text-foreground\",\n        \"peer-disabled:cursor-not-allowed peer-disabled:opacity-60\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n      {required ? (\n        <span className=\"text-destructive\" aria-hidden=\"true\">\n          *\n        </span>\n      ) : null}\n    </LabelPrimitive.Root>\n  ),\n);\nLabel.displayName = \"Label\";\n\nexport { Label };\n"
     }
   ]
 }

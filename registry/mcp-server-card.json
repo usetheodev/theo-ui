@@ -3,7 +3,7 @@
   "name": "mcp-server-card",
   "type": "registry:ui",
   "title": "McpServerCard",
-  "description": "one MCP server entry showing connection status, the tools",
+  "description": "One MCP server entry showing connection status, the tools",
   "dependencies": [
     "lucide-react"
   ],

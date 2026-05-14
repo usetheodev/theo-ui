@@ -3,7 +3,7 @@
   "name": "social-auth-row",
   "type": "registry:ui",
   "title": "SocialAuthRow",
-  "description": "row of OAuth provider buttons.",
+  "description": "Row of OAuth provider buttons.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

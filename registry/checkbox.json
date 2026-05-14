@@ -3,7 +3,7 @@
   "name": "checkbox",
   "type": "registry:ui",
   "title": "Checkbox",
-  "description": "built on Radix Checkbox.",
+  "description": "Built on Radix Checkbox — accessible binary control with focus ring and indeterminate state support.",
   "dependencies": [
     "@radix-ui/react-checkbox",
     "lucide-react"

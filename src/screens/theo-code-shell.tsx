@@ -1040,7 +1040,7 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
         <div className="flex flex-1 flex-col overflow-y-auto">
           {/* Mode context badge — shows what's being filtered */}
           <div className="flex items-center gap-2 px-5 py-2 font-mono text-label text-muted-foreground">
-            <span className="size-1.5 rounded-full bg-primary" aria-hidden />
+            <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
             Filtering by <span className="font-medium text-foreground">{MODE_LABEL[mode]}</span>
           </div>
           <Sidebar.Section title={`${MODE_LABEL[mode]} sessions`}>
@@ -1097,7 +1097,7 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
           <div className="flex items-center gap-3">
             <span
               className="grid size-8 place-items-center rounded-full bg-accent font-bold text-accent-foreground text-label-caps"
-              aria-hidden
+              aria-hidden="true"
             >
               AA
             </span>
@@ -1356,7 +1356,7 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
                 className="flex items-center justify-between gap-3 rounded-lg border border-border/40 bg-card/40 p-3"
               >
                 <div className="flex items-center gap-3">
-                  <Layers className="size-4 text-muted-foreground" aria-hidden />
+                  <Layers className="size-4 text-muted-foreground" aria-hidden="true" />
                   <div className="grid">
                     <span className="font-medium font-mono text-body-sm uppercase tracking-wider">
                       {e.name}
@@ -1974,7 +1974,7 @@ function AgentsSheet({ open, onClose, currentMode }: PanelSheetProps) {
                       </span>
                     ) : null}
                   </div>
-                  <Pencil className="size-3.5 text-muted-foreground" aria-hidden />
+                  <Pencil className="size-3.5 text-muted-foreground" aria-hidden="true" />
                 </button>
               ))}
             </div>
@@ -2135,7 +2135,7 @@ function ThemeIconPicker() {
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           )}
         >
-          <Palette className="size-4 text-primary" aria-hidden />
+          <Palette className="size-4 text-primary" aria-hidden="true" />
         </button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
@@ -2164,7 +2164,7 @@ function ThemeIconPicker() {
                 ) : null}
               </span>
               {t.name === theme.name ? (
-                <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
+                <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden="true" />
               ) : null}
             </DropdownMenu.Item>
           ))}

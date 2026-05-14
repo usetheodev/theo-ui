@@ -3,7 +3,7 @@
   "name": "agent-handoff",
   "type": "registry:ui",
   "title": "AgentHandoff",
-  "description": "visual marker of one agent delegating to another.",
+  "description": "Visual marker of one agent delegating to another.",
   "dependencies": [
     "lucide-react"
   ],

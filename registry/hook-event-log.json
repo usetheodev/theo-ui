@@ -3,7 +3,7 @@
   "name": "hook-event-log",
   "type": "registry:ui",
   "title": "HookEventLog",
-  "description": "chronological list of hook firings, with result tone, the",
+  "description": "Chronological list of hook firings, with result tone, the",
   "dependencies": [
     "lucide-react"
   ],

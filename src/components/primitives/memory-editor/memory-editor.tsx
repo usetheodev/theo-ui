@@ -54,7 +54,7 @@ const MemoryEditor = forwardRef<HTMLDivElement, MemoryEditorProps>(
       <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
         <header className="flex items-center justify-between gap-3 border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">
-            <Brain className="size-4 text-primary" aria-hidden />
+            <Brain className="size-4 text-primary" aria-hidden="true" />
             <h3 className="font-display text-title-md tracking-tight">{title}</h3>
           </div>
           <div className="inline-flex items-center rounded-lg border border-border/60 bg-muted p-0.5">
@@ -89,7 +89,7 @@ const MemoryEditor = forwardRef<HTMLDivElement, MemoryEditorProps>(
           <>
             <div className="flex items-center justify-between gap-3 border-border/40 border-b bg-muted/30 px-4 py-2">
               <div className="flex min-w-0 items-center gap-2">
-                <ActiveIcon className="size-3 shrink-0 text-muted-foreground" aria-hidden />
+                <ActiveIcon className="size-3 shrink-0 text-muted-foreground" aria-hidden="true" />
                 <span className="truncate font-mono text-code-sm text-foreground">
                   {active.path}
                 </span>

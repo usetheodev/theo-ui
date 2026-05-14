@@ -3,7 +3,7 @@
   "name": "sub-agent-dispatch",
   "type": "registry:ui",
   "title": "SubAgentDispatch",
-  "description": "visualization for a Task() / sub-agent invocation.",
+  "description": "Visualization for a Task() / sub-agent invocation.",
   "dependencies": [
     "lucide-react"
   ],

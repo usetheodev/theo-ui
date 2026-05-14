@@ -3,7 +3,7 @@
   "name": "tool-call-card",
   "type": "registry:ui",
   "title": "ToolCallCard",
-  "description": "single agent tool invocation rendered inside the stream.",
+  "description": "Single agent tool invocation rendered inside the stream.",
   "dependencies": [
     "lucide-react"
   ],

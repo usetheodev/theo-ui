@@ -3,7 +3,7 @@
   "name": "diff-viewer",
   "type": "registry:ui",
   "title": "DiffViewer",
-  "description": "unified diff rendering, no external dep.",
+  "description": "Unified diff rendering, no external dep.",
   "dependencies": [],
   "registryDependencies": [
     "cn"

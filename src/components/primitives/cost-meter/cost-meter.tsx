@@ -37,7 +37,7 @@ const CostMeter = forwardRef<HTMLDivElement, CostMeterProps>(
           )}
           {...props}
         >
-          <Coins className="size-3 text-primary" aria-hidden />
+          <Coins className="size-3 text-primary" aria-hidden="true" />
           <span className="text-foreground tabular-nums">{formatUsd(cost)}</span>
           {budget ? <span className="text-muted-foreground">/ {formatUsd(budget)}</span> : null}
         </div>
@@ -66,9 +66,9 @@ const CostMeter = forwardRef<HTMLDivElement, CostMeterProps>(
               )}
             >
               {delta.value >= 0 ? (
-                <TrendingUp className="size-3" aria-hidden />
+                <TrendingUp className="size-3" aria-hidden="true" />
               ) : (
-                <TrendingDown className="size-3" aria-hidden />
+                <TrendingDown className="size-3" aria-hidden="true" />
               )}
               {delta.value >= 0 ? "+" : ""}
               {formatUsd(Math.abs(delta.value))}{" "}

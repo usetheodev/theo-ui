@@ -3,7 +3,7 @@
   "name": "artifact-preview",
   "type": "registry:ui",
   "title": "ArtifactPreview",
-  "description": "shell for previewing a generated artifact (XLSX, PDF, image…).",
+  "description": "Shell for previewing a generated artifact (XLSX, PDF, image…).",
   "dependencies": [
     "lucide-react"
   ],

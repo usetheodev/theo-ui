@@ -3,7 +3,7 @@
   "name": "radio-group",
   "type": "registry:ui",
   "title": "RadioGroup",
-  "description": "built on Radix RadioGroup.",
+  "description": "Built on Radix RadioGroup — accessible radio group with roving focus and orientation control.",
   "dependencies": [
     "@radix-ui/react-radio-group",
     "lucide-react"

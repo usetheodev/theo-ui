@@ -3,7 +3,7 @@
   "name": "button",
   "type": "registry:ui",
   "title": "Button",
-  "description": "primitive action element in the Violet Forge design system.",
+  "description": "Primitive action element in the Violet Forge design system.",
   "dependencies": [
     "@radix-ui/react-slot",
     "class-variance-authority"

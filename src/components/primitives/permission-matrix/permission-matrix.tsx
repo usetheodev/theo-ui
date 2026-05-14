@@ -20,7 +20,9 @@ interface PermissionMatrixProps extends Omit<HTMLAttributes<HTMLDivElement>, "ti
   rules: PermissionRule[];
   title?: ReactNode;
   /**
-   * Available tools shown in the add form. Empty array hides the add form.
+   * Available tools shown in the add form. Pass `undefined` (or omit) — or an
+   * empty array — to hide the add form entirely. The form only renders when
+   * `onAdd` is provided AND `toolOptions` has at least one entry.
    */
   toolOptions?: string[];
   onAdd?: (rule: Omit<PermissionRule, "id">) => void;
@@ -35,9 +37,9 @@ const DECISION_CLASS: Record<PermissionDecisionKind, string> = {
 };
 
 const DECISION_ICON: Record<PermissionDecisionKind, ReactNode> = {
-  allow: <Check className="size-3" aria-hidden />,
-  ask: <ShieldQuestion className="size-3" aria-hidden />,
-  deny: <Lock className="size-3" aria-hidden />,
+  allow: <Check className="size-3" aria-hidden="true" />,
+  ask: <ShieldQuestion className="size-3" aria-hidden="true" />,
+  deny: <Lock className="size-3" aria-hidden="true" />,
 };
 
 const cycle = (cur: PermissionDecisionKind): PermissionDecisionKind =>
@@ -84,7 +86,7 @@ const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
           </header>
         ) : null}
 
-        {onAdd && toolOptions ? (
+        {onAdd && toolOptions && toolOptions.length > 0 ? (
           <form
             className="grid grid-cols-[1fr_2fr_auto_auto] gap-2 border-border/40 border-b p-3"
             onSubmit={(e) => {

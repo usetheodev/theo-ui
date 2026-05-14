@@ -3,7 +3,7 @@
   "name": "session-timeline",
   "type": "registry:ui",
   "title": "SessionTimeline",
-  "description": "historical view of past agent sessions with per-row",
+  "description": "Historical view of past agent sessions with per-row",
   "dependencies": [
     "lucide-react"
   ],

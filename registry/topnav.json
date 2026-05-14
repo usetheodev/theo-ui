@@ -3,7 +3,7 @@
   "name": "topnav",
   "type": "registry:ui",
   "title": "TopNav",
-  "description": "horizontal app bar (64px).",
+  "description": "Horizontal app bar (64px) with breadcrumbs, mode switcher (radiogroup), and action slots.",
   "dependencies": [
     "lucide-react"
   ],

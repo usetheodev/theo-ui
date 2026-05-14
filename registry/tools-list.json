@@ -3,7 +3,7 @@
   "name": "tools-list",
   "type": "registry:ui",
   "title": "ToolsList",
-  "description": "surface every tool the agent could call, with its enablement",
+  "description": "Surface every tool the agent could call, with its enablement",
   "dependencies": [
     "lucide-react"
   ],

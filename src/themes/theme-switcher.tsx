@@ -1,5 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Check, Moon, Palette, Sun } from "lucide-react";
+import type { JSX } from "react";
 import { cn } from "../lib/cn.js";
 import { useTheme } from "./theme-provider.js";
 
@@ -35,7 +36,7 @@ function ThemeSwitcher({ className, showModeToggle = true }: ThemeSwitcherProps)
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             )}
           >
-            <Palette className="size-4 text-primary" aria-hidden />
+            <Palette className="size-4 text-primary" aria-hidden="true" />
             <span>{theme.label}</span>
           </button>
         </DropdownMenu.Trigger>
@@ -65,7 +66,7 @@ function ThemeSwitcher({ className, showModeToggle = true }: ThemeSwitcherProps)
                   ) : null}
                 </span>
                 {t.name === theme.name ? (
-                  <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
+                  <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden="true" />
                 ) : null}
               </DropdownMenu.Item>
             ))}

@@ -3,7 +3,7 @@
   "name": "scroll-area",
   "type": "registry:ui",
   "title": "ScrollArea",
-  "description": "custom scroller with Violet Forge styling.",
+  "description": "Custom scroller with Violet Forge styling.",
   "dependencies": [
     "@radix-ui/react-scroll-area"
   ],

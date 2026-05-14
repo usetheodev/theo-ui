@@ -39,7 +39,7 @@ function Avatar({ party }: { party: HandoffParty }) {
           "grid size-7 place-items-center rounded-full font-bold font-mono text-label",
           TONE_CLASS[party.tone ?? "primary"],
         )}
-        aria-hidden
+        aria-hidden="true"
       >
         {inits}
       </span>
@@ -65,7 +65,7 @@ const AgentHandoff = forwardRef<HTMLElement, AgentHandoffProps>(
     >
       <header className="flex items-center gap-2">
         <Avatar party={from} />
-        <ArrowRight className="size-4 text-primary" aria-hidden />
+        <ArrowRight className="size-4 text-primary" aria-hidden="true" />
         <Avatar party={to} />
         <span className="ml-auto font-mono text-label-caps text-muted-foreground uppercase tracking-wider">
           handoff

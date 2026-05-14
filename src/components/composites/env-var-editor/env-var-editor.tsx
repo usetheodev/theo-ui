@@ -2,9 +2,9 @@ import { Copy, Eye, EyeOff, Lock, Plus, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/badge.js";
-import { Button } from "../../primitives/button/button.js";
-import { Input } from "../../primitives/input/input.js";
+import { Badge } from "../../primitives/badge/index.js";
+import { Button } from "../../primitives/button/index.js";
+import { Input } from "../../primitives/input/index.js";
 
 export type EnvScope = "production" | "staging" | "preview" | "all" | string;
 
@@ -154,7 +154,7 @@ function Row({ entry, onRemove }: RowProps) {
     <li className="grid grid-cols-[2fr_3fr_auto_auto] items-center gap-3 py-3">
       <span className="truncate font-mono text-code-sm text-foreground">{entry.key}</span>
       <span className="flex items-center gap-2 truncate font-mono text-code-sm text-muted-foreground">
-        {entry.readonly ? <Lock className="size-3" aria-hidden /> : null}
+        {entry.readonly ? <Lock className="size-3" aria-hidden="true" /> : null}
         {value}
       </span>
       <Badge variant={entry.scope === "production" ? "primary" : "default"}>

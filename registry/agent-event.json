@@ -3,7 +3,7 @@
   "name": "agent-event",
   "type": "registry:ui",
   "title": "AgentEvent",
-  "description": "single event row in the agent timeline.",
+  "description": "Single event row in the agent timeline.",
   "dependencies": [
     "lucide-react"
   ],

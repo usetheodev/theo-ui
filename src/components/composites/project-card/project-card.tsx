@@ -2,7 +2,7 @@ import { Activity, GitBranch, GitCommit } from "lucide-react";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/badge.js";
+import { Badge } from "../../primitives/badge/index.js";
 import type { DeploymentStatus } from "../deployment-row/deployment-row.js";
 
 const statusToVariant: Record<
@@ -116,7 +116,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               <Activity className="size-3" /> {project.region}
             </span>
           ) : null}
-          <span aria-hidden>·</span>
+          <span aria-hidden="true">·</span>
           <span>{project.lastDeployedAt}</span>
         </div>
 

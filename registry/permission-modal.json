@@ -3,7 +3,7 @@
   "name": "permission-modal",
   "type": "registry:ui",
   "title": "PermissionModal",
-  "description": "local-files access prompt built on Dialog.",
+  "description": "Local-files access prompt built on Dialog.",
   "dependencies": [
     "lucide-react"
   ],

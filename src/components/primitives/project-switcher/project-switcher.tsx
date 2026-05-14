@@ -59,7 +59,7 @@ const ProjectSwitcher = forwardRef<HTMLButtonElement, ProjectSwitcherProps>(
       <>
         <span
           className="grid size-8 shrink-0 place-items-center rounded-lg bg-primary font-black font-display text-primary-foreground"
-          aria-hidden
+          aria-hidden="true"
         >
           {inferredBrand}
         </span>
@@ -74,12 +74,12 @@ const ProjectSwitcher = forwardRef<HTMLButtonElement, ProjectSwitcherProps>(
           </div>
           {branch ? (
             <span className="mt-1 inline-flex items-center gap-1 truncate font-mono text-label text-muted-foreground">
-              <GitBranch className="size-3 shrink-0" aria-hidden /> {branch}
+              <GitBranch className="size-3 shrink-0" aria-hidden="true" /> {branch}
             </span>
           ) : null}
         </div>
         {isInteractive ? (
-          <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+          <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         ) : null}
       </>
     );

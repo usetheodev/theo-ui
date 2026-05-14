@@ -3,7 +3,7 @@
   "name": "tooltip",
   "type": "registry:ui",
   "title": "Tooltip",
-  "description": "built on Radix Tooltip.",
+  "description": "Built on Radix Tooltip — accessible hover / focus tooltip with delay and side / align controls.",
   "dependencies": [
     "@radix-ui/react-tooltip"
   ],

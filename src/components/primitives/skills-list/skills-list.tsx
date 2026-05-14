@@ -52,7 +52,7 @@ const SkillsList = forwardRef<HTMLDivElement, SkillsListProps>(
               <div className="relative">
                 <Search
                   className="-translate-y-1/2 absolute top-1/2 left-2 size-3.5 text-muted-foreground"
-                  aria-hidden
+                  aria-hidden="true"
                 />
                 <input
                   type="search"

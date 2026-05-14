@@ -9,5 +9,6 @@ export default defineConfig({
   splitting: false,
   treeshake: true,
   external: ["react", "react-dom"],
-  onSuccess: "cp src/styles/tokens.css dist/tokens.css && cp src/styles/global.css dist/styles.css",
+  onSuccess:
+    "cp src/styles/tokens.css dist/tokens.css && cp src/styles/fonts.css dist/fonts.css && cp src/styles/global.css dist/styles.css",
 });

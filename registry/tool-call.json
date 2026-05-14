@@ -3,7 +3,7 @@
   "name": "tool-call",
   "type": "registry:ui",
   "title": "ToolCall",
-  "description": "collapsible row representing an agent tool invocation.",
+  "description": "Collapsible row representing an agent tool invocation.",
   "dependencies": [
     "lucide-react"
   ],

@@ -20,7 +20,7 @@ interface ChatMessageProps extends HTMLAttributes<HTMLElement> {
  *
  * Visual:
  *   - user      → soft surface bubble aligned right, max-width 70%
- *   - assistant → card with violet accent border-left + Boska title for model + body
+ *   - assistant → card with violet accent border-left + display-font title for model + body
  *   - system    → muted callout with accent-deep border
  */
 const ChatMessage = forwardRef<HTMLElement, ChatMessageProps>(

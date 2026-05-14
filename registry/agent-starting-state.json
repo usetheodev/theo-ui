@@ -3,7 +3,7 @@
   "name": "agent-starting-state",
   "type": "registry:ui",
   "title": "AgentStartingState",
-  "description": "full-width skeleton shown while the agent boots.",
+  "description": "Full-width skeleton shown while the agent boots.",
   "dependencies": [
     "lucide-react"
   ],

@@ -136,7 +136,7 @@ function Delta({ metric }: { metric: Metric }) {
 function Sparkline({ values }: { values: number[] }) {
   const clamped = values.map((v) => Math.max(0, Math.min(1, v)));
   return (
-    <span className="ml-auto flex h-6 items-end gap-[2px]" aria-hidden>
+    <span className="ml-auto flex h-6 items-end gap-[2px]" aria-hidden="true">
       {clamped.map((v, idx) => (
         <span
           // biome-ignore lint/suspicious/noArrayIndexKey: positional, values are not stable identifiers

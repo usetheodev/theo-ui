@@ -174,11 +174,176 @@ function validateScriptsAndCi(): void {
   }
 }
 
+function validateGovernanceFiles(): void {
+  // Implemented in T1.7 — checks LICENSE, CHANGELOG.md, README.md presence.
+  for (const file of ["LICENSE", "CHANGELOG.md", "README.md"]) {
+    if (!existsSync(join(ROOT, file))) fail("repo", `missing ${file}`);
+  }
+  const changelogPath = join(ROOT, "CHANGELOG.md");
+  if (existsSync(changelogPath)) {
+    const ch = readFileSync(changelogPath, "utf-8");
+    if (!ch.includes("## [Unreleased]")) {
+      fail("CHANGELOG.md", "must contain '## [Unreleased]' section");
+    }
+  }
+}
+
+function validateReadmeDrift(): void {
+  // Implemented in T1.8 — fails if README mentions exports that don't exist
+  // or fails to mention exports declared in src/index.ts.
+  const readmePath = join(ROOT, "README.md");
+  if (!existsSync(readmePath)) return;
+  const indexContent = readFileSync(join(ROOT, "src/index.ts"), "utf-8");
+  const readmeContent = readFileSync(readmePath, "utf-8");
+
+  // Extract exported names from `export { A, B, type C }` lines, ignoring `type`.
+  const exportedNames = new Set<string>();
+  for (const match of indexContent.matchAll(/export\s+(?:type\s+)?{([^}]+)}/g)) {
+    const body = match[1];
+    if (!body) continue;
+    for (const raw of body.split(",")) {
+      const cleaned = raw
+        .trim()
+        .replace(/^type\s+/, "")
+        .split(/\s+as\s+/)[0]
+        ?.trim();
+      if (cleaned && /^[A-Z][A-Za-z0-9]+$/.test(cleaned)) exportedNames.add(cleaned);
+    }
+  }
+
+  // Whitelist for non-component capitalized names that legitimately appear in README.
+  const whitelist = new Set([
+    "Apache",
+    "Vercel",
+    "React",
+    "Tailwind",
+    "Radix",
+    "Geist",
+    "Sans",
+    "Mono",
+    "Theo",
+    "AI",
+    "PaaS",
+    "MIT",
+    "OR",
+    "EMAIL",
+    "DESIGN",
+    "LAB",
+    "Quickstart",
+    "Engineered",
+    "Precision",
+    "Roadmap",
+    "Component",
+    "Components",
+    "Composites",
+    "Primitives",
+    "Themes",
+    "DESIGN.md",
+    "ARCHITECTURE.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "README.md",
+    "Sprint",
+    "Phase",
+    "Card",
+    "Dialog",
+    "ScrollBar",
+    "ScrollArea",
+    "Boska",
+    "Switzer",
+    "JetBrains",
+    "Inter",
+    "Berkeley",
+    "Departure",
+    "Söhne",
+    "Migra",
+    "Monaspace",
+    "Neon",
+    "PP",
+    "Editorial",
+    "New",
+    "General",
+    "Industrial",
+    "Aurora",
+    "Terminal",
+    "Furnace",
+    "Console",
+  ]);
+
+  // Find capitalized words in backticks that aren't in exportedNames or whitelist.
+  const ticked = new Set<string>();
+  for (const match of readmeContent.matchAll(/`([A-Z][A-Za-z0-9]+)`/g)) {
+    const name = match[1];
+    if (name && !whitelist.has(name)) ticked.add(name);
+  }
+
+  for (const name of ticked) {
+    if (!exportedNames.has(name)) {
+      fail("README.md", `mentions \`${name}\` but it is not exported from src/index.ts`);
+    }
+  }
+}
+
+function validateDocsTypography(): void {
+  // Implemented in T1.9 — fails if docs/design-system.md mentions deprecated fonts
+  // outside a "Histórico" section, or doesn't mention Geist (the normative font).
+  const dsPath = join(ROOT, "docs/design-system.md");
+  if (!existsSync(dsPath)) return;
+  const ds = readFileSync(dsPath, "utf-8");
+
+  if (!ds.includes("Geist")) {
+    fail("design-system.md", "missing normative font 'Geist' (must be cited)");
+  }
+
+  // Split at "## Histórico" or "## Alternativas consideradas" — anything before
+  // these headers must not mention deprecated fonts.
+  const splitMarker = /^##\s+(Histórico|Alternativas consideradas|History|Appendix)/m;
+  const normativeSection = ds.split(splitMarker)[0] ?? ds;
+  const deprecatedFonts = ["Boska", "Switzer", "JetBrains Mono"];
+  for (const font of deprecatedFonts) {
+    if (normativeSection.includes(font)) {
+      fail(
+        "design-system.md",
+        `mentions deprecated font '${font}' in normative section (must live under '## Histórico')`,
+      );
+    }
+  }
+}
+
+async function validateCompositeBarrel(): Promise<void> {
+  // Implemented in T8.1 — fails if a composite imports a primitive via its raw
+  // implementation file (e.g. ../primitives/X/X.js) instead of the barrel
+  // (../primitives/X/index.js or ../primitives/X).
+  const compositesRoot = join(ROOT, "src/components/composites");
+  if (!existsSync(compositesRoot)) return;
+
+  for (const name of await listDirectories(compositesRoot)) {
+    const impl = join(compositesRoot, name, `${name}.tsx`);
+    if (!existsSync(impl)) continue;
+    const content = await readFile(impl, "utf-8");
+    // Match imports of the form ../../primitives/<X>/<X>.js (i.e. NOT index.js)
+    const pattern = /from\s+["']((?:\.\.\/)+primitives\/([^/]+)\/(?!index)([^"']+))["']/g;
+    for (const match of content.matchAll(pattern)) {
+      const importedFile = match[3];
+      if (importedFile && !importedFile.startsWith("index")) {
+        fail(
+          `composites/${name}`,
+          `imports primitive via raw file (${match[1]}); use the barrel index instead`,
+        );
+      }
+    }
+  }
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(ROOT, "docs/quality-gates.md"))) {
     fail("docs", "missing docs/quality-gates.md");
   }
 
+  validateGovernanceFiles();
+  validateReadmeDrift();
+  validateDocsTypography();
+  await validateCompositeBarrel();
   await validateComponentStructure();
   await validateRegistryStoriesAndTests();
   await validatePublicExports();

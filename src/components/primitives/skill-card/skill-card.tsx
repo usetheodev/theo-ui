@@ -58,7 +58,7 @@ const SkillCard = forwardRef<HTMLDivElement, SkillCardProps>(
         <header className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className={cn("grid size-8 place-items-center rounded-md bg-muted", config.tone)}>
-              <Icon className="size-4" aria-hidden />
+              <Icon className="size-4" aria-hidden="true" />
             </span>
             <div className="grid">
               <h4 className="font-medium font-mono text-body-sm text-foreground">{skill.name}</h4>

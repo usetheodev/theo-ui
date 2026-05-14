@@ -71,7 +71,7 @@ const ToolsList = forwardRef<HTMLDivElement, ToolsListProps>(
               className="grid grid-cols-[auto_1fr_auto] items-start gap-3 px-4 py-3"
             >
               <span className="mt-0.5 grid size-8 place-items-center rounded-md bg-muted text-muted-foreground">
-                <Icon className="size-4" aria-hidden />
+                <Icon className="size-4" aria-hidden="true" />
               </span>
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
@@ -106,11 +106,11 @@ const ToolsList = forwardRef<HTMLDivElement, ToolsListProps>(
                 aria-label={`Cycle enablement for ${tool.name}`}
               >
                 {state === "enabled" ? (
-                  <Eye className="size-3" aria-hidden />
+                  <Eye className="size-3" aria-hidden="true" />
                 ) : state === "ask" ? (
-                  <Settings2 className="size-3" aria-hidden />
+                  <Settings2 className="size-3" aria-hidden="true" />
                 ) : (
-                  <Lock className="size-3" aria-hidden />
+                  <Lock className="size-3" aria-hidden="true" />
                 )}
                 {ENABLEMENT_LABEL[state]}
               </button>

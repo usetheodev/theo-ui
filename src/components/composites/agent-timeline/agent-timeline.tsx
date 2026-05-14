@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { AgentEvent as AgentEventModel } from "../../../types/agent.js";
-import { AgentEvent } from "../../primitives/agent-event/agent-event.js";
+import { AgentEvent } from "../../primitives/agent-event/index.js";
 
 interface AgentTimelineProps extends HTMLAttributes<HTMLOListElement> {
   events: AgentEventModel[];

@@ -98,7 +98,7 @@ const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
               </span>
             )}
             {!isLast ? (
-              <ChevronRight className="size-3.5 text-muted-foreground" aria-hidden />
+              <ChevronRight className="size-3.5 text-muted-foreground" aria-hidden="true" />
             ) : null}
           </Fragment>
         );
@@ -117,62 +117,92 @@ interface ModeSwitcherProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChan
   value: string;
   options: ModeSwitcherOption[];
   onChange?: (value: string) => void;
+  /**
+   * Accessible label for the radiogroup. Defaults to "Mode".
+   */
+  ariaLabel?: string;
 }
 
 /**
- * TopNav.ModeSwitcher — segmented control (Chat / Code / Infra) inspired by the
- * referencia wiremocks. Stateless: pass `value` + `onChange`.
+ * TopNav.ModeSwitcher — segmented control (Chat / Code / Infra).
+ *
+ * ARIA semantics: `role="radiogroup"` + `role="radio"` per option, with roving
+ * tabindex and full keyboard navigation (Arrow keys + Home/End). Per WAI-ARIA
+ * radiogroup pattern, exactly one option has `tabIndex=0` (the active one) and
+ * the rest have `tabIndex=-1`, so Tab moves in and Tab moves out.
+ *
+ * Stateless: pass `value` + `onChange`.
  */
 const ModeSwitcher = forwardRef<HTMLDivElement, ModeSwitcherProps>(
-  ({ className, value, options, onChange, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="tablist"
-      aria-label="Mode"
-      className={cn(
-        "inline-flex items-center rounded-lg border border-border/60 bg-muted p-1",
-        className,
-      )}
-      {...props}
-    >
-      {options.map((opt) => {
-        const isActive = opt.value === value;
-        return (
-          <button
-            key={opt.value}
-            type="button"
-            role="tab"
-            aria-selected={isActive}
-            onClick={() => onChange?.(opt.value)}
-            className={cn(
-              "rounded-md px-3 py-1.5 font-medium font-sans text-body-sm",
-              "transition-all duration-base ease-out-soft",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              isActive
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {opt.label}
-          </button>
-        );
-      })}
-    </div>
-  ),
+  ({ className, value, options, onChange, ariaLabel = "Mode", ...props }, ref) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!onChange || options.length === 0) return;
+      const idx = options.findIndex((o) => o.value === value);
+      const current = idx >= 0 ? idx : 0;
+      let nextIdx: number | null = null;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        nextIdx = (current + 1) % options.length;
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        nextIdx = (current - 1 + options.length) % options.length;
+      } else if (e.key === "Home") {
+        nextIdx = 0;
+      } else if (e.key === "End") {
+        nextIdx = options.length - 1;
+      }
+      if (nextIdx === null) return;
+      e.preventDefault();
+      const target = options[nextIdx];
+      if (target) onChange(target.value);
+    };
+
+    return (
+      <div
+        ref={ref}
+        role="radiogroup"
+        aria-label={ariaLabel}
+        onKeyDown={handleKeyDown}
+        className={cn(
+          "inline-flex items-center rounded-lg border border-border/60 bg-muted p-1",
+          className,
+        )}
+        {...props}
+      >
+        {options.map((opt) => {
+          const isActive = opt.value === value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              // biome-ignore lint/a11y/useSemanticElements: WAI-ARIA radiogroup pattern requires role="radio" on buttons for segmented controls
+              role="radio"
+              aria-checked={isActive}
+              tabIndex={isActive ? 0 : -1}
+              onClick={() => onChange?.(opt.value)}
+              className={cn(
+                "rounded-md px-3 py-1.5 font-medium font-sans text-body-sm",
+                "transition-all duration-base ease-out-soft",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                isActive
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+    );
+  },
 );
 ModeSwitcher.displayName = "TopNav.ModeSwitcher";
 
-const TopNav = Root as typeof Root & {
-  Left: typeof Left;
-  Center: typeof Center;
-  Right: typeof Right;
-  Breadcrumbs: typeof Breadcrumbs;
-  ModeSwitcher: typeof ModeSwitcher;
-};
-TopNav.Left = Left;
-TopNav.Center = Center;
-TopNav.Right = Right;
-TopNav.Breadcrumbs = Breadcrumbs;
-TopNav.ModeSwitcher = ModeSwitcher;
+const TopNav = /*#__PURE__*/ Object.assign(Root, {
+  Left,
+  Center,
+  Right,
+  Breadcrumbs,
+  ModeSwitcher,
+});
 
 export { TopNav };

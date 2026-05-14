@@ -3,7 +3,7 @@
   "name": "cron-job-card",
   "type": "registry:ui",
   "title": "CronJobCard",
-  "description": "one scheduled agent job.",
+  "description": "One scheduled agent job — shows schedule, next run, last status, and toggle / edit actions.",
   "dependencies": [
     "lucide-react"
   ],

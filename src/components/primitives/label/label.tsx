@@ -28,7 +28,7 @@ const Label = forwardRef<ElementRef<typeof LabelPrimitive.Root>, LabelProps>(
     >
       {children}
       {required ? (
-        <span className="text-destructive" aria-hidden>
+        <span className="text-destructive" aria-hidden="true">
           *
         </span>
       ) : null}

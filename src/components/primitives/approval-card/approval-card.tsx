@@ -94,7 +94,7 @@ const ApprovalCard = forwardRef<HTMLElement, ApprovalCardProps>(
         <header className="flex items-start gap-3">
           <span
             className={cn("mt-0.5 inline-flex shrink-0", ICON_TONE[resolvedSeverity])}
-            aria-hidden
+            aria-hidden="true"
           >
             <Icon className="size-4" />
           </span>

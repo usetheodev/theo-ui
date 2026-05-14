@@ -44,11 +44,11 @@ const toastVariants = cva(
 );
 
 const iconForVariant: Record<NonNullable<ToastVariant>, ReactNode> = {
-  default: <Info className="size-4 shrink-0 text-muted-foreground" aria-hidden />,
-  info: <Info className="size-4 shrink-0 text-primary" aria-hidden />,
-  success: <CheckCircle2 className="size-4 shrink-0 text-success" aria-hidden />,
-  warning: <TriangleAlert className="size-4 shrink-0 text-warning" aria-hidden />,
-  destructive: <AlertCircle className="size-4 shrink-0 text-destructive" aria-hidden />,
+  default: <Info className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />,
+  info: <Info className="size-4 shrink-0 text-primary" aria-hidden="true" />,
+  success: <CheckCircle2 className="size-4 shrink-0 text-success" aria-hidden="true" />,
+  warning: <TriangleAlert className="size-4 shrink-0 text-warning" aria-hidden="true" />,
+  destructive: <AlertCircle className="size-4 shrink-0 text-destructive" aria-hidden="true" />,
 };
 
 type ToastVariant = NonNullable<VariantProps<typeof toastVariants>["variant"]>;
@@ -60,7 +60,7 @@ interface ToastProps
 const ToastRoot = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>(
   ({ className, variant = "default", children, ...props }, ref) => (
     <ToastPrimitive.Root ref={ref} className={cn(toastVariants({ variant }), className)} {...props}>
-      <span aria-hidden>{iconForVariant[variant as ToastVariant]}</span>
+      <span aria-hidden="true">{iconForVariant[variant as ToastVariant]}</span>
       <div className="min-w-0 flex-1">{children}</div>
     </ToastPrimitive.Root>
   ),

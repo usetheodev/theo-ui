@@ -128,7 +128,7 @@ export function MentionMenu({
     >
       <header className="flex items-center justify-between gap-2 border-border/40 border-b bg-muted/30 px-3 py-2">
         <span className="inline-flex items-center gap-1.5 font-mono text-label text-muted-foreground uppercase tracking-wider">
-          <TriggerIcon className="size-3" aria-hidden />
+          <TriggerIcon className="size-3" aria-hidden="true" />
           {resolvedTitle}
         </span>
         <span className="font-mono text-label text-muted-foreground tabular-nums">
@@ -159,7 +159,10 @@ export function MentionMenu({
                   data-active={active || undefined}
                 >
                   {Icon ? (
-                    <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
+                    <Icon
+                      className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                      aria-hidden="true"
+                    />
                   ) : null}
                   <span className="grid min-w-0 flex-1 gap-0.5">
                     <span className="truncate font-medium font-mono text-code-md">

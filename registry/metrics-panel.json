@@ -3,7 +3,7 @@
   "name": "metrics-panel",
   "type": "registry:block",
   "title": "MetricsPanel",
-  "description": "grid of metric tiles for observability dashboards.",
+  "description": "Grid of metric tiles for observability dashboards.",
   "dependencies": [
     "lucide-react"
   ],

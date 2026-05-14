@@ -3,7 +3,7 @@
   "name": "task-header",
   "type": "registry:ui",
   "title": "TaskHeader",
-  "description": "title bar for a task pane.",
+  "description": "Title bar for a task pane — composite combining heading, status badge, and chevron menu.",
   "dependencies": [
     "lucide-react"
   ],

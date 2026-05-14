@@ -40,7 +40,7 @@ const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
       {...props}
     >
       <header className="mb-3 flex items-center gap-2">
-        <Cloud className="size-4 text-primary" aria-hidden />
+        <Cloud className="size-4 text-primary" aria-hidden="true" />
         <h3 className="font-display text-title-md tracking-tight">{title}</h3>
       </header>
       <ul className="grid gap-2">
@@ -59,12 +59,12 @@ const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
                     "transition-colors hover:border-primary/40 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 )}
               >
-                <Icon className="size-5 shrink-0 text-primary" aria-hidden />
+                <Icon className="size-5 shrink-0 text-primary" aria-hidden="true" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-code-md text-foreground">{file.name}</p>
                   {file.destination ? (
                     <p className="flex items-center gap-1 truncate text-body-sm text-muted-foreground">
-                      <Folder className="size-3 shrink-0" aria-hidden /> {file.destination}
+                      <Folder className="size-3 shrink-0" aria-hidden="true" /> {file.destination}
                     </p>
                   ) : null}
                 </div>

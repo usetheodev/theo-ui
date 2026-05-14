@@ -56,7 +56,7 @@ const SocialAuthRow = forwardRef<HTMLDivElement, SocialAuthRowProps>(
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             )}
           >
-            <Icon className="size-4" aria-hidden />
+            <Icon className="size-4" aria-hidden="true" />
             {p.label}
           </button>
         );

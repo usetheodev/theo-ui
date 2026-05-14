@@ -19,6 +19,12 @@ interface TerminalPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
    * Optional prompt prefix for commands, defaults to "$".
    */
   promptPrefix?: string;
+  /**
+   * Live-region politeness for screen readers. Use `"polite"` when streaming
+   * fresh output so assistive tech announces new lines without interrupting.
+   * Default `"off"` for static / historical views.
+   */
+  live?: "off" | "polite";
 }
 
 const kindColor: Record<NonNullable<TerminalLine["kind"]>, string> = {
@@ -37,19 +43,23 @@ const kindColor: Record<NonNullable<TerminalLine["kind"]>, string> = {
  * pty/xterm for live shells if needed.
  */
 const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
-  ({ className, title = "Terminal", lines, promptPrefix = "$", ...props }, ref) => (
+  ({ className, title = "Terminal", lines, promptPrefix = "$", live = "off", ...props }, ref) => (
     <div
       ref={ref}
       className={cn("overflow-hidden rounded-xl border bg-card", className)}
       {...props}
     >
       <header className="flex items-center gap-2 border-border/40 border-b px-3 py-2">
-        <TerminalIcon className="size-3.5 text-muted-foreground" aria-hidden />
+        <TerminalIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />
         <span className="font-sans text-label-caps text-muted-foreground uppercase tracking-wider">
           {title}
         </span>
       </header>
-      <ol className="grid gap-0.5 px-3 py-2 font-mono text-code-sm">
+      <ol
+        className="grid gap-0.5 px-3 py-2 font-mono text-code-sm"
+        aria-live={live}
+        aria-atomic="false"
+      >
         {lines.map((line) => {
           const kind = line.kind ?? "stdout";
           return (
@@ -60,7 +70,7 @@ const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
                   {line.content}
                 </>
               ) : kind === "prompt" ? (
-                <span className="animate-pulse">{line.content}</span>
+                <span className="motion-safe:animate-pulse">{line.content}</span>
               ) : (
                 line.content
               )}

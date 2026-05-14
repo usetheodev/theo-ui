@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { MoreHorizontal, RotateCcw } from "lucide-react";
-import { Button } from "../../primitives/button/button.js";
-import { Card } from "../../primitives/card/card.js";
+import { Button } from "../../primitives/button/index.js";
+import { Card } from "../../primitives/card/index.js";
 import { type Deployment, DeploymentRow } from "./deployment-row.js";
 
 export default { title: "Composites / PaaS / DeploymentRow" };

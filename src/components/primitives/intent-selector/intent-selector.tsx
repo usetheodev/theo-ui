@@ -45,9 +45,9 @@ const IntentSelector = forwardRef<HTMLButtonElement, IntentSelectorProps>(
             )}
             {...props}
           >
-            <Icon className="size-3.5 text-primary" aria-hidden />
+            <Icon className="size-3.5 text-primary" aria-hidden="true" />
             {current?.label ?? "Select intent"}
-            <ChevronDown className="size-3 text-muted-foreground" aria-hidden />
+            <ChevronDown className="size-3 text-muted-foreground" aria-hidden="true" />
           </button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
@@ -73,7 +73,7 @@ const IntentSelector = forwardRef<HTMLButtonElement, IntentSelectorProps>(
                     "data-[highlighted]:bg-muted",
                   )}
                 >
-                  <OptIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+                  <OptIcon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                   <span className="flex flex-1 flex-col">
                     <span className="font-medium">{opt.label}</span>
                     {opt.description ? (

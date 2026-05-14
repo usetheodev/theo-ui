@@ -67,7 +67,7 @@ const Dot = forwardRef<HTMLSpanElement, BadgeDotProps>(
   ({ className, pulse = false, tone = "success", ...props }, ref) => (
     <span
       ref={ref}
-      aria-hidden
+      aria-hidden="true"
       className={cn(
         "inline-block size-1.5 rounded-full",
         toneClass[tone],

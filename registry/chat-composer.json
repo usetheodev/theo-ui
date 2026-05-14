@@ -3,7 +3,7 @@
   "name": "chat-composer",
   "type": "registry:ui",
   "title": "ChatComposer",
-  "description": "message input area, shared by Chat / Code / Infra modes.",
+  "description": "Message input area, shared by Chat / Code / Infra modes.",
   "dependencies": [
     "lucide-react"
   ],

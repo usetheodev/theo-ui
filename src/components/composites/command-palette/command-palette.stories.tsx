@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { FilePlus, GitBranch, Rocket, Search, Settings, Terminal } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../../primitives/button/button.js";
+import { Button } from "../../primitives/button/index.js";
 import { CommandPalette } from "./command-palette.js";
 
 export default { title: "Composites / Code / CommandPalette" };
@@ -14,6 +14,7 @@ export const Default: Story = () => {
       <CommandPalette
         open={open}
         onOpenChange={setOpen}
+        // biome-ignore lint/suspicious/noConsole: demo story sink
         onSelect={(id) => console.log("selected", id)}
         items={[
           {

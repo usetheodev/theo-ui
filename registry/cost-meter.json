@@ -3,7 +3,7 @@
   "name": "cost-meter",
   "type": "registry:ui",
   "title": "CostMeter",
-  "description": "gauge for token spend.",
+  "description": "Gauge for token spend that visualizes used vs. budget with color-coded states.",
   "dependencies": [
     "lucide-react"
   ],

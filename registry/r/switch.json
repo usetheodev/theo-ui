@@ -3,7 +3,7 @@
   "name": "switch",
   "type": "registry:ui",
   "title": "Switch",
-  "description": "built on Radix Switch.",
+  "description": "Built on Radix Switch — accessible binary toggle with on / off states and disabled support.",
   "dependencies": [
     "@radix-ui/react-switch"
   ],

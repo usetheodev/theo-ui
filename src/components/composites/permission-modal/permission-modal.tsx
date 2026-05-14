@@ -5,8 +5,8 @@ import type {
   PermissionOperation,
   PermissionRequest,
 } from "../../../types/permission.js";
-import { Button } from "../../primitives/button/button.js";
-import { Dialog } from "../../primitives/dialog/dialog.js";
+import { Button } from "../../primitives/button/index.js";
+import { Dialog } from "../../primitives/dialog/index.js";
 
 /**
  * Friendly operation labels used by the default copy. Override with the
@@ -82,7 +82,7 @@ function PermissionModal({
 
   const defaultTitle = (
     <span className="flex items-center gap-2">
-      <ShieldAlert className="size-5 text-warning" aria-hidden />
+      <ShieldAlert className="size-5 text-warning" aria-hidden="true" />
       Allow Theo to {opsList} files in{" "}
       <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-code-md text-primary">
         {request.path}
@@ -107,11 +107,14 @@ function PermissionModal({
         </Dialog.Header>
         <Dialog.Body>
           <div className="flex items-start gap-3 rounded-md border border-border/40 bg-muted/40 p-3">
-            <FolderOpen className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
+            <FolderOpen
+              className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+              aria-hidden="true"
+            />
             <div className="grid gap-1">
               <p className="font-mono text-code-sm text-foreground">{request.path}</p>
               <p className="flex items-center gap-1.5 font-sans text-label text-warning">
-                <AlertTriangle className="size-3" aria-hidden />
+                <AlertTriangle className="size-3" aria-hidden="true" />
                 {text.requestedOps} {opsList}
               </p>
             </div>

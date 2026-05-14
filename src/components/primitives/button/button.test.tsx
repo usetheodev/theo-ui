@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 import { Button } from "./button.js";
 
 describe("Button", () => {
@@ -69,5 +70,10 @@ describe("Button", () => {
     const link = screen.getByRole("link", { name: "Deploy" });
     expect(link).toHaveAttribute("href", "/deploy");
     expect(link.className).toContain("bg-primary");
+  });
+
+  it("has no axe accessibility violations", async () => {
+    const { container } = render(<Button>Deploy</Button>);
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

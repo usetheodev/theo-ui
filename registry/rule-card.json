@@ -3,7 +3,7 @@
   "name": "rule-card",
   "type": "registry:ui",
   "title": "RuleCard",
-  "description": "single Rule row in the Rules list.",
+  "description": "Single Rule row in the Rules list.",
   "dependencies": [
     "lucide-react"
   ],

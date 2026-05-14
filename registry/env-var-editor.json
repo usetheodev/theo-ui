@@ -3,7 +3,7 @@
   "name": "env-var-editor",
   "type": "registry:block",
   "title": "EnvVarEditor",
-  "description": "table-like editor for environment variables.",
+  "description": "Table-like editor for environment variables.",
   "dependencies": [
     "lucide-react"
   ],

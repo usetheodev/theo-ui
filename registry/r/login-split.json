@@ -3,7 +3,7 @@
   "name": "login-split",
   "type": "registry:ui",
   "title": "LoginSplit",
-  "description": "50/50 split layout shell.",
+  "description": "50/50 split shell for authentication screens — form pane on the left, illustration on the right.",
   "dependencies": [],
   "registryDependencies": [
     "cn"

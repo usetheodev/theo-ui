@@ -1,6 +1,25 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterEach, beforeAll, expect, vi } from "vitest";
+import * as axeMatchers from "vitest-axe/matchers";
+
+expect.extend(axeMatchers);
+
+// happy-dom otherwise attempts real network fetches when ThemeProvider injects
+// `<link rel="stylesheet" href="https://fonts.googleapis.com/...">` for theme
+// font loading. Stub fetch + restrict link injection side-effects in tests so
+// the suite stays hermetic and fast (no minutes-long teardowns waiting for
+// aborted fetches).
+beforeAll(() => {
+  if (typeof globalThis.fetch === "function") {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 200, headers: { "content-type": "text/css" } })),
+      ),
+    );
+  }
+});
 
 afterEach(() => {
   cleanup();

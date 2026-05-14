@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 import { TopNav } from "./topnav.js";
 
 describe("TopNav", () => {
@@ -50,36 +51,71 @@ describe("TopNav", () => {
   });
 
   describe("ModeSwitcher", () => {
-    it("marks the active option with aria-selected", () => {
-      render(
-        <TopNav.ModeSwitcher
-          value="infra"
-          options={[
-            { value: "chat", label: "Chat" },
-            { value: "infra", label: "Infra" },
-            { value: "code", label: "Code" },
-          ]}
-        />,
-      );
-      expect(screen.getByRole("tab", { name: "Infra" })).toHaveAttribute("aria-selected", "true");
-      expect(screen.getByRole("tab", { name: "Chat" })).toHaveAttribute("aria-selected", "false");
+    const allOptions = [
+      { value: "chat", label: "Chat" },
+      { value: "infra", label: "Infra" },
+      { value: "code", label: "Code" },
+    ];
+
+    it("renders as radiogroup with aria-checked on the active option", () => {
+      render(<TopNav.ModeSwitcher value="infra" options={allOptions} />);
+      expect(screen.getByRole("radiogroup", { name: "Mode" })).toBeInTheDocument();
+      expect(screen.getByRole("radio", { name: "Infra" })).toHaveAttribute("aria-checked", "true");
+      expect(screen.getByRole("radio", { name: "Chat" })).toHaveAttribute("aria-checked", "false");
+    });
+
+    it("uses roving tabIndex (only active option has tabIndex=0)", () => {
+      render(<TopNav.ModeSwitcher value="infra" options={allOptions} />);
+      expect(screen.getByRole("radio", { name: "Infra" })).toHaveAttribute("tabIndex", "0");
+      expect(screen.getByRole("radio", { name: "Chat" })).toHaveAttribute("tabIndex", "-1");
+      expect(screen.getByRole("radio", { name: "Code" })).toHaveAttribute("tabIndex", "-1");
     });
 
     it("fires onChange with the clicked option value", async () => {
       const user = userEvent.setup();
       const onChange = vi.fn();
-      render(
-        <TopNav.ModeSwitcher
-          value="chat"
-          options={[
-            { value: "chat", label: "Chat" },
-            { value: "code", label: "Code" },
-          ]}
-          onChange={onChange}
-        />,
-      );
-      await user.click(screen.getByRole("tab", { name: "Code" }));
+      render(<TopNav.ModeSwitcher value="chat" options={allOptions} onChange={onChange} />);
+      await user.click(screen.getByRole("radio", { name: "Code" }));
       expect(onChange).toHaveBeenCalledWith("code");
+    });
+
+    it("navigates with ArrowRight", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(<TopNav.ModeSwitcher value="chat" options={allOptions} onChange={onChange} />);
+      const group = screen.getByRole("radiogroup", { name: "Mode" });
+      group.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(onChange).toHaveBeenCalledWith("infra");
+    });
+
+    it("navigates with ArrowLeft (wraps to last)", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(<TopNav.ModeSwitcher value="chat" options={allOptions} onChange={onChange} />);
+      const group = screen.getByRole("radiogroup", { name: "Mode" });
+      group.focus();
+      await user.keyboard("{ArrowLeft}");
+      expect(onChange).toHaveBeenCalledWith("code"); // wraps to last
+    });
+
+    it("handles Home and End keys", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(<TopNav.ModeSwitcher value="infra" options={allOptions} onChange={onChange} />);
+      const group = screen.getByRole("radiogroup", { name: "Mode" });
+      group.focus();
+      await user.keyboard("{End}");
+      expect(onChange).toHaveBeenLastCalledWith("code");
+      await user.keyboard("{Home}");
+      expect(onChange).toHaveBeenLastCalledWith("chat");
+    });
+
+    it("has no axe accessibility violations", async () => {
+      const { container } = render(
+        <TopNav.ModeSwitcher value="chat" options={allOptions} onChange={() => undefined} />,
+      );
+      expect(await axe(container)).toHaveNoViolations();
     });
   });
 });

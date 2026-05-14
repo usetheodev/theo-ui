@@ -69,7 +69,7 @@ const RuleCard = forwardRef<HTMLElement, RuleCardProps>(
               SCOPE_CLASS[rule.scope],
             )}
           >
-            <Globe className="size-3" aria-hidden /> {SCOPE_LABEL[rule.scope]}
+            <Globe className="size-3" aria-hidden="true" /> {SCOPE_LABEL[rule.scope]}
           </span>
         </header>
         <p className="line-clamp-2 text-body-sm text-muted-foreground">{rule.body}</p>

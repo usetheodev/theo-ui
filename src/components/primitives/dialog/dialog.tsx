@@ -20,8 +20,9 @@ import { cn } from "../../../lib/cn.js";
  *     </Dialog.Content>
  *   </Dialog>
  *
- * Overlay is solid violet-tinted backdrop with 60% opacity (no glass blur — anti-glass guideline).
- * Content uses card surface, rounded-2xl, shadow-lg + slight glow on enter.
+ * Overlay is a theme-neutral backdrop (`bg-background/80`) with no glass blur
+ * (anti-glass guideline). Content uses card surface, rounded-2xl, shadow-lg
+ * + slight glow on enter.
  */
 
 const Overlay = forwardRef<
@@ -99,16 +100,17 @@ const Footer = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
 );
 Footer.displayName = "Dialog.Footer";
 
-const Title = forwardRef<
-  ElementRef<typeof DialogPrimitive.Title>,
-  ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
-    {...props}
-  />
-));
+type TitleProps = ComponentPropsWithoutRef<typeof DialogPrimitive.Title>;
+
+const Title = forwardRef<ElementRef<typeof DialogPrimitive.Title>, TitleProps>(
+  ({ className, ...props }, ref) => (
+    <DialogPrimitive.Title
+      ref={ref}
+      className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
+      {...props}
+    />
+  ),
+);
 Title.displayName = "Dialog.Title";
 
 const Description = forwardRef<
@@ -123,25 +125,16 @@ const Description = forwardRef<
 ));
 Description.displayName = "Dialog.Description";
 
-const Dialog = DialogPrimitive.Root as typeof DialogPrimitive.Root & {
-  Trigger: typeof DialogPrimitive.Trigger;
-  Close: typeof DialogPrimitive.Close;
-  Content: typeof Content;
-  Overlay: typeof Overlay;
-  Header: typeof Header;
-  Body: typeof Body;
-  Footer: typeof Footer;
-  Title: typeof Title;
-  Description: typeof Description;
-};
-Dialog.Trigger = DialogPrimitive.Trigger;
-Dialog.Close = DialogPrimitive.Close;
-Dialog.Content = Content;
-Dialog.Overlay = Overlay;
-Dialog.Header = Header;
-Dialog.Body = Body;
-Dialog.Footer = Footer;
-Dialog.Title = Title;
-Dialog.Description = Description;
+const Dialog = /*#__PURE__*/ Object.assign(DialogPrimitive.Root, {
+  Trigger: DialogPrimitive.Trigger,
+  Close: DialogPrimitive.Close,
+  Content,
+  Overlay,
+  Header,
+  Body,
+  Footer,
+  Title,
+  Description,
+});
 
 export { Dialog };

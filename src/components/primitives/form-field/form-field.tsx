@@ -136,7 +136,7 @@ const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParag
         className={cn("flex items-center gap-1 text-body-sm text-destructive", className)}
         {...props}
       >
-        <AlertCircle className="size-3.5 shrink-0" aria-hidden />
+        <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />
         {children as ReactNode}
       </p>
     );

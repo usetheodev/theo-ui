@@ -3,7 +3,7 @@
   "name": "deployment-row",
   "type": "registry:block",
   "title": "DeploymentRow",
-  "description": "one row in a deployment list (table-ish layout).",
+  "description": "One row in a deployment list (table-ish layout).",
   "dependencies": [
     "lucide-react"
   ],

@@ -36,6 +36,10 @@ interface BuildLogStreamProps extends HTMLAttributes<HTMLDivElement> {
   filterable?: boolean;
   /**
    * Controlled filter — which levels are visible. Empty Set = show all.
+   *
+   * Pick one mode: either always pass `visibleLevels` + `onVisibleLevelsChange`
+   * (controlled), or never (uncontrolled). Mixing the two between renders is
+   * not supported and may produce surprising state.
    */
   visibleLevels?: Set<LogLevel>;
   onVisibleLevelsChange?: (levels: Set<LogLevel>) => void;
@@ -43,6 +47,18 @@ interface BuildLogStreamProps extends HTMLAttributes<HTMLDivElement> {
    * Height of the scrollable region.
    */
   height?: string | number;
+  /**
+   * Maximum number of lines rendered. When exceeded, only the tail is shown
+   * and a banner indicates truncation. Defaults to 2000 — set higher with
+   * caution; React reconciliation cost scales linearly.
+   */
+  maxLines?: number;
+  /**
+   * Screen-reader live-region politeness for newly appended lines. Defaults
+   * to `"off"` because build-log streams can be high-volume; opt into
+   * `"polite"` only when running the build in the foreground.
+   */
+  live?: "off" | "polite";
 }
 
 const ALL_LEVELS: LogLevel[] = ["info", "warn", "error", "success", "debug"];
@@ -50,7 +66,7 @@ const ALL_LEVELS: LogLevel[] = ["info", "warn", "error", "success", "debug"];
 /**
  * BuildLogStream — terminal-like log viewer with timestamps + level coloring.
  *
- * Used in Code workspace and PaaS deployment views. JetBrains Mono throughout.
+ * Used in Code workspace and PaaS deployment views. Geist Mono throughout.
  * Lines fade in via animate-fade-in-up on mount; new lines (when prepended/appended)
  * are not animated to avoid feedback noise (consumer's responsibility to render
  * incrementally if needed).
@@ -64,6 +80,8 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
       visibleLevels,
       onVisibleLevelsChange,
       height = "320px",
+      maxLines = 2000,
+      live = "off",
       ...props
     },
     ref,
@@ -72,10 +90,14 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
     const levels = visibleLevels ?? internalLevels;
     const updateLevels = onVisibleLevelsChange ?? setInternalLevels;
 
-    const visible = useMemo(() => {
+    const filtered = useMemo(() => {
       if (levels.size === 0) return lines;
       return lines.filter((l) => levels.has(l.level));
     }, [lines, levels]);
+
+    const truncated = filtered.length > maxLines;
+    const visible = truncated ? filtered.slice(filtered.length - maxLines) : filtered;
+    const hiddenCount = truncated ? filtered.length - maxLines : 0;
 
     const toggle = (level: LogLevel) => {
       const next = new Set(levels);
@@ -115,10 +137,16 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
           className={cn("overflow-y-auto rounded-lg border bg-card", "font-mono text-code-sm")}
           style={{ height }}
         >
+          {truncated ? (
+            <output className="block border-border/30 border-b bg-muted/40 px-4 py-1.5 text-label text-muted-foreground">
+              Showing last {maxLines.toLocaleString()} of {filtered.length.toLocaleString()} lines (
+              {hiddenCount.toLocaleString()} earlier lines hidden)
+            </output>
+          ) : null}
           {visible.length === 0 ? (
             <p className="px-4 py-3 text-muted-foreground">No log lines.</p>
           ) : (
-            <ol className="divide-y divide-border/30">
+            <ol className="divide-y divide-border/30" aria-live={live} aria-atomic="false">
               {visible.map((line) => (
                 <li
                   key={line.id}

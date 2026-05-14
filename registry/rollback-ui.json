@@ -3,7 +3,7 @@
   "name": "rollback-ui",
   "type": "registry:block",
   "title": "RollbackUI",
-  "description": "instant rollback selector showing recent versions.",
+  "description": "Instant rollback selector showing recent versions.",
   "dependencies": [
     "lucide-react"
   ],

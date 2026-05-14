@@ -1,6 +1,6 @@
 import type { Story } from "@ladle/react";
 import { ExternalLink, Rocket } from "lucide-react";
-import { Button } from "../../primitives/button/button.js";
+import { Button } from "../../primitives/button/index.js";
 import { type Project, ProjectCard } from "./project-card.js";
 
 export default { title: "Composites / PaaS / ProjectCard" };

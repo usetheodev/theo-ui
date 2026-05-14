@@ -45,7 +45,7 @@ const SelectTrigger = forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+      <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -144,7 +144,7 @@ const SelectItem = forwardRef<
   >
     <span className="absolute left-1.5 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="size-3.5 text-primary" aria-hidden />
+        <Check className="size-3.5 text-primary" aria-hidden="true" />
       </SelectPrimitive.ItemIndicator>
     </span>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

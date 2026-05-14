@@ -3,7 +3,7 @@
   "name": "select",
   "type": "registry:ui",
   "title": "Select",
-  "description": "styled wrapper around Radix Select.",
+  "description": "Styled wrapper around Radix Select.",
   "dependencies": [
     "@radix-ui/react-select",
     "lucide-react"

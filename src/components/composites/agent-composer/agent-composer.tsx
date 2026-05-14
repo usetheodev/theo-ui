@@ -5,7 +5,7 @@ import {
   type MentionItem,
   MentionMenu,
   type MentionTrigger,
-} from "../../primitives/mention-menu/mention-menu.js";
+} from "../../primitives/mention-menu/index.js";
 import { ChatComposer } from "../chat-composer/chat-composer.js";
 
 /**

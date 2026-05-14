@@ -3,7 +3,7 @@
   "name": "capability-indicator",
   "type": "registry:ui",
   "title": "CapabilityIndicator",
-  "description": "row of chips showing what the agent can currently do.",
+  "description": "Row of chips showing what the agent can currently do.",
   "dependencies": [
     "lucide-react"
   ],

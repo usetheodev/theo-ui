@@ -2,8 +2,8 @@ import { ArrowDownLeft, Clock, GitCommit, RotateCcw } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/badge.js";
-import { Button } from "../../primitives/button/button.js";
+import { Badge } from "../../primitives/badge/index.js";
+import { Button } from "../../primitives/button/index.js";
 
 export interface RollbackTarget {
   id: string;
@@ -86,7 +86,7 @@ const RollbackUI = forwardRef<HTMLDivElement, RollbackUIProps>(
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground",
                   )}
-                  aria-hidden
+                  aria-hidden="true"
                 >
                   {isCurrent ? <Clock className="size-4" /> : <GitCommit className="size-4" />}
                 </span>

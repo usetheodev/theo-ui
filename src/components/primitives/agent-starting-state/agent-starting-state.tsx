@@ -27,7 +27,7 @@ const AgentStartingState = forwardRef<HTMLOutputElement, AgentStartingStateProps
       )}
       {...props}
     >
-      <Loader2 className="size-4 animate-spin text-primary" aria-hidden />
+      <Loader2 className="size-4 animate-spin text-primary" aria-hidden="true" />
       <div className="grid">
         <span className="font-medium text-body-sm text-foreground">{label}</span>
         {hint ? <span className="text-body-sm text-muted-foreground">{hint}</span> : null}

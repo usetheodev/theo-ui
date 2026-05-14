@@ -1,6 +1,6 @@
 import type { Story } from "@ladle/react";
 import { X } from "lucide-react";
-import { Button } from "../../primitives/button/button.js";
+import { Button } from "../../primitives/button/index.js";
 import { TaskHeader } from "./task-header.js";
 
 export default { title: "Composites / Agent / TaskHeader" };

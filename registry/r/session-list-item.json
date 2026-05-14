@@ -3,7 +3,7 @@
   "name": "session-list-item",
   "type": "registry:ui",
   "title": "SessionListItem",
-  "description": "single row in the sidebar's Sessions list for a code agent",
+  "description": "Single row in the sidebar's Sessions list for a code agent",
   "dependencies": [],
   "registryDependencies": [
     "cn"

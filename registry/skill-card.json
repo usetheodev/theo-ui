@@ -3,7 +3,7 @@
   "name": "skill-card",
   "type": "registry:ui",
   "title": "SkillCard",
-  "description": "single skill entry showing what it does, where it came from,",
+  "description": "Single skill entry showing what it does, where it came from,",
   "dependencies": [
     "lucide-react"
   ],

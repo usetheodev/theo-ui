@@ -3,7 +3,7 @@
   "name": "progress-checklist",
   "type": "registry:ui",
   "title": "ProgressChecklist",
-  "description": "right-inspector checklist.",
+  "description": "Right-inspector checklist tracking subtask completion with success / running / pending tones.",
   "dependencies": [
     "lucide-react"
   ],

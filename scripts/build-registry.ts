@@ -81,7 +81,16 @@ function buildSourceImportMap(descriptors: RegistryDescriptor[]): Map<string, st
     for (const file of descriptor.files) {
       if (!file.target) continue;
       const sourceKey = stripExtension(toPosix(file.path));
-      map.set(sourceKey, consumerImportForTarget(file.target));
+      const consumerImport = consumerImportForTarget(file.target);
+      map.set(sourceKey, consumerImport);
+      // Also register the barrel index path so composites that import via the
+      // primitive's index.ts (e.g. `../../primitives/button/index.js`) rewrite
+      // correctly. The barrel and the implementation file collapse to the
+      // same consumer import path.
+      if (/components\/(?:primitives|composites)\/[^/]+\/[^/]+$/.test(sourceKey)) {
+        const dir = sourceKey.replace(/\/[^/]+$/, "");
+        map.set(`${dir}/index`, consumerImport);
+      }
     }
   }
 

@@ -3,7 +3,7 @@
   "name": "sheet",
   "type": "registry:ui",
   "title": "Sheet",
-  "description": "slide-in side panel built on Radix Dialog.",
+  "description": "Slide-in side panel built on Radix Dialog.",
   "dependencies": [
     "@radix-ui/react-dialog",
     "class-variance-authority",

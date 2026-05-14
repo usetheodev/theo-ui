@@ -3,7 +3,7 @@
   "name": "chat-message",
   "type": "registry:ui",
   "title": "ChatMessage",
-  "description": "single chat turn.",
+  "description": "Single chat turn rendered as user bubble, assistant card, or system callout with accent border.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

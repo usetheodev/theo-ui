@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { TaskStatus } from "../../../types/task.js";
-import { Badge } from "../../primitives/badge/badge.js";
+import { Badge } from "../../primitives/badge/index.js";
 
 const statusVariant: Record<
   TaskStatus,

@@ -1,5 +1,5 @@
 import type { Story } from "@ladle/react";
-import { BuildLogStream } from "../../primitives/build-log-stream/build-log-stream.js";
+import { BuildLogStream } from "../../primitives/build-log-stream/index.js";
 import { PreviewPanel } from "./preview-panel.js";
 
 export default { title: "Composites / Code / PreviewPanel" };

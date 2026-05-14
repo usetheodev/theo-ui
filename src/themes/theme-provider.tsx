@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import type { ColorScale, Theme, ThemeMode } from "./types.js";
 import { violetForge } from "./violet-forge.js";
 
@@ -103,12 +103,12 @@ interface ThemeProviderProps {
 function ThemeProvider({
   children,
   defaultTheme = "violet-forge",
-  defaultMode = "light",
+  defaultMode = "dark",
   themes: themesProp,
   storageKey = "theo-ui:theme",
 }: ThemeProviderProps): JSX.Element {
   // Merge user themes with the default, dedup by name (user wins).
-  const initialThemes = useMemo<Theme[]>(() => {
+  const mergedThemes = useMemo<Theme[]>(() => {
     const base = [violetForge];
     const extras = themesProp ?? [];
     const map = new Map<string, Theme>();
@@ -117,7 +117,14 @@ function ThemeProvider({
     return Array.from(map.values());
   }, [themesProp]);
 
-  const [themes, setThemes] = useState<Theme[]>(initialThemes);
+  const [themes, setThemes] = useState<Theme[]>(mergedThemes);
+
+  // Re-sync state when the `themes` prop changes between renders. Avoids the
+  // common pitfall where the user passes a different array later and the
+  // initial-state-only seed silently ignores the change.
+  useEffect(() => {
+    setThemes(mergedThemes);
+  }, [mergedThemes]);
 
   const [themeName, setThemeName] = useState<string>(() => {
     if (typeof window === "undefined" || !storageKey) return defaultTheme;

@@ -29,9 +29,9 @@ const Checkbox = forwardRef<
   >
     <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
       {props.checked === "indeterminate" ? (
-        <Minus className="size-3.5" aria-hidden strokeWidth={3} />
+        <Minus className="size-3.5" aria-hidden="true" strokeWidth={3} />
       ) : (
-        <Check className="size-3.5" aria-hidden strokeWidth={3} />
+        <Check className="size-3.5" aria-hidden="true" strokeWidth={3} />
       )}
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>

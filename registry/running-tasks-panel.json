@@ -3,7 +3,7 @@
   "name": "running-tasks-panel",
   "type": "registry:ui",
   "title": "RunningTasksPanel",
-  "description": "split list of Running vs Completed tasks.",
+  "description": "Split list of Running vs Completed tasks.",
   "dependencies": [
     "lucide-react"
   ],

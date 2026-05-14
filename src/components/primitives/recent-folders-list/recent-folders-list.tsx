@@ -50,7 +50,7 @@ const RecentFoldersList = forwardRef<HTMLDivElement, RecentFoldersListProps>(
                   "size-4 shrink-0",
                   folder.active ? "text-primary" : "text-muted-foreground",
                 )}
-                aria-hidden
+                aria-hidden="true"
               />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium text-body-sm">{folder.name}</p>

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 import { Sidebar } from "./sidebar.js";
 
 describe("Sidebar", () => {
@@ -20,7 +21,7 @@ describe("Sidebar", () => {
     expect(screen.getByRole("button", { name: "Deployments" })).toBeInTheDocument();
   });
 
-  it("marks active item with aria-current=page", () => {
+  it("marks active button with aria-pressed=true", () => {
     render(
       <Sidebar>
         <Sidebar.Item active>Overview</Sidebar.Item>
@@ -28,10 +29,21 @@ describe("Sidebar", () => {
       </Sidebar>,
     );
     expect(screen.getByRole("button", { name: "Overview" })).toHaveAttribute(
-      "aria-current",
-      "page",
+      "aria-pressed",
+      "true",
     );
-    expect(screen.getByRole("button", { name: "Settings" })).not.toHaveAttribute("aria-current");
+    expect(screen.getByRole("button", { name: "Settings" })).not.toHaveAttribute("aria-pressed");
+  });
+
+  it("marks active anchor with aria-current=page", () => {
+    render(
+      <Sidebar>
+        <Sidebar.Item as="a" href="/x" active>
+          Overview
+        </Sidebar.Item>
+      </Sidebar>,
+    );
+    expect(screen.getByRole("link", { name: "Overview" })).toHaveAttribute("aria-current", "page");
   });
 
   it("renders as anchor when as='a' + href", () => {
@@ -65,5 +77,32 @@ describe("Sidebar", () => {
     );
     await user.click(screen.getByRole("button", { name: "Overview" }));
     expect(handle).toHaveBeenCalledTimes(1);
+  });
+
+  it("supports keyboard activation (Enter)", async () => {
+    const user = userEvent.setup();
+    const handle = vi.fn();
+    render(
+      <Sidebar>
+        <Sidebar.Item onClick={handle}>Overview</Sidebar.Item>
+      </Sidebar>,
+    );
+    const btn = screen.getByRole("button", { name: "Overview" });
+    btn.focus();
+    await user.keyboard("{Enter}");
+    expect(handle).toHaveBeenCalledTimes(1);
+  });
+
+  it("has no axe accessibility violations", async () => {
+    const { container } = render(
+      <Sidebar>
+        <Sidebar.Header>theo-ui</Sidebar.Header>
+        <Sidebar.Section title="Workspace">
+          <Sidebar.Item active>Overview</Sidebar.Item>
+          <Sidebar.Item count={3}>Deployments</Sidebar.Item>
+        </Sidebar.Section>
+      </Sidebar>,
+    );
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

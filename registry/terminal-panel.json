@@ -3,7 +3,7 @@
   "name": "terminal-panel",
   "type": "registry:ui",
   "title": "TerminalPanel",
-  "description": "minimal terminal output viewer.",
+  "description": "Minimal terminal output viewer.",
   "dependencies": [
     "lucide-react"
   ],

@@ -1,6 +1,6 @@
 import type { Story } from "@ladle/react";
 import { ExternalLink, Rocket, Trash2 } from "lucide-react";
-import { Button } from "../../primitives/button/button.js";
+import { Button } from "../../primitives/button/index.js";
 import { type PreviewEnv, PreviewEnvCard } from "./preview-env-card.js";
 
 export default { title: "Composites / PaaS / PreviewEnvCard" };

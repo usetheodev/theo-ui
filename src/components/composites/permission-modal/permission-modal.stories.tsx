@@ -1,6 +1,6 @@
 import type { Story } from "@ladle/react";
 import { useState } from "react";
-import { Button } from "../../primitives/button/button.js";
+import { Button } from "../../primitives/button/index.js";
 import { PermissionModal } from "./permission-modal.js";
 
 export default { title: "Composites / Infra / PermissionModal" };

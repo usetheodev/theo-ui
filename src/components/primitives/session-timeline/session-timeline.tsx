@@ -94,17 +94,17 @@ const SessionTimeline = forwardRef<HTMLDivElement, SessionTimelineProps>(
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-3 font-mono text-label text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
-                      <Clock className="size-3" aria-hidden /> {s.startedAt}
+                      <Clock className="size-3" aria-hidden="true" /> {s.startedAt}
                       {s.duration ? <> · {s.duration}</> : null}
                     </span>
                     {s.model ? (
                       <span className="inline-flex items-center gap-1">
-                        <Sparkles className="size-3" aria-hidden /> {s.model}
+                        <Sparkles className="size-3" aria-hidden="true" /> {s.model}
                       </span>
                     ) : null}
                     {s.tokens ? (
                       <span className="inline-flex items-center gap-1">
-                        <Coins className="size-3" aria-hidden /> {s.tokens} tok
+                        <Coins className="size-3" aria-hidden="true" /> {s.tokens} tok
                       </span>
                     ) : null}
                     {s.cost !== undefined ? (
@@ -112,13 +112,16 @@ const SessionTimeline = forwardRef<HTMLDivElement, SessionTimelineProps>(
                     ) : null}
                     {s.messageCount !== undefined ? (
                       <span className="inline-flex items-center gap-1">
-                        <MessageSquare className="size-3" aria-hidden /> {s.messageCount}
+                        <MessageSquare className="size-3" aria-hidden="true" /> {s.messageCount}
                       </span>
                     ) : null}
                   </div>
                 </div>
                 {onOpen ? (
-                  <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  <ChevronRight
+                    className="size-4 shrink-0 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 ) : null}
               </RowTag>
             </li>

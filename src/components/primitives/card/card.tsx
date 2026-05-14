@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import { forwardRef } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -41,14 +42,26 @@ const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 );
 Header.displayName = "Card.Header";
 
-const Title = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h3
-      ref={ref}
-      className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
-      {...props}
-    />
-  ),
+interface TitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  /**
+   * When true, renders the child element with the Card.Title styles applied
+   * (Radix Slot pattern). Use to swap the default `<h3>` for `<h1>` / `<h2>`
+   * when the heading hierarchy requires it.
+   */
+  asChild?: boolean;
+}
+
+const Title = forwardRef<HTMLHeadingElement, TitleProps>(
+  ({ className, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "h3";
+    return (
+      <Comp
+        ref={ref}
+        className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
+        {...props}
+      />
+    );
+  },
 );
 Title.displayName = "Card.Title";
 
@@ -77,17 +90,12 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 );
 Footer.displayName = "Card.Footer";
 
-const Card = Root as typeof Root & {
-  Header: typeof Header;
-  Title: typeof Title;
-  Description: typeof Description;
-  Body: typeof Body;
-  Footer: typeof Footer;
-};
-Card.Header = Header;
-Card.Title = Title;
-Card.Description = Description;
-Card.Body = Body;
-Card.Footer = Footer;
+const Card = /*#__PURE__*/ Object.assign(Root, {
+  Header,
+  Title,
+  Description,
+  Body,
+  Footer,
+});
 
 export { Card };

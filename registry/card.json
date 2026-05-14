@@ -3,7 +3,10 @@
   "name": "card",
   "type": "registry:ui",
   "title": "Card",
-  "description": "surface container for grouping related content.",
+  "description": "Surface container for grouping related content.",
+  "dependencies": [
+    "@radix-ui/react-slot"
+  ],
   "registryDependencies": [
     "cn"
   ],

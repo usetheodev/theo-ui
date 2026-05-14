@@ -3,7 +3,7 @@
   "name": "badge",
   "type": "registry:ui",
   "title": "Badge",
-  "description": "small status / tag indicator.",
+  "description": "Small status / tag indicator with semantic variants (default, primary, success, warning, destructive, info).",
   "dependencies": [
     "class-variance-authority"
   ],

@@ -3,7 +3,7 @@
   "name": "recent-folders-list",
   "type": "registry:ui",
   "title": "RecentFoldersList",
-  "description": "recently-used folders for the Files picker.",
+  "description": "Recently-used folders for the Files picker.",
   "dependencies": [
     "lucide-react"
   ],

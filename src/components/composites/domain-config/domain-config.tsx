@@ -2,9 +2,9 @@ import { Check, Globe, Plus, ShieldCheck, ShieldX, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/badge.js";
-import { Button } from "../../primitives/button/button.js";
-import { Input } from "../../primitives/input/input.js";
+import { Badge } from "../../primitives/badge/index.js";
+import { Button } from "../../primitives/button/index.js";
+import { Input } from "../../primitives/input/index.js";
 
 export type DomainStatus = "verified" | "pending" | "invalid";
 
@@ -101,7 +101,7 @@ const DomainConfig = forwardRef<HTMLDivElement, DomainConfigProps>(
           {domains.map((d) => (
             <li key={d.id} className="grid gap-3 rounded-lg border border-border/40 p-4">
               <div className="flex flex-wrap items-center gap-3">
-                <Globe className="size-4 text-muted-foreground" aria-hidden />
+                <Globe className="size-4 text-muted-foreground" aria-hidden="true" />
                 <span className="font-mono text-code-md text-foreground">{d.hostname}</span>
                 <Badge variant={statusVariant[d.status]}>
                   <Badge.Dot tone={statusDot[d.status]} pulse={d.status === "pending"} />

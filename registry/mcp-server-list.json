@@ -3,7 +3,7 @@
   "name": "mcp-server-list",
   "type": "registry:ui",
   "title": "McpServerList",
-  "description": "grouped MCP server inventory with status filter chips.",
+  "description": "Grouped MCP server inventory with status filter chips.",
   "dependencies": [
     "lucide-react"
   ],

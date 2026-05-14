@@ -136,7 +136,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
         ref={ref as React.Ref<HTMLButtonElement>}
         type="button"
         className={classes}
-        aria-current={active ? "page" : undefined}
+        aria-pressed={active ? "true" : undefined}
         {...props}
       >
         {content}
@@ -157,15 +157,11 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 );
 Footer.displayName = "Sidebar.Footer";
 
-const Sidebar = Root as typeof Root & {
-  Header: typeof Header;
-  Section: typeof Section;
-  Item: typeof Item;
-  Footer: typeof Footer;
-};
-Sidebar.Header = Header;
-Sidebar.Section = Section;
-Sidebar.Item = Item;
-Sidebar.Footer = Footer;
+const Sidebar = /*#__PURE__*/ Object.assign(Root, {
+  Header,
+  Section,
+  Item,
+  Footer,
+});
 
 export { Sidebar };

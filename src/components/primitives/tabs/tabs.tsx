@@ -63,13 +63,10 @@ const Content = forwardRef<
 ));
 Content.displayName = "Tabs.Content";
 
-const Tabs = TabsPrimitive.Root as typeof TabsPrimitive.Root & {
-  List: typeof List;
-  Trigger: typeof Trigger;
-  Content: typeof Content;
-};
-Tabs.List = List;
-Tabs.Trigger = Trigger;
-Tabs.Content = Content;
+const Tabs = /*#__PURE__*/ Object.assign(TabsPrimitive.Root, {
+  List,
+  Trigger,
+  Content,
+});
 
 export { Tabs };

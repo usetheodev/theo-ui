@@ -38,7 +38,7 @@ const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
     >
       {Icon ? (
         <span className="grid size-12 place-items-center rounded-2xl bg-primary/10 text-primary">
-          <Icon className="size-6" aria-hidden />
+          <Icon className="size-6" aria-hidden="true" />
         </span>
       ) : null}
       {eyebrow ? (

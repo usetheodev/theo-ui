@@ -54,7 +54,7 @@ const HookEventLog = forwardRef<HTMLDivElement, HookEventLogProps>(
               key={evt.id}
               className="grid grid-cols-[auto_1fr_auto] items-start gap-3 px-4 py-2.5"
             >
-              <Icon aria-hidden className={cn("mt-0.5 size-3.5 shrink-0", cfg.color)} />
+              <Icon aria-hidden="true" className={cn("mt-0.5 size-3.5 shrink-0", cfg.color)} />
               <div className="min-w-0">
                 <p className="flex flex-wrap items-baseline gap-2">
                   <span className="font-mono text-code-sm text-primary">{evt.event}</span>

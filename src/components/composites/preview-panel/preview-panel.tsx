@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { BrowserControls } from "../../primitives/browser-controls/browser-controls.js";
+import { BrowserControls } from "../../primitives/browser-controls/index.js";
 
 interface PreviewPanelProps extends Omit<HTMLAttributes<HTMLElement>, "content"> {
   url: string;
