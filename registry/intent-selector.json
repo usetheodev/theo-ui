@@ -3,7 +3,7 @@
   "name": "intent-selector",
   "type": "registry:ui",
   "title": "IntentSelector",
-  "description": "chip dropdown for picking the agent's intent for the next",
+  "description": "Chip dropdown for picking the agent's intent for the next",
   "dependencies": [
     "@radix-ui/react-dropdown-menu",
     "lucide-react"

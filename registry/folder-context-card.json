@@ -3,7 +3,7 @@
   "name": "folder-context-card",
   "type": "registry:ui",
   "title": "FolderContextCard",
-  "description": "file/folder tree fragment for the right inspector.",
+  "description": "File/folder tree fragment for the right inspector.",
   "dependencies": [
     "lucide-react"
   ],

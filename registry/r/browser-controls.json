@@ -3,7 +3,7 @@
   "name": "browser-controls",
   "type": "registry:ui",
   "title": "BrowserControls",
-  "description": "back/forward/reload + URL bar.",
+  "description": "Back/forward/reload + URL bar.",
   "dependencies": [
     "lucide-react"
   ],

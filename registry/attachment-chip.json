@@ -3,7 +3,7 @@
   "name": "attachment-chip",
   "type": "registry:ui",
   "title": "AttachmentChip",
-  "description": "file pill shown in chat composer or message attachments row.",
+  "description": "File pill shown in chat composer or message attachments row.",
   "dependencies": [
     "lucide-react"
   ],

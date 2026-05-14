@@ -31,7 +31,7 @@ const ContextCard = forwardRef<HTMLElement, ContextCardProps>(
         {illustration ? (
           <div className="flex justify-center">{illustration}</div>
         ) : (
-          <Icon className="size-5 text-primary" aria-hidden />
+          <Icon className="size-5 text-primary" aria-hidden="true" />
         )}
         {title ? <h3 className="font-display text-title-md tracking-tight">{title}</h3> : null}
         {description ? <p className="text-body-sm text-muted-foreground">{description}</p> : null}

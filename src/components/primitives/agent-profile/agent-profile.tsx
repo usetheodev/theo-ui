@@ -64,14 +64,14 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
                 "grid size-7 place-items-center rounded-full font-bold font-mono text-label",
                 TONE_CLASS[active.tone ?? "primary"],
               )}
-              aria-hidden
+              aria-hidden="true"
             >
               {initials}
             </span>
             <span className="font-medium font-sans text-body-sm text-foreground">
               {active.name}
             </span>
-            <ChevronDown className="size-3 text-muted-foreground" aria-hidden />
+            <ChevronDown className="size-3 text-muted-foreground" aria-hidden="true" />
           </button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
@@ -104,7 +104,7 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
                       "mt-0.5 grid size-8 place-items-center rounded-full font-bold font-mono text-label",
                       TONE_CLASS[agent.tone ?? "muted"],
                     )}
-                    aria-hidden
+                    aria-hidden="true"
                   >
                     {inits}
                   </span>
@@ -113,7 +113,7 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
                       <span className="font-medium text-body-sm">{agent.name}</span>
                       {agent.badge ? (
                         <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-1.5 py-0 font-mono text-accent text-label uppercase">
-                          <Sparkles className="size-2.5" aria-hidden />
+                          <Sparkles className="size-2.5" aria-hidden="true" />
                           {agent.badge}
                         </span>
                       ) : null}
@@ -125,7 +125,7 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
                     ) : null}
                   </div>
                   {isActive ? (
-                    <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
+                    <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden="true" />
                   ) : null}
                 </DropdownMenu.Item>
               );

@@ -14,6 +14,7 @@ export { cn } from "./lib/cn.js";
 // Theme system
 export {
   ThemeProvider,
+  ThemeScript,
   ThemeSwitcher,
   builtinThemes,
   classicPaper,

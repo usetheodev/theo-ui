@@ -3,7 +3,7 @@
   "name": "memory-editor",
   "type": "registry:ui",
   "title": "MemoryEditor",
-  "description": "three-layer Markdown memory editor (global / project /",
+  "description": "Three-layer Markdown memory editor (global / project /",
   "dependencies": [
     "lucide-react"
   ],

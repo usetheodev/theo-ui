@@ -3,7 +3,7 @@
   "name": "preview-panel",
   "type": "registry:ui",
   "title": "PreviewPanel",
-  "description": "browser preview with controls + integrated logs slot.",
+  "description": "Browser preview with controls + integrated logs slot.",
   "dependencies": [],
   "registryDependencies": [
     "browser-controls",

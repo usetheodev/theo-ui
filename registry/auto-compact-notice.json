@@ -3,7 +3,7 @@
   "name": "auto-compact-notice",
   "type": "registry:ui",
   "title": "AutoCompactNotice",
-  "description": "inline banner warning the user that the agent is",
+  "description": "Inline banner warning the user that the agent is",
   "dependencies": [
     "lucide-react"
   ],

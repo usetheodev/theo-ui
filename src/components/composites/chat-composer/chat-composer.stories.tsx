@@ -1,7 +1,7 @@
 import type { Story } from "@ladle/react";
 import { useState } from "react";
-import { FolderSelector } from "../../primitives/folder-selector/folder-selector.js";
-import { ModelSelector } from "../../primitives/model-selector/model-selector.js";
+import { FolderSelector } from "../../primitives/folder-selector/index.js";
+import { ModelSelector } from "../../primitives/model-selector/index.js";
 import { ChatComposer } from "./chat-composer.js";
 
 export default { title: "Composites / Chat / ChatComposer" };
@@ -19,6 +19,7 @@ export const Chat: Story = () => {
       className="max-w-2xl"
       value={v}
       onValueChange={setV}
+      // biome-ignore lint/suspicious/noConsole: demo story sink
       onSubmit={(x) => console.log("submit", x)}
       trailingActions={<ModelSelector value={m} onChange={setM} options={MODELS} />}
     />

@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 import { ChatComposer } from "./chat-composer.js";
 
 function Harness({ onSubmit }: { onSubmit?: (v: string) => void }) {
@@ -68,5 +69,43 @@ describe("ChatComposer", () => {
   it("uses code mode placeholder when mode='code'", () => {
     render(<ChatComposer mode="code" value="" onValueChange={() => undefined} />);
     expect(screen.getByPlaceholderText("Type / for commands")).toBeInTheDocument();
+  });
+
+  it("does NOT render mic button by default (no fake affordance)", () => {
+    render(<ChatComposer value="" onValueChange={() => undefined} />);
+    expect(screen.queryByRole("button", { name: "Voice input" })).not.toBeInTheDocument();
+  });
+
+  it("does NOT render attach button by default", () => {
+    render(<ChatComposer value="" onValueChange={() => undefined} />);
+    expect(screen.queryByRole("button", { name: "Attach file" })).not.toBeInTheDocument();
+  });
+
+  it("renders mic button when onVoiceInput is provided", async () => {
+    const user = userEvent.setup();
+    const onVoiceInput = vi.fn();
+    render(<ChatComposer value="" onValueChange={() => undefined} onVoiceInput={onVoiceInput} />);
+    const mic = screen.getByRole("button", { name: "Voice input" });
+    await user.click(mic);
+    expect(onVoiceInput).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders attach button when onAttach is provided", async () => {
+    const user = userEvent.setup();
+    const onAttach = vi.fn();
+    render(<ChatComposer value="" onValueChange={() => undefined} onAttach={onAttach} />);
+    const attach = screen.getByRole("button", { name: "Attach file" });
+    await user.click(attach);
+    expect(onAttach).toHaveBeenCalledTimes(1);
+  });
+
+  it("exposes accessible name on the textarea", () => {
+    render(<ChatComposer value="" onValueChange={() => undefined} />);
+    expect(screen.getByRole("textbox", { name: "Chat message" })).toBeInTheDocument();
+  });
+
+  it("has no axe accessibility violations", async () => {
+    const { container } = render(<ChatComposer value="" onValueChange={() => undefined} />);
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

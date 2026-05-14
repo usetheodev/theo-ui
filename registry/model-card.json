@@ -3,7 +3,7 @@
   "name": "model-card",
   "type": "registry:ui",
   "title": "ModelCard",
-  "description": "full info on a model: vendor, context, output cap, pricing,",
+  "description": "Full info on a model: vendor, context, output cap, pricing,",
   "dependencies": [
     "lucide-react"
   ],

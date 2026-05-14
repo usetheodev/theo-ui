@@ -3,7 +3,7 @@
   "name": "task-plan",
   "type": "registry:ui",
   "title": "TaskPlan",
-  "description": "hierarchical task plan, à la Claude \"plan mode\".",
+  "description": "Hierarchical task plan, à la Claude \"plan mode\".",
   "dependencies": [
     "lucide-react"
   ],

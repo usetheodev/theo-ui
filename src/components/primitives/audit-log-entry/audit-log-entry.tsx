@@ -63,7 +63,7 @@ const AuditLogEntry = forwardRef<HTMLElement, AuditLogEntryProps>(
             sev === "warning" && "text-warning",
             sev === "error" && "text-destructive",
           )}
-          aria-hidden
+          aria-hidden="true"
         >
           <Icon className="size-3.5" />
         </span>

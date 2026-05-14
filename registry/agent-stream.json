@@ -3,7 +3,7 @@
   "name": "agent-stream",
   "type": "registry:ui",
   "title": "AgentStream",
-  "description": "the canonical conversation surface for a code agent.",
+  "description": "The canonical conversation surface for a code agent.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

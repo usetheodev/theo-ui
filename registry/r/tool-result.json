@@ -3,7 +3,7 @@
   "name": "tool-result",
   "type": "registry:ui",
   "title": "ToolResult",
-  "description": "formatted output of a tool invocation.",
+  "description": "Formatted output of a tool invocation.",
   "dependencies": [],
   "registryDependencies": [
     "cn"

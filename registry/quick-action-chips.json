@@ -3,7 +3,7 @@
   "name": "quick-action-chips",
   "type": "registry:ui",
   "title": "QuickActionChips",
-  "description": "row of intent chips below a hero composer.",
+  "description": "Row of intent chips below a hero composer.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

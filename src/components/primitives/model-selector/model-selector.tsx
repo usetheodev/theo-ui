@@ -43,9 +43,9 @@ const ModelSelector = forwardRef<HTMLButtonElement, ModelSelectorProps>(
             )}
             {...props}
           >
-            <span className="size-1.5 rounded-full bg-primary" aria-hidden />
+            <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
             {current?.label ?? "Select model"}
-            <ChevronDown className="size-3 text-muted-foreground" aria-hidden />
+            <ChevronDown className="size-3 text-muted-foreground" aria-hidden="true" />
           </button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>

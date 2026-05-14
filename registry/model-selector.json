@@ -3,7 +3,7 @@
   "name": "model-selector",
   "type": "registry:ui",
   "title": "ModelSelector",
-  "description": "chip dropdown for picking the active LLM.",
+  "description": "Chip dropdown for picking the active LLM.",
   "dependencies": [
     "@radix-ui/react-dropdown-menu",
     "lucide-react"

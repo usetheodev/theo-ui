@@ -3,7 +3,7 @@
   "name": "chat-thread",
   "type": "registry:ui",
   "title": "ChatThread",
-  "description": "simple vertical container that applies spacing + scroll.",
+  "description": "Simple vertical container that applies spacing + scroll.",
   "dependencies": [],
   "registryDependencies": [
     "cn"

@@ -3,7 +3,7 @@
   "name": "permission-matrix",
   "type": "registry:ui",
   "title": "PermissionMatrix",
-  "description": "tool × path × decision grid for fine-grained access",
+  "description": "Tool × path × decision grid for fine-grained access",
   "dependencies": [
     "lucide-react"
   ],

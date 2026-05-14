@@ -23,13 +23,22 @@ function Inspector() {
 }
 
 describe("ThemeProvider", () => {
-  it("defaults to violet-forge in light mode", () => {
+  it("defaults to violet-forge in dark mode (dark-first)", () => {
     render(
       <ThemeProvider storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
     expect(screen.getByTestId("theme")).toHaveTextContent("violet-forge");
+    expect(screen.getByTestId("mode")).toHaveTextContent("dark");
+  });
+
+  it("accepts defaultMode='light' explicitly", () => {
+    render(
+      <ThemeProvider defaultMode="light" storageKey={null}>
+        <Inspector />
+      </ThemeProvider>,
+    );
     expect(screen.getByTestId("mode")).toHaveTextContent("light");
   });
 
@@ -67,26 +76,46 @@ describe("ThemeProvider", () => {
     expect(screen.getByTestId("theme")).toHaveTextContent("classic-paper");
   });
 
-  it("toggleMode flips light <> dark", async () => {
+  it("toggleMode flips dark <> light", async () => {
     const user = userEvent.setup();
     render(
       <ThemeProvider storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("mode")).toHaveTextContent("light");
-    await user.click(screen.getByRole("button", { name: "toggle" }));
     expect(screen.getByTestId("mode")).toHaveTextContent("dark");
+    await user.click(screen.getByRole("button", { name: "toggle" }));
+    expect(screen.getByTestId("mode")).toHaveTextContent("light");
   });
 
   it("applies data-theme and data-mode on <html>", () => {
     render(
-      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
+      <ThemeProvider
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        defaultMode="light"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
     expect(document.documentElement.getAttribute("data-theme")).toBe("classic-paper");
     expect(document.documentElement.getAttribute("data-mode")).toBe("light");
+  });
+
+  it("re-syncs when themes prop changes between renders", async () => {
+    const { rerender } = render(
+      <ThemeProvider themes={[classicPaper]} storageKey={null}>
+        <Inspector />
+      </ThemeProvider>,
+    );
+    expect(screen.getByTestId("count")).toHaveTextContent("2"); // violet-forge + classic-paper
+    rerender(
+      <ThemeProvider themes={[classicPaper, auroraTerminal]} storageKey={null}>
+        <Inspector />
+      </ThemeProvider>,
+    );
+    expect(screen.getByTestId("count")).toHaveTextContent("3"); // + aurora-terminal
   });
 
   it("injects a style block with CSS vars for each theme", () => {

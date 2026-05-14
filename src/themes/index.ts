@@ -1,5 +1,6 @@
 export type { ColorScale, Theme, ThemeFonts, ThemeMode } from "./types.js";
 export { ThemeProvider, useTheme } from "./theme-provider.js";
+export { ThemeScript } from "./theme-script.js";
 export { ThemeSwitcher } from "./theme-switcher.js";
 export { violetForge } from "./violet-forge.js";
 export { classicPaper } from "./classic-paper.js";

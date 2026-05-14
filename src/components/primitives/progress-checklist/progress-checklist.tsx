@@ -58,7 +58,7 @@ const ProgressChecklist = forwardRef<HTMLDivElement, ProgressChecklistProps>(
                   "mt-0.5 grid size-5 place-items-center rounded-full",
                   statusBg[step.status],
                 )}
-                aria-hidden
+                aria-hidden="true"
               >
                 <Icon className={cn("size-3", step.status === "running" && "animate-spin")} />
               </span>

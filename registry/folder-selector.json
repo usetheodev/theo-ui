@@ -3,7 +3,7 @@
   "name": "folder-selector",
   "type": "registry:ui",
   "title": "FolderSelector",
-  "description": "chip showing the active working directory.",
+  "description": "Chip showing the active working directory.",
   "dependencies": [
     "lucide-react"
   ],

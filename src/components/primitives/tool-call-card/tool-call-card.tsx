@@ -18,11 +18,11 @@ import type { IconComponent } from "../../../lib/types.js";
 export type ToolCallStatus = "running" | "success" | "failed" | "queued" | "skipped";
 
 const STATUS_ICON: Record<ToolCallStatus, ReactNode> = {
-  running: <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden />,
-  success: <Check className="size-3.5 text-success" aria-hidden />,
-  failed: <X className="size-3.5 text-destructive" aria-hidden />,
-  queued: <span className="size-2 rounded-full bg-warning" aria-hidden />,
-  skipped: <span className="size-2 rounded-full bg-muted-foreground" aria-hidden />,
+  running: <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden="true" />,
+  success: <Check className="size-3.5 text-success" aria-hidden="true" />,
+  failed: <X className="size-3.5 text-destructive" aria-hidden="true" />,
+  queued: <span className="size-2 rounded-full bg-warning" aria-hidden="true" />,
+  skipped: <span className="size-2 rounded-full bg-muted-foreground" aria-hidden="true" />,
 };
 
 const STATUS_LABEL: Record<ToolCallStatus, string> = {
@@ -97,10 +97,12 @@ export function ToolCallCard({
               "size-3.5 shrink-0 text-muted-foreground transition-transform duration-base",
               open && "rotate-90",
             )}
-            aria-hidden
+            aria-hidden="true"
           />
         ) : null}
-        {Icon ? <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden /> : null}
+        {Icon ? (
+          <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+        ) : null}
         <span className="shrink-0 font-medium font-mono text-code-sm text-foreground">{tool}</span>
         {target ? (
           <span className="truncate font-mono text-code-sm text-muted-foreground">{target}</span>

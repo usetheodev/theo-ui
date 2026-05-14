@@ -3,20 +3,11 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { IconComponent } from "../../../lib/types.js";
 import type { Message } from "../../../types/chat.js";
-import {
-  AgentErrorCard,
-  type AgentErrorKind,
-} from "../../primitives/agent-error-card/agent-error-card.js";
-import { AgentStreaming } from "../../primitives/agent-streaming/agent-streaming.js";
-import {
-  ApprovalCard,
-  type ApprovalSeverity,
-} from "../../primitives/approval-card/approval-card.js";
-import { ChatMessage } from "../../primitives/chat-message/chat-message.js";
-import {
-  ToolCallCard,
-  type ToolCallStatus,
-} from "../../primitives/tool-call-card/tool-call-card.js";
+import { AgentErrorCard, type AgentErrorKind } from "../../primitives/agent-error-card/index.js";
+import { AgentStreaming } from "../../primitives/agent-streaming/index.js";
+import { ApprovalCard, type ApprovalSeverity } from "../../primitives/approval-card/index.js";
+import { ChatMessage } from "../../primitives/chat-message/index.js";
+import { ToolCallCard, type ToolCallStatus } from "../../primitives/tool-call-card/index.js";
 
 /**
  * AgentStream — the canonical conversation surface for a code agent.

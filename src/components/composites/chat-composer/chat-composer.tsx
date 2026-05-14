@@ -1,8 +1,14 @@
 import { Mic, Paperclip, Send, Square } from "lucide-react";
 import { forwardRef } from "react";
-import type { HTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
+import type {
+  FormEvent,
+  HTMLAttributes,
+  KeyboardEvent,
+  ReactNode,
+  TextareaHTMLAttributes,
+} from "react";
 import { cn } from "../../../lib/cn.js";
-import { Button } from "../../primitives/button/button.js";
+import { Button } from "../../primitives/button/index.js";
 
 export type ComposerMode = "chat" | "code" | "infra";
 
@@ -25,14 +31,29 @@ interface ChatComposerProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSub
    */
   attachmentsSlot?: ReactNode;
   /**
-   * Slot on the bottom-left of the action row (e.g. add-attachment button + custom toggles).
-   * If omitted, defaults to a paperclip attach button (without behavior).
+   * Slot on the bottom-left of the action row (e.g. custom toggles).
+   * Overrides the default attach button entirely when provided.
    */
   leadingActions?: ReactNode;
   /**
    * Slot on the bottom-right (e.g. model selector). Send/stop is appended after this.
    */
   trailingActions?: ReactNode;
+  /**
+   * Optional attach-file callback. If omitted (and `leadingActions` is also
+   * omitted), no attach button is rendered. This avoids fake affordances per
+   * Quality Gate §7.
+   */
+  onAttach?: () => void;
+  /**
+   * Optional voice-input callback. If omitted, no mic button is rendered.
+   * Same rationale as `onAttach`.
+   */
+  onVoiceInput?: () => void;
+  /**
+   * Accessible label for the textarea. Falls back to a mode-aware default.
+   */
+  textareaLabel?: string;
   /**
    * Textarea placeholder. Defaults change by mode.
    */
@@ -49,6 +70,12 @@ const defaultPlaceholder: Record<ComposerMode, string> = {
   infra: "Ask about deploys, metrics, env, or rollback…",
 };
 
+const defaultTextareaLabel: Record<ComposerMode, string> = {
+  chat: "Chat message",
+  code: "Code prompt",
+  infra: "Infra command",
+};
+
 /**
  * ChatComposer — message input area, shared by Chat / Code / Infra modes.
  *
@@ -58,6 +85,9 @@ const defaultPlaceholder: Record<ComposerMode, string> = {
  *
  * Stateless: caller controls `value` + handles `onSubmit`. Submit fires on Enter
  * (without Shift). Shift+Enter inserts a newline.
+ *
+ * Optional affordances (mic, attach) are opt-in via `onVoiceInput` / `onAttach`
+ * — Quality Gate §7 forbids rendering fake controls without behavior.
  */
 const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
   (
@@ -73,20 +103,23 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
       attachmentsSlot,
       leadingActions,
       trailingActions,
+      onAttach,
+      onVoiceInput,
+      textareaLabel,
       placeholder,
       textareaProps,
       ...props
     },
     ref,
   ) => {
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
       e.preventDefault();
       if (running) return;
       if (!value.trim()) return;
       onSubmit?.(value);
     };
 
-    const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         if (running) return;
@@ -122,6 +155,7 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
           onChange={(e) => onValueChange(e.target.value)}
           onKeyDown={onKeyDown}
           placeholder={placeholder ?? defaultPlaceholder[mode]}
+          aria-label={textareaLabel ?? defaultTextareaLabel[mode]}
           rows={isCode ? 1 : 2}
           {...textareaProps}
           className={cn(
@@ -139,17 +173,33 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
           )}
         >
           <div className="flex items-center gap-1">
-            {leadingActions ?? (
-              <Button size="icon" variant="ghost" type="button" aria-label="Attach file">
+            {leadingActions !== undefined ? (
+              leadingActions
+            ) : onAttach ? (
+              <Button
+                size="icon"
+                variant="ghost"
+                type="button"
+                onClick={onAttach}
+                aria-label="Attach file"
+              >
                 <Paperclip />
               </Button>
-            )}
+            ) : null}
           </div>
           <div className="flex items-center gap-2">
             {trailingActions}
-            <Button size="icon" variant="ghost" type="button" aria-label="Voice input">
-              <Mic />
-            </Button>
+            {onVoiceInput ? (
+              <Button
+                size="icon"
+                variant="ghost"
+                type="button"
+                onClick={onVoiceInput}
+                aria-label="Voice input"
+              >
+                <Mic />
+              </Button>
+            ) : null}
             {running ? (
               <Button
                 type="button"

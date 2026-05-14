@@ -3,7 +3,7 @@
   "name": "skills-list",
   "type": "registry:ui",
   "title": "SkillsList",
-  "description": "grid of SkillCards with optional search + source filter chips.",
+  "description": "Grid of SkillCards with optional search + source filter chips.",
   "dependencies": [
     "lucide-react"
   ],

@@ -3,7 +3,7 @@
   "name": "agent-timeline",
   "type": "registry:ui",
   "title": "AgentTimeline",
-  "description": "vertical list of agent events.",
+  "description": "Vertical list of agent events.",
   "dependencies": [],
   "registryDependencies": [
     "agent-event",

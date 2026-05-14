@@ -60,7 +60,7 @@ const TaskNode = forwardRef<HTMLLIElement, TaskNodeProps>(
       >
         <div className="grid grid-cols-[auto_1fr] items-baseline gap-2">
           <Icon
-            aria-hidden
+            aria-hidden="true"
             className={cn(
               "mt-0.5 size-3.5 shrink-0",
               STATUS_COLOR[node.status],

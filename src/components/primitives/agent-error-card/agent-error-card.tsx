@@ -60,7 +60,7 @@ const AgentErrorCard = forwardRef<HTMLElement, AgentErrorCardProps>(
         {...props}
       >
         <header className="flex items-start gap-3">
-          <span className="mt-0.5 inline-flex shrink-0 text-destructive" aria-hidden>
+          <span className="mt-0.5 inline-flex shrink-0 text-destructive" aria-hidden="true">
             <Icon className="size-4" />
           </span>
           <div className="grid min-w-0 flex-1 gap-1">

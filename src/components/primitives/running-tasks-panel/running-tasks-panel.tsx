@@ -84,7 +84,10 @@ function Group({
                 ) : (
                   <span className="size-2 rounded-full bg-destructive" aria-label="failed" />
                 )}
-                <SourceIcon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                <SourceIcon
+                  className="size-3.5 shrink-0 text-muted-foreground"
+                  aria-hidden="true"
+                />
                 <span className="flex-1 truncate">{task.label}</span>
                 <span className="font-mono text-label text-muted-foreground uppercase">
                   {sourceLabel[task.source]}

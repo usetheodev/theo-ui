@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-script",
+  "type": "registry:lib",
+  "title": "ThemeScript",
+  "description": "Inline script for SSR-safe theme initialization in Next.js / Astro / Remix. Place in <head> to read persisted theme + mode from localStorage BEFORE React hydrates, eliminating FOUC and hydration mismatch.",
+  "registryDependencies": [
+    "theme-provider"
+  ],
+  "files": [
+    {
+      "path": "themes/theme-script.tsx",
+      "type": "registry:lib",
+      "target": "themes/theme-script.tsx"
+    }
+  ]
+}

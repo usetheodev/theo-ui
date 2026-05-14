@@ -152,7 +152,7 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
                       : "bg-muted text-muted-foreground line-through",
                   )}
                 >
-                  <Icon className="size-3" aria-hidden />
+                  <Icon className="size-3" aria-hidden="true" />
                   {cap.label}
                 </span>
               );
@@ -162,7 +162,7 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
 
         {model.cutoff ? (
           <p className="inline-flex items-center gap-1 font-mono text-label text-muted-foreground">
-            <CalendarDays className="size-3" aria-hidden /> Knowledge cutoff · {model.cutoff}
+            <CalendarDays className="size-3" aria-hidden="true" /> Knowledge cutoff · {model.cutoff}
           </p>
         ) : null}
       </Tag>

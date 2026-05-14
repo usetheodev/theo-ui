@@ -60,7 +60,7 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
       <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
         <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">
-            <Zap className="size-4 text-primary" aria-hidden />
+            <Zap className="size-4 text-primary" aria-hidden="true" />
             <h3 className="font-display text-title-md tracking-tight">{title}</h3>
           </div>
           <span className="font-mono text-label text-muted-foreground">

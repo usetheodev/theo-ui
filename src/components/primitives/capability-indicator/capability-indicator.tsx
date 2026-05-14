@@ -68,7 +68,7 @@ const CapabilityIndicator = forwardRef<HTMLUListElement, CapabilityIndicatorProp
             )}
           >
             <Icon
-              aria-hidden
+              aria-hidden="true"
               className={cn("size-3 shrink-0", state === "active" && "animate-pulse")}
             />
             {c.label}

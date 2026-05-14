@@ -87,7 +87,7 @@ const DiffViewer = forwardRef<HTMLDivElement, DiffViewerProps>(
                 {hunk.header ? (
                   <div className="bg-muted/60 px-3 py-1 text-primary">{hunk.header}</div>
                 ) : null}
-                <table className="w-full border-collapse">
+                <table className="w-full border-collapse" aria-label={`Diff hunk for ${path}`}>
                   <tbody>
                     {hunk.lines.map((line, idx) => (
                       <tr key={`${hunk.id}-${idx}`} className={lineBg[line.kind]}>

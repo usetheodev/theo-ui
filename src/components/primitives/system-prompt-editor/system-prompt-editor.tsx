@@ -46,7 +46,7 @@ const SystemPromptEditor = forwardRef<HTMLDivElement, SystemPromptEditorProps>(
       <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
         <header className="flex items-center justify-between gap-3 border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" aria-hidden />
+            <Sparkles className="size-4 text-primary" aria-hidden="true" />
             <h3 className="font-display text-title-md tracking-tight">{title}</h3>
             <span
               className={cn(

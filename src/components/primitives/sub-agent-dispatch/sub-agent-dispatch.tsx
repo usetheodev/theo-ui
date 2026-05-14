@@ -59,8 +59,8 @@ const SubAgentDispatch = forwardRef<HTMLElement, SubAgentDispatchProps>(
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2">
-            <CornerDownRight className="size-3.5 shrink-0 text-primary" aria-hidden />
-            <Bot className="size-4 shrink-0 text-primary" aria-hidden />
+            <CornerDownRight className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
+            <Bot className="size-4 shrink-0 text-primary" aria-hidden="true" />
             <span className="font-medium font-mono text-code-sm text-foreground">dispatch</span>
             <span className="font-mono text-code-sm text-primary">{run.agent}</span>
             {run.duration ? (
@@ -76,7 +76,7 @@ const SubAgentDispatch = forwardRef<HTMLElement, SubAgentDispatchProps>(
               cfg.class,
             )}
           >
-            {isLive ? <Loader2 className="size-3 animate-spin" aria-hidden /> : null}
+            {isLive ? <Loader2 className="size-3 animate-spin" aria-hidden="true" /> : null}
             {cfg.label}
           </span>
         </header>

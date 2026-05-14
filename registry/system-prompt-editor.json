@@ -3,7 +3,7 @@
   "name": "system-prompt-editor",
   "type": "registry:ui",
   "title": "SystemPromptEditor",
-  "description": "surface the agent's system prompt with a clear",
+  "description": "Surface the agent's system prompt with a clear",
   "dependencies": [
     "lucide-react"
   ],

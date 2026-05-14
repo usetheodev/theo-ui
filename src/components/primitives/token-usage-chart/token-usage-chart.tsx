@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 
@@ -19,6 +19,30 @@ interface TokenUsageChartProps extends Omit<HTMLAttributes<HTMLDivElement>, "tit
   height?: number;
   /** Show legend below the chart. Default true. */
   showLegend?: boolean;
+  /**
+   * Maximum number of bars to render. When `points.length` exceeds this, the
+   * series is binned (summed in equal-width windows) so the chart stays
+   * legible and SVG node count stays bounded. Default 60.
+   */
+  maxBars?: number;
+}
+
+function binPoints(points: TokenUsagePoint[], maxBars: number): TokenUsagePoint[] {
+  if (points.length <= maxBars) return points;
+  const binSize = Math.ceil(points.length / maxBars);
+  const out: TokenUsagePoint[] = [];
+  for (let i = 0; i < points.length; i += binSize) {
+    const slice = points.slice(i, i + binSize);
+    if (slice.length === 0) continue;
+    const first = slice[0]?.label ?? "";
+    const last = slice[slice.length - 1]?.label ?? first;
+    out.push({
+      label: slice.length === 1 ? first : `${first}…${last}`,
+      input: slice.reduce((a, p) => a + p.input, 0),
+      output: slice.reduce((a, p) => a + p.output, 0),
+    });
+  }
+  return out;
 }
 
 const formatTokens = (n: number) => {
@@ -35,16 +59,25 @@ const formatTokens = (n: number) => {
  */
 const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
   (
-    { className, points, title = "Token usage", height = 160, showLegend = true, ...props },
+    {
+      className,
+      points,
+      title = "Token usage",
+      height = 160,
+      showLegend = true,
+      maxBars = 60,
+      ...props
+    },
     ref,
   ) => {
-    const max = Math.max(1, ...points.map((p) => p.input + p.output));
-    const barCount = points.length;
+    const series = useMemo(() => binPoints(points, maxBars), [points, maxBars]);
+    const max = Math.max(1, ...series.map((p) => p.input + p.output));
+    const barCount = series.length;
     const barWidth = 100 / Math.max(1, barCount);
     const gap = Math.min(2, barWidth * 0.2);
     const innerWidth = barWidth - gap;
 
-    const total = points.reduce((acc, p) => acc + p.input + p.output, 0);
+    const total = series.reduce((acc, p) => acc + p.input + p.output, 0);
 
     return (
       <section
@@ -68,7 +101,7 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
           <div
             className="grid font-mono text-label text-muted-foreground"
             style={{ height, gridTemplateRows: "1fr 1fr 1fr" }}
-            aria-hidden
+            aria-hidden="true"
           >
             <span className="tabular-nums">{formatTokens(max)}</span>
             <span className="tabular-nums">{formatTokens(max / 2)}</span>
@@ -95,7 +128,7 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
                 strokeWidth={0.2}
               />
             ))}
-            {points.map((p, idx) => {
+            {series.map((p, idx) => {
               const totalH = ((p.input + p.output) / max) * 100;
               const inputH = (p.input / max) * 100;
               const outputH = (p.output / max) * 100;
@@ -126,26 +159,28 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
             })}
           </svg>
         </div>
-        {/* x-axis labels */}
+        {/* x-axis labels — aligned with the chart column of the parent grid */}
         <div
-          className="mt-1 grid pl-[3.5rem] font-mono text-label text-muted-foreground"
-          style={{ gridTemplateColumns: `repeat(${barCount}, 1fr)` }}
-          aria-hidden
+          className="mt-1 grid grid-cols-[auto_1fr] gap-2 font-mono text-label text-muted-foreground"
+          aria-hidden="true"
         >
-          {points.map((p) => (
-            <span key={p.label} className="truncate text-center">
-              {p.label}
-            </span>
-          ))}
+          <span aria-hidden="true" />
+          <div className="grid" style={{ gridTemplateColumns: `repeat(${barCount}, 1fr)` }}>
+            {series.map((p) => (
+              <span key={p.label} className="truncate text-center">
+                {p.label}
+              </span>
+            ))}
+          </div>
         </div>
         {showLegend ? (
           <footer className="mt-3 flex items-center gap-4 font-mono text-label text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
-              <span className="size-2 rounded-sm bg-accent" aria-hidden />
+              <span className="size-2 rounded-sm bg-accent" aria-hidden="true" />
               Input
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="size-2 rounded-sm bg-primary" aria-hidden />
+              <span className="size-2 rounded-sm bg-primary" aria-hidden="true" />
               Output
             </span>
           </footer>

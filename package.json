@@ -1,7 +1,7 @@
 {
   "name": "@usetheo/ui",
   "version": "0.0.0",
-  "description": "Theo UI — biblioteca de componentes React framework-agnostic com design system Violet Forge. Foco em interfaces para AI agents e developer tools.",
+  "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, PaaS dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": ["**/*.css"],
@@ -11,9 +11,10 @@
       "import": "./dist/index.js"
     },
     "./styles.css": "./dist/styles.css",
-    "./tokens.css": "./dist/tokens.css"
+    "./tokens.css": "./dist/tokens.css",
+    "./fonts.css": "./dist/fonts.css"
   },
-  "files": ["dist", "src", "registry"],
+  "files": ["dist", "src", "registry", "LICENSE", "CHANGELOG.md"],
   "scripts": {
     "build": "tsup",
     "dev": "ladle serve",
@@ -33,6 +34,9 @@
     "test:ui": "vitest --ui",
     "registry:build": "tsx scripts/build-registry.ts",
     "registry:validate": "tsx scripts/validate-registry.ts",
+    "sync:readme": "tsx scripts/sync-readme.ts",
+    "test:registry": "tsx scripts/test-registry-install.ts",
+    "test:coverage": "vitest run --coverage",
     "quality:structure": "tsx scripts/validate-quality-gates.ts",
     "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm ladle:build",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
@@ -58,6 +62,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "lucide-react": "^0.471.0",
     "tailwind-merge": "^2.5.5"
   },
@@ -83,7 +88,8 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vite": "^5.4.21",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "vitest-axe": "^0.1.0"
   },
   "engines": {
     "node": ">=20"
@@ -91,6 +97,20 @@
   "pnpm": {
     "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"]
   },
-  "keywords": ["react", "components", "ui", "design-system", "shadcn", "theo", "paas"],
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "design-system",
+    "shadcn",
+    "theo",
+    "paas",
+    "agent-ui",
+    "ai-tools",
+    "developer-tools"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
 }

@@ -3,7 +3,7 @@
   "name": "steps-rail",
   "type": "registry:ui",
   "title": "StepsRail",
-  "description": "vertical numbered rail with connecting line.",
+  "description": "Vertical numbered rail with connecting line.",
   "dependencies": [],
   "registryDependencies": [
     "cn"

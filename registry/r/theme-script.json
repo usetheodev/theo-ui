@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-script",
+  "type": "registry:lib",
+  "title": "ThemeScript",
+  "description": "Inline script for SSR-safe theme initialization in Next.js / Astro / Remix. Place in <head> to read persisted theme + mode from localStorage BEFORE React hydrates, eliminating FOUC and hydration mismatch.",
+  "registryDependencies": [
+    "theme-provider"
+  ],
+  "files": [
+    {
+      "path": "themes/theme-script.tsx",
+      "type": "registry:lib",
+      "target": "themes/theme-script.tsx",
+      "content": "/**\n * ThemeScript — inline `<script>` for SSR-safe theme initialization.\n *\n * Renders a synchronous script that runs BEFORE React hydration. It reads the\n * persisted theme + mode from localStorage (or falls back to the defaults) and\n * sets `data-theme` / `data-mode` on `<html>`, plus the `.dark` class when\n * mode is dark. This eliminates FOUC and avoids hydration mismatch warnings\n * when the user's persisted choice differs from the SSR defaults.\n *\n * Place this in `<head>` ABOVE `<body>`. The component does not need to live\n * inside `<ThemeProvider>`.\n *\n * Security: the inline script is built from `JSON.stringify`-encoded literals\n * (no user input), so it is not a `dangerouslySetInnerHTML` XSS vector.\n *\n * Example (Next.js App Router): see docs/design-system.md → SSR section.\n * Pass `defaultTheme` and `defaultMode` to align with the consumer's\n * preferred initial state. Always wrap the root in `<html\n * suppressHydrationWarning>` to silence the expected one-render diff.\n */\nimport type { JSX } from \"react\";\nimport type { ThemeMode } from \"@/themes/types\";\n\ninterface ThemeScriptProps {\n  /** Theme name to apply when no persisted value exists. Default `\"violet-forge\"`. */\n  defaultTheme?: string;\n  /** Mode to apply when no persisted value exists. Default `\"dark\"`. */\n  defaultMode?: ThemeMode;\n  /**\n   * localStorage namespace. Must match the `storageKey` passed to\n   * `<ThemeProvider>`. Default `\"theo-ui:theme\"`. Pass `null` to disable\n   * persistence reads (the script will always apply defaults).\n   */\n  storageKey?: string | null;\n}\n\nfunction buildScript(\n  defaultTheme: string,\n  defaultMode: ThemeMode,\n  storageKey: string | null,\n): string {\n  const k = JSON.stringify(storageKey);\n  const t = JSON.stringify(defaultTheme);\n  const m = JSON.stringify(defaultMode);\n  return `(function(){try{var k=${k};var d=document.documentElement;var t=null;var m=null;if(k){t=localStorage.getItem(k+\":name\");m=localStorage.getItem(k+\":mode\");}d.setAttribute(\"data-theme\",t||${t});d.setAttribute(\"data-mode\",m||${m});if((m||${m})===\"dark\"){d.classList.add(\"dark\");}}catch(e){}})();`;\n}\n\nfunction ThemeScript({\n  defaultTheme = \"violet-forge\",\n  defaultMode = \"dark\",\n  storageKey = \"theo-ui:theme\",\n}: ThemeScriptProps): JSX.Element {\n  const code = buildScript(defaultTheme, defaultMode, storageKey);\n  // biome-ignore lint/security/noDangerouslySetInnerHtml: payload is JSON.stringify-encoded literals (no user input); intentional for SSR theme bootstrap before React hydrates\n  return <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: code }} />;\n}\n\nexport { ThemeScript };\n"
+    }
+  ]
+}

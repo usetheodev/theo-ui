@@ -53,7 +53,9 @@ const ToolCall = forwardRef<HTMLDivElement, ToolCallProps>(
             expandable && "cursor-pointer hover:bg-muted/60",
           )}
         >
-          {!hideIcon ? <Wrench className="size-3.5 shrink-0 text-primary" aria-hidden /> : null}
+          {!hideIcon ? (
+            <Wrench className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
+          ) : null}
           {name ? (
             <span className="font-mono text-code-sm text-muted-foreground">{name}</span>
           ) : null}
@@ -64,7 +66,7 @@ const ToolCall = forwardRef<HTMLDivElement, ToolCallProps>(
                 "size-3.5 text-muted-foreground transition-transform",
                 open && "rotate-90",
               )}
-              aria-hidden
+              aria-hidden="true"
             />
           ) : null}
         </button>

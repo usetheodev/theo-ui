@@ -3,7 +3,7 @@
   "name": "context-window-bar",
   "type": "registry:ui",
   "title": "ContextWindowBar",
-  "description": "shows how much of the model's context window has been",
+  "description": "Shows how much of the model's context window has been",
   "dependencies": [],
   "registryDependencies": [
     "cn"

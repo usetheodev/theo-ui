@@ -29,17 +29,17 @@ const RunStats = forwardRef<HTMLDivElement, RunStatsProps>(
     >
       {duration ? (
         <span className="inline-flex items-center gap-1.5">
-          <Clock className="size-3" aria-hidden /> {duration}
+          <Clock className="size-3" aria-hidden="true" /> {duration}
         </span>
       ) : null}
       {tokens ? (
         <span className="inline-flex items-center gap-1.5">
-          <Coins className="size-3" aria-hidden /> {tokens} tokens
+          <Coins className="size-3" aria-hidden="true" /> {tokens} tokens
         </span>
       ) : null}
       {filesChanged !== undefined ? (
         <span className="inline-flex items-center gap-1.5">
-          <FileEdit className="size-3" aria-hidden /> {filesChanged} files
+          <FileEdit className="size-3" aria-hidden="true" /> {filesChanged} files
         </span>
       ) : null}
     </div>

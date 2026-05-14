@@ -64,7 +64,7 @@ const CronJobCard = forwardRef<HTMLElement, CronJobCardProps>(
           <div className="min-w-0">
             <h4 className="font-display text-title-md tracking-tight">{job.name}</h4>
             <p className="mt-0.5 inline-flex items-center gap-2 font-mono text-code-sm text-muted-foreground">
-              <Clock className="size-3" aria-hidden /> {job.schedule}
+              <Clock className="size-3" aria-hidden="true" /> {job.schedule}
             </p>
           </div>
           <span

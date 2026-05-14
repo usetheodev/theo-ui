@@ -34,7 +34,7 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
     >
       <span
         className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/15 text-primary"
-        aria-hidden
+        aria-hidden="true"
       >
         <Sparkles className="size-3.5" />
       </span>
@@ -49,11 +49,11 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
             {partial}
             <span
               className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 animate-pulse bg-primary align-middle"
-              aria-hidden
+              aria-hidden="true"
             />
           </span>
         ) : (
-          <span className="flex items-center gap-1.5" aria-hidden>
+          <span className="flex items-center gap-1.5" aria-hidden="true">
             <Dot delay={0} />
             <Dot delay={120} />
             <Dot delay={240} />

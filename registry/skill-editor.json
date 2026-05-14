@@ -3,7 +3,7 @@
   "name": "skill-editor",
   "type": "registry:ui",
   "title": "SkillEditor",
-  "description": "form for creating or editing a Skill.",
+  "description": "Form for creating or editing a Skill.",
   "dependencies": [],
   "registryDependencies": [
     "cn",

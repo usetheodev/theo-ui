@@ -59,7 +59,7 @@ const MCPServerCard = forwardRef<HTMLElement, MCPServerCardProps>(
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2">
-            <Server className="size-4 shrink-0 text-primary" aria-hidden />
+            <Server className="size-4 shrink-0 text-primary" aria-hidden="true" />
             <div className="min-w-0">
               <h4 className="font-medium font-mono text-body-sm text-foreground">{server.name}</h4>
               <p className="truncate font-mono text-label text-muted-foreground">

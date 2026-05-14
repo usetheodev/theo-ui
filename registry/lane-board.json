@@ -3,7 +3,7 @@
   "name": "lane-board",
   "type": "registry:ui",
   "title": "LaneBoard",
-  "description": "kanban-style task board with 4 lanes matching the claw-code",
+  "description": "Kanban-style task board with 4 lanes matching the claw-code",
   "dependencies": [],
   "registryDependencies": [
     "cn"

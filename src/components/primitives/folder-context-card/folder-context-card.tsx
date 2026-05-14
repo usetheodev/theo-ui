@@ -89,17 +89,17 @@ function Tree({
                     "size-3 shrink-0 text-muted-foreground transition-transform",
                     entry.open && "rotate-90",
                   )}
-                  aria-hidden
+                  aria-hidden="true"
                 />
               ) : (
-                <span className="w-3" aria-hidden />
+                <span className="w-3" aria-hidden="true" />
               )}
               <IconComp
                 className={cn(
                   "size-4 shrink-0",
                   entry.kind === "folder" ? "text-primary" : "text-muted-foreground",
                 )}
-                aria-hidden
+                aria-hidden="true"
               />
               <span className="flex-1 truncate text-left">{entry.name}</span>
               {entry.trailing}

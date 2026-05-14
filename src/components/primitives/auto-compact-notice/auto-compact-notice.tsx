@@ -53,7 +53,7 @@ const AutoCompactNotice = forwardRef<HTMLElement, AutoCompactNoticeProps>(
       )}
       {...props}
     >
-      <Sparkles className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
+      <Sparkles className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden="true" />
       <div className="grid gap-1">
         <p className="flex items-baseline gap-2 font-medium text-body-sm text-foreground">
           {title}

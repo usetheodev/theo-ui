@@ -3,7 +3,7 @@
   "name": "agent-error-card",
   "type": "registry:ui",
   "title": "AgentErrorCard",
-  "description": "inline error / blocked-state card for an agent stream.",
+  "description": "Inline error / blocked-state card for an agent stream.",
   "dependencies": [
     "lucide-react"
   ],

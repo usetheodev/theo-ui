@@ -3,7 +3,7 @@
   "name": "cron-jobs-list",
   "type": "registry:ui",
   "title": "CronJobsList",
-  "description": "grid of CronJobCards with a sticky \"new job\" action.",
+  "description": "Grid of CronJobCards with a sticky \"new job\" action.",
   "dependencies": [
     "lucide-react"
   ],

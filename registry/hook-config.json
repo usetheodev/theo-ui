@@ -3,7 +3,7 @@
   "name": "hook-config",
   "type": "registry:ui",
   "title": "HookConfig",
-  "description": "editor for lifecycle hooks (PreToolUse, PostToolUse, Stop…).",
+  "description": "Editor for lifecycle hooks (PreToolUse, PostToolUse, Stop…).",
   "dependencies": [
     "lucide-react"
   ],
