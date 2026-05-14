@@ -304,6 +304,27 @@ function validateDesignSystemFidelity(): void {
   for (const token of requiredTypeScale) {
     if (!preset.includes(token)) fail("tailwind-preset.ts", `type scale drift: missing ${token}`);
   }
+
+  /* HIGH-002 / D6: fonts.css must self-host via @font-face (default), not
+   * load from Google Fonts CDN. The CDN path lives in fonts-cdn.css (opt-in).
+   */
+  const fontsCss = readFileSync(join(ROOT, "src/styles/fonts.css"), "utf-8");
+  if (!fontsCss.includes("@font-face")) {
+    fail("fonts.css", "default fonts.css must declare @font-face (self-hosted Geist).");
+  }
+  // Strip block comments so we only audit declarations, not narrative.
+  const stripped = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "");
+  if (/@import\s+url\(["']?https?:[^"')]*fonts\.googleapis\.com/.test(stripped)) {
+    fail(
+      "fonts.css",
+      "default fonts.css must not @import from fonts.googleapis.com (use fonts-cdn.css for opt-in CDN).",
+    );
+  }
+  // The CDN entrypoint must continue to exist so consumers can opt in.
+  const fontsCdnPath = join(ROOT, "src/styles/fonts-cdn.css");
+  if (!existsSync(fontsCdnPath)) {
+    fail("fonts-cdn.css", "missing opt-in CDN entrypoint at src/styles/fonts-cdn.css");
+  }
 }
 
 function validateScriptsAndCi(): void {

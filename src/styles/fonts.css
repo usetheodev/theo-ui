@@ -1,27 +1,75 @@
-/* Theo UI — font loading.
+/* Theo UI — font loading (self-hosted by default).
  *
  * Default theme (Violet Forge): Geist Sans + Geist Mono.
  * Vercel-inspired typographic vocabulary — tight letter-spacing on display,
- * 3 strict weights (400/500/600), OpenType "liga" enabled globally. Geist is
- * Vercel's open-source font, optimized for product UIs and code surfaces.
+ * 3 strict weights (400 body / 500 UI / 600 display), OpenType "liga"
+ * enabled globally. Geist is Vercel's open-source typeface, optimized for
+ * product UIs and code surfaces. Licensed under SIL Open Font License
+ * (LICENSE-GEIST.txt sits next to the woff2 files in `dist/fonts/`).
  *
- * Additional theme fonts (Inter, etc.) are loaded on demand by individual
- * themes — see src/themes/.
+ * ── Why self-hosted by default (HIGH-002 / D6) ────────────────────────────
+ * The previous default `@import url("https://fonts.googleapis.com/...")`
+ * triggered a third-party network request on every page load — friction for
+ * CSP-strict deployments, GDPR jurisdictions, and offline-first products.
+ * The fonts ship as woff2 next to this CSS; consumers who installed
+ * `@usetheo/ui/styles.css` get Geist with zero external dependencies.
  *
- * ── Self-hosting opt-out ───────────────────────────────────────────────────
- * The CDN `@import` below is the easiest path but ships a third-party fetch
- * to `fonts.googleapis.com` on every page load. For GDPR-sensitive products
- * or strict CSP environments, comment the `@import` below and replace it
- * with local `@font-face` declarations pointing to assets you ship.
+ * Asset budget: 6 woff2 files (~290 KB total). Three weights per family
+ * cover the entire Violet Forge typescale (display-2xl through code-sm).
  *
- *   1. Download Geist + Geist Mono from https://vercel.com/font (or npm
- *      `geist` package) into `public/fonts/`.
- *   2. Comment out the `@import` below.
- *   3. Add `@font-face { font-family: "Geist"; src: url(/fonts/...) ... }`
- *      blocks for the weights you need.
+ * ── Opt-in CDN ────────────────────────────────────────────────────────────
+ * Consumers who prefer Google Fonts CDN (e.g. don't want to host static
+ * assets) can use the parallel entrypoint instead:
  *
- * The default behavior remains CDN-loading so the Quickstart in the README
- * works zero-config.
+ *   @import "@usetheo/ui/fonts-cdn.css";
+ *
+ * That file keeps the legacy @import to fonts.googleapis.com.
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/geist-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/geist-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/geist-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/geist-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/geist-mono-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/geist-mono-600.woff2") format("woff2");
+}
