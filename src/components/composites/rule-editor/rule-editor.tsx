@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { HTMLAttributes } from "react";
+import type { FormEvent, HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
 import type { Rule, RuleScope, RuleState } from "../../../types/rule.js";
@@ -54,7 +54,7 @@ export function RuleEditor({
     setModes((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
 
   const canSave = title.trim().length > 0 && body.trim().length > 0;
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!canSave) return;
     onSave({

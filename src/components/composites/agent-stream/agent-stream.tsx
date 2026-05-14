@@ -95,6 +95,9 @@ const AgentStream = forwardRef<HTMLDivElement, AgentStreamProps>(
       role="log"
       aria-live="polite"
       aria-relevant="additions"
+      // MEDIUM-001: explicit aria-atomic="false" so VoiceOver/macOS doesn't
+      // reannounce the entire stream on each new item.
+      aria-atomic="false"
       className={cn("flex flex-col gap-3", className)}
       {...props}
     >

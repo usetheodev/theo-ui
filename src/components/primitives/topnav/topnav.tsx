@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { Fragment, forwardRef } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 
 /**
@@ -135,7 +135,7 @@ interface ModeSwitcherProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChan
  */
 const ModeSwitcher = forwardRef<HTMLDivElement, ModeSwitcherProps>(
   ({ className, value, options, onChange, ariaLabel = "Mode", ...props }, ref) => {
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
       if (!onChange || options.length === 0) return;
       const idx = options.findIndex((o) => o.value === value);
       const current = idx >= 0 ? idx : 0;

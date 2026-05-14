@@ -53,4 +53,15 @@ describe("Dialog", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Example />);
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on root + subparts", () => {
+    expect(Dialog.Overlay.displayName).toBe("Dialog.Overlay");
+    expect(Dialog.Content.displayName).toBe("Dialog.Content");
+    expect(Dialog.Header.displayName).toBe("Dialog.Header");
+    expect(Dialog.Body.displayName).toBe("Dialog.Body");
+    expect(Dialog.Footer.displayName).toBe("Dialog.Footer");
+    expect(Dialog.Title.displayName).toBe("Dialog.Title");
+    expect(Dialog.Description.displayName).toBe("Dialog.Description");
+  });
 });

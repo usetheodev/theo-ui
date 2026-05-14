@@ -51,7 +51,7 @@ const CapabilityIndicator = forwardRef<HTMLUListElement, CapabilityIndicatorProp
       ref={ref}
       aria-label="Agent capabilities"
       className={cn("flex flex-wrap items-center gap-1.5", className)}
-      {...(props as React.HTMLAttributes<HTMLUListElement>)}
+      {...(props as HTMLAttributes<HTMLUListElement>)}
     >
       {capabilities.map((c) => {
         const Icon = c.icon ?? AlertCircle;

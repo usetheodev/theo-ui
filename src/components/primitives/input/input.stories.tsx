@@ -1,4 +1,5 @@
 import type { Story } from "@ladle/react";
+import type { ReactNode } from "react";
 import { Input } from "./input.js";
 
 export default { title: "Primitives / Foundations / Input" };
@@ -27,7 +28,7 @@ function Field({
 }: {
   id: string;
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="grid gap-2">

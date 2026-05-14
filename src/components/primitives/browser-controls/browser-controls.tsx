@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight, RotateCw } from "lucide-react";
 import { forwardRef } from "react";
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 
 interface BrowserControlsProps extends HTMLAttributes<HTMLDivElement> {
@@ -62,7 +62,7 @@ function NavBtn({
   "aria-label": ariaLabel,
 }: {
   onClick?: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
   "aria-label": string;
 }) {
   return (

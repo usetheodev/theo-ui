@@ -46,4 +46,11 @@ describe("Tabs", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Example />);
   });
+
+  // HIGH-009 / T6.2: compound displayName chain.
+  it("exposes correct displayName on subparts", () => {
+    expect(Tabs.List.displayName).toBe("Tabs.List");
+    expect(Tabs.Trigger.displayName).toBe("Tabs.Trigger");
+    expect(Tabs.Content.displayName).toBe("Tabs.Content");
+  });
 });
