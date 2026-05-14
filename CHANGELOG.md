@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixture `tailwind.config.ts` + `postcss.config.cjs`** — `tests/fixture-shadcn-app/` now has a real Tailwind toolchain with `safelist` covering the full Violet Forge typescale (forces compilation of every preset entry as proof of capability, independent of fixture App.tsx usage).
 - `validateDesignSystemFidelity` audits `src/styles/tailwind-preset.ts` instead of `tailwind.config.ts` (typescale now lives in the preset).
 
+### Added (Phase 5 — docs + governance)
+- **`CONTRIBUTING.md`** — operational handbook: setup, taxonomy rule, adding components, quality gates explained, registry distribution, PR conventions, release process, internal exploration archive policy.
+- **`SECURITY.md`** — disclosure policy, supported versions matrix, vulnerability scope (in/out), hardening already in place (ThemeScript `</script>` escape, no `dangerouslySetInnerHTML` outside SSR helper, lint guards). Aligns with GitHub Security Advisories workflow.
+- **`docs/architecture.md` §"Global Provider Primitives"** — closed-set, RFC-gated exception for `Toaster` + `ThemeProvider`. Names the trade-off explicitly so future contributors can't dilute it silently (HIGH-007 / D7).
+- **`referencia/` documentation policy** — `CONTRIBUTING.md` and `SECURITY.md` both name `referencia/` as unmaintained internal exploration archive, not shipped, not in scope for vulnerability reports. Future cleanup will relocate to a separate read-only repository. The directory itself is `.gitignore`d (MEDIUM-004 / T5.4).
+- README nav links `Contributing` and `Security`.
+
 ### Changed (HIGH-002 / T4.1 — self-hosted fonts as default)
 - **`src/styles/fonts.css` no longer `@import`s from `fonts.googleapis.com`.** Now declares six `@font-face` rules pointing at `./fonts/geist-{400,500,600}.woff2` and `./fonts/geist-mono-{400,500,600}.woff2`. Total asset budget: ~290 KB of woff2 next to the CSS. Eliminates the render-blocking third-party fetch that previously hit `fonts.googleapis.com` on every cold page load — fixes GDPR / CSP friction for the enterprise audience.
 - `src/styles/fonts-cdn.css` (NEW) — opt-in entrypoint that preserves the legacy Google Fonts CDN behavior. Consumers who prefer not to host static assets can `@import "@usetheo/ui/fonts-cdn.css"` instead of `@usetheo/ui/fonts.css` / `@usetheo/ui/styles.css`.
