@@ -28,7 +28,6 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
     return (
       <div
         ref={ref}
-        // biome-ignore lint/a11y/useSemanticElements: role="status" is intentional on this card wrapper; <output> is for form-controlled values
         role={inLiveRegion ? undefined : "status"}
         aria-live={inLiveRegion ? undefined : "polite"}
         aria-label="Agent is responding"
