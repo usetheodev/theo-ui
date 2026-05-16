@@ -273,6 +273,17 @@ describe("ThemeProvider", () => {
       expect(window.localStorage.getItem(`${STORAGE_KEY}:name`)).toBe("violet-forge");
     });
 
+    it("persists theme name on setTheme (Test NEW-A from re-audit)", async () => {
+      const user = userEvent.setup();
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      await user.click(screen.getByRole("button", { name: "switch" }));
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:name`)).toBe("classic-paper");
+    });
+
     it("falls back to defaults if localStorage.getItem throws", () => {
       const getSpy = vi.spyOn(window.localStorage.__proto__, "getItem").mockImplementation(() => {
         throw new Error("SecurityError: blocked");
