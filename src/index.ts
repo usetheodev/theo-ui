@@ -27,6 +27,9 @@ export {
   type ThemeMode,
 } from "./themes/index.js";
 
+// Primary entry point — composes ThemeProvider + Toaster (T2.1)
+export { TheoUIProvider, type TheoUIProviderProps } from "./theo-ui-provider.js";
+
 // Shared domain types
 export type { Attachment, Message, MessageRole } from "./types/chat.js";
 export type {
