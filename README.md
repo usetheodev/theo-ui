@@ -13,7 +13,7 @@ A React component library built for AI agent surfaces and PaaS dashboards. **102
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-453%20passing-success?style=flat-square)](#quality-gates)
+[![tests](https://img.shields.io/badge/tests-479%20passing-success?style=flat-square)](#quality-gates)
 [![components](https://img.shields.io/badge/components-102-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
