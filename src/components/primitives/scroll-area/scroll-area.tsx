@@ -110,14 +110,10 @@ const ScrollBar = forwardRef<
 ));
 ScrollBar.displayName = "ScrollArea.Bar";
 
-// Compound assembly (T7.1 / MEDIUM-007). `ScrollArea.Bar` is the canonical
-// surface; the legacy `ScrollBar` standalone export stays as a deprecated
-// alias until the next major release.
+// Compound assembly. `ScrollArea.Bar` is the only public surface for the
+// scroll bar. The previous standalone `ScrollBar` re-export was deprecated
+// theater in v0.0.0 (no public consumers exist on a pre-published package),
+// so it was removed cleanly in T7.4 (agent-team-audit-fixes plan).
 const ScrollArea = /*#__PURE__*/ Object.assign(ScrollAreaRoot, { Bar: ScrollBar });
 
-/**
- * @deprecated Use `ScrollArea.Bar` instead. Will be removed in the next
- * major version. Kept as a name re-export to preserve registry consumers
- * who depend on the standalone import; will be dropped in 1.0.
- */
-export { ScrollArea, ScrollBar };
+export { ScrollArea };
