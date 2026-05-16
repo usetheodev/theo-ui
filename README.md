@@ -2,11 +2,13 @@
 
 <img src="https://usetheo.dev/logo-128.webp" alt="Theo" width="96" height="96" />
 
-# `@usetheo/ui`
+**`@usetheo/ui`**
 
-**Violet Forge** — a framework-agnostic React component library for AI agents and developer tools.
+# The UI your agent already needs.
 
-Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-swappable themes.
+A React component library built for AI agent surfaces and PaaS dashboards. **102 components** designed for what you'd otherwise build from scratch.
+
+*Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
@@ -22,6 +24,12 @@ Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-s
 
 ---
 
+## The shift
+
+There is a version of your product where the agent UI is half-built before you start.
+
+The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the deployment status, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
+
 ## Why `@usetheo/ui`
 
 Most component libraries optimize for marketing pages. `@usetheo/ui` is built for the surfaces that AI agents and PaaS dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
@@ -32,7 +40,33 @@ Most component libraries optimize for marketing pages. `@usetheo/ui` is built fo
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
 - **Framework-agnostic.** Peer-deps on React only. Works under Vite, Next, Remix, Astro, Tanstack Start.
 
+The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
+
+| Surface need | `@usetheo/ui` | shadcn / Radix | Tremor | Build it yourself |
+|---|---|---|---|---|
+| Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
+| Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
+| PaaS-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
+| Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
+| shadcn-compatible registry | **Yes** | Original | No | N/A |
+| ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
+| a11y enforced as a quality gate | **Yes** — vitest-axe on 126 stories | Per-component, manual | Manual | Often skipped |
+
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write.
+
+## What you'd build
+
+- **Coding assistant interface.** Chat thread, streaming assistant, tool-call timeline, file diff viewer, permission matrix, sub-agent dispatch.
+- **Agent dashboard.** Run stats, session timeline, MCP server admin, cron job scheduler, memory editor, audit log, model card, cost meter.
+- **PaaS dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
+- **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
+- **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
+
 ---
+
+## How it works
+
+Below this line, full technical vocabulary is in play. Installation, themes, the component catalog, design system, quality gates.
 
 ## Quickstart
 
@@ -49,12 +83,14 @@ pnpm add @usetheo/ui
 ```
 
 ```tsx
-import { Button, ThemeProvider } from "@usetheo/ui";
+import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@usetheo/ui";
 
 export default function App() {
   return (
     <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
-      <Button>Deploy</Button>
+      <AgentEvent kind="thinking" text="Reading repository structure..." />
+      <ToolCall name="readFile" status="completed" />
+      <DeploymentRow status="ready" env="production" branch="main" />
     </ThemeProvider>
   );
 }
@@ -279,6 +315,21 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 ---
 
+## Status
+
+Honest claims only.
+
+- **Production.** 102 components, 453 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Registry distribution.** Artifacts shipped at `registry/r/*.json` in this repo; canonical `ui.usetheo.dev/r/*.json` URL is the planned distribution target.
+- **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
+- **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
+
 ## License
 
 [Apache-2.0](./LICENSE) © [usetheo.dev](https://usetheo.dev)
+
+## Community
+
+- Discord: https://discord.usetheo.dev/
+- X: https://x.com/usetheodev
+- LinkedIn: https://linkedin.com/company/usetheodev
