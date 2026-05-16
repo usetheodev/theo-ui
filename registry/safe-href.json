@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "safe-href",
+  "type": "registry:lib",
+  "title": "safeHref (XSS-safe URL guard)",
+  "description": "Defang javascript:/vbscript:/data:text/html URIs before rendering as <a href>. Returns undefined for dangerous protocols so the caller can render a non-link fallback.",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "lib/safe-href.ts",
+      "type": "registry:lib",
+      "target": "lib/safe-href.ts"
+    }
+  ]
+}

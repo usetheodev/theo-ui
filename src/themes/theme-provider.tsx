@@ -23,19 +23,85 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const STYLE_ELEMENT_ID = "theo-ui-theme-vars";
 
+// T3.2 (SEC-001): allowlist validators for theme values. injectThemeCss
+// interpolates theme name + color values + font families into a <style>
+// textContent. Without validation, a theme object from an untrusted source
+// (e.g., a feature-flag service, a CMS) could inject arbitrary CSS via
+// closing the declaration with `}` or smuggling `url(...)` for exfiltration.
+// We reject rather than escape: themes are code, not user input. Invalid
+// values cause a dev-time throw (caller sees the problem); production
+// silently substitutes a safe fallback so a misconfigured theme can't
+// crash the app.
+
+// Color values. Multiple accepted shapes:
+//   1. Hex: `#fff`, `#0a0a0a`, `#0a0a0aff`.
+//   2. Fully-parenthesized CSS color functions: `oklch(...)`, `rgb(...)`,
+//      `hsl(...)`, etc. Inner content restricted to digits/dots/spaces/
+//      percent/slash/comma/dash/plus — no semicolons, no braces, no `url(`.
+//   3. HSL-component split (shadcn-ui convention used by the built-in
+//      themes): `"0 0% 100%"`, `"262 83% 58%"` — space-separated numeric
+//      components consumed via `hsl(var(--token))` in stylesheets.
+//   4. `var(--token)` references, optionally with a fallback value that
+//      contains no parens/braces/semicolons.
+//   5. CSS keywords: `transparent`, `currentColor`, `inherit`, `initial`,
+//      `unset`.
+const COLOR_VALUE_PATTERN =
+  /^(#[0-9a-fA-F]{3,8}|(?:oklch|oklab|rgb|rgba|hsl|hsla|lab|lch|color)\(\s*[\d.\s%,/+\-]+\s*\)|-?\d+(?:\.\d+)?%?(?:\s+-?\d+(?:\.\d+)?%?){1,3}|var\(--[a-zA-Z0-9-]+(?:\s*,\s*[^();{}]+)?\)|transparent|currentColor|inherit|initial|unset)$/;
+
+// Font family: word chars, spaces, commas, hyphens, dots, quotes. Excludes
+// parens (blocks `url(...)`) and semicolons (blocks declaration breakouts).
+const FONT_FAMILY_PATTERN = /^[\w\s,"'\-.]+$/;
+
+// Theme name: kebab-case identifier. Excludes anything that could break out
+// of an attribute selector or inject additional rules.
+const THEME_NAME_PATTERN = /^[a-z][a-z0-9-]*$/;
+
+const IS_DEV = typeof process === "undefined" || process.env.NODE_ENV !== "production";
+
+function rejectOrFallback(scope: string, value: string, fallback: string): string {
+  if (IS_DEV) {
+    throw new Error(
+      `[@usetheo/ui] invalid ${scope} value: ${JSON.stringify(value)}. ` +
+        "Theme values must match the allowlist (see src/themes/theme-provider.tsx). " +
+        "Refusing to inject potentially unsafe CSS.",
+    );
+  }
+  return fallback;
+}
+
+function validatedColor(token: string, value: string): string {
+  if (COLOR_VALUE_PATTERN.test(value)) return value;
+  return rejectOrFallback(`color "${token}"`, value, "transparent");
+}
+
+function validatedFontFamily(slot: string, value: string): string {
+  if (FONT_FAMILY_PATTERN.test(value)) return value;
+  return rejectOrFallback(`fontFamily "${slot}"`, value, "inherit");
+}
+
+function validatedThemeName(value: string): string {
+  if (THEME_NAME_PATTERN.test(value)) return value;
+  return rejectOrFallback("theme.name", value, "invalid-theme");
+}
+
 function colorScaleToCss(name: string, mode: ThemeMode, colors: ColorScale): string {
+  const safeName = validatedThemeName(name);
   const selector =
     mode === "light"
-      ? `[data-theme="${name}"]`
-      : `[data-theme="${name}"].dark, [data-theme="${name}"][data-mode="dark"]`;
+      ? `[data-theme="${safeName}"]`
+      : `[data-theme="${safeName}"].dark, [data-theme="${safeName}"][data-mode="dark"]`;
   const decls = Object.entries(colors)
-    .map(([token, value]) => `  --${token}: ${value};`)
+    .map(([token, value]) => `  --${token}: ${validatedColor(token, value)};`)
     .join("\n");
   return `${selector} {\n${decls}\n}`;
 }
 
 function fontsToCss(name: string, fonts: Theme["fonts"]): string {
-  return `[data-theme="${name}"] {\n  --font-display: ${fonts.display};\n  --font-body: ${fonts.body};\n  --font-mono: ${fonts.mono};\n}`;
+  const safeName = validatedThemeName(name);
+  const display = validatedFontFamily("display", fonts.display);
+  const body = validatedFontFamily("body", fonts.body);
+  const mono = validatedFontFamily("mono", fonts.mono);
+  return `[data-theme="${safeName}"] {\n  --font-display: ${display};\n  --font-body: ${body};\n  --font-mono: ${mono};\n}`;
 }
 
 function injectThemeCss(themes: Theme[]): void {
@@ -142,6 +208,24 @@ function ThemeProvider({
         "Pass `themes={builtinThemes}` for the Violet Forge defaults (importable " +
         "via the package barrel), or use <TheoUIProvider> which sets this for you.",
     );
+  }
+
+  // T3.2 (SEC-001): eager validation. Calling validatedColor/FontFamily/
+  // ThemeName here (synchronously during render) ensures CSS-injection
+  // attempts throw at construction time rather than inside the deferred
+  // useEffect that injects the <style>. Production-mode fallbacks keep
+  // the app rendering even if a theme has bad values.
+  for (const t of themesProp) {
+    validatedThemeName(t.name);
+    validatedFontFamily("display", t.fonts.display);
+    validatedFontFamily("body", t.fonts.body);
+    validatedFontFamily("mono", t.fonts.mono);
+    for (const [token, value] of Object.entries(t.light)) {
+      validatedColor(token, value);
+    }
+    for (const [token, value] of Object.entries(t.dark)) {
+      validatedColor(token, value);
+    }
   }
 
   // Dedup by theme name; last writer wins (allows registerTheme override).
