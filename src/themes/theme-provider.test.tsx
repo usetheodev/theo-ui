@@ -46,11 +46,7 @@ describe("ThemeProvider", () => {
 
   it("uses only the themes passed (T2.5 — decoupled from violet-forge)", () => {
     render(
-      <ThemeProvider
-        themes={[classicPaper]}
-        defaultTheme="classic-paper"
-        storageKey={null}
-      >
+      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
@@ -60,11 +56,7 @@ describe("ThemeProvider", () => {
 
   it("does not inject violet-forge CSS vars when not in themes (T2.5)", () => {
     render(
-      <ThemeProvider
-        themes={[classicPaper]}
-        defaultTheme="classic-paper"
-        storageKey={null}
-      >
+      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );

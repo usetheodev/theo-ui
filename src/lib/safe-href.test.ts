@@ -57,8 +57,6 @@ describe("safeHref", () => {
 
   it("accepts safe data: subtypes (non-text/html)", () => {
     // data:image/png is fine — no script execution surface.
-    expect(safeHref("data:image/png;base64,iVBOR...")).toBe(
-      "data:image/png;base64,iVBOR...",
-    );
+    expect(safeHref("data:image/png;base64,iVBOR...")).toBe("data:image/png;base64,iVBOR...");
   });
 });
