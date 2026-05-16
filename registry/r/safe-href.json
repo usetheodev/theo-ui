@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "safe-href",
+  "type": "registry:lib",
+  "title": "safeHref (XSS-safe URL guard)",
+  "description": "Defang javascript:/vbscript:/data:text/html URIs before rendering as <a href>. Returns undefined for dangerous protocols so the caller can render a non-link fallback.",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "lib/safe-href.ts",
+      "type": "registry:lib",
+      "target": "lib/safe-href.ts",
+      "content": "/**\n * safeHref — defang `javascript:`, `vbscript:`, and `data:text/html` URIs.\n *\n * T3.3 (Security SEC-003). When a consumer passes user-controlled data as\n * an href to one of our card composites (`ProjectCard.href`, `PreviewEnvCard.url`,\n * etc.), an attacker who controls that data can craft a `javascript:alert(...)`\n * URI that fires in the application's origin on click. This is a standard\n * component-library hardening (mitigation also documented in `SECURITY.md`).\n *\n * Returns `undefined` for dangerous protocols so the consuming component\n * can short-circuit to a non-link rendering. Returns the URL unchanged for\n * safe protocols (`http`, `https`, `mailto`, `tel`, relative paths).\n *\n * Allowed (returns input unchanged):\n *   - \"https://example.com/path?query\"\n *   - \"/internal/route\"\n *   - \"mailto:dev@usetheo.dev\"\n *   - \"tel:+15551234567\"\n *\n * Blocked (returns undefined):\n *   - \"javascript:alert(1)\" — XSS via JS execution\n *   - \" JavaScript:alert(1)\" — case-insensitive, leading whitespace\n *   - \"vbscript:msgbox(1)\" — legacy IE XSS surface (still relevant on\n *     certain enterprise envs)\n *   - \"data:text/html,...\" — inline HTML/script payloads\n */\n\nconst DANGEROUS_PROTOCOL_PATTERNS: readonly RegExp[] = [\n  /^javascript:/i,\n  /^vbscript:/i,\n  /^data:text\\/html/i,\n];\n\nexport function safeHref(url: string | null | undefined): string | undefined {\n  if (url === null || url === undefined) return undefined;\n  const trimmed = url.trim();\n  if (trimmed.length === 0) return undefined;\n  for (const pattern of DANGEROUS_PROTOCOL_PATTERNS) {\n    if (pattern.test(trimmed)) return undefined;\n  }\n  return url;\n}\n"
+    }
+  ]
+}

