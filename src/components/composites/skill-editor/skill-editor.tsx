@@ -130,7 +130,7 @@ export function SkillEditor({
           <FormField.Label>Source</FormField.Label>
           <FormField.Control>
             <Select value={source} onValueChange={(v) => setSource(v as SkillSource)}>
-              <Select.Trigger>
+              <Select.Trigger aria-label="Select skill source">
                 <Select.Value />
               </Select.Trigger>
               <Select.Content>

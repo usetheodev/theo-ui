@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { auroraTerminal } from "./aurora-terminal.js";
 import { classicPaper } from "./classic-paper.js";
 import { builtinThemes } from "./index.js";
@@ -227,5 +227,76 @@ describe("ThemeProvider", () => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     expect(() => render(<Bare />)).toThrow(/useTheme must be used inside/);
     spy.mockRestore();
+  });
+
+  describe("localStorage persistence (T5.1)", () => {
+    const STORAGE_KEY = "test-ui:theme";
+
+    beforeEach(() => {
+      window.localStorage.clear();
+    });
+
+    afterEach(() => {
+      window.localStorage.clear();
+      vi.restoreAllMocks();
+    });
+
+    it("reads initial theme name from localStorage", () => {
+      window.localStorage.setItem(`${STORAGE_KEY}:name`, "classic-paper");
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      expect(screen.getByTestId("theme")).toHaveTextContent("classic-paper");
+    });
+
+    it("reads initial mode from localStorage", () => {
+      window.localStorage.setItem(`${STORAGE_KEY}:mode`, "light");
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      expect(screen.getByTestId("mode")).toHaveTextContent("light");
+    });
+
+    it("persists theme + mode on toggleMode", async () => {
+      const user = userEvent.setup();
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      await user.click(screen.getByRole("button", { name: "toggle" }));
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:mode`)).toBe("light");
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:name`)).toBe("violet-forge");
+    });
+
+    it("falls back to defaults if localStorage.getItem throws", () => {
+      const getSpy = vi.spyOn(window.localStorage.__proto__, "getItem").mockImplementation(() => {
+        throw new Error("SecurityError: blocked");
+      });
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      // Falls back to defaults: violet-forge / dark.
+      expect(screen.getByTestId("theme")).toHaveTextContent("violet-forge");
+      expect(screen.getByTestId("mode")).toHaveTextContent("dark");
+      getSpy.mockRestore();
+    });
+
+    it("ignores invalid stored mode and uses default", () => {
+      window.localStorage.setItem(`${STORAGE_KEY}:mode`, "twilight");
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      // "twilight" is not "dark" or "light" → falls back to defaultMode (dark).
+      expect(screen.getByTestId("mode")).toHaveTextContent("dark");
+    });
   });
 });
