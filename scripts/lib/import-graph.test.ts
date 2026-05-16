@@ -202,7 +202,7 @@ describe("composite cycle detection (NEW-C)", () => {
       compositeLayers,
       adj,
     );
-    collectCompositeEdges(fileFor("c"), "c", ``, compositeLayers, adj);
+    collectCompositeEdges(fileFor("c"), "c", "", compositeLayers, adj);
     expect(findCompositeCycles(adj)).toEqual([]);
   });
 
