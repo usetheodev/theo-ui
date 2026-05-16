@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0-next.0] - 2026-05-16
+
+First public pre-release on npm under the `next` dist-tag. Install with
+`pnpm add @usetheo/ui@next` (the default `latest` tag is intentionally
+unset until 1.0). Highlights from the agent-team-audit-fixes-2026-05-16
+remediation sprint:
+
+- New `<TheoUIProvider>` primary entry point (T2.1).
+- `<ThemeProvider>` decoupled from `violetForge` (T2.5, **breaking** —
+  see migration below).
+- CSS injection allowlist + `safeHref` URL guard (T3.2 / T3.3).
+- LiveRegionContext universal — eliminates double aria-live
+  announcements across 9 components (T4.1, MF-4).
+- React 19 compatibility verified in CI (T6.3); `onToggle` clash with
+  the new `ToggleEventHandler` resolved in 6 components.
+- New composite-to-composite cycle detection gate (re-audit NEW-C).
+- happy-dom 16 → 20 (closes CVE-2025-61927 in test env; T3.1).
+- Postcss override + tailwindcss-animate moved to deps (T6.1 / T6.4).
+- ScrollBar standalone removed in favor of `ScrollArea.Bar` (T7.4).
+
 ### Changed (BREAKING, 2026-05-16) — T2.5 ThemeProvider decouple
 - **`<ThemeProvider>` now requires the `themes` prop.** Previously, the prop was optional and ThemeProvider auto-included `violet-forge` regardless. Since the source no longer top-level imports `violetForge`, the runtime now throws a helpful error if `themes` is missing or empty. This decouples consumer bundle size from the built-in theme set: consumers passing only custom themes no longer ship `violetForge.ts` (~6 KB savings).
 - **Migration**:
