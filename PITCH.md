@@ -238,7 +238,7 @@ npx shadcn@latest add https://ui.usetheo.dev/r/button.json
 
 **Next in the funnel:** Build any React surface today — install `@usetheo/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
 
-**Tertiary:** [Component catalog](https://github.com/usetheodev/theo-ui#component-catalog) · [Gallery](https://ui.usetheo.dev) · [GitHub](https://github.com/usetheodev/theo-ui)
+**Tertiary:** [Component catalog](https://github.com/usetheodev/theo-ui#component-catalog) · Gallery (coming soon at ui.usetheo.dev) · [GitHub](https://github.com/usetheodev/theo-ui)
 
 ## Community
 
