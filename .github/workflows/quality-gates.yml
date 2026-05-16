@@ -36,3 +36,44 @@ jobs:
 
       - name: Run quality gates
         run: pnpm quality:gates
+
+  # T6.3 (agent-team-audit-fixes plan): React 19 compatibility job.
+  # Overrides React to 19.x over the locked tree, then runs typecheck +
+  # test to surface incompatibilities. `continue-on-error: true` means
+  # failures here do NOT block the PR — we gather evidence first, then
+  # decide whether to promote it to a required check. The peer range
+  # `"react": ">=18.2.0"` already permits 19 numerically; this proves
+  # the library actually compiles and tests against it.
+  react-19-compat:
+    name: react@19 compat (allow-failure)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install (baseline lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Override React to 19
+        run: |
+          pnpm add -D react@^19 react-dom@^19 @types/react@^19 @types/react-dom@^19
+
+      - name: Typecheck against React 19
+        run: pnpm typecheck
+
+      - name: Test against React 19
+        run: pnpm test
