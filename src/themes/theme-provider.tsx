@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { JSX, ReactNode } from "react";
+import { safeHref } from "../lib/safe-href.js";
 import type { ColorScale, Theme, ThemeMode } from "./types.js";
 
 interface ThemeContextValue {
@@ -135,12 +136,20 @@ function loadThemeFonts(theme: Theme): void {
   if (typeof document === "undefined") return;
   if (!theme.fontUrls) return;
   for (const url of theme.fontUrls) {
-    if (document.head.querySelector(`link[rel="stylesheet"][href="${CSS.escape(url)}"]`)) {
+    // Re-audit NEW-001 (SSRF, LOW): defang dangerous protocols on
+    // consumer-provided font URLs. Built-in themes use
+    // fonts.googleapis.com/gstatic.com — safe. registerTheme accepts
+    // arbitrary objects at runtime; a malicious theme could try to inject
+    // javascript:/data:text/html via fontUrls. safeHref returns undefined
+    // for dangerous protocols, which we skip silently.
+    const safe = safeHref(url);
+    if (!safe) continue;
+    if (document.head.querySelector(`link[rel="stylesheet"][href="${CSS.escape(safe)}"]`)) {
       continue;
     }
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = url;
+    link.href = safe;
     document.head.appendChild(link);
   }
 }
@@ -220,25 +229,30 @@ function ThemeProvider({
   }
 
   // T3.2 (SEC-001): eager validation. Calling validatedColor/FontFamily/
-  // ThemeName here (synchronously during render) ensures CSS-injection
-  // attempts throw at construction time rather than inside the deferred
-  // useEffect that injects the <style>. Production-mode fallbacks keep
-  // the app rendering even if a theme has bad values.
-  for (const t of themesProp) {
-    validatedThemeName(t.name);
-    validatedFontFamily("display", t.fonts.display);
-    validatedFontFamily("body", t.fonts.body);
-    validatedFontFamily("mono", t.fonts.mono);
-    for (const [token, value] of Object.entries(t.light)) {
-      validatedColor(token, value);
-    }
-    for (const [token, value] of Object.entries(t.dark)) {
-      validatedColor(token, value);
-    }
-  }
-
-  // Dedup by theme name; last writer wins (allows registerTheme override).
+  // ThemeName here ensures CSS-injection attempts throw at construction
+  // time rather than inside the deferred useEffect that injects the
+  // <style>. Production-mode fallbacks keep the app rendering even if a
+  // theme has bad values.
+  //
+  // Re-audit NEW-3: wrapped in useMemo so the validation cost (O(themes *
+  // tokens), ~60 ops per built-in theme) only runs when themesProp's
+  // reference changes — not on every parent re-render. Consumers passing
+  // inline array literals (`themes={[violetForge, classicPaper]}`) would
+  // otherwise pay this on every parent update.
   const mergedThemes = useMemo<Theme[]>(() => {
+    for (const t of themesProp) {
+      validatedThemeName(t.name);
+      validatedFontFamily("display", t.fonts.display);
+      validatedFontFamily("body", t.fonts.body);
+      validatedFontFamily("mono", t.fonts.mono);
+      for (const [token, value] of Object.entries(t.light)) {
+        validatedColor(token, value);
+      }
+      for (const [token, value] of Object.entries(t.dark)) {
+        validatedColor(token, value);
+      }
+    }
+    // Dedup by theme name; last writer wins (allows registerTheme override).
     const map = new Map<string, Theme>();
     for (const t of themesProp) map.set(t.name, t);
     return Array.from(map.values());
