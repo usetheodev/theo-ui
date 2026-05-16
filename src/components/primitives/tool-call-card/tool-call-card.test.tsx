@@ -43,4 +43,20 @@ describe("ToolCallCard", () => {
     );
     expect(screen.getByText(/error TS2304/)).toBeInTheDocument();
   });
+
+  it("does not use <header role=button> pattern (T5.4 regression)", () => {
+    const { container } = render(
+      <ToolCallCard tool="Bash" target="tsc --noEmit" status="success" output={<pre>ok</pre>} />,
+    );
+    // Header element with role=button is the prohibited pattern (axe + AT
+    // confusion). The expander is now a dedicated <button> inside a <div>.
+    expect(container.querySelector('header[role="button"]')).toBeNull();
+  });
+
+  it("status icon span has role=img so aria-label is valid (T5.4)", () => {
+    const { container } = render(<ToolCallCard tool="Bash" status="running" />);
+    const statusSpan = container.querySelector('span[role="img"]');
+    expect(statusSpan).not.toBeNull();
+    expect(statusSpan?.getAttribute("aria-label")).toBe("Running");
+  });
 });

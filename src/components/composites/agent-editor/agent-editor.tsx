@@ -156,7 +156,7 @@ export function AgentEditor({
               value={tone}
               onValueChange={(v) => setTone(v as NonNullable<AgentProfileDescriptor["tone"]>)}
             >
-              <Select.Trigger>
+              <Select.Trigger aria-label="Select tone">
                 <Select.Value />
               </Select.Trigger>
               <Select.Content>
@@ -174,7 +174,7 @@ export function AgentEditor({
             <FormField.Label>Model</FormField.Label>
             <FormField.Control>
               <Select value={model} onValueChange={setModel}>
-                <Select.Trigger>
+                <Select.Trigger aria-label="Select model">
                   <Select.Value />
                 </Select.Trigger>
                 <Select.Content>

@@ -50,6 +50,15 @@ describe("Dialog", () => {
     expect(screen.queryByText("Delete project")).not.toBeInTheDocument();
   });
 
+  it("closes on Escape key press (T5.2 regression)", async () => {
+    const user = userEvent.setup();
+    render(<Example />);
+    await user.click(screen.getByRole("button", { name: "Open" }));
+    expect(screen.getByText("Delete project")).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByText("Delete project")).not.toBeInTheDocument();
+  });
+
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Example />);
   });
