@@ -1,4 +1,5 @@
 import { AlertTriangle, FolderOpen, ShieldAlert } from "lucide-react";
+import { useRef } from "react";
 import type { ReactNode } from "react";
 import type {
   PermissionDecision,
@@ -80,6 +81,27 @@ function PermissionModal({
   const opsList = request.operations.map((op) => opLabels[op]).join(", ");
   const text = { ...defaultLabels, ...labels };
 
+  // T4.4 (Code Issue 4): Esc / overlay-click previously fired onOpenChange(false)
+  // but never onDecide — users saw "Cancel" semantics, app saw silent dismissal.
+  // Track whether an explicit button decision happened; if the dialog closes
+  // without one, treat it as denied. decidedRef must reset on every fresh open
+  // so a rapid close-then-open doesn't carry state forward.
+  const decidedRef = useRef(false);
+  function handleDecide(decision: PermissionDecision) {
+    decidedRef.current = true;
+    onDecide(decision);
+  }
+  function handleOpenChange(next: boolean) {
+    const wasDecided = decidedRef.current;
+    // Reset BEFORE invoking onDecide so a re-open within the same tick starts
+    // clean. Edge case from SF-6: rapid toggle could leave decidedRef=true.
+    decidedRef.current = false;
+    if (!next && !wasDecided) {
+      onDecide("denied");
+    }
+    onOpenChange(next);
+  }
+
   const defaultTitle = (
     <span className="flex items-center gap-2">
       <ShieldAlert className="size-5 text-warning" aria-hidden="true" />
@@ -99,7 +121,7 @@ function PermissionModal({
   );
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <Dialog.Content className="max-w-xl">
         <Dialog.Header>
           <Dialog.Title>{title ?? defaultTitle}</Dialog.Title>
@@ -121,13 +143,13 @@ function PermissionModal({
           </div>
         </Dialog.Body>
         <Dialog.Footer>
-          <Button variant="secondary" onClick={() => onDecide("denied")}>
+          <Button variant="secondary" onClick={() => handleDecide("denied")}>
             {text.cancel}
           </Button>
-          <Button variant="ghost" onClick={() => onDecide("always_allowed")}>
+          <Button variant="ghost" onClick={() => handleDecide("always_allowed")}>
             {text.always}
           </Button>
-          <Button onClick={() => onDecide("allowed_once")}>{text.allow}</Button>
+          <Button onClick={() => handleDecide("allowed_once")}>{text.allow}</Button>
         </Dialog.Footer>
       </Dialog.Content>
     </Dialog>

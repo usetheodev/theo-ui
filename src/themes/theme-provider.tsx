@@ -121,14 +121,25 @@ function injectThemeCss(themes: Theme[]): void {
   style.textContent = blocks.join("\n\n");
 }
 
-const injectedFontUrls = new Set<string>();
-
+/**
+ * loadThemeFonts — idempotently inject `<link rel="stylesheet">` for each
+ * font URL declared by the theme.
+ *
+ * T4.2: the previous implementation kept a module-level `Set` to track
+ * already-injected URLs. That singleton broke test isolation (state
+ * leaked across renders) and silently skipped injection in micro-frontend
+ * setups with multiple `<ThemeProvider>` mounts. Replaced with a DOM
+ * check: we query `document.head` for an existing link with the same
+ * `href` before appending a new one. The DOM is the single source of
+ * truth; no shared state across instances.
+ */
 function loadThemeFonts(theme: Theme): void {
   if (typeof document === "undefined") return;
   if (!theme.fontUrls) return;
   for (const url of theme.fontUrls) {
-    if (injectedFontUrls.has(url)) continue;
-    injectedFontUrls.add(url);
+    if (document.head.querySelector(`link[rel="stylesheet"][href="${CSS.escape(url)}"]`)) {
+      continue;
+    }
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = url;
