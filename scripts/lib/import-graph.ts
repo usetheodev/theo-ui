@@ -142,10 +142,15 @@ export function resolveSpecifierToLayer(
  * Global provider primitives — exceções nomeadas à regra "primitive não
  * importa outro Theo component". Documentado em `docs/architecture.md`
  * (seção "Global Provider Primitives") por D7. Edição requer RFC.
+ *
+ * NOTE: ThemeProvider lives at `src/themes/theme-provider.tsx`, NOT in
+ * `src/components/primitives/`. The previous `"theme-provider"` allowlist
+ * entry was dead code (the path resolver scans the primitives folder
+ * only). Removed in re-audit cleanup. If a future provider lands as a
+ * components/primitives/* folder, add it here with an RFC reference.
  */
 export const GLOBAL_PROVIDER_PRIMITIVES: ReadonlySet<string> = new Set([
   "toast", // Toaster provider lives here
-  "theme-provider", // not actually a primitive folder; reserved for future
 ]);
 
 /**

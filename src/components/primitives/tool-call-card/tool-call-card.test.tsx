@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { expectNoA11yViolations } from "../../../test/a11y.js";
 import { ToolCallCard } from "./tool-call-card.js";
 
 describe("ToolCallCard", () => {
@@ -58,5 +59,21 @@ describe("ToolCallCard", () => {
     const statusSpan = container.querySelector('span[role="img"]');
     expect(statusSpan).not.toBeNull();
     expect(statusSpan?.getAttribute("aria-label")).toBe("Running");
+  });
+
+  it("has no a11y violations (Test NEW-C from re-audit)", async () => {
+    await expectNoA11yViolations(
+      <ToolCallCard
+        tool="Bash"
+        target="tsc --noEmit"
+        status="success"
+        output={<pre>ok</pre>}
+        defaultExpanded
+      />,
+    );
+  });
+
+  it("has no a11y violations when not interactive (no output)", async () => {
+    await expectNoA11yViolations(<ToolCallCard tool="Lint" status="running" />);
   });
 });
