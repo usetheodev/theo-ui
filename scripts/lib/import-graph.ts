@@ -198,3 +198,82 @@ export function importsScreen(fromFile: string, content: string): boolean {
   }
   return false;
 }
+
+/**
+ * Composite-to-composite dependency adjacency. `composites/<from>` → set of
+ * `composites/<target>` names imported by `<from>`. Type-only imports are
+ * excluded (same rule as primitives — they don't add code at runtime).
+ *
+ * Architecture re-audit NEW-C: composites may import other composites
+ * (documented), but cycles between composites have no automated guard. This
+ * function builds the directed graph and `findCompositeCycles` runs DFS
+ * over it to surface offenders.
+ */
+export type CompositeAdjacency = Map<string, Set<string>>;
+
+/**
+ * Add the edges (from → composite-targets) for one composite file to the
+ * accumulating adjacency. `fromName` should be the composite folder name.
+ */
+export function collectCompositeEdges(
+  fromFile: string,
+  fromName: string,
+  content: string,
+  layers: LayerMembership,
+  adjacency: CompositeAdjacency,
+): void {
+  const edges = adjacency.get(fromName) ?? new Set<string>();
+  for (const imp of parseImportsDetailed(content)) {
+    if (imp.isType) continue;
+    const resolved = resolveSpecifierToLayer(fromFile, imp.specifier, layers);
+    if (resolved.layer !== "composites") continue;
+    if (!resolved.name || resolved.name === fromName) continue;
+    edges.add(resolved.name);
+  }
+  adjacency.set(fromName, edges);
+}
+
+/**
+ * Detect cycles in a composite adjacency graph via DFS with a recursion
+ * stack. Returns one representative cycle per strongly-connected component
+ * (not all cycles — just enough to flag the offending nodes for the gate).
+ *
+ * Each returned cycle is a list of composite names in traversal order,
+ * ending with the node that closes the loop (e.g., `["a", "b", "a"]` for
+ * a 2-node cycle).
+ */
+export function findCompositeCycles(adjacency: CompositeAdjacency): string[][] {
+  const cycles: string[][] = [];
+  const seenCycles = new Set<string>();
+  const visitState = new Map<string, "white" | "gray" | "black">();
+  for (const node of adjacency.keys()) visitState.set(node, "white");
+
+  function dfs(node: string, path: string[]): void {
+    visitState.set(node, "gray");
+    path.push(node);
+    for (const target of adjacency.get(node) ?? []) {
+      const state = visitState.get(target);
+      if (state === "gray") {
+        // Cycle detected: slice the path from `target` to current `node`.
+        const start = path.indexOf(target);
+        if (start >= 0) {
+          const cycle = [...path.slice(start), target];
+          const key = `${[...cycle].sort().join(">")}`;
+          if (!seenCycles.has(key)) {
+            seenCycles.add(key);
+            cycles.push(cycle);
+          }
+        }
+      } else if (state === "white") {
+        dfs(target, path);
+      }
+    }
+    path.pop();
+    visitState.set(node, "black");
+  }
+
+  for (const node of adjacency.keys()) {
+    if (visitState.get(node) === "white") dfs(node, []);
+  }
+  return cycles;
+}
