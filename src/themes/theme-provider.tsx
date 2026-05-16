@@ -61,9 +61,7 @@ const IS_DEV = typeof process === "undefined" || process.env.NODE_ENV !== "produ
 function rejectOrFallback(scope: string, value: string, fallback: string): string {
   if (IS_DEV) {
     throw new Error(
-      `[@usetheo/ui] invalid ${scope} value: ${JSON.stringify(value)}. ` +
-        "Theme values must match the allowlist (see src/themes/theme-provider.tsx). " +
-        "Refusing to inject potentially unsafe CSS.",
+      `[@usetheo/ui] invalid ${scope} value: ${JSON.stringify(value)}. Theme values must match the allowlist (see src/themes/theme-provider.tsx). Refusing to inject potentially unsafe CSS.`,
     );
   }
   return fallback;

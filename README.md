@@ -13,8 +13,8 @@ A React component library built for AI agent surfaces and PaaS dashboards. **102
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-479%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-102-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-514%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-101-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -131,13 +131,13 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**102 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
+**101 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (81) — building blocks
+**Primitives** (80) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
@@ -151,11 +151,11 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 `LaneBoard` · `LoginSplit` · `MCPServerCard` · `MemoryEditor` · `MentionMenu` · `MetricsPanel`
 `ModelCard` · `ModelSelector` · `PermissionMatrix` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
 `RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunningTasksPanel` · `ScrollArea`
-`ScrollBar` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
-`Skeleton` · `SkillCard` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch`
-`SystemPromptEditor` · `Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea`
-`Toast` · `Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult`
-`ToolsList` · `Tooltip` · `TopNav`
+`Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar` · `Skeleton`
+`SkillCard` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch` · `SystemPromptEditor`
+`Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea` · `Toast`
+`Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
+`Tooltip` · `TopNav`
 <!-- END:primitives -->
 
 </details>
