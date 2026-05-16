@@ -30,7 +30,7 @@ export interface Skill {
   modes?: Mode[];
 }
 
-interface SkillCardProps extends HTMLAttributes<HTMLDivElement> {
+interface SkillCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "onToggle"> {
   skill: Skill;
   onToggle?: (id: string, next: SkillState) => void;
 }

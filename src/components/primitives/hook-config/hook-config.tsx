@@ -30,7 +30,7 @@ const HOOK_EVENTS: HookEvent[] = [
   "SessionEnd",
 ];
 
-interface HookConfigProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+interface HookConfigProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "onToggle"> {
   hooks: HookEntry[];
   onAdd?: (hook: Omit<HookEntry, "id">) => void;
   onRemove?: (id: string) => void;
