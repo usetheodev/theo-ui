@@ -142,6 +142,7 @@ async function main(): Promise<void> {
   }
 
   const index = await readJson<{
+    metadata?: { requires?: { tsconfigPathAlias?: Record<string, string[]> } };
     items: Array<{ name: string; type: RegistryType; title: string; description: string }>;
   }>(join(REGISTRY_DIR, "index.json"));
   const indexNames = new Set(index.items.map((item) => item.name));
@@ -150,6 +151,17 @@ async function main(): Promise<void> {
   }
   for (const name of indexNames) {
     if (!descriptors.has(name)) addFailure("index.json", `references missing descriptor "${name}"`);
+  }
+
+  // T2.3: gate the `@/` alias precondition. Items inline source that imports
+  // from `@/`; consumers must have that alias mapped in tsconfig. The index
+  // must declare the requirement so downstream tooling can surface it.
+  const declaredAlias = index.metadata?.requires?.tsconfigPathAlias?.["@/*"];
+  if (!declaredAlias || declaredAlias.length === 0) {
+    addFailure(
+      "index.json",
+      'metadata.requires.tsconfigPathAlias["@/*"] is required; consumers need the "@/" path alias mapped to ./src for shadcn-style copy-paste to resolve "@/lib/cn", "@/components/ui/...", etc.',
+    );
   }
 
   const BUILTIN_RUNTIMES = new Set(["react", "react-dom", "react/jsx-runtime"]);

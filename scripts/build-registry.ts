@@ -161,10 +161,25 @@ async function main(): Promise<void> {
   }
 
   // Update the index with the names of everything built.
+  //
+  // T2.3: declare the environmental precondition required by the
+  // copy-paste install path. shadcn CLI consumers must have the `@/` path
+  // alias mapped to `./src` in their tsconfig.json (the convention since
+  // shadcn-ui 2.0). Without it, the inlined `import { cn } from "@/lib/cn"`
+  // statements fail to resolve. Surfacing this in the index lets future
+  // tooling check for it before attempting an install.
   const index = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "theo-ui",
     homepage: "https://usetheo.dev",
+    metadata: {
+      requires: {
+        // The shadcn-standard path alias. Consumers must have this mapped
+        // in tsconfig.json#compilerOptions.paths (or jsconfig.json).
+        // Standard mapping: { "@/*": ["./src/*"] }.
+        tsconfigPathAlias: { "@/*": ["./src/*"] },
+      },
+    },
     items: built.map((item) => ({
       name: item.name,
       type: item.type,
