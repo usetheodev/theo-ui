@@ -36,6 +36,13 @@ export interface Metric {
    * Optional onClick to drill into the metric.
    */
   onClick?: () => void;
+  /**
+   * Optional override for the clickable tile's accessible name. When the
+   * tile is interactive (`onClick` set), defaults to `View <label> details`.
+   * Has no effect when `onClick` is absent (tile is rendered as a non-link
+   * `<div>` with no button semantics). T4.3.
+   */
+  actionLabel?: string;
 }
 
 interface MetricsPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -86,10 +93,18 @@ MetricsPanel.displayName = "MetricsPanel";
 function Tile({ metric }: { metric: Metric }) {
   const interactive = metric.onClick !== undefined;
   const Tag = interactive ? "button" : "div";
+  // T4.3 (Code Issue 3): clickable tiles need an explicit accessible name
+  // so AT users hear "View Requests/s details, button" instead of just
+  // the spoken value cluster. Falls back to metric.actionLabel when the
+  // caller wants custom text (e.g., "Drill into requests").
+  const ariaLabel = interactive
+    ? (metric.actionLabel ?? `View ${metric.label} details`)
+    : undefined;
   return (
     <Tag
       type={interactive ? "button" : undefined}
       onClick={metric.onClick}
+      aria-label={ariaLabel}
       className={cn(
         "flex flex-col gap-2 rounded-lg border border-border/30 bg-muted/30 p-4 text-left",
         "transition-colors duration-base ease-out-soft",

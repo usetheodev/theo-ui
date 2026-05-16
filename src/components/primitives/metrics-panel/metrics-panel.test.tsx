@@ -47,4 +47,29 @@ describe("MetricsPanel", () => {
     render(<MetricsPanel metrics={[{ label: "x", value: "1" }]} />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
+
+  it("clickable tile carries a default aria-label of 'View <label> details' (T4.3)", () => {
+    render(
+      <MetricsPanel metrics={[{ label: "Requests/s", value: "1.2k", onClick: () => undefined }]} />,
+    );
+    const button = screen.getByRole("button", { name: "View Requests/s details" });
+    expect(button).toBeInTheDocument();
+  });
+
+  it("clickable tile honors metric.actionLabel override (T4.3)", () => {
+    render(
+      <MetricsPanel
+        metrics={[
+          {
+            label: "Requests/s",
+            value: "1.2k",
+            actionLabel: "Drill into requests",
+            onClick: () => undefined,
+          },
+        ]}
+      />,
+    );
+    const button = screen.getByRole("button", { name: "Drill into requests" });
+    expect(button).toBeInTheDocument();
+  });
 });

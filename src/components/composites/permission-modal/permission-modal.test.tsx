@@ -49,4 +49,41 @@ describe("PermissionModal", () => {
     );
     expect(screen.getByRole("button", { name: /Yes, permitir/ })).toBeInTheDocument();
   });
+
+  it("Esc closes the dialog AND fires onDecide('denied') (T4.4)", async () => {
+    const user = userEvent.setup();
+    const onDecide = vi.fn();
+    const onOpenChange = vi.fn();
+    render(
+      <PermissionModal open onOpenChange={onOpenChange} request={request} onDecide={onDecide} />,
+    );
+    await user.keyboard("{Escape}");
+    expect(onDecide).toHaveBeenCalledWith("denied");
+    expect(onDecide).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("explicit Cancel button does not double-fire (T4.4)", async () => {
+    const user = userEvent.setup();
+    const onDecide = vi.fn();
+    const onOpenChange = vi.fn();
+    render(
+      <PermissionModal open onOpenChange={onOpenChange} request={request} onDecide={onDecide} />,
+    );
+    await user.click(screen.getByRole("button", { name: /Cancel/i }));
+    expect(onDecide).toHaveBeenCalledWith("denied");
+    expect(onDecide).toHaveBeenCalledTimes(1);
+  });
+
+  it("Allow button fires only 'allowed_once', not also 'denied' (T4.4)", async () => {
+    const user = userEvent.setup();
+    const onDecide = vi.fn();
+    render(
+      <PermissionModal open onOpenChange={() => undefined} request={request} onDecide={onDecide} />,
+    );
+    await user.click(screen.getByRole("button", { name: /Allow once/i }));
+    expect(onDecide).toHaveBeenCalledWith("allowed_once");
+    expect(onDecide).not.toHaveBeenCalledWith("denied");
+    expect(onDecide).toHaveBeenCalledTimes(1);
+  });
 });
