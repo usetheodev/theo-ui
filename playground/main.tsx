@@ -1,7 +1,7 @@
 // Public-API imports only — no relative paths into `src/`. The Vite alias in
 // `playground/vite.config.ts` resolves `@usetheo/ui` to `src/index.ts`, so this
 // file demonstrates how a real consumer would wire the library.
-import { Button, ThemeProvider, ThemeScript } from "@usetheo/ui";
+import { Button, ThemeProvider, ThemeScript, builtinThemes } from "@usetheo/ui";
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "@usetheo/ui/styles.css";
@@ -56,7 +56,7 @@ if (!root) throw new Error("Playground root element not found");
 createRoot(root).render(
   <StrictMode>
     <ThemeScript defaultTheme="violet-forge" defaultMode="dark" />
-    <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
+    <ThemeProvider themes={builtinThemes} defaultTheme="violet-forge" defaultMode="dark">
       <PlaygroundRoot />
     </ThemeProvider>
   </StrictMode>,
