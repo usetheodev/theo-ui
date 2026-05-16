@@ -20,7 +20,8 @@ const SCOPE_CLASS: Record<RuleScope, string> = {
   project: "bg-accent/15 text-accent",
 };
 
-interface RuleCardProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "onSelect"> {
+interface RuleCardProps
+  extends Omit<HTMLAttributes<HTMLElement>, "title" | "onSelect" | "onToggle"> {
   rule: Rule;
   /** Click on the card body — typically opens detail/edit view. */
   onSelect?: (id: string) => void;
