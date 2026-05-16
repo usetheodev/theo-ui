@@ -4,7 +4,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import { type CronJob, CronJobCard } from "../../primitives/cron-job-card/index.js";
 
-interface CronJobsListProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+interface CronJobsListProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "onToggle"> {
   jobs: CronJob[];
   title?: ReactNode;
   onAdd?: () => void;
