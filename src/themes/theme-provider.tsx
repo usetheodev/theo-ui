@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { JSX, ReactNode } from "react";
 import type { ColorScale, Theme, ThemeMode } from "./types.js";
-import { violetForge } from "./violet-forge.js";
 
 interface ThemeContextValue {
   /** Active theme (full descriptor). */
@@ -73,15 +72,24 @@ function loadThemeFonts(theme: Theme): void {
 
 interface ThemeProviderProps {
   children: ReactNode;
-  /** Theme to start with. Defaults to `violet-forge`. */
+  /**
+   * Theme to start with. Must match the `name` of an entry in `themes`.
+   * Defaults to `"violet-forge"` for backward compat — if you don't pass
+   * `violet-forge` in `themes`, set this prop explicitly.
+   */
   defaultTheme?: string;
   /** Mode to start with. Defaults to `"dark"` (library is dark-first). */
   defaultMode?: ThemeMode;
   /**
-   * Available themes. Always includes `violet-forge` even if omitted.
-   * Pass extra Theme objects to register them.
+   * Available themes. **Required**: ThemeProvider does not auto-include any
+   * built-in theme since v0.1.0-next.0 — pass `builtinThemes` for all three
+   * Violet Forge defaults, or your own array for a slimmer bundle.
+   *
+   * Migration: consumers previously calling `<ThemeProvider>` without this
+   * prop now must pass `themes={builtinThemes}` (or use `<TheoUIProvider>`
+   * which defaults to `builtinThemes` for you).
    */
-  themes?: Theme[];
+  themes: Theme[];
   /**
    * Persist selection in localStorage under this key. Pass `null` to disable.
    * Default: "theo-ui:theme".
@@ -123,13 +131,23 @@ function ThemeProvider({
   themes: themesProp,
   storageKey = "theo-ui:theme",
 }: ThemeProviderProps): JSX.Element {
-  // Merge user themes with the default, dedup by name (user wins).
+  // Themes prop is required since v0.1.0-next.0 — see migration note in
+  // the JSDoc on ThemeProviderProps. Pass `builtinThemes` for the legacy
+  // default behavior (violet-forge + classic-paper + aurora-terminal), or
+  // an array of your own. Empty array is rejected: ThemeProvider has no
+  // valid state without at least one registered theme.
+  if (!themesProp || themesProp.length === 0) {
+    throw new Error(
+      "<ThemeProvider> requires the `themes` prop with at least one Theme. " +
+        "Pass `themes={builtinThemes}` for the Violet Forge defaults (importable " +
+        "via the package barrel), or use <TheoUIProvider> which sets this for you.",
+    );
+  }
+
+  // Dedup by theme name; last writer wins (allows registerTheme override).
   const mergedThemes = useMemo<Theme[]>(() => {
-    const base = [violetForge];
-    const extras = themesProp ?? [];
     const map = new Map<string, Theme>();
-    for (const t of base) map.set(t.name, t);
-    for (const t of extras) map.set(t.name, t);
+    for (const t of themesProp) map.set(t.name, t);
     return Array.from(map.values());
   }, [themesProp]);
 
@@ -211,7 +229,11 @@ function ThemeProvider({
     });
   }, []);
 
-  const active = themes.find((t) => t.name === themeName) ?? themes[0] ?? violetForge;
+  // themes[0] is guaranteed non-undefined by the constructor-time check
+  // above (themesProp is non-empty); the non-null assert encodes that
+  // invariant for TypeScript, which can't trace it through useState.
+  // biome-ignore lint/style/noNonNullAssertion: T2.5 runtime invariant — themesProp non-empty validated at top of function
+  const active = themes.find((t) => t.name === themeName) ?? themes[0]!;
 
   const value = useMemo<ThemeContextValue>(
     () => ({

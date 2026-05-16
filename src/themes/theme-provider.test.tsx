@@ -1,9 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { auroraTerminal } from "./aurora-terminal.js";
 import { classicPaper } from "./classic-paper.js";
+import { builtinThemes } from "./index.js";
 import { ThemeProvider, useTheme } from "./theme-provider.js";
+import { violetForge } from "./violet-forge.js";
 
 function Inspector() {
   const { theme, mode, themes, setTheme, toggleMode } = useTheme();
@@ -23,9 +25,9 @@ function Inspector() {
 }
 
 describe("ThemeProvider", () => {
-  it("defaults to violet-forge in dark mode (dark-first)", () => {
+  it("defaults to violet-forge in dark mode (dark-first) when builtinThemes passed", () => {
     render(
-      <ThemeProvider storageKey={null}>
+      <ThemeProvider themes={builtinThemes} storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
@@ -35,21 +37,52 @@ describe("ThemeProvider", () => {
 
   it("accepts defaultMode='light' explicitly", () => {
     render(
-      <ThemeProvider defaultMode="light" storageKey={null}>
+      <ThemeProvider themes={builtinThemes} defaultMode="light" storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
     expect(screen.getByTestId("mode")).toHaveTextContent("light");
   });
 
-  it("always exposes violet-forge even if not passed in themes", () => {
+  it("uses only the themes passed (T2.5 — decoupled from violet-forge)", () => {
     render(
-      <ThemeProvider themes={[classicPaper]} storageKey={null}>
+      <ThemeProvider
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
-    // violet-forge + classic-paper = 2
-    expect(screen.getByTestId("count")).toHaveTextContent("2");
+    expect(screen.getByTestId("count")).toHaveTextContent("1");
+    expect(screen.getByTestId("theme")).toHaveTextContent("classic-paper");
+  });
+
+  it("does not inject violet-forge CSS vars when not in themes (T2.5)", () => {
+    render(
+      <ThemeProvider
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
+        <Inspector />
+      </ThemeProvider>,
+    );
+    const style = document.getElementById("theo-ui-theme-vars");
+    expect(style?.textContent ?? "").not.toContain('[data-theme="violet-forge"]');
+    expect(style?.textContent ?? "").toContain('[data-theme="classic-paper"]');
+  });
+
+  it("throws a helpful error when themes is empty (T2.5)", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    expect(() =>
+      render(
+        <ThemeProvider themes={[]} storageKey={null}>
+          <Inspector />
+        </ThemeProvider>,
+      ),
+    ).toThrow(/requires the `themes` prop with at least one Theme/);
+    spy.mockRestore();
   });
 
   it("accepts a defaultTheme override", () => {
@@ -68,7 +101,7 @@ describe("ThemeProvider", () => {
   it("setTheme swaps the active theme", async () => {
     const user = userEvent.setup();
     render(
-      <ThemeProvider themes={[classicPaper]} storageKey={null}>
+      <ThemeProvider themes={[violetForge, classicPaper]} storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
@@ -79,7 +112,7 @@ describe("ThemeProvider", () => {
   it("toggleMode flips dark <> light", async () => {
     const user = userEvent.setup();
     render(
-      <ThemeProvider storageKey={null}>
+      <ThemeProvider themes={builtinThemes} storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
@@ -103,30 +136,37 @@ describe("ThemeProvider", () => {
     expect(document.documentElement.getAttribute("data-mode")).toBe("light");
   });
 
-  it("re-syncs when themes prop changes between renders", async () => {
+  it("re-syncs when themes prop changes between renders", () => {
     const { rerender } = render(
-      <ThemeProvider themes={[classicPaper]} storageKey={null}>
+      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("count")).toHaveTextContent("2"); // violet-forge + classic-paper
+    expect(screen.getByTestId("count")).toHaveTextContent("1");
     rerender(
-      <ThemeProvider themes={[classicPaper, auroraTerminal]} storageKey={null}>
+      <ThemeProvider
+        themes={[classicPaper, auroraTerminal]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("count")).toHaveTextContent("3"); // + aurora-terminal
+    expect(screen.getByTestId("count")).toHaveTextContent("2");
   });
 
   it("injects a style block with CSS vars for each theme", () => {
     render(
-      <ThemeProvider themes={[classicPaper, auroraTerminal]} storageKey={null}>
+      <ThemeProvider
+        themes={[classicPaper, auroraTerminal]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
     const style = document.getElementById("theo-ui-theme-vars");
     expect(style).not.toBeNull();
-    expect(style?.textContent ?? "").toContain('[data-theme="violet-forge"]');
     expect(style?.textContent ?? "").toContain('[data-theme="classic-paper"]');
     expect(style?.textContent ?? "").toContain('[data-theme="aurora-terminal"]');
     expect(style?.textContent ?? "").toContain("--primary:");
@@ -138,11 +178,8 @@ describe("ThemeProvider", () => {
       useTheme();
       return null;
     };
-    // suppress expected error noise
     const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     expect(() => render(<Bare />)).toThrow(/useTheme must be used inside/);
     spy.mockRestore();
   });
 });
-
-import { vi } from "vitest";

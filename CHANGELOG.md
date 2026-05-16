@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed (BREAKING, 2026-05-16) — T2.5 ThemeProvider decouple
+- **`<ThemeProvider>` now requires the `themes` prop.** Previously, the prop was optional and ThemeProvider auto-included `violet-forge` regardless. Since the source no longer top-level imports `violetForge`, the runtime now throws a helpful error if `themes` is missing or empty. This decouples consumer bundle size from the built-in theme set: consumers passing only custom themes no longer ship `violetForge.ts` (~6 KB savings).
+- **Migration**:
+  ```tsx
+  // Before
+  import { ThemeProvider } from "@usetheo/ui";
+  <ThemeProvider>...</ThemeProvider>
+
+  // After — option A (recommended for parity with old behavior)
+  import { ThemeProvider, builtinThemes } from "@usetheo/ui";
+  <ThemeProvider themes={builtinThemes}>...</ThemeProvider>
+
+  // After — option B (new in v0.1.0-next.0)
+  import { TheoUIProvider } from "@usetheo/ui";
+  <TheoUIProvider>...</TheoUIProvider>
+  ```
+- **Why this is acceptable pre-1.0**: package is `0.0.0` and never published; first public release will be `0.1.0-next.0`. No external consumers exist yet (validated via `npm view`).
+
+### Added (Agent-team audit fixes, 2026-05-16)
+- **`<TheoUIProvider>` (T2.1)** — primary entry point composing `<ThemeProvider>` + `<Toaster>` with sensible defaults (`themes={builtinThemes}`). Recommended for new consumer apps; preserves "works out of the box" DX while keeping explicit primitives (`ThemeProvider`, `Toaster`) available for bespoke setups.
+- **`registry/index.json#metadata.requires.tsconfigPathAlias` (T2.3)** — explicit declaration of the `@/` path alias precondition required by the copy-paste install path. New `validateApiCompatibility` gate fails if the field is missing.
+
+### Changed (Agent-team audit fixes, 2026-05-16)
+- **`src/index.ts` barrel reorganized (T2.4)** — 8 composites (`SkillsList`, `SkillEditor`, `RuleEditor`, `CronJobsList`, `MCPServerList`, `AgentEditor`, `ApprovalCard`) moved from the `// PRIMITIVES` editorial section to a dedicated subsection under `// COMPOSITES`. No name changes, no type changes, `package.json#exports` unchanged. Quality gate of taxonomy already enforces the rule mechanically; this aligns the human signal.
+- **`docs/architecture.md` + `README.md`** — added subsection "Subpath exports — convenience aliases, not code splitting" (T2.2) explaining that all 99 subpath entries resolve to the same `dist/index.js`, tree-shaking is what shrinks bundles, and `tsup splitting: false` is deliberate.
+- **`scripts/validate-registry.ts`** — `targetToItemName` reverse map resolves `@/components/ui/<target>` imports to the registry item that ships that file (fix for multi-file items like `toast` which ships `toaster.tsx`).
+
 ### Documentation (Agent-team audit fixes, 2026-05-16)
 - **`PITCH.md`** — removed false claim that `npx create-theokit my-app` already imports `@usetheo/ui` when picking the dashboard template (verified via `grep -r "@usetheo/ui" /home/paulo/Projetos/usetheo/theokit/` returning zero matches). Replaced with honest "TheoKit integration is on the roadmap." Aligned tertiary CTAs with reality (substituted dead `docs.usetheo.dev/ui` with GitHub anchor).
 - **`README.md`** — updated `pnpm quality:gates` pipeline listing to match `package.json#scripts['quality:gates']` exactly: now lists 11 gates (`format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `quality:bundle` → `quality:a11y` → `ladle:build`). Previous text omitted `quality:bundle` and `quality:a11y`.
