@@ -475,6 +475,12 @@
       "description": "Split list of Running vs Completed tasks."
     },
     {
+      "name": "safe-href",
+      "type": "registry:lib",
+      "title": "safeHref (XSS-safe URL guard)",
+      "description": "Defang javascript:/vbscript:/data:text/html URIs before rendering as <a href>. Returns undefined for dangerous protocols so the caller can render a non-link fallback."
+    },
+    {
       "name": "scroll-area",
       "type": "registry:ui",
       "title": "ScrollArea",
