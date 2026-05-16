@@ -319,6 +319,12 @@
       "description": "Kanban-style task board with 4 lanes matching the claw-code"
     },
     {
+      "name": "live-region-context",
+      "type": "registry:lib",
+      "title": "LiveRegionContext",
+      "description": "React context that coordinates aria-live declarations across nested components to prevent screen-reader double-announcement (T4.1)."
+    },
+    {
       "name": "login-split",
       "type": "registry:ui",
       "title": "LoginSplit",

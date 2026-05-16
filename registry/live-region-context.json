@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "live-region-context",
+  "type": "registry:lib",
+  "title": "LiveRegionContext",
+  "description": "React context that coordinates aria-live declarations across nested components to prevent screen-reader double-announcement (T4.1).",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "lib/live-region-context.tsx",
+      "type": "registry:lib",
+      "target": "lib/live-region-context.tsx"
+    }
+  ]
+}

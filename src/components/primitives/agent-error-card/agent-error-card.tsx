@@ -9,6 +9,7 @@ import {
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
+import { useInLiveRegion } from "../../../lib/live-region-context.js";
 
 /**
  * AgentErrorCard — inline error / blocked-state card for an agent stream.
@@ -48,11 +49,16 @@ interface AgentErrorCardProps extends Omit<HTMLAttributes<HTMLElement>, "title">
 const AgentErrorCard = forwardRef<HTMLElement, AgentErrorCardProps>(
   ({ className, kind = "generic", title, detail, actions, timestamp, ...props }, ref) => {
     const Icon = ICON_FOR_KIND[kind];
+    // T4.1 (MF-4): omit own aria-live when nested in a container live region.
+    // role="alert" stays — alerts should announce even via outer region —
+    // but we drop the explicit aria-live="assertive" attribute so AT doesn't
+    // see two competing live region declarations.
+    const inLiveRegion = useInLiveRegion();
     return (
       <section
         ref={ref}
         role="alert"
-        aria-live="assertive"
+        aria-live={inLiveRegion ? undefined : "assertive"}
         className={cn(
           "grid w-full gap-3 rounded-xl border border-destructive/40 bg-destructive/5 p-4",
           className,

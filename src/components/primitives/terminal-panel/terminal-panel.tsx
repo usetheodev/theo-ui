@@ -2,6 +2,7 @@ import { Terminal as TerminalIcon } from "lucide-react";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
+import { useInLiveRegion } from "../../../lib/live-region-context.js";
 
 export interface TerminalLine {
   id: string;
@@ -43,43 +44,48 @@ const kindColor: Record<NonNullable<TerminalLine["kind"]>, string> = {
  * pty/xterm for live shells if needed.
  */
 const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
-  ({ className, title = "Terminal", lines, promptPrefix = "$", live = "off", ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("overflow-hidden rounded-xl border bg-card", className)}
-      {...props}
-    >
-      <header className="flex items-center gap-2 border-border/40 border-b px-3 py-2">
-        <TerminalIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />
-        <span className="font-sans text-label-caps text-muted-foreground uppercase tracking-wider">
-          {title}
-        </span>
-      </header>
-      <ol
-        className="grid gap-0.5 px-3 py-2 font-mono text-code-sm"
-        aria-live={live}
-        aria-atomic="false"
+  ({ className, title = "Terminal", lines, promptPrefix = "$", live = "off", ...props }, ref) => {
+    // T4.1 (MF-4): suppress own aria-live when nested in container live region.
+    const inLiveRegion = useInLiveRegion();
+    const effectiveLive = inLiveRegion ? "off" : live;
+    return (
+      <div
+        ref={ref}
+        className={cn("overflow-hidden rounded-xl border bg-card", className)}
+        {...props}
       >
-        {lines.map((line) => {
-          const kind = line.kind ?? "stdout";
-          return (
-            <li key={line.id} className={cn("whitespace-pre-wrap", kindColor[kind])}>
-              {kind === "command" ? (
-                <>
-                  <span className="select-none text-primary">{promptPrefix} </span>
-                  {line.content}
-                </>
-              ) : kind === "prompt" ? (
-                <span className="motion-safe:animate-pulse">{line.content}</span>
-              ) : (
-                line.content
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </div>
-  ),
+        <header className="flex items-center gap-2 border-border/40 border-b px-3 py-2">
+          <TerminalIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />
+          <span className="font-sans text-label-caps text-muted-foreground uppercase tracking-wider">
+            {title}
+          </span>
+        </header>
+        <ol
+          className="grid gap-0.5 px-3 py-2 font-mono text-code-sm"
+          aria-live={effectiveLive}
+          aria-atomic="false"
+        >
+          {lines.map((line) => {
+            const kind = line.kind ?? "stdout";
+            return (
+              <li key={line.id} className={cn("whitespace-pre-wrap", kindColor[kind])}>
+                {kind === "command" ? (
+                  <>
+                    <span className="select-none text-primary">{promptPrefix} </span>
+                    {line.content}
+                  </>
+                ) : kind === "prompt" ? (
+                  <span className="motion-safe:animate-pulse">{line.content}</span>
+                ) : (
+                  line.content
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    );
+  },
 );
 TerminalPanel.displayName = "TerminalPanel";
 

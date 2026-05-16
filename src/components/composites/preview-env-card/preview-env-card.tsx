@@ -129,17 +129,17 @@ const PreviewEnvCard = forwardRef<HTMLDivElement, PreviewEnvCardProps>(
                 ) : (
                   <span className="font-mono text-code-sm text-muted-foreground">internal</span>
                 )}
-              <Badge variant={statusToVariant[s.status]}>
-                <Badge.Dot
-                  tone={statusToDot[s.status]}
-                  pulse={
-                    s.status === "building" || s.status === "deploying" || s.status === "queued"
-                  }
-                />
-                {statusLabels[s.status]}
-              </Badge>
-            </div>
-          </li>
+                <Badge variant={statusToVariant[s.status]}>
+                  <Badge.Dot
+                    tone={statusToDot[s.status]}
+                    pulse={
+                      s.status === "building" || s.status === "deploying" || s.status === "queued"
+                    }
+                  />
+                  {statusLabels[s.status]}
+                </Badge>
+              </div>
+            </li>
           );
         })}
       </ul>

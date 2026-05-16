@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "live-region-context",
+  "type": "registry:lib",
+  "title": "LiveRegionContext",
+  "description": "React context that coordinates aria-live declarations across nested components to prevent screen-reader double-announcement (T4.1).",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "lib/live-region-context.tsx",
+      "type": "registry:lib",
+      "target": "lib/live-region-context.tsx",
+      "content": "import { createContext, useContext } from \"react\";\n\n/**\n * LiveRegionContext — coordinates `aria-live` declarations across nested\n * components so screen readers don't announce content twice.\n *\n * T4.1 (MF-4, edge-case review). Problem: a container component that\n * declares `role=\"log\" aria-live=\"polite\"` (e.g. `ChatThread`,\n * `AgentStream`) may render a child component that ALSO declares its own\n * `role=\"status\" aria-live=\"polite\"` (e.g. `AgentStreaming`,\n * `AgentErrorCard`). NVDA/JAWS/VoiceOver treat each live region as an\n * independent announcement source, so updates to the child trigger TWO\n * announcements — once from the inner status, once because the outer\n * log observes the DOM mutation. Result: stutter on every streaming\n * token, every new toast, every skeleton mount inside a log.\n *\n * Solution: container components wrap their content with\n * `<LiveRegionProvider value={true}>`. Child components call\n * `useInLiveRegion()` and omit their own `aria-live` / `role` when the\n * context is true. The outer region remains the single announcement\n * source.\n *\n * Default is `false` so standalone components (e.g., a single\n * `AgentStreaming` placed directly in a page) keep their original\n * announcement semantics with zero migration cost.\n *\n * @example\n *   // Container declares the live region\n *   <LiveRegionProvider value={true}>\n *     <div role=\"log\" aria-live=\"polite\">\n *       {children}\n *     </div>\n *   </LiveRegionProvider>\n *\n *   // Child reads context to decide its own ARIA attrs\n *   const inLiveRegion = useInLiveRegion();\n *   return (\n *     <div\n *       role={inLiveRegion ? undefined : \"status\"}\n *       aria-live={inLiveRegion ? undefined : \"polite\"}\n *     >\n *       ...\n *     </div>\n *   );\n */\n\nconst LiveRegionContext = createContext<boolean>(false);\n\nexport const LiveRegionProvider = LiveRegionContext.Provider;\n\nexport function useInLiveRegion(): boolean {\n  return useContext(LiveRegionContext);\n}\n"
+    }
+  ]
+}
