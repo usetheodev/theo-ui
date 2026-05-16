@@ -4,9 +4,7 @@
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, PaaS dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -413,13 +411,7 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist",
-    "registry/r",
-    "registry/index.json",
-    "LICENSE",
-    "CHANGELOG.md"
-  ],
+  "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
   "scripts": {
     "build": "tsup",
     "dev": "ladle serve",
@@ -504,11 +496,7 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "esbuild"
-    ]
+    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"]
   },
   "keywords": [
     "react",

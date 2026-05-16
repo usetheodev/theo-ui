@@ -144,8 +144,15 @@ function Row({ entry, onRemove }: RowProps) {
 
   const copy = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(entry.value).catch(() => {
-        /* swallowed; clipboard can fail in restricted contexts */
+      navigator.clipboard.writeText(entry.value).catch((err: unknown) => {
+        // T7.6: dev-only warning so engineers see something when clipboard
+        // fails (Safari/Firefox iframe sandbox, document not focused,
+        // Permissions-Policy block). Production stays silent — behavior is
+        // fail-safe (user can still copy manually).
+        if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+          // biome-ignore lint/suspicious/noConsole: dev-only clipboard diagnostic (T7.6)
+          console.warn("[@usetheo/ui] EnvVarEditor clipboard write failed:", err);
+        }
       });
     }
   };
