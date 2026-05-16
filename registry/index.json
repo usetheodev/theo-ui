@@ -2,6 +2,15 @@
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "theo-ui",
   "homepage": "https://usetheo.dev",
+  "metadata": {
+    "requires": {
+      "tsconfigPathAlias": {
+        "@/*": [
+          "./src/*"
+        ]
+      }
+    }
+  },
   "items": [
     {
       "name": "agent-composer",
