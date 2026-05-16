@@ -4,7 +4,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import { type Skill, SkillCard, type SkillState } from "../../primitives/skill-card/index.js";
 
-interface SkillsListProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+interface SkillsListProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "onToggle"> {
   skills: Skill[];
   title?: ReactNode;
   /** If true, shows a search input above the grid. */

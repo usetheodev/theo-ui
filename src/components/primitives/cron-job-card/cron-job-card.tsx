@@ -22,7 +22,7 @@ export interface CronJob {
   lastResult?: ReactNode;
 }
 
-interface CronJobCardProps extends HTMLAttributes<HTMLElement> {
+interface CronJobCardProps extends Omit<HTMLAttributes<HTMLElement>, "onToggle"> {
   job: CronJob;
   onRunNow?: (id: string) => void;
   onToggle?: (id: string, enabled: boolean) => void;
