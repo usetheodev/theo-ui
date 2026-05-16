@@ -610,6 +610,12 @@
       "description": "Inline script for SSR-safe theme initialization in Next.js / Astro / Remix. Place in <head> to read persisted theme + mode from localStorage BEFORE React hydrates, eliminating FOUC and hydration mismatch."
     },
     {
+      "name": "theo-ui-provider",
+      "type": "registry:lib",
+      "title": "TheoUIProvider",
+      "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps."
+    },
+    {
       "name": "toast",
       "type": "registry:ui",
       "title": "Toast",

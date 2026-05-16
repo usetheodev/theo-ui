@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theo-ui-provider",
+  "type": "registry:lib",
+  "title": "TheoUIProvider",
+  "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps.",
+  "dependencies": [],
+  "registryDependencies": [
+    "theme-provider",
+    "toast"
+  ],
+  "files": [
+    {
+      "path": "theo-ui-provider.tsx",
+      "type": "registry:lib",
+      "target": "theo-ui-provider.tsx",
+      "content": "\"use client\";\n\nimport type { ComponentProps, JSX, ReactNode } from \"react\";\nimport { Toaster } from \"@/components/ui/toaster\";\nimport { ThemeProvider } from \"@/themes/theme-provider\";\n\n/**\n * TheoUIProvider — primary entry point composing `<ThemeProvider>` and\n * `<Toaster>` in the correct order with sensible defaults.\n *\n * Recommended for consumer apps to avoid hand-wiring the provider stack.\n * Equivalent to:\n *\n *   <ThemeProvider {...theme}>\n *     <Toaster {...toaster}>{children}</Toaster>\n *   </ThemeProvider>\n *\n * Notes:\n *   - The `\"use client\"` directive is required for Next.js App Router (RSC)\n *     because `<ThemeProvider>` uses React state and effects internally.\n *   - `<Tooltip>` provider stays per-instance (Radix recommendation) — this\n *     wrapper does NOT introduce a global tooltip context.\n *   - `<ThemeProvider>` and `<Toaster>` remain independently exported for\n *     consumers who want bespoke control.\n *\n * SSR:\n *   - Place `<ThemeScript>` in `<head>` to avoid FOUC + hydration mismatch.\n *   - Wrap `<html lang=\"en\" suppressHydrationWarning>`.\n *\n * @example\n *   import { TheoUIProvider } from \"@usetheo/ui\";\n *\n *   export default function App({ children }) {\n *     return <TheoUIProvider>{children}</TheoUIProvider>;\n *   }\n */\nexport interface TheoUIProviderProps {\n  children: ReactNode;\n  /** Pass-through props for the inner `<ThemeProvider>`. */\n  theme?: Omit<ComponentProps<typeof ThemeProvider>, \"children\">;\n  /** Pass-through props for the inner `<Toaster>`. */\n  toaster?: Omit<ComponentProps<typeof Toaster>, \"children\">;\n}\n\nexport function TheoUIProvider({\n  children,\n  theme,\n  toaster,\n}: TheoUIProviderProps): JSX.Element {\n  return (\n    <ThemeProvider {...theme}>\n      <Toaster {...toaster}>{children}</Toaster>\n    </ThemeProvider>\n  );\n}\n\nTheoUIProvider.displayName = \"TheoUIProvider\";\n"
+    }
+  ]
+}
