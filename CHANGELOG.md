@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Pitch + Voice and Tone formalization, 2026-05-15)
+- **`PITCH.md`** at project root — landing-page copy for `@usetheo/ui` (Violet Forge) using the TheoKit aspirational voice. Three layers: HERO (no jargon), BODY (benefit-first with one technical anchor per item), DEEP DIVE (full technical vocabulary, after the `## How it works` delimiter). Companion to `README.md` for marketing surfaces; verified component counts and quality metrics against `README.md` and `src/`.
+- **`CLAUDE.md`** at project root — contract between Claude and this project. Defines what TheoUI is, the locked names (npm package, theme names, registry endpoint, module format, component taxonomy), the Voice and Tone section that formalizes adoption of the TheoKit aspirational voice for public copy (strategic review dated 2026-05-15), the relationship to the other usetheo pillars (Harness, Skills, Runtime), and the quality-gate non-bypass rule.
+
+### Changed (Cross-project, 2026-05-15)
+- Root monorepo `CLAUDE.md` (`../CLAUDE.md`) `## Voice and Tone — sub-project scoped` section: TheoUI moved from the "technical-direct only" list to the aspirational-voice list, alongside TheoKit and TheoKit-SDK. Rationale captured inline (TheoUI is the visual surface every other product inherits from; benefits from outcome-shaped framing on landing copy).
+- Root monorepo sub-project index: `theo-ui` "Read first" pointer updated from `theo-ui/README.md` to `theo-ui/CLAUDE.md` (was a fallback because no `CLAUDE.md` existed in this project until today).
+
+### Changed (README alignment with PITCH, 2026-05-15)
+- `README.md` HERO + BODY layers rewritten in the TheoKit aspirational voice to match `PITCH.md`. New h1: *"The UI your agent already needs."* Tagline calls out the 102 agent-shaped components. `@usetheo/ui` demoted from h1 to a small tag above it (discoverability preserved without dominating the HERO).
+- Added `## The shift` storytelling block between the HERO and `## Why @usetheo/ui`.
+- `## Why @usetheo/ui` now closes with the comparison table from `PITCH.md` (`@usetheo/ui` vs shadcn/Radix, Tremor, build-yourself) and the punch line *"Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write."*
+- Added `## What you'd build` (5 concrete surfaces) before `## Quickstart`.
+- Added `## How it works` DEEP DIVE delimiter before `## Quickstart`; everything from there downward stays technical-direct.
+- Quickstart code sample swapped from a generic `<Button>` example to `<AgentEvent>` + `<ToolCall>` + `<DeploymentRow>` — agent-shaped primitives nobody else ships.
+- Added `## Status` section between `## License` and the bundle/architecture content: production callouts, registry-distribution plan, ESM-only caveat, "component count is the floor" framing.
+
 ### Added (BLOCKER-002 / BLOCKER-003 remediation)
 - **`src/styles/tailwind-preset.ts`** — single source of truth for the Violet Forge Tailwind tokens (colors, fontFamily, Geist-inspired typescale, borderRadius, boxShadow, motion, keyframes, animation + tailwindcss-animate plugin). `tailwind.config.ts` now consumes the preset via `presets: [theoUIPreset]` (was inline `theme.extend`).
 - **`registry/tailwind-preset.json`** (`registry:lib`) — distributes the preset to copy-paste consumers via `npx shadcn add tailwind-preset`. Declares `tailwindcss` + `tailwindcss-animate` as deps.
