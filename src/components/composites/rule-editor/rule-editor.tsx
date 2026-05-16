@@ -110,7 +110,7 @@ export function RuleEditor({
           <FormField.Label>Scope</FormField.Label>
           <FormField.Control>
             <Select value={scope} onValueChange={(v) => setScope(v as RuleScope)}>
-              <Select.Trigger>
+              <Select.Trigger aria-label="Select rule scope">
                 <Select.Value />
               </Select.Trigger>
               <Select.Content>

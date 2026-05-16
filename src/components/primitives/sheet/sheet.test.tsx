@@ -57,6 +57,15 @@ describe("Sheet", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
+  it("closes on Escape key press (T5.2 regression)", async () => {
+    const user = userEvent.setup();
+    render(<Example />);
+    await user.click(screen.getByText("Open"));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Example />);
   });

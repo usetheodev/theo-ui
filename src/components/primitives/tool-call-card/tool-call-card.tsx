@@ -71,34 +71,25 @@ export function ToolCallCard({
       )}
       {...props}
     >
-      <header
-        className={cn(
-          "flex items-center gap-2 px-3 py-2",
-          expandable && "cursor-pointer select-none hover:bg-muted/30",
-        )}
-        onClick={expandable ? () => setOpen((v) => !v) : undefined}
-        onKeyDown={
-          expandable
-            ? (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setOpen((v) => !v);
-                }
-              }
-            : undefined
-        }
-        role={expandable ? "button" : undefined}
-        tabIndex={expandable ? 0 : undefined}
-        aria-expanded={expandable ? open : undefined}
-      >
+      {/* T5.4: <header role="button"> previously failed axe's
+       * aria-prohibited-attr + semantic-landmark guidance. Replaced by
+       * <div> for the layout container and a separate <button> for the
+       * expand affordance (when expandable). Status icon span now carries
+       * role="img" to make aria-label valid. */}
+      <div className={cn("flex items-center gap-2 px-3 py-2")}>
         {expandable ? (
-          <ChevronRight
-            className={cn(
-              "size-3.5 shrink-0 text-muted-foreground transition-transform duration-base",
-              open && "rotate-90",
-            )}
-            aria-hidden="true"
-          />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-label={open ? `Collapse ${tool} details` : `Expand ${tool} details`}
+            className="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-md p-1 text-muted-foreground hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ChevronRight
+              className={cn("size-3.5 transition-transform duration-base", open && "rotate-90")}
+              aria-hidden="true"
+            />
+          </button>
         ) : null}
         {Icon ? (
           <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
@@ -108,8 +99,9 @@ export function ToolCallCard({
           <span className="truncate font-mono text-code-sm text-muted-foreground">{target}</span>
         ) : null}
         <span
-          className="ml-auto inline-flex shrink-0 items-center gap-1.5"
+          role="img"
           aria-label={STATUS_LABEL[status]}
+          className="ml-auto inline-flex shrink-0 items-center gap-1.5"
         >
           {STATUS_ICON[status]}
         </span>
@@ -118,7 +110,7 @@ export function ToolCallCard({
             {timestamp}
           </span>
         ) : null}
-      </header>
+      </div>
       {expandable && open ? (
         <div className="border-border/40 border-t bg-muted/20 px-3 py-2 font-mono text-code-sm">
           {output}
