@@ -304,6 +304,16 @@ tests/             fixture-shadcn-app/ (registry install integration test)
   unused components from the barrel import (`import { Button } from
   "@usetheo/ui"` drops every other component from the final bundle). No
   per-component subpath exports are needed for this to work.
+- **Subpath imports are aliases (not separate bundles).** `package.json#exports`
+  publishes 99 component subpaths (`@usetheo/ui/button`, `@usetheo/ui/agent-event`,
+  …). Every subpath resolves to the same `dist/index.js`. tsup is configured with
+  `splitting: false` deliberately — a 99-entry split would duplicate shared code
+  (cn, types, Radix runtime) into every chunk and inflate the tarball. Subpath
+  imports exist for IDE intellisense and import organization. Modern bundlers
+  tree-shake the same way whether you write `import { Button } from "@usetheo/ui"`
+  or `import { Button } from "@usetheo/ui/button"`. Runtimes that don't tree-shake
+  (Jest classic, Node REPL, raw browser ESM) will load the full barrel either way
+  — accept that cost or pre-bundle with the consumer's tooling.
 - **CSS distribution** — `dist/styles.css` is the recommended single import
   (combines tokens, fonts self-hosted, Tailwind base/components/utilities).
   `@usetheo/ui/tokens.css`, `@usetheo/ui/fonts.css`, and
