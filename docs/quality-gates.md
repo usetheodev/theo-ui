@@ -98,6 +98,27 @@ into consumer-app `@/...` paths via `sourceImportMap`, so descriptors targeting
 A failing fixture-install test (`scripts/test-registry-install.ts`) keeps this
 honest by running `tsc --noEmit` against a real consumer fixture.
 
+### Registry copy-paste preconditions (T2.3)
+
+The copy-paste install path (`npx shadcn@latest add https://ui.usetheo.dev/r/<name>.json`)
+requires the consumer project to satisfy these environmental preconditions:
+
+| Precondition | Required value | Why |
+|---|---|---|
+| `tsconfig.json#compilerOptions.paths["@/*"]` | `["./src/*"]` | Inlined source contains `import { cn } from "@/lib/cn"` and similar `@/components/ui/*` imports. Without the alias mapped, TypeScript fails to resolve. Convention since shadcn-ui 2.0. |
+| Vite/Webpack alias | matching `@/` alias | Build-time resolution for non-tsconfig-aware bundlers. |
+| React 18.2+ | matches `peerDependencies` | Hook + ref forwarding semantics. |
+| Tailwind CSS 3.x | + `tailwindcss-animate` plugin | Source uses utility classes from the Violet Forge preset. `npx shadcn add tailwind-preset` installs the preset itself. |
+
+The shipped `registry/index.json` declares this precondition under
+`metadata.requires.tsconfigPathAlias["@/*"]`. The `scripts/validate-registry.ts`
+gate `metadata.requires.tsconfigPathAlias` fails the build if the field
+is missing or empty, so the doc and the artifact cannot drift apart.
+
+Consumers using a different alias convention (e.g. Vite default `~/`) need to
+either configure `@/` in their tsconfig or rewrite the imports after copy-paste.
+Plan to add a `shadcn`-aware bundler check in v0.2.0.
+
 ---
 
 ## Gate 3 — Design System Fidelity

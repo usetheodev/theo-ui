@@ -105,6 +105,8 @@ npx shadcn@latest add https://ui.usetheo.dev/r/deployment-row.json
 
 Every item under [`registry/r/`](./registry/r) is a standalone copy-paste unit with its dependencies declared.
 
+**Precondition.** Copy-paste install requires `@/` configured as a path alias in your `tsconfig.json` (`{ "paths": { "@/*": ["./src/*"] } }`) — the shadcn-ui 2.0 convention. Inlined source uses `@/lib/cn` and similar `@/components/ui/...` imports. If your project uses a different alias (Vite default `~/`, etc.), either add the `@/` mapping or rewrite the imports after copy-paste. The shipped `registry/index.json` declares this requirement under `metadata.requires.tsconfigPathAlias`.
+
 ### SSR (Next.js / Astro / Remix)
 
 Inject `<ThemeScript>` in `<head>` to prevent FOUC and hydration mismatch:
