@@ -154,7 +154,16 @@ export function AgentEditor({
           <FormField.Control>
             <Select
               value={tone}
-              onValueChange={(v) => setTone(v as NonNullable<AgentProfileDescriptor["tone"]>)}
+              onValueChange={(v) => {
+                // Re-audit Issue 7: narrow the string `v` against TONES.id
+                // values before casting. Radix Select guarantees `v` is one
+                // of the Select.Item values declared below, but adding the
+                // runtime guard keeps the type narrowing explicit and
+                // surfaces invalid future configurations as no-ops instead
+                // of silently writing a bad state.
+                const next = TONES.find((t) => t.id === v);
+                if (next) setTone(next.id);
+              }}
             >
               <Select.Trigger aria-label="Select tone">
                 <Select.Value />

@@ -109,7 +109,15 @@ export function RuleEditor({
         <FormField>
           <FormField.Label>Scope</FormField.Label>
           <FormField.Control>
-            <Select value={scope} onValueChange={(v) => setScope(v as RuleScope)}>
+            <Select
+              value={scope}
+              onValueChange={(v) => {
+                // Re-audit Issue 7: narrow Select string value against
+                // SCOPES.id before casting. Silent no-op for unknown.
+                const next = SCOPES.find((s) => s.id === v);
+                if (next) setScope(next.id);
+              }}
+            >
               <Select.Trigger aria-label="Select rule scope">
                 <Select.Value />
               </Select.Trigger>
