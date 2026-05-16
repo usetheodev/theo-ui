@@ -56,7 +56,7 @@ export { Input, type InputProps } from "./components/primitives/input/index.js";
 export { Dialog } from "./components/primitives/dialog/index.js";
 export { Tabs } from "./components/primitives/tabs/index.js";
 export { Tooltip } from "./components/primitives/tooltip/index.js";
-export { ScrollArea, ScrollBar } from "./components/primitives/scroll-area/index.js";
+export { ScrollArea } from "./components/primitives/scroll-area/index.js";
 export {
   Toast,
   type ToastVariant,
