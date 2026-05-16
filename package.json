@@ -443,8 +443,8 @@
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",
