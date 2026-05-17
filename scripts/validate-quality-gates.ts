@@ -5,7 +5,14 @@ import { readFileSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type LayerMembership, findPrimitiveOffenses, importsScreen } from "./lib/import-graph.js";
+import {
+  type CompositeAdjacency,
+  type LayerMembership,
+  collectCompositeEdges,
+  findCompositeCycles,
+  findPrimitiveOffenses,
+  importsScreen,
+} from "./lib/import-graph.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -65,6 +72,10 @@ async function validateComponentStructure(): Promise<void> {
     composites: new Set(existsSync(compositesRoot) ? await listDirectories(compositesRoot) : []),
   };
 
+  // Architecture re-audit NEW-C: build composite-to-composite adjacency
+  // alongside the per-file scan so we can detect cycles after the loop.
+  const compositeAdjacency: CompositeAdjacency = new Map();
+
   for (const layer of ["primitives", "composites"] as const) {
     const layerRoot = join(ROOT, "src/components", layer);
     for (const name of await listDirectories(layerRoot)) {
@@ -87,10 +98,24 @@ async function validateComponentStructure(): Promise<void> {
           );
         }
       }
-      if (layer === "composites" && importsScreen(implementation, content)) {
-        fail(`${layer}/${name}`, "composite imports a screen");
+      if (layer === "composites") {
+        if (importsScreen(implementation, content)) {
+          fail(`${layer}/${name}`, "composite imports a screen");
+        }
+        collectCompositeEdges(implementation, name, content, layers, compositeAdjacency);
       }
     }
+  }
+
+  // NEW-C: cycle detection across the full composite graph. The
+  // architecture explicitly permits composite-to-composite imports; cycles
+  // are the failure mode that documentation alone cannot guard against.
+  const cycles = findCompositeCycles(compositeAdjacency);
+  for (const cycle of cycles) {
+    fail(
+      "composites",
+      `cycle detected: ${cycle.join(" → ")}. Composites may import each other but the dependency graph must remain acyclic. Break the cycle by promoting shared logic to a primitive or to src/lib/.`,
+    );
   }
 }
 

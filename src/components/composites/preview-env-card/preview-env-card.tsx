@@ -2,6 +2,7 @@ import { ExternalLink, GitPullRequest, Server } from "lucide-react";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
+import { safeHref } from "../../../lib/safe-href.js";
 import { Badge } from "../../primitives/badge/index.js";
 import type { DeploymentStatus } from "../deployment-row/deployment-row.js";
 
@@ -105,35 +106,42 @@ const PreviewEnvCard = forwardRef<HTMLDivElement, PreviewEnvCardProps>(
       </header>
 
       <ul className="mt-4 divide-y divide-border/30 rounded-lg border border-border/30">
-        {env.services.map((s) => (
-          <li key={s.name} className="flex items-center justify-between gap-3 px-3 py-2">
-            <span className="font-mono text-code-sm text-foreground">{s.name}</span>
-            <div className="flex items-center gap-2">
-              {s.url ? (
-                <a
-                  href={s.url}
-                  className="inline-flex items-center gap-1 font-mono text-code-sm text-primary hover:underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {s.url.replace(/^https?:\/\//, "")}
-                  <ExternalLink className="size-3" />
-                </a>
-              ) : (
-                <span className="font-mono text-code-sm text-muted-foreground">internal</span>
-              )}
-              <Badge variant={statusToVariant[s.status]}>
-                <Badge.Dot
-                  tone={statusToDot[s.status]}
-                  pulse={
-                    s.status === "building" || s.status === "deploying" || s.status === "queued"
-                  }
-                />
-                {statusLabels[s.status]}
-              </Badge>
-            </div>
-          </li>
-        ))}
+        {env.services.map((s) => {
+          // T3.3 (SEC-003): defang dangerous URL protocols before rendering
+          // as <a href>. Consumers passing user-controlled URLs from API
+          // responses are protected from javascript:/vbscript:/data:text/html
+          // XSS payloads.
+          const sanitized = safeHref(s.url);
+          return (
+            <li key={s.name} className="flex items-center justify-between gap-3 px-3 py-2">
+              <span className="font-mono text-code-sm text-foreground">{s.name}</span>
+              <div className="flex items-center gap-2">
+                {sanitized ? (
+                  <a
+                    href={sanitized}
+                    className="inline-flex items-center gap-1 font-mono text-code-sm text-primary hover:underline"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {sanitized.replace(/^https?:\/\//, "")}
+                    <ExternalLink className="size-3" />
+                  </a>
+                ) : (
+                  <span className="font-mono text-code-sm text-muted-foreground">internal</span>
+                )}
+                <Badge variant={statusToVariant[s.status]}>
+                  <Badge.Dot
+                    tone={statusToDot[s.status]}
+                    pulse={
+                      s.status === "building" || s.status === "deploying" || s.status === "queued"
+                    }
+                  />
+                  {statusLabels[s.status]}
+                </Badge>
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
       {actions ? <div className="mt-4 flex items-center gap-2">{actions}</div> : null}

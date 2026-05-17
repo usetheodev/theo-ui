@@ -142,6 +142,7 @@ async function main(): Promise<void> {
   }
 
   const index = await readJson<{
+    metadata?: { requires?: { tsconfigPathAlias?: Record<string, string[]> } };
     items: Array<{ name: string; type: RegistryType; title: string; description: string }>;
   }>(join(REGISTRY_DIR, "index.json"));
   const indexNames = new Set(index.items.map((item) => item.name));
@@ -152,7 +153,50 @@ async function main(): Promise<void> {
     if (!descriptors.has(name)) addFailure("index.json", `references missing descriptor "${name}"`);
   }
 
+  // T2.3: gate the `@/` alias precondition. Items inline source that imports
+  // from `@/`; consumers must have that alias mapped in tsconfig. The index
+  // must declare the requirement so downstream tooling can surface it.
+  const declaredAlias = index.metadata?.requires?.tsconfigPathAlias?.["@/*"];
+  if (!declaredAlias || declaredAlias.length === 0) {
+    addFailure(
+      "index.json",
+      'metadata.requires.tsconfigPathAlias["@/*"] is required; consumers need the "@/" path alias mapped to ./src for shadcn-style copy-paste to resolve "@/lib/cn", "@/components/ui/...", etc.',
+    );
+  }
+
   const BUILTIN_RUNTIMES = new Set(["react", "react-dom", "react/jsx-runtime"]);
+
+  // Build a reverse map: shipped file target → owning registry item name.
+  // This lets us resolve imports like `@/components/ui/toaster` to the item
+  // that ships that file (in this case, `toast.json`, whose files[] includes
+  // a target `components/ui/toaster.tsx`). Without this, multi-file registry
+  // items (toast ships toast + toaster) cause spurious "missing dependency"
+  // failures on consumers that import the secondary file.
+  const targetToItemName = new Map<string, string>();
+  for (const [name, descriptor] of descriptors) {
+    for (const file of descriptor.files ?? []) {
+      if (!file.target) continue;
+      const normalized = stripExtension(`@/${file.target}`);
+      // Multiple items shouldn't ship the same target — but if they do, last
+      // writer wins; the validate-registry "duplicate target" gate handles
+      // surface-level uniqueness elsewhere.
+      targetToItemName.set(normalized, name);
+    }
+  }
+
+  function resolveDependencyName(specifier: string): string | undefined {
+    const stripped = stripExtension(specifier);
+    const direct = registryNameFromTarget(stripped);
+    if (direct) {
+      // Check whether `direct` is itself the name of a built registry item.
+      // If not (e.g. `toaster`), try the reverse-target map.
+      if (descriptors.has(direct)) return direct;
+      const owner = targetToItemName.get(stripped);
+      if (owner) return owner;
+      return direct; // Fall back so the legacy failure message still fires.
+    }
+    return undefined;
+  }
 
   for (const [name, descriptor] of descriptors) {
     const builtPath = join(OUT_DIR, `${name}.json`);
@@ -188,7 +232,7 @@ async function main(): Promise<void> {
         }
 
         if (specifier.startsWith("@/") || specifier.startsWith(".") || specifier.startsWith("/")) {
-          const dependencyName = registryNameFromTarget(stripExtension(specifier));
+          const dependencyName = resolveDependencyName(specifier);
           if (dependencyName && dependencyName !== name && !dependencySet.has(dependencyName)) {
             addFailure(
               `${name}.json`,

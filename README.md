@@ -2,17 +2,19 @@
 
 <img src="https://usetheo.dev/logo-128.webp" alt="Theo" width="96" height="96" />
 
-# `@usetheo/ui`
+**`@usetheo/ui`**
 
-**Violet Forge** — a framework-agnostic React component library for AI agents and developer tools.
+# The UI your agent already needs.
 
-Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-swappable themes.
+A React component library built for AI agent surfaces and PaaS dashboards. **102 components** designed for what you'd otherwise build from scratch.
+
+*Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-453%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-102-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-514%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-101-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -21,6 +23,12 @@ Editorial typography. Dark-first violet palette. Burnt-sienna accents. Runtime-s
 </div>
 
 ---
+
+## The shift
+
+There is a version of your product where the agent UI is half-built before you start.
+
+The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the deployment status, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
 
 ## Why `@usetheo/ui`
 
@@ -32,7 +40,33 @@ Most component libraries optimize for marketing pages. `@usetheo/ui` is built fo
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
 - **Framework-agnostic.** Peer-deps on React only. Works under Vite, Next, Remix, Astro, Tanstack Start.
 
+The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
+
+| Surface need | `@usetheo/ui` | shadcn / Radix | Tremor | Build it yourself |
+|---|---|---|---|---|
+| Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
+| Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
+| PaaS-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
+| Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
+| shadcn-compatible registry | **Yes** | Original | No | N/A |
+| ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
+| a11y enforced as a quality gate | **Yes** — vitest-axe on 126 stories | Per-component, manual | Manual | Often skipped |
+
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write.
+
+## What you'd build
+
+- **Coding assistant interface.** Chat thread, streaming assistant, tool-call timeline, file diff viewer, permission matrix, sub-agent dispatch.
+- **Agent dashboard.** Run stats, session timeline, MCP server admin, cron job scheduler, memory editor, audit log, model card, cost meter.
+- **PaaS dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
+- **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
+- **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
+
 ---
+
+## How it works
+
+Below this line, full technical vocabulary is in play. Installation, themes, the component catalog, design system, quality gates.
 
 ## Quickstart
 
@@ -49,12 +83,14 @@ pnpm add @usetheo/ui
 ```
 
 ```tsx
-import { Button, ThemeProvider } from "@usetheo/ui";
+import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@usetheo/ui";
 
 export default function App() {
   return (
     <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
-      <Button>Deploy</Button>
+      <AgentEvent kind="thinking" text="Reading repository structure..." />
+      <ToolCall name="readFile" status="completed" />
+      <DeploymentRow status="ready" env="production" branch="main" />
     </ThemeProvider>
   );
 }
@@ -68,6 +104,8 @@ npx shadcn@latest add https://ui.usetheo.dev/r/deployment-row.json
 ```
 
 Every item under [`registry/r/`](./registry/r) is a standalone copy-paste unit with its dependencies declared.
+
+**Precondition.** Copy-paste install requires `@/` configured as a path alias in your `tsconfig.json` (`{ "paths": { "@/*": ["./src/*"] } }`) — the shadcn-ui 2.0 convention. Inlined source uses `@/lib/cn` and similar `@/components/ui/...` imports. If your project uses a different alias (Vite default `~/`, etc.), either add the `@/` mapping or rewrite the imports after copy-paste. The shipped `registry/index.json` declares this requirement under `metadata.requires.tsconfigPathAlias`.
 
 ### SSR (Next.js / Astro / Remix)
 
@@ -93,13 +131,13 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**102 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
+**101 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (81) — building blocks
+**Primitives** (80) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
@@ -113,11 +151,11 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 `LaneBoard` · `LoginSplit` · `MCPServerCard` · `MemoryEditor` · `MentionMenu` · `MetricsPanel`
 `ModelCard` · `ModelSelector` · `PermissionMatrix` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
 `RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunningTasksPanel` · `ScrollArea`
-`ScrollBar` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
-`Skeleton` · `SkillCard` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch`
-`SystemPromptEditor` · `Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea`
-`Toast` · `Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult`
-`ToolsList` · `Tooltip` · `TopNav`
+`Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar` · `Skeleton`
+`SkillCard` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch` · `SystemPromptEditor`
+`Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea` · `Toast`
+`Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
+`Tooltip` · `TopNav`
 <!-- END:primitives -->
 
 </details>
@@ -207,7 +245,7 @@ Every change is validated through a strict chain — no PR ships otherwise.
 pnpm quality:gates
 ```
 
-Runs in order: `format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `ladle:build`.
+Runs in order: `format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `quality:bundle` → `quality:a11y` → `ladle:build`.
 
 The structural validator ([`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts)) enforces taxonomy (primitive vs composite by import graph), registry/test/story presence per item (test gate is **hard-fail**), public-export surface, design-system fidelity (Geist fonts + Vercel type scale), governance files (LICENSE + CHANGELOG), README ↔ exports drift, docs typography drift, composite-via-barrel imports, compound-pattern uniformity (`Object.assign /*#__PURE__*/`), README/architecture census consistency, vitest-axe coverage on ≥30 interactive primitives, and zero stray `*.bak` / `*.json.tmp` artifacts in the working tree. Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
@@ -268,6 +306,16 @@ tests/             fixture-shadcn-app/ (registry install integration test)
   unused components from the barrel import (`import { Button } from
   "@usetheo/ui"` drops every other component from the final bundle). No
   per-component subpath exports are needed for this to work.
+- **Subpath imports are aliases (not separate bundles).** `package.json#exports`
+  publishes 99 component subpaths (`@usetheo/ui/button`, `@usetheo/ui/agent-event`,
+  …). Every subpath resolves to the same `dist/index.js`. tsup is configured with
+  `splitting: false` deliberately — a 99-entry split would duplicate shared code
+  (cn, types, Radix runtime) into every chunk and inflate the tarball. Subpath
+  imports exist for IDE intellisense and import organization. Modern bundlers
+  tree-shake the same way whether you write `import { Button } from "@usetheo/ui"`
+  or `import { Button } from "@usetheo/ui/button"`. Runtimes that don't tree-shake
+  (Jest classic, Node REPL, raw browser ESM) will load the full barrel either way
+  — accept that cost or pre-bundle with the consumer's tooling.
 - **CSS distribution** — `dist/styles.css` is the recommended single import
   (combines tokens, fonts self-hosted, Tailwind base/components/utilities).
   `@usetheo/ui/tokens.css`, `@usetheo/ui/fonts.css`, and
@@ -279,6 +327,21 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 ---
 
+## Status
+
+Honest claims only.
+
+- **Production.** 102 components, 453 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
+- **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
+- **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
+
 ## License
 
 [Apache-2.0](./LICENSE) © [usetheo.dev](https://usetheo.dev)
+
+## Community
+
+- Discord: https://discord.usetheo.dev/
+- X: https://x.com/usetheodev
+- LinkedIn: https://linkedin.com/company/usetheodev

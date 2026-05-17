@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
+import { LiveRegionProvider } from "../../../lib/live-region-context.js";
 import type { IconComponent } from "../../../lib/types.js";
 import type { Message } from "../../../types/chat.js";
 import { AgentErrorCard, type AgentErrorKind } from "../../primitives/agent-error-card/index.js";
@@ -90,63 +91,69 @@ interface AgentStreamProps extends HTMLAttributes<HTMLDivElement> {
 
 const AgentStream = forwardRef<HTMLDivElement, AgentStreamProps>(
   ({ className, items, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="log"
-      aria-live="polite"
-      aria-relevant="additions"
-      // MEDIUM-001: explicit aria-atomic="false" so VoiceOver/macOS doesn't
-      // reannounce the entire stream on each new item.
-      aria-atomic="false"
-      className={cn("flex flex-col gap-3", className)}
-      {...props}
-    >
-      {items.map((item) => {
-        if (item.kind === "message") return <ChatMessage key={item.id} message={item.message} />;
-        if (item.kind === "tool-call")
-          return (
-            <ToolCallCard
-              key={item.id}
-              tool={item.tool}
-              icon={item.icon}
-              target={item.target}
-              status={item.status}
-              output={item.output}
-              defaultExpanded={item.defaultExpanded}
-              timestamp={item.timestamp}
-            />
-          );
-        if (item.kind === "approval")
-          return (
-            <ApprovalCard
-              key={item.id}
-              severity={item.severity}
-              title={item.title}
-              request={item.request}
-              description={item.description}
-              details={item.details}
-              onApprove={item.onApprove}
-              onDeny={item.onDeny}
-              onAlways={item.onAlways}
-            />
-          );
-        if (item.kind === "error")
-          return (
-            <AgentErrorCard
-              key={item.id}
-              kind={item.errorKind}
-              title={item.title}
-              detail={item.detail}
-              actions={item.actions}
-              timestamp={item.timestamp}
-            />
-          );
-        if (item.kind === "streaming")
-          return <AgentStreaming key={item.id} model={item.model} partial={item.partial} />;
-        if (item.kind === "custom") return <div key={item.id}>{item.node}</div>;
-        return null;
-      })}
-    </div>
+    // T4.1 (MF-4): AgentStream is the canonical live region for the stream
+    // surface. Wrap children in LiveRegionProvider so nested AgentStreaming,
+    // AgentErrorCard, AutoCompactNotice, Skeleton, etc. don't declare their
+    // own aria-live (which would cause double announcements).
+    <LiveRegionProvider value={true}>
+      <div
+        ref={ref}
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+        // MEDIUM-001: explicit aria-atomic="false" so VoiceOver/macOS doesn't
+        // reannounce the entire stream on each new item.
+        aria-atomic="false"
+        className={cn("flex flex-col gap-3", className)}
+        {...props}
+      >
+        {items.map((item) => {
+          if (item.kind === "message") return <ChatMessage key={item.id} message={item.message} />;
+          if (item.kind === "tool-call")
+            return (
+              <ToolCallCard
+                key={item.id}
+                tool={item.tool}
+                icon={item.icon}
+                target={item.target}
+                status={item.status}
+                output={item.output}
+                defaultExpanded={item.defaultExpanded}
+                timestamp={item.timestamp}
+              />
+            );
+          if (item.kind === "approval")
+            return (
+              <ApprovalCard
+                key={item.id}
+                severity={item.severity}
+                title={item.title}
+                request={item.request}
+                description={item.description}
+                details={item.details}
+                onApprove={item.onApprove}
+                onDeny={item.onDeny}
+                onAlways={item.onAlways}
+              />
+            );
+          if (item.kind === "error")
+            return (
+              <AgentErrorCard
+                key={item.id}
+                kind={item.errorKind}
+                title={item.title}
+                detail={item.detail}
+                actions={item.actions}
+                timestamp={item.timestamp}
+              />
+            );
+          if (item.kind === "streaming")
+            return <AgentStreaming key={item.id} model={item.model} partial={item.partial} />;
+          if (item.kind === "custom") return <div key={item.id}>{item.node}</div>;
+          return null;
+        })}
+      </div>
+    </LiveRegionProvider>
   ),
 );
 AgentStream.displayName = "AgentStream";

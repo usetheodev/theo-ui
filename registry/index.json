@@ -2,6 +2,15 @@
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "theo-ui",
   "homepage": "https://usetheo.dev",
+  "metadata": {
+    "requires": {
+      "tsconfigPathAlias": {
+        "@/*": [
+          "./src/*"
+        ]
+      }
+    }
+  },
   "items": [
     {
       "name": "agent-composer",
@@ -310,6 +319,12 @@
       "description": "Kanban-style task board with 4 lanes matching the claw-code"
     },
     {
+      "name": "live-region-context",
+      "type": "registry:lib",
+      "title": "LiveRegionContext",
+      "description": "React context that coordinates aria-live declarations across nested components to prevent screen-reader double-announcement (T4.1)."
+    },
+    {
       "name": "login-split",
       "type": "registry:ui",
       "title": "LoginSplit",
@@ -466,6 +481,12 @@
       "description": "Split list of Running vs Completed tasks."
     },
     {
+      "name": "safe-href",
+      "type": "registry:lib",
+      "title": "safeHref (XSS-safe URL guard)",
+      "description": "Defang javascript:/vbscript:/data:text/html URIs before rendering as <a href>. Returns undefined for dangerous protocols so the caller can render a non-link fallback."
+    },
+    {
       "name": "scroll-area",
       "type": "registry:ui",
       "title": "ScrollArea",
@@ -608,6 +629,12 @@
       "type": "registry:lib",
       "title": "ThemeScript",
       "description": "Inline script for SSR-safe theme initialization in Next.js / Astro / Remix. Place in <head> to read persisted theme + mode from localStorage BEFORE React hydrates, eliminating FOUC and hydration mismatch."
+    },
+    {
+      "name": "theo-ui-provider",
+      "type": "registry:lib",
+      "title": "TheoUIProvider",
+      "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps."
     },
     {
       "name": "toast",

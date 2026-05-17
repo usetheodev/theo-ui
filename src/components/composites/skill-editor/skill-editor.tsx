@@ -129,8 +129,16 @@ export function SkillEditor({
         <FormField>
           <FormField.Label>Source</FormField.Label>
           <FormField.Control>
-            <Select value={source} onValueChange={(v) => setSource(v as SkillSource)}>
-              <Select.Trigger>
+            <Select
+              value={source}
+              onValueChange={(v) => {
+                // Re-audit Issue 7: narrow Select string value against
+                // SOURCES.id before casting. Silent no-op for unknown.
+                const next = SOURCES.find((s) => s.id === v);
+                if (next) setSource(next.id);
+              }}
+            >
+              <Select.Trigger aria-label="Select skill source">
                 <Select.Value />
               </Select.Trigger>
               <Select.Content>

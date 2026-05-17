@@ -7,6 +7,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0-next.0] - 2026-05-16
+
+First public pre-release on npm under the `next` dist-tag. Install with
+`pnpm add @usetheo/ui@next` (the default `latest` tag is intentionally
+unset until 1.0). Highlights from the agent-team-audit-fixes-2026-05-16
+remediation sprint:
+
+- New `<TheoUIProvider>` primary entry point (T2.1).
+- `<ThemeProvider>` decoupled from `violetForge` (T2.5, **breaking** —
+  see migration below).
+- CSS injection allowlist + `safeHref` URL guard (T3.2 / T3.3).
+- LiveRegionContext universal — eliminates double aria-live
+  announcements across 9 components (T4.1, MF-4).
+- React 19 compatibility verified in CI (T6.3); `onToggle` clash with
+  the new `ToggleEventHandler` resolved in 6 components.
+- New composite-to-composite cycle detection gate (re-audit NEW-C).
+- happy-dom 16 → 20 (closes CVE-2025-61927 in test env; T3.1).
+- Postcss override + tailwindcss-animate moved to deps (T6.1 / T6.4).
+- ScrollBar standalone removed in favor of `ScrollArea.Bar` (T7.4).
+
+### Changed (BREAKING, 2026-05-16) — T2.5 ThemeProvider decouple
+- **`<ThemeProvider>` now requires the `themes` prop.** Previously, the prop was optional and ThemeProvider auto-included `violet-forge` regardless. Since the source no longer top-level imports `violetForge`, the runtime now throws a helpful error if `themes` is missing or empty. This decouples consumer bundle size from the built-in theme set: consumers passing only custom themes no longer ship `violetForge.ts` (~6 KB savings).
+- **Migration**:
+  ```tsx
+  // Before
+  import { ThemeProvider } from "@usetheo/ui";
+  <ThemeProvider>...</ThemeProvider>
+
+  // After — option A (recommended for parity with old behavior)
+  import { ThemeProvider, builtinThemes } from "@usetheo/ui";
+  <ThemeProvider themes={builtinThemes}>...</ThemeProvider>
+
+  // After — option B (new in v0.1.0-next.0)
+  import { TheoUIProvider } from "@usetheo/ui";
+  <TheoUIProvider>...</TheoUIProvider>
+  ```
+- **Why this is acceptable pre-1.0**: package is `0.0.0` and never published; first public release will be `0.1.0-next.0`. No external consumers exist yet (validated via `npm view`).
+
+### Added (Agent-team audit fixes, 2026-05-16)
+- **`<TheoUIProvider>` (T2.1)** — primary entry point composing `<ThemeProvider>` + `<Toaster>` with sensible defaults (`themes={builtinThemes}`). Recommended for new consumer apps; preserves "works out of the box" DX while keeping explicit primitives (`ThemeProvider`, `Toaster`) available for bespoke setups.
+- **`registry/index.json#metadata.requires.tsconfigPathAlias` (T2.3)** — explicit declaration of the `@/` path alias precondition required by the copy-paste install path. New `validateApiCompatibility` gate fails if the field is missing.
+
+### Changed (Agent-team audit fixes, 2026-05-16)
+- **`src/index.ts` barrel reorganized (T2.4)** — 8 composites (`SkillsList`, `SkillEditor`, `RuleEditor`, `CronJobsList`, `MCPServerList`, `AgentEditor`, `ApprovalCard`) moved from the `// PRIMITIVES` editorial section to a dedicated subsection under `// COMPOSITES`. No name changes, no type changes, `package.json#exports` unchanged. Quality gate of taxonomy already enforces the rule mechanically; this aligns the human signal.
+- **`docs/architecture.md` + `README.md`** — added subsection "Subpath exports — convenience aliases, not code splitting" (T2.2) explaining that all 99 subpath entries resolve to the same `dist/index.js`, tree-shaking is what shrinks bundles, and `tsup splitting: false` is deliberate.
+- **`scripts/validate-registry.ts`** — `targetToItemName` reverse map resolves `@/components/ui/<target>` imports to the registry item that ships that file (fix for multi-file items like `toast` which ships `toaster.tsx`).
+
+### Documentation (Agent-team audit fixes, 2026-05-16)
+- **`PITCH.md`** — removed false claim that `npx create-theokit my-app` already imports `@usetheo/ui` when picking the dashboard template (verified via `grep -r "@usetheo/ui" /home/paulo/Projetos/usetheo/theokit/` returning zero matches). Replaced with honest "TheoKit integration is on the roadmap." Aligned tertiary CTAs with reality (substituted dead `docs.usetheo.dev/ui` with GitHub anchor).
+- **`README.md`** — updated `pnpm quality:gates` pipeline listing to match `package.json#scripts['quality:gates']` exactly: now lists 11 gates (`format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `quality:bundle` → `quality:a11y` → `ladle:build`). Previous text omitted `quality:bundle` and `quality:a11y`.
+- **CHANGELOG correction** — earlier entry under "Phase 3 — Build correctness + exports surface" stated `validateExportsMap` "locks `package.json#exports` to the canonical 5-entry set". Since commit `77b2f7a` (`feat(exports): subpath import for every component`) the strategy expanded to 107+ subpath entries generated by `scripts/sync-exports.ts`. Authoritative source is `package.json` itself. Prior entries in versioned releases stay immutable per Keep a Changelog; this correction lives in `[Unreleased]`.
+
+### Added (Pitch + Voice and Tone formalization, 2026-05-15)
+- **`PITCH.md`** at project root — landing-page copy for `@usetheo/ui` (Violet Forge) using the TheoKit aspirational voice. Three layers: HERO (no jargon), BODY (benefit-first with one technical anchor per item), DEEP DIVE (full technical vocabulary, after the `## How it works` delimiter). Companion to `README.md` for marketing surfaces; verified component counts and quality metrics against `README.md` and `src/`.
+- **`CLAUDE.md`** at project root — contract between Claude and this project. Defines what TheoUI is, the locked names (npm package, theme names, registry endpoint, module format, component taxonomy), the Voice and Tone section that formalizes adoption of the TheoKit aspirational voice for public copy (strategic review dated 2026-05-15), the relationship to the other usetheo pillars (Harness, Skills, Runtime), and the quality-gate non-bypass rule.
+
+### Changed (Cross-project, 2026-05-15)
+- Root monorepo `CLAUDE.md` (`../CLAUDE.md`) `## Voice and Tone — sub-project scoped` section: TheoUI moved from the "technical-direct only" list to the aspirational-voice list, alongside TheoKit and TheoKit-SDK. Rationale captured inline (TheoUI is the visual surface every other product inherits from; benefits from outcome-shaped framing on landing copy).
+- Root monorepo sub-project index: `theo-ui` "Read first" pointer updated from `theo-ui/README.md` to `theo-ui/CLAUDE.md` (was a fallback because no `CLAUDE.md` existed in this project until today).
+
+### Changed (README alignment with PITCH, 2026-05-15)
+- `README.md` HERO + BODY layers rewritten in the TheoKit aspirational voice to match `PITCH.md`. New h1: *"The UI your agent already needs."* Tagline calls out the 102 agent-shaped components. `@usetheo/ui` demoted from h1 to a small tag above it (discoverability preserved without dominating the HERO).
+- Added `## The shift` storytelling block between the HERO and `## Why @usetheo/ui`.
+- `## Why @usetheo/ui` now closes with the comparison table from `PITCH.md` (`@usetheo/ui` vs shadcn/Radix, Tremor, build-yourself) and the punch line *"Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write."*
+- Added `## What you'd build` (5 concrete surfaces) before `## Quickstart`.
+- Added `## How it works` DEEP DIVE delimiter before `## Quickstart`; everything from there downward stays technical-direct.
+- Quickstart code sample swapped from a generic `<Button>` example to `<AgentEvent>` + `<ToolCall>` + `<DeploymentRow>` — agent-shaped primitives nobody else ships.
+- Added `## Status` section between `## License` and the bundle/architecture content: production callouts, registry-distribution plan, ESM-only caveat, "component count is the floor" framing.
+
 ### Added (BLOCKER-002 / BLOCKER-003 remediation)
 - **`src/styles/tailwind-preset.ts`** — single source of truth for the Violet Forge Tailwind tokens (colors, fontFamily, Geist-inspired typescale, borderRadius, boxShadow, motion, keyframes, animation + tailwindcss-animate plugin). `tailwind.config.ts` now consumes the preset via `presets: [theoUIPreset]` (was inline `theme.extend`).
 - **`registry/tailwind-preset.json`** (`registry:lib`) — distributes the preset to copy-paste consumers via `npx shadcn add tailwind-preset`. Declares `tailwindcss` + `tailwindcss-animate` as deps.

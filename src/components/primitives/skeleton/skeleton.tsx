@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
+import { useInLiveRegion } from "../../../lib/live-region-context.js";
 
 /**
  * Skeleton — placeholder block shown while content is loading.
@@ -21,16 +22,22 @@ import { cn } from "../../../lib/cn.js";
  *   </div>
  */
 const Skeleton = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="status"
-      aria-live="polite"
-      aria-label="Loading"
-      className={cn("animate-pulse rounded-md bg-muted", className)}
-      {...props}
-    />
-  ),
+  ({ className, ...props }, ref) => {
+    // T4.1 (MF-4): when nested inside a container live region (BuildLogStream,
+    // ChatThread, etc.), omit role/aria-live so AT doesn't announce every
+    // placeholder mount as a separate "loading" event.
+    const inLiveRegion = useInLiveRegion();
+    return (
+      <div
+        ref={ref}
+        role={inLiveRegion ? undefined : "status"}
+        aria-live={inLiveRegion ? undefined : "polite"}
+        aria-label={inLiveRegion ? undefined : "Loading"}
+        className={cn("animate-pulse rounded-md bg-muted", className)}
+        {...props}
+      />
+    );
+  },
 );
 Skeleton.displayName = "Skeleton";
 

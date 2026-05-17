@@ -2,6 +2,7 @@ import { Activity, GitBranch, GitCommit } from "lucide-react";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode, Ref } from "react";
 import { cn } from "../../../lib/cn.js";
+import { safeHref } from "../../../lib/safe-href.js";
 import { Badge } from "../../primitives/badge/index.js";
 import type { DeploymentStatus } from "../deployment-row/deployment-row.js";
 
@@ -60,7 +61,11 @@ interface ProjectCardProps extends HTMLAttributes<HTMLAnchorElement | HTMLDivEle
  */
 const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
   ({ className, project, href, actions, detailed = true, ...props }, ref) => {
-    const isLink = href !== undefined;
+    // T3.3 (SEC-003): defang javascript:/vbscript:/data:text/html before
+    // rendering as <a href>. Consumers passing user-controlled URLs are
+    // protected from XSS via dangerous protocols.
+    const sanitizedHref = safeHref(href);
+    const isLink = sanitizedHref !== undefined;
     const Tag = isLink ? "a" : "div";
     const isAnimated =
       project.status === "building" ||
@@ -127,7 +132,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
     return (
       <Tag
         ref={ref as Ref<HTMLAnchorElement & HTMLDivElement>}
-        href={href}
+        href={sanitizedHref}
         className={cn(
           "group relative flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm",
           "transition-[box-shadow,transform,border-color] duration-base ease-out-soft",

@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  type CompositeAdjacency,
   type LayerMembership,
+  collectCompositeEdges,
+  findCompositeCycles,
   findPrimitiveOffenses,
   importsScreen,
   parseImportsDetailed,
@@ -170,5 +173,117 @@ describe("importsScreen (composite guard)", () => {
   it("does not flag normal composite imports", () => {
     const content = `import { Button } from "../../primitives/button/index.js";`;
     expect(importsScreen(fromAgentStream, content)).toBe(false);
+  });
+});
+
+describe("composite cycle detection (NEW-C)", () => {
+  const compositeLayers: LayerMembership = {
+    primitives: new Set(["button"]),
+    composites: new Set(["a", "b", "c", "d"]),
+  };
+
+  function fileFor(name: string): string {
+    return `/repo/src/components/composites/${name}/${name}.tsx`;
+  }
+
+  it("returns no cycles for an acyclic graph", () => {
+    const adj: CompositeAdjacency = new Map();
+    collectCompositeEdges(
+      fileFor("a"),
+      "a",
+      `import { B } from "../b/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    collectCompositeEdges(
+      fileFor("b"),
+      "b",
+      `import { C } from "../c/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    collectCompositeEdges(fileFor("c"), "c", "", compositeLayers, adj);
+    expect(findCompositeCycles(adj)).toEqual([]);
+  });
+
+  it("detects a 2-node cycle a → b → a", () => {
+    const adj: CompositeAdjacency = new Map();
+    collectCompositeEdges(
+      fileFor("a"),
+      "a",
+      `import { B } from "../b/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    collectCompositeEdges(
+      fileFor("b"),
+      "b",
+      `import { A } from "../a/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    const cycles = findCompositeCycles(adj);
+    expect(cycles).toHaveLength(1);
+    expect(cycles[0]).toEqual(["a", "b", "a"]);
+  });
+
+  it("detects a 3-node cycle a → b → c → a", () => {
+    const adj: CompositeAdjacency = new Map();
+    collectCompositeEdges(
+      fileFor("a"),
+      "a",
+      `import { B } from "../b/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    collectCompositeEdges(
+      fileFor("b"),
+      "b",
+      `import { C } from "../c/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    collectCompositeEdges(
+      fileFor("c"),
+      "c",
+      `import { A } from "../a/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    const cycles = findCompositeCycles(adj);
+    expect(cycles).toHaveLength(1);
+    expect(cycles[0]).toEqual(["a", "b", "c", "a"]);
+  });
+
+  it("ignores type-only composite imports", () => {
+    const adj: CompositeAdjacency = new Map();
+    collectCompositeEdges(
+      fileFor("a"),
+      "a",
+      `import type { BProps } from "../b/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    collectCompositeEdges(
+      fileFor("b"),
+      "b",
+      `import { A } from "../a/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    // Only b → a edge exists; not a cycle.
+    expect(findCompositeCycles(adj)).toEqual([]);
+  });
+
+  it("ignores composite imports of primitives", () => {
+    const adj: CompositeAdjacency = new Map();
+    collectCompositeEdges(
+      fileFor("a"),
+      "a",
+      `import { Button } from "../../primitives/button/index.js";`,
+      compositeLayers,
+      adj,
+    );
+    expect(findCompositeCycles(adj)).toEqual([]);
   });
 });

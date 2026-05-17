@@ -27,6 +27,9 @@ export {
   type ThemeMode,
 } from "./themes/index.js";
 
+// Primary entry point — composes ThemeProvider + Toaster (T2.1)
+export { TheoUIProvider, type TheoUIProviderProps } from "./theo-ui-provider.js";
+
 // Shared domain types
 export type { Attachment, Message, MessageRole } from "./types/chat.js";
 export type {
@@ -53,7 +56,7 @@ export { Input, type InputProps } from "./components/primitives/input/index.js";
 export { Dialog } from "./components/primitives/dialog/index.js";
 export { Tabs } from "./components/primitives/tabs/index.js";
 export { Tooltip } from "./components/primitives/tooltip/index.js";
-export { ScrollArea, ScrollBar } from "./components/primitives/scroll-area/index.js";
+export { ScrollArea } from "./components/primitives/scroll-area/index.js";
 export {
   Toast,
   type ToastVariant,
@@ -95,10 +98,7 @@ export {
   type SkillSource,
   type SkillState,
 } from "./components/primitives/skill-card/index.js";
-export { SkillsList } from "./components/composites/skills-list/index.js";
-export { SkillEditor } from "./components/composites/skill-editor/index.js";
 export { RuleCard } from "./components/primitives/rule-card/index.js";
-export { RuleEditor } from "./components/composites/rule-editor/index.js";
 export type { Rule, RuleScope, RuleState } from "./types/rule.js";
 export { ALL_MODES, MODE_LABEL, type Mode } from "./types/mode.js";
 export { CostMeter } from "./components/primitives/cost-meter/index.js";
@@ -130,13 +130,11 @@ export {
   type CronJob,
   type CronJobStatus,
 } from "./components/primitives/cron-job-card/index.js";
-export { CronJobsList } from "./components/composites/cron-jobs-list/index.js";
 export {
   MCPServerCard,
   type MCPServer,
   type MCPServerStatus,
 } from "./components/primitives/mcp-server-card/index.js";
-export { MCPServerList } from "./components/composites/mcp-server-list/index.js";
 export {
   ModelCard,
   modelCapabilityPresets,
@@ -149,10 +147,6 @@ export {
   AgentProfile,
   type AgentProfileDescriptor,
 } from "./components/primitives/agent-profile/index.js";
-export {
-  AgentEditor,
-  type AgentDraft,
-} from "./components/composites/agent-editor/index.js";
 export {
   SubAgentDispatch,
   type SubAgentRun,
@@ -182,10 +176,6 @@ export {
 export { AutoCompactNotice } from "./components/primitives/auto-compact-notice/index.js";
 export { AgentHandoff, type HandoffParty } from "./components/primitives/agent-handoff/index.js";
 export { AgentStreaming } from "./components/primitives/agent-streaming/index.js";
-export {
-  ApprovalCard,
-  type ApprovalSeverity,
-} from "./components/composites/approval-card/index.js";
 export {
   AgentErrorCard,
   type AgentErrorKind,
@@ -289,6 +279,23 @@ export { LoginSplit } from "./components/primitives/login-split/index.js";
 // ─────────────────────────────────────────────────────────────────────────────
 // COMPOSITES — depend on one or more primitives above.
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Configuration & registry composites (skill, rule, MCP server, cron job, agent editors and lists)
+// Previously mis-grouped under PRIMITIVES. Mechanically these are composites
+// because they import primitives via the barrel (T2.4, MF-1 of edge review).
+export { SkillsList } from "./components/composites/skills-list/index.js";
+export { SkillEditor } from "./components/composites/skill-editor/index.js";
+export { RuleEditor } from "./components/composites/rule-editor/index.js";
+export { CronJobsList } from "./components/composites/cron-jobs-list/index.js";
+export { MCPServerList } from "./components/composites/mcp-server-list/index.js";
+export {
+  AgentEditor,
+  type AgentDraft,
+} from "./components/composites/agent-editor/index.js";
+export {
+  ApprovalCard,
+  type ApprovalSeverity,
+} from "./components/composites/approval-card/index.js";
 
 // Chat composites
 export {

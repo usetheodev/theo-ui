@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
+import { useInLiveRegion } from "../../../lib/live-region-context.js";
 
 export type LogLevel = "info" | "warn" | "error" | "success" | "debug";
 
@@ -86,6 +87,9 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
     },
     ref,
   ) => {
+    // T4.1 (MF-4): suppress own aria-live when nested in container live region.
+    const inLiveRegion = useInLiveRegion();
+    const effectiveLive = inLiveRegion ? "off" : live;
     const [internalLevels, setInternalLevels] = useState<Set<LogLevel>>(new Set());
     const levels = visibleLevels ?? internalLevels;
     const updateLevels = onVisibleLevelsChange ?? setInternalLevels;
@@ -168,7 +172,7 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
           {visible.length === 0 ? (
             <p className="px-4 py-3 text-muted-foreground">No log lines.</p>
           ) : (
-            <ol className="divide-y divide-border/30" aria-live={live} aria-atomic="false">
+            <ol className="divide-y divide-border/30" aria-live={effectiveLive} aria-atomic="false">
               {visible.map((line) => (
                 <li
                   key={line.id}
