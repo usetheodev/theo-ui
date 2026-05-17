@@ -104,9 +104,11 @@ import "@usetheo/ui/styles.css";
 Or copy individual components shadcn-style:
 
 ```bash
-npx shadcn@latest add https://ui.usetheo.dev/r/button.json
-npx shadcn@latest add https://ui.usetheo.dev/r/deployment-row.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/deployment-row.json
 ```
+
+> Branded `https://ui.usetheo.dev/r/*` URL will follow after the DNS CNAME is configured. Both URLs serve identical content.
 
 Every item in [`registry/r/`](./registry/r) is a standalone copy-paste unit with declared `registryDependencies`. The Tailwind preset (`registry/tailwind-preset.json`) ships the Violet Forge tokens and is a dependency of every UI / block item — so copy-paste consumers get the full typescale and color system, not just the markup.
 
@@ -233,7 +235,7 @@ pnpm add @usetheo/ui
 **Or copy individual components shadcn-style:**
 
 ```bash
-npx shadcn@latest add https://ui.usetheo.dev/r/button.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
 ```
 
 **Next in the funnel:** Build any React surface today — install `@usetheo/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
