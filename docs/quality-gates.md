@@ -100,7 +100,7 @@ honest by running `tsc --noEmit` against a real consumer fixture.
 
 ### Registry copy-paste preconditions (T2.3)
 
-The copy-paste install path (`npx shadcn@latest add https://ui.usetheo.dev/r/<name>.json`)
+The copy-paste install path (`npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/<name>.json` — branded `ui.usetheo.dev` URL pending DNS CNAME)
 requires the consumer project to satisfy these environmental preconditions:
 
 | Precondition | Required value | Why |

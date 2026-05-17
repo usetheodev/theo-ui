@@ -145,7 +145,7 @@ Every component is shipped two ways:
 
 1. **As part of the package** — `pnpm add @usetheo/ui`, then
    `import { Button } from "@usetheo/ui"`. ESM-only, tree-shakable.
-2. **As copy-paste via shadcn CLI** — `npx shadcn add https://ui.usetheo.dev/r/<name>.json`.
+2. **As copy-paste via shadcn CLI** — `npx shadcn add https://usetheodev.github.io/theo-ui/r/<name>.json` (branded `ui.usetheo.dev` URL pending DNS CNAME).
    The consumer's project receives the source `.tsx` file under
    `components/ui/<name>.tsx` (primitives) or `components/blocks/<name>.tsx`
    (composites).
