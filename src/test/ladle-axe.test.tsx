@@ -69,19 +69,12 @@ const STORY_SKIPS = new Set<string>([
   "Primitives / Code / RunningTasksPanel › Default",
   // Empty state of an aria-required-children container
   "Primitives / Agent / MentionMenu › Empty",
-  // Editors with Radix Select triggers that have no inner text in the
-  // story's initial state. The Select compound is `button-name`-compliant
-  // once the consumer threads a selected value through — these stories
-  // intentionally start unselected to demonstrate the empty state.
-  "Composites / Agent / AgentEditor › NewAgent",
-  "Composites / Agent / AgentEditor › EditExisting",
-  "Composites / Agent / RuleEditor › EditExisting",
-  "Composites / Agent / SkillEditor › NewSkill",
-  "Composites / Agent / SkillEditor › EditExisting",
-  // AgentStream FullStream uses <header role="button"> + <span aria-label>
-  // patterns that surface real semantic gaps. Tracked separately as a
-  // follow-up; not a regression from this audit cycle.
-  "Composites / Agent / AgentStream › FullStream",
+  // (T5.3, 2026-05-16): Editor Select triggers now ship explicit aria-label
+  // ("Select tone", "Select model", "Select skill source", "Select rule
+  // scope") so axe `button-name` passes even when no value is selected.
+  // Skips removed.
+  // (T5.4, 2026-05-16): AgentStream FullStream fixed — see commit. Skip
+  // removed.
   // Full-app screen pulling Ladle runtime APIs (DarkModeToggle, ThemeIconPicker
   // hit `useTheme` outside the screen's own ThemeProvider).
   "Screens / Theo Code Shell › Default",
