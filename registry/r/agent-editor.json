@@ -6,15 +6,15 @@
   "description": "Form for creating or editing an Agent persona.",
   "dependencies": [],
   "registryDependencies": [
-    "agent-profile",
-    "button",
-    "cn",
-    "form-field",
-    "input",
-    "mode-types",
-    "select",
-    "tailwind-preset",
-    "textarea"
+    "https://usetheodev.github.io/theo-ui/r/agent-profile.json",
+    "https://usetheodev.github.io/theo-ui/r/button.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/form-field.json",
+    "https://usetheodev.github.io/theo-ui/r/input.json",
+    "https://usetheodev.github.io/theo-ui/r/mode-types.json",
+    "https://usetheodev.github.io/theo-ui/r/select.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/textarea.json"
   ],
   "files": [
     {

@@ -6,15 +6,15 @@
   "description": "The canonical conversation surface for a code agent.",
   "dependencies": [],
   "registryDependencies": [
-    "agent-error-card",
-    "agent-streaming",
-    "approval-card",
-    "chat-message",
-    "chat-types",
-    "cn",
-    "tailwind-preset",
-    "tool-call-card",
-    "types"
+    "https://usetheodev.github.io/theo-ui/r/agent-error-card.json",
+    "https://usetheodev.github.io/theo-ui/r/agent-streaming.json",
+    "https://usetheodev.github.io/theo-ui/r/approval-card.json",
+    "https://usetheodev.github.io/theo-ui/r/chat-message.json",
+    "https://usetheodev.github.io/theo-ui/r/chat-types.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/tool-call-card.json",
+    "https://usetheodev.github.io/theo-ui/r/types.json"
   ],
   "files": [
     {

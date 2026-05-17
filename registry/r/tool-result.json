@@ -6,8 +6,8 @@
   "description": "Formatted output of a tool invocation.",
   "dependencies": [],
   "registryDependencies": [
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

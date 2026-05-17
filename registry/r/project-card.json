@@ -8,11 +8,11 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "badge",
-    "cn",
-    "deployment-row",
-    "safe-href",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/badge.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/deployment-row.json",
+    "https://usetheodev.github.io/theo-ui/r/safe-href.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {
