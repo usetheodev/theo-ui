@@ -6,10 +6,10 @@
   "description": "Vertical list of agent events.",
   "dependencies": [],
   "registryDependencies": [
-    "agent-event",
-    "agent-types",
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/agent-event.json",
+    "https://usetheodev.github.io/theo-ui/r/agent-types.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

@@ -6,8 +6,8 @@
   "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps.",
   "dependencies": [],
   "registryDependencies": [
-    "theme-provider",
-    "toast"
+    "https://usetheodev.github.io/theo-ui/r/theme-provider.json",
+    "https://usetheodev.github.io/theo-ui/r/toast.json"
   ],
   "files": [
     {

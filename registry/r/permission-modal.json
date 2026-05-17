@@ -8,10 +8,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "button",
-    "dialog",
-    "permission-types",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/button.json",
+    "https://usetheodev.github.io/theo-ui/r/dialog.json",
+    "https://usetheodev.github.io/theo-ui/r/permission-types.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

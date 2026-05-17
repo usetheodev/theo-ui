@@ -9,10 +9,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "button",
-    "cn",
-    "tailwind-preset",
-    "types"
+    "https://usetheodev.github.io/theo-ui/r/button.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/types.json"
   ],
   "files": [
     {
