@@ -99,9 +99,11 @@ export default function App() {
 ### Option B — copy individual components (shadcn-style)
 
 ```bash
-npx shadcn@latest add https://ui.usetheo.dev/r/button.json
-npx shadcn@latest add https://ui.usetheo.dev/r/deployment-row.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/deployment-row.json
 ```
+
+> Branded `https://ui.usetheo.dev/r/*` URL will follow once the DNS CNAME is configured (single record at the registrar). Both URLs serve identical content.
 
 Every item under [`registry/r/`](./registry/r) is a standalone copy-paste unit with its dependencies declared.
 
