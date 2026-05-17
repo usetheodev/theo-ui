@@ -7,7 +7,9 @@
  * shape that `npx shadcn add <url>` expects.
  *
  * The CLI consumer points shadcn at a URL serving registry/r/<name>.json.
- * Example (after this repo is published or served statically):
+ * Functional URL (live on every push to main via deploy-registry.yml):
+ *   npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
+ * Branded URL pending DNS CNAME:
  *   npx shadcn@latest add https://ui.usetheo.dev/r/button.json
  *
  * Reference: https://ui.shadcn.com/docs/registry
