@@ -214,7 +214,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 ## Status
 
 - **Production.** 102 components, 453 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
-- **Registry distribution.** Artifacts shipped at `registry/r/*.json` in this repo; canonical `ui.usetheo.dev/r/*.json` URL is the planned distribution target.
+- **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on push to `main`). Branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
 
