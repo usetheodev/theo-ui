@@ -5,8 +5,8 @@
   "title": "Textarea",
   "description": "Multi-line input mirror of Input.",
   "registryDependencies": [
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

@@ -6,9 +6,9 @@
   "description": "Browser preview with controls + integrated logs slot.",
   "dependencies": [],
   "registryDependencies": [
-    "browser-controls",
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/browser-controls.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

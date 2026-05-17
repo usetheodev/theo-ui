@@ -9,8 +9,8 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "cn",
-    "tokens"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tokens.json"
   ],
   "files": [
     {

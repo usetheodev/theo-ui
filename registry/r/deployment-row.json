@@ -8,9 +8,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "badge",
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/badge.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

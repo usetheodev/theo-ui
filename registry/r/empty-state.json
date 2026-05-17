@@ -5,9 +5,9 @@
   "title": "EmptyState",
   "description": "Visual placeholder for empty lists / first-run screens.",
   "registryDependencies": [
-    "cn",
-    "tailwind-preset",
-    "types"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/types.json"
   ],
   "files": [
     {
