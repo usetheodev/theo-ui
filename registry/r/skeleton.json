@@ -5,8 +5,8 @@
   "title": "Skeleton",
   "description": "Placeholder block shown while content is loading.",
   "registryDependencies": [
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

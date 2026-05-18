@@ -5,7 +5,7 @@
   "title": "ThemeScript",
   "description": "Inline script for SSR-safe theme initialization in Next.js / Astro / Remix. Place in <head> to read persisted theme + mode from localStorage BEFORE React hydrates, eliminating FOUC and hydration mismatch.",
   "registryDependencies": [
-    "theme-provider"
+    "https://usetheodev.github.io/theo-ui/r/theme-provider.json"
   ],
   "files": [
     {

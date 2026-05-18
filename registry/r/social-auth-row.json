@@ -6,9 +6,9 @@
   "description": "Row of OAuth provider buttons.",
   "dependencies": [],
   "registryDependencies": [
-    "cn",
-    "tailwind-preset",
-    "types"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/types.json"
   ],
   "files": [
     {

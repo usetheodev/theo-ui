@@ -8,9 +8,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "cn",
-    "cron-job-card",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/cron-job-card.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {
