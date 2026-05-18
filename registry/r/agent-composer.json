@@ -6,10 +6,10 @@
   "description": "ChatComposer + slash-command / @file / #memory triggers.",
   "dependencies": [],
   "registryDependencies": [
-    "chat-composer",
-    "cn",
-    "mention-menu",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/chat-composer.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/mention-menu.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

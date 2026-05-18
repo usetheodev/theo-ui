@@ -6,8 +6,8 @@
   "description": "Kanban-style task board with 4 lanes matching the claw-code",
   "dependencies": [],
   "registryDependencies": [
-    "cn",
-    "tailwind-preset"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

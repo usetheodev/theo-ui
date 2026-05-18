@@ -6,16 +6,16 @@
   "description": "Form for creating or editing a Skill.",
   "dependencies": [],
   "registryDependencies": [
-    "button",
-    "cn",
-    "form-field",
-    "input",
-    "mode-types",
-    "select",
-    "skill-card",
-    "switch",
-    "tailwind-preset",
-    "textarea"
+    "https://usetheodev.github.io/theo-ui/r/button.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/form-field.json",
+    "https://usetheodev.github.io/theo-ui/r/input.json",
+    "https://usetheodev.github.io/theo-ui/r/mode-types.json",
+    "https://usetheodev.github.io/theo-ui/r/select.json",
+    "https://usetheodev.github.io/theo-ui/r/skill-card.json",
+    "https://usetheodev.github.io/theo-ui/r/switch.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/textarea.json"
   ],
   "files": [
     {

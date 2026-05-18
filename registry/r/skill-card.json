@@ -8,10 +8,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "cn",
-    "mode-types",
-    "tailwind-preset",
-    "types"
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/mode-types.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theo-ui/r/types.json"
   ],
   "files": [
     {
