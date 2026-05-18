@@ -75,7 +75,7 @@ Four future engines / composites are explicitly in scope but **not implemented**
 
 | Item | Type | Inspiration | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `Whiteboard` | Primitive | Excalidraw | Explorer (RFC) | Hand-drawn canvas. SVG-or-Canvas decision pending; selection model + undo/redo + pan/zoom required for MVP. |
+| `Whiteboard` | Primitive (engine, view-only) | Excalidraw | **Available** (2026-05-18, RFC 0001) | Subpath `@usetheo/ui/whiteboard`. JSON → SVG with hand-drawn aesthetic via `roughjs` + `perfect-freehand` (optional peer-deps). Pan + zoom built-in. NOT an editor — no toolbar / selection / undo. See `docs/rfcs/0001-whiteboard.md`. |
 | `Slide` | Primitive | Marp | Explorer (RFC) | Single slide renderer (markdown → themed surface). Reuse `remark`/`micromark` for parsing; do not reinvent the markdown layer. |
 | `SlideDeck` | Composite | Marp / Reveal.js | Explorer (RFC) | Orchestrates `Slide` primitives: navigation, progress, presenter mode, fullscreen, PDF export. Depends on Slide. |
 | `Diagram` | Primitive | Mermaid | Explorer (RFC) | DSL → SVG. Reuse `dagre` / `elk` for layout algorithms. MVP: one diagram type (flowchart). |

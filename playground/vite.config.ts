@@ -13,6 +13,9 @@ const libEntry = fileURLToPath(new URL("../src/index.ts", import.meta.url));
 const libStyles = fileURLToPath(new URL("../src/styles/global.css", import.meta.url));
 const libTokens = fileURLToPath(new URL("../src/styles/tokens.css", import.meta.url));
 const libFonts = fileURLToPath(new URL("../src/styles/fonts.css", import.meta.url));
+const libWhiteboard = fileURLToPath(
+  new URL("../src/components/primitives/whiteboard/index.ts", import.meta.url),
+);
 
 export default defineConfig({
   root: rootDir,
@@ -22,6 +25,7 @@ export default defineConfig({
       { find: /^@usetheo\/ui\/styles\.css$/, replacement: libStyles },
       { find: /^@usetheo\/ui\/tokens\.css$/, replacement: libTokens },
       { find: /^@usetheo\/ui\/fonts\.css$/, replacement: libFonts },
+      { find: /^@usetheo\/ui\/whiteboard$/, replacement: libWhiteboard },
       { find: /^@usetheo\/ui$/, replacement: libEntry },
     ],
   },

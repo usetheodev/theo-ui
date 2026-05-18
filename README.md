@@ -338,13 +338,47 @@ Honest claims only.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
 
+## Engines (isolated subpaths)
+
+Engines ship as bundle-isolated subpaths — they are NOT in the main barrel (`@usetheo/ui`). Each one has its own dist file, its own optional peer-deps, and its own RFC.
+
+```bash
+# Whiteboard — view-only renderer for JSON in Excalidraw style.
+pnpm add @usetheo/ui roughjs perfect-freehand
+```
+
+```tsx
+import { Whiteboard, type WhiteboardData } from "@usetheo/ui/whiteboard";
+
+const scene: WhiteboardData = {
+  version: 1,
+  width: 600,
+  height: 400,
+  elements: [
+    { type: "rect", x: 50, y: 50, w: 120, h: 60, label: "User" },
+    { type: "ellipse", x: 350, y: 50, w: 120, h: 60, label: "DB" },
+    { type: "arrow", x: 170, y: 80, to: [350, 80], label: "query" },
+  ],
+};
+
+<Whiteboard data={scene} fitOnLoad />
+```
+
+| Engine | Subpath | Status | RFC |
+|---|---|---|---|
+| Whiteboard (view-only, JSON → SVG, Excalidraw aesthetic) | `@usetheo/ui/whiteboard` | Available | [RFC 0001](./docs/rfcs/0001-whiteboard.md) |
+| Slide | TBD | Roadmap | TBD |
+| Slide deck | TBD | Roadmap | TBD |
+| Diagram | TBD | Roadmap | TBD |
+
+Each engine ships behind the same gate chain (test + story + a11y + registry + bundle isolation). No version commitment for the Roadmap items — these are not on the 0.1 / 1.0 line.
+
 ## Roadmap
 
 The component count is the floor, not the ceiling. The next surfaces on the roadmap are creative and authoring tools — built in-house under the same quality gates, not third-party wrappers.
 
 | Item | Type | Inspiration | Status |
 |---|---|---|---|
-| Whiteboard engine | Primitive | Excalidraw | Explorer (RFC) |
 | Slide engine | Primitive | Marp | Explorer (RFC) |
 | Slide deck composite | Composite | Marp / Reveal.js | Explorer (RFC) |
 | Diagram engine | Primitive | Mermaid | Explorer (RFC) |

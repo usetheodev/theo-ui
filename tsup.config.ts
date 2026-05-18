@@ -3,14 +3,21 @@ import { join } from "node:path";
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: {
+    index: "src/index.ts",
+    // Engine bundle: must NOT vendor roughjs / perfect-freehand into the main
+    // barrel. See ADR D3 in `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md`.
+    "whiteboard/index": "src/components/primitives/whiteboard/index.ts",
+  },
   format: ["esm"],
   dts: true,
   sourcemap: true,
   clean: true,
   splitting: false,
   treeshake: true,
-  external: ["react", "react-dom"],
+  // `roughjs` exposes submodule imports (`roughjs/bin/svg`, `roughjs/bin/generator`)
+  // that must also stay external for the isolated bundle to remain small.
+  external: ["react", "react-dom", "roughjs", /^roughjs\//, "perfect-freehand"],
   // Portable: Node fs APIs work on Linux, macOS, and Windows (the previous `cp`
   // shell invocation broke under Windows native shells).
   onSuccess: async () => {

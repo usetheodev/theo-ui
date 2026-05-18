@@ -52,6 +52,24 @@ const BASE_EXPORTS: Record<string, ExportEntry | string> = {
 };
 
 /**
+ * Subpath entries that point to their OWN bundle, not the shared barrel.
+ *
+ * Reserved for "engines" (Whiteboard, future Slide / SlideDeck / Diagram) —
+ * heavy components with optional peer-deps that must not inflate the main
+ * bundle. See `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md`
+ * ADR D3 and the roadmap section of `CLAUDE.md`.
+ *
+ * Invariant: keys here MUST NOT collide with any auto-scanned component
+ * subpath (which come from `src/index.ts`). `buildExports` enforces this.
+ */
+const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
+  "./whiteboard": {
+    types: "./dist/whiteboard/index.d.ts",
+    import: "./dist/whiteboard/index.js",
+  },
+};
+
+/**
  * Extract `./<name>` subpaths from `src/index.ts`. We expect lines like
  * `export { X } from "./components/<layer>/<name>/index.js";` — the
  * `<name>` segment becomes the subpath identifier.
@@ -71,10 +89,22 @@ function extractComponentSubpaths(indexContent: string): string[] {
 function buildExports(componentSubpaths: string[]): Record<string, ExportEntry | string> {
   const map: Record<string, ExportEntry | string> = { ...BASE_EXPORTS };
   for (const name of componentSubpaths) {
-    map[`./${name}`] = {
+    const key = `./${name}`;
+    // Guard against silent overrides: if a component named the same as an
+    // isolated engine slipped into `src/index.ts`, fail loud here so we
+    // discover the regression instead of shipping a broken bundle.
+    if (key in ISOLATED_SUBPATHS) {
+      throw new Error(
+        `sync-exports collision: auto-scanned subpath "${key}" conflicts with an ISOLATED_SUBPATHS entry. Engines (Whiteboard, etc.) must stay out of the barrel — remove the export from src/index.ts.`,
+      );
+    }
+    map[key] = {
       types: "./dist/index.d.ts",
       import: "./dist/index.js",
     };
+  }
+  for (const [key, entry] of Object.entries(ISOLATED_SUBPATHS)) {
+    map[key] = entry;
   }
   return map;
 }
@@ -88,11 +118,11 @@ async function main(): Promise<void> {
   pkg.exports = exports;
   await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
   process.stdout.write(
-    `Synced package.json#exports: ${Object.keys(exports).length} entries (${subpaths.length} component subpaths + ${Object.keys(BASE_EXPORTS).length} base entries)\n`,
+    `Synced package.json#exports: ${Object.keys(exports).length} entries (${subpaths.length} component subpaths + ${Object.keys(BASE_EXPORTS).length} base entries + ${Object.keys(ISOLATED_SUBPATHS).length} isolated engines)\n`,
   );
 }
 
-export { BASE_EXPORTS, buildExports, extractComponentSubpaths };
+export { BASE_EXPORTS, ISOLATED_SUBPATHS, buildExports, extractComponentSubpaths };
 
 // Only run main when invoked as the entrypoint (CLI). Importers
 // (validateExportsMap) get the pure functions without side effects.

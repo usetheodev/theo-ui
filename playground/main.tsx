@@ -10,12 +10,17 @@ import "@usetheo/ui/styles.css";
 // barrel; the playground composes it on top of the public components below.
 import { TheoCodeShell } from "../src/screens/theo-code-shell.js";
 import { Catalog } from "./catalog.js";
+import { WhiteboardDemo } from "./whiteboard-demo.js";
 
-type View = "shell" | "catalog";
+type View = "shell" | "catalog" | "whiteboard";
+
+function isView(v: string): v is View {
+  return v === "shell" || v === "catalog" || v === "whiteboard";
+}
 
 function PlaygroundRoot() {
-  const initial: View = (window.location.hash.replace("#", "") as View) || "shell";
-  const [view, setView] = useState<View>(initial === "catalog" ? "catalog" : "shell");
+  const initialHash = window.location.hash.replace("#", "");
+  const [view, setView] = useState<View>(isView(initialHash) ? initialHash : "shell");
 
   const switchTo = (next: View) => {
     setView(next);
@@ -41,10 +46,23 @@ function PlaygroundRoot() {
           >
             Catalog
           </Button>
+          <Button
+            size="sm"
+            variant={view === "whiteboard" ? "primary" : "ghost"}
+            onClick={() => switchTo("whiteboard")}
+          >
+            Whiteboard
+          </Button>
         </div>
       </header>
       <div className="min-h-0 overflow-auto">
-        {view === "shell" ? <TheoCodeShell /> : <Catalog />}
+        {view === "shell" ? (
+          <TheoCodeShell />
+        ) : view === "catalog" ? (
+          <Catalog />
+        ) : (
+          <WhiteboardDemo />
+        )}
       </div>
     </div>
   );
