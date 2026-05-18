@@ -69,6 +69,27 @@ If a piece of TheoUI copy contradicts the locked narrative in [`../CLAUDE.md`](.
 
 > "Do not invent integration that does not exist yet." (Root `CLAUDE.md` rule 2.) Verify the actual import / dependency before claiming wiring exists in copy or examples. `grep` first, claim second.
 
+## Roadmap (formalized 2026-05-18)
+
+Four future engines / composites are explicitly in scope but **not implemented**. They will land through individual RFCs, each running the full quality-gate chain:
+
+| Item | Type | Inspiration | Status | Notes |
+| --- | --- | --- | --- | --- |
+| `Whiteboard` | Primitive | Excalidraw | Explorer (RFC) | Hand-drawn canvas. SVG-or-Canvas decision pending; selection model + undo/redo + pan/zoom required for MVP. |
+| `Slide` | Primitive | Marp | Explorer (RFC) | Single slide renderer (markdown → themed surface). Reuse `remark`/`micromark` for parsing; do not reinvent the markdown layer. |
+| `SlideDeck` | Composite | Marp / Reveal.js | Explorer (RFC) | Orchestrates `Slide` primitives: navigation, progress, presenter mode, fullscreen, PDF export. Depends on Slide. |
+| `Diagram` | Primitive | Mermaid | Explorer (RFC) | DSL → SVG. Reuse `dagre` / `elk` for layout algorithms. MVP: one diagram type (flowchart). |
+
+**Rules in force for each engine (non-negotiable):**
+
+- **Don't reinvent the algorithmic core** (global rule 9). Markdown parsing, DSL parsing, graph layout, and freedraw stroke rendering use mature OSS deps. TheoUI ships the React shell, theming, a11y, and the agent-surface integration — not the algorithm.
+- **Bundle isolation**: every engine likely blows the current `quality:bundle` ±5% baseline. Plan a subpath import (`@usetheo/ui/whiteboard`) with peer-dep opt-in; **do not include in the main barrel**. Update `quality:bundle` baseline only after subpath isolation is confirmed.
+- **YAGNI gate**: no engine moves out of "Explorer" without a documented agent-surface or PaaS-dashboard consumer asking for it.
+- **License compatibility**: Apache-2.0 compatible deps only (no GPL transitive).
+- **Honesty**: until shipped, every public surface (README, PITCH, site) must label these as Roadmap, not Available.
+
+No version commitment yet. These are not on the 0.1 / 1.0 line.
+
 ## Component taxonomy (mechanical)
 
 The split between **primitive** and **composite** is enforced by [`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts), not chosen subjectively:

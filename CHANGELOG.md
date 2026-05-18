@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Roadmap formalized (2026-05-18)** — 4 future engines / composites explicitly in scope: `Whiteboard` (Excalidraw-like primitive), `Slide` (Marp-like primitive), `SlideDeck` (composite that orchestrates `Slide` primitives), `Diagram` (Mermaid-like primitive). Each is Explorer (RFC) status, multi-quarter effort, will land via individual RFCs running the full quality-gate chain. Documented in `README.md` (`## Roadmap`) and `CLAUDE.md` (`## Roadmap (formalized 2026-05-18)`) with rules in force per engine: don't reinvent algorithmic cores (markdown / DSL parsing, graph layout, freedraw rendering use mature OSS deps), bundle isolation via subpath import (not main barrel), YAGNI gate (no engine ships without a documented consumer), Apache-2.0 compatible deps only. No version commitment — not on the 0.1 / 1.0 line.
+
 ## [0.1.0-next.0] - 2026-05-16
 
 First public pre-release on npm under the `next` dist-tag. Install with

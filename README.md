@@ -13,7 +13,7 @@ A React component library built for AI agent surfaces and PaaS dashboards. **102
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-514%20passing-success?style=flat-square)](#quality-gates)
+[![tests](https://img.shields.io/badge/tests-517%20passing-success?style=flat-square)](#quality-gates)
 [![components](https://img.shields.io/badge/components-101-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
@@ -337,6 +337,19 @@ Honest claims only.
 - **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
+
+## Roadmap
+
+The component count is the floor, not the ceiling. The next surfaces on the roadmap are creative and authoring tools — built in-house under the same quality gates, not third-party wrappers.
+
+| Item | Type | Inspiration | Status |
+|---|---|---|---|
+| Whiteboard engine | Primitive | Excalidraw | Explorer (RFC) |
+| Slide engine | Primitive | Marp | Explorer (RFC) |
+| Slide deck composite | Composite | Marp / Reveal.js | Explorer (RFC) |
+| Diagram engine | Primitive | Mermaid | Explorer (RFC) |
+
+Each engine is a multi-quarter effort and lands through an individual RFC. No version commitment yet — these are not on the 0.1 / 1.0 line. Each engine ships behind the same gate chain (test + story + a11y + registry + bundle). Names will be locked at RFC time, not before.
 
 ## License
 
