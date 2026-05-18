@@ -139,6 +139,29 @@ async function main(): Promise<void> {
   );
   const sourceImportMap = buildSourceImportMap(descriptors.map(({ descriptor }) => descriptor));
 
+  // Build the set of registry names served by THIS registry. Used to rewrite
+  // bare-name registryDependencies into absolute URLs so shadcn CLI v5+
+  // doesn't try to resolve them against ui.shadcn.com (which is what happens
+  // by default for bare names like "cn"). Discovered via dogfood install
+  // in `/tmp/shadcn-dogfood` — `npx shadcn add ...button.json` failed with
+  // "The item at https://ui.shadcn.com/r/styles/default/cn.json was not found"
+  // because our items declared `"registryDependencies": ["cn"]` and shadcn
+  // resolves bare names against its own registry first.
+  const REGISTRY_BASE_URL = "https://usetheodev.github.io/theo-ui/r";
+  const ownRegistryNames = new Set(descriptors.map(({ descriptor }) => descriptor.name));
+  function rewriteRegistryDeps(deps: string[] | undefined): string[] | undefined {
+    if (!deps) return undefined;
+    return deps.map((dep) => {
+      // Already absolute? Keep as-is.
+      if (dep.startsWith("http://") || dep.startsWith("https://")) return dep;
+      // Bare name that exists in OUR registry? Rewrite to absolute URL.
+      if (ownRegistryNames.has(dep)) return `${REGISTRY_BASE_URL}/${dep}.json`;
+      // Bare name not in our registry — leave as-is for shadcn's default
+      // resolution (e.g., future cross-registry refs to shadcn primitives).
+      return dep;
+    });
+  }
+
   const built: BuiltRegistryItem[] = [];
 
   for (const { descriptorFile, descriptor } of descriptors) {
@@ -155,7 +178,11 @@ async function main(): Promise<void> {
       builtFiles.push({ ...file, content });
     }
 
-    const item: BuiltRegistryItem = { ...descriptor, files: builtFiles };
+    const item: BuiltRegistryItem = {
+      ...descriptor,
+      registryDependencies: rewriteRegistryDeps(descriptor.registryDependencies),
+      files: builtFiles,
+    };
     const outPath = join(OUT_DIR, `${descriptor.name}.json`);
     await writeFile(outPath, JSON.stringify(item, null, 2));
     built.push(item);
