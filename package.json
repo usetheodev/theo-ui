@@ -409,6 +409,10 @@
     "./topnav": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./whiteboard": {
+      "types": "./dist/whiteboard/index.d.ts",
+      "import": "./dist/whiteboard/index.js"
     }
   },
   "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
@@ -439,12 +443,19 @@
     "quality:bundle": "tsx scripts/validate-bundle-size.ts",
     "quality:bundle:update": "tsx scripts/validate-bundle-size.ts --update",
     "quality:a11y": "vitest run src/test/ladle-axe.test.tsx",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build",
+    "dogfood:whiteboard": "tsx scripts/dogfood-whiteboard.ts",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
     "react": ">=18.2.0 <20",
-    "react-dom": ">=18.2.0 <20"
+    "react-dom": ">=18.2.0 <20",
+    "roughjs": "^4.6.0",
+    "perfect-freehand": "^1.2.0"
+  },
+  "peerDependenciesMeta": {
+    "roughjs": { "optional": true },
+    "perfect-freehand": { "optional": true }
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",
@@ -465,7 +476,8 @@
     "cmdk": "^1.1.1",
     "lucide-react": "^0.471.0",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -481,9 +493,11 @@
     "autoprefixer": "^10.4.20",
     "geist": "^1.7.0",
     "happy-dom": "^20.9.0",
+    "perfect-freehand": "1.2.3",
     "postcss": "^8.5.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "roughjs": "4.6.6",
     "tailwindcss": "^3.4.17",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",

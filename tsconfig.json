@@ -23,6 +23,7 @@
     "paths": {
       "~/*": ["./src/*"],
       "@usetheo/ui": ["./src/index.ts"],
+      "@usetheo/ui/whiteboard": ["./src/components/primitives/whiteboard/index.ts"],
       "@usetheo/ui/*": ["./src/*"]
     }
   },
