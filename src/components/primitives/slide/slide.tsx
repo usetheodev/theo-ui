@@ -1,0 +1,241 @@
+import {
+  type FC,
+  type ReactElement,
+  type ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+/**
+ * `<Slide>` — view-only primitive that renders markdown + YAML frontmatter
+ * into a themed, fixed-aspect surface. Lives in the isolated subpath
+ * `@usetheo/ui/slide`.
+ *
+ * See RFC 0002 (`docs/rfcs/0002-slide.md`) and the plan in
+ * `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.
+ *
+ * SSR note: initial render returns the section wrapper; the parsed React tree
+ * fills in client-side via the useEffect → `parseSlide` chain. Consumers
+ * wrapping in Suspense / skeleton can mitigate visible jump.
+ *
+ * Performance tip: pass a memoized `onValidationError` (via `useCallback`)
+ * and a memoized `components` map. Inline arrows recreate on each render
+ * and cause re-parses.
+ */
+import { type ParsedSlide, parseSlide } from "./parse.js";
+import type { SlideValidationError } from "./schema.js";
+import type { SlideTheme } from "./themes/index.js";
+import { useSlideFit } from "./use-slide-fit.js";
+
+export type { SlideTheme } from "./themes/index.js";
+export type {
+  SlideValidationError,
+  SlideValidationErrorCode,
+} from "./schema.js";
+
+export interface SlideAspectRatio {
+  width: number;
+  height: number;
+}
+
+export interface SlideProps {
+  /**
+   * Slide markdown. CommonMark + GFM + optional YAML frontmatter delimited
+   * by `---`. Top-level horizontal rules (`---` on their own line outside
+   * frontmatter) imply a deck split and trigger `MULTIPLE_SLIDES`; only the
+   * first slide is rendered.
+   *
+   * Note: `<figure>`/`<figcaption>` tags are stripped by the default
+   * sanitize schema (D8). Use `<img>` directly for captionless images.
+   */
+  markdown: string;
+  /** Theme name. Defaults to `"default"`. */
+  theme?: SlideTheme;
+  /**
+   * Aspect ratio of the logical canvas. Default `"16:9"` → 1280×720.
+   * Custom `{ width, height }` accepted; zero/negative/NaN fallback to 16:9.
+   */
+  aspectRatio?: "16:9" | "4:3" | SlideAspectRatio;
+  /** Lower clamp for container-fit scale. Default 0.1. */
+  minScale?: number;
+  /** Upper clamp for container-fit scale. Default 4. */
+  maxScale?: number;
+  /** Best-effort callback invoked in useEffect when validation/sanitize emits errors. */
+  onValidationError?: (errors: SlideValidationError[]) => void;
+  /** Override individual element renderers (passed to hast-util-to-jsx-runtime). */
+  // biome-ignore lint/suspicious/noExplicitAny: third-party component override map
+  components?: Record<string, FC<any>>;
+  /** Accessible label for the slide. Defaults to `"Slide"`. */
+  "aria-label"?: string;
+  /** Optional class applied to the outer host element (sizing/positioning hook). */
+  className?: string;
+}
+
+const ASPECT_PRESETS: Record<"16:9" | "4:3", SlideAspectRatio> = {
+  "16:9": { width: 1280, height: 720 },
+  "4:3": { width: 960, height: 720 },
+};
+
+/**
+ * Resolve aspectRatio prop to concrete dimensions. Invalid custom values
+ * (zero, negative, non-finite) silently fall back to 16:9 — surfaced via
+ * `INVALID_ASPECT_RATIO` error in `onValidationError`. ADR D14.
+ */
+function resolveCanvas(ar: SlideProps["aspectRatio"]): {
+  width: number;
+  height: number;
+  invalid?: boolean;
+} {
+  if (!ar || ar === "16:9") return ASPECT_PRESETS["16:9"];
+  if (ar === "4:3") return ASPECT_PRESETS["4:3"];
+  if (
+    ar.width <= 0 ||
+    ar.height <= 0 ||
+    !Number.isFinite(ar.width) ||
+    !Number.isFinite(ar.height)
+  ) {
+    return { ...ASPECT_PRESETS["16:9"], invalid: true };
+  }
+  return ar;
+}
+
+export const Slide: FC<SlideProps> = ({
+  markdown,
+  theme = "default",
+  aspectRatio = "16:9",
+  minScale,
+  maxScale,
+  onValidationError,
+  components,
+  className,
+  "aria-label": ariaLabel = "Slide",
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvas = useMemo(() => resolveCanvas(aspectRatio), [aspectRatio]);
+  const scale = useSlideFit(containerRef, canvas.width, canvas.height, {
+    minScale,
+    maxScale,
+  });
+
+  const [parsed, setParsed] = useState<ParsedSlide | null>(null);
+
+  // Surface INVALID_ASPECT_RATIO immediately when the prop is invalid.
+  // Independent of markdown parsing so consumers see the signal even with
+  // an empty markdown payload.
+  useEffect(() => {
+    if (canvas.invalid && onValidationError) {
+      onValidationError([
+        {
+          code: "INVALID_ASPECT_RATIO",
+          path: ["aspectRatio"],
+          message:
+            "aspectRatio width/height must be positive finite numbers; falling back to 16:9.",
+          got: aspectRatio,
+        },
+      ]);
+    }
+  }, [canvas.invalid, onValidationError, aspectRatio]);
+
+  // EC-7 / version counter — prevents older parses from overwriting newer
+  // ones on rapid prop changes.
+  const versionRef = useRef(0);
+  useEffect(() => {
+    const myVersion = ++versionRef.current;
+    let cancelled = false;
+    parseSlide(markdown, { components }).then(
+      (result) => {
+        if (cancelled || myVersion !== versionRef.current) return;
+        setParsed(result);
+        if (result.errors.length > 0 && onValidationError) {
+          onValidationError(result.errors);
+        }
+      },
+      (err: unknown) => {
+        // Defensive: parseSlide promises to never throw, but if a runtime
+        // failure escapes (e.g. peer-dep missing), surface a synthetic error
+        // and keep the slide visible with empty body.
+        if (cancelled || myVersion !== versionRef.current) return;
+        if (onValidationError) {
+          onValidationError([
+            {
+              code: "INVALID_FRONTMATTER",
+              path: [],
+              message: err instanceof Error ? err.message : "parseSlide rejected.",
+            },
+          ]);
+        }
+        setParsed({
+          frontmatter: {},
+          tree: emptyFragment(),
+          errors: [],
+          truncated: false,
+        });
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [markdown, components, onValidationError]);
+
+  const treeNode: ReactNode = parsed?.tree ?? null;
+  const slideThemeAttr: SlideTheme = theme;
+
+  return (
+    <div
+      ref={containerRef}
+      className={["theo-slide-host", className].filter(Boolean).join(" ")}
+      data-theo-slide-host
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      {/*
+        Section is taken out of normal flow with position:absolute so its
+        1280×720 layout box doesn't inflate the host. `translate(-50%, -50%)`
+        anchors the section's center to the host's center; the scale applies
+        relative to that same origin. Mirrors Reveal.js transformSlides()
+        (see `.claude/knowledge-base/reference/slide.md` §4.5 / §14.2).
+      */}
+      <section
+        aria-roledescription="slide"
+        aria-label={ariaLabel}
+        className="theo-slide"
+        data-theo-slide-theme={slideThemeAttr}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: canvas.width,
+          height: canvas.height,
+          transform: `translate(-50%, -50%) scale(${scale})`,
+          transformOrigin: "center",
+          padding: "var(--theo-slide-padding, 64px)",
+          // Inherit color + background from the parent — same pattern as the
+          // Whiteboard SVG using `currentColor`. The consumer's surface
+          // (Tailwind classes, ThemeProvider, etc.) drives light/dark.
+          color: "inherit",
+          background: "transparent",
+          fontFamily:
+            "var(--theo-slide-font-family, system-ui, -apple-system, 'Segoe UI', sans-serif)",
+          fontSize: "var(--theo-slide-font-base, 28px)",
+          lineHeight: 1.5,
+          boxSizing: "border-box",
+          overflow: "hidden",
+        }}
+      >
+        {treeNode}
+      </section>
+    </div>
+  );
+};
+
+/** Empty React fragment placeholder used when parseSlide fails fatally. */
+function emptyFragment(): ReactElement {
+  // Cheap fallback that does not require importing Fragment from react/jsx-runtime.
+  // Using a real element keeps the type as ReactElement (not ReactNode).
+  return { type: "span", props: { children: null }, key: null } as unknown as ReactElement;
+}
