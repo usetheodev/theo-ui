@@ -8,7 +8,7 @@ This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/
 
 ## What this project is
 
-`@usetheo/ui` — codenamed **Violet Forge** — is the React component library of the [usetheo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and PaaS dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
+`@usetheo/ui` — codenamed **Violet Forge** — is the React component library of the [usetheo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and cloud dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
 
 Published as `@usetheo/ui` on npm. Distributed two ways: install the whole package, or copy individual components via the shadcn-compatible registry.
 
@@ -51,7 +51,7 @@ Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the 
 
 - **UI pillar of usetheo** — one of four pillars (UI, Harness, Skills, Runtime). Not the framework (TheoKit), not the SDK (TheoKit-SDK), not the runtime (Theo PaaS).
 - **Community auxiliary** — Apache-2.0, not part of the paid funnel. Usable standalone, no commitment to the rest of the stack.
-- **Built for AI agents + PaaS dashboards** — the categorical wedge against generic component libraries (shadcn, MUI, Mantine, Tremor).
+- **Built for AI agents + cloud dashboards** — the categorical wedge against generic component libraries (shadcn, MUI, Mantine, Tremor).
 - **shadcn-compatible registry** — copy-paste path is first-class, not a side feature.
 - **Same Radix underneath as shadcn** — no foundational fork. The wedge is what we built on top.
 - **Quality gates are hard requirements** — format → lint → typecheck → test → build → registry → structure → bundle → a11y → ladle. No PR ships otherwise.
@@ -76,8 +76,9 @@ Four future engines / composites are explicitly in scope but **not implemented**
 | Item | Type | Inspiration | Status | Notes |
 | --- | --- | --- | --- | --- |
 | `Whiteboard` | Primitive (engine, view-only) | Excalidraw | **Available** (2026-05-18, RFC 0001) | Subpath `@usetheo/ui/whiteboard`. JSON → SVG with hand-drawn aesthetic via `roughjs` + `perfect-freehand` (optional peer-deps). Pan + zoom built-in. NOT an editor — no toolbar / selection / undo. See `docs/rfcs/0001-whiteboard.md`. |
-| `Slide` | Primitive | Marp | Explorer (RFC) | Single slide renderer (markdown → themed surface). Reuse `remark`/`micromark` for parsing; do not reinvent the markdown layer. |
-| `SlideDeck` | Composite | Marp / Reveal.js | Explorer (RFC) | Orchestrates `Slide` primitives: navigation, progress, presenter mode, fullscreen, PDF export. Depends on Slide. |
+| `Slide` | Primitive (engine, view-only) | Marp | **Available** (2026-05-19, RFC 0002) | Subpath `@usetheo/ui/slide`. Markdown + YAML frontmatter → themed SVG/HTML surface via `mdast-util-from-markdown` + `mdast-util-gfm` + `mdast-util-to-hast` + `hast-util-sanitize` + `hast-util-to-jsx-runtime` (optional peer-deps). Fixed 1280×720 canvas (16:9 default), Reveal.js scale-to-fit, two built-in themes (`default`, `violet-forge`). View-only — no deck navigation. See `docs/rfcs/0002-slide.md`. |
+| `SlideDeck` | Composite (engine, view-only) | Marp / Reveal.js | **Available** (2026-05-19, RFC 0003) | Subpath `@usetheo/ui/slide-deck`. Orchestrates N `<Slide>` primitives with keyboard/touch/hash navigation, thumbnails sidebar, presenter view (inline panel w/ next + notes + timer), fullscreen API, CSS transitions (`none`/`fade`/`slide` + prefers-reduced-motion), Marpit-style fragments (`*` lists), PDF export via `window.print()` + `@page` CSS. Zero new peer-deps (reuses Slide's 7). See `docs/rfcs/0003-slide-deck.md`. |
+| `Slide` rich content (Tier 1 + Tier 2 plugins) | Slide extension (engine + 4 plugins) | Marp + Reveal.js + GitHub callouts + Shiki/KaTeX/Mermaid | **Available** (2026-05-19, RFC 0004) | **Tier 1 baked into `@usetheo/ui/slide`**: GFM alerts (`> [!NOTE/TIP/IMPORTANT/WARNING/CAUTION]`), 7 layouts (`default`/`title`/`two-column`/`image-right`/`image-left`/`code-output`/`section`), background image/gradient (sanitized — http(s) only, data: rejected), Marpit `![bg](url)` syntax, header/footer/paginate overlays. **Tier 2 opt-in plugins** in sub-subpaths `@usetheo/ui/slide/plugins/{shiki,math,mermaid,emoji}` — each with its own peer-deps externalized. Plugin architecture: explicit `plugins={SlidePlugin[]}` prop (`<Slide>` + `<SlideDeck>` relay), error isolation (D16 — plugin throws collected as `PLUGIN_ERROR`) + sanitize-schema merge (D17 — plugins MUST declare `sanitizeSchemaExtension` for custom tags). Pipeline order: `mdast → hast → sanitize → components`. **128 new tests**; bundle isolation invariant preserved (barrel unchanged). See `docs/rfcs/0004-slide-rich-content.md`. |
 | `Diagram` | Primitive | Mermaid | Explorer (RFC) | DSL → SVG. Reuse `dagre` / `elk` for layout algorithms. MVP: one diagram type (flowchart). |
 
 **Rules in force for each engine (non-negotiable):**

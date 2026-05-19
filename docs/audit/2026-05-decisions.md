@@ -19,7 +19,7 @@ Each direction is complete: display + body + mono fonts, primary + neutral + sem
 
 > Premium editorial with thermal presence. **Persimmon + cream + ink black**.
 
-**Bet**: a PaaS dashboard should be as refined as a magazine. Editorial typography + warm palette nobody occupies.
+**Bet**: a cloud dashboard should be as refined as a magazine. Editorial typography + warm palette nobody occupies.
 
 #### Typography
 - **Display**: `PP Editorial New` (Pangram Pangram) — contemporary serif, high contrast, dramatic italic for hero.

@@ -10,12 +10,22 @@ import "@usetheo/ui/styles.css";
 // barrel; the playground composes it on top of the public components below.
 import { TheoCodeShell } from "../src/screens/theo-code-shell.js";
 import { Catalog } from "./catalog.js";
+import { SlideDeckDemo } from "./slide-deck-demo.js";
+import { SlideDemo } from "./slide-demo.js";
+import { SlideRichDemo } from "./slide-rich-demo.js";
 import { WhiteboardDemo } from "./whiteboard-demo.js";
 
-type View = "shell" | "catalog" | "whiteboard";
+type View = "shell" | "catalog" | "whiteboard" | "slide" | "slide-deck" | "slide-rich";
 
 function isView(v: string): v is View {
-  return v === "shell" || v === "catalog" || v === "whiteboard";
+  return (
+    v === "shell" ||
+    v === "catalog" ||
+    v === "whiteboard" ||
+    v === "slide" ||
+    v === "slide-deck" ||
+    v === "slide-rich"
+  );
 }
 
 function PlaygroundRoot() {
@@ -53,6 +63,27 @@ function PlaygroundRoot() {
           >
             Whiteboard
           </Button>
+          <Button
+            size="sm"
+            variant={view === "slide" ? "primary" : "ghost"}
+            onClick={() => switchTo("slide")}
+          >
+            Slide
+          </Button>
+          <Button
+            size="sm"
+            variant={view === "slide-deck" ? "primary" : "ghost"}
+            onClick={() => switchTo("slide-deck")}
+          >
+            Slide Deck
+          </Button>
+          <Button
+            size="sm"
+            variant={view === "slide-rich" ? "primary" : "ghost"}
+            onClick={() => switchTo("slide-rich")}
+          >
+            Slide Rich
+          </Button>
         </div>
       </header>
       <div className="min-h-0 overflow-auto">
@@ -60,8 +91,14 @@ function PlaygroundRoot() {
           <TheoCodeShell />
         ) : view === "catalog" ? (
           <Catalog />
-        ) : (
+        ) : view === "whiteboard" ? (
           <WhiteboardDemo />
+        ) : view === "slide" ? (
+          <SlideDemo />
+        ) : view === "slide-deck" ? (
+          <SlideDeckDemo />
+        ) : (
+          <SlideRichDemo />
         )}
       </div>
     </div>

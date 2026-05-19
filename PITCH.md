@@ -6,11 +6,13 @@ Every named component, count, and quality metric is verified against README.md a
 Restructure 2026-05-16 (PITCH Audit): "Built for surfaces nobody else builds for" + "The shift" fused into single bridge section (eliminated redundancy). Long list of 11 components on the bridge shortened. Quality gates paragraph (line ~164) broken into list. "Where this fits" rewritten to use the locked funnel (TheoCode → TheoCreate/TheoKit → Theo PaaS) instead of the deprecated four-pillar framing (UI/Harness/Skills/Runtime). Status of Theo PaaS aligned with founder decision (production, 2026-05-16).
 -->
 
+**Build** — the UI auxiliary of the **Chat. Build. Deploy.** ecosystem.
+
 # The UI your agent already needs.
 
-### 102 React components for AI agent surfaces and PaaS dashboards — the ones you'd otherwise build from scratch.
+### 102 React components for AI agent surfaces and cloud dashboards — the ones you'd otherwise build from scratch.
 
-*Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
+*The visual surface auxiliary of the [Theo ecosystem](https://usetheo.dev). Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
 **102 components (81 primitives + 21 composites) · 453 tests passing · 126 Ladle stories · zero a11y violations · ESM-only · Apache-2.0**
 
@@ -54,7 +56,7 @@ Three components. Three primitives nobody else ships. Themed by default.
 
 - **Coding assistant interface.** Chat thread, streaming assistant, tool-call timeline, file diff viewer, permission matrix, sub-agent dispatch. Everything Cursor and Claude Code surface.
 - **Agent dashboard.** Run stats, session timeline, MCP server admin, cron job scheduler, memory editor, audit log, model card, cost meter, token usage chart.
-- **PaaS dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
+- **cloud dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
 - **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
 - **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
 
@@ -67,7 +69,7 @@ The agent UI gap is real. Most teams reach for shadcn for the primitives and the
 | **Frame** | The UI your agent already needs | "Copy-paste components" | "Dashboard primitives" | (you) |
 | Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
 | Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
-| PaaS-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
+| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
@@ -209,7 +211,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 **Theo's vision.** Be to AI agents what Vercel became to the web: the default, obvious, developer-respected path — with an open runtime end to end.
 
-**`@usetheo/ui`'s vision.** The component library every AI agent UI and PaaS dashboard converges on — built for surfaces nobody else builds for.
+**`@usetheo/ui`'s vision.** The component library every AI agent UI and cloud dashboard converges on — built for surfaces nobody else builds for.
 
 > The full identity (mission, vision, values) lives in [`/IDENTITY.md`](../IDENTITY.md).
 

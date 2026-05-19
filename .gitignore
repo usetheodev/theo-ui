@@ -72,7 +72,7 @@ docs/audit/**/raw
 *.rej
 
 # Local agent / AI tool configuration
-.claude/
+# .claude/
 .aider*
 
 # External reference repos kept locally for inspiration (open-design, ui, stitch)

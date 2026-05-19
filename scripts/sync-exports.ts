@@ -49,6 +49,10 @@ const BASE_EXPORTS: Record<string, ExportEntry | string> = {
   "./tokens.css": "./dist/tokens.css",
   "./fonts.css": "./dist/fonts.css",
   "./fonts-cdn.css": "./dist/fonts-cdn.css",
+  // Slide theme stylesheets — shipped alongside the slide engine subpath.
+  // See `.claude/knowledge-base/plans/slide-view-primitive-plan.md` T3.2.
+  "./slide/themes/default.css": "./dist/slide/themes/default.css",
+  "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
 };
 
 /**
@@ -66,6 +70,34 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
   "./whiteboard": {
     types: "./dist/whiteboard/index.d.ts",
     import: "./dist/whiteboard/index.js",
+  },
+  "./slide": {
+    types: "./dist/slide/index.d.ts",
+    import: "./dist/slide/index.js",
+  },
+  // Slide rich-content plugins (Tier 2 of the rich-content plan). Each plugin
+  // is its own sub-subpath; the main `./slide` bundle never vendors shiki /
+  // katex / mermaid. Consumers opt-in by installing the peer-dep + importing
+  // the plugin explicitly (ADRs D1 / D14 of slide-rich-content-plan).
+  "./slide/plugins/shiki": {
+    types: "./dist/slide/plugins/shiki/index.d.ts",
+    import: "./dist/slide/plugins/shiki/index.js",
+  },
+  "./slide/plugins/math": {
+    types: "./dist/slide/plugins/math/index.d.ts",
+    import: "./dist/slide/plugins/math/index.js",
+  },
+  "./slide/plugins/mermaid": {
+    types: "./dist/slide/plugins/mermaid/index.d.ts",
+    import: "./dist/slide/plugins/mermaid/index.js",
+  },
+  "./slide/plugins/emoji": {
+    types: "./dist/slide/plugins/emoji/index.d.ts",
+    import: "./dist/slide/plugins/emoji/index.js",
+  },
+  "./slide-deck": {
+    types: "./dist/slide-deck/index.d.ts",
+    import: "./dist/slide-deck/index.js",
   },
 };
 

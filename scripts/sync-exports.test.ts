@@ -49,4 +49,46 @@ describe("buildExports", () => {
   it("ISOLATED_SUBPATHS export is non-empty (sanity)", () => {
     expect(Object.keys(ISOLATED_SUBPATHS).length).toBeGreaterThan(0);
   });
+
+  // T0.1 (slide plan) — Slide primitive subpath isolation, mirrors Whiteboard.
+  it("includes ./slide isolated subpath", () => {
+    const exports = buildExports([]);
+    expect(exports["./slide"]).toBeDefined();
+    expect(exports["./slide"]).toEqual({
+      types: "./dist/slide/index.d.ts",
+      import: "./dist/slide/index.js",
+    });
+  });
+
+  it("./slide points to its own dist file (not the barrel)", () => {
+    const exports = buildExports([]);
+    const entry = exports["./slide"] as { import: string; types: string };
+    expect(entry.import).not.toBe("./dist/index.js");
+    expect(entry.import).toBe("./dist/slide/index.js");
+  });
+
+  it("throws when an auto-scanned subpath collides with ./slide", () => {
+    expect(() => buildExports(["slide"])).toThrow(/collision/i);
+  });
+
+  // T0.1 (slide-deck plan) — SlideDeck composite engine subpath isolation.
+  it("includes ./slide-deck isolated subpath", () => {
+    const exports = buildExports([]);
+    expect(exports["./slide-deck"]).toBeDefined();
+    expect(exports["./slide-deck"]).toEqual({
+      types: "./dist/slide-deck/index.d.ts",
+      import: "./dist/slide-deck/index.js",
+    });
+  });
+
+  it("./slide-deck points to its own dist file (not the barrel)", () => {
+    const exports = buildExports([]);
+    const entry = exports["./slide-deck"] as { import: string; types: string };
+    expect(entry.import).not.toBe("./dist/index.js");
+    expect(entry.import).toBe("./dist/slide-deck/index.js");
+  });
+
+  it("throws when an auto-scanned subpath collides with ./slide-deck", () => {
+    expect(() => buildExports(["slide-deck"])).toThrow(/collision/i);
+  });
 });
