@@ -36,3 +36,11 @@ export {
 export { isSlideTheme, slideThemes } from "./themes/index.js";
 export { useSlideFit, type UseSlideFitOptions } from "./use-slide-fit.js";
 export { collectTagCounts, getSlideSanitizeSchema } from "./sanitize.js";
+export {
+  composePlugins,
+  type SlidePlugin,
+  type SlideSanitizeExtension,
+  type MergedSanitizeExtensions,
+  type PluginComposer,
+} from "./plugin.js";
+export { slideFrontmatterJsonSchema } from "./json-schema.js";

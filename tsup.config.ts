@@ -11,6 +11,12 @@ export default defineConfig({
     // Slide engine: must NOT vendor markdown/mdast/hast stack into the main
     // barrel. See ADR D3 in `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.
     "slide/index": "src/components/primitives/slide/index.ts",
+    // Slide rich-content plugins (Tier 2): each plugin owns its own bundle.
+    // peer-deps for each plugin stay external — see external[] below.
+    "slide/plugins/shiki/index": "src/components/primitives/slide/plugins/shiki/index.ts",
+    "slide/plugins/math/index": "src/components/primitives/slide/plugins/math/index.ts",
+    "slide/plugins/mermaid/index": "src/components/primitives/slide/plugins/mermaid/index.tsx",
+    "slide/plugins/emoji/index": "src/components/primitives/slide/plugins/emoji/index.ts",
     // SlideDeck composite engine: orchestrates Slide primitives with deck-level
     // chrome. Subpath isolated per ADR D1 in
     // `.claude/knowledge-base/plans/slide-deck-composite-plan.md`.
@@ -40,8 +46,21 @@ export default defineConfig({
     "mdast-util-to-hast",
     "hast-util-sanitize",
     "hast-util-to-jsx-runtime",
+    "hast-util-from-html",
+    "unist-util-visit",
+    "unist-util-visit-parents",
     "yaml",
     /^react\/jsx-runtime/,
+    // Tier 2 plugin peer-deps — must stay external so the main slide bundle
+    // and individual plugin bundles do not vendor them.
+    "shiki",
+    /^shiki\//,
+    "katex",
+    /^katex\//,
+    "micromark-extension-math",
+    "mdast-util-math",
+    "mermaid",
+    /^mermaid\//,
   ],
   // Portable: Node fs APIs work on Linux, macOS, and Windows (the previous `cp`
   // shell invocation broke under Windows native shells).

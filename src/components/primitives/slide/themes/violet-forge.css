@@ -8,6 +8,8 @@
  * with the inherited foreground.
  */
 
+@import "./layouts.css";
+
 .theo-slide[data-theo-slide-theme="violet-forge"] {
   --theo-slide-canvas-width: 1280px;
   --theo-slide-canvas-height: 720px;
@@ -176,4 +178,79 @@
   border: 1px solid var(--theo-slide-color-border);
   border-radius: 4px;
   background: var(--theo-slide-color-tint-weak);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * GFM alerts (rich-content T1.2) — Violet Forge palette.
+ * Same structure as `default`; only the accent colors differ
+ * so callouts feel native to the design system.
+ * ───────────────────────────────────────────────────────────────── */
+.theo-slide[data-theo-slide-theme="violet-forge"] aside.theo-slide-alert {
+  margin: 0 0 0.75em 0;
+  padding: 0.75em 1em;
+  border-left: 4px solid currentColor;
+  border-radius: 0.4em;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] aside.theo-slide-alert::before {
+  display: block;
+  margin-bottom: 0.35em;
+  font-weight: 600;
+  font-size: 0.9em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] aside.theo-slide-alert > :first-child {
+  margin-top: 0;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] aside.theo-slide-alert > :last-child {
+  margin-bottom: 0;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="note"] {
+  border-color: #6366f1;
+  background: color-mix(in srgb, #6366f1 12%, transparent);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="note"]::before {
+  content: "ⓘ Note";
+  color: #6366f1;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="tip"] {
+  border-color: #22d3ee;
+  background: color-mix(in srgb, #22d3ee 12%, transparent);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="tip"]::before {
+  content: "✓ Tip";
+  color: #22d3ee;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="important"] {
+  border-color: #c084fc;
+  background: color-mix(in srgb, #c084fc 12%, transparent);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"]
+  aside[data-theo-slide-alert-type="important"]::before {
+  content: "★ Important";
+  color: #c084fc;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="warning"] {
+  border-color: #facc15;
+  background: color-mix(in srgb, #facc15 12%, transparent);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"]
+  aside[data-theo-slide-alert-type="warning"]::before {
+  content: "⚠ Warning";
+  color: #facc15;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] aside[data-theo-slide-alert-type="caution"] {
+  border-color: #f87171;
+  background: color-mix(in srgb, #f87171 12%, transparent);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"]
+  aside[data-theo-slide-alert-type="caution"]::before {
+  content: "✗ Caution";
+  color: #f87171;
 }

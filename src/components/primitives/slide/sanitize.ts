@@ -15,18 +15,96 @@
  * opt-in for v0.2 — gated by security review.
  */
 import type { Element, Root } from "hast";
+import type { MergedSanitizeExtensions } from "./plugin.js";
 
-let cachedSchema: import("hast-util-sanitize").Schema | undefined;
+let cachedBuiltSchema: import("hast-util-sanitize").Schema | undefined;
 
 /**
- * Lazy accessor for the sanitize schema. We avoid a top-level import so the
- * `hast-util-sanitize` peer-dep stays lazy in the slide subpath bundle.
+ * Tier 1 built-in extensions to the default sanitize schema. These cover the
+ * tags emitted by built-in Slide features (alerts in `aside`, layout / header
+ * / footer / paginate metadata attributes on the outer section wrapper). They
+ * are NOT plugin-declared because they ship with the Slide primitive.
+ *
+ * Note: layout / header / footer / paginate are applied at the React component
+ * level (outside the hast tree), so their attributes don't need sanitize rules.
+ * Only `aside` (alerts) ends up in the hast.
  */
-export async function getSlideSanitizeSchema(): Promise<import("hast-util-sanitize").Schema> {
-  if (cachedSchema) return cachedSchema;
+const TIER_1_TAG_NAMES: string[] = ["aside"];
+const TIER_1_ATTRIBUTES: Record<string, string[]> = {
+  aside: ["className", "data-theo-slide-alert-type"],
+  "*": ["className"],
+};
+
+/**
+ * Lazy accessor for the sanitize schema.
+ *
+ * Always merges `defaultSchema` with the Tier 1 baseline (aside + className).
+ * When `extensions` is provided, plugin-declared tag names + attributes are
+ * unioned on top (D17 / EC-3). Plugins NEVER bypass sanitize — they declare
+ * what they need via `sanitizeSchemaExtension`.
+ *
+ * Implementation notes:
+ *   - The baseline schema (default + Tier 1) is cached.
+ *   - Plugin-merged schemas are NOT cached (depends on combination).
+ */
+export async function getSlideSanitizeSchema(
+  extensions?: MergedSanitizeExtensions,
+): Promise<import("hast-util-sanitize").Schema> {
+  const baseline = await getBaselineSchema();
+  if (
+    !extensions ||
+    (extensions.tagNames.length === 0 && Object.keys(extensions.attributes).length === 0)
+  ) {
+    return baseline;
+  }
+  return mergeSchema(baseline, extensions);
+}
+
+async function getBaselineSchema(): Promise<import("hast-util-sanitize").Schema> {
+  if (cachedBuiltSchema) return cachedBuiltSchema;
   const { defaultSchema } = await import("hast-util-sanitize");
-  cachedSchema = defaultSchema;
-  return cachedSchema;
+  cachedBuiltSchema = mergeSchema(defaultSchema, {
+    tagNames: TIER_1_TAG_NAMES,
+    attributes: TIER_1_ATTRIBUTES,
+  });
+  return cachedBuiltSchema;
+}
+
+function mergeSchema(
+  base: import("hast-util-sanitize").Schema,
+  extensions: MergedSanitizeExtensions,
+): import("hast-util-sanitize").Schema {
+  // Merge tag names (deduplicated set).
+  const baseTagNames = (base.tagNames ?? []) as string[];
+  const tagSet = new Set<string>(baseTagNames);
+  for (const t of extensions.tagNames) tagSet.add(t);
+  // Merge attributes per tag.
+  const baseAttrs = (base.attributes ?? {}) as Record<string, unknown[]>;
+  const mergedAttrs: Record<string, unknown[]> = { ...baseAttrs };
+  for (const [tag, attrs] of Object.entries(extensions.attributes)) {
+    const baseline = (mergedAttrs[tag] ?? []) as unknown[];
+    const seen = new Set<string>();
+    const combined: unknown[] = [];
+    for (const a of baseline) {
+      const key = typeof a === "string" ? a : JSON.stringify(a);
+      if (!seen.has(key)) {
+        seen.add(key);
+        combined.push(a);
+      }
+    }
+    for (const a of attrs) {
+      if (!seen.has(a)) {
+        seen.add(a);
+        combined.push(a);
+      }
+    }
+    mergedAttrs[tag] = combined;
+  }
+  return {
+    ...base,
+    tagNames: Array.from(tagSet),
+    attributes: mergedAttrs,
+  } as import("hast-util-sanitize").Schema;
 }
 
 /** Count elements by tagName in a hast tree. Used for BANNED_TAG detection (ADR D13). */

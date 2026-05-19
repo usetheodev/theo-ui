@@ -35,7 +35,7 @@ describe("validateSlide (async — D11)", () => {
   });
 
   it("returns INVALID_FRONTMATTER for unknown key with path", async () => {
-    const result = await validateSlide("---\npaginate: true\n---\n# body");
+    const result = await validateSlide("---\ntotallyUnknownKey: true\n---\n# body");
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.errors.some((e) => e.code === "INVALID_FRONTMATTER")).toBe(true);

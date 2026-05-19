@@ -1,6 +1,9 @@
+import type { Root as HastRoot } from "hast";
+import type { Root as MdastRoot } from "mdast";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { hastToReact, mdastToHast, parseBody, parseSlide, sanitizeHast } from "./parse.js";
+import type { SlidePlugin } from "./plugin.js";
 
 describe("parseBody (T2.1)", () => {
   it("returns Root with 0 children for empty body", async () => {
@@ -182,7 +185,7 @@ describe("parseSlide orchestrator (T2.5)", () => {
   });
 
   it("returns INVALID_FRONTMATTER error and still renders body", async () => {
-    const result = await parseSlide("---\npaginate: true\n---\n# body");
+    const result = await parseSlide("---\ntotallyUnknownKey: true\n---\n# body");
     expect(result.errors.some((e) => e.code === "INVALID_FRONTMATTER")).toBe(true);
     // Body still rendered (best-effort).
     const html = renderToStaticMarkup(result.tree);
@@ -217,5 +220,245 @@ describe("parseSlide orchestrator (T2.5)", () => {
     // strips `<iframe>` if it ever appeared in the tree.
     // For coverage, this is already verified at the sanitizeHast unit level.
     expect(true).toBe(true);
+  });
+});
+
+describe("parseSlide plugin integration (T0.2)", () => {
+  it("passes plugins=[] safely (no-op)", async () => {
+    const result = await parseSlide("# title", { plugins: [] });
+    expect(result.errors).toEqual([]);
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("<h1>title</h1>");
+  });
+
+  it("plugin mdastTransform mutates tree before hast conversion", async () => {
+    const plugin: SlidePlugin = {
+      name: "rename-h1",
+      mdastTransform: (tree: MdastRoot) => {
+        for (const node of tree.children) {
+          if (node.type === "heading" && node.depth === 1) {
+            node.depth = 2 as 1 | 2 | 3 | 4 | 5 | 6;
+          }
+        }
+        return tree;
+      },
+    };
+    const result = await parseSlide("# original", { plugins: [plugin] });
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("<h2>original</h2>");
+    expect(html).not.toContain("<h1>");
+  });
+
+  it("plugin hastTransform mutates tree before sanitize", async () => {
+    const plugin: SlidePlugin = {
+      name: "rename-p-to-section",
+      hastTransform: (tree: HastRoot) => {
+        for (const node of tree.children) {
+          if (node.type === "element" && node.tagName === "p") {
+            // `<section>` is permitted by defaultSchema.
+            node.tagName = "section";
+          }
+        }
+        return tree;
+      },
+    };
+    const result = await parseSlide("simple body", { plugins: [plugin] });
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("<section>simple body</section>");
+    expect(html).not.toContain("<p>");
+  });
+
+  it("plugin components merged into final React tree", async () => {
+    const React = await import("react");
+    const CustomP = (props: { children?: React.ReactNode }) =>
+      React.createElement("p", { "data-from-plugin": "1" }, props.children);
+    const plugin: SlidePlugin = {
+      name: "custom-p",
+      components: { p: CustomP },
+    };
+    const result = await parseSlide("text", { plugins: [plugin] });
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain('data-from-plugin="1"');
+  });
+
+  it("plugin sanitizeSchemaExtension extends allowed tags (D17 / EC-3)", async () => {
+    // Inject a <details> element via hastTransform. defaultSchema already
+    // allows <details>, so to genuinely test the merge, inject a <foo> tag
+    // (defaultSchema rejects it) AND declare extension allowing it.
+    const plugin: SlidePlugin = {
+      name: "foo-injector",
+      hastTransform: (tree: HastRoot) => {
+        tree.children.push({
+          type: "element",
+          tagName: "foo",
+          properties: {},
+          children: [{ type: "text", value: "hello" }],
+        });
+        return tree;
+      },
+      sanitizeSchemaExtension: {
+        tagNames: ["foo"],
+      },
+    };
+    const result = await parseSlide("", { plugins: [plugin] });
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("hello");
+    // The non-default tag survived sanitize because extension allowed it.
+    expect(html).toContain("<foo>");
+  });
+
+  it("sanitizeHast without extensions equals defaultSchema (regression)", async () => {
+    const tree: HastRoot = {
+      type: "root",
+      children: [
+        {
+          type: "element",
+          tagName: "iframe",
+          properties: {},
+          children: [],
+        },
+      ],
+    };
+    const { tree: safe, bannedTags } = await sanitizeHast(tree);
+    expect(JSON.stringify(safe).includes('"tagName":"iframe"')).toBe(false);
+    expect(bannedTags).toContain("iframe");
+  });
+
+  it("mergedSanitizeExtensions deduplicates tag names across plugins (D17)", async () => {
+    const plugin1: SlidePlugin = {
+      name: "a",
+      hastTransform: (tree: HastRoot) => {
+        tree.children.push({
+          type: "element",
+          tagName: "bar",
+          properties: {},
+          children: [{ type: "text", value: "A" }],
+        });
+        return tree;
+      },
+      sanitizeSchemaExtension: { tagNames: ["bar"] },
+    };
+    const plugin2: SlidePlugin = {
+      name: "b",
+      hastTransform: (tree: HastRoot) => {
+        tree.children.push({
+          type: "element",
+          tagName: "bar",
+          properties: {},
+          children: [{ type: "text", value: "B" }],
+        });
+        return tree;
+      },
+      sanitizeSchemaExtension: { tagNames: ["bar"] },
+    };
+    const result = await parseSlide("", { plugins: [plugin1, plugin2] });
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("<bar>A</bar>");
+    expect(html).toContain("<bar>B</bar>");
+  });
+
+  it("plugin throwing in mdastTransform emits PLUGIN_ERROR + continues (D16 / EC-1)", async () => {
+    const plugin: SlidePlugin = {
+      name: "broken",
+      mdastTransform: () => {
+        throw new Error("nope");
+      },
+    };
+    const result = await parseSlide("# survives", { plugins: [plugin] });
+    expect(result.errors.some((e) => e.code === "PLUGIN_ERROR")).toBe(true);
+    const html = renderToStaticMarkup(result.tree);
+    // The slide still renders because the pipeline reverts to pre-plugin tree.
+    expect(html).toContain("<h1>survives</h1>");
+  });
+
+  it("plugin throwing in hastTransform emits PLUGIN_ERROR + continues (D16 / EC-1)", async () => {
+    const plugin: SlidePlugin = {
+      name: "hast-broken",
+      hastTransform: () => {
+        throw new Error("nope-hast");
+      },
+    };
+    const result = await parseSlide("# survives", { plugins: [plugin] });
+    const pluginError = result.errors.find((e) => e.code === "PLUGIN_ERROR");
+    expect(pluginError).toBeDefined();
+    expect(pluginError?.message).toContain("hastTransform");
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("<h1>survives</h1>");
+  });
+
+  it("GFM alert renders as <aside class='theo-slide-alert' data-theo-slide-alert-type='note'> (T1.1)", async () => {
+    const result = await parseSlide("> [!NOTE]\n> body");
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain('<aside class="theo-slide-alert"');
+    expect(html).toContain('data-theo-slide-alert-type="note"');
+    expect(html).toContain("body");
+    expect(html).not.toContain("[!NOTE]");
+    // Make sure sanitizer didn't strip <aside>.
+    expect(result.errors.some((e) => e.code === "BANNED_TAG" && e.got === "aside")).toBe(false);
+  });
+
+  it("regular blockquote stays as <blockquote> (T1.1)", async () => {
+    const result = await parseSlide("> ordinary quote");
+    const html = renderToStaticMarkup(result.tree);
+    expect(html).toContain("<blockquote>");
+    expect(html).not.toContain("theo-slide-alert");
+  });
+
+  it("extractedBackground field populated on ParsedSlide (D18 / EC-5)", async () => {
+    const result = await parseSlide("![bg](https://example.com/x.png)\n\n# t");
+    expect(result.extractedBackground?.url).toBe("https://example.com/x.png");
+  });
+
+  it("Marpit bg modifier captured (EC-5)", async () => {
+    const result = await parseSlide("![bg cover](https://example.com/x.png)\n\n# t");
+    expect(result.extractedBackground?.modifier).toBe("cover");
+  });
+
+  it("extractedBackground sanitized via sanitizeBgUrl — javascript: → MARPIT_BG_UNSAFE_URL (EC-5)", async () => {
+    const result = await parseSlide("![bg](javascript:alert(1))\n\n# t");
+    expect(result.extractedBackground).toBeUndefined();
+    expect(result.errors.some((e) => e.code === "MARPIT_BG_UNSAFE_URL")).toBe(true);
+  });
+
+  it("Marpit data: URL rejected (EC-5 / EC-7)", async () => {
+    const result = await parseSlide("![bg](data:image/png;base64,xxxx)\n\n# t");
+    expect(result.extractedBackground).toBeUndefined();
+    expect(result.errors.some((e) => e.code === "MARPIT_BG_UNSAFE_URL")).toBe(true);
+  });
+
+  it("Marpit ![bg]() image is removed from rendered tree (no duplicate)", async () => {
+    const result = await parseSlide("![bg](https://example.com/x.png)\n\n# heading");
+    const html = renderToStaticMarkup(result.tree);
+    // Image must NOT appear in body — only as extracted bg.
+    expect(html).not.toContain("example.com/x.png");
+    expect(html).toContain("<h1>heading</h1>");
+  });
+
+  it("plugins applied in array order", async () => {
+    const order: string[] = [];
+    const p1: SlidePlugin = {
+      name: "first",
+      mdastTransform: (t) => {
+        order.push("p1-mdast");
+        return t;
+      },
+      hastTransform: (t) => {
+        order.push("p1-hast");
+        return t;
+      },
+    };
+    const p2: SlidePlugin = {
+      name: "second",
+      mdastTransform: (t) => {
+        order.push("p2-mdast");
+        return t;
+      },
+      hastTransform: (t) => {
+        order.push("p2-hast");
+        return t;
+      },
+    };
+    await parseSlide("# x", { plugins: [p1, p2] });
+    expect(order).toEqual(["p1-mdast", "p2-mdast", "p1-hast", "p2-hast"]);
   });
 });

@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { SlidePlugin } from "./plugin.js";
 import type { SlideValidationError } from "./schema.js";
 import { Slide } from "./slide.js";
 
@@ -234,5 +235,144 @@ describe("<Slide>", () => {
         ]).toContain(e.code);
       }
     }
+  });
+
+  it("renders data-theo-slide-layout from frontmatter (T2.1)", async () => {
+    const md = `---
+layout: two-column
+---
+# t`;
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const section = container.querySelector("[data-theo-slide-layout]");
+      expect(section?.getAttribute("data-theo-slide-layout")).toBe("two-column");
+    });
+  });
+
+  it("defaults data-theo-slide-layout to 'default' when frontmatter omitted (T2.1)", () => {
+    const { container } = render(<Slide markdown="# t" />);
+    const section = container.querySelector("[data-theo-slide-layout]");
+    expect(section?.getAttribute("data-theo-slide-layout")).toBe("default");
+  });
+
+  it("applies frontmatter.backgroundImage as inline style (T3.1)", async () => {
+    const md = `---
+backgroundImage: "https://example.com/bg.jpg"
+---
+# x`;
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const section = container.querySelector(".theo-slide") as HTMLElement | null;
+      expect(section?.style.backgroundImage).toContain("example.com/bg.jpg");
+    });
+  });
+
+  it("rejects javascript: backgroundImage (EC-7)", async () => {
+    const errs: SlideValidationError[] = [];
+    const md = `---
+backgroundImage: "javascript:alert(1)"
+---
+# x`;
+    const { container } = render(
+      <Slide markdown={md} onValidationError={(e) => errs.push(...e)} />,
+    );
+    await waitFor(() => {
+      const section = container.querySelector(".theo-slide") as HTMLElement | null;
+      expect(section).toBeTruthy();
+      // javascript: is silently dropped to undefined by the schema transform.
+      // No `javascript:` should land in the inline style.
+      expect(section?.style.backgroundImage ?? "").not.toContain("javascript");
+    });
+  });
+
+  it("renders header overlay when frontmatter sets it (T5.1)", async () => {
+    const md = `---
+header: ACME
+---
+# x`;
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const header = container.querySelector(".theo-slide-header");
+      expect(header?.textContent).toBe("ACME");
+    });
+  });
+
+  it("renders footer overlay when frontmatter sets it (T5.1)", async () => {
+    const md = `---
+footer: "page 1"
+---
+# x`;
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const footer = container.querySelector(".theo-slide-footer");
+      expect(footer?.textContent).toBe("page 1");
+    });
+  });
+
+  it("renders pagination overlay when paginate: true (T5.1)", async () => {
+    const md = `---
+paginate: true
+---
+# x`;
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const pag = container.querySelector(".theo-slide-paginate");
+      expect(pag?.textContent).toBe("1");
+    });
+  });
+
+  it("no overlays when frontmatter empty (T5.1)", async () => {
+    const { container } = render(<Slide markdown="# x" />);
+    await waitFor(() => {
+      // Wait for parse to settle.
+      expect(container.querySelector("h1")).toBeTruthy();
+    });
+    expect(container.querySelector(".theo-slide-header")).toBeNull();
+    expect(container.querySelector(".theo-slide-footer")).toBeNull();
+    expect(container.querySelector(".theo-slide-paginate")).toBeNull();
+  });
+
+  it("Marpit ![bg](url) applied when frontmatter.backgroundImage absent (D18 / EC-5)", async () => {
+    const md = "![bg](https://example.com/marpit.png)\n\n# t";
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const section = container.querySelector(".theo-slide") as HTMLElement | null;
+      expect(section?.style.backgroundImage).toContain("example.com/marpit.png");
+    });
+  });
+
+  it("frontmatter.backgroundImage wins over Marpit ![bg]() (D18)", async () => {
+    const md = `---
+backgroundImage: "https://example.com/explicit.png"
+---
+![bg](https://example.com/marpit.png)
+
+# t`;
+    const { container } = render(<Slide markdown={md} />);
+    await waitFor(() => {
+      const section = container.querySelector(".theo-slide") as HTMLElement | null;
+      const bg = section?.style.backgroundImage ?? "";
+      expect(bg).toContain("explicit.png");
+      expect(bg).not.toContain("marpit.png");
+    });
+  });
+
+  it("plugins prop forwarded to parseSlide (T0.3)", async () => {
+    const plugin: SlidePlugin = {
+      name: "rename-h1-to-h2",
+      mdastTransform: (tree) => {
+        for (const node of tree.children) {
+          if (node.type === "heading" && node.depth === 1) {
+            node.depth = 2 as 1 | 2 | 3 | 4 | 5 | 6;
+          }
+        }
+        return tree;
+      },
+    };
+    const { container } = render(<Slide markdown="# rich" plugins={[plugin]} />);
+    await waitFor(() => {
+      expect(container.querySelector("h2")?.textContent).toContain("rich");
+    });
+    expect(container.querySelector("h1")).toBeFalsy();
   });
 });
