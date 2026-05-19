@@ -6,11 +6,13 @@ Every named component, count, and quality metric is verified against README.md a
 Restructure 2026-05-16 (PITCH Audit): "Built for surfaces nobody else builds for" + "The shift" fused into single bridge section (eliminated redundancy). Long list of 11 components on the bridge shortened. Quality gates paragraph (line ~164) broken into list. "Where this fits" rewritten to use the locked funnel (TheoCode → TheoCreate/TheoKit → Theo PaaS) instead of the deprecated four-pillar framing (UI/Harness/Skills/Runtime). Status of Theo PaaS aligned with founder decision (production, 2026-05-16).
 -->
 
+**Build** — the UI auxiliary of the **Chat. Build. Deploy.** ecosystem.
+
 # The UI your agent already needs.
 
 ### 102 React components for AI agent surfaces and PaaS dashboards — the ones you'd otherwise build from scratch.
 
-*Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
+*The visual surface auxiliary of the [Theo ecosystem](https://usetheo.dev). Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
 **102 components (81 primitives + 21 composites) · 453 tests passing · 126 Ladle stories · zero a11y violations · ESM-only · Apache-2.0**
 
