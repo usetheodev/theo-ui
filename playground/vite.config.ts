@@ -16,6 +16,18 @@ const libFonts = fileURLToPath(new URL("../src/styles/fonts.css", import.meta.ur
 const libWhiteboard = fileURLToPath(
   new URL("../src/components/primitives/whiteboard/index.ts", import.meta.url),
 );
+const libSlide = fileURLToPath(
+  new URL("../src/components/primitives/slide/index.ts", import.meta.url),
+);
+const libSlideThemeDefault = fileURLToPath(
+  new URL("../src/components/primitives/slide/themes/default.css", import.meta.url),
+);
+const libSlideThemeVioletForge = fileURLToPath(
+  new URL("../src/components/primitives/slide/themes/violet-forge.css", import.meta.url),
+);
+const libSlideDeck = fileURLToPath(
+  new URL("../src/components/composites/slide-deck/index.ts", import.meta.url),
+);
 
 export default defineConfig({
   root: rootDir,
@@ -26,6 +38,13 @@ export default defineConfig({
       { find: /^@usetheo\/ui\/tokens\.css$/, replacement: libTokens },
       { find: /^@usetheo\/ui\/fonts\.css$/, replacement: libFonts },
       { find: /^@usetheo\/ui\/whiteboard$/, replacement: libWhiteboard },
+      { find: /^@usetheo\/ui\/slide\/themes\/default\.css$/, replacement: libSlideThemeDefault },
+      {
+        find: /^@usetheo\/ui\/slide\/themes\/violet-forge\.css$/,
+        replacement: libSlideThemeVioletForge,
+      },
+      { find: /^@usetheo\/ui\/slide-deck$/, replacement: libSlideDeck },
+      { find: /^@usetheo\/ui\/slide$/, replacement: libSlide },
       { find: /^@usetheo\/ui$/, replacement: libEntry },
     ],
   },

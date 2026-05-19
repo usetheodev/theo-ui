@@ -1,12 +1,16 @@
 {
   "$comment": "Baseline output sizes for the published artifacts. Maintained by scripts/validate-bundle-size.ts. Update via `pnpm tsx scripts/validate-bundle-size.ts --update` when a legitimate size change lands; commit the diff. Sizes are bytes, tolerance ±5% (configurable in the script).",
   "files": {
-    "dist/index.js": 321588,
-    "dist/index.d.ts": 120846,
+    "dist/index.js": 328106,
+    "dist/index.d.ts": 123865,
     "dist/styles.css": 2243,
     "dist/tokens.css": 8212,
     "dist/fonts.css": 2569,
-    "dist/fonts-cdn.css": 1295
+    "dist/fonts-cdn.css": 1295,
+    "dist/slide/index.js": 13084,
+    "dist/slide/index.d.ts": 10181,
+    "dist/slide-deck/index.js": 48126,
+    "dist/slide-deck/index.d.ts": 12790
   },
   "tolerancePercent": 5
 }

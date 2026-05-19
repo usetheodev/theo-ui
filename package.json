@@ -1,7 +1,7 @@
 {
   "name": "@usetheo/ui",
   "version": "0.1.0-next.0",
-  "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, PaaS dashboards, and developer-tooling surfaces.",
+  "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": ["**/*.css"],
@@ -14,6 +14,8 @@
     "./tokens.css": "./dist/tokens.css",
     "./fonts.css": "./dist/fonts.css",
     "./fonts-cdn.css": "./dist/fonts-cdn.css",
+    "./slide/themes/default.css": "./dist/slide/themes/default.css",
+    "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
     "./agent-composer": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
@@ -413,6 +415,14 @@
     "./whiteboard": {
       "types": "./dist/whiteboard/index.d.ts",
       "import": "./dist/whiteboard/index.js"
+    },
+    "./slide": {
+      "types": "./dist/slide/index.d.ts",
+      "import": "./dist/slide/index.js"
+    },
+    "./slide-deck": {
+      "types": "./dist/slide-deck/index.d.ts",
+      "import": "./dist/slide-deck/index.js"
     }
   },
   "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
@@ -444,18 +454,52 @@
     "quality:bundle:update": "tsx scripts/validate-bundle-size.ts --update",
     "quality:a11y": "vitest run src/test/ladle-axe.test.tsx",
     "dogfood:whiteboard": "tsx scripts/dogfood-whiteboard.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard",
+    "dogfood:slide": "tsx scripts/dogfood-slide.ts",
+    "dogfood:slide-deck": "tsx scripts/dogfood-slide-deck.ts",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
+    "hast-util-sanitize": "^5.0.0",
+    "hast-util-to-jsx-runtime": "^2.0.0",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-gfm": "^3.0.0",
+    "mdast-util-to-hast": "^13.0.0",
+    "micromark-extension-gfm": "^3.0.0",
+    "perfect-freehand": "^1.2.0",
     "react": ">=18.2.0 <20",
     "react-dom": ">=18.2.0 <20",
     "roughjs": "^4.6.0",
-    "perfect-freehand": "^1.2.0"
+    "yaml": "^2.0.0"
   },
   "peerDependenciesMeta": {
-    "roughjs": { "optional": true },
-    "perfect-freehand": { "optional": true }
+    "roughjs": {
+      "optional": true
+    },
+    "perfect-freehand": {
+      "optional": true
+    },
+    "mdast-util-from-markdown": {
+      "optional": true
+    },
+    "mdast-util-gfm": {
+      "optional": true
+    },
+    "micromark-extension-gfm": {
+      "optional": true
+    },
+    "mdast-util-to-hast": {
+      "optional": true
+    },
+    "hast-util-sanitize": {
+      "optional": true
+    },
+    "hast-util-to-jsx-runtime": {
+      "optional": true
+    },
+    "yaml": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",
@@ -486,13 +530,22 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/hast": "^3.0.4",
+    "@types/mdast": "^4.0.4",
     "@types/node": "^22.10.5",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "2.1.9",
     "autoprefixer": "^10.4.20",
     "geist": "^1.7.0",
     "happy-dom": "^20.9.0",
+    "hast-util-sanitize": "^5.0.2",
+    "hast-util-to-jsx-runtime": "^2.3.6",
+    "mdast-util-from-markdown": "^2.0.3",
+    "mdast-util-gfm": "^3.1.0",
+    "mdast-util-to-hast": "^13.2.1",
+    "micromark-extension-gfm": "^3.0.0",
     "perfect-freehand": "1.2.3",
     "postcss": "^8.5.14",
     "react": "^18.3.1",
@@ -504,7 +557,8 @@
     "typescript": "^5.7.3",
     "vite": "^5.4.21",
     "vitest": "^2.1.8",
-    "vitest-axe": "^0.1.0"
+    "vitest-axe": "^0.1.0",
+    "yaml": "^2.9.0"
   },
   "engines": {
     "node": ">=20"

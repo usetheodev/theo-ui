@@ -49,6 +49,10 @@ const BASE_EXPORTS: Record<string, ExportEntry | string> = {
   "./tokens.css": "./dist/tokens.css",
   "./fonts.css": "./dist/fonts.css",
   "./fonts-cdn.css": "./dist/fonts-cdn.css",
+  // Slide theme stylesheets — shipped alongside the slide engine subpath.
+  // See `.claude/knowledge-base/plans/slide-view-primitive-plan.md` T3.2.
+  "./slide/themes/default.css": "./dist/slide/themes/default.css",
+  "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
 };
 
 /**
@@ -66,6 +70,14 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
   "./whiteboard": {
     types: "./dist/whiteboard/index.d.ts",
     import: "./dist/whiteboard/index.js",
+  },
+  "./slide": {
+    types: "./dist/slide/index.d.ts",
+    import: "./dist/slide/index.js",
+  },
+  "./slide-deck": {
+    types: "./dist/slide-deck/index.d.ts",
+    import: "./dist/slide-deck/index.js",
   },
 };
 

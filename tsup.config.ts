@@ -8,6 +8,13 @@ export default defineConfig({
     // Engine bundle: must NOT vendor roughjs / perfect-freehand into the main
     // barrel. See ADR D3 in `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md`.
     "whiteboard/index": "src/components/primitives/whiteboard/index.ts",
+    // Slide engine: must NOT vendor markdown/mdast/hast stack into the main
+    // barrel. See ADR D3 in `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.
+    "slide/index": "src/components/primitives/slide/index.ts",
+    // SlideDeck composite engine: orchestrates Slide primitives with deck-level
+    // chrome. Subpath isolated per ADR D1 in
+    // `.claude/knowledge-base/plans/slide-deck-composite-plan.md`.
+    "slide-deck/index": "src/components/composites/slide-deck/index.ts",
   },
   format: ["esm"],
   dts: true,
@@ -17,7 +24,25 @@ export default defineConfig({
   treeshake: true,
   // `roughjs` exposes submodule imports (`roughjs/bin/svg`, `roughjs/bin/generator`)
   // that must also stay external for the isolated bundle to remain small.
-  external: ["react", "react-dom", "roughjs", /^roughjs\//, "perfect-freehand"],
+  external: [
+    "react",
+    "react-dom",
+    // Whiteboard peer-deps (D2 of whiteboard plan)
+    "roughjs",
+    /^roughjs\//,
+    "perfect-freehand",
+    // Slide peer-deps (D2 of slide plan) — markdown/mdast/hast stack stays external
+    // so the isolated bundle imports them at runtime from the consumer's installed
+    // peer-deps, never vendored.
+    "mdast-util-from-markdown",
+    "mdast-util-gfm",
+    "micromark-extension-gfm",
+    "mdast-util-to-hast",
+    "hast-util-sanitize",
+    "hast-util-to-jsx-runtime",
+    "yaml",
+    /^react\/jsx-runtime/,
+  ],
   // Portable: Node fs APIs work on Linux, macOS, and Windows (the previous `cp`
   // shell invocation broke under Windows native shells).
   onSuccess: async () => {
@@ -32,6 +57,17 @@ export default defineConfig({
     await mkdir("dist/fonts", { recursive: true });
     for (const entry of await readdir("src/styles/fonts")) {
       await copyFile(join("src/styles/fonts", entry), join("dist/fonts", entry));
+    }
+    // Slide theme CSS (D7 / T3.2 of the slide plan). Mirror src/themes/ to
+    // dist/slide/themes/ so consumers can `import "@usetheo/ui/slide/themes/default.css"`.
+    await mkdir("dist/slide/themes", { recursive: true });
+    for (const entry of await readdir("src/components/primitives/slide/themes")) {
+      if (entry.endsWith(".css")) {
+        await copyFile(
+          join("src/components/primitives/slide/themes", entry),
+          join("dist/slide/themes", entry),
+        );
+      }
     }
   },
 });

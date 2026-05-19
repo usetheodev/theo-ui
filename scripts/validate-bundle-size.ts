@@ -82,12 +82,21 @@ async function main(): Promise<void> {
   }
 
   // EC-1 from the Whiteboard edge-case review: the main barrel must never
-  // vendor `roughjs` or `perfect-freehand`. Those engines must stay in their
-  // isolated subpath bundles (e.g. `dist/whiteboard/index.js`). If a future
-  // refactor accidentally exports an engine from `src/index.ts`, the barrel
-  // would balloon by tens of KB and break the contract documented in
+  // vendor engine peer-deps. Those engines must stay in their isolated subpath
+  // bundles (e.g. `dist/whiteboard/index.js`, `dist/slide/index.js`). If a
+  // future refactor accidentally exports an engine from `src/index.ts`, the
+  // barrel would balloon by tens of KB and break the contract documented in
   // `CLAUDE.md > Roadmap`. This grep is the runtime-metric proof.
-  const ENGINE_PEER_DEPS = ["roughjs", "perfect-freehand"];
+  const ENGINE_PEER_DEPS = [
+    "roughjs",
+    "perfect-freehand",
+    "mdast-util-from-markdown",
+    "mdast-util-gfm",
+    "micromark-extension-gfm",
+    "mdast-util-to-hast",
+    "hast-util-sanitize",
+    "hast-util-to-jsx-runtime",
+  ];
   const barrelPath = join(ROOT, "dist/index.js");
   if (existsSync(barrelPath) && !update) {
     const barrel = readFileSync(barrelPath, "utf-8");

@@ -8,7 +8,7 @@
 | Subpath | `@usetheo/ui/whiteboard` |
 | Plan | `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md` |
 | Edge-case review | `.claude/knowledge-base/reviews/edge-cases/whiteboard-view-primitive-edge-cases-2026-05-18.md` |
-| Consumer documented | Confirmed verbally by repo owner (paulohenriquevn) on 2026-05-18 during plan kickoff. Concrete consumer reference (specific TheoCode Desktop screen, TheoKit app, or Theo PaaS dashboard panel) to be linked here in the follow-up PR that wires Whiteboard into the consumer surface. |
+| Consumer documented | Confirmed verbally by repo owner (paulohenriquevn) on 2026-05-18 during plan kickoff. Concrete consumer reference (specific TheoCode Desktop screen, TheoKit app, or Theo cloud dashboard panel) to be linked here in the follow-up PR that wires Whiteboard into the consumer surface. |
 
 ## 1. Summary
 

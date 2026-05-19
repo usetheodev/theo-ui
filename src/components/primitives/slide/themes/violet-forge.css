@@ -1,0 +1,179 @@
+/*
+ * Slide primitive — `violet-forge` theme.
+ *
+ * Branded variant: same inherit-first foundation as the `default` theme, but
+ * with a Violet Forge accent (links, code backgrounds, blockquote bar)
+ * blended with `currentColor` via `color-mix()`. The brand hue stays
+ * recognizable across light and dark surfaces because the accent is mixed
+ * with the inherited foreground.
+ */
+
+.theo-slide[data-theo-slide-theme="violet-forge"] {
+  --theo-slide-canvas-width: 1280px;
+  --theo-slide-canvas-height: 720px;
+  --theo-slide-padding: 64px;
+  --theo-slide-font-base: 28px;
+  --theo-slide-font-family: var(
+    --vf-font-family-sans,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif
+  );
+  --theo-slide-font-mono: var(--vf-font-family-mono, ui-monospace, "JetBrains Mono", monospace);
+
+  /* Violet accent — the brand hue. Used for relative mixing so it adapts
+     to light/dark surfaces (mixed with `currentColor`). */
+  --theo-slide-accent: #7c3aed;
+
+  /* Derived tints — relative to inherited `currentColor` so they auto-flip
+     when the parent surface flips. */
+  --theo-slide-color-muted: color-mix(in srgb, currentColor 60%, transparent);
+  --theo-slide-color-tint-strong: color-mix(in srgb, var(--theo-slide-accent) 15%, transparent);
+  --theo-slide-color-tint-weak: color-mix(in srgb, var(--theo-slide-accent) 7%, transparent);
+  --theo-slide-color-border: color-mix(in srgb, var(--theo-slide-accent) 30%, transparent);
+  --theo-slide-color-link: color-mix(in srgb, var(--theo-slide-accent) 70%, currentColor);
+  --theo-slide-color-blockquote-bar: color-mix(in srgb, var(--theo-slide-accent) 60%, currentColor);
+
+  color: inherit;
+  background: transparent;
+  font-family: var(--theo-slide-font-family);
+  font-size: var(--theo-slide-font-base);
+  line-height: 1.5;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] h1,
+.theo-slide[data-theo-slide-theme="violet-forge"] h2,
+.theo-slide[data-theo-slide-theme="violet-forge"] h3,
+.theo-slide[data-theo-slide-theme="violet-forge"] h4,
+.theo-slide[data-theo-slide-theme="violet-forge"] h5,
+.theo-slide[data-theo-slide-theme="violet-forge"] h6 {
+  color: inherit;
+  line-height: 1.2;
+  margin: 0 0 0.5em 0;
+  font-weight: 600;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] h1 {
+  font-size: 1.8em;
+  letter-spacing: -0.02em;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] h2 {
+  font-size: 1.4em;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] h3 {
+  font-size: 1.2em;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] h4 {
+  font-size: 1.05em;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] h5 {
+  font-size: 1em;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] h6 {
+  font-size: 0.9em;
+  color: var(--theo-slide-color-muted);
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] p {
+  margin: 0 0 0.75em 0;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] ul,
+.theo-slide[data-theo-slide-theme="violet-forge"] ol {
+  margin: 0 0 0.75em 0;
+  padding-left: 1.5em;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] li {
+  margin: 0.25em 0;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] blockquote {
+  margin: 0 0 0.75em 0;
+  padding: 0.25em 0.75em;
+  border-left: 4px solid var(--theo-slide-color-blockquote-bar);
+  color: var(--theo-slide-color-muted);
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] a {
+  color: var(--theo-slide-color-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] code {
+  font-family: var(--theo-slide-font-mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  background: var(--theo-slide-color-tint-strong);
+  color: inherit;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] pre {
+  font-family: var(--theo-slide-font-mono);
+  background: var(--theo-slide-color-tint-strong);
+  color: inherit;
+  padding: 0.75em 1em;
+  border-radius: 8px;
+  overflow: auto;
+  font-size: 0.85em;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] pre code {
+  padding: 0;
+  background: transparent;
+  font-size: inherit;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] hr {
+  border: none;
+  border-top: 1px solid var(--theo-slide-color-border);
+  margin: 1em 0;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] table {
+  border-collapse: collapse;
+  margin: 0 0 0.75em 0;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] th,
+.theo-slide[data-theo-slide-theme="violet-forge"] td {
+  border: 1px solid var(--theo-slide-color-border);
+  padding: 0.4em 0.75em;
+  text-align: left;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] thead th {
+  background: var(--theo-slide-color-tint-weak);
+  font-weight: 600;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] tbody tr:nth-child(even) td {
+  background: var(--theo-slide-color-tint-weak);
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.theo-slide[data-theo-slide-theme="violet-forge"] em {
+  font-style: italic;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] strong {
+  font-weight: 600;
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] del {
+  text-decoration: line-through;
+  color: var(--theo-slide-color-muted);
+}
+.theo-slide[data-theo-slide-theme="violet-forge"] kbd {
+  font-family: var(--theo-slide-font-mono);
+  font-size: 0.85em;
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--theo-slide-color-border);
+  border-radius: 4px;
+  background: var(--theo-slide-color-tint-weak);
+}

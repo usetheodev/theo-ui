@@ -6,7 +6,7 @@
 
 # The UI your agent already needs.
 
-A React component library built for AI agent surfaces and PaaS dashboards. **102 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
+A React component library built for AI agent surfaces and cloud dashboards. **102 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
 
 *Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
@@ -32,7 +32,7 @@ The chat thread, the tool calls, the streaming assistant message, the model sele
 
 ## Why `@usetheo/ui`
 
-Most component libraries optimize for marketing pages. `@usetheo/ui` is built for the surfaces that AI agents and PaaS dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
+Most component libraries optimize for marketing pages. `@usetheo/ui` is built for the surfaces that AI agents and cloud dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
 
 - **Built for AI agents.** Primitives for skills, cron jobs, permission matrices, MCP servers, memory editing, hook config, audit logs, model cards, token usage charts, sub-agent dispatch — the components a transparent agent UI actually needs.
 - **Built for PaaS.** Composites for project cards, deployment rows, build log streams, env var editors, domain config, preview environments, rollback flows, metrics panels.
@@ -46,7 +46,7 @@ The agent UI gap is real — most teams reach for shadcn for the primitives and 
 |---|---|---|---|---|
 | Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
 | Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
-| PaaS-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
+| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
@@ -58,7 +58,7 @@ Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the 
 
 - **Coding assistant interface.** Chat thread, streaming assistant, tool-call timeline, file diff viewer, permission matrix, sub-agent dispatch.
 - **Agent dashboard.** Run stats, session timeline, MCP server admin, cron job scheduler, memory editor, audit log, model card, cost meter.
-- **PaaS dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
+- **cloud dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
 - **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
 - **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
 
@@ -364,11 +364,69 @@ const scene: WhiteboardData = {
 <Whiteboard data={scene} fitOnLoad />
 ```
 
+```bash
+# Slide — view-only renderer for markdown + YAML frontmatter, Marp-inspired.
+pnpm add @usetheo/ui mdast-util-from-markdown mdast-util-gfm \
+  micromark-extension-gfm mdast-util-to-hast hast-util-sanitize \
+  hast-util-to-jsx-runtime yaml
+```
+
+```tsx
+import { Slide } from "@usetheo/ui/slide";
+import "@usetheo/ui/slide/themes/default.css";
+
+const md = `---
+theme: default
+lang: en-US
+---
+
+# Pull Request #142
+
+Adds rate limiting to the public API.
+
+- Refill rate: 100 req/sec
+- Burst capacity: 200 tokens`;
+
+<Slide markdown={md} aspectRatio="16:9" />
+```
+
+Note: IDs generated from markdown headings are prefixed with `user-content-` by the default sanitize schema (`hast-util-sanitize` clobber protection). Consumers wanting raw anchors override via the `components` prop.
+
+```bash
+# SlideDeck — multi-slide deck w/ navigation, presenter, fullscreen, PDF.
+pnpm add @usetheo/ui mdast-util-from-markdown mdast-util-gfm \
+  micromark-extension-gfm mdast-util-to-hast hast-util-sanitize \
+  hast-util-to-jsx-runtime yaml
+```
+
+```tsx
+import { SlideDeck } from "@usetheo/ui/slide-deck";
+import "@usetheo/ui/slide/themes/default.css";
+
+const deck = `# Welcome
+
+A multi-slide deck.
+
+<!-- notes: lembre da agenda -->
+
+---
+
+# Navigation
+
+Use ← / → / Space, swipe on mobile, or click thumbnails.
+
+---
+
+# Done`;
+
+<SlideDeck slides={deck} transition="fade" />
+```
+
 | Engine | Subpath | Status | RFC |
 |---|---|---|---|
 | Whiteboard (view-only, JSON → SVG, Excalidraw aesthetic) | `@usetheo/ui/whiteboard` | Available | [RFC 0001](./docs/rfcs/0001-whiteboard.md) |
-| Slide | TBD | Roadmap | TBD |
-| Slide deck | TBD | Roadmap | TBD |
+| Slide (view-only, markdown → themed surface, Marp-inspired) | `@usetheo/ui/slide` | Available | [RFC 0002](./docs/rfcs/0002-slide.md) |
+| SlideDeck (multi-slide deck w/ navigation + presenter + fullscreen + PDF) | `@usetheo/ui/slide-deck` | Available | [RFC 0003](./docs/rfcs/0003-slide-deck.md) |
 | Diagram | TBD | Roadmap | TBD |
 
 Each engine ships behind the same gate chain (test + story + a11y + registry + bundle isolation). No version commitment for the Roadmap items — these are not on the 0.1 / 1.0 line.
