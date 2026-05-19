@@ -54,7 +54,7 @@ interface DomainConfigProps extends HTMLAttributes<HTMLDivElement> {
  * DomainConfig — manage custom domains for a project.
  *
  * Shows: hostname, status, TLS, primary flag, and verification DNS record when pending.
- * Common in every PaaS dashboard (Vercel, Railway, Render).
+ * Common in every cloud dashboard (Vercel, Railway, Render).
  */
 const DomainConfig = forwardRef<HTMLDivElement, DomainConfigProps>(
   ({ className, domains, onAdd, onRemove, onSetPrimary, ...props }, ref) => {

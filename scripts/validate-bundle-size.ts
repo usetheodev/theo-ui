@@ -14,7 +14,7 @@
  * The baseline lives in source control; rebaseline produces a diff a reviewer
  * sees in the PR, so accidental size regressions can never sneak in.
  */
-import { statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -78,6 +78,34 @@ async function main(): Promise<void> {
       failures.push(
         `${relPath}: ${actual} bytes (baseline ${expected}, ${sign}${delta} bytes / ${sign}${pct}%). Tolerance ±${baseline.tolerancePercent}%. Rebaseline with \`pnpm quality:bundle:update\` if intentional.`,
       );
+    }
+  }
+
+  // EC-1 from the Whiteboard edge-case review: the main barrel must never
+  // vendor engine peer-deps. Those engines must stay in their isolated subpath
+  // bundles (e.g. `dist/whiteboard/index.js`, `dist/slide/index.js`). If a
+  // future refactor accidentally exports an engine from `src/index.ts`, the
+  // barrel would balloon by tens of KB and break the contract documented in
+  // `CLAUDE.md > Roadmap`. This grep is the runtime-metric proof.
+  const ENGINE_PEER_DEPS = [
+    "roughjs",
+    "perfect-freehand",
+    "mdast-util-from-markdown",
+    "mdast-util-gfm",
+    "micromark-extension-gfm",
+    "mdast-util-to-hast",
+    "hast-util-sanitize",
+    "hast-util-to-jsx-runtime",
+  ];
+  const barrelPath = join(ROOT, "dist/index.js");
+  if (existsSync(barrelPath) && !update) {
+    const barrel = readFileSync(barrelPath, "utf-8");
+    for (const peer of ENGINE_PEER_DEPS) {
+      if (barrel.includes(peer)) {
+        failures.push(
+          `dist/index.js leaks engine peer-dep "${peer}". Engines (Whiteboard, future Slide/SlideDeck/Diagram) must stay isolated under dist/<engine>/. Remove any export from src/index.ts that imports this lib.`,
+        );
+      }
     }
   }
 

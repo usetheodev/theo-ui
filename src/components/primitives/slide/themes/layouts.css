@@ -1,0 +1,143 @@
+/*
+ * Slide layouts (rich-content plan T2.2).
+ *
+ * Selectors are scoped by `[data-theo-slide-layout]` on the outer `<section>`.
+ * Themes (`default`, `violet-forge`) @import this file so layouts work across
+ * the design system without duplication.
+ *
+ * Each layout uses CSS grid for placement. `default` is a no-op so existing
+ * slides remain pixel-identical. The 7 layouts cover the 80% case for tech
+ * presentations: title hero, dual columns, image-prose, code-output, chapter
+ * dividers. Custom layouts require consumer CSS overriding the data-attr
+ * selector.
+ */
+
+/* Default — vertical flow (no grid). Preserves existing slide rendering. */
+.theo-slide[data-theo-slide-layout="default"] {
+  /* no-op */
+}
+
+/* Title — centered hero. Used for cover slides and section dividers. */
+.theo-slide[data-theo-slide-layout="title"] {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.theo-slide[data-theo-slide-layout="title"] h1 {
+  font-size: 2.8em;
+  letter-spacing: -0.02em;
+}
+.theo-slide[data-theo-slide-layout="title"] h2 {
+  font-size: 1.6em;
+  font-weight: 500;
+  color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* Two-column — equal split. First child block goes left, rest stack right. */
+.theo-slide[data-theo-slide-layout="two-column"] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.theo-slide[data-theo-slide-layout="two-column"] > * {
+  min-width: 0;
+}
+
+/* Image-right — text left (1.5fr), image right (1fr). */
+.theo-slide[data-theo-slide-layout="image-right"] {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+.theo-slide[data-theo-slide-layout="image-right"] img {
+  grid-column: 2;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  justify-self: end;
+}
+
+/* Image-left — mirror of image-right. */
+.theo-slide[data-theo-slide-layout="image-left"] {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+  align-items: center;
+}
+.theo-slide[data-theo-slide-layout="image-left"] img {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Code-output — code block left (slightly wider), prose right. */
+.theo-slide[data-theo-slide-layout="code-output"] {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.theo-slide[data-theo-slide-layout="code-output"] pre {
+  margin: 0;
+}
+
+/* Section — full-bleed chapter divider with tinted backdrop. */
+.theo-slide[data-theo-slide-layout="section"] {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.theo-slide[data-theo-slide-layout="section"] h1 {
+  font-size: 3.6em;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.theo-slide[data-theo-slide-layout="section"] p {
+  font-size: 1.1em;
+  color: color-mix(in srgb, currentColor 65%, transparent);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+ * Header / Footer / Pagination overlays (rich-content T5.1).
+ * Plain text divs absolute-positioned in the canvas. They don't push
+ * content; they sit ON TOP. Sized in slide units (28px base).
+ * ───────────────────────────────────────────────────────────────── */
+.theo-slide .theo-slide-header {
+  position: absolute;
+  top: 16px;
+  left: 32px;
+  right: 32px;
+  font-size: 0.6em;
+  opacity: 0.7;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.theo-slide .theo-slide-footer {
+  position: absolute;
+  bottom: 16px;
+  left: 32px;
+  right: 96px;
+  font-size: 0.6em;
+  opacity: 0.7;
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.theo-slide .theo-slide-paginate {
+  position: absolute;
+  bottom: 16px;
+  right: 32px;
+  font-size: 0.55em;
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}

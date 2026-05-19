@@ -1,0 +1,75 @@
+/*
+ * Slide deck transitions (ADR D8).
+ *
+ * Three presets via the `data-theo-slide-deck-transition` attribute on the
+ * deck root: "none" | "fade" | "slide".
+ *
+ * Active transition direction is signaled via `data-theo-slide-deck-direction`
+ * ("none" | "next" | "prev"). CSS animations are 250ms, GPU-accelerated.
+ *
+ * Respects `prefers-reduced-motion: reduce` — all durations collapse to 0ms,
+ * effectively becoming "none" regardless of the prop.
+ */
+
+.theo-slide-deck-slide-frame {
+  --theo-slide-deck-transition-duration: 250ms;
+  position: absolute;
+  inset: 0;
+}
+
+/* fade preset */
+.theo-slide-deck-slide-frame[data-theo-slide-deck-transition="fade"]
+  > [data-theo-slide-deck-slide-state="incoming"] {
+  animation: theo-slide-deck-fade-in var(--theo-slide-deck-transition-duration) ease-out;
+}
+
+@keyframes theo-slide-deck-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* slide preset */
+.theo-slide-deck-slide-frame[data-theo-slide-deck-transition="slide"][data-theo-slide-deck-direction="next"]
+  > [data-theo-slide-deck-slide-state="incoming"] {
+  animation: theo-slide-deck-slide-in-right var(--theo-slide-deck-transition-duration) ease-out;
+}
+
+.theo-slide-deck-slide-frame[data-theo-slide-deck-transition="slide"][data-theo-slide-deck-direction="prev"]
+  > [data-theo-slide-deck-slide-state="incoming"] {
+  animation: theo-slide-deck-slide-in-left var(--theo-slide-deck-transition-duration) ease-out;
+}
+
+@keyframes theo-slide-deck-slide-in-right {
+  from {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes theo-slide-deck-slide-in-left {
+  from {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theo-slide-deck-slide-frame,
+  .theo-slide-deck-slide-frame * {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+  }
+}
