@@ -24,6 +24,7 @@ import {
  * and cause re-parses.
  */
 import { type ParsedSlide, parseSlide } from "./parse.js";
+import type { SlidePlugin } from "./plugin.js";
 import type { SlideValidationError } from "./schema.js";
 import type { SlideTheme } from "./themes/index.js";
 import { useSlideFit } from "./use-slide-fit.js";
@@ -33,6 +34,7 @@ export type {
   SlideValidationError,
   SlideValidationErrorCode,
 } from "./schema.js";
+export type { SlidePlugin } from "./plugin.js";
 
 export interface SlideAspectRatio {
   width: number;
@@ -66,6 +68,16 @@ export interface SlideProps {
   /** Override individual element renderers (passed to hast-util-to-jsx-runtime). */
   // biome-ignore lint/suspicious/noExplicitAny: third-party component override map
   components?: Record<string, FC<any>>;
+  /**
+   * Rich-content plugins (Tier 2). Each plugin transforms the mdast/hast tree
+   * or adds React component overrides. Pass MEMOIZED arrays to avoid re-parses
+   * on every render (D15).
+   *
+   * @example
+   *   const plugins = useMemo(() => [emojiPlugin(), shikiPlugin()], []);
+   *   <Slide markdown={md} plugins={plugins} />
+   */
+  plugins?: SlidePlugin[];
   /** Accessible label for the slide. Defaults to `"Slide"`. */
   "aria-label"?: string;
   /** Optional class applied to the outer host element (sizing/positioning hook). */
@@ -108,6 +120,7 @@ export const Slide: FC<SlideProps> = ({
   maxScale,
   onValidationError,
   components,
+  plugins,
   className,
   "aria-label": ariaLabel = "Slide",
 }) => {
@@ -143,7 +156,7 @@ export const Slide: FC<SlideProps> = ({
   useEffect(() => {
     const myVersion = ++versionRef.current;
     let cancelled = false;
-    parseSlide(markdown, { components }).then(
+    parseSlide(markdown, { components, plugins }).then(
       (result) => {
         if (cancelled || myVersion !== versionRef.current) return;
         setParsed(result);
@@ -176,10 +189,29 @@ export const Slide: FC<SlideProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [markdown, components, onValidationError]);
+  }, [markdown, components, plugins, onValidationError]);
 
   const treeNode: ReactNode = parsed?.tree ?? null;
   const slideThemeAttr: SlideTheme = theme;
+
+  // Tier 1 — frontmatter-driven attributes & overlays.
+  const fm = parsed?.frontmatter ?? {};
+  const layout = fm.layout;
+  // Background precedence: explicit frontmatter > Marpit ![bg](url) (D18 / EC-5).
+  const bgUrl = fm.backgroundImage ?? parsed?.extractedBackground?.url;
+  const bgModifier = parsed?.extractedBackground?.modifier;
+  const bgGradient = fm.backgroundGradient;
+  const headerText = fm.header;
+  const footerText = fm.footer;
+  const paginateValue = fm.paginate;
+  const showPaginate = paginateValue === true;
+
+  // Background style: gradient > image > inherited.
+  const backgroundImageStyle: string | undefined = bgGradient
+    ? bgGradient
+    : bgUrl
+      ? `url("${bgUrl}")`
+      : undefined;
 
   return (
     <div
@@ -205,6 +237,8 @@ export const Slide: FC<SlideProps> = ({
         aria-label={ariaLabel}
         className="theo-slide"
         data-theo-slide-theme={slideThemeAttr}
+        data-theo-slide-layout={layout ?? "default"}
+        data-theo-slide-bg-modifier={bgModifier}
         style={{
           position: "absolute",
           top: "50%",
@@ -214,11 +248,21 @@ export const Slide: FC<SlideProps> = ({
           transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: "center",
           padding: "var(--theo-slide-padding, 64px)",
-          // Inherit color + background from the parent — same pattern as the
-          // Whiteboard SVG using `currentColor`. The consumer's surface
-          // (Tailwind classes, ThemeProvider, etc.) drives light/dark.
           color: "inherit",
+          // Background fills the canvas. When neither image nor gradient is set,
+          // the slide inherits the parent surface (same pattern as Whiteboard).
           background: "transparent",
+          // Only set backgroundImage + ancillary props when one is provided —
+          // otherwise the shorthand `background: transparent` is preserved as-is
+          // (important for the inherit-from-parent guarantee).
+          ...(backgroundImageStyle
+            ? {
+                backgroundImage: backgroundImageStyle,
+                backgroundSize: bgModifier === "fit" ? "contain" : "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }
+            : {}),
           fontFamily:
             "var(--theo-slide-font-family, system-ui, -apple-system, 'Segoe UI', sans-serif)",
           fontSize: "var(--theo-slide-font-base, 28px)",
@@ -227,7 +271,22 @@ export const Slide: FC<SlideProps> = ({
           overflow: "hidden",
         }}
       >
+        {headerText ? (
+          <div className="theo-slide-header" aria-hidden="true">
+            {headerText}
+          </div>
+        ) : null}
         {treeNode}
+        {footerText ? (
+          <div className="theo-slide-footer" aria-hidden="true">
+            {footerText}
+          </div>
+        ) : null}
+        {showPaginate ? (
+          <div className="theo-slide-paginate" aria-hidden="true">
+            1
+          </div>
+        ) : null}
       </section>
     </div>
   );

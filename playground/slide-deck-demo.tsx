@@ -41,7 +41,9 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
       <SlideDeck.Thumbnails />
       <div style={{ display: "grid", gridTemplateRows: "1fr auto", gap: 8, minHeight: 0 }}>
         <SlideDeck.Slides />
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        <div
+          style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}
+        >
           <SlideDeck.Controls />
           <SlideDeck.ProgressBar />
         </div>
@@ -51,7 +53,9 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
     <div style={{ display: "grid", gridTemplateRows: "1fr auto auto", gap: 8, height: "100%" }}>
       <SlideDeck.Slides />
       <SlideDeck.PresenterView />
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+      <div
+        style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}
+      >
         <SlideDeck.Controls />
         <div style={{ display: "flex", gap: 4 }}>
           <SlideDeck.PresenterButton />
@@ -68,9 +72,7 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
             #{String(index + 1).padStart(2, "0")} · {scene.id}
           </div>
           <h2 className="font-display text-title-md tracking-tight">{scene.title}</h2>
-          <p className="mt-1 max-w-prose text-body-md text-muted-foreground">
-            {scene.description}
-          </p>
+          <p className="mt-1 max-w-prose text-body-md text-muted-foreground">{scene.description}</p>
         </div>
         <div className="flex flex-col items-end gap-1 text-muted-foreground text-xs">
           <span>current: {currentIndex + 1}</span>
@@ -202,12 +204,12 @@ export function SlideDeckDemo() {
         <p>
           Cada cena passa pelo pipeline completo:{" "}
           <code className="rounded bg-muted px-1 py-0.5">splitDeck()</code> → useReducer state
-          machine → keyboard + swipe + hash routing → fullscreen API → print CSS. Erros surgem
-          via callbacks; o componente nunca lança.
+          machine → keyboard + swipe + hash routing → fullscreen API → print CSS. Erros surgem via
+          callbacks; o componente nunca lança.
         </p>
         <p className="mt-2">
-          <strong>Atalhos:</strong> ←/→ navegar · Space avança · Home/End início/fim · F
-          fullscreen · N/P presenter · Ctrl+P print. Para detalhes técnicos, ver{" "}
+          <strong>Atalhos:</strong> ←/→ navegar · Space avança · Home/End início/fim · F fullscreen
+          · N/P presenter · Ctrl+P print. Para detalhes técnicos, ver{" "}
           <code className="rounded bg-muted px-1 py-0.5">docs/rfcs/0003-slide-deck.md</code>.
         </p>
       </footer>

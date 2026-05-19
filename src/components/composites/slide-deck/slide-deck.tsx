@@ -27,7 +27,7 @@ import {
  * `initFromHash` (D17) to avoid hydration mismatch. Reducer clamps
  * `currentIndex` whenever `slides.length` changes (EC-4 reconciliation).
  */
-import { Slide } from "../../primitives/slide/index.js";
+import { Slide, type SlidePlugin } from "../../primitives/slide/index.js";
 import { DeckContext, type DeckContextValue, useDeckContext } from "./context.js";
 import { Controls } from "./controls.js";
 import { countFragmentsInMarkdown } from "./fragments.js";
@@ -69,6 +69,11 @@ export interface SlideDeckProps {
   className?: string;
   /** Accessible label for the deck region. Defaults to "Slide deck". */
   "aria-label"?: string;
+  /**
+   * Rich-content plugins relayed to every inner `<Slide>` (D15 / RFC 0004).
+   * Pass MEMOIZED arrays to avoid re-parses on every render.
+   */
+  plugins?: SlidePlugin[];
 }
 
 function generateDeckId(): string {
@@ -90,6 +95,7 @@ const SlideDeckBase: FC<SlideDeckProps> = ({
   children,
   className,
   "aria-label": ariaLabel = "Slide deck",
+  plugins,
 }) => {
   const generatedId = useId();
   const deckId = deckIdProp ?? generatedId ?? generateDeckId();
@@ -201,10 +207,11 @@ const SlideDeckBase: FC<SlideDeckProps> = ({
       slides: parsedSlides,
       transition,
       deckId,
+      plugins,
       toggleFullscreen: fullscreen.toggle,
       print: onPrint,
     }),
-    [state, dispatch, parsedSlides, transition, deckId, fullscreen.toggle, onPrint],
+    [state, dispatch, parsedSlides, transition, deckId, plugins, fullscreen.toggle, onPrint],
   );
 
   return (
@@ -242,14 +249,14 @@ const SlideDeckBase: FC<SlideDeckProps> = ({
         </div>
         {children ?? <DefaultDeckLayout />}
         {/* Hidden print container — visible only during @media print. */}
-        <PrintContainer slides={parsedSlides} />
+        <PrintContainer slides={parsedSlides} plugins={plugins} />
       </div>
     </DeckContext.Provider>
   );
 };
 
 const SlidesView: FC<{ className?: string }> = ({ className }) => {
-  const { state, slides, transition } = useDeckContext();
+  const { state, slides, transition, plugins } = useDeckContext();
   const current = slides[state.currentIndex];
   return (
     <div
@@ -270,7 +277,11 @@ const SlidesView: FC<{ className?: string }> = ({ className }) => {
           data-theo-slide-deck-slide-state="incoming"
           style={{ position: "absolute", inset: 0 }}
         >
-          <Slide markdown={current.markdown} aria-label={`Slide ${state.currentIndex + 1}`} />
+          <Slide
+            markdown={current.markdown}
+            plugins={plugins}
+            aria-label={`Slide ${state.currentIndex + 1}`}
+          />
         </div>
       ) : (
         <div
@@ -334,7 +345,10 @@ const PrintButton: FC<{ className?: string }> = ({ className }) => {
   );
 };
 
-const PrintContainer: FC<{ slides: SlideDeckSlide[] }> = ({ slides }) => {
+const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> = ({
+  slides,
+  plugins,
+}) => {
   return (
     <div
       className="theo-slide-deck-print-container"
@@ -352,7 +366,11 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[] }> = ({ slides }) => {
           className="theo-slide-deck-print-slide"
           style={{ width: 1280, height: 720 }}
         >
-          <Slide markdown={slide.markdown} aria-label={`Print slide ${index + 1}`} />
+          <Slide
+            markdown={slide.markdown}
+            plugins={plugins}
+            aria-label={`Print slide ${index + 1}`}
+          />
         </div>
       ))}
     </div>

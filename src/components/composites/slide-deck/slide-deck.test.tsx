@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import type { SlidePlugin } from "../../primitives/slide/index.js";
 import type { SlideDeckSlide } from "./schema.js";
 import { SlideDeck } from "./slide-deck.js";
 
@@ -149,5 +150,29 @@ describe("<SlideDeck>", () => {
       <SlideDeck slides={sampleMd} aria-label="Quarterly review deck" />,
     );
     expect(getByLabelText("Quarterly review deck")).toBeTruthy();
+  });
+
+  it("plugins prop relayed to every internal <Slide> (T0.3 / D15)", async () => {
+    const calls: string[] = [];
+    const plugin: SlidePlugin = {
+      name: "spy",
+      mdastTransform: (tree) => {
+        calls.push("called");
+        // rename h1 → h2 so we can observe per slide
+        for (const node of tree.children) {
+          if (node.type === "heading" && node.depth === 1) {
+            node.depth = 2 as 1 | 2 | 3 | 4 | 5 | 6;
+          }
+        }
+        return tree;
+      },
+    };
+    const slides: SlideDeckSlide[] = [{ markdown: "# one" }, { markdown: "# two" }];
+    const { container } = render(<SlideDeck slides={slides} plugins={[plugin]} />);
+    await waitFor(() => {
+      expect(container.querySelector("h2")?.textContent).toContain("one");
+    });
+    expect(calls.length).toBeGreaterThan(0);
+    expect(container.querySelector("h1")).toBeFalsy();
   });
 });

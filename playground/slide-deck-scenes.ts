@@ -44,8 +44,7 @@ Press F to enter fullscreen, P or N to open presenter view.`,
   {
     id: "gfm-table",
     title: "Quarterly KPIs — GFM table",
-    description:
-      "GFM table renders with semantic <table> markup, scaled to fit the slide canvas.",
+    description: "GFM table renders with semantic <table> markup, scaled to fit the slide canvas.",
     slides: `# Quarterly KPIs
 
 | Metric  | Q1    | Q2    | Q3    |
@@ -63,8 +62,7 @@ Revenue grew **50%** quarter-over-quarter. NPS climbed to 53.`,
   {
     id: "with-speaker-notes",
     title: "Speaker notes (open Presenter)",
-    description:
-      "Click 'Presenter' or press N to reveal speaker notes panel below the slide.",
+    description: "Click 'Presenter' or press N to reveal speaker notes panel below the slide.",
     slides: `# Pull Request #142
 
 <!-- notes: lembre da queda no p99 — começou em 2026-05-12 -->
@@ -136,8 +134,7 @@ Direction follows nav.`,
   {
     id: "thumbnails-sidebar",
     title: "Thumbnails sidebar (headless)",
-    description:
-      "Headless layout with thumbnails on the left. Click any thumbnail to jump.",
+    description: "Headless layout with thumbnails on the left. Click any thumbnail to jump.",
     slides: `# Welcome
 
 ---
@@ -161,14 +158,16 @@ micromark → mdast → hast → sanitize → React.
     id: "large-deck",
     title: "Large deck (20 slides) with thumbnails",
     description: "Stress test for thumbnails lazy-load via IntersectionObserver.",
-    slides: Array.from({ length: 20 }, (_, i) => `# Slide ${i + 1}\n\nContent for slide ${i + 1}.`).join("\n\n---\n\n"),
+    slides: Array.from(
+      { length: 20 },
+      (_, i) => `# Slide ${i + 1}\n\nContent for slide ${i + 1}.`,
+    ).join("\n\n---\n\n"),
     showThumbnails: true,
   },
   {
     id: "hash-routing",
     title: "Hash routing — opens at slide 2",
-    description:
-      "initialIndex={1} (0-based). With hash routing enabled, URL becomes #/2.",
+    description: "initialIndex={1} (0-based). With hash routing enabled, URL becomes #/2.",
     slides: `# Slide A
 
 ---
@@ -193,8 +192,7 @@ micromark → mdast → hast → sanitize → React.
   {
     id: "frontmatter-global",
     title: "Global frontmatter (D15 / EC-1)",
-    description:
-      "Frontmatter at the top of the deck is stripped first — no phantom empty slide.",
+    description: "Frontmatter at the top of the deck is stripped first — no phantom empty slide.",
     slides: `---
 theme: violet-forge
 lang: en-US

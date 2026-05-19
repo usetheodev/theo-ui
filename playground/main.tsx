@@ -10,11 +10,12 @@ import "@usetheo/ui/styles.css";
 // barrel; the playground composes it on top of the public components below.
 import { TheoCodeShell } from "../src/screens/theo-code-shell.js";
 import { Catalog } from "./catalog.js";
-import { SlideDemo } from "./slide-demo.js";
 import { SlideDeckDemo } from "./slide-deck-demo.js";
+import { SlideDemo } from "./slide-demo.js";
+import { SlideRichDemo } from "./slide-rich-demo.js";
 import { WhiteboardDemo } from "./whiteboard-demo.js";
 
-type View = "shell" | "catalog" | "whiteboard" | "slide" | "slide-deck";
+type View = "shell" | "catalog" | "whiteboard" | "slide" | "slide-deck" | "slide-rich";
 
 function isView(v: string): v is View {
   return (
@@ -22,7 +23,8 @@ function isView(v: string): v is View {
     v === "catalog" ||
     v === "whiteboard" ||
     v === "slide" ||
-    v === "slide-deck"
+    v === "slide-deck" ||
+    v === "slide-rich"
   );
 }
 
@@ -75,6 +77,13 @@ function PlaygroundRoot() {
           >
             Slide Deck
           </Button>
+          <Button
+            size="sm"
+            variant={view === "slide-rich" ? "primary" : "ghost"}
+            onClick={() => switchTo("slide-rich")}
+          >
+            Slide Rich
+          </Button>
         </div>
       </header>
       <div className="min-h-0 overflow-auto">
@@ -86,8 +95,10 @@ function PlaygroundRoot() {
           <WhiteboardDemo />
         ) : view === "slide" ? (
           <SlideDemo />
-        ) : (
+        ) : view === "slide-deck" ? (
           <SlideDeckDemo />
+        ) : (
+          <SlideRichDemo />
         )}
       </div>
     </div>

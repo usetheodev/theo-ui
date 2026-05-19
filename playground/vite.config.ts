@@ -28,6 +28,18 @@ const libSlideThemeVioletForge = fileURLToPath(
 const libSlideDeck = fileURLToPath(
   new URL("../src/components/composites/slide-deck/index.ts", import.meta.url),
 );
+const libSlideShiki = fileURLToPath(
+  new URL("../src/components/primitives/slide/plugins/shiki/index.ts", import.meta.url),
+);
+const libSlideMath = fileURLToPath(
+  new URL("../src/components/primitives/slide/plugins/math/index.ts", import.meta.url),
+);
+const libSlideMermaid = fileURLToPath(
+  new URL("../src/components/primitives/slide/plugins/mermaid/index.tsx", import.meta.url),
+);
+const libSlideEmoji = fileURLToPath(
+  new URL("../src/components/primitives/slide/plugins/emoji/index.ts", import.meta.url),
+);
 
 export default defineConfig({
   root: rootDir,
@@ -44,6 +56,10 @@ export default defineConfig({
         replacement: libSlideThemeVioletForge,
       },
       { find: /^@usetheo\/ui\/slide-deck$/, replacement: libSlideDeck },
+      { find: /^@usetheo\/ui\/slide\/plugins\/shiki$/, replacement: libSlideShiki },
+      { find: /^@usetheo\/ui\/slide\/plugins\/math$/, replacement: libSlideMath },
+      { find: /^@usetheo\/ui\/slide\/plugins\/mermaid$/, replacement: libSlideMermaid },
+      { find: /^@usetheo\/ui\/slide\/plugins\/emoji$/, replacement: libSlideEmoji },
       { find: /^@usetheo\/ui\/slide$/, replacement: libSlide },
       { find: /^@usetheo\/ui$/, replacement: libEntry },
     ],
