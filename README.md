@@ -2,11 +2,11 @@
 
 <img src="https://usetheo.dev/logo-128.webp" alt="Theo" width="96" height="96" />
 
-**`@usetheo/ui`**
+**`@usetheo/ui`** · the **Build** (UI) auxiliary of the [Theo ecosystem](https://usetheo.dev)
 
 # The UI your agent already needs.
 
-A React component library built for AI agent surfaces and PaaS dashboards. **102 components** designed for what you'd otherwise build from scratch.
+A React component library built for AI agent surfaces and PaaS dashboards. **102 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
 
 *Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
