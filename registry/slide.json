@@ -1,0 +1,107 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide",
+  "type": "registry:ui",
+  "title": "Slide",
+  "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @usetheo/ui.",
+  "dependencies": [
+    "hast",
+    "hast-util-from-html",
+    "hast-util-sanitize",
+    "hast-util-to-jsx-runtime",
+    "mdast",
+    "mdast-util-from-markdown",
+    "mdast-util-gfm",
+    "mdast-util-to-hast",
+    "micromark-extension-gfm",
+    "unist-util-visit",
+    "unist-util-visit-parents",
+    "yaml",
+    "zod"
+  ],
+  "registryDependencies": [
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/slide/slide.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/slide/slide.tsx"
+    },
+    {
+      "path": "components/primitives/slide/parse.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/parse.ts"
+    },
+    {
+      "path": "components/primitives/slide/validate.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/validate.ts"
+    },
+    {
+      "path": "components/primitives/slide/sanitize.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/sanitize.ts"
+    },
+    {
+      "path": "components/primitives/slide/schema.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/schema.ts"
+    },
+    {
+      "path": "components/primitives/slide/frontmatter.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/frontmatter.ts"
+    },
+    {
+      "path": "components/primitives/slide/alerts.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/alerts.ts"
+    },
+    {
+      "path": "components/primitives/slide/marpit-bg.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/marpit-bg.ts"
+    },
+    {
+      "path": "components/primitives/slide/plugin.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/plugin.ts"
+    },
+    {
+      "path": "components/primitives/slide/json-schema.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/json-schema.ts"
+    },
+    {
+      "path": "components/primitives/slide/use-slide-fit.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/use-slide-fit.ts"
+    },
+    {
+      "path": "components/primitives/slide/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/index.ts"
+    },
+    {
+      "path": "components/primitives/slide/themes/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/themes/index.ts"
+    },
+    {
+      "path": "components/primitives/slide/themes/default.css",
+      "type": "registry:ui",
+      "target": "components/ui/slide/themes/default.css"
+    },
+    {
+      "path": "components/primitives/slide/themes/violet-forge.css",
+      "type": "registry:ui",
+      "target": "components/ui/slide/themes/violet-forge.css"
+    },
+    {
+      "path": "components/primitives/slide/themes/layouts.css",
+      "type": "registry:ui",
+      "target": "components/ui/slide/themes/layouts.css"
+    }
+  ]
+}

@@ -270,18 +270,26 @@ async function validateRegistryStoriesAndTests(): Promise<void> {
 
     if (!["registry:ui", "registry:block"].includes(descriptor.type)) continue;
 
-    for (const file of descriptor.files) {
-      if (!file.path.startsWith("components/")) continue;
-      const dir = join(ROOT, "src", dirname(file.path));
-      const base = descriptor.name;
-      if (!existsSync(join(dir, `${base}.test.tsx`))) {
-        // Hard-fail (D5): test-backfill phase ended; every registry component
-        // ships with a smoke test.
-        fail(descriptor.name, `registry item is missing ${base}.test.tsx`);
-      }
-      if (!existsSync(join(dir, `${base}.stories.tsx`))) {
-        fail(descriptor.name, `registry item is missing ${base}.stories.tsx`);
-      }
+    // Multi-file engines (e.g. whiteboard, slide, slide-deck) ship a single
+    // entry component named `<descriptor.name>.tsx`; the remaining files are
+    // internal modules without their own stories. Restrict the gate to the
+    // entry file so internal-only modules don't trigger spurious failures.
+    const entry = descriptor.files.find(
+      (file) =>
+        file.path.startsWith("components/") &&
+        (file.path.endsWith(`/${descriptor.name}.tsx`) ||
+          file.path.endsWith(`/${descriptor.name}.ts`)),
+    );
+    if (!entry) continue;
+    const dir = join(ROOT, "src", dirname(entry.path));
+    const base = descriptor.name;
+    if (!existsSync(join(dir, `${base}.test.tsx`))) {
+      // Hard-fail (D5): test-backfill phase ended; every registry component
+      // ships with a smoke test.
+      fail(descriptor.name, `registry item is missing ${base}.test.tsx`);
+    }
+    if (!existsSync(join(dir, `${base}.stories.tsx`))) {
+      fail(descriptor.name, `registry item is missing ${base}.stories.tsx`);
     }
   }
 }

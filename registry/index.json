@@ -547,6 +547,42 @@
       "description": "Grid of SkillCards with optional search + source filter chips."
     },
     {
+      "name": "slide-deck",
+      "type": "registry:block",
+      "title": "SlideDeck",
+      "description": "Composite engine that orchestrates N <Slide> primitives. Keyboard / touch / hash routing, thumbnails, presenter view, fullscreen, CSS transitions, Marpit-style fragments, PDF export. Subpath-isolated bundle in @usetheo/ui."
+    },
+    {
+      "name": "slide-plugin-emoji",
+      "type": "registry:ui",
+      "title": "Slide plugin · Emoji",
+      "description": "Tier 2 Slide plugin that replaces :shortcode: with Unicode emoji. Ancestor-aware: skips replacement inside <code> / <pre> to preserve type hints and YAML keys. Zero peer-deps."
+    },
+    {
+      "name": "slide-plugin-math",
+      "type": "registry:ui",
+      "title": "Slide plugin · Math",
+      "description": "Tier 2 Slide plugin that renders $inline$ and $$block$$ math via KaTeX. Peer-deps katex + hast-util-from-html are opt-in."
+    },
+    {
+      "name": "slide-plugin-mermaid",
+      "type": "registry:ui",
+      "title": "Slide plugin · Mermaid",
+      "description": "Tier 2 Slide plugin that converts <code class=\"language-mermaid\"> blocks into Mermaid SVG diagrams (lazy-loaded). Peer-dep mermaid is opt-in."
+    },
+    {
+      "name": "slide-plugin-shiki",
+      "type": "registry:ui",
+      "title": "Slide plugin · Shiki",
+      "description": "Tier 2 Slide plugin that pre-renders fenced code blocks with Shiki's dual-theme highlighter. Peer-dep shiki is opt-in."
+    },
+    {
+      "name": "slide",
+      "type": "registry:ui",
+      "title": "Slide",
+      "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @usetheo/ui."
+    },
+    {
       "name": "social-auth-row",
       "type": "registry:ui",
       "title": "SocialAuthRow",
@@ -695,6 +731,12 @@
       "type": "registry:lib",
       "title": "Theo UI shared types",
       "description": "Shared TypeScript helper types (IconComponent, etc.) used across Theo UI."
+    },
+    {
+      "name": "whiteboard",
+      "type": "registry:ui",
+      "title": "Whiteboard",
+      "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @usetheo/ui."
     }
   ]
 }

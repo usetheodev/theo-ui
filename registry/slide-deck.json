@@ -1,0 +1,111 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-deck",
+  "type": "registry:block",
+  "title": "SlideDeck",
+  "description": "Composite engine that orchestrates N <Slide> primitives. Keyboard / touch / hash routing, thumbnails, presenter view, fullscreen, CSS transitions, Marpit-style fragments, PDF export. Subpath-isolated bundle in @usetheo/ui.",
+  "dependencies": [
+    "zod"
+  ],
+  "registryDependencies": [
+    "slide",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/composites/slide-deck/slide-deck.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/slide-deck.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/context.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/context.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/controls.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/controls.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/fragments.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/fragments.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/notes.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/notes.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/presenter-view.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/presenter-view.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/print-styles.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/print-styles.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/progress-bar.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/progress-bar.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/schema.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/schema.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/slide-number.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/slide-number.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/split-deck.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/split-deck.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/thumbnails.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/thumbnails.tsx"
+    },
+    {
+      "path": "components/composites/slide-deck/transitions.css",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/transitions.css"
+    },
+    {
+      "path": "components/composites/slide-deck/use-deck-hash-routing.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/use-deck-hash-routing.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/use-deck-keyboard.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/use-deck-keyboard.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/use-deck-state.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/use-deck-state.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/use-deck-swipe.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/use-deck-swipe.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/use-fullscreen.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/use-fullscreen.ts"
+    },
+    {
+      "path": "components/composites/slide-deck/index.ts",
+      "type": "registry:block",
+      "target": "components/blocks/slide-deck/index.ts"
+    }
+  ]
+}

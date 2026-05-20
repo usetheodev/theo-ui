@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-plugin-shiki",
+  "type": "registry:ui",
+  "title": "Slide plugin · Shiki",
+  "description": "Tier 2 Slide plugin that pre-renders fenced code blocks with Shiki's dual-theme highlighter. Peer-dep shiki is opt-in.",
+  "dependencies": [
+    "hast",
+    "shiki"
+  ],
+  "registryDependencies": [
+    "slide",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/slide/plugins/shiki/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/plugins/shiki/index.ts"
+    }
+  ]
+}
