@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0-next.0] - 2026-05-22
+
+Minor bump — visual defaults realigned to FAANG-modern density baseline
+(shadcn / Linear / Vercel / Stripe). Public API unchanged; no type/prop
+signatures touched. Every consumer in 0.2.x will see tighter form controls,
+smaller body text, and a less-padded Card after upgrading.
+
+### Migration from 0.2.x
+
+If you depended on the prior visual defaults (Button 40px, Card 24px
+padding, body-md 15px), you have two options:
+
+1. **Per-component** — pass explicit `size="lg"` to Button/Input/Select/
+   Textarea/Card. These render the prior dimensions.
+2. **Global override** — set `<ThemeProvider defaultDensity="spacious">`
+   at the app root. All form controls bump to 44px globally.
+
+No code change required if you accept the new defaults. Type-only
+exports added: `Density`, `DensityContextValue`.
+
+### Added
+
+- **`useDensity()` hook + `data-density` attribute (2026-05-22, RFC 0006)** — Global density override without rewriting `size` props per call site. Three tiers: `compact` (32px), `comfortable` (36px, default), `spacious` (44px). `<ThemeProvider defaultDensity="compact">` at the app root flips the entire surface. Persisted to localStorage. **EC-1 fix**: density implemented via CSS variables on `:root` (`--theo-control-h`, `--theo-control-px`) injected by ThemeProvider, not Tailwind class modifiers. Only the `md` cva variant reads the var; `sm` and `lg` stay hardcoded so explicit `size` prop always overrides density. (#TBD)
+- **`docs/design-system.md > Density policy` section** — declares default heights per component + WCAG 2.5.8 AA tap-target policy + density override patterns. Closes the style-guide gap (previously implicit in source). (#TBD)
+- **`playground/density-demo.tsx`** — live preview with 3-way density toggle. Mount via `?view=density` in the Vite playground. (#TBD)
+
+### Changed (BREAKING visual default, not API)
+
+- **Form-control `md` defaults: 40px → 36px** (FAANG-tier modern density). Affects `Button`, `Input`, `Select.Trigger`, `Textarea`. `sm` stays 32px, `lg` recalibrated to 44px. (#TBD)
+- **`body-md` typescale: 15px → 14px** (shadcn / Vercel Geist / Linear standard). `body-sm` recalibrated 14px → 13px to preserve a distinct tier. `validateDesignSystemFidelity` gate updated atomically with `tailwind-preset.ts`. (#TBD)
+- **Card `md` padding: 24px → 20px** (`p-6` → `p-5`). `sm` unchanged (`p-3`); `lg` recalibrated 28px → 24px (`p-7` → `p-6`). (#TBD)
+- **Bundle baseline rebased** for the new defaults (~+700 bytes total — CSS-var class strings + Density type union). Engines (whiteboard / slide / slide-deck) untouched. (#TBD)
+
 ## [0.2.0-next.0] - 2026-05-20
 
 Minor bump (not patch) because public API surface grew: new `defineTheme` /

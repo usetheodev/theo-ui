@@ -42,18 +42,18 @@ describe("Textarea", () => {
     expect(el.className).toContain("text-body-sm");
   });
 
-  it("applies min-h-[6rem] + text-body-md when size omitted (default md)", () => {
+  it("md (default) keeps min-h-[6rem] but uses text-body-sm (FAANG density)", () => {
     render(<Textarea aria-label="m" />);
     const el = screen.getByRole("textbox", { name: "m" });
     expect(el.className).toContain("min-h-[6rem]");
-    expect(el.className).toContain("text-body-md");
+    expect(el.className).toContain("text-body-sm");
   });
 
-  it("applies min-h-[128px] + text-body-lg when size='lg'", () => {
+  it("applies min-h-[128px] + text-body-md when size='lg' (FAANG-density)", () => {
     render(<Textarea aria-label="l" size="lg" />);
     const el = screen.getByRole("textbox", { name: "l" });
     expect(el.className).toContain("min-h-[128px]");
-    expect(el.className).toContain("text-body-lg");
+    expect(el.className).toContain("text-body-md");
   });
 
   it("forwards ref", () => {

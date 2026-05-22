@@ -59,7 +59,7 @@ describe("Select", () => {
     expect(trigger.className).toContain("text-body-sm");
   });
 
-  it("Trigger applies h-10 + text-body-md when size omitted (default md)", () => {
+  it("Trigger md (default) reads height from --theo-control-h var + text-body-sm (FAANG density)", () => {
     render(
       <Select>
         <Select.Trigger aria-label="m">
@@ -68,11 +68,11 @@ describe("Select", () => {
       </Select>,
     );
     const trigger = screen.getByLabelText("m");
-    expect(trigger.className).toContain("h-10");
-    expect(trigger.className).toContain("text-body-md");
+    expect(trigger.className).toContain("h-[var(--theo-control-h,2.25rem)]");
+    expect(trigger.className).toContain("text-body-sm");
   });
 
-  it("Trigger applies h-12 + text-body-lg when size='lg'", () => {
+  it("Trigger applies h-11 + text-body-md when size='lg' (FAANG-density)", () => {
     render(
       <Select>
         <Select.Trigger aria-label="l" size="lg">
@@ -81,8 +81,8 @@ describe("Select", () => {
       </Select>,
     );
     const trigger = screen.getByLabelText("l");
-    expect(trigger.className).toContain("h-12");
-    expect(trigger.className).toContain("text-body-lg");
+    expect(trigger.className).toContain("h-11");
+    expect(trigger.className).toContain("text-body-md");
   });
 
   it("Items inside Content stay invariant regardless of Trigger size", async () => {

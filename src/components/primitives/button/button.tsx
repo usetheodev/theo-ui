@@ -63,9 +63,12 @@ const buttonVariants = cva(
       },
       size: {
         sm: "h-8 px-3 text-body-sm",
-        md: "h-10 px-4 text-body-md",
-        lg: "h-12 px-6 text-body-lg",
-        icon: "h-10 w-10 p-0",
+        // md: tier ajustável via density (CSS var on :root). See D3 ADR of
+        // faang-density-tightening plan. Default `comfortable` density makes
+        // this 36px (--theo-control-h: 2.25rem). sm and lg stay hardcoded.
+        md: "h-[var(--theo-control-h,2.25rem)] px-[var(--theo-control-px,0.875rem)] text-body-sm",
+        lg: "h-11 px-4 text-body-md",
+        icon: "h-[var(--theo-control-h,2.25rem)] w-[var(--theo-control-h,2.25rem)] p-0",
       },
     },
     defaultVariants: {

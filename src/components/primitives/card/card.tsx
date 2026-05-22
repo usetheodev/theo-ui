@@ -56,8 +56,8 @@ Root.displayName = "Card";
 
 const headerPadBySize: Record<CardSize, string> = {
   sm: "gap-1 p-3 pb-1.5",
-  md: "gap-1.5 p-6 pb-3",
-  lg: "gap-2 p-7 pb-3",
+  md: "gap-1.5 p-5 pb-2.5",
+  lg: "gap-2 p-6 pb-3",
 };
 
 const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
@@ -113,8 +113,8 @@ Description.displayName = "Card.Description";
 
 const bodyPadBySize: Record<CardSize, string> = {
   sm: "p-3 pt-1.5",
-  md: "p-6 pt-3",
-  lg: "p-7 pt-3",
+  md: "p-5 pt-2.5",
+  lg: "p-6 pt-3",
 };
 
 const Body = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
@@ -127,8 +127,8 @@ Body.displayName = "Card.Body";
 
 const footerPadBySize: Record<CardSize, string> = {
   sm: "gap-2 p-3 pt-2",
-  md: "gap-3 p-6 pt-4",
-  lg: "gap-4 p-7 pt-4",
+  md: "gap-3 p-5 pt-3",
+  lg: "gap-4 p-6 pt-4",
 };
 
 const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(

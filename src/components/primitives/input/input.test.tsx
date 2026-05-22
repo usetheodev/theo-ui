@@ -48,18 +48,18 @@ describe("Input", () => {
     expect(input.className).toContain("text-body-sm");
   });
 
-  it("applies h-10 + text-body-md classes when size is omitted (default md)", () => {
+  it("md (default) reads height from --theo-control-h CSS var + text-body-sm (FAANG density)", () => {
     render(<Input data-testid="i" />);
     const input = screen.getByTestId("i");
-    expect(input.className).toContain("h-10");
-    expect(input.className).toContain("text-body-md");
+    expect(input.className).toContain("h-[var(--theo-control-h,2.25rem)]");
+    expect(input.className).toContain("text-body-sm");
   });
 
-  it("applies h-12 + text-body-lg classes when size='lg'", () => {
+  it("applies h-11 + text-body-md classes when size='lg' (FAANG-density)", () => {
     render(<Input data-testid="i" size="lg" />);
     const input = screen.getByTestId("i");
-    expect(input.className).toContain("h-12");
-    expect(input.className).toContain("text-body-lg");
+    expect(input.className).toContain("h-11");
+    expect(input.className).toContain("text-body-md");
   });
 
   it("forwards ref and preserves extra className", () => {

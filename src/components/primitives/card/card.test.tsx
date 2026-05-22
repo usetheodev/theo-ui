@@ -73,7 +73,7 @@ describe("Card", () => {
     expect(screen.getByText("y").className).toContain("p-3");
   });
 
-  it("applies p-6 + text-title-lg when Card size omitted (default md)", () => {
+  it("applies p-5 + text-title-lg when Card size omitted (default md, FAANG-density)", () => {
     render(
       <Card>
         <Card.Header>
@@ -81,11 +81,11 @@ describe("Card", () => {
         </Card.Header>
       </Card>,
     );
-    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-6");
+    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-5");
     expect(screen.getByText("x").className).toContain("text-title-lg");
   });
 
-  it("applies p-7 + text-headline when Card size='lg'", () => {
+  it("applies p-6 + text-headline when Card size='lg' (FAANG-density)", () => {
     render(
       <Card size="lg">
         <Card.Header>
@@ -93,7 +93,7 @@ describe("Card", () => {
         </Card.Header>
       </Card>,
     );
-    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-7");
+    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-6");
     expect(screen.getByText("x").className).toContain("text-headline");
   });
 

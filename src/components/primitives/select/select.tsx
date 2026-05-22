@@ -28,8 +28,8 @@ const selectTriggerVariants = cva(
     variants: {
       size: {
         sm: "h-8 px-2.5 py-1 text-body-sm",
-        md: "h-10 px-3 py-2 text-body-md",
-        lg: "h-12 px-4 py-3 text-body-lg",
+        md: "h-[var(--theo-control-h,2.25rem)] px-[var(--theo-control-px,0.875rem)] py-1.5 text-body-sm",
+        lg: "h-11 px-4 py-2.5 text-body-md",
       },
     },
     defaultVariants: { size: "md" },

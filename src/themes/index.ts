@@ -7,6 +7,7 @@ export { classicPaper } from "./classic-paper.js";
 export { auroraTerminal } from "./aurora-terminal.js";
 export { defineTheme, type DefineThemeInput } from "./define.js";
 export { hex, rgb } from "./color.js";
+export { useDensity, type Density, type DensityContextValue } from "./density.js";
 
 import { auroraTerminal } from "./aurora-terminal.js";
 import { classicPaper } from "./classic-paper.js";

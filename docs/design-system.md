@@ -128,8 +128,8 @@ headline:     28px / 1.25  / -0.035em  / 600
 title-lg:     24px / 1.33  / -0.04em   / 600
 title-md:     20px / 1.4   / -0.03em   / 600
 body-lg:      18px / 1.56  / -0.01em   / 400
-body-md:      15px / 1.5   / -0.005em  / 400
-body-sm:      14px / 1.43  / 0         / 400
+body-md:      14px / 1.43  / 0         / 400
+body-sm:      13px / 1.46  / 0         / 400
 label:        14px / 1.43  / 0         / 500
 label-caps:   12px / 1.33  /  0.04em   / 500  (uppercase)
 code-md:      14px / 1.5   / 0         / 400
@@ -159,6 +159,56 @@ Base 4px. Tokens in `--space-N` where N is the value in px.
 --space-24:  96px
 --space-32:  128px
 ```
+
+---
+
+## Density policy
+
+The Violet Forge defaults target FAANG-tier modern dashboards
+(Vercel · Linear · Stripe-aligned). Form-control heights at `md` are 36px
+("comfortable"), body text is 14px, Card padding is 20px.
+
+### Form-control heights by density
+
+| Density       | Button / Input / Select.Trigger | Textarea min-h | Card `md` padding | Body text |
+|---------------|---------------------------------|----------------|-------------------|-----------|
+| `compact`     | 32px (`h-8`)                    | 96px (`6rem`)  | 20px (`p-5`)      | 14px      |
+| `comfortable` | **36px** (default)              | 96px (`6rem`)  | 20px (`p-5`)      | **14px**  |
+| `spacious`    | 44px (`h-11`)                   | 128px (`8rem`) | 24px (`p-6`)      | 14px      |
+
+Override globally via `<ThemeProvider defaultDensity="compact">`:
+
+```tsx
+import { ThemeProvider, builtinThemes } from "@usetheo/ui";
+
+<ThemeProvider themes={builtinThemes} defaultDensity="compact">
+  {children}
+</ThemeProvider>
+```
+
+Or runtime via `useDensity()`:
+
+```tsx
+const { density, setDensity } = useDensity();
+setDensity("compact");
+```
+
+**EC-1 fix invariant:** density only affects the `md` tier (the default).
+Explicit `size="sm"` / `size="lg"` always overrides density — they use
+hardcoded classes (`h-8`, `h-11`), not the `var(--theo-control-h)` lookup
+the `md` variant uses.
+
+### Tap target policy
+
+Theo UI targets **WCAG 2.5.8 Level AA** — minimum 24×24 CSS pixels
+effective tap area. The 36px default in `comfortable` mode + the 24px+
+checkbox/switch tap area comfortably exceed this. We do **not** target
+2.5.5 Level AAA (44px) at `comfortable`; consumers requiring AAA can opt
+into `spacious` mode globally or `size="lg"` per call site.
+
+The `compact` mode (32px) still meets 2.5.8 AA because the visible
+control plus the 2px focus ring on each side expands the focusable area
+to ~36×36 effective.
 
 ---
 

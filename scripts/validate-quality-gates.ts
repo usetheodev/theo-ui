@@ -346,7 +346,7 @@ function validateDesignSystemFidelity(): void {
     '"title-lg": ["24px"',
     '"title-md": ["20px"',
     '"body-lg": ["18px"',
-    '"body-md": ["15px"',
+    '"body-md": ["14px"',
   ];
   for (const token of requiredTypeScale) {
     if (!preset.includes(token)) fail("tailwind-preset.ts", `type scale drift: missing ${token}`);
