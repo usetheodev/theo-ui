@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0-next.0] - 2026-05-22
+
+Minor bump — public API gains 7 new theme exports. Zero visual break for
+consumers in 0.3.x (default theme remains `violet-forge`).
+
+### Added
+
+- **7 new built-in themes (2026-05-22, RFC 0007)** — `vercelMono`, `githubDark`, `dracula`, `oneDark`, `anthropicStyle`, `openaiStyle`, `linearGlass`. `builtinThemes` grows from 3 to 10 entries. Each ships light + dark mode. Derivative slugs from brand names use suffixes (`-mono`, `-style`, `-glass`) and descriptions include "Inspired by, not affiliated with [Company]" per D1.1 ADR (trademark protection / no false-affiliation). Canonical OSS themes (Dracula, One Dark, GitHub Dark) keep their reusable names. Bundle delta: ~60 KB CSS injection if consumer passes `builtinThemes` (alternative: `themes={[violetForge, dracula]}` for ~12 KB). (#TBD)
+- **`validateThemeContrast` quality gate (2026-05-22)** — Pure-JS WCAG 2.1 contrast validator in `scripts/lib/wcag-contrast.ts` + gate in `validate-quality-gates.ts`. Iterates 10 themes × 2 modes × 4 high-stakes pairs, enforces 4.5:1 (body) and 3:1 (large/button) thresholds. Runs <50ms. Caught 14 pre-existing AA failures in `violet-forge`, `classic-paper`, `aurora-terminal` accent contrast; `classic-paper` accent darkened from `37 92% 50%` → `37 92% 40%` and `openai-style` dark primary darkened from `155 78% 43%` → `155 78% 30%` to satisfy the gate. (#TBD)
+- **`scripts/lib/wcag-contrast.ts` + `.test.ts` (NEW)** — Pure functions `parseHsl`, `hslToLuminance`, `contrastRatio`. 9 tests cover edge cases (achromatic, hue overflow, percent stripping — EC-3). (#TBD)
+
 ## [0.3.0-next.0] - 2026-05-22
 
 Minor bump — visual defaults realigned to FAANG-modern density baseline

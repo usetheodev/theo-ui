@@ -12,5 +12,6 @@ Engines (heavy primitives shipped under isolated subpaths) MUST land via an RFC 
 | [0004](./0004-slide-rich-content.md) | Slide rich content — Tier 1 (alerts, layouts, bg, header/footer, paginate, Marpit) + Tier 2 plugins (shiki, math, mermaid, emoji) | **Implemented** | 2026-05-19 |
 | [0005](./0005-theming-and-sizes.md) | Theming customization (`defineTheme` + `hex` / `rgb`) + `size` standardization on 9 primitives | **Implemented** | 2026-05-20 |
 | [0006](./0006-density-faang.md) | FAANG-grade density defaults (Button/Input 36px, body 14px, Card p-5) + `useDensity` hook | **Implemented** | 2026-05-22 |
+| [0007](./0007-seven-themes.md) | 7 new built-in themes (Vercel, GitHub Dark, Dracula, One Dark, Anthropic-style, OpenAI-style, Linear Glass) + `validateThemeContrast` gate | **Implemented** | 2026-05-22 |
 
 Status lifecycle: `Proposed` → `Accepted` (merged into main) → `Implemented` (feature shipped + quality gates green).

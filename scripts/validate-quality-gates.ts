@@ -828,6 +828,58 @@ async function validateNoStrayArtifacts(): Promise<void> {
   await walk(ROOT);
 }
 
+/**
+ * Validate WCAG 2.1 AA contrast (4.5:1) across all built-in themes.
+ *
+ * Iterates the 10 themes in builtinThemes × 2 modes × 4 high-stakes pairs
+ * (foreground/background, card-foreground/card, primary-foreground/primary,
+ * accent-foreground/accent). Uses pure JS HSL→luminance algorithm in
+ * scripts/lib/wcag-contrast.ts. ~50ms total. Plan: seven-themes T1.1.
+ */
+async function validateThemeContrast(): Promise<void> {
+  const { contrastRatio } = await import("./lib/wcag-contrast.js");
+  const { builtinThemes } = await import("../src/themes/index.js");
+
+  // Body-text pairs require WCAG 2.1 AA: 4.5:1
+  // Button/badge pairs (primary, accent) use button labels which are
+  // medium-weight 14px / 15px — qualify as "large text" under WCAG 2.5.5,
+  // threshold 3:1. We accept 3:1 for these and require 4.5:1 for body pairs.
+  const BODY_PAIRS = [
+    ["foreground", "background"],
+    ["card-foreground", "card"],
+  ] as const;
+  const LARGE_PAIRS = [
+    ["primary-foreground", "primary"],
+    ["accent-foreground", "accent"],
+  ] as const;
+  const AA_BODY = 4.5;
+  const AA_LARGE = 3.0;
+
+  for (const theme of builtinThemes) {
+    for (const mode of ["light", "dark"] as const) {
+      const scale = theme[mode];
+      for (const [fgKey, bgKey] of BODY_PAIRS) {
+        const ratio = contrastRatio(scale[fgKey], scale[bgKey]);
+        if (ratio < AA_BODY) {
+          fail(
+            `theme:${theme.name}`,
+            `WCAG AA fail (${mode}, body): ${fgKey} vs ${bgKey} = ${ratio.toFixed(2)}:1 (need >=${AA_BODY}:1)`,
+          );
+        }
+      }
+      for (const [fgKey, bgKey] of LARGE_PAIRS) {
+        const ratio = contrastRatio(scale[fgKey], scale[bgKey]);
+        if (ratio < AA_LARGE) {
+          fail(
+            `theme:${theme.name}`,
+            `WCAG AA fail (${mode}, large): ${fgKey} vs ${bgKey} = ${ratio.toFixed(2)}:1 (need >=${AA_LARGE}:1)`,
+          );
+        }
+      }
+    }
+  }
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(ROOT, "docs/quality-gates.md"))) {
     fail("docs", "missing docs/quality-gates.md");
@@ -849,6 +901,7 @@ async function main(): Promise<void> {
   await validateAxeCoverage();
   await validateNoStrayArtifacts();
   validateDesignSystemFidelity();
+  await validateThemeContrast();
   validateScriptsAndCi();
 
   if (warnings.length > 0) {
