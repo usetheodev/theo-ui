@@ -354,6 +354,30 @@ import { ThemeProvider, ThemeScript, ThemeSwitcher } from "@usetheo/ui";
 
 Custom themes: define an object satisfying the `Theme` type and pass it via `themes={[violetForge, myCustomTheme]}` to `<ThemeProvider>`, or call `registerTheme(theme)` at runtime.
 
+### CSS payload trade-off (EC-4)
+
+Each registered theme adds roughly **6 KB** of CSS variables to the runtime
+`<style id="theo-ui-theme-vars">` block injected by `<ThemeProvider>`.
+Passing the full `builtinThemes` (10 entries since RFC 0007) therefore
+injects ~60 KB of CSS into the DOM — a cold-parse cost in the ~25–35 ms
+range on a mid-tier laptop. This is acceptable for apps that genuinely
+expose a 10-theme switcher, but it is **not free**.
+
+For apps that only need 1–2 themes, prefer an explicit subset to cut the
+payload to ~6–12 KB:
+
+```tsx
+import { ThemeProvider, violetForge, dracula } from "@usetheo/ui";
+
+<ThemeProvider themes={[violetForge, dracula]} defaultTheme="violet-forge">
+  {children}
+</ThemeProvider>
+```
+
+Tree-shaking removes the unimported theme source files from the JS
+bundle automatically — the payload concern is exclusively the runtime
+`<style>` block, not the barrel import.
+
 ---
 
 ## See also
