@@ -32,18 +32,20 @@ function parseHex(input: string): { r: number; g: number; b: number } {
   let g: number;
   let b: number;
   if (body.length === 3 || body.length === 4) {
-    // Short form #rgb or #rgba — expand each nibble.
-    const nr = hexCharToNibble(body[0]!);
-    const ng = hexCharToNibble(body[1]!);
-    const nb = hexCharToNibble(body[2]!);
+    // Short form #rgb or #rgba — expand each nibble. charAt always returns
+    // a string (empty for OOB), so hexCharToNibble throws on the empty
+    // string the same way it does on any invalid char — no NonNull needed.
+    const nr = hexCharToNibble(body.charAt(0));
+    const ng = hexCharToNibble(body.charAt(1));
+    const nb = hexCharToNibble(body.charAt(2));
     r = (nr << 4) | nr;
     g = (ng << 4) | ng;
     b = (nb << 4) | nb;
     // Alpha char (body[3]) is silently dropped per spec — ColorScale is opaque.
   } else if (body.length === 6 || body.length === 8) {
-    r = (hexCharToNibble(body[0]!) << 4) | hexCharToNibble(body[1]!);
-    g = (hexCharToNibble(body[2]!) << 4) | hexCharToNibble(body[3]!);
-    b = (hexCharToNibble(body[4]!) << 4) | hexCharToNibble(body[5]!);
+    r = (hexCharToNibble(body.charAt(0)) << 4) | hexCharToNibble(body.charAt(1));
+    g = (hexCharToNibble(body.charAt(2)) << 4) | hexCharToNibble(body.charAt(3));
+    b = (hexCharToNibble(body.charAt(4)) << 4) | hexCharToNibble(body.charAt(5));
     // Bytes 6-7 (alpha) silently dropped.
   } else {
     throw new Error(

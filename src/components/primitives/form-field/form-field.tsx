@@ -195,11 +195,7 @@ const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParag
         ref={ref}
         id={errorId}
         role="alert"
-        className={cn(
-          "flex items-center gap-1 text-destructive",
-          hintFontBySize[size],
-          className,
-        )}
+        className={cn("flex items-center gap-1 text-destructive", hintFontBySize[size], className)}
         {...props}
       >
         <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />

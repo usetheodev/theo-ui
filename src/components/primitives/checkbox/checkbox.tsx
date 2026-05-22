@@ -36,12 +36,14 @@ const checkboxVariants = cva(
   },
 );
 
-const iconClassBySize: Record<NonNullable<VariantProps<typeof checkboxVariants>["size"]>, string> =
-  {
-    sm: "size-2.5",
-    md: "size-3.5",
-    lg: "size-3.5",
-  };
+const iconClassBySize: Record<
+  NonNullable<VariantProps<typeof checkboxVariants>["size"]>,
+  string
+> = {
+  sm: "size-2.5",
+  md: "size-3.5",
+  lg: "size-3.5",
+};
 
 interface CheckboxProps
   extends ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,

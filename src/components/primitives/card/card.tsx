@@ -64,12 +64,7 @@ const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
     return (
-      <div
-        ref={ref}
-       
-        className={cn("flex flex-col", headerPadBySize[size], className)}
-        {...props}
-      />
+      <div ref={ref} className={cn("flex flex-col", headerPadBySize[size], className)} {...props} />
     );
   },
 );
@@ -97,7 +92,11 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>(
     return (
       <Comp
         ref={ref}
-        className={cn("font-display text-foreground tracking-tight", titleFontBySize[size], className)}
+        className={cn(
+          "font-display text-foreground tracking-tight",
+          titleFontBySize[size],
+          className,
+        )}
         {...props}
       />
     );
@@ -121,9 +120,7 @@ const bodyPadBySize: Record<CardSize, string> = {
 const Body = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
-    return (
-      <div ref={ref} className={cn(bodyPadBySize[size], className)} {...props} />
-    );
+    return <div ref={ref} className={cn(bodyPadBySize[size], className)} {...props} />;
   },
 );
 Body.displayName = "Card.Body";
@@ -140,7 +137,6 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     return (
       <div
         ref={ref}
-       
         className={cn(
           "flex items-center border-border/40 border-t",
           footerPadBySize[size],

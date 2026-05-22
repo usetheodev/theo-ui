@@ -42,7 +42,6 @@ describe("defineTheme", () => {
   });
 
   it("throws when name is empty", () => {
-    // @ts-expect-error — intentional, testing runtime validation.
     expect(() => defineTheme({ name: "" })).toThrow(/name.*required/);
   });
 
