@@ -26,7 +26,10 @@ export default defineConfig({
     // EXTERNAL (see the `external` array below) so the consumer's installed
     // peers are used and the barrel is never inflated by them.
     "vite-plugin": "src/vite-plugin.ts",
-    preset: "src/preset.ts",
+    // RFC 0008 follow-up — `./preset` is now a CSS file (Tailwind v4 dropped
+    // JS presets). The legacy v3 JS preset stays available under
+    // `./preset-v3-legacy` for any tailwindcss@^3 consumer.
+    "preset-v3-legacy": "src/preset-v3-legacy.ts",
   },
   format: ["esm"],
   dts: true,
@@ -80,7 +83,18 @@ export default defineConfig({
     await copyFile("src/styles/tokens.css", "dist/tokens.css");
     await copyFile("src/styles/fonts.css", "dist/fonts.css");
     await copyFile("src/styles/fonts-cdn.css", "dist/fonts-cdn.css");
-    await copyFile("src/styles/global.css", "dist/styles.css");
+    // RFC 0008 follow-up — `dist/styles.css` IS the Tailwind v4 entry now
+    // (`@import "tailwindcss"` + tokens + preset + @layer base). The v3
+    // variant (legacy `@tailwind base/components/utilities`) lives at
+    // `dist/styles-v3-legacy.css` for any remaining v3 consumer.
+    await copyFile("src/styles/global-v4.css", "dist/styles.css");
+    await copyFile("src/styles/global.css", "dist/styles-v3-legacy.css");
+    // v4 @theme aliases (`--color-*`, `--text-*`, `--radius-*`, …) Tailwind
+    // v4 needs to actually emit `.bg-primary`, `.text-body-md`, etc.
+    await copyFile("src/styles/tokens-v4.css", "dist/tokens-v4.css");
+    // CSS preset for consumers running their own Tailwind v4 build (chain
+    // via `@import "@usetheo/ui/preset.css"`).
+    await copyFile("src/styles/preset.css", "dist/preset.css");
     // Geist woff2 assets — self-hosted by default per HIGH-002 / D6.
     // dist/fonts/ mirrors src/styles/fonts/ so the relative URLs in
     // fonts.css (`./fonts/geist-400.woff2`) resolve correctly inside the

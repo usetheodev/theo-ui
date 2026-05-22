@@ -1,6 +1,6 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.5.0-next.0",
+  "version": "0.5.1-next.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -11,7 +11,11 @@
       "import": "./dist/index.js"
     },
     "./styles.css": "./dist/styles.css",
+    "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
     "./tokens.css": "./dist/tokens.css",
+    "./tokens-v4.css": "./dist/tokens-v4.css",
+    "./preset.css": "./dist/preset.css",
+    "./preset": "./dist/preset.css",
     "./fonts.css": "./dist/fonts.css",
     "./fonts-cdn.css": "./dist/fonts-cdn.css",
     "./slide/themes/default.css": "./dist/slide/themes/default.css",
@@ -444,9 +448,9 @@
       "types": "./dist/vite-plugin.d.ts",
       "import": "./dist/vite-plugin.js"
     },
-    "./preset": {
-      "types": "./dist/preset.d.ts",
-      "import": "./dist/preset.js"
+    "./preset-v3-legacy": {
+      "types": "./dist/preset-v3-legacy.d.ts",
+      "import": "./dist/preset-v3-legacy.js"
     }
   },
   "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
@@ -481,7 +485,9 @@
     "dogfood:slide": "tsx scripts/dogfood-slide.ts",
     "dogfood:slide-deck": "tsx scripts/dogfood-slide-deck.ts",
     "dogfood:slide-rich": "tsx scripts/dogfood-slide-rich.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich",
+    "dogfood:v4-zero-config": "tsx scripts/dogfood-v4-zero-config.ts",
+    "dogfood:v4-real-build": "bash scripts/dogfood-v4-real-build.sh",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {

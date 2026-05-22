@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import preset from "./preset.js";
+import preset from "./preset-v3-legacy.js";
 
-describe("preset — Tailwind v4 default export shape", () => {
+describe("preset-v3-legacy — Tailwind v3 JS preset default-export shape", () => {
   it("is a plain object (not a function, not an array)", () => {
     expect(preset).toBeTypeOf("object");
     expect(preset).not.toBeNull();

@@ -3,8 +3,10 @@
   "files": {
     "dist/index.js": 354524,
     "dist/index.d.ts": 135882,
-    "dist/styles.css": 2243,
+    "dist/styles.css": 3194,
+    "dist/styles-v3-legacy.css": 2243,
     "dist/tokens.css": 8212,
+    "dist/tokens-v4.css": 6244,
     "dist/fonts.css": 2569,
     "dist/fonts-cdn.css": 1295,
     "dist/slide/index.js": 23825,
@@ -13,8 +15,9 @@
     "dist/slide-deck/index.d.ts": 13247,
     "dist/vite-plugin.js": 2406,
     "dist/vite-plugin.d.ts": 1273,
-    "dist/preset.js": 5884,
-    "dist/preset.d.ts": 1027
+    "dist/preset.css": 991,
+    "dist/preset-v3-legacy.js": 5934,
+    "dist/preset-v3-legacy.d.ts": 1193
   },
   "tolerancePercent": 5
 }

@@ -201,3 +201,44 @@ token coverage, and plugin array presence.
 - TheoKit consumer code: `theokit/packages/theo/src/vite-plugin/integrate-ui.ts`
 - TheoKit auto-detect: `theokit/packages/theo/src/vite-plugin/auto-detect.ts`
 - TheoKit gated tests: `theokit/tests/unit/example-tailwind-files-deleted.test.ts` (lines 23-31)
+
+## 8. Follow-up (2026-05-22) — v4-native CSS artifacts (`0.5.1-next.0`)
+
+The initial 0.5.0-next.0 release declared `tailwindcss@^4` as a peer dep
+but shipped v3-shaped CSS artifacts internally — `dist/styles.css` used
+`@tailwind base/components/utilities` directives (which Tailwind v4
+emits as literal strings, zero utility generation) and the JS preset
+relied on `theme.extend.colors` (a no-op for v4). Real TheoKit consumer
+boot showed correct SSR HTML but every component unstyled in the browser.
+
+Patched in 0.5.1-next.0:
+
+| Bug | Fix |
+|---|---|
+| `dist/styles.css` used v3 `@tailwind` directives | Replaced with `@import "tailwindcss"`. v3 variant preserved at `dist/styles-v3-legacy.css`. |
+| `dist/tokens.css` declared v3 `--primary` etc. (Tailwind v4 reads `--color-*`) | Added `dist/tokens-v4.css` with `@theme { --color-primary: hsl(var(--primary)); … }` aliases (Option A from the bug report). Kept `tokens.css` unchanged so `<ThemeProvider>`'s runtime `[data-theme]` cascade still mutates the v3 var layer; v4 utilities resolve through the indirection. |
+| `dist/preset.js` was a v3 JS preset (Tailwind v4 dropped JS presets) | `./preset` subpath now points to `dist/preset.css` which chains `@import "./tokens.css"` + `@import "./tokens-v4.css"`. The JS preset stays available at `./preset-v3-legacy` for any tailwindcss@^3 consumer. |
+
+Verification:
+
+- **Shape check** — `pnpm dogfood:v4-zero-config` asserts all 28 `--color-*`
+  aliases, all 14 `--text-*` tiers, `@keyframes` declarations, and the
+  package.json export shape (64 checks).
+- **Real build** — `pnpm dogfood:v4-real-build` packs the tarball,
+  installs it in a tmp project alongside `@tailwindcss/cli@^4`, runs
+  Tailwind v4 against `tests/fixtures/v4-zero-config/`, and grep-asserts
+  the expected utility rules (`bg-primary`, `text-muted-foreground`,
+  `text-body-sm`, `text-body-md`, `max-w-md`, `border-border`, `bg-card`,
+  `text-accent-foreground`, `text-display-2xl`, `font-mono`, `shadow-md`)
+  appear in the emitted CSS plus zero literal `@tailwind ` directives
+  remain — 12 assertions, all passing.
+
+### Follow-up ADRs
+
+| ID | Decisão | Por quê |
+|---|---|---|
+| D9 | Keep v3 runtime vars (`--primary`, …) intact; layer v4 `--color-*` aliases on top via `hsl(var(--*))` indirection (bug report's Option A) | `<ThemeProvider>` injects v3 vars at runtime; 6 component files (token-usage-chart SVG, scroll-area, tabs inline shadows) read `hsl(var(--primary))` directly. Renaming would break them. The indirection is a one-token cost on resolution. |
+| D10 | `./preset` becomes CSS (not JS); JS preset stays under `./preset-v3-legacy` | Tailwind v4 dropped JS presets; CSS is the canonical surface. Preserving the JS shape under a legacy name keeps shadcn-style v3 consumers viable. |
+| D11 | Ship two prebuilt entry stylesheets: `dist/styles.css` (v4) and `dist/styles-v3-legacy.css` (v3) | Same as D10 logic — v3 consumers shouldn't break when 0.5.x ships. |
+| D12 | Add `dogfood:v4-real-build` shell script (NOT in `quality:gates` by default) | The real build needs `@tailwindcss/cli@^4` installed; adding it to local devDeps conflicts with our existing `tailwindcss@^3` Ladle path. The script runs in an isolated tmp dir. Slow (~30s w/ network). Opt-in for local verification; runs in CI under a dedicated job. |
+| D13 | Bump to `0.5.1-next.0` (patch, not minor/major) | Technically breaking for any 0.5.0-next.0 consumer using `import preset from "@usetheo/ui/preset"` (JS) — but TheoKit reverted away by the time this shipped, and 0.5.0-next.0 was out for only hours. Patch is honest: this is a bug fix on a release that wasn't actually working. |

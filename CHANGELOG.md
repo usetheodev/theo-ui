@@ -7,6 +7,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1-next.0] - 2026-05-22
+
+Patch — RFC 0008 follow-up. The 0.5.0-next.0 release declared `tailwindcss@^4`
+as a peer dependency and shipped the `./vite-plugin` + `./preset` subpaths,
+but the actual CSS / token / preset artifacts inside the tarball were still
+Tailwind v3 internally. Result: every TheoKit consumer of 0.5.0-next.0 booted
+with unstyled UI in dev and production — `bg-primary`, `text-muted-foreground`,
+`border-border`, `text-body-sm`, etc. emitted as className strings with no
+matching CSS rule.
+
+This release rewrites the three v3-shaped artifacts to v4-native syntax and
+ships a fixture-backed real-build dogfood so the regression cannot recur.
+
+### Changed
+
+- **`dist/styles.css` is now Tailwind v4 native.** Uses `@import "tailwindcss"`
+  (replaces the v3 `@tailwind base; @tailwind components; @tailwind utilities;`
+  trio that Tailwind v4 emits as literal strings, with zero utility generation).
+  Imports `tokens.css` (runtime cascade) AND `tokens-v4.css` (`@theme` namespace)
+  so consumers' Tailwind v4 build resolves both layers correctly. Same
+  `@layer base` content (border-color, body font, focus ring, scrollbar
+  styling) as before. (#TBD)
+- **`./preset` subpath is now a CSS file.** Tailwind v4 dropped the v3 JS
+  preset format — `theme.extend.colors.{name}` declarations are a no-op for
+  v4. The new `dist/preset.css` simply chains `@import "./tokens.css"` and
+  `@import "./tokens-v4.css"` so consumers can `@import "@usetheo/ui/preset.css"`
+  from their own Tailwind v4 entry CSS. (#TBD)
+
+### Added
+
+- **`@usetheo/ui/tokens-v4.css` (NEW)** — `@theme {}` block declaring 28
+  `--color-*` aliases (full color set), 14 `--text-*` typescale tiers
+  (Violet Forge — `--text-display-2xl` through `--text-code-sm` with companion
+  `--*--line-height`, `--*--letter-spacing`, `--*--font-weight`), 3 `--font-*`
+  family tokens, 7 `--radius-*` tiers, 5 `--shadow-*` levels, 3 `--ease-*`
+  timings, and 2 `--animate-*` keyframe-bound utilities. Every color alias
+  uses `hsl(var(--*))` indirection so `<ThemeProvider>`'s runtime
+  `[data-theme]` cascade keeps working — switching themes still recolors
+  every utility. (#TBD)
+- **`@usetheo/ui/styles-v3-legacy.css` (NEW)** — the previous v3-shaped
+  `@tailwind base/components/utilities` entry. Pinned consumers on
+  `tailwindcss@^3` who still want a prebuilt stylesheet can import this
+  subpath. New code SHOULD use `@usetheo/ui/styles.css` (v4) instead.
+- **`@usetheo/ui/preset-v3-legacy` (NEW)** — the v3 JS `Partial<Config>`
+  preset that previously lived at `./preset`. Renamed so the canonical
+  `./preset` subpath can host the v4 CSS preset. v3 consumers update
+  imports from `@usetheo/ui/preset` to `@usetheo/ui/preset-v3-legacy`.
+- **Dogfood scripts** — `pnpm dogfood:v4-zero-config` (shape check, runs in
+  `quality:gates`) and `pnpm dogfood:v4-real-build` (end-to-end: packs the
+  tarball, installs in a tmp project alongside `@tailwindcss/cli@^4`, runs
+  Tailwind v4 against `tests/fixtures/v4-zero-config/`, and grep-asserts the
+  expected utility classes appear in the emitted CSS — 12 assertions). The
+  real-build dogfood is opt-in (slow, requires network) but catches any
+  future regression where v3-shaped artifacts get shipped under a v4 peer
+  declaration. (#TBD)
+
+### Notes
+
+- **Breaking for any 0.5.0-next.0 consumer.** The `./preset` subpath changed
+  from JS (`Partial<Config>` default-export) to CSS file. Code importing
+  `import preset from "@usetheo/ui/preset"` will break and must migrate to
+  `@import "@usetheo/ui/preset.css"` in an entry CSS. Blast radius: TheoKit
+  (already reverted away from 0.5.x by the time this fix shipped) plus any
+  community consumer that adopted 0.5.0-next.0 in the same day — likely zero.
+- The runtime indirection via `hsl(var(--*))` aliases keeps `<ThemeProvider>`
+  and every built-in theme (`violet-forge`, `dracula`, `vercel-mono`, etc.)
+  working with zero changes — the v4 utilities transparently follow the v3
+  cascade.
+
 ## [0.5.0-next.0] - 2026-05-22
 
 Minor bump — public API gains two subpath exports (`./vite-plugin` and

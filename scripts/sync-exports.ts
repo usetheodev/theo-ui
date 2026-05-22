@@ -46,7 +46,11 @@ const BASE_EXPORTS: Record<string, ExportEntry | string> = {
     import: "./dist/index.js",
   },
   "./styles.css": "./dist/styles.css",
+  "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
   "./tokens.css": "./dist/tokens.css",
+  "./tokens-v4.css": "./dist/tokens-v4.css",
+  "./preset.css": "./dist/preset.css",
+  "./preset": "./dist/preset.css",
   "./fonts.css": "./dist/fonts.css",
   "./fonts-cdn.css": "./dist/fonts-cdn.css",
   // Slide theme stylesheets — shipped alongside the slide engine subpath.
@@ -99,16 +103,18 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
     types: "./dist/slide-deck/index.d.ts",
     import: "./dist/slide-deck/index.js",
   },
-  // RFC 0008 — TheoKit zero-config integration subpaths. Both bundles are
-  // isolated (their own tsup entries) so the main barrel is unaffected by
-  // the vite / tailwindcss / @tailwindcss/vite externals.
+  // RFC 0008 — TheoKit zero-config integration subpaths. `./vite-plugin`
+  // ships its own isolated bundle (vite / tailwindcss kept external).
   "./vite-plugin": {
     types: "./dist/vite-plugin.d.ts",
     import: "./dist/vite-plugin.js",
   },
-  "./preset": {
-    types: "./dist/preset.d.ts",
-    import: "./dist/preset.js",
+  // RFC 0008 follow-up — Tailwind v4 dropped JS presets, so the v3-shaped
+  // JS preset stays available under `./preset-v3-legacy`. New v4 consumers
+  // should use `@usetheo/ui/preset.css` declared in BASE_EXPORTS above.
+  "./preset-v3-legacy": {
+    types: "./dist/preset-v3-legacy.d.ts",
+    import: "./dist/preset-v3-legacy.js",
   },
 };
 
