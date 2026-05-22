@@ -310,4 +310,22 @@ describe("ThemeProvider", () => {
       expect(screen.getByTestId("mode")).toHaveTextContent("dark");
     });
   });
+
+  // T2.3 — integration: defineTheme output is a drop-in Theme.
+  describe("integration with defineTheme", () => {
+    it("accepts a Theme produced by defineTheme() and applies it", async () => {
+      const { defineTheme } = await import("./define.js");
+      const corp = defineTheme({
+        name: "corp",
+        light: { primary: "0 0% 0%" },
+      });
+      render(
+        <ThemeProvider themes={[corp]} defaultTheme="corp" storageKey={null}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+      expect(screen.getByTestId("theme")).toHaveTextContent("corp");
+      expect(screen.getByTestId("count")).toHaveTextContent("1");
+    });
+  });
 });

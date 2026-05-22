@@ -5,6 +5,8 @@ export { ThemeSwitcher } from "./theme-switcher.js";
 export { violetForge } from "./violet-forge.js";
 export { classicPaper } from "./classic-paper.js";
 export { auroraTerminal } from "./aurora-terminal.js";
+export { defineTheme, type DefineThemeInput } from "./define.js";
+export { hex, rgb } from "./color.js";
 
 import { auroraTerminal } from "./aurora-terminal.js";
 import { classicPaper } from "./classic-paper.js";
