@@ -1,6 +1,6 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.4.0-next.0",
+  "version": "0.5.0-next.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -439,6 +439,14 @@
     "./slide-deck": {
       "types": "./dist/slide-deck/index.d.ts",
       "import": "./dist/slide-deck/index.js"
+    },
+    "./vite-plugin": {
+      "types": "./dist/vite-plugin.d.ts",
+      "import": "./dist/vite-plugin.js"
+    },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "import": "./dist/preset.js"
     }
   },
   "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "CHANGELOG.md"],
@@ -477,6 +485,7 @@
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
     "hast-util-from-html": "^2.0.0",
     "hast-util-sanitize": "^5.0.0",
     "hast-util-to-jsx-runtime": "^2.0.0",
@@ -493,8 +502,10 @@
     "react-dom": ">=18.2.0 <20",
     "roughjs": "^4.6.0",
     "shiki": "^1.0.0",
+    "tailwindcss": "^4.0.0",
     "unist-util-visit": "^5.0.0",
     "unist-util-visit-parents": "^6.0.0",
+    "vite": "^6.0.0 || ^7.0.0",
     "yaml": "^2.0.0"
   },
   "peerDependenciesMeta": {
@@ -547,6 +558,15 @@
       "optional": true
     },
     "mermaid": {
+      "optional": true
+    },
+    "@tailwindcss/vite": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    },
+    "vite": {
       "optional": true
     }
   },

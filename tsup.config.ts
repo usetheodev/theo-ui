@@ -21,6 +21,12 @@ export default defineConfig({
     // chrome. Subpath isolated per ADR D1 in
     // `.claude/knowledge-base/plans/slide-deck-composite-plan.md`.
     "slide-deck/index": "src/components/composites/slide-deck/index.ts",
+    // RFC 0008 — TheoKit zero-config integration. Both entries must keep
+    // `vite`, `@tailwindcss/vite`, `tailwindcss`, and `tailwindcss-animate`
+    // EXTERNAL (see the `external` array below) so the consumer's installed
+    // peers are used and the barrel is never inflated by them.
+    "vite-plugin": "src/vite-plugin.ts",
+    preset: "src/preset.ts",
   },
   format: ["esm"],
   dts: true,
@@ -61,6 +67,12 @@ export default defineConfig({
     "mdast-util-math",
     "mermaid",
     /^mermaid\//,
+    // RFC 0008 peer-deps for the `vite-plugin` + `preset` subpaths. All
+    // optional in package.json — the entry bundle must NOT vendor them.
+    "vite",
+    "@tailwindcss/vite",
+    "tailwindcss",
+    "tailwindcss-animate",
   ],
   // Portable: Node fs APIs work on Linux, macOS, and Windows (the previous `cp`
   // shell invocation broke under Windows native shells).

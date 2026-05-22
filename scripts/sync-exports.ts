@@ -99,6 +99,17 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
     types: "./dist/slide-deck/index.d.ts",
     import: "./dist/slide-deck/index.js",
   },
+  // RFC 0008 — TheoKit zero-config integration subpaths. Both bundles are
+  // isolated (their own tsup entries) so the main barrel is unaffected by
+  // the vite / tailwindcss / @tailwindcss/vite externals.
+  "./vite-plugin": {
+    types: "./dist/vite-plugin.d.ts",
+    import: "./dist/vite-plugin.js",
+  },
+  "./preset": {
+    types: "./dist/preset.d.ts",
+    import: "./dist/preset.js",
+  },
 };
 
 /**

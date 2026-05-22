@@ -1,0 +1,105 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import useTheoUIVite from "./vite-plugin.js";
+
+describe("useTheoUIVite — factory shape (TheoKit contract)", () => {
+  it("is a callable default export", () => {
+    expect(typeof useTheoUIVite).toBe("function");
+  });
+
+  it("returns exactly ONE Vite Plugin object (not array, not null)", () => {
+    const plugin = useTheoUIVite();
+    expect(plugin).toBeTypeOf("object");
+    expect(plugin).not.toBeNull();
+    expect(Array.isArray(plugin)).toBe(false);
+  });
+
+  it("returned plugin has `name` of type string", () => {
+    const plugin = useTheoUIVite();
+    expect(typeof plugin.name).toBe("string");
+    expect(plugin.name.length).toBeGreaterThan(0);
+  });
+
+  it("uses the documented name slug", () => {
+    const plugin = useTheoUIVite();
+    expect(plugin.name).toBe("@usetheo/ui/vite-plugin");
+  });
+
+  it("exposes a config() hook", () => {
+    const plugin = useTheoUIVite();
+    expect(typeof plugin.config).toBe("function");
+  });
+});
+
+describe("useTheoUIVite — graceful peer-dep handling", () => {
+  let warnSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
+  });
+
+  it("does NOT throw when @tailwindcss/vite is unresolvable", async () => {
+    // @tailwindcss/vite is intentionally NOT installed in this repo. The
+    // config() hook must degrade gracefully via console.warn instead of
+    // throwing — TheoKit's integrateUseTheoUI() expects this contract.
+    const plugin = useTheoUIVite();
+    const config = plugin.config as (
+      // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
+      arg?: any,
+      // biome-ignore lint/suspicious/noExplicitAny: vite env arg
+      env?: any,
+    ) => Promise<unknown> | unknown;
+    await expect(
+      Promise.resolve(config({}, { command: "serve", mode: "development" })),
+    ).resolves.not.toThrow();
+  });
+
+  it("warns the consumer when @tailwindcss/vite is missing", async () => {
+    const plugin = useTheoUIVite();
+    // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
+    const config = plugin.config as (arg?: any, env?: any) => Promise<unknown>;
+    await config({}, { command: "serve", mode: "development" });
+    expect(warnSpy).toHaveBeenCalled();
+    const message = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(message).toMatch(/@tailwindcss\/vite/);
+  });
+
+  it("when opts.tailwind === false, does NOT warn and does NOT attempt resolution", async () => {
+    const plugin = useTheoUIVite({ tailwind: false });
+    // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
+    const config = plugin.config as (arg?: any, env?: any) => Promise<unknown>;
+    await config({}, { command: "serve", mode: "development" });
+    expect(warnSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe("useTheoUIVite — virtual library-sources module", () => {
+  it("resolves `virtual:@usetheo/ui/library-sources.css` via resolveId", () => {
+    const plugin = useTheoUIVite();
+    const resolveId = plugin.resolveId as (id: string) => string | undefined;
+    expect(typeof resolveId).toBe("function");
+    const resolved = resolveId("virtual:@usetheo/ui/library-sources.css");
+    expect(resolved).toBeTruthy();
+  });
+
+  it("load() returns CSS with @source directive covering @usetheo/ui dist", () => {
+    const plugin = useTheoUIVite();
+    const resolveId = plugin.resolveId as (id: string) => string | undefined;
+    const load = plugin.load as (id: string) => string | undefined;
+    const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
+    const css = load(id);
+    expect(css).toBeTruthy();
+    expect(css).toMatch(/@source/);
+    expect(css).toMatch(/@usetheo\/ui/);
+  });
+
+  it("returns undefined for unrelated ids (no global side effects)", () => {
+    const plugin = useTheoUIVite();
+    const resolveId = plugin.resolveId as (id: string) => string | undefined;
+    expect(resolveId("/some/other/file.css")).toBeUndefined();
+    expect(resolveId("react")).toBeUndefined();
+  });
+});

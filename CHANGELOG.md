@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0-next.0] - 2026-05-22
+
+Minor bump — public API gains two subpath exports (`./vite-plugin` and
+`./preset`) so the TheoKit framework's `integrateUseTheoUI()` can
+auto-wire Tailwind v4 for consumers with zero further configuration.
+Zero visual break and no runtime behavior change for existing consumers.
+
+### Added
+
+- **`@usetheo/ui/vite-plugin` (NEW, RFC 0008)** — Default-export factory
+  returning one Vite `Plugin`. The plugin's `config()` hook
+  dynamic-imports `@tailwindcss/vite` v4 and chains it into the
+  consumer's plugin array when resolvable, and degrades to `console.warn`
+  + CSS-only mode (via the pre-built `@usetheo/ui/styles.css` subpath)
+  when the peer is not installed. A virtual module
+  `virtual:@usetheo/ui/library-sources.css` provides the `@source`
+  directive covering `node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}`
+  so Tailwind scans the library's published JS for utilities. Plugin
+  name slug: `@usetheo/ui/vite-plugin`. Options: `tailwind?: boolean`
+  (default `true`), `contentExtra?: string[]` (extra `@source` globs).
+  (#TBD)
+- **`@usetheo/ui/preset` (NEW, RFC 0008)** — Default-export Tailwind v4
+  `Partial<Config>` mirroring the design tokens in `tokens.css`
+  (colors via `hsl(var(--x) / <alpha-value>)`, font families, the
+  Violet Forge typescale, radii, shadows, animations, motion timing)
+  with `content` paths covering `./node_modules/@usetheo/ui/dist/**` and
+  the `tailwindcss-animate` plugin. Consumer usage:
+  `import preset from "@usetheo/ui/preset"; export default { presets: [preset] }`.
+  Internally delegates to the existing `src/styles/tailwind-preset.ts` —
+  the v3 shadcn-registry preset and the v4 import preset stay
+  byte-for-byte aligned and impossible to drift. (#TBD)
+- **`@tailwindcss/vite ^4`, `tailwindcss ^4`, `vite ^6 || ^7` peer-deps
+  (all optional)** — added to `peerDependenciesMeta` so consumers
+  importing `@usetheo/ui` standalone (no framework) are not forced into
+  Tailwind v4. Required only when consuming via TheoKit's auto-wire path
+  or the new `./vite-plugin` subpath. (#TBD)
+
+### Notes
+
+- Existing `tailwindcss@^3` consumers continue to work via the shadcn
+  registry preset (`registry/r/tailwind-preset.json`) and the prebuilt
+  `@usetheo/ui/styles.css`. The new subpaths are additive — they do not
+  break v3-based setups.
+- The `vite-plugin` returns ONE `Plugin` object (not `Plugin[]`) per the
+  cross-repo contract with TheoKit's `integrateUseTheoUI()`. The chain
+  to `@tailwindcss/vite` happens via the `config()` hook's `plugins`
+  field — Vite 5+ tightened the TypeScript signature, the runtime still
+  merges plugins as expected.
+
 ## [0.4.0-next.0] - 2026-05-22
 
 Minor bump — public API gains 7 new theme exports. Zero visual break for
