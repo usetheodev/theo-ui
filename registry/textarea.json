@@ -14,5 +14,8 @@
       "type": "registry:ui",
       "target": "components/ui/textarea.tsx"
     }
+  ],
+  "dependencies": [
+    "class-variance-authority"
   ]
 }

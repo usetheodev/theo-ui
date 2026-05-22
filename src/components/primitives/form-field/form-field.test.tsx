@@ -127,4 +127,61 @@ describe("FormField", () => {
     expect(FormField.Hint.displayName).toBe("FormField.Hint");
     expect(FormField.Error.displayName).toBe("FormField.Error");
   });
+
+  // T1.7 — size prop (theming-and-sizes plan)
+  it("applies text-label-caps + gap-1 when size='sm'", () => {
+    render(
+      <FormField size="sm">
+        <FormField.Label>L</FormField.Label>
+        <FormField.Control>
+          <Input placeholder="x" />
+        </FormField.Control>
+      </FormField>,
+    );
+    const label = screen.getByText("L").closest("label");
+    expect(label?.className ?? "").toContain("text-label-caps");
+    const root = label?.parentElement;
+    expect(root?.className ?? "").toContain("gap-1");
+  });
+
+  it("applies text-body-sm + gap-1.5 when size omitted (default md)", () => {
+    render(
+      <FormField>
+        <FormField.Label>L</FormField.Label>
+        <FormField.Control>
+          <Input placeholder="x" />
+        </FormField.Control>
+      </FormField>,
+    );
+    const label = screen.getByText("L").closest("label");
+    expect(label?.className ?? "").toContain("text-body-sm");
+    expect(label?.parentElement?.className ?? "").toContain("gap-1.5");
+  });
+
+  it("applies text-body-md + gap-2 when size='lg'", () => {
+    render(
+      <FormField size="lg">
+        <FormField.Label>L</FormField.Label>
+        <FormField.Control>
+          <Input placeholder="x" />
+        </FormField.Control>
+      </FormField>,
+    );
+    const label = screen.getByText("L").closest("label");
+    expect(label?.className ?? "").toContain("text-body-md");
+    expect(label?.parentElement?.className ?? "").toContain("gap-2");
+  });
+
+  it("propagates size to Hint", () => {
+    render(
+      <FormField size="lg">
+        <FormField.Label>L</FormField.Label>
+        <FormField.Control>
+          <Input placeholder="x" />
+        </FormField.Control>
+        <FormField.Hint>H</FormField.Hint>
+      </FormField>,
+    );
+    expect(screen.getByText("H").className).toContain("text-body-md");
+  });
 });

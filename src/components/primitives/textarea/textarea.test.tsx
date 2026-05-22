@@ -33,4 +33,32 @@ describe("Textarea", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Textarea aria-label="Notes" rows={5} />);
   });
+
+  // T1.8 — size prop (theming-and-sizes plan)
+  it("applies min-h-[64px] + text-body-sm when size='sm'", () => {
+    render(<Textarea aria-label="s" size="sm" />);
+    const el = screen.getByRole("textbox", { name: "s" });
+    expect(el.className).toContain("min-h-[64px]");
+    expect(el.className).toContain("text-body-sm");
+  });
+
+  it("applies min-h-[6rem] + text-body-md when size omitted (default md)", () => {
+    render(<Textarea aria-label="m" />);
+    const el = screen.getByRole("textbox", { name: "m" });
+    expect(el.className).toContain("min-h-[6rem]");
+    expect(el.className).toContain("text-body-md");
+  });
+
+  it("applies min-h-[128px] + text-body-lg when size='lg'", () => {
+    render(<Textarea aria-label="l" size="lg" />);
+    const el = screen.getByRole("textbox", { name: "l" });
+    expect(el.className).toContain("min-h-[128px]");
+    expect(el.className).toContain("text-body-lg");
+  });
+
+  it("forwards ref", () => {
+    const ref = { current: null } as { current: HTMLTextAreaElement | null };
+    render(<Textarea aria-label="r" ref={ref} />);
+    expect(ref.current).toBeInstanceOf(HTMLTextAreaElement);
+  });
 });

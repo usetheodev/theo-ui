@@ -35,4 +35,35 @@ describe("Badge", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Badge>Live</Badge>);
   });
+
+  // T1.2 — size prop (theming-and-sizes plan)
+  it("applies px-2 + text-label-caps when size='sm'", () => {
+    render(<Badge size="sm">Live</Badge>);
+    const el = screen.getByText("Live");
+    expect(el.className).toContain("px-2");
+    expect(el.className).toContain("text-label-caps");
+  });
+
+  it("applies px-2.5 + text-label when size is omitted (default md)", () => {
+    render(<Badge>Live</Badge>);
+    const el = screen.getByText("Live");
+    expect(el.className).toContain("px-2.5");
+    expect(el.className).toContain("text-label");
+  });
+
+  it("applies px-3 + text-body-md when size='lg'", () => {
+    render(<Badge size="lg">Live</Badge>);
+    const el = screen.getByText("Live");
+    expect(el.className).toContain("px-3");
+    expect(el.className).toContain("text-body-md");
+  });
+
+  it("preserves variant when size is set", () => {
+    render(
+      <Badge variant="success" size="sm">
+        Live
+      </Badge>,
+    );
+    expect(screen.getByText("Live").className).toContain("border-success/40");
+  });
 });

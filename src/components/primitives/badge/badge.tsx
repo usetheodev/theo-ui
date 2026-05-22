@@ -20,8 +20,8 @@ import { cn } from "../../../lib/cn.js";
  */
 const badgeVariants = cva(
   [
-    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5",
-    "font-sans text-label uppercase tracking-wider",
+    "inline-flex items-center gap-1.5 rounded-full border",
+    "font-sans uppercase tracking-wider",
     "transition-colors",
   ],
   {
@@ -35,8 +35,13 @@ const badgeVariants = cva(
         destructive: "border-destructive/40 bg-destructive/15 text-destructive",
         outline: "border-border bg-transparent text-foreground",
       },
+      size: {
+        sm: "px-2 py-0.5 text-label-caps",
+        md: "px-2.5 py-0.5 text-label",
+        lg: "px-3 py-1 text-body-md",
+      },
     },
-    defaultVariants: { variant: "default" },
+    defaultVariants: { variant: "default", size: "md" },
   },
 );
 
@@ -44,9 +49,11 @@ export interface BadgeProps
   extends HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
-const Badge = forwardRef<HTMLSpanElement, BadgeProps>(({ className, variant, ...props }, ref) => (
-  <span ref={ref} className={cn(badgeVariants({ variant }), className)} {...props} />
-));
+const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ className, variant, size, ...props }, ref) => (
+    <span ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props} />
+  ),
+);
 Badge.displayName = "Badge";
 
 interface BadgeDotProps extends HTMLAttributes<HTMLSpanElement> {

@@ -42,4 +42,28 @@ describe("Checkbox", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Checkbox aria-label="Accept" />);
   });
+
+  // T1.4 — size prop (theming-and-sizes plan)
+  it("applies size-3.5 + expanded tap target when size='sm'", () => {
+    render(<Checkbox aria-label="sm" size="sm" />);
+    const box = screen.getByRole("checkbox", { name: "sm" });
+    expect(box.className).toContain("size-3.5");
+    expect(box.className).toContain("before:inset-[-5px]");
+  });
+
+  it("applies size-4 (16px) when size omitted (default md)", () => {
+    render(<Checkbox aria-label="md" />);
+    expect(screen.getByRole("checkbox", { name: "md" }).className).toContain("size-4");
+  });
+
+  it("applies size-5 when size='lg'", () => {
+    render(<Checkbox aria-label="lg" size="lg" />);
+    expect(screen.getByRole("checkbox", { name: "lg" }).className).toContain("size-5");
+  });
+
+  it("has no a11y violations in each size", async () => {
+    await expectNoA11yViolations(<Checkbox aria-label="s" size="sm" />);
+    await expectNoA11yViolations(<Checkbox aria-label="m" size="md" />);
+    await expectNoA11yViolations(<Checkbox aria-label="l" size="lg" />);
+  });
 });

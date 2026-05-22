@@ -6,6 +6,7 @@
   "description": "Built on Radix Checkbox — accessible binary control with focus ring and indeterminate state support.",
   "dependencies": [
     "@radix-ui/react-checkbox",
+    "class-variance-authority",
     "lucide-react"
   ],
   "registryDependencies": [

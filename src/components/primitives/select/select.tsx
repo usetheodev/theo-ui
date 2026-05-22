@@ -1,8 +1,40 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { type VariantProps, cva } from "class-variance-authority";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { forwardRef } from "react";
 import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { cn } from "../../../lib/cn.js";
+
+/**
+ * Trigger size variant (theming-and-sizes plan T1.9).
+ * Items inside Select.Content stay md-equivalent regardless — the floating
+ * menu is isolated from the trigger context (documented decision).
+ *
+ * EC-2 guard: `<Select.Trigger>` is a Radix `<button>` — no SelectHTMLAttributes
+ * conflict to Omit. Verified before implementation.
+ */
+const selectTriggerVariants = cva(
+  [
+    "flex w-full items-center justify-between gap-2 rounded-md border border-input bg-card",
+    "text-foreground placeholder:text-muted-foreground",
+    "transition-[border-color,box-shadow] duration-base ease-out-soft",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    "focus-visible:border-primary",
+    "data-[placeholder]:text-muted-foreground",
+    "disabled:cursor-not-allowed disabled:opacity-50",
+    "[&>span]:line-clamp-1",
+  ],
+  {
+    variants: {
+      size: {
+        sm: "h-8 px-2.5 py-1 text-body-sm",
+        md: "h-10 px-3 py-2 text-body-md",
+        lg: "h-12 px-4 py-3 text-body-lg",
+      },
+    },
+    defaultVariants: { size: "md" },
+  },
+);
 
 /**
  * Select — styled wrapper around Radix Select.
@@ -24,31 +56,24 @@ import { cn } from "../../../lib/cn.js";
  * surface with check on the selected item.
  */
 
-const SelectTrigger = forwardRef<
-  ElementRef<typeof SelectPrimitive.Trigger>,
-  ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between gap-2 rounded-md border border-input bg-card px-3 py-2",
-      "text-body-md text-foreground placeholder:text-muted-foreground",
-      "transition-[border-color,box-shadow] duration-base ease-out-soft",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-      "focus-visible:border-primary",
-      "data-[placeholder]:text-muted-foreground",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      "[&>span]:line-clamp-1",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
+interface SelectTriggerProps
+  extends ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>,
+    VariantProps<typeof selectTriggerVariants> {}
+
+const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
+  ({ className, children, size, ...props }, ref) => (
+    <SelectPrimitive.Trigger
+      ref={ref}
+      className={cn(selectTriggerVariants({ size }), className)}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  ),
+);
 SelectTrigger.displayName = "Select.Trigger";
 
 const SelectScrollUpButton = forwardRef<

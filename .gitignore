@@ -77,3 +77,4 @@ docs/audit/**/raw
 
 # External reference repos kept locally for inspiration (open-design, ui, stitch)
 referencia/
+.gstack/
