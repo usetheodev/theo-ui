@@ -13,8 +13,8 @@ A React component library built for AI agent surfaces and cloud dashboards. **10
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1123%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-120-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-1174%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-124-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -133,13 +133,13 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**120 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
+**124 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (79) — building blocks
+**Primitives** (81) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
@@ -151,13 +151,13 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 `Dialog` · `DiffViewer` · `EmptyState` · `FolderContextCard` · `FolderSelector` · `FormField`
 `HookConfig` · `HookEventLog` · `Input` · `IntentSelector` · `Label` · `LaneBoard`
 `LoginSplit` · `MCPServerCard` · `MemoryEditor` · `MentionMenu` · `MetricsPanel` · `ModelCard`
-`ModelSelector` · `PermissionMatrix` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips` · `RadioGroup`
-`RecentFoldersList` · `RuleCard` · `RunStats` · `RunningTasksPanel` · `ScrollArea` · `Select`
-`SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar` · `Skeleton` · `SkillCard`
-`SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch` · `SystemPromptEditor` · `Tabs`
-`TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea` · `Toast` · `Toaster`
-`TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList` · `Tooltip`
-`TopNav`
+`ModelSelector` · `PermissionMatrix` · `PlanBadge` · `Progress` · `ProgressChecklist` · `ProjectSwitcher`
+`QuickActionChips` · `RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunningTasksPanel`
+`ScrollArea` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
+`Skeleton` · `SkillCard` · `SocialAuthRow` · `StepsRail` · `SubAgentDispatch` · `Switch`
+`SystemPromptEditor` · `Tabs` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea`
+`Toast` · `Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult`
+`ToolsList` · `Tooltip` · `TopNav`
 <!-- END:primitives -->
 
 </details>
@@ -165,12 +165,12 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 <details>
 <summary>
 <!-- BEGIN:composites-count -->
-**Composites** (41) — assembled flows
+**Composites** (43) — assembled flows
 <!-- END:composites-count -->
 </summary>
 
 <!-- BEGIN:composites -->
-`AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `CommandPalette` · `CronJobsList` · `DataPart` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `TaskHeader` · `TextPart` · `ToolCallPart`
+`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `CommandPalette` · `CronJobsList` · `DataPart` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `TaskHeader` · `TextPart` · `ToolCallPart` · `UsageMeter`
 <!-- END:composites -->
 
 </details>

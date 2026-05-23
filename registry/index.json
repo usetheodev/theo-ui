@@ -13,6 +13,12 @@
   },
   "items": [
     {
+      "name": "account-menu",
+      "type": "registry:ui",
+      "title": "AccountMenu",
+      "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a <button> with trailing chevron (account picker affordance); without, renders as a static <div>. PaaS-shape sibling of ProjectSwitcher."
+    },
+    {
       "name": "agent-composer",
       "type": "registry:ui",
       "title": "AgentComposer",
@@ -397,6 +403,12 @@
       "description": "Shared TypeScript types for permission requests, scopes, and decisions."
     },
     {
+      "name": "plan-badge",
+      "type": "registry:ui",
+      "title": "PlanBadge",
+      "description": "Semantic pricing-tier badge. Five canonical tiers (free, hobby, pro, team, enterprise) with distinct color tokens. Consumers self-document intent (plan=\"hobby\") instead of mapping generic Badge variants per app — future rebrand / dark-mode tweaks propagate automatically."
+    },
+    {
       "name": "preview-env-card",
       "type": "registry:block",
       "title": "PreviewEnvCard",
@@ -413,6 +425,12 @@
       "type": "registry:ui",
       "title": "ProgressChecklist",
       "description": "Right-inspector checklist tracking subtask completion with success / running / pending tones."
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Accessible progress bar primitive with intent variants (default, success, warning, destructive), 4 heights (h-1 / h-1.5 / h-2 / h-3), and an indeterminate animated state. Built on role=\"progressbar\" + ARIA semantics."
     },
     {
       "name": "project-card",
@@ -731,6 +749,12 @@
       "type": "registry:lib",
       "title": "Theo UI shared types",
       "description": "Shared TypeScript helper types (IconComponent, etc.) used across Theo UI."
+    },
+    {
+      "name": "usage-meter",
+      "type": "registry:ui",
+      "title": "UsageMeter",
+      "description": "Multi-metric stacked usage card for PaaS dashboards. Renders N metrics (data transfer, requests, build minutes, seats, …) each with label + value/max + Progress bar. Supports custom per-metric formatter, over-quota warning, and a compact bars-only mode. PaaS-shape sibling of CostMeter."
     },
     {
       "name": "whiteboard",

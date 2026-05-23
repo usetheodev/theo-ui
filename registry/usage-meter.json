@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "usage-meter",
+  "type": "registry:ui",
+  "title": "UsageMeter",
+  "description": "Multi-metric stacked usage card for PaaS dashboards. Renders N metrics (data transfer, requests, build minutes, seats, …) each with label + value/max + Progress bar. Supports custom per-metric formatter, over-quota warning, and a compact bars-only mode. PaaS-shape sibling of CostMeter.",
+  "dependencies": [],
+  "registryDependencies": ["cn", "progress", "tailwind-preset"],
+  "files": [
+    {
+      "path": "components/composites/usage-meter/usage-meter.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/usage-meter.tsx"
+    }
+  ]
+}

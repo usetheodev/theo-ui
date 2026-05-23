@@ -1,6 +1,6 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.6.3-next.0",
+  "version": "0.7.0-next.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -21,6 +21,10 @@
     "./fonts-cdn.css": "./dist/fonts-cdn.css",
     "./slide/themes/default.css": "./dist/slide/themes/default.css",
     "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
+    "./account-menu": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./agent-composer": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
@@ -253,11 +257,19 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./plan-badge": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./preview-env-card": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
     "./preview-panel": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./progress": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
@@ -414,6 +426,10 @@
       "import": "./dist/index.js"
     },
     "./topnav": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./usage-meter": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },

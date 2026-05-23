@@ -317,6 +317,28 @@ export { RunStats } from "./components/primitives/run-stats/index.js";
 export { ToolCall } from "./components/primitives/tool-call/index.js";
 export { ToolResult } from "./components/primitives/tool-result/index.js";
 
+// PaaS-shape primitives + composites (RFC dashboard-paas-primitives, 0.7.0-next.0)
+// Sibling components for cloud-dashboard surfaces — distinct from the
+// agent-first siblings (CostMeter, Badge, ProjectSwitcher) so both
+// shapes can coexist without API widening. UsageMeter + AccountMenu are
+// composites (depend on sibling primitives — Progress / Avatar+PlanBadge);
+// Progress + PlanBadge are standalone primitives.
+export { Progress, type ProgressProps } from "./components/primitives/progress/index.js";
+export {
+  PlanBadge,
+  type PlanBadgeProps,
+  type PlanTier,
+} from "./components/primitives/plan-badge/index.js";
+export {
+  UsageMeter,
+  type UsageMeterProps,
+  type UsageMetric,
+} from "./components/composites/usage-meter/index.js";
+export {
+  AccountMenu,
+  type AccountMenuProps,
+} from "./components/composites/account-menu/index.js";
+
 // Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";
 export {

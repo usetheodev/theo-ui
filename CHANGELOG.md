@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0-next.0] - 2026-05-23
+
+Minor — adds four PaaS-shape primitives to cover the gaps surfaced by the
+TheoCloud dashboard migration: multi-metric `UsageMeter`, standalone
+`Progress` bar, semantic `PlanBadge`, and sidebar `AccountMenu`. Each
+primitive is a SIBLING of an existing agent-shape primitive — no breaking
+changes, no modifications to current components. The library's
+agent-first positioning (per `PITCH.md`) stays intact; both shapes now
+coexist with TypeScript dispatch by name.
+
+Plan: `.claude/knowledge-base/plans/dashboard-paas-primitives-plan.md`.
+Consumer brief: `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief.md`.
+
+### Added
+
+- **`<Progress>` primitive (NEW)** — accessible progress bar built on
+  `<div role="progressbar">` (not native `<progress>` — Tailwind classes
+  style cross-browser reliably). Variants:
+  - `intent`: `default` / `success` / `warning` / `destructive`
+  - `height`: `h-1` (default) / `h-1.5` / `h-2` / `h-3`
+  - `indeterminate`: animated bar with no value (omits `aria-valuenow`,
+    sets `aria-busy="true"`)
+  Clamping handles `value > max` (clamps to max) + `value < 0` (clamps to
+  0) + `max = 0` (no NaN/Infinity). Respects `prefers-reduced-motion`.
+  14 unit tests + 6 Ladle stories. (#TBD)
+- **`<UsageMeter>` primitive (NEW)** — multi-metric stacked usage card
+  for PaaS dashboards. Renders N metrics (data transfer, requests, build
+  minutes, seats, …) each with `label + value/max + <Progress>` bar.
+  Supports custom per-metric `formatter`, automatic over-quota warning
+  (value text gets `text-warning`, `<Progress>` uses `intent="warning"`
+  AND clamps the bar at 100%), and a `compact` bars-only mode. PaaS-shape
+  sibling of `<CostMeter>` (which stays single-USD-mono for agent token
+  spend). 12 unit tests + 4 Ladle stories. (#TBD)
+- **`<PlanBadge>` primitive (NEW)** — semantic pricing-tier badge with 5
+  canonical tiers (`free`, `hobby`, `pro`, `team`, `enterprise`) and two
+  sizes (`sm`, `md`). Each tier carries distinct color tokens. Consumers
+  self-document intent (`plan="hobby"`) instead of mapping a generic
+  `<Badge variant="outline">` to colors per app — future rebrand /
+  dark-mode tweaks propagate automatically. Default label capitalizes
+  the tier; `label` prop overrides. Runtime fallback to `free` styling
+  for unknown tier (TypeScript prevents this at compile time). 16 unit
+  tests + 2 Ladle stories. (#TBD)
+- **`<AccountMenu>` primitive (NEW)** — sidebar header for PaaS surfaces.
+  Avatar + name + (optional) `<PlanBadge>` + (optional) secondary line.
+  Dual mode: with `onClick`, renders as `<button>` with trailing
+  `ChevronsUpDown` icon; without, renders as a static `<div>` (not
+  focusable, no chevron). Avatar handling auto-detects URL vs short
+  string (≤2 chars treated as initials) vs undefined (derives initials
+  from `name`). PaaS-shape sibling of `<ProjectSwitcher>` (which stays
+  workspace+branch+agent-status for code-agent surfaces). 13 unit tests
+  + 4 Ladle stories. (#TBD)
+
+### Notes
+
+- **No breaking change.** `CostMeter`, `ProgressChecklist`, `Badge`,
+  `ProjectSwitcher` are untouched. Consumers on 0.6.x see only new
+  exports.
+- **Taxonomy invariant preserved.** `UsageMeter → Progress` and
+  `AccountMenu → Avatar + PlanBadge` use relative-path imports
+  (`../{slug}/index.js`), not barrel imports, so primitives still have
+  zero `@usetheo/ui` cross-dependencies per the structural gate.
+- **Bundle delta.** `dist/index.js` grows by ~6 KB (4 primitives + types
+  + small imports). Within the ±5% baseline tolerance (rebaselined).
+- **Subpath exports.** `package.json#exports` gains `./usage-meter`,
+  `./progress`, `./plan-badge`, `./account-menu` per existing
+  convention (auto-synced by `scripts/sync-exports.ts`).
+- **Registry items.** Four new `registry/r/*.json` descriptors ship for
+  shadcn-style copy-paste install. `usage-meter` declares `progress` as
+  a `registryDependencies`; `account-menu` declares `avatar` +
+  `plan-badge`.
+
 ## [0.6.3-next.0] - 2026-05-23
 
 Patch — eliminate React hydration mismatch in `<ThemeProvider>`. Reported
