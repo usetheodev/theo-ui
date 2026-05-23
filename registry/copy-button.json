@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "copy-button",
+  "type": "registry:ui",
+  "title": "CopyButton",
+  "description": "Click-to-copy button primitive. Wraps navigator.clipboard.writeText with icon swap (Copy → Check on success, Copy → X on failure), aria-live announcement for screen readers, optional label, ghost/outline variants, and SSR-safe rendering. Auto-cleans the revert timer on unmount and debounces double-clicks.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["cn", "tailwind-preset"],
+  "files": [
+    {
+      "path": "components/primitives/copy-button/copy-button.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/copy-button.tsx"
+    }
+  ]
+}

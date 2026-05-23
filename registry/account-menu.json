@@ -3,7 +3,7 @@
   "name": "account-menu",
   "type": "registry:ui",
   "title": "AccountMenu",
-  "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a <button> with trailing chevron (account picker affordance); without, renders as a static <div>. PaaS-shape sibling of ProjectSwitcher.",
+  "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a `button` with trailing chevron (account picker affordance); without, renders as a static `div`. PaaS-shape sibling of ProjectSwitcher.",
   "dependencies": ["lucide-react"],
   "registryDependencies": ["cn", "avatar", "plan-badge", "tailwind-preset"],
   "files": [

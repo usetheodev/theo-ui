@@ -66,19 +66,19 @@ but **must not import their own consumers** (no circular deps).
 > `validateArchitectureCensus` quality gate fails the build if they drift.
 
 <!-- BEGIN:primitives-census -->
-### Primitives (81)
+### Primitives (87)
 <!-- END:primitives-census -->
 
 <!-- BEGIN:primitives-list -->
-`AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `Avatar`, `Badge`, `BrowserControls`, `BuildLogStream`, `Button`, `CapabilityIndicator`, `Card`, `ChatThread`, `Checkbox`, `ContextCard`, `ContextWindowBar`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `Dialog`, `DiffViewer`, `EmptyState`, `FolderContextCard`, `FolderSelector`, `FormField`, `HookConfig`, `HookEventLog`, `Input`, `IntentSelector`, `Label`, `LaneBoard`, `LoginSplit`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `MetricsPanel`, `ModelCard`, `ModelSelector`, `PermissionMatrix`, `PlanBadge`, `Progress`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RadioGroup`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunningTasksPanel`, `ScrollArea`, `Select`, `SessionListItem`, `SessionTimeline`, `Sheet`, `Sidebar`, `Skeleton`, `SkillCard`, `SocialAuthRow`, `StepsRail`, `SubAgentDispatch`, `Switch`, `SystemPromptEditor`, `Tabs`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `Textarea`, `Toast`, `Toaster`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `Tooltip`, `TopNav`
+`AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `Avatar`, `Badge`, `BrowserControls`, `BuildLogStream`, `Button`, `CapabilityIndicator`, `Card`, `ChatThread`, `Checkbox`, `ContextCard`, `ContextWindowBar`, `CopyButton`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `DangerZone`, `Dialog`, `DiffViewer`, `EmptyState`, `FolderContextCard`, `FolderSelector`, `FormField`, `HookConfig`, `HookEventLog`, `Input`, `IntentSelector`, `Label`, `LaneBoard`, `LoginSplit`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `MetricsPanel`, `ModelCard`, `ModelSelector`, `PermissionMatrix`, `PlanBadge`, `Progress`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RadioGroup`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunningTasksPanel`, `ScrollArea`, `Select`, `SessionListItem`, `SessionTimeline`, `Sheet`, `Sidebar`, `Skeleton`, `SkillCard`, `SocialAuthRow`, `StatTile`, `StatusDot`, `StepsRail`, `SubAgentDispatch`, `Switch`, `SystemPromptEditor`, `Table`, `Tabs`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `Textarea`, `Timestamp`, `Toast`, `Toaster`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `Tooltip`, `TopNav`
 <!-- END:primitives-list -->
 
 <!-- BEGIN:composites-census -->
-### Composites (43)
+### Composites (45)
 <!-- END:composites-census -->
 
 <!-- BEGIN:composites-list -->
-`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CommandPalette`, `CronJobsList`, `DataPart`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
+`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `CronJobsList`, `DataPart`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
 <!-- END:composites-list -->
 
 ### Notes

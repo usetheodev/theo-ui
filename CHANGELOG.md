@@ -7,6 +7,135 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0-next.0] - 2026-05-23
+
+Minor — adds eight cross-cutting primitives revealed by the systematic
+review of the remaining 11 dashboard pages (Projects, Environments,
+Team, Billing, Domains, Settings, Profile, Login, Register,
+Verification, Recovery, DeviceSuccess) + recurring PaaS UI patterns.
+Each component is used in ≥3 distinct sites in the consumer dashboard.
+6 are true primitives (Table, StatusDot, CopyButton, Timestamp,
+StatTile, DangerZone); 2 are composites by taxonomy gate
+(ConfirmDialog depends on Dialog/Input/Button; CodeBlock depends on
+CopyButton). Zero breaking change; zero new peer-deps.
+
+Plan: `.claude/knowledge-base/plans/dashboard-paas-primitives-2-plan.md`.
+Edge-case review: `.claude/knowledge-base/reviews/edge-cases/dashboard-paas-primitives-2-edge-cases-2026-05-23.md`.
+Consumer brief: `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief-2.md`.
+
+### Added
+
+- **`<Table>` primitive (NEW)** — semantic data-table with sub-components
+  `Table.Header`, `Table.Body`, `Table.Row`, `Table.Cell`,
+  `Table.HeaderCell`. Supports `density` (`default` / `compact` via
+  Context), per-cell `align` (`left` / `center` / `right`), `numeric`
+  cells (`font-mono tabular-nums`), and sortable header cells
+  (`onSort` + `sortDirection` with ChevronUp/ChevronDown affordance
+  + `aria-sort`). `sortDirection` without `onSort` is a no-op (header
+  stays static); `sortDirection="none"` with `onSort` renders both
+  chevrons dimmed (`opacity-30`). 10 unit tests + 4 Ladle stories.
+  Brief #2 consumer: TheoCloud dashboard.
+- **`<StatusDot>` primitive (NEW)** — semantic status indicator
+  (small colored circle + optional label). Five `status` kinds:
+  `live` (success), `building` (warning, auto-pulses), `failed`
+  (destructive), `idle` (muted), `warning` (warning, static). Three
+  sizes (`xs` 6px / `sm` 8px default / `md` 10px). When neither
+  `label` nor `aria-label` is provided, auto-applies
+  `aria-label={status}` + emits a dev-only warning (color-only
+  status is invisible to screen readers). 12 unit tests + 3 stories.
+  Brief #2 consumer: TheoCloud dashboard (7+ sites).
+- **`<CopyButton>` primitive (NEW)** — click-to-copy primitive wrapping
+  `navigator.clipboard.writeText`. Icon swap (Copy → Check on success,
+  Copy → X on failure), `aria-live="polite"` announcement for screen
+  readers, optional `label`, `ghost`/`outline` variants, two sizes,
+  `onCopied` callback, configurable `feedbackDuration` (default
+  1500ms). SSR-safe (guards `navigator?.clipboard?.writeText`); HTTP
+  non-localhost contexts (where the Clipboard API is undefined) fall
+  back to the failed state instead of throwing. Auto-cleans the
+  revert timer on unmount; debounces double-clicks. 12 unit tests +
+  4 Ladle stories. Brief #2 consumer: TheoCloud dashboard.
+- **`<Timestamp>` primitive (NEW)** — accessible `<time datetime>`
+  element with `relative` (default) / `absolute` / `both` formats.
+  Uses zero-dep `Intl.RelativeTimeFormat`. Auto-refreshes via
+  `setInterval` (default 60s, `refreshInterval={0}` disables).
+  Native `title` HTML attribute carries the absolute time on hover
+  (no Tooltip component dependency — keeps Timestamp a true
+  primitive). `aria-label` always carries the full date. Invalid
+  date renders an empty `<time>` element; invalid locale falls back
+  to default with a dev warning. `value` accepts ISO string, Date,
+  or **Unix milliseconds** (documented in JSDoc — passing seconds
+  renders ~1970). 13 unit tests + 4 Ladle stories. Brief #2
+  consumer: TheoCloud dashboard (every dashboard page).
+- **`<StatTile>` primitive (NEW)** — big-number stat tile for
+  dashboard summary rows. `value` + `label` + optional `icon` +
+  optional `delta` (`{value, trend}` with `trend: "up" | "down" |
+  "flat"` driving TrendingUp/TrendingDown/Minus icons and
+  success/destructive/muted color). Dual mode (button/div) based on
+  `onClick` — same pattern as `AccountMenu`/`ProjectSwitcher`. Value
+  uses `font-display tabular-nums whitespace-nowrap`. 7 unit tests
+  + 4 Ladle stories. Brief #2 consumer: TheoCloud Overview
+  dashboard (3 tiles per page).
+- **`<DangerZone>` primitive (NEW)** — destructive-actions section
+  with sub-component `DangerZone.Action`. Red-bordered container
+  (`border-destructive/30`) with title bar (default `"Danger Zone"`)
+  and action rows. Each row carries `title` + `description` +
+  consumer-provided `action` slot (typically a destructive
+  `<Button>`). Rows separated by hairline dividers; last row drops
+  the bottom border via `last:border-b-0`. Consumer supplies the
+  destructive button — DangerZone never imports `<Button>`, keeping
+  it a true primitive. 6 unit tests + 3 Ladle stories. Brief #2
+  consumer: Settings + Profile + Team + Billing pages.
+- **`<ConfirmDialog>` composite (NEW)** — controlled confirmation
+  modal built on `Dialog`. Auto-focuses Cancel on open (deliberate
+  — NOT the destructive button). `intent="destructive"` styles the
+  confirm button with the destructive variant. `confirmationPhrase`
+  enables typed-confirmation guard (case-sensitive, empty string
+  treated as no phrase). Pressing Enter in the input triggers
+  confirm when matched. Async `onConfirm` shows `Loader2` spinner
+  while pending; resolve closes the dialog; reject keeps it open
+  so consumers can surface their own error. Phrase input resets
+  whenever the dialog closes. 13 unit tests + 4 Ladle stories.
+  Composite (depends on Dialog + Button + Input). Brief #2
+  consumer: 6+ destructive flows (Settings delete, Team remove,
+  Billing cancel, Profile delete, Domains remove, Environments
+  delete).
+- **`<CodeBlock>` composite (NEW)** — terminal command / code-snippet
+  surface. Pre-rendered code inside a `<pre>` with optional
+  `terminal` prefix per line (`"$ "`), optional `caption` (file
+  name), and optional inline `<CopyButton>` positioned top-right.
+  The CopyButton receives the RAW `code` (without the visual `"$ "`
+  prefix) — consumers paste only the executable command. `language`
+  prop is reserved for future syntax highlighting (v1 ignored).
+  7 unit tests + 4 Ladle stories. Composite (depends on
+  CopyButton). Brief #2 consumer: Overview EmptyState, Projects
+  EmptyState, Domains DNS records, API token display, LoginPage
+  CLI hint.
+
+### Implementation notes
+
+- **Taxonomy gate** classified ConfirmDialog + CodeBlock as composites
+  (D2 in the plan). Brief #2 listed all 8 as primitives, but the
+  validate-quality-gates.ts script is hard-fail for any
+  `primitives/` file that imports another `@usetheo/ui` component.
+- **Timestamp uses native `title` HTML attribute** (D3) instead of
+  the `<Tooltip>` component, to keep the file a true primitive
+  without sibling-primitive imports.
+- **Zero new peer-deps.** Every component uses only `lucide-react`
+  + Radix (both already peer) + `cn()`.
+- **Bundle delta** — `dist/index.js` grew from 395763 B to 417113 B
+  (+21350 B / +5.4%); `dist/index.d.ts` grew +11808 B / +7.5%. Both
+  exceeded the ±5% tolerance by a small margin (8 components ≈ +2.5 KB
+  each on average). The baseline was rebaselined in the same release
+  (`scripts/baselines/bundle-sizes.json`) — expected and explicit per
+  plan D6.
+- 10 SHOULD TEST edge cases from the `/edge-case-plan` review
+  incorporated into the TDD blocks (EC-1 through EC-10 — empty
+  CopyButton value, unmount during timer, clipboard undefined,
+  Table sort direction without onSort, dimmed affordance for
+  `none`, StatusDot dev warning, Timestamp Unix seconds vs ms,
+  invalid locale fallback, ConfirmDialog empty phrase semantics,
+  Enter-to-confirm in phrase input).
+
 ## [0.7.0-next.0] - 2026-05-23
 
 Minor — adds four PaaS-shape primitives to cover the gaps surfaced by the

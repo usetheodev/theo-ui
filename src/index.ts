@@ -339,6 +339,38 @@ export {
   type AccountMenuProps,
 } from "./components/composites/account-menu/index.js";
 
+// Cross-cutting PaaS primitives (RFC dashboard-paas-primitives-2, 0.8.0-next.0)
+// Brief #2 — 8 components closing the cross-cutting gaps surfaced by the
+// TheoCloud dashboard migration. 6 primitives + 2 composites (ConfirmDialog
+// depends on Dialog/Input/Button; CodeBlock depends on CopyButton).
+export {
+  Table,
+  type TableProps,
+  type TableCellProps,
+  type TableHeaderCellProps,
+} from "./components/primitives/table/index.js";
+export {
+  StatusDot,
+  type StatusDotProps,
+  type StatusKind,
+} from "./components/primitives/status-dot/index.js";
+export {
+  CopyButton,
+  type CopyButtonProps,
+} from "./components/primitives/copy-button/index.js";
+export { Timestamp, type TimestampProps } from "./components/primitives/timestamp/index.js";
+export { StatTile, type StatTileProps } from "./components/primitives/stat-tile/index.js";
+export {
+  DangerZone,
+  type DangerZoneProps,
+  type DangerZoneActionProps,
+} from "./components/primitives/danger-zone/index.js";
+export {
+  ConfirmDialog,
+  type ConfirmDialogProps,
+} from "./components/composites/confirm-dialog/index.js";
+export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
+
 // Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";
 export {

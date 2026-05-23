@@ -16,7 +16,7 @@
       "name": "account-menu",
       "type": "registry:ui",
       "title": "AccountMenu",
-      "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a <button> with trailing chevron (account picker affordance); without, renders as a static <div>. PaaS-shape sibling of ProjectSwitcher."
+      "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a `button` with trailing chevron (account picker affordance); without, renders as a static `div`. PaaS-shape sibling of ProjectSwitcher."
     },
     {
       "name": "agent-composer",
@@ -193,10 +193,22 @@
       "description": "Merge Tailwind classes with conflict resolution."
     },
     {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "CodeBlock",
+      "description": "Terminal / code-snippet surface. Renders code inside a <pre> with optional 'terminal' prefix per line ('$ '), optional caption (file name), and optional inline CopyButton in top-right. Copy uses the raw code (without the visual prefix). language prop is forward-compat for future syntax highlighting."
+    },
+    {
       "name": "command-palette",
       "type": "registry:ui",
       "title": "CommandPalette",
       "description": "Cmd+K-style global launcher with arrow-key navigation, fuzzy ranking, and Enter/Escape behavior — built on cmdk + Theo Dialog."
+    },
+    {
+      "name": "confirm-dialog",
+      "type": "registry:ui",
+      "title": "ConfirmDialog",
+      "description": "Controlled confirmation modal built on Dialog. Auto-focuses Cancel on open (deliberate — NOT the destructive button). Optional intent=destructive switches the confirm button to destructive variant. Optional confirmationPhrase enables typed-confirmation guard (case-sensitive, empty string = no phrase). Async onConfirm shows Loader2 spinner; resolve closes the dialog; reject keeps it open so consumers can surface their own error. Enter in the phrase input triggers confirm when matched."
     },
     {
       "name": "context-card",
@@ -209,6 +221,12 @@
       "type": "registry:ui",
       "title": "ContextWindowBar",
       "description": "Shows how much of the model's context window has been"
+    },
+    {
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "CopyButton",
+      "description": "Click-to-copy button primitive. Wraps navigator.clipboard.writeText with icon swap (Copy → Check on success, Copy → X on failure), aria-live announcement for screen readers, optional label, ghost/outline variants, and SSR-safe rendering. Auto-cleans the revert timer on unmount and debounces double-clicks."
     },
     {
       "name": "cost-meter",
@@ -233,6 +251,12 @@
       "type": "registry:block",
       "title": "CronJobsList",
       "description": "Grid of CronJobCards with a sticky \"new job\" action."
+    },
+    {
+      "name": "danger-zone",
+      "type": "registry:ui",
+      "title": "DangerZone",
+      "description": "Destructive-actions section primitive with sub-component DangerZone.Action. Red-bordered container with title bar (default 'Danger Zone') and action rows. Each row carries title + description + consumer-provided action slot (typically a destructive Button). Rows separated by hairline dividers; last row drops the bottom border via last:border-b-0."
     },
     {
       "name": "deployment-row",
@@ -607,6 +631,18 @@
       "description": "Row of OAuth provider buttons."
     },
     {
+      "name": "stat-tile",
+      "type": "registry:ui",
+      "title": "StatTile",
+      "description": "Big-number stat tile primitive for dashboard summaries. Renders value + label + optional icon + optional delta (trend up/down/flat with TrendingUp/TrendingDown/Minus icons and success/destructive/muted color). Dual mode: with onClick renders as button with hover state + trailing ArrowUpRight chevron; without, renders as static div. Value uses font-display tabular-nums whitespace-nowrap."
+    },
+    {
+      "name": "status-dot",
+      "type": "registry:ui",
+      "title": "StatusDot",
+      "description": "Semantic status indicator (small colored circle + optional label). Five status kinds: live (success), building (warning, auto-pulses), failed (destructive), idle (muted), warning (warning, static). Three sizes (xs 6px / sm 8px default / md 10px). When neither label nor aria-label is provided, auto-applies aria-label=status and emits a dev warning."
+    },
+    {
       "name": "steps-rail",
       "type": "registry:ui",
       "title": "StepsRail",
@@ -629,6 +665,12 @@
       "type": "registry:ui",
       "title": "SystemPromptEditor",
       "description": "Surface the agent's system prompt with a clear"
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Semantic data-table primitive with sub-components (Table.Header, Table.Body, Table.Row, Table.Cell, Table.HeaderCell). Supports density (default | compact via Context), per-cell align (left | center | right), numeric cells (font-mono tabular-nums), and sortable header cells (onSort + sortDirection with ChevronUp/ChevronDown affordance + aria-sort)."
     },
     {
       "name": "tabs",
@@ -689,6 +731,12 @@
       "type": "registry:lib",
       "title": "TheoUIProvider",
       "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps."
+    },
+    {
+      "name": "timestamp",
+      "type": "registry:ui",
+      "title": "Timestamp",
+      "description": "Accessible <time> primitive with relative/absolute/both formats, auto-refresh interval (default 60s, 0 disables), native title tooltip with absolute time, and aria-label that always carries the full date. Built on Intl.RelativeTimeFormat (zero deps). value accepts ISO string, Date, or Unix ms (NOT seconds). Invalid date renders empty element; invalid locale falls back to default with dev warning."
     },
     {
       "name": "toast",
