@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0-next.0] - 2026-05-23
+
+Minor — adds the two deferred primitives revealed by the Brief #3
+review (`Alert` + `Pagination`). Both are additive; zero breaking
+change. The release closes the lower-priority follow-ups left over
+from Briefs #1/#2 — `Alert` replaces the consumer's 27-LOC
+`<VerificationBanner>` composition; `Pagination` is forward-positioned
+for when `<Table>` (0.8) starts paginating Billing / Audit / Team
+data at scale.
+
+Plan: filed as Brief #3 in
+`theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief-3.md`.
+
+### Added
+
+- **`<Alert>` primitive (NEW)** — persistent inline notice. Four
+  intents: `info` (Info icon, primary token), `success`
+  (CheckCircle2, success), `warning` (TriangleAlert, warning),
+  `destructive` (AlertCircle, destructive). Optional `title`,
+  `description`, right-aligned `action` slot (consumer-provided
+  ReactNode), and `onDismiss` handler (renders an `X` button).
+  `destructive` intent renders `role="alert"` (assertive
+  announcement); other intents render `role="status"` (polite) —
+  matches WAI-ARIA conventions for status messaging. Distinct
+  from `Toast` (transient + corner) and `EmptyState` (centered
+  card). 13 unit tests + 5 Ladle stories. Brief #3 consumer:
+  TheoCloud `<VerificationBanner>` → 3-line `<Alert>`.
+- **`<Pagination>` primitive (NEW)** — accessible page-number
+  navigation. Renders `<nav aria-label="Pagination">` with
+  first / prev / numbers / next / last buttons + visual ellipses
+  when `totalPages` exceeds the visible range. Active page carries
+  `aria-current="page"`. Keyboard nav (`ArrowLeft` / `ArrowRight` /
+  `Home` / `End`) on the nav element. Configurable `siblingCount`
+  (default 1) + optional `showJumpButtons` (default true) +
+  `size` (`sm | md`). Returns `null` when `totalPages <= 1`. Also
+  exports a pure `computePageRange(currentPage, totalPages,
+  siblingCount)` helper for unit-testing the range logic in
+  isolation — most pagination bugs live in that function. 21 unit
+  tests (6 on `computePageRange` alone) + 6 Ladle stories.
+  Forward-positioned for `<Table>` v2 consumers.
+
 ## [0.8.0-next.0] - 2026-05-23
 
 Minor — adds eight cross-cutting primitives revealed by the systematic

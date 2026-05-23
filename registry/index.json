@@ -85,6 +85,12 @@
       "description": "Shared TypeScript types for the agent timeline, events, and statuses."
     },
     {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Persistent inline notice primitive. Four intents (info / success / warning / destructive) with mapped lucide icons (Info / CheckCircle2 / TriangleAlert / AlertCircle) and design tokens. Optional title, description, action slot, and onDismiss handler. destructive intent renders role=alert (assertive); other intents render role=status (polite). Distinct from Toast (transient, auto-dismiss) and EmptyState (centered card)."
+    },
+    {
       "name": "approval-card",
       "type": "registry:block",
       "title": "ApprovalCard",
@@ -407,6 +413,12 @@
       "type": "registry:ui",
       "title": "ModelSelector",
       "description": "Chip dropdown for picking the active LLM."
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Accessible page-number navigation primitive. Renders <nav aria-label=Pagination> with first/prev/numbers/next/last buttons and visual ellipses when totalPages exceeds the visible range. Active page carries aria-current=page. Keyboard nav: ArrowLeft / ArrowRight / Home / End. Configurable siblingCount + optional jump buttons. Returns null when totalPages <= 1. Exports a pure computePageRange helper for unit testing the range logic in isolation."
     },
     {
       "name": "permission-matrix",

@@ -371,6 +371,14 @@ export {
 } from "./components/composites/confirm-dialog/index.js";
 export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
 
+// Brief #3 deferred primitives (0.9.0-next.0)
+export { Alert, type AlertProps, type AlertIntent } from "./components/primitives/alert/index.js";
+export {
+  Pagination,
+  computePageRange,
+  type PaginationProps,
+} from "./components/primitives/pagination/index.js";
+
 // Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";
 export {

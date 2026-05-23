@@ -1,6 +1,6 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.8.0-next.0",
+  "version": "0.9.0-next.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -62,6 +62,10 @@
       "import": "./dist/index.js"
     },
     "./agent-timeline": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./alert": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
@@ -262,6 +266,10 @@
       "import": "./dist/index.js"
     },
     "./model-selector": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./pagination": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
@@ -502,7 +510,15 @@
       "import": "./dist/preset-v3-legacy.js"
     }
   },
-  "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "NOTICE", "CHANGELOG.md", "llms.txt"],
+  "files": [
+    "dist",
+    "registry/r",
+    "registry/index.json",
+    "LICENSE",
+    "NOTICE",
+    "CHANGELOG.md",
+    "llms.txt"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "ladle serve",
