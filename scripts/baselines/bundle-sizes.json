@@ -1,9 +1,9 @@
 {
   "$comment": "Baseline output sizes for the published artifacts. Maintained by scripts/validate-bundle-size.ts. Update via `pnpm tsx scripts/validate-bundle-size.ts --update` when a legitimate size change lands; commit the diff. Sizes are bytes, tolerance ±5% (configurable in the script).",
   "files": {
-    "dist/index.js": 386248,
+    "dist/index.js": 386873,
     "dist/index.d.ts": 149230,
-    "dist/styles.css": 3501,
+    "dist/styles.css": 4720,
     "dist/components.css": 88194,
     "dist/styles-v3-legacy.css": 2243,
     "dist/tokens.css": 8212,

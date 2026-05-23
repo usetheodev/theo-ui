@@ -28,6 +28,15 @@ const buttonVariants = cva(
     "font-medium font-sans tracking-tight",
     "transition-[box-shadow,background-color,color,transform] duration-base ease-out-soft",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    // Tailwind v4 dropped the `button { cursor: pointer }` preflight rule
+    // (https://tailwindcss.com/docs/upgrade-guide#default-button-cursor) so
+    // every <button> now shows the default arrow cursor. Restore the
+    // "clickable hand" explicitly for the Button primitive; the
+    // `disabled:pointer-events-none` rule below short-circuits cursor
+    // application for disabled state (no events → cursor is moot).
+    // `aria-disabled:cursor-default` is a belt-and-suspenders override
+    // for paths where pointer-events still flow.
+    "cursor-pointer disabled:cursor-default aria-disabled:cursor-default",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   ],

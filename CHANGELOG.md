@@ -7,6 +7,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2-next.0] - 2026-05-23
+
+Patch — restore `cursor: pointer` on interactive buttons. Tailwind v4
+intentionally dropped the v3 preflight rule
+(https://tailwindcss.com/docs/upgrade-guide#default-button-cursor) so
+every `<button>` rendered by `Sidebar.Item`, `QuickActionChips`,
+`ChatComposer`, `ContextWindowBar`, `ToolCallCard`, `AgentProfile`,
+`CommandPalette`, etc. was showing the default arrow cursor instead of
+the pointing hand. Visual regression observed in TheoKit
+`examples/full-stack-agent` against `@usetheo/ui@0.6.1-next.0`.
+
+### Fixed
+
+- **Tailwind v4 preflight regression on `<button>` cursor** — restored
+  the v3 `button { cursor: pointer }` behavior via TWO defenses:
+  1. `<Button>` primitive (`src/components/primitives/button/button.tsx`)
+     gains `cursor-pointer disabled:cursor-default
+     aria-disabled:cursor-default` in its CVA base — explicit per
+     Tailwind v4 spec intent.
+  2. `dist/styles.css` `@layer base` adds a scoped preflight rule:
+     ```css
+     button:not(:disabled):not([aria-disabled="true"]),
+     [role="button"]:not([aria-disabled="true"]) {
+       cursor: pointer;
+     }
+     ```
+     This covers every native `<button>` the library composites render
+     directly (50+ across `Sidebar.Item`, `QuickActionChips`,
+     `ChatComposer`, `ToolCallCard`, `CommandPalette`, …) without
+     touching their per-component className strings. Disabled and
+     `aria-disabled="true"` paths keep `cursor: default` per
+     accessibility convention. (#TBD)
+
+The fix is opt-in by consumer choice — they imported
+`@usetheo/ui/styles.css`. Tailwind v4's global preflight remains
+untouched; only this stylesheet's `@layer base` adds the rule. (#TBD)
+
+### Notes
+
+- Verification recipe (matches the TheoKit reproduction):
+  ```bash
+  # Browser test:
+  # 1. cd theokit/examples/full-stack-agent && pnpm dev
+  # 2. Hover any Sidebar.Item → cursor MUST visibly change to the
+  #    pointing-hand icon (not the default arrow).
+  #
+  # CSS grep test:
+  grep -c "button:not(:disabled)" node_modules/@usetheo/ui/dist/styles.css
+  # MUST return >= 1 (pre-fix: 0)
+  ```
+
 ## [0.6.1-next.0] - 2026-05-23
 
 Patch — pre-compile utility CSS at library build time so consumers see
