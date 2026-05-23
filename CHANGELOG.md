@@ -7,6 +7,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.3-next.0] - 2026-05-23
+
+Patch — eliminate React hydration mismatch in `<ThemeProvider>`. Reported
+by the TheoKit framework team (2026-05-23): every SSR'd app using
+`<ThemeSwitcher>` threw `Hydration failed because the server rendered
+text didn't match the client` on every page reload after a user had
+changed themes, then re-rendered the entire React tree client-side,
+defeating SSR.
+
+### Fixed
+
+- **SSR hydration mismatch on `<ThemeProvider>`** — three `useState`
+  calls (`themeName`, `mode`, `density`) previously ran their initializer
+  on BOTH server (no `window`, returned default) AND client at hydration
+  time (with `window`, returned `localStorage.getItem(…)`). The two
+  diverged → React threw + discarded the SSR'd tree on every page load.
+  Fixed by initializing with the SSR default ALWAYS, then promoting to
+  the stored value via a post-mount `useEffect` after hydration. The
+  visible-text nodes the React reconciler compares (switcher label,
+  `sr-only` announcement, `aria-label`) now match server → client.
+  Stored preferences still apply within one render tick of mount;
+  `<ThemeScript>` continues to set `data-theme` / `data-mode` /
+  `data-density` on `<html>` before React mounts to suppress the
+  1-frame visual flicker. (#TBD)
+- **Persist effect first-mount guard** — a `useRef`-based skip-first
+  flag prevents the persist effect from writing the SSR-safe defaults
+  to `localStorage` between mount and the post-mount hydration
+  setState. Previously, the brief window between commit and the
+  hydration effect could clobber the user's stored preference if the
+  page closed mid-render. After the first call, every subsequent
+  change (user-driven OR hydration-promoted) persists normally. (#TBD)
+
+### Added
+
+- **`<ThemeScript defaultDensity>` prop** — the inline `<script>`
+  bootstrap now also sets `data-density` on `<html>` from
+  `localStorage.getItem(":density")` (or `defaultDensity`, default
+  `"comfortable"`) so density-driven layouts have zero FOUC at first
+  paint. Mirrors `ThemeProvider`'s `defaultDensity`. (#TBD)
+
+### Notes
+
+- Pattern mirrors `next-themes` (Vercel), `MantineProvider`, and
+  shadcn/ui's theme scaffold. The 1-frame state-promotion delay is the
+  React-canonical price for SSR-safe client-only state. `<ThemeScript>`
+  pre-paints the `<html>` attributes so the visible layer doesn't
+  flicker.
+- Two new unit tests guard the regression:
+  - `does NOT write to localStorage on first mount when nothing changes
+    (persist gate)` — verifies the skip-first guard.
+  - `writes to localStorage AFTER a user-driven change (persist fires
+    post-hydration)` — verifies the gate releases after the first call.
+- Existing `reads initial theme name from localStorage` and `reads
+  initial mode from localStorage` tests continue to pass because
+  testing-library's `render()` flushes effects synchronously inside
+  `act()`, so by the assertion phase the post-mount hydration effect
+  has already promoted the stored value.
+
 ## [0.6.2-next.0] - 2026-05-23
 
 Patch — restore `cursor: pointer` on interactive buttons. Tailwind v4

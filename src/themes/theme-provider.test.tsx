@@ -309,6 +309,62 @@ describe("ThemeProvider", () => {
       // "twilight" is not "dark" or "light" → falls back to defaultMode (dark).
       expect(screen.getByTestId("mode")).toHaveTextContent("dark");
     });
+
+    // 0.6.3-next.0 hydration-mismatch fix — these guard against
+    // regressing the SSR-safe initialization pattern.
+    it("does NOT clobber stored value with default on mount (hydration guard)", () => {
+      // Pre-seed storage with a non-default value.
+      window.localStorage.setItem(`${STORAGE_KEY}:name`, "aurora-terminal");
+      window.localStorage.setItem(`${STORAGE_KEY}:mode`, "light");
+
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+
+      // After mount + post-mount hydration effect: state reflects stored value.
+      expect(screen.getByTestId("theme")).toHaveTextContent("aurora-terminal");
+      expect(screen.getByTestId("mode")).toHaveTextContent("light");
+
+      // CRUCIAL: storage still holds the original stored value, NOT the
+      // default. Previously the persist effect ran before hydration and
+      // wrote `defaultTheme`/`defaultMode` for one tick.
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:name`)).toBe("aurora-terminal");
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:mode`)).toBe("light");
+    });
+
+    it("does NOT write to localStorage on first mount when nothing changes (persist gate)", () => {
+      // Empty storage + no user interaction → persist effect MUST NOT fire.
+      // Previously this wrote `defaultTheme`/`defaultMode`/`defaultDensity`
+      // on every mount, briefly clobbering a stored value before the
+      // hydration effect could promote it.
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+
+      // Storage stays empty for unchanged keys.
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:name`)).toBeNull();
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:mode`)).toBeNull();
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:density`)).toBeNull();
+    });
+
+    it("writes to localStorage AFTER a user-driven change (persist fires post-hydration)", async () => {
+      const user = userEvent.setup();
+      render(
+        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+          <Inspector />
+        </ThemeProvider>,
+      );
+
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:mode`)).toBeNull();
+      await user.click(screen.getByRole("button", { name: "toggle" }));
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:mode`)).toBe("light");
+      // Sibling keys are also persisted in the same effect.
+      expect(window.localStorage.getItem(`${STORAGE_KEY}:name`)).toBe("violet-forge");
+    });
   });
 
   // T2.3 — integration: defineTheme output is a drop-in Theme.

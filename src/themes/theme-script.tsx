@@ -31,6 +31,14 @@ interface ThemeScriptProps {
   /** Mode to apply when no persisted value exists. Default `"dark"`. */
   defaultMode?: ThemeMode;
   /**
+   * Density to apply when no persisted value exists. Default `"comfortable"`.
+   * Mirrors `ThemeProvider`'s `defaultDensity` so the inline-script and
+   * the React provider agree on the SSR-default density (and the
+   * `data-density` attribute set by this script matches what
+   * `ThemeProvider` promotes via its post-mount hydration effect).
+   */
+  defaultDensity?: "compact" | "comfortable" | "spacious";
+  /**
    * localStorage namespace. Must match the `storageKey` passed to
    * `<ThemeProvider>`. Default `"theo-ui:theme"`. Pass `null` to disable
    * persistence reads (the script will always apply defaults).
@@ -59,20 +67,23 @@ function safe(value: unknown): string {
 function buildScript(
   defaultTheme: string,
   defaultMode: ThemeMode,
+  defaultDensity: "compact" | "comfortable" | "spacious",
   storageKey: string | null,
 ): string {
   const k = safe(storageKey);
   const t = safe(defaultTheme);
   const m = safe(defaultMode);
-  return `(function(){try{var k=${k};var d=document.documentElement;var t=null;var m=null;if(k){t=localStorage.getItem(k+":name");m=localStorage.getItem(k+":mode");}d.setAttribute("data-theme",t||${t});d.setAttribute("data-mode",m||${m});if((m||${m})==="dark"){d.classList.add("dark");}}catch(e){}})();`;
+  const dn = safe(defaultDensity);
+  return `(function(){try{var k=${k};var d=document.documentElement;var t=null;var m=null;var dn=null;if(k){t=localStorage.getItem(k+":name");m=localStorage.getItem(k+":mode");dn=localStorage.getItem(k+":density");}d.setAttribute("data-theme",t||${t});d.setAttribute("data-mode",m||${m});d.setAttribute("data-density",dn||${dn});if((m||${m})==="dark"){d.classList.add("dark");}}catch(e){}})();`;
 }
 
 function ThemeScript({
   defaultTheme = "violet-forge",
   defaultMode = "dark",
+  defaultDensity = "comfortable",
   storageKey = "theo-ui:theme",
 }: ThemeScriptProps): JSX.Element {
-  const code = buildScript(defaultTheme, defaultMode, storageKey);
+  const code = buildScript(defaultTheme, defaultMode, defaultDensity, storageKey);
   // biome-ignore lint/security/noDangerouslySetInnerHtml: payload is JSON.stringify-encoded literals (no user input); intentional for SSR theme bootstrap before React hydrates
   return <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: code }} />;
 }

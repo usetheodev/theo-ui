@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { JSX, ReactNode } from "react";
 import { safeHref } from "../lib/safe-href.js";
 import { type Density, DensityContext, injectDensityCss } from "./density.js";
@@ -276,39 +284,59 @@ function ThemeProvider({
     setThemes(mergedThemes);
   }, [mergedThemes]);
 
-  const [themeName, setThemeName] = useState<string>(() => {
-    if (typeof window === "undefined" || !storageKey) return defaultTheme;
-    try {
-      return window.localStorage.getItem(`${storageKey}:name`) ?? defaultTheme;
-    } catch (err) {
-      warnStorageFailure("read theme name", err);
-      return defaultTheme;
-    }
-  });
+  // SSR-safe initialization (0.6.3-next.0 hydration-mismatch fix).
+  //
+  // Previously: `useState(() => localStorage.getItem(…))`. The initializer
+  // ran on BOTH server (no `window`, returned default) AND client at
+  // hydration time (with `window`, returned the stored value). The two
+  // results disagreed → React threw a hydration error on every page load
+  // for any user who had previously changed themes, and re-rendered the
+  // entire tree from scratch — defeating SSR.
+  //
+  // Fix: initialize with the SSR default ALWAYS. Promote to the stored
+  // value in a post-mount `useEffect` below. The 1-frame visual flicker
+  // is mitigated by the optional `<ThemeScript>` component, which sets
+  // `data-theme` / `data-mode` / `data-density` on `<html>` before React
+  // hydrates — see `theme-script.tsx`.
+  //
+  // The `hydratedRef` flag below guards the persist effect so that
+  // first-mount writes (with the SSR default values) don't clobber the
+  // user's stored preference in the brief window between mount and the
+  // post-mount hydration effect.
+  const [themeName, setThemeName] = useState<string>(defaultTheme);
+  const [mode, setModeState] = useState<ThemeMode>(defaultMode);
+  const [density, setDensityState] = useState<Density>(defaultDensity);
 
-  const [mode, setModeState] = useState<ThemeMode>(() => {
-    if (typeof window === "undefined" || !storageKey) return defaultMode;
-    try {
-      const stored = window.localStorage.getItem(`${storageKey}:mode`);
-      return stored === "dark" || stored === "light" ? stored : defaultMode;
-    } catch (err) {
-      warnStorageFailure("read theme mode", err);
-      return defaultMode;
-    }
-  });
+  // First-run guard for the persist effect below. On initial mount the
+  // state is the SSR-safe default; we MUST NOT clobber the user's stored
+  // preference with that default before the post-mount hydration effect
+  // can promote it. After the first persist-effect call returns early,
+  // every subsequent change (post-hydration setState OR user-driven)
+  // persists normally.
+  const skipFirstPersistRef = useRef(true);
 
-  const [density, setDensityState] = useState<Density>(() => {
-    if (typeof window === "undefined" || !storageKey) return defaultDensity;
+  // Post-mount hydration: read localStorage and promote stored values to
+  // state. Runs ONCE on mount. If `storageKey` is null or no value is
+  // stored, this is a no-op — state stays at the SSR defaults.
+  useEffect(() => {
+    if (typeof window === "undefined" || !storageKey) return;
     try {
-      const stored = window.localStorage.getItem(`${storageKey}:density`);
-      return stored === "compact" || stored === "comfortable" || stored === "spacious"
-        ? stored
-        : defaultDensity;
+      const storedName = window.localStorage.getItem(`${storageKey}:name`);
+      const storedMode = window.localStorage.getItem(`${storageKey}:mode`);
+      const storedDensity = window.localStorage.getItem(`${storageKey}:density`);
+      if (storedName) setThemeName(storedName);
+      if (storedMode === "dark" || storedMode === "light") setModeState(storedMode);
+      if (
+        storedDensity === "compact" ||
+        storedDensity === "comfortable" ||
+        storedDensity === "spacious"
+      ) {
+        setDensityState(storedDensity);
+      }
     } catch (err) {
-      warnStorageFailure("read density", err);
-      return defaultDensity;
+      warnStorageFailure("read theme + mode + density", err);
     }
-  });
+  }, [storageKey]);
 
   // Inject CSS vars whenever the themes list changes.
   useEffect(() => {
@@ -330,7 +358,19 @@ function ThemeProvider({
   }, [themeName, mode, density, themes]);
 
   // Persist on change.
+  //
+  // The first run is SKIPPED via `skipFirstPersistRef`: state at mount
+  // is the SSR-safe default. If we wrote it to storage immediately,
+  // we'd clobber the user's stored preference between mount and the
+  // post-mount hydration effect that promotes the stored value. After
+  // the first call, every subsequent run persists — whether the change
+  // came from the hydration effect (no-op write back of the stored
+  // value) or a user-driven `setTheme` / `toggleMode` / `setDensity`.
   useEffect(() => {
+    if (skipFirstPersistRef.current) {
+      skipFirstPersistRef.current = false;
+      return;
+    }
     if (typeof window === "undefined" || !storageKey) return;
     try {
       window.localStorage.setItem(`${storageKey}:name`, themeName);
