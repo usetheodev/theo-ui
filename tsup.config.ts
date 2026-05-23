@@ -103,6 +103,25 @@ export default defineConfig({
     for (const entry of await readdir("src/styles/fonts")) {
       await copyFile(join("src/styles/fonts", entry), join("dist/fonts", entry));
     }
+    // RFC 0008 follow-up #2 (0.6.1-next.0) — pre-compile utility CSS at
+    // library build time so consumers never depend on Tailwind v4
+    // `@source` scanning the library's `node_modules` tree (which breaks
+    // under pnpm symlinks). The script runs `@tailwindcss/cli` against
+    // `src/styles/components-entry.css`, emits `dist/components.css` with
+    // the materialized utility rules (hover/focus/active/data-state
+    // variants included), and appends `@import "./components.css"` to
+    // `dist/styles.css`. Idempotent — re-running is safe.
+    const { spawnSync } = await import("node:child_process");
+    const precompile = spawnSync("pnpm", ["tsx", "scripts/build-precompiled-css.ts"], {
+      stdio: "inherit",
+      encoding: "utf-8",
+    });
+    if (precompile.status !== 0) {
+      throw new Error(
+        `[tsup onSuccess] pre-compile utility CSS failed (exit ${precompile.status})`,
+      );
+    }
+
     // Slide theme CSS (D7 / T3.2 of the slide plan). Mirror src/themes/ to
     // dist/slide/themes/ so consumers can `import "@usetheo/ui/slide/themes/default.css"`.
     await mkdir("dist/slide/themes", { recursive: true });

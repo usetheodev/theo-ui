@@ -1,6 +1,6 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.6.0-next.0",
+  "version": "0.6.1-next.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -12,6 +12,7 @@
     },
     "./styles.css": "./dist/styles.css",
     "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
+    "./components.css": "./dist/components.css",
     "./tokens.css": "./dist/tokens.css",
     "./tokens-v4.css": "./dist/tokens-v4.css",
     "./preset.css": "./dist/preset.css",
@@ -487,7 +488,8 @@
     "dogfood:slide-rich": "tsx scripts/dogfood-slide-rich.ts",
     "dogfood:v4-zero-config": "tsx scripts/dogfood-v4-zero-config.ts",
     "dogfood:v4-real-build": "bash scripts/dogfood-v4-real-build.sh",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config",
+    "dogfood:precompiled-utilities": "tsx scripts/dogfood-precompiled-utilities.ts",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
   },
   "peerDependencies": {
@@ -601,6 +603,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@ladle/react": "^4.1.2",
+    "@tailwindcss/cli": "^4.3.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",

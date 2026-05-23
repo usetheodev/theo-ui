@@ -7,6 +7,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1-next.0] - 2026-05-23
+
+Patch — pre-compile utility CSS at library build time so consumers see
+every hover / focus / active / data-state variant the library uses,
+regardless of package-manager layout. Fixes a critical regression where
+the entire library rendered flat under pnpm.
+
+### Fixed
+
+- **pnpm symlink + Tailwind v4 `@source` bug** — Tailwind v4's
+  `tinyglobby`-based scanner does **not** follow symbolic links. Under a
+  pnpm install, `node_modules/@usetheo/ui` is a symlink to a deep
+  `node_modules/.pnpm/@usetheo+ui@…/node_modules/@usetheo/ui` directory,
+  and the consumer-side pattern
+  `@source "node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}"` (the one
+  the `vite-plugin` previously emitted via the
+  `virtual:@usetheo/ui/library-sources.css` virtual module) expanded to
+  **zero** matches. Every `hover:bg-muted`, `hover:text-foreground`,
+  `data-[state=active]:…` variant the library's 79 primitives + 41
+  composites use was therefore never emitted into the consumer's CSS,
+  and components rendered flat (no hover feedback, no focus rings, no
+  active-tab highlight). The bug affected every modern Node toolchain
+  that uses pnpm — Vite ecosystem default, Bun, recent Turborepo
+  templates. (#TBD)
+
+### Added
+
+- **`dist/components.css` (NEW)** — pre-compiled utility CSS file
+  containing the materialized rules for every Tailwind class the
+  library's components reference. Generated at library build time by
+  `scripts/build-precompiled-css.ts`, which runs `@tailwindcss/cli@^4`
+  against `src/styles/components-entry.css` (a curated entry that
+  imports `tailwindcss`, the existing `tokens.css` and `tokens-v4.css`
+  `@theme` namespace, and declares `@source` globs against the library's
+  own `src/` — not `node_modules/`). Size: ~88 KB unminified, ~14 KB
+  gzipped. This is the canonical Tailwind v4 library pattern used by
+  Radix UI Themes, shadcn/ui pre-compiled, and Mantine v7. (#TBD)
+- **`dist/styles.css` chains `@import "./components.css"`** at the end,
+  so a single `@import "@usetheo/ui/styles.css"` in the consumer's CSS
+  now transitively pulls in every utility the library uses — zero
+  filesystem scanning required. Consumer-side `@theme` overrides still
+  win via the runtime CSS-var cascade (every utility resolves
+  `var(--color-*)` at paint time, not at compile time). (#TBD)
+- **`scripts/dogfood-precompiled-utilities.ts`** — 25 contract checks
+  asserting `dist/components.css` ships the required variants
+  (`hover:bg-muted`, `hover:text-foreground`, `hover:bg-secondary`,
+  `hover:shadow-md`, `hover:underline`, `focus-visible:outline`, every
+  base color/typescale token, the radii). Integrated to
+  `pnpm quality:gates` so the regression cannot reach npm again. (#TBD)
+- **`@tailwindcss/cli@^4`** added as a devDependency — required for the
+  pre-compile pass at library build time. Consumers do NOT need it; the
+  utility rules ship as static CSS bytes. (#TBD)
+
+### Changed
+
+- **`@usetheo/ui/vite-plugin` virtual module** — the
+  `virtual:@usetheo/ui/library-sources.css` module no longer emits the
+  broken `@source "node_modules/@usetheo/ui/..."` default globs. It is
+  retained for backwards compatibility (TheoKit's earlier integration
+  code may still resolve it) but now emits only an explanatory comment
+  block when no `contentExtra` option is passed. The plugin's primary
+  job remains chaining `@tailwindcss/vite` for the consumer's own
+  Tailwind v4 build. (#TBD)
+
+### Notes
+
+- Adopted from the canonical Tailwind v4 library pattern documented at
+  https://tailwindcss.com/docs/upgrade-guide. Reference implementations
+  studied: Radix UI Themes
+  (`packages/radix-ui-themes/scripts/build.mjs`), shadcn/ui pre-compiled
+  starter, Mantine v7.
+- Verification recipe matching TheoKit's reproduction script:
+  ```bash
+  grep -c "\.hover\\:bg-muted" node_modules/.pnpm/@usetheo+ui@*/node_modules/@usetheo/ui/dist/components.css
+  # MUST return >= 1 (pre-fix: 0)
+  ```
+
 ## [0.6.0-next.0] - 2026-05-23
 
 Minor — `<ChatMessage>` rewritten on top of the Vercel AI SDK `UIMessage`

@@ -47,6 +47,7 @@ const BASE_EXPORTS: Record<string, ExportEntry | string> = {
   },
   "./styles.css": "./dist/styles.css",
   "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
+  "./components.css": "./dist/components.css",
   "./tokens.css": "./dist/tokens.css",
   "./tokens-v4.css": "./dist/tokens-v4.css",
   "./preset.css": "./dist/preset.css",

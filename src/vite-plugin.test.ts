@@ -85,15 +85,26 @@ describe("useTheoUIVite — virtual library-sources module", () => {
     expect(resolved).toBeTruthy();
   });
 
-  it("load() returns CSS with @source directive covering @usetheo/ui dist", () => {
+  it("load() returns CSS for the virtual module (RFC 0008 follow-up #2: emits only consumer extra globs; default @source is gone — pre-compiled into dist/components.css)", () => {
     const plugin = useTheoUIVite();
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     const load = plugin.load as (id: string) => string | undefined;
     const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
     const css = load(id);
     expect(css).toBeTruthy();
-    expect(css).toMatch(/@source/);
-    expect(css).toMatch(/@usetheo\/ui/);
+    // Default (no contentExtra) emits an explanatory comment block, NOT
+    // the broken `@source "node_modules/@usetheo/ui/..."` glob.
+    expect(css).toMatch(/pre-compiled utility CSS/);
+    expect(css).toContain("dist/components.css");
+  });
+
+  it("load() emits @source for consumer-supplied contentExtra globs only", () => {
+    const plugin = useTheoUIVite({ contentExtra: ["./my-app/**/*.tsx"] });
+    const resolveId = plugin.resolveId as (id: string) => string | undefined;
+    const load = plugin.load as (id: string) => string | undefined;
+    const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
+    const css = load(id);
+    expect(css).toMatch(/@source "\.\/my-app\/\*\*\/\*\.tsx";/);
   });
 
   it("returns undefined for unrelated ids (no global side effects)", () => {

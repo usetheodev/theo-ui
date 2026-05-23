@@ -29,16 +29,38 @@ const VIRTUAL_ID = "virtual:@usetheo/ui/library-sources.css";
 const RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_ID}`;
 
 function buildLibrarySourcesCss(extra: string[] = []): string {
-  // `@source` paths are resolved relative to the importing CSS file in
-  // Tailwind v4. The library defaults below cover the published artifact
-  // tree under the consumer's `node_modules/@usetheo/ui/dist/`. Extra globs
-  // are appended verbatim — consumers can register additional roots.
-  const defaults = [
-    '"../node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}"',
-    '"./node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}"',
-  ];
-  const all = [...defaults, ...extra.map((g) => JSON.stringify(g))];
-  return `${all.map((src) => `@source ${src};`).join("\n")}\n`;
+  // RFC 0008 follow-up #2 (0.6.1-next.0):
+  // The previous implementation emitted `@source` globs pointing at
+  // `node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}` so Tailwind v4 would
+  // scan the library's published JS for utility classes. Under pnpm,
+  // `node_modules/@usetheo/ui` is a symlink to a deep `.pnpm` directory
+  // and Tailwind v4's tinyglobby scanner does NOT follow symlinks — the
+  // glob expanded to zero matches and the consumer saw flat-rendered
+  // components (no hover/focus/active variants emitted).
+  //
+  // The fix lives entirely on the library side: `dist/styles.css` now
+  // chains `@import "./components.css"`, a pre-compiled CSS file built
+  // by `scripts/build-precompiled-css.ts` containing the materialized
+  // utility rules for every class the library uses. Consumers get every
+  // variant for free with a single `@import "@usetheo/ui/styles.css"` —
+  // no filesystem scanning, no symlink dependency.
+  //
+  // The virtual module below is retained for backwards compatibility
+  // (TheoKit's earlier integration code may still resolve it) but it
+  // now emits ONLY the optional consumer-supplied `contentExtra` globs.
+  // The library-side default globs are gone — pre-compiled CSS replaces
+  // them. Returning empty (`extra = []`) is safe; Tailwind v4 ignores
+  // empty CSS.
+  if (extra.length === 0) {
+    return [
+      "/* @usetheo/ui/vite-plugin — `virtual:@usetheo/ui/library-sources.css` */",
+      "/* The library now ships pre-compiled utility CSS via `dist/components.css` */",
+      "/* (chained from `dist/styles.css`), so no `@source` glob is needed here. */",
+      "/* This virtual module remains resolvable for backwards compatibility. */",
+      "",
+    ].join("\n");
+  }
+  return `${extra.map((g) => `@source ${JSON.stringify(g)};`).join("\n")}\n`;
 }
 
 export default function useTheoUIVite(opts: UseTheoUIPluginOptions = {}): Plugin {
