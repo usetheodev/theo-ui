@@ -14,5 +14,6 @@ Engines (heavy primitives shipped under isolated subpaths) MUST land via an RFC 
 | [0006](./0006-density-faang.md) | FAANG-grade density defaults (Button/Input 36px, body 14px, Card p-5) + `useDensity` hook | **Implemented** | 2026-05-22 |
 | [0007](./0007-seven-themes.md) | 7 new built-in themes (Vercel, GitHub Dark, Dracula, One Dark, Anthropic-style, OpenAI-style, Linear Glass) + `validateThemeContrast` gate | **Implemented** | 2026-05-22 |
 | [0008](./0008-vite-plugin-and-preset.md) | `./vite-plugin` + `./preset` subpath exports for TheoKit zero-config integration | **Implemented** | 2026-05-22 |
+| [0009](./0009-chat-message-parts-api.md) | ChatMessage parts API + markdown engine (fork of vercel/ai-elements, Apache-2.0) | **Implemented** | 2026-05-23 |
 
 Status lifecycle: `Proposed` → `Accepted` (merged into main) → `Implemented` (feature shipped + quality gates green).

@@ -1,0 +1,38 @@
+@usetheo/ui
+Copyright 2026 usetheo.dev
+
+This product includes software developed at Vercel, Inc.
+(https://vercel.com).
+
+The `<ChatMessage>` composite's structural shell (Message, MessageContent,
+MessageActions, MessageAction, MessageBranch*, MessageResponse,
+MessageToolbar) was adapted from Vercel's `ai-elements` package, available
+at https://github.com/vercel/ai-elements, licensed under the Apache License,
+Version 2.0. The original code lives in `packages/elements/src/message.tsx`.
+
+The `UIMessage` + `UIMessagePart` type surface in `src/types/chat.ts` mirrors
+the canonical shape declared in `vercel/ai` `packages/ai/src/ui/ui-messages.ts`
+(also Apache-2.0) so consumers using `useChat()` from `@ai-sdk/react` get
+zero-adapter interop with `<ChatMessage>`.
+
+`@usetheo/ui` itself is licensed under the Apache License, Version 2.0, the
+same terms — see LICENSE.
+
+This product also bundles or peer-depends on the following third-party
+libraries, distributed under their own licenses:
+
+  - lucide-react           (ISC, https://lucide.dev/)
+  - class-variance-authority (Apache-2.0)
+  - clsx                   (MIT)
+  - cmdk                   (MIT)
+  - tailwind-merge         (MIT)
+  - tailwindcss-animate    (MIT)
+  - radix-ui/*             (MIT)
+  - zod                    (MIT)
+  - mdast-util-from-markdown / mdast-util-gfm / mdast-util-to-hast / hast-util-sanitize / hast-util-to-jsx-runtime / micromark-extension-gfm  (MIT, optional peer-deps)
+  - shiki                  (MIT, optional peer-dep)
+  - katex                  (MIT, optional peer-dep)
+  - mermaid                (MIT, optional peer-dep)
+  - roughjs                (MIT, optional peer-dep)
+  - perfect-freehand       (MIT, optional peer-dep)
+  - geist (font)           (SIL OFL 1.1, self-hosted)

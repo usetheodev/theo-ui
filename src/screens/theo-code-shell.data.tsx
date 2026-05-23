@@ -40,7 +40,7 @@ import type { MentionItem } from "../components/primitives/mention-menu/mention-
 import type { SessionRunStatus } from "../components/primitives/session-list-item/session-list-item.js";
 import type { Skill } from "../components/primitives/skill-card/skill-card.js";
 import type { AgentEvent } from "../types/agent.js";
-import type { Message } from "../types/chat.js";
+import type { UIMessage } from "../types/chat.js";
 import type { Mode } from "../types/mode.js";
 import type { Rule } from "../types/rule.js";
 
@@ -90,33 +90,33 @@ export const SESSIONS: Array<{
   },
 ];
 
-export const MESSAGES: Message[] = [
+export const MESSAGES: UIMessage[] = [
   {
     id: "m1",
     role: "user",
-    content: "Build a CSS alignment grid demo at src/components/AlignmentGrid.tsx",
-    timestamp: "9:58 PM",
+    parts: [
+      { type: "text", text: "Build a CSS alignment grid demo at src/components/AlignmentGrid.tsx" },
+    ],
   },
   {
     id: "m2",
     role: "assistant",
-    content:
-      "On it. I'll scaffold the component, wire it up, and run the typechecker. Starting the dev server in parallel.",
-    timestamp: "9:58 PM",
-    model: "Opus 4.7",
+    parts: [
+      {
+        type: "text",
+        text: "On it. I'll scaffold the component, wire it up, and run the typechecker. Starting the dev server in parallel.",
+      },
+    ],
   },
   {
     id: "m3",
     role: "user",
-    content: "Use snap={true} on the select primitive, not stiffness.",
-    timestamp: "9:59 PM",
+    parts: [{ type: "text", text: "Use snap={true} on the select primitive, not stiffness." }],
   },
   {
     id: "m4",
     role: "assistant",
-    content: "Got it — patching now and re-running typecheck.",
-    timestamp: "9:59 PM",
-    model: "Opus 4.7",
+    parts: [{ type: "text", text: "Got it — patching now and re-running typecheck." }],
   },
 ];
 
@@ -361,34 +361,36 @@ export const AUDIT_LIB = [
   },
 ];
 
-export const INFRA_MESSAGES: Message[] = [
+export const INFRA_MESSAGES: UIMessage[] = [
   {
     id: "im1",
     role: "user",
-    content: "Why did p95 latency spike at 21:48?",
-    timestamp: "9:50 PM",
+    parts: [{ type: "text", text: "Why did p95 latency spike at 21:48?" }],
   },
   {
     id: "im2",
     role: "assistant",
-    content:
-      "Looking at the metrics now. The spike correlates with deploy dpl_8f3 going live (commit 8f3jka9). I'll fetch the build log and compare to the previous green deploy.",
-    timestamp: "9:50 PM",
-    model: "Opus 4.7",
+    parts: [
+      {
+        type: "text",
+        text: "Looking at the metrics now. The spike correlates with deploy dpl_8f3 going live (commit 8f3jka9). I'll fetch the build log and compare to the previous green deploy.",
+      },
+    ],
   },
   {
     id: "im3",
     role: "user",
-    content: "Rollback to last green if confirmed.",
-    timestamp: "9:51 PM",
+    parts: [{ type: "text", text: "Rollback to last green if confirmed." }],
   },
   {
     id: "im4",
     role: "assistant",
-    content:
-      "On it — preparing rollback to v1.2.3 (commit 7d2bca). I'll ask you to confirm before flipping traffic.",
-    timestamp: "9:51 PM",
-    model: "Opus 4.7",
+    parts: [
+      {
+        type: "text",
+        text: "On it — preparing rollback to v1.2.3 (commit 7d2bca). I'll ask you to confirm before flipping traffic.",
+      },
+    ],
   },
 ];
 
@@ -691,8 +693,7 @@ export const CODE_STREAM: AgentStreamItem[] = [
     message: {
       id: "u1",
       role: "user",
-      content: "Find every call site of stiffness and refactor to snap.",
-      timestamp: "9:58 PM",
+      parts: [{ type: "text", text: "Find every call site of stiffness and refactor to snap." }],
     },
   },
   {
@@ -701,9 +702,9 @@ export const CODE_STREAM: AgentStreamItem[] = [
     message: {
       id: "a1",
       role: "assistant",
-      content: "I'll start by grepping the codebase for stiffness call sites.",
-      timestamp: "9:58 PM",
-      model: "Opus 4.7",
+      parts: [
+        { type: "text", text: "I'll start by grepping the codebase for stiffness call sites." },
+      ],
     },
   },
   {
@@ -728,9 +729,12 @@ export const CODE_STREAM: AgentStreamItem[] = [
     message: {
       id: "a2",
       role: "assistant",
-      content: "Found 3 call sites. Patching AlignmentGrid first; tokens.css next.",
-      timestamp: "9:58 PM",
-      model: "Opus 4.7",
+      parts: [
+        {
+          type: "text",
+          text: "Found 3 call sites. Patching AlignmentGrid first; tokens.css next.",
+        },
+      ],
     },
   },
   {

@@ -2,11 +2,14 @@ import type { Story } from "@ladle/react";
 import { ExternalLink, FileSpreadsheet, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import {
+  ChatMessageContent,
+  ChatMessageRoot,
+} from "../components/composites/chat-message/chat-message.js";
 import { TaskHeader } from "../components/composites/task-header/task-header.js";
 import { ArtifactPreview } from "../components/primitives/artifact-preview/artifact-preview.js";
 import { Badge } from "../components/primitives/badge/badge.js";
 import { Button } from "../components/primitives/button/button.js";
-import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { CreatedFilesCard } from "../components/primitives/created-files-card/created-files-card.js";
 import { ProgressChecklist } from "../components/primitives/progress-checklist/progress-checklist.js";
@@ -66,45 +69,40 @@ export const ExpenseReport: Story = () => {
           <section className="flex flex-col gap-4 overflow-y-auto px-6 py-6">
             <TaskHeader title="Create expense report from receipts" status="completed" />
             <ChatThread>
-              <ChatMessage
-                message={{
-                  id: "a1",
-                  role: "assistant",
-                  model: "Sonnet 4.6",
-                  content: (
-                    <div className="grid gap-3">
-                      <p>Done. Here's your expense report:</p>
-                      <a
-                        // biome-ignore lint/a11y/useValidAnchor: mockup link
-                        href="#"
-                        className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-                      >
-                        View your expense report <ExternalLink className="size-3" />
-                      </a>
-                      <div>
-                        <p className="font-semibold">What's in it:</p>
-                        <p className="text-body-sm text-muted-foreground">
-                          84 line items across two sheets. The <strong>Expense Report</strong> sheet
-                          has every receipt sorted by date, vendor, category, amount, currency, and
-                          notes. The <strong>Currency Summary</strong> sheet has totals by currency.
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">
-                          Rows flagged with <Badge variant="warning">VERIFY</Badge>:
-                        </p>
-                        <ul className="ml-4 list-disc text-body-sm">
-                          <li>Taxi receipt · vendor name unclear</li>
-                          <li>Two JPEG images · amounts too blurry</li>
-                          <li>Westin Thailand · THB seems unusual</li>
-                          <li>Beijing Marriott · stay may have been October</li>
-                          <li>Ping Pong Gintoneria · total may be cut off</li>
-                        </ul>
-                      </div>
+              <ChatMessageRoot from="assistant">
+                <ChatMessageContent variant="contained">
+                  <div className="grid gap-3">
+                    <p>Done. Here's your expense report:</p>
+                    <a
+                      // biome-ignore lint/a11y/useValidAnchor: mockup link
+                      href="#"
+                      className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+                    >
+                      View your expense report <ExternalLink className="size-3" />
+                    </a>
+                    <div>
+                      <p className="font-semibold">What's in it:</p>
+                      <p className="text-body-sm text-muted-foreground">
+                        84 line items across two sheets. The <strong>Expense Report</strong> sheet
+                        has every receipt sorted by date, vendor, category, amount, currency, and
+                        notes. The <strong>Currency Summary</strong> sheet has totals by currency.
+                      </p>
                     </div>
-                  ),
-                }}
-              />
+                    <div>
+                      <p className="font-semibold">
+                        Rows flagged with <Badge variant="warning">VERIFY</Badge>:
+                      </p>
+                      <ul className="ml-4 list-disc text-body-sm">
+                        <li>Taxi receipt · vendor name unclear</li>
+                        <li>Two JPEG images · amounts too blurry</li>
+                        <li>Westin Thailand · THB seems unusual</li>
+                        <li>Beijing Marriott · stay may have been October</li>
+                        <li>Ping Pong Gintoneria · total may be cut off</li>
+                      </ul>
+                    </div>
+                  </div>
+                </ChatMessageContent>
+              </ChatMessageRoot>
             </ChatThread>
             <CreatedFilesCard
               files={[

@@ -160,7 +160,7 @@
       "name": "chat-message",
       "type": "registry:ui",
       "title": "ChatMessage",
-      "description": "Single chat turn rendered as user bubble, assistant card, or system callout with accent border."
+      "description": "Composable chat-turn surface with Vercel AI SDK UIMessage parts API — markdown, code blocks, math, tool calls, reasoning, file attachments, source citations, branching navigation."
     },
     {
       "name": "chat-thread",

@@ -46,7 +46,36 @@ export {
 export { TheoUIProvider, type TheoUIProviderProps } from "./theo-ui-provider.js";
 
 // Shared domain types
-export type { Attachment, Message, MessageRole } from "./types/chat.js";
+export type {
+  Attachment,
+  CustomContentUIPart,
+  DataUIPart,
+  FileUIPart,
+  MessageRole,
+  ProviderMetadata,
+  ReasoningFileUIPart,
+  ReasoningUIPart,
+  SourceDocumentUIPart,
+  SourceUrlUIPart,
+  StepStartUIPart,
+  TextUIPart,
+  ToolInvocationState,
+  ToolUIPart,
+  UIMessage,
+  UIMessagePart,
+} from "./types/chat.js";
+export {
+  isCustomContentUIPart,
+  isDataUIPart,
+  isFileUIPart,
+  isReasoningFileUIPart,
+  isReasoningUIPart,
+  isSourceDocumentUIPart,
+  isSourceUrlUIPart,
+  isStepStartUIPart,
+  isTextUIPart,
+  isToolUIPart,
+} from "./types/chat.js";
 export type {
   AgentEvent as AgentEventModel,
   AgentEventStatus,
@@ -215,7 +244,54 @@ export {
 } from "./components/primitives/session-list-item/index.js";
 
 // Chat atoms
-export { ChatMessage } from "./components/primitives/chat-message/index.js";
+export {
+  ChatMessage,
+  ChatMessageAction,
+  ChatMessageActions,
+  ChatMessageBranch,
+  ChatMessageBranchContent,
+  ChatMessageBranchNext,
+  ChatMessageBranchPage,
+  ChatMessageBranchPrevious,
+  ChatMessageBranchSelector,
+  ChatMessageContent,
+  ChatMessageResponse,
+  ChatMessageRoot,
+  ChatMessageToolbar,
+  DataPart,
+  FilePart,
+  ReasoningPart,
+  SourceDocumentPart,
+  SourceUrlPart,
+  TextPart,
+  ToolCallPart,
+  renderPart,
+  type ChatMessageProps,
+  type ChatMessageRootProps,
+  type ChatMessageContentProps,
+  type ChatMessageContentVariant,
+  type ChatMessageResponseProps,
+  type ChatMessageActionsProps,
+  type ChatMessageActionProps,
+  type ChatMessageToolbarProps,
+  type ChatMessageBranchProps,
+  type ChatMessageBranchContentProps,
+  type ChatMessageBranchSelectorProps,
+  type ChatMessageBranchPreviousProps,
+  type ChatMessageBranchNextProps,
+  type ChatMessageBranchPageProps,
+  type DataPartProps,
+  type DataRenderer,
+  type DataRendererMap,
+  type FilePartProps,
+  type PartRendererMap,
+  type ReasoningPartProps,
+  type RenderPartOptions,
+  type SourceDocumentPartProps,
+  type SourceUrlPartProps,
+  type TextPartProps,
+  type ToolCallPartProps,
+} from "./components/composites/chat-message/index.js";
 export { ChatThread } from "./components/primitives/chat-thread/index.js";
 export { ModelSelector, type ModelOption } from "./components/primitives/model-selector/index.js";
 export {

@@ -7,6 +7,113 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0-next.0] - 2026-05-23
+
+Minor — `<ChatMessage>` rewritten on top of the Vercel AI SDK `UIMessage`
+shape with full markdown rendering, syntax-highlighted code blocks, math,
+mermaid diagrams, tool calls, reasoning panels, file/source citations,
+branching navigation, and a streaming-safe markdown preprocess.
+
+### Added
+
+- **`<ChatMessage>` v2 (RFC 0009)** — promoted from primitive to composite
+  (`src/components/composites/chat-message/`). Two consumption shapes:
+  (a) convenience `<ChatMessage message={uiMessage} />` auto-dispatches
+  every part to its built-in renderer; (b) composable
+  `<ChatMessage.Root from="assistant"><ChatMessage.Content>…</…></…>` for
+  full control. Forks structural shell from `vercel/ai-elements`
+  (Apache-2.0, see `NOTICE`). Renders 11 part types:
+  `text`, `reasoning`, `tool-${name}`, `dynamic-tool`, `file`,
+  `reasoning-file`, `source-url`, `source-document`, `step-start`,
+  `custom`, `data-${name}`. (#TBD)
+- **Branching navigation** — `<ChatMessageBranch>` + content / selector /
+  previous / next / page sub-components for cycling through alternate
+  responses on a single turn. (#TBD)
+- **Markdown engine (`src/lib/markdown/`)** — `parseMarkdownToReact()` +
+  `parseMarkdownToReactSafe()` build a mdast → hast → React pipeline
+  via the existing optional peer-deps (`mdast-util-from-markdown`,
+  `mdast-util-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`,
+  `hast-util-to-jsx-runtime`). Sanitize schema allows
+  `language-*` classes on `<code>`/`<pre>` so syntax highlight survives.
+  GFM tables, task lists, strikethrough, autolinks all render. (#TBD)
+- **Streaming-safe preprocessor** — `preprocessStreaming()` auto-closes
+  trailing `**bold`, `_italic`, `` `code ``, `[link](url`, `$math$`,
+  `$$blockmath$$`, and `` ```fence `` so token-by-token streaming output
+  never flashes raw markdown chars. Re-implemented (NOT
+  `streamdown`-dep) so we don't take a runtime dependency on a Vercel
+  package we compete with. (#TBD)
+- **`<CodeBlock>` + `<InlineCode>` (`src/lib/markdown/`)** — fenced code
+  ships Shiki SSR-friendly highlight (lazy `import("shiki")` — peer-dep
+  optional, graceful plain-`<pre>` fallback), language label header,
+  Copy → Check 2s button per `shadcn.io` AI code-block pattern. Inline
+  `<code>` is styled distinct from blocks. (#TBD)
+- **`<MathInline>` + `<MathBlock>`** — lazy-load KaTeX, render to safe
+  HTML, fall back to `<code>` / `<pre>` plain when peer-dep missing. (#TBD)
+- **`<MermaidDiagram>`** — lazy-load Mermaid with `securityLevel:
+  "strict"`, render to SVG. Failed parse or missing peer falls back to
+  a labeled `<pre>` block. (#TBD)
+- **11 Vercel-compat UIMessagePart types** + 10 type guards in
+  `src/types/chat.ts` (`UIMessage`, `UIMessagePart`, `TextUIPart`,
+  `ReasoningUIPart`, `ToolUIPart`, `DataUIPart`, `FileUIPart`,
+  `ReasoningFileUIPart`, `SourceUrlUIPart`, `SourceDocumentUIPart`,
+  `StepStartUIPart`, `CustomContentUIPart`, `ProviderMetadata`,
+  `ToolInvocationState`, `MessageRole`). Field-for-field compatible
+  with `useChat()` from `@ai-sdk/react` — zero-adapter interop. (#TBD)
+
+### Changed
+
+- **Taxonomy**: `ChatMessage` moves from `primitives/` → `composites/`.
+  Composite layer is the correct home — internal deps on `<Button>`,
+  native `<details>`, our `<Card>` patterns. README catalog counts
+  adjust automatically via the structure gate (`pnpm sync:readme`). (#TBD)
+- **`registry/chat-message.json`** — descriptor now lists 12 source
+  files + 6 lib files, declares `lucide-react` + `safe-href` + `button`
+  registry-deps. (#TBD)
+
+### Breaking changes
+
+- **`Message` type removed.** `import type { Message } from "@usetheo/ui"`
+  now fails — use `UIMessage` instead. TypeScript will hint
+  `Did you mean 'UIMessage'?`.
+- **`message.content` removed.** Replace every callsite:
+
+  ```diff
+  - { id, role: "user", content: "hello", timestamp: "10:00" }
+  + { id, role: "user", parts: [{ type: "text", text: "hello" }] }
+  ```
+
+  Internal callsites already migrated: `agent-stream`,
+  `chat-thread.stories`, `theo-code-shell.data`, `task-running.stories`,
+  `task-starting.stories`, `task-completed.stories`. For mockup data
+  with arbitrary JSX content, use the composable form:
+
+  ```tsx
+  <ChatMessage.Root from="assistant">
+    <ChatMessage.Content variant="contained">
+      <div>any JSX here</div>
+    </ChatMessage.Content>
+  </ChatMessage.Root>
+  ```
+
+- **`message.model` / `message.timestamp` no longer rendered** by
+  `<ChatMessage>` — fold them into custom UI under the message body, or
+  attach via `metadata?: unknown` (consumer-typed) and read from there.
+- **`./components/primitives/chat-message/`** deleted. Imports must move
+  to `./components/composites/chat-message/` (the public `@usetheo/ui`
+  barrel handles this; only relative imports inside the repo need
+  updating).
+
+### Notes
+
+- **License attribution**: a `NOTICE` file ships at the package root
+  with Apache-2.0 attribution to `vercel/ai-elements` for the
+  structural-shell components forked, and to `vercel/ai` for the
+  `UIMessage` shape mirrored. Both upstream and TheoUI are Apache-2.0
+  — compatible.
+- **Reference clones** of `vercel/ai-elements` and `vercel/ai` live in
+  `referencia/` (read-only). Not shipped in the npm tarball (excluded
+  via the `files` field).
+
 ## [0.5.1-next.0] - 2026-05-22
 
 Patch — RFC 0008 follow-up. The 0.5.0-next.0 release declared `tailwindcss@^4`
