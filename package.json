@@ -502,7 +502,7 @@
       "import": "./dist/preset-v3-legacy.js"
     }
   },
-  "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "NOTICE", "CHANGELOG.md"],
+  "files": ["dist", "registry/r", "registry/index.json", "LICENSE", "NOTICE", "CHANGELOG.md", "llms.txt"],
   "scripts": {
     "build": "tsup",
     "dev": "ladle serve",
