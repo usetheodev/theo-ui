@@ -276,6 +276,32 @@ A PR touching public UI passes release readiness only if:
 - Breaking API changes include migration notes.
 - Known warnings are either fixed or documented with owner and reason.
 
+### Sub-gates added 2026-05-25
+
+The `quality:gates` chain ran originally with format/lint/typecheck/test/
+build/structure/bundle/a11y/ladle/dogfood. Three additive sub-gates landed
+on 2026-05-25 to close gaps a manual audit surfaced:
+
+- **`quality:knip`** — runs [knip](https://knip.dev/) against `src/`,
+  `scripts/`, `playground/`, `.ladle/`. Hard-fails on unused dependencies,
+  unresolved imports, missing binaries, and duplicate exports. Soft-warns
+  on unused files, exports, and types (intended to surface drift without
+  blocking merges). Config in [`knip.json`](../knip.json).
+- **`quality:publint`** — runs [publint](https://publint.dev/) with
+  `--strict` on the package shape. Validates `exports` map, `types`
+  fields, dual-package shape, license metadata, npm-publish hygiene.
+  No config file needed; reads `package.json` + tarball contents.
+- **`quality:attw`** — runs [@arethetypeswrong/cli](https://arethetypeswrong.github.io/)
+  against the packed tarball. **NOT in the `quality:gates` chain by
+  default** — the tool currently crashes on `@usetheo/ui`'s intentional
+  package shape (per Brief #4 / RFC subpath-exports-per-component: ~130
+  per-component subpath exports share the root `dist/index.d.ts` rather
+  than generating per-component DTS files, which would OOM the tsup
+  worker pool). The script is kept available for opt-in manual runs
+  (`pnpm quality:attw`) when investigating type-resolution issues.
+  Revisit when upstream stabilizes or when we adopt a per-component DTS
+  strategy.
+
 ---
 
 ## Review Checklist

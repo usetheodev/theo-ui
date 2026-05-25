@@ -78,3 +78,6 @@ docs/audit/**/raw
 # External reference repos kept locally for inspiration (open-design, ui, stitch)
 referencia/
 .gstack/
+
+# npm pack artifacts (publint creates these during quality:gates)
+*.tgz

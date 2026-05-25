@@ -576,8 +576,12 @@
     "dogfood:v4-zero-config": "tsx scripts/dogfood-v4-zero-config.ts",
     "dogfood:v4-real-build": "bash scripts/dogfood-v4-real-build.sh",
     "dogfood:precompiled-utilities": "tsx scripts/dogfood-precompiled-utilities.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm test && pnpm build && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
-    "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm registry:build && pnpm registry:validate && pnpm quality:structure"
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm quality:publint && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
+    "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm registry:build && pnpm registry:validate && pnpm quality:structure",
+    "quality:knip": "knip",
+    "quality:knip:fix": "knip --fix",
+    "quality:publint": "publint --strict",
+    "quality:attw": "attw --pack . --profile esm-only"
   },
   "peerDependencies": {
     "@tailwindcss/vite": "^4.0.0",
@@ -688,6 +692,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
     "@biomejs/biome": "^1.9.4",
     "@ladle/react": "^4.1.2",
     "@tailwindcss/cli": "^4.3.0",
@@ -708,12 +713,14 @@
     "hast-util-from-html": "^2.0.3",
     "hast-util-sanitize": "^5.0.2",
     "hast-util-to-jsx-runtime": "^2.3.6",
+    "knip": "^6.14.2",
     "mdast-util-from-markdown": "^2.0.3",
     "mdast-util-gfm": "^3.1.0",
     "mdast-util-to-hast": "^13.2.1",
     "micromark-extension-gfm": "^3.0.0",
     "perfect-freehand": "1.2.3",
     "postcss": "^8.5.14",
+    "publint": "^0.3.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "roughjs": "4.6.6",
