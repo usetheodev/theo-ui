@@ -87,10 +87,26 @@ Brief: `theo/docs/handoff/2026-05-24-theo-ui-subpath-tree-shaking-brief-4.md`
 | **Shared chunks (`dist/chunk-*.js`)** | 0 | 119 | + |
 
 The barrel shrank because all component code now lives in shared
-chunks. Consumer-side bundle delta against TheoCloud dashboard:
-**TBD — see Phase 8 evidence file** at
+chunks. **Consumer-side bundle delta against TheoCloud dashboard
+(measured 2026-05-25):**
+
+| Metric | 0.9.0-next.0 | 0.10.0-next.0 | Δ |
+|---|---|---|---|
+| `@usetheo/ui` chunk | 36.96 KB brotli | 10.96 KB brotli | **−26.00 KB (−70.3%)** |
+| TOTAL initial JS | 176.27 KB brotli | 134.68 KB brotli | −41.59 KB (−23.6%) |
+
+Per-chunk cap (50 KB): passes with 39 KB headroom (was 13 KB).
+Total hard gate (240 KB): passes with 105 KB headroom (was 64 KB).
+
+**Notable:** the savings were realized WITHOUT migrating consumer
+imports to subpath form. The barrel benefits from tree-shaking now
+because `dist/index.js` is structured as a collection of
+per-component re-exports from shared chunks — Vite/Rollup's
+tree-shaker can drop individual chunks per consumer usage. Subpath-
+form migration is expected to yield additional savings on top.
+
+Evidence file:
 `.claude/knowledge-base/baselines/2026-05-25-post-subpath/theocloud-bundle-delta.txt`
-once measured.
 
 ### Migration (consumer-side, opt-in)
 

@@ -1,0 +1,49 @@
+TheoCloud dashboard — bundle-delta measurement
+==============================================
+Date: 2026-05-25
+Source: cd theo/cloud/dashboard && pnpm run build && size-limit
+Methodology: vite build (rollup), brotli-compressed size of named chunks.
+
+BEFORE (@usetheo/ui@0.9.0-next.0, cosmetic subpath exports)
+-----------------------------------------------------------
+@usetheo/ui chunk:    36.96 KB brotli  (vite chunk: theo-ui-*.js, ~202.56 KB minified)
+TOTAL initial JS:    176.27 KB brotli
+
+AFTER (@usetheo/ui@0.10.0-next.0, real per-component dist files)
+---------------------------------------------------------------
+@usetheo/ui chunk:    10.96 KB brotli  (vite chunk: theo-ui-*.js, ~43.32 KB minified)
+TOTAL initial JS:    134.68 KB brotli
+
+DELTA
+-----
+@usetheo/ui chunk:   -26.00 KB brotli  (-70.3%)
+TOTAL initial JS:    -41.59 KB brotli  (-23.6%)
+
+Per-chunk cap:        50 KB brotli — passes with 39 KB headroom (was 13 KB).
+Total hard gate:     240 KB brotli — passes with 105 KB headroom (was 64 KB).
+
+ACCEPTANCE (HARD GATE per plan T8.1)
+------------------------------------
+Required: @usetheo/ui chunk drops >= 10 KB brotli.
+Measured: -26.00 KB brotli.
+Result:   PASSED with 16 KB margin above threshold.
+
+Notable: the savings were realized WITHOUT migrating consumer imports
+to subpath form. The barrel `import { X } from "@usetheo/ui"` now
+benefits from tree-shaking because the post-0.10.0 barrel
+(`dist/index.js`, 49 KB minified, was 417 KB) is structured as a
+collection of per-component re-exports from shared chunks
+(`dist/chunk-*.js`). Vite/Rollup's tree-shaker can now drop individual
+component chunks per the consumer's usage. Subpath-form migration
+(per brief T8.1) is still expected to yield additional savings on
+top of these baseline gains.
+
+Raw size-limit output (after, 0.10.0-next.0) — relevant excerpts:
+
+  02 — @usetheo/ui (design system)
+  Size limit:   50 kB
+  Size:         10.96 kB brotlied
+
+  TOTAL initial JS — HARD GATE (MEET-ASYNC-002 v1.3, brotli)
+  Size limit:   240 kB
+  Size:         134.68 kB brotlied
