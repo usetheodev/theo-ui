@@ -539,7 +539,8 @@
     "LICENSE",
     "NOTICE",
     "CHANGELOG.md",
-    "llms.txt"
+    "llms.txt",
+    "DESIGN.md"
   ],
   "scripts": {
     "build": "tsup && tsx scripts/regen-subpath-exports.ts",

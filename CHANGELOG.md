@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`DESIGN.md` at repo root (NEW)** — plain-text design system spec
+  for LLM assistants generating UI against `@usetheo/ui`. Follows the
+  awesome-design-md 9-section canonical structure (Visual Theme &
+  Atmosphere · Color Palette & Roles · Typography Rules · Layout
+  Principles · Depth & Elevation · Component Stylings · Responsive
+  Behavior · Do's and Don'ts · Agent Prompt Guide). Tokens mirror
+  `src/styles/tokens.css` and `src/themes/violet-forge.ts`. Shipped
+  via `package.json > files` alongside `llms.txt` and `CHANGELOG.md`
+  so consumers see the visual spec at `node_modules/@usetheo/ui/DESIGN.md`.
+  Reference research lives at
+  `.claude/knowledge-base/reference/design-md-convention.md`.
+
 ## [0.11.0-next.0] - 2026-05-25
 
 Minor (additive, zero breaking change) — ships Brief #5 from the
