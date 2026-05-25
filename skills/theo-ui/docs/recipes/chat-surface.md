@@ -14,7 +14,7 @@ A worked example of the default verb building a P4 ChatSurface. Skim before tack
 
 ```
 Pre-flight findings:
-- @usetheo/ui: 0.11.0-next.0
+- @usetheo/ui: 0.12.0-next.0
 - Tailwind preset: loaded
 - ThemeProvider: violet-forge, density=comfortable
 - React: 19
