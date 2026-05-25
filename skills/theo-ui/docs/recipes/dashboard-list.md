@@ -14,7 +14,7 @@ A worked example of the default verb building a P1 ListPage. Skim before tacklin
 
 ```
 Pre-flight findings:
-- @usetheo/ui: 0.11.0-next.0 (package.json L42)
+- @usetheo/ui: 0.12.0-next.0 (package.json L42)
 - Tailwind preset: loaded (tailwind.config.ts L8)
 - ThemeProvider: violet-forge default, density=comfortable (src/app/layout.tsx L18)
 - Imports: 6 barrel, 0 subpath (could optimize)

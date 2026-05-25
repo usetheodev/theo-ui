@@ -134,7 +134,7 @@ After installing the skill, drop into a project that uses `@usetheo/ui`:
 cd my-app/
 # Verify @usetheo/ui is installed
 pnpm list @usetheo/ui
-# Should show: @usetheo/ui 0.11.0-next.0 (or later)
+# Should show: @usetheo/ui 0.12.0-next.0 (or later)
 ```
 
 Then in your AI assistant, try:
@@ -209,7 +209,7 @@ The skill loads references on-demand. `SKILL.md` is always read; specialized ref
 
 ## Versioning
 
-v1.0.0 (2026-05-25). Targets `@usetheo/ui` 0.11.0-next.0+.
+v1.0.0 (2026-05-25). Targets `@usetheo/ui` 0.12.0-next.0+.
 
 The skill's `version` field in `SKILL.md` is authoritative. Future versions will add:
 

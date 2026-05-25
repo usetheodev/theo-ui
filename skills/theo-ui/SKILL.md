@@ -140,7 +140,7 @@ If the project already has code — a `package.json`, a Vite/Next config, any Re
 
 ```
 Pre-flight findings:
-- @usetheo/ui: 0.11.0-next.0 (package.json L42)
+- @usetheo/ui: 0.12.0-next.0 (package.json L42)
 - Tailwind preset: loaded (tailwind.config.ts L8)
 - ThemeProvider: violet-forge default, density=comfortable (src/app/layout.tsx L18)
 - Density hook usage: 0 call sites (no runtime density toggle wired)
