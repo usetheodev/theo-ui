@@ -379,6 +379,21 @@ export {
   type PaginationProps,
 } from "./components/primitives/pagination/index.js";
 
+// Brief #5 — 3 dashboard primitives + 2 pre-reqs (0.11.0-next.0)
+// Closes 3 TheoCloud Deep Review findings (§ 2.12 P2, § 2.2 + § 2.4 P1
+// Top-5 fix #2, CC-3 boilerplate dedup). DropdownMenu + ActionBar
+// added as explicit pre-reqs (Brief #5 assumed they existed).
+export { DropdownMenu } from "./components/primitives/dropdown-menu/index.js";
+export { ActionBar, type ActionBarProps } from "./components/primitives/action-bar/index.js";
+export { PinInput, type PinInputProps } from "./components/primitives/pin-input/index.js";
+export {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+  type DataTableSort,
+} from "./components/composites/data-table/index.js";
+export { PageShell, type PageShellProps } from "./components/composites/page-shell/index.js";
+
 // Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";
 export {

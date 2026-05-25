@@ -1,6 +1,6 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.10.0-next.0",
+  "version": "0.11.0-next.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -12,20 +12,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css",
-    "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
-    "./components.css": "./dist/components.css",
-    "./tokens.css": "./dist/tokens.css",
-    "./tokens-v4.css": "./dist/tokens-v4.css",
-    "./preset.css": "./dist/preset.css",
-    "./preset": "./dist/preset.css",
-    "./fonts.css": "./dist/fonts.css",
-    "./fonts-cdn.css": "./dist/fonts-cdn.css",
-    "./slide/themes/default.css": "./dist/slide/themes/default.css",
-    "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
     "./account-menu": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/account-menu/index.js"
+    },
+    "./action-bar": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/action-bar/index.js"
     },
     "./agent-composer": {
       "types": "./dist/index.d.ts",
@@ -143,6 +136,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/command-palette/index.js"
     },
+    "./components.css": "./dist/components.css",
     "./confirm-dialog": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/confirm-dialog/index.js"
@@ -179,6 +173,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/danger-zone/index.js"
     },
+    "./data-table": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/data-table/index.js"
+    },
     "./deployment-row": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/deployment-row/index.js"
@@ -194,6 +192,10 @@
     "./domain-config": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/domain-config/index.js"
+    },
+    "./dropdown-menu": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/dropdown-menu/index.js"
     },
     "./empty-state": {
       "types": "./dist/index.d.ts",
@@ -211,6 +213,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/folder-selector/index.js"
     },
+    "./fonts-cdn.css": "./dist/fonts-cdn.css",
+    "./fonts.css": "./dist/fonts.css",
     "./form-field": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/form-field/index.js"
@@ -271,6 +275,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/model-selector/index.js"
     },
+    "./page-shell": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/page-shell/index.js"
+    },
     "./pagination": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/pagination/index.js"
@@ -283,10 +291,20 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/permission-modal/index.js"
     },
+    "./pin-input": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/pin-input/index.js"
+    },
     "./plan-badge": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/plan-badge/index.js"
     },
+    "./preset": "./dist/preset.css",
+    "./preset-v3-legacy": {
+      "types": "./dist/preset-v3-legacy.d.ts",
+      "import": "./dist/preset-v3-legacy.js"
+    },
+    "./preset.css": "./dist/preset.css",
     "./preview-env-card": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/preview-env-card/index.js"
@@ -383,6 +401,32 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/skills-list/index.js"
     },
+    "./slide": {
+      "types": "./dist/slide/index.d.ts",
+      "import": "./dist/slide/index.js"
+    },
+    "./slide-deck": {
+      "types": "./dist/slide-deck/index.d.ts",
+      "import": "./dist/slide-deck/index.js"
+    },
+    "./slide/plugins/emoji": {
+      "types": "./dist/slide/plugins/emoji/index.d.ts",
+      "import": "./dist/slide/plugins/emoji/index.js"
+    },
+    "./slide/plugins/math": {
+      "types": "./dist/slide/plugins/math/index.d.ts",
+      "import": "./dist/slide/plugins/math/index.js"
+    },
+    "./slide/plugins/mermaid": {
+      "types": "./dist/slide/plugins/mermaid/index.d.ts",
+      "import": "./dist/slide/plugins/mermaid/index.js"
+    },
+    "./slide/plugins/shiki": {
+      "types": "./dist/slide/plugins/shiki/index.d.ts",
+      "import": "./dist/slide/plugins/shiki/index.js"
+    },
+    "./slide/themes/default.css": "./dist/slide/themes/default.css",
+    "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
     "./social-auth-row": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/social-auth-row/index.js"
@@ -399,6 +443,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/steps-rail/index.js"
     },
+    "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
+    "./styles.css": "./dist/styles.css",
     "./sub-agent-dispatch": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/sub-agent-dispatch/index.js"
@@ -447,6 +493,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/token-usage-chart/index.js"
     },
+    "./tokens-v4.css": "./dist/tokens-v4.css",
+    "./tokens.css": "./dist/tokens.css",
     "./tool-call": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/tool-call/index.js"
@@ -475,41 +523,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/usage-meter/index.js"
     },
-    "./whiteboard": {
-      "types": "./dist/whiteboard/index.d.ts",
-      "import": "./dist/whiteboard/index.js"
-    },
-    "./slide": {
-      "types": "./dist/slide/index.d.ts",
-      "import": "./dist/slide/index.js"
-    },
-    "./slide/plugins/shiki": {
-      "types": "./dist/slide/plugins/shiki/index.d.ts",
-      "import": "./dist/slide/plugins/shiki/index.js"
-    },
-    "./slide/plugins/math": {
-      "types": "./dist/slide/plugins/math/index.d.ts",
-      "import": "./dist/slide/plugins/math/index.js"
-    },
-    "./slide/plugins/mermaid": {
-      "types": "./dist/slide/plugins/mermaid/index.d.ts",
-      "import": "./dist/slide/plugins/mermaid/index.js"
-    },
-    "./slide/plugins/emoji": {
-      "types": "./dist/slide/plugins/emoji/index.d.ts",
-      "import": "./dist/slide/plugins/emoji/index.js"
-    },
-    "./slide-deck": {
-      "types": "./dist/slide-deck/index.d.ts",
-      "import": "./dist/slide-deck/index.js"
-    },
     "./vite-plugin": {
       "types": "./dist/vite-plugin.d.ts",
       "import": "./dist/vite-plugin.js"
     },
-    "./preset-v3-legacy": {
-      "types": "./dist/preset-v3-legacy.d.ts",
-      "import": "./dist/preset-v3-legacy.js"
+    "./whiteboard": {
+      "types": "./dist/whiteboard/index.d.ts",
+      "import": "./dist/whiteboard/index.js"
     }
   },
   "files": [

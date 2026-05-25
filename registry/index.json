@@ -19,6 +19,12 @@
       "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a `button` with trailing chevron (account picker affordance); without, renders as a static `div`. PaaS-shape sibling of ProjectSwitcher."
     },
     {
+      "name": "action-bar",
+      "type": "registry:ui",
+      "title": "ActionBar",
+      "description": "Page-top action strip primitive. Three optional slots: search input (flex-1, grows to fill), filter icon button, and primary action button (right-aligned). Returns null when no slots are provided. Used standalone or composed inside <PageShell>. Primary action supports loading state with spinner."
+    },
+    {
       "name": "agent-composer",
       "type": "registry:ui",
       "title": "AgentComposer",
@@ -265,6 +271,12 @@
       "description": "Destructive-actions section primitive with sub-component DangerZone.Action. Red-bordered container with title bar (default 'Danger Zone') and action rows. Each row carries title + description + consumer-provided action slot (typically a destructive Button). Rows separated by hairline dividers; last row drops the bottom border via last:border-b-0."
     },
     {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "DataTable",
+      "description": "Generic, sortable, expandable composite over <Table>. Operator-grade entity-list patterns: sortable headers (controlled OR uncontrolled), sticky header, expandable rows (multi default + expandMode='single' opt-in), row action menus via DropdownMenu, client-side pagination, loading skeleton, empty state. Generic over T (e.g. DataTable<Domain>)."
+    },
+    {
       "name": "deployment-row",
       "type": "registry:block",
       "title": "DeploymentRow",
@@ -287,6 +299,12 @@
       "type": "registry:block",
       "title": "DomainConfig",
       "description": "Manage custom domains for a project."
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "DropdownMenu",
+      "description": "Accessible dropdown menu primitive built on @radix-ui/react-dropdown-menu. Sub-components attached via Object.assign (Trigger, Content, Item, CheckboxItem, RadioItem, Label, Separator, Shortcut, Group, Sub, SubTrigger, SubContent, RadioGroup). Styled with @usetheo/ui design tokens. Consolidates the 5 prior direct-Radix usages under a single wrapper."
     },
     {
       "name": "empty-state",
@@ -415,6 +433,12 @@
       "description": "Chip dropdown for picking the active LLM."
     },
     {
+      "name": "page-shell",
+      "type": "registry:ui",
+      "title": "PageShell",
+      "description": "Page-level scaffold composite. Renders title + optional description + optional ActionBar (when search/primaryAction/onFilterClick provided), then one of four mutually-exclusive content states (loading > error > empty > children). Loading defaults to a centered spinner Card; loadingNode escape hatch lets consumers pass custom skeleton. Error state renders Card with message + optional retry button + optional docsHref. Empty state delegates to <EmptyState>. PageShell does NOT manage document.title — pass onTitleChange callback to wire your own hook."
+    },
+    {
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
@@ -437,6 +461,12 @@
       "type": "registry:lib",
       "title": "Theo UI permission types",
       "description": "Shared TypeScript types for permission requests, scopes, and decisions."
+    },
+    {
+      "name": "pin-input",
+      "type": "registry:ui",
+      "title": "PinInput",
+      "description": "Multi-slot OTP / code input primitive. N separate boxes (default 6) that auto-advance focus on input. Paste fills all slots from clipboard with whitespace stripped. Arrow keys navigate; backspace clears current slot then moves focus back when empty. numeric / alphanumeric inputMode (default numeric, triggers mobile numeric keyboard via pattern=[0-9]*). Optional mask renders bullets. Optional error state applies destructive border. onComplete fires once when value reaches length — NOT on mount with pre-filled value."
     },
     {
       "name": "plan-badge",

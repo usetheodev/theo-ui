@@ -7,6 +7,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0-next.0] - 2026-05-25
+
+Minor (additive, zero breaking change) — ships Brief #5 from the
+TheoCloud dashboard team, closing 3 measured Deep Review findings.
+Five new components: 3 brief-asks (PinInput, DataTable, PageShell)
++ 2 explicit pre-requisites (DropdownMenu, ActionBar) that the
+brief assumed existed but didn't.
+
+Plan: `.claude/knowledge-base/plans/dashboard-primitives-brief-5-plan.md`
+ADR: `.claude/knowledge-base/decisions/page-shell-composite-pattern.md`
+Brief: `theo/docs/handoff/2026-05-25-theo-ui-cloud-dashboard-brief-5.md`
+
+### Added
+
+- **`<DropdownMenu>` primitive (NEW, Brief #5 pre-req)** — accessible
+  menu built on `@radix-ui/react-dropdown-menu` (already a bundled
+  dep, no new peer needed). Sub-components attached via
+  `Object.assign`: `Trigger`, `Portal`, `Content`, `Item`,
+  `CheckboxItem`, `RadioItem`, `Label`, `Separator`, `Shortcut`,
+  `Group`, `Sub`, `SubTrigger`, `SubContent`, `RadioGroup`. Styled
+  with `@usetheo/ui` design tokens. Consolidates 5 prior direct-
+  Radix usages (`model-selector`, `intent-selector`, `agent-profile`,
+  `theme-switcher`, `theo-code-shell`) under a single styled
+  wrapper. 6 unit tests + 5 Ladle stories. SSR-safe.
+- **`<ActionBar>` primitive (NEW, Brief #5 pre-req)** — page-top
+  action strip with three optional slots: search input (flex-1,
+  grows to fill), filter icon button, primary action button
+  (right-aligned). Returns `null` when no slots are provided.
+  Primary action supports `loading` state with `Loader2` spinner.
+  Usable standalone or composed inside `<PageShell>`. 6 unit tests
+  + 5 Ladle stories.
+- **`<PinInput>` primitive (NEW)** — multi-slot OTP / code input
+  with auto-advance focus, paste handling (whitespace stripped),
+  arrow-key navigation, backspace clearing + focus back. Default
+  6 slots, configurable. `inputMode="numeric"` (default, triggers
+  mobile numeric keyboard via `pattern="[0-9]*"`) or
+  `alphanumeric` (auto-uppercase). Optional `mask` renders bullets.
+  Optional `error` state applies destructive border. `onComplete`
+  fires once on transitions to complete (NOT on mount with pre-
+  filled value — verified via test). Closes Deep Review § 2.12 P2
+  (Verification page off-brand single-input pattern). 17 unit
+  tests + 7 Ladle stories.
+- **`<DataTable>` composite (NEW)** — generic, sortable,
+  expandable composite over `<Table>` + `<Pagination>` +
+  `<Skeleton>` + `<EmptyState>` + `<DropdownMenu>`. Generic over
+  `T` (e.g. `DataTable<Domain>`). Sortable headers (controlled via
+  `onSortChange` OR uncontrolled client-side). Sticky header
+  (default true). Expandable rows with `expandable(row)` callback
+  — multi-row default, opt-in `expandMode="single"`. Row actions
+  via `rowActions(row)` opens DropdownMenu. Client-side pagination
+  with `pageSize`; sort changes reset to page 0. Loading state
+  renders 5 skeleton rows. Empty state delegates to `<EmptyState>`
+  or custom `emptyState` prop. Expanded row `colSpan` correctly
+  accounts for chevron + actions columns (EC-1 fix). pageSize<=0
+  clamps to 1 graceful degradation. Closes Deep Review Top-5
+  fix #2, § 2.2 P1, § 2.4 P1 (card-grid → sortable table for
+  Domains + Projects). 19 unit tests + 8 Ladle stories.
+- **`<PageShell>` composite (NEW)** — page-level scaffold. Title
+  + optional description + optional ActionBar (when search /
+  primaryAction / onFilterClick provided), then one of four
+  mutually-exclusive content states with strict precedence:
+  loading > error > empty > children. Default loading is a
+  centered spinner Card; `loadingNode?` escape hatch for custom
+  skeletons. Error renders Card with message + optional retry
+  button + optional docs link. Empty delegates to `<EmptyState>`.
+  `aria-busy="true"` on the `<main>` element while loading. Does
+  NOT manage `document.title` (D3 scope-narrowing); consumers
+  wire `onTitleChange?` callback to their own hook. Dedupes
+  ~20 LOC × 13 dashboard pages of boilerplate. 15 unit tests + 6
+  Ladle stories.
+
+### Notes
+
+- Edge-case review surfaced 1 MUST FIX (DataTable expanded row
+  colSpan miscalculation when rowActions present) + 14 SHOULD TEST
+  + 7 DOCUMENT — all incorporated into TDD blocks before
+  implementation.
+- D3 scope-narrowing: PageShell does NOT include `useSetPageTitle`
+  / `PageMetaProvider` — those are consumer-scope hooks. The
+  library exposes only the visible heading + an `onTitleChange?`
+  callback for the consumer to wire their own title management.
+- DropdownMenu consolidation is opt-in: the 5 existing direct-
+  Radix usages stay untouched in this release; migration is a
+  follow-up PR.
+- Zero new peer-deps. `@radix-ui/react-dropdown-menu` was already
+  bundled.
+
+### Bundle delta (consumer canary)
+
+Measured against TheoCloud dashboard (no consumer migration to the
+new primitives yet — pure version bump):
+
+| Metric | 0.10.0-next.0 | 0.11.0-next.0 | Δ |
+|---|---|---|---|
+| `@usetheo/ui` chunk | TBD | TBD | TBD |
+| TOTAL initial JS | TBD | TBD | TBD |
+
+(Evidence file:
+`.claude/knowledge-base/baselines/2026-05-26-post-brief-5/theocloud-bundle-delta.txt`)
+
 ## [0.10.0-next.0] - 2026-05-25
 
 Minor (additive, zero breaking change) — fixes a publishing-pipeline
