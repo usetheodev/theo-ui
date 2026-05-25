@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0-next.0] - 2026-05-25
+
+Minor (additive, zero breaking change) — ships two LLM-facing artifacts
+that complement the existing `llms.txt`: a structured visual spec
+(`DESIGN.md`) and a companion agent skill (`skills/theo-ui/`).
+
 ### Added
 
 - **`DESIGN.md` at repo root (NEW)** — plain-text design system spec
@@ -20,6 +26,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   so consumers see the visual spec at `node_modules/@usetheo/ui/DESIGN.md`.
   Reference research lives at
   `.claude/knowledge-base/reference/design-md-convention.md`.
+- **`skills/theo-ui/` companion agent skill (NEW)** — library-aware
+  design skill for AI coding assistants (Claude Code, Cursor, Codex,
+  OpenCode, Windsurf, Copilot) installable via the `vercel-labs/skills`
+  CLI:
+
+  ```
+  npx skills add usetheodev/theo-ui
+  ```
+
+  Four verbs (default build / `audit` / `migrate` / `catalog`), 32
+  universal slop-test gates plus surface-specific extensions, pre-emit
+  self-critique on six axes (Library-fit · Token-fidelity · Composition ·
+  A11y · Restraint · Voice), 12 page archetypes (P1–P12), 5 surfaces
+  (agent-chat · cloud-dashboard · settings-form · marketing · auth).
+  Project memory at `.theo-ui-skill/log.json`. 30 files, ~9300 lines
+  of markdown, ~416 KB. Distributed via the GitHub repo (not the npm
+  package). Root README ships Option C in Quickstart pointing
+  consumers at the skill.
 
 ## [0.11.0-next.0] - 2026-05-25
 
