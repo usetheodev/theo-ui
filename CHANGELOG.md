@@ -7,6 +7,105 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0-next.0] - 2026-05-25
+
+Minor (additive, zero breaking change) — fixes a publishing-pipeline
+defect surfaced by the TheoCloud dashboard bundle audit
+(`MEET-ASYNC-AMENDMENT-2026-05-24-002`). Since 0.7.0, the ~100 subpath
+exports declared in `package.json#exports` (`./alert`, `./button`,
+`./table`, …) were **cosmetic** — each pointed at the same
+`./dist/index.js` (the 417 KB barrel). `import { Alert } from
+"@usetheo/ui/alert"` resolved byte-identical to
+`import { Alert } from "@usetheo/ui"`, and barrel tree-shaking
+failed in consumers because of `forwardRef` side-effect bailouts,
+`Object.assign` compound components, and `sideEffects: ["**/*.css"]`
+conservatism. TheoCloud measured **0 KB dropped** from the 240 KB
+minified barrel regardless of how few exports were used.
+
+This release extends the per-component dist pattern that already
+worked for `whiteboard` / `slide` / `slide-deck` to every primitive
+and composite. The barrel `import { X } from "@usetheo/ui"` is
+preserved unchanged (additive migration shape, same as `@mui/material`).
+
+Plan: `.claude/knowledge-base/plans/subpath-tree-shaking-plan.md`
+ADR: `.claude/knowledge-base/decisions/subpath-exports-per-component.md`
+Brief: `theo/docs/handoff/2026-05-24-theo-ui-subpath-tree-shaking-brief-4.md`
+
+### Changed
+
+- **`tsup.config.ts`** auto-globs primitive + composite entries from
+  `src/components/{primitives,composites}/<name>/index.ts` at
+  config-load time. 87 primitives + 26 composites — 3 excluded
+  (`whiteboard`, `slide`, `slide-deck` retain their existing manual
+  isolated entries). New components ship subpath-shaped automatically
+  without `package.json#exports` hand-maintenance.
+- **`splitting: true`** in tsup now dedupes shared utilities (`cn`,
+  forwardRef wrappers, theme helpers, lucide icon imports) into
+  `dist/chunk-<hash>.js` instead of inlining into every per-component
+  bundle. ~119 shared chunks emitted; barrel + per-component dist
+  files re-export from them.
+- **`dts: { entry: ... }`** restricted to the barrel + isolated
+  engines only (D5 escalation). Generating per-component `.d.ts` for
+  all 114 entries OOMs the rollup-plugin-dts worker thread even with
+  `NODE_OPTIONS=--max-old-space-size=8192` (the flag does not
+  propagate to workers). Per-component subpaths resolve their `types`
+  field at the barrel `dist/index.d.ts` — TypeScript still finds
+  `Alert`/`AlertProps` from `import { Alert } from "@usetheo/ui/alert"`.
+  Trade-off: consumers' typecheck pulls the full type graph regardless
+  of subpath, but the JS dist (where tree-shaking matters) is
+  per-component and small.
+
+### Added
+
+- **`scripts/regen-subpath-exports.ts`** — runs after `tsup` and
+  rewrites `package.json#exports` so per-component subpaths point at
+  their own dist file. Refuses to write if any non-root entry still
+  points at `./dist/index.js` (permanent guard against the cosmetic-
+  subpath defect coming back). Verifies that every source-tree
+  component has a matching dist entry (EC-2 guard against silent
+  partial builds). Wired into `package.json#scripts.build` so
+  `pnpm build` produces a consistent `dist/` + `exports` map every
+  time.
+- **`scripts/sync-exports.ts`** updated to resolve each component's
+  layer (primitives vs composites) via filesystem and emit the
+  correct per-component dist path. Stays the source-of-truth for
+  the structure gate; `regen-subpath-exports.ts` is the same logic
+  applied post-build against the actual dist tree.
+
+### Bundle deltas
+
+| File | Before (0.9.0-next.0) | After (0.10.0-next.0) | Δ |
+|---|---|---|---|
+| `dist/index.js` | 417,113 B | 49,018 B | **−88.2%** |
+| `dist/slide/index.js` | 23,825 B | 400 B | −98.3% |
+| `dist/slide-deck/index.js` | 58,413 B | 35,795 B | −38.7% |
+| `dist/components.css` | 89,654 B | 93,069 B | +3.8% (within ±5%) |
+| `dist/styles.css` | 4,720 B | 4,720 B | 0% |
+| **Build time** | 17.72 s | 15.98 s | −10% |
+| **Tarball (`pnpm pack`)** | 1.1 MB | 1.2 MB | +9% |
+| **New per-component dist files** | 0 | 113 | + |
+| **Shared chunks (`dist/chunk-*.js`)** | 0 | 119 | + |
+
+The barrel shrank because all component code now lives in shared
+chunks. Consumer-side bundle delta against TheoCloud dashboard:
+**TBD — see Phase 8 evidence file** at
+`.claude/knowledge-base/baselines/2026-05-25-post-subpath/theocloud-bundle-delta.txt`
+once measured.
+
+### Migration (consumer-side, opt-in)
+
+```diff
+- import { Card, Button, Alert } from "@usetheo/ui";
++ import { Card } from "@usetheo/ui/card";
++ import { Button } from "@usetheo/ui/button";
++ import { Alert } from "@usetheo/ui/alert";
+```
+
+The barrel import keeps working — migration is gradual, file by
+file. CSS, themes, and isolated engines stay barrel-imported:
+`import { ThemeProvider, violetForge } from "@usetheo/ui"`,
+`import "@usetheo/ui/styles.css"`.
+
 ## [0.9.0-next.0] - 2026-05-23
 
 Minor — adds the two deferred primitives revealed by the Brief #3

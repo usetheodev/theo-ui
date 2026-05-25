@@ -1,0 +1,26 @@
+2.7M	dist
+total 1772
+drwxrwxr-x  6 paulo paulo   4096 May 23 20:35 .
+drwxrwxr-x 18 paulo paulo   4096 May 24 12:11 ..
+-rw-rw-r--  1 paulo paulo  93047 May 23 20:34 components.css
+drwxrwxr-x  2 paulo paulo   4096 May 23 20:34 fonts
+-rw-rw-r--  1 paulo paulo   1295 May 23 20:34 fonts-cdn.css
+-rw-rw-r--  1 paulo paulo   2569 May 23 20:34 fonts.css
+-rw-rw-r--  1 paulo paulo 172306 May 23 20:35 index.d.ts
+-rw-rw-r--  1 paulo paulo 426609 May 23 20:34 index.js
+-rw-rw-r--  1 paulo paulo 986751 May 23 20:34 index.js.map
+-rw-rw-r--  1 paulo paulo   8453 May 23 20:35 plugin-Atb0VKtr.d.ts
+-rw-rw-r--  1 paulo paulo    991 May 23 20:34 preset.css
+-rw-rw-r--  1 paulo paulo   1193 May 23 20:35 preset-v3-legacy.d.ts
+-rw-rw-r--  1 paulo paulo   5934 May 23 20:34 preset-v3-legacy.js
+-rw-rw-r--  1 paulo paulo  12940 May 23 20:34 preset-v3-legacy.js.map
+drwxrwxr-x  4 paulo paulo   4096 May 23 20:35 slide
+drwxrwxr-x  2 paulo paulo   4096 May 23 20:35 slide-deck
+-rw-rw-r--  1 paulo paulo   4720 May 23 20:34 styles.css
+-rw-rw-r--  1 paulo paulo   2243 May 23 20:34 styles-v3-legacy.css
+-rw-rw-r--  1 paulo paulo   8212 May 23 20:34 tokens.css
+-rw-rw-r--  1 paulo paulo   6244 May 23 20:34 tokens-v4.css
+-rw-rw-r--  1 paulo paulo   1273 May 23 20:35 vite-plugin.d.ts
+-rw-rw-r--  1 paulo paulo   2624 May 23 20:34 vite-plugin.js
+-rw-rw-r--  1 paulo paulo   7684 May 23 20:34 vite-plugin.js.map
+drwxrwxr-x  2 paulo paulo   4096 May 23 20:35 whiteboard

@@ -23,6 +23,7 @@
  * the live `package.json#exports`. Run `pnpm sync:exports` whenever
  * `src/index.ts` adds or removes a component export.
  */
+import { statSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -136,6 +137,24 @@ function extractComponentSubpaths(indexContent: string): string[] {
   return Array.from(names).sort();
 }
 
+/**
+ * Resolve a component slug to its layer (primitives vs composites) by
+ * checking the source tree. Brief #4 (subpath tree-shaking plan) made
+ * `package.json#exports` point at per-component dist files instead of
+ * the barrel — to emit the correct path we need to know the layer.
+ */
+function resolveLayer(slug: string): "primitives" | "composites" | null {
+  for (const layer of ["primitives", "composites"] as const) {
+    try {
+      const stat = statSync(join(ROOT, "src/components", layer, slug, "index.ts"));
+      if (stat.isFile()) return layer;
+    } catch {
+      // try next layer
+    }
+  }
+  return null;
+}
+
 function buildExports(componentSubpaths: string[]): Record<string, ExportEntry | string> {
   const map: Record<string, ExportEntry | string> = { ...BASE_EXPORTS };
   for (const name of componentSubpaths) {
@@ -148,9 +167,23 @@ function buildExports(componentSubpaths: string[]): Record<string, ExportEntry |
         `sync-exports collision: auto-scanned subpath "${key}" conflicts with an ISOLATED_SUBPATHS entry. Engines (Whiteboard, etc.) must stay out of the barrel — remove the export from src/index.ts.`,
       );
     }
+    const layer = resolveLayer(name);
+    if (layer === null) {
+      // Symbol exported from the barrel that has no `src/components/<layer>/<name>/`
+      // folder — falls back to the barrel (themes, helpers, types-only
+      // exports like `Attachment`, `Message`, etc.). These stay barrel-mapped.
+      map[key] = {
+        types: "./dist/index.d.ts",
+        import: "./dist/index.js",
+      };
+      continue;
+    }
+    // Per-component dist file emitted by tsup (Brief #4 / D5 escalation —
+    // types still point at the barrel because per-component .d.ts files
+    // are not generated to avoid worker OOM).
     map[key] = {
       types: "./dist/index.d.ts",
-      import: "./dist/index.js",
+      import: `./dist/${layer}/${name}/index.js`,
     };
   }
   for (const [key, entry] of Object.entries(ISOLATED_SUBPATHS)) {
