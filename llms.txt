@@ -1,13 +1,13 @@
 # @usetheo/ui — Theo UI (Violet Forge)
 
-> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 116 components (89 primitives + 27 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
+> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 121 components (92 primitives + 29 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
 
 This file follows the [llms.txt convention](https://llmstxt.org/) and gives an LLM the **factual ground truth** of the project: package name, import paths, component inventory, locked conventions, anti-patterns, and links to the canonical documentation. Treat the bullets below as non-negotiable contracts unless the source files contradict them — in which case the source files win and this file is stale.
 
 ## Project metadata
 
 - **npm package:** `@usetheo/ui`
-- **Current version:** `0.10.0-next.0` (npm dist-tag `next`; latest release line)
+- **Current version:** `0.11.0-next.0` (npm dist-tag `next`; latest release line)
 - **License:** Apache-2.0
 - **Repository:** `https://github.com/usetheodev/theo-ui`
 - **Docs site:** `https://docs.usetheo.dev/theoui`
@@ -103,6 +103,7 @@ Located in `src/components/composites/{slug}/`.
 
 ## Recent deliveries (PaaS shape)
 
+- **0.11.0-next.0 (Brief #5 — 3 dashboard primitives + 2 pre-reqs, 2026-05-25):** Closes 3 measured TheoCloud Deep Review findings. `PinInput` (6-box OTP input with auto-advance, paste handling, mask, error — closes § 2.12 P2). `DataTable` composite (sortable + sticky + expandable rows with `expandMode="single"|"multiple"` + row actions via DropdownMenu + client-side pagination + loading skeleton + empty state — closes Top-5 #2 / § 2.2 + § 2.4 P1). `PageShell` composite (page-level scaffold with state precedence loading > error > empty > children; does NOT manage document.title — exposes `onTitleChange` callback for consumer-scope hook — closes CC-3 indirect; D3 scope decision). Plus 2 explicit pre-requisites the brief assumed existed: `DropdownMenu` primitive (Radix wrapper consolidating 5 prior direct usages) and `ActionBar` primitive (search + filter + primary action; composed by PageShell). Zero new peer-deps. ADR `page-shell-composite-pattern.md` documents the scope-narrowing decision.
 - **0.10.0-next.0 (Brief #4 — subpath tree-shaking, build pipeline fix):** ~100 cosmetic subpath exports (every entry pointed at the same 417 KB barrel) replaced with real per-component dist files via tsup auto-glob + `splitting: true`. `dist/index.js` shrank from 417 KB → 49 KB (−88%) because all component code now lives in 119 shared chunks. Per-component dist files (~150-200 bytes each) are tiny re-export wrappers. Per-component `.d.ts` not emitted (would OOM tsup worker pool) — types resolve via barrel `dist/index.d.ts`. `scripts/regen-subpath-exports.ts` runs after every build to keep `package.json#exports` honest (refuses to write if any straggler points at the barrel). Zero breaking change; consumer migration is opt-in file-by-file. ADR at `.claude/knowledge-base/decisions/subpath-exports-per-component.md`.
 - **0.9.0-next.0 (Brief #3 — deferred follow-ups, 2 components):** `Alert` (persistent inline notice; 4 intents — info/success/warning/destructive — with mapped lucide icons and role=alert for destructive vs role=status for others; optional title/description/action/onDismiss), `Pagination` (accessible nav landmark with first/prev/numbers/next/last + visual ellipses + aria-current=page; keyboard nav ArrowLeft/Right/Home/End; configurable siblingCount + jump buttons + size; returns null when totalPages <= 1; exports a pure `computePageRange` helper for unit-testing the range logic in isolation). Zero new peer-deps. Brief #3 consumer: TheoCloud `<VerificationBanner>` → 3-line `<Alert>`.
 - **0.8.0-next.0 (Brief #2 — cross-cutting, 8 components):** `Table` (sub-components + sortable headers), `StatusDot` (5 kinds + auto-pulse), `CopyButton` (clipboard + `aria-live` + SSR-safe), `Timestamp` (`Intl.RelativeTimeFormat`, native `title` tooltip, Unix ms only), `StatTile` (dual button/div mode), `DangerZone` (`.Action` sub-component), `ConfirmDialog` (typed-phrase guard + async loading + Enter-to-confirm), `CodeBlock` (terminal prefix + caption + raw-code copy). Consumer: TheoCloud dashboard. Zero new peer-deps; bundle +5.4% (rebaselined).
@@ -268,4 +269,4 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
 
 The code, the README, and the `package.json#exports` map are **authoritative**. If `llms.txt` disagrees with them, the code wins — update this file via PR with a one-line rationale. Locked names (Section "Locked names") and voice/narrative rules require a strategic review at the monorepo level before being weakened or repealed.
 
-— Generated 2026-05-23 (last updated 2026-05-25 for 0.10.0-next.0 / Brief #4 subpath tree-shaking) from filesystem inventory + `CLAUDE.md` + `README.md`. Regenerate by inspecting `src/components/{primitives,composites}/*/` directories and updating the catalog sections above.
+— Generated 2026-05-23 (last updated 2026-05-25 for 0.11.0-next.0 / Brief #5 dashboard primitives) from filesystem inventory + `CLAUDE.md` + `README.md`. Regenerate by inspecting `src/components/{primitives,composites}/*/` directories and updating the catalog sections above.
