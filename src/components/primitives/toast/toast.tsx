@@ -23,7 +23,7 @@ import { cn } from "../../../lib/cn.js";
 
 const toastVariants = cva(
   [
-    "group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-lg border p-4 pr-10 shadow-md",
+    "group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-lg border pr-10 shadow-md",
     "data-[state=open]:slide-in-from-top-full data-[state=open]:fade-in-0 data-[state=open]:animate-in",
     "data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=closed]:animate-out",
     "data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)]",
@@ -38,8 +38,13 @@ const toastVariants = cva(
         warning: "border-warning/40 bg-popover text-popover-foreground",
         destructive: "border-destructive/50 bg-popover text-popover-foreground",
       },
+      size: {
+        sm: "p-3 text-body-sm",
+        md: "p-4 text-body-md",
+        lg: "p-5 text-body-lg",
+      },
     },
-    defaultVariants: { variant: "default" },
+    defaultVariants: { variant: "default", size: "md" },
   },
 );
 
@@ -58,8 +63,12 @@ interface ToastProps
     VariantProps<typeof toastVariants> {}
 
 const ToastRoot = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>(
-  ({ className, variant = "default", children, ...props }, ref) => (
-    <ToastPrimitive.Root ref={ref} className={cn(toastVariants({ variant }), className)} {...props}>
+  ({ className, variant = "default", size, children, ...props }, ref) => (
+    <ToastPrimitive.Root
+      ref={ref}
+      className={cn(toastVariants({ variant, size }), className)}
+      {...props}
+    >
       <span aria-hidden="true">{iconForVariant[variant as ToastVariant]}</span>
       <div className="min-w-0 flex-1">{children}</div>
     </ToastPrimitive.Root>

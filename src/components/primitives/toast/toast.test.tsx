@@ -70,4 +70,60 @@ describe("Toast", () => {
     expect(Toast.Close.displayName).toBe("Toast.Close");
     expect(Toast.Action.displayName).toBe("Toast.Action");
   });
+
+  // T1.3 — size prop (theming-and-sizes plan)
+  it("applies p-3 + text-body-sm when size='sm'", () => {
+    render(
+      <Toast.Provider>
+        <Toast size="sm" open>
+          <Toast.Title>tiny</Toast.Title>
+        </Toast>
+        <Toast.Viewport />
+      </Toast.Provider>,
+    );
+    const root = screen.getByText("tiny").closest("[role=status],[role=alert],li");
+    expect(root?.className ?? "").toMatch(/p-3/);
+    expect(root?.className ?? "").toMatch(/text-body-sm/);
+  });
+
+  it("applies p-4 + text-body-md when size omitted (default md)", () => {
+    render(
+      <Toast.Provider>
+        <Toast open>
+          <Toast.Title>regular</Toast.Title>
+        </Toast>
+        <Toast.Viewport />
+      </Toast.Provider>,
+    );
+    const root = screen.getByText("regular").closest("[role=status],[role=alert],li");
+    expect(root?.className ?? "").toMatch(/p-4/);
+    expect(root?.className ?? "").toMatch(/text-body-md/);
+  });
+
+  it("applies p-5 + text-body-lg when size='lg'", () => {
+    render(
+      <Toast.Provider>
+        <Toast size="lg" open>
+          <Toast.Title>banner</Toast.Title>
+        </Toast>
+        <Toast.Viewport />
+      </Toast.Provider>,
+    );
+    const root = screen.getByText("banner").closest("[role=status],[role=alert],li");
+    expect(root?.className ?? "").toMatch(/p-5/);
+    expect(root?.className ?? "").toMatch(/text-body-lg/);
+  });
+
+  it("preserves variant when size is set", () => {
+    render(
+      <Toast.Provider>
+        <Toast variant="destructive" size="sm" open>
+          <Toast.Title>oops</Toast.Title>
+        </Toast>
+        <Toast.Viewport />
+      </Toast.Provider>,
+    );
+    const root = screen.getByText("oops").closest("[role=status],[role=alert],li");
+    expect(root?.className ?? "").toMatch(/border-destructive\/50/);
+  });
 });

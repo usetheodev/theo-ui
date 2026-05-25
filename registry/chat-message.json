@@ -3,18 +3,99 @@
   "name": "chat-message",
   "type": "registry:ui",
   "title": "ChatMessage",
-  "description": "Single chat turn rendered as user bubble, assistant card, or system callout with accent border.",
-  "dependencies": [],
-  "registryDependencies": [
-    "chat-types",
-    "cn",
-    "tailwind-preset"
-  ],
+  "description": "Composable chat-turn surface with Vercel AI SDK UIMessage parts API — markdown, code blocks, math, tool calls, reasoning, file attachments, source citations, branching navigation.",
+  "dependencies": ["lucide-react", "hast", "mdast"],
+  "registryDependencies": ["chat-types", "cn", "safe-href", "button", "tailwind-preset"],
   "files": [
     {
-      "path": "components/primitives/chat-message/chat-message.tsx",
+      "path": "components/composites/chat-message/chat-message.tsx",
       "type": "registry:ui",
       "target": "components/ui/chat-message.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/chat-message-response.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message-response.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/chat-message-actions.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message-actions.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/chat-message-toolbar.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message-toolbar.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/chat-message-branch.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message-branch.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/parts/text-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/parts/text-part.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/parts/reasoning-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/parts/reasoning-part.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/parts/tool-call-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/parts/tool-call-part.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/parts/file-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/parts/file-part.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/parts/source-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/parts/source-part.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/parts/data-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/parts/data-part.tsx"
+    },
+    {
+      "path": "components/composites/chat-message/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/chat-message/index.ts"
+    },
+    {
+      "path": "lib/markdown/parser.ts",
+      "type": "registry:lib",
+      "target": "lib/markdown/parser.ts"
+    },
+    {
+      "path": "lib/markdown/streaming-preprocess.ts",
+      "type": "registry:lib",
+      "target": "lib/markdown/streaming-preprocess.ts"
+    },
+    {
+      "path": "lib/markdown/code-block.tsx",
+      "type": "registry:lib",
+      "target": "lib/markdown/code-block.tsx"
+    },
+    {
+      "path": "lib/markdown/inline-code.tsx",
+      "type": "registry:lib",
+      "target": "lib/markdown/inline-code.tsx"
+    },
+    {
+      "path": "lib/markdown/math.tsx",
+      "type": "registry:lib",
+      "target": "lib/markdown/math.tsx"
+    },
+    {
+      "path": "lib/markdown/mermaid.tsx",
+      "type": "registry:lib",
+      "target": "lib/markdown/mermaid.tsx"
     }
   ]
 }

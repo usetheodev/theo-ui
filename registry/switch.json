@@ -5,7 +5,8 @@
   "title": "Switch",
   "description": "Built on Radix Switch — accessible binary toggle with on / off states and disabled support.",
   "dependencies": [
-    "@radix-ui/react-switch"
+    "@radix-ui/react-switch",
+    "class-variance-authority"
   ],
   "registryDependencies": [
     "cn",

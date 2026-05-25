@@ -21,6 +21,20 @@ export const Default: Story = () => (
   </div>
 );
 
+export const Sizes: Story = () => (
+  <div className="grid max-w-md gap-4">
+    <Field id="sm" label="Small (sm)">
+      <Input id="sm" size="sm" placeholder="32px tall, body-sm text" />
+    </Field>
+    <Field id="md" label="Medium (md, default)">
+      <Input id="md" size="md" placeholder="40px tall, body-md text" />
+    </Field>
+    <Field id="lg" label="Large (lg)">
+      <Input id="lg" size="lg" placeholder="48px tall, body-lg text" />
+    </Field>
+  </div>
+);
+
 function Field({
   id,
   label,

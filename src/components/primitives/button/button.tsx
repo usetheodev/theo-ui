@@ -28,6 +28,15 @@ const buttonVariants = cva(
     "font-medium font-sans tracking-tight",
     "transition-[box-shadow,background-color,color,transform] duration-base ease-out-soft",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    // Tailwind v4 dropped the `button { cursor: pointer }` preflight rule
+    // (https://tailwindcss.com/docs/upgrade-guide#default-button-cursor) so
+    // every <button> now shows the default arrow cursor. Restore the
+    // "clickable hand" explicitly for the Button primitive; the
+    // `disabled:pointer-events-none` rule below short-circuits cursor
+    // application for disabled state (no events → cursor is moot).
+    // `aria-disabled:cursor-default` is a belt-and-suspenders override
+    // for paths where pointer-events still flow.
+    "cursor-pointer disabled:cursor-default aria-disabled:cursor-default",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   ],
@@ -63,9 +72,12 @@ const buttonVariants = cva(
       },
       size: {
         sm: "h-8 px-3 text-body-sm",
-        md: "h-10 px-4 text-body-md",
-        lg: "h-12 px-6 text-body-lg",
-        icon: "h-10 w-10 p-0",
+        // md: tier ajustável via density (CSS var on :root). See D3 ADR of
+        // faang-density-tightening plan. Default `comfortable` density makes
+        // this 36px (--theo-control-h: 2.25rem). sm and lg stay hardcoded.
+        md: "h-[var(--theo-control-h,2.25rem)] px-[var(--theo-control-px,0.875rem)] text-body-sm",
+        lg: "h-11 px-4 text-body-md",
+        icon: "h-[var(--theo-control-h,2.25rem)] w-[var(--theo-control-h,2.25rem)] p-0",
       },
     },
     defaultVariants: {

@@ -1,0 +1,66 @@
+TheoCloud dashboard — bundle-delta measurement (Brief #5)
+=========================================================
+Date: 2026-05-25
+Source: cd theo/cloud/dashboard && pnpm run build && size-limit
+Methodology: vite build (rollup), brotli-compressed size of named chunks.
+Reference: Brief #4 evidence file (2026-05-25-post-subpath).
+
+BEFORE (@usetheo/ui@0.10.0-next.0, no Brief #5 components imported)
+-------------------------------------------------------------------
+@usetheo/ui chunk:    10.96 KB brotli  (vite chunk: theo-ui-*.js)
+TOTAL initial JS:    134.68 KB brotli
+
+AFTER (@usetheo/ui@0.11.0-next.0, no consumer migration yet — pure dep bump)
+---------------------------------------------------------------------------
+@usetheo/ui chunk:    10.98 KB brotli  (vite chunk: theo-ui-*.js, 43.32 KB minified)
+TOTAL initial JS:    135.56 KB brotli
+
+DELTA
+-----
+@usetheo/ui chunk:    +0.02 KB brotli  (+0.2%)
+TOTAL initial JS:     +0.88 KB brotli  (+0.6%)
+
+Per-chunk cap (post-0.10 v1.4 — 18 KB):  passes with 7.02 KB headroom (was 7.04 KB).
+Total hard gate (post-0.10 v1.4 — 180 KB): passes with 44.44 KB headroom (was 45.32 KB).
+
+ACCEPTANCE (HARD GATE per plan T10.1)
+-------------------------------------
+Required: TheoCloud chunk delta <= +5 KB brotli without consumer migration.
+Measured: +0.02 KB brotli.
+Result:   PASSED with 4.98 KB margin (effectively zero impact).
+
+Notable: the +0.02 KB chunk delta is effectively noise — confirms
+that Brief #4's per-component dist + tree-shaking works as designed.
+The 5 new Brief #5 components (DropdownMenu, ActionBar, PinInput,
+DataTable, PageShell) ship as separate chunks in the per-component
+dist tree, and none are imported by TheoCloud yet, so the consumer's
+bundle correctly drops all of them. The +0.88 KB total delta likely
+comes from minor shared-chunk reshuffling as new chunks register in
+the dist tree (some shared utilities now hashed slightly differently
+due to a larger total surface). Acceptable.
+
+Brief #5 consumer migration (out of scope for this plan):
+- Verification page: replace single text input with <PinInput length={6} />
+- Domains page: card-grid → <DataTable expandable={DnsRecords} />
+- Projects page: card-grid → <DataTable />
+- All 13 pages: bootstrap boilerplate → <PageShell>
+- Settings + Profile: keep DangerZone as-is, add row actions via DropdownMenu
+
+Expected post-migration delta (TBD per Brief #6, after consumer PR):
+- DataTable chunk pulled in: +~5-6 KB brotli
+- PageShell chunk pulled in: +~2-3 KB brotli
+- PinInput chunk pulled in: +~1.5 KB brotli
+- DropdownMenu chunk pulled in: +~1-2 KB brotli (shared with row actions already)
+- ActionBar chunk pulled in (composed via PageShell): +~1-2 KB brotli
+- Total estimated: +10-15 KB brotli when fully migrated
+- LOC savings in TheoCloud: −150 to −200 net (per Brief #5 estimate)
+
+Raw size-limit output (after, 0.11.0-next.0):
+
+  02 — @usetheo/ui (design system, post-0.10 per-component dist)
+  Size limit:   18 kB
+  Size:         10.98 kB brotlied
+
+  TOTAL initial JS — HARD GATE (MEET-ASYNC-002 v1.4 post-Brief-4, brotli)
+  Size limit:   180 kB
+  Size:         135.56 kB brotlied

@@ -19,9 +19,24 @@ export {
   builtinThemes,
   classicPaper,
   auroraTerminal,
+  defineTheme,
+  hex,
+  rgb,
+  useDensity,
   useTheme,
   violetForge,
+  // 7 new themes (RFC 0007)
+  vercelMono,
+  githubDark,
+  dracula,
+  oneDark,
+  anthropicStyle,
+  openaiStyle,
+  linearGlass,
   type ColorScale,
+  type DefineThemeInput,
+  type Density,
+  type DensityContextValue,
   type Theme,
   type ThemeFonts,
   type ThemeMode,
@@ -31,7 +46,36 @@ export {
 export { TheoUIProvider, type TheoUIProviderProps } from "./theo-ui-provider.js";
 
 // Shared domain types
-export type { Attachment, Message, MessageRole } from "./types/chat.js";
+export type {
+  Attachment,
+  CustomContentUIPart,
+  DataUIPart,
+  FileUIPart,
+  MessageRole,
+  ProviderMetadata,
+  ReasoningFileUIPart,
+  ReasoningUIPart,
+  SourceDocumentUIPart,
+  SourceUrlUIPart,
+  StepStartUIPart,
+  TextUIPart,
+  ToolInvocationState,
+  ToolUIPart,
+  UIMessage,
+  UIMessagePart,
+} from "./types/chat.js";
+export {
+  isCustomContentUIPart,
+  isDataUIPart,
+  isFileUIPart,
+  isReasoningFileUIPart,
+  isReasoningUIPart,
+  isSourceDocumentUIPart,
+  isSourceUrlUIPart,
+  isStepStartUIPart,
+  isTextUIPart,
+  isToolUIPart,
+} from "./types/chat.js";
 export type {
   AgentEvent as AgentEventModel,
   AgentEventStatus,
@@ -200,7 +244,54 @@ export {
 } from "./components/primitives/session-list-item/index.js";
 
 // Chat atoms
-export { ChatMessage } from "./components/primitives/chat-message/index.js";
+export {
+  ChatMessage,
+  ChatMessageAction,
+  ChatMessageActions,
+  ChatMessageBranch,
+  ChatMessageBranchContent,
+  ChatMessageBranchNext,
+  ChatMessageBranchPage,
+  ChatMessageBranchPrevious,
+  ChatMessageBranchSelector,
+  ChatMessageContent,
+  ChatMessageResponse,
+  ChatMessageRoot,
+  ChatMessageToolbar,
+  DataPart,
+  FilePart,
+  ReasoningPart,
+  SourceDocumentPart,
+  SourceUrlPart,
+  TextPart,
+  ToolCallPart,
+  renderPart,
+  type ChatMessageProps,
+  type ChatMessageRootProps,
+  type ChatMessageContentProps,
+  type ChatMessageContentVariant,
+  type ChatMessageResponseProps,
+  type ChatMessageActionsProps,
+  type ChatMessageActionProps,
+  type ChatMessageToolbarProps,
+  type ChatMessageBranchProps,
+  type ChatMessageBranchContentProps,
+  type ChatMessageBranchSelectorProps,
+  type ChatMessageBranchPreviousProps,
+  type ChatMessageBranchNextProps,
+  type ChatMessageBranchPageProps,
+  type DataPartProps,
+  type DataRenderer,
+  type DataRendererMap,
+  type FilePartProps,
+  type PartRendererMap,
+  type ReasoningPartProps,
+  type RenderPartOptions,
+  type SourceDocumentPartProps,
+  type SourceUrlPartProps,
+  type TextPartProps,
+  type ToolCallPartProps,
+} from "./components/composites/chat-message/index.js";
 export { ChatThread } from "./components/primitives/chat-thread/index.js";
 export { ModelSelector, type ModelOption } from "./components/primitives/model-selector/index.js";
 export {
@@ -225,6 +316,83 @@ export { AgentStartingState } from "./components/primitives/agent-starting-state
 export { RunStats } from "./components/primitives/run-stats/index.js";
 export { ToolCall } from "./components/primitives/tool-call/index.js";
 export { ToolResult } from "./components/primitives/tool-result/index.js";
+
+// PaaS-shape primitives + composites (RFC dashboard-paas-primitives, 0.7.0-next.0)
+// Sibling components for cloud-dashboard surfaces — distinct from the
+// agent-first siblings (CostMeter, Badge, ProjectSwitcher) so both
+// shapes can coexist without API widening. UsageMeter + AccountMenu are
+// composites (depend on sibling primitives — Progress / Avatar+PlanBadge);
+// Progress + PlanBadge are standalone primitives.
+export { Progress, type ProgressProps } from "./components/primitives/progress/index.js";
+export {
+  PlanBadge,
+  type PlanBadgeProps,
+  type PlanTier,
+} from "./components/primitives/plan-badge/index.js";
+export {
+  UsageMeter,
+  type UsageMeterProps,
+  type UsageMetric,
+} from "./components/composites/usage-meter/index.js";
+export {
+  AccountMenu,
+  type AccountMenuProps,
+} from "./components/composites/account-menu/index.js";
+
+// Cross-cutting PaaS primitives (RFC dashboard-paas-primitives-2, 0.8.0-next.0)
+// Brief #2 — 8 components closing the cross-cutting gaps surfaced by the
+// TheoCloud dashboard migration. 6 primitives + 2 composites (ConfirmDialog
+// depends on Dialog/Input/Button; CodeBlock depends on CopyButton).
+export {
+  Table,
+  type TableProps,
+  type TableCellProps,
+  type TableHeaderCellProps,
+} from "./components/primitives/table/index.js";
+export {
+  StatusDot,
+  type StatusDotProps,
+  type StatusKind,
+} from "./components/primitives/status-dot/index.js";
+export {
+  CopyButton,
+  type CopyButtonProps,
+} from "./components/primitives/copy-button/index.js";
+export { Timestamp, type TimestampProps } from "./components/primitives/timestamp/index.js";
+export { StatTile, type StatTileProps } from "./components/primitives/stat-tile/index.js";
+export {
+  DangerZone,
+  type DangerZoneProps,
+  type DangerZoneActionProps,
+} from "./components/primitives/danger-zone/index.js";
+export {
+  ConfirmDialog,
+  type ConfirmDialogProps,
+} from "./components/composites/confirm-dialog/index.js";
+export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
+
+// Brief #3 deferred primitives (0.9.0-next.0)
+export { Alert, type AlertProps, type AlertIntent } from "./components/primitives/alert/index.js";
+export {
+  Pagination,
+  computePageRange,
+  type PaginationProps,
+} from "./components/primitives/pagination/index.js";
+
+// Brief #5 — 3 dashboard primitives + 2 pre-reqs (0.11.0-next.0)
+// Closes 3 TheoCloud Deep Review findings (§ 2.12 P2, § 2.2 + § 2.4 P1
+// Top-5 fix #2, CC-3 boilerplate dedup). DropdownMenu + ActionBar
+// added as explicit pre-reqs (Brief #5 assumed they existed).
+export { DropdownMenu } from "./components/primitives/dropdown-menu/index.js";
+export { ActionBar, type ActionBarProps } from "./components/primitives/action-bar/index.js";
+export { PinInput, type PinInputProps } from "./components/primitives/pin-input/index.js";
+export {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+  type DataTableSort,
+} from "./components/composites/data-table/index.js";
+export { PageShell, type PageShellProps } from "./components/composites/page-shell/index.js";
 
 // Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "whiteboard",
+  "type": "registry:ui",
+  "title": "Whiteboard",
+  "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @usetheo/ui.",
+  "dependencies": [
+    "perfect-freehand",
+    "roughjs",
+    "zod"
+  ],
+  "registryDependencies": [
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/whiteboard/whiteboard.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/whiteboard.tsx"
+    },
+    {
+      "path": "components/primitives/whiteboard/schema.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/schema.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/validate.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/validate.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/seed.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/seed.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/index.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/scene.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/scene.tsx"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/shape.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/shape.tsx"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/line.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/line.tsx"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/freedraw.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/freedraw.tsx"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/text.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/text.tsx"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/rough-paths.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/rough-paths.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/render/style.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/render/style.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/viewport/use-pointer-pan.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/viewport/use-pointer-pan.ts"
+    },
+    {
+      "path": "components/primitives/whiteboard/viewport/use-viewport.ts",
+      "type": "registry:ui",
+      "target": "components/ui/whiteboard/viewport/use-viewport.ts"
+    }
+  ]
+}

@@ -38,11 +38,14 @@ import { cn } from "../../../lib/cn.js";
  * Errors take precedence over hints (only one of them shows at once).
  */
 
+type FormFieldSize = "sm" | "md" | "lg";
+
 interface FormFieldContextValue {
   fieldId: string;
   hintId: string;
   errorId: string;
   hasError: boolean;
+  size: FormFieldSize;
 }
 
 const FormFieldContext = createContext<FormFieldContextValue | null>(null);
@@ -58,10 +61,22 @@ interface FormFieldProps extends HTMLAttributes<HTMLDivElement> {
   id?: string;
   /** Marks the field as invalid; switches Hint → Error and toggles aria. */
   invalid?: boolean;
+  /**
+   * Size scale propagated to Label / Hint / Error subparts via Context.
+   * Default `md` preserves prior behavior. Subparts do NOT accept a `size`
+   * prop of their own — use `className` for granular tweaks (EC-8).
+   */
+  size?: FormFieldSize;
 }
 
+const rootGapBySize: Record<FormFieldSize, string> = {
+  sm: "gap-1",
+  md: "gap-1.5",
+  lg: "gap-2",
+};
+
 const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
-  ({ className, id: idProp, invalid, ...props }, ref) => {
+  ({ className, id: idProp, invalid, size = "md", ...props }, ref) => {
     const auto = useId();
     const fieldId = idProp ?? `field-${auto}`;
     const ctx: FormFieldContextValue = {
@@ -69,15 +84,28 @@ const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
       hintId: `${fieldId}-hint`,
       errorId: `${fieldId}-error`,
       hasError: !!invalid,
+      size,
     };
     return (
       <FormFieldContext.Provider value={ctx}>
-        <div ref={ref} className={cn("grid gap-1.5", className)} {...props} />
+        <div ref={ref} className={cn("grid", rootGapBySize[size], className)} {...props} />
       </FormFieldContext.Provider>
     );
   },
 );
 FormFieldRoot.displayName = "FormField";
+
+const labelFontBySize: Record<FormFieldSize, string> = {
+  sm: "text-label-caps",
+  md: "text-body-sm",
+  lg: "text-body-md",
+};
+
+const hintFontBySize: Record<FormFieldSize, string> = {
+  sm: "text-label-caps",
+  md: "text-body-sm",
+  lg: "text-body-md",
+};
 
 interface FormFieldLabelProps extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {
   required?: boolean;
@@ -89,13 +117,14 @@ interface FormFieldLabelProps extends ComponentPropsWithoutRef<typeof LabelPrimi
 // uses, with identical Tailwind tokens — visual parity is preserved.
 const FormFieldLabel = forwardRef<ElementRef<typeof LabelPrimitive.Root>, FormFieldLabelProps>(
   ({ className, required, children, ...props }, ref) => {
-    const { fieldId } = useFormField();
+    const { fieldId, size } = useFormField();
     return (
       <LabelPrimitive.Root
         ref={ref}
         htmlFor={fieldId}
         className={cn(
-          "inline-flex items-center gap-1 font-medium font-sans text-body-sm text-foreground",
+          "inline-flex items-center gap-1 font-medium font-sans text-foreground",
+          labelFontBySize[size],
           "peer-disabled:cursor-not-allowed peer-disabled:opacity-60",
           className,
         )}
@@ -141,13 +170,13 @@ FormFieldControl.displayName = "FormField.Control";
 
 const FormFieldHint = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className, children, ...props }, ref) => {
-    const { hintId, hasError } = useFormField();
+    const { hintId, hasError, size } = useFormField();
     if (hasError) return null;
     return (
       <p
         ref={ref}
         id={hintId}
-        className={cn("text-body-sm text-muted-foreground", className)}
+        className={cn("text-muted-foreground", hintFontBySize[size], className)}
         {...props}
       >
         {children}
@@ -159,14 +188,14 @@ FormFieldHint.displayName = "FormField.Hint";
 
 const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className, children, ...props }, ref) => {
-    const { errorId, hasError } = useFormField();
+    const { errorId, hasError, size } = useFormField();
     if (!hasError) return null;
     return (
       <p
         ref={ref}
         id={errorId}
         role="alert"
-        className={cn("flex items-center gap-1 text-body-sm text-destructive", className)}
+        className={cn("flex items-center gap-1 text-destructive", hintFontBySize[size], className)}
         {...props}
       >
         <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />

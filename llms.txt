@@ -1,0 +1,272 @@
+# @usetheo/ui — Theo UI (Violet Forge)
+
+> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 121 components (92 primitives + 29 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
+
+This file follows the [llms.txt convention](https://llmstxt.org/) and gives an LLM the **factual ground truth** of the project: package name, import paths, component inventory, locked conventions, anti-patterns, and links to the canonical documentation. Treat the bullets below as non-negotiable contracts unless the source files contradict them — in which case the source files win and this file is stale.
+
+## Project metadata
+
+- **npm package:** `@usetheo/ui`
+- **Current version:** `0.11.0-next.0` (npm dist-tag `next`; latest release line)
+- **License:** Apache-2.0
+- **Repository:** `https://github.com/usetheodev/theo-ui`
+- **Docs site:** `https://docs.usetheo.dev/theoui`
+- **Registry (shadcn CLI):** `https://usetheodev.github.io/theo-ui/r/{slug}.json`
+- **Design-system codename:** Violet Forge
+- **Module format:** ESM only (no CJS). `"type": "module"`. Side-effects on `**/*.css`.
+- **React peer range:** `>=18.2.0 <20` (works with 18.x and 19.x)
+- **Distribution:** npm package install OR copy-paste source via shadcn CLI (registry). Both paths are first-class.
+
+## Install
+
+```bash
+# Full package (recommended for new projects)
+pnpm add @usetheo/ui@next
+
+# Per-component copy (shadcn-style)
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/copy-button.json
+```
+
+## Import path canonical form
+
+```ts
+// All components ship via the single barrel.
+import { Button, Table, ConfirmDialog, CopyButton } from "@usetheo/ui";
+
+// Themes + provider:
+import { ThemeProvider, violetForge, classicPaper, auroraTerminal } from "@usetheo/ui";
+
+// Pure utility (no React):
+import { cn } from "@usetheo/ui";
+
+// Engines ship under subpaths (separate bundles, opt-in peer-deps):
+import { Whiteboard } from "@usetheo/ui/whiteboard";
+import { Slide } from "@usetheo/ui/slide";
+import { SlideDeck } from "@usetheo/ui/slide-deck";
+import { Mermaid } from "@usetheo/ui/slide/plugins/mermaid";
+import { Math } from "@usetheo/ui/slide/plugins/math";
+import { Shiki } from "@usetheo/ui/slide/plugins/shiki";
+import { Emoji } from "@usetheo/ui/slide/plugins/emoji";
+import { theoUIVitePlugin } from "@usetheo/ui/vite-plugin";
+import "@usetheo/ui/preset";       // Tailwind v4 preset (zero-config)
+```
+
+There are **134 subpath exports** in `package.json#exports` — one per component plus engine entry points. **As of 0.10.0-next.0** (Brief #4), per-component subpath imports (`@usetheo/ui/button`) point at real per-component dist files (`dist/primitives/button/index.js`) instead of the barrel — switching to subpath form measurably shrinks the consumer's `@usetheo/ui` chunk by dropping unused components. Before 0.10, subpath imports were cosmetic (all aliased the barrel). The barrel form keeps working, additive migration shape (same as `@mui/material`).
+
+## Peer dependencies (required vs optional)
+
+**Required for the main barrel:**
+- `react >=18.2.0 <20`
+- `react-dom >=18.2.0 <20`
+- `tailwindcss ^4.0.0`
+
+**Optional (only required if you use the matching engine subpath):**
+- `@tailwindcss/vite ^4.0.0`, `vite ^6 || ^7` — for `@usetheo/ui/vite-plugin`
+- `roughjs ^4.6`, `perfect-freehand ^1.2` — for `@usetheo/ui/whiteboard`
+- `mdast-util-from-markdown`, `mdast-util-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `micromark-extension-gfm`, `unist-util-visit`, `unist-util-visit-parents`, `yaml` — for `@usetheo/ui/slide`
+- `shiki ^1.0` — for `@usetheo/ui/slide/plugins/shiki`
+- `katex ^0.16`, `mdast-util-math`, `micromark-extension-math` — for `@usetheo/ui/slide/plugins/math`
+- `mermaid ^11.0` — for `@usetheo/ui/slide/plugins/mermaid`
+- `hast-util-from-html` — for `@usetheo/ui/slide/plugins/emoji`
+
+**Already bundled (do NOT install separately):** `@radix-ui/*`, `class-variance-authority`, `clsx`, `cmdk`, `lucide-react`, `tailwind-merge`. These are `dependencies`, not peer.
+
+## Taxonomy (mechanical rule, gate-enforced)
+
+- **Primitive** = a component that imports **zero** other `@usetheo/ui` components. Lives in `src/components/primitives/`.
+- **Composite** = a component that imports **one or more** primitives via their barrel `index.js`. Lives in `src/components/composites/`.
+- The gate `scripts/validate-quality-gates.ts` is **hard-fail** if either rule is violated. A primitive that grows to need a sibling primitive must be **promoted to composite** by moving the folder + renaming via PR with rationale.
+- Composites import siblings via barrel: `import { Button } from "../../primitives/button/index.js"` — NOT via the raw `.tsx` file (also gate-enforced).
+- Sub-component pattern (e.g., `Table.Header`, `Sidebar.Item`, `DangerZone.Action`) is implemented via `Object.assign(Root, { SubA, SubB })` — Sidebar-style. Single import surface, attached as static properties on the root.
+
+## Theme system
+
+- **Provider:** `<ThemeProvider initial="violet-forge">{...}</ThemeProvider>`. Wrap once at the app root.
+- **Built-in themes (10):** `violetForge` (default), `classicPaper`, `auroraTerminal`, `vercelMono`, `githubDark`, `dracula`, `oneDark`, `anthropicStyle`, `openaiStyle`, `linearGlass`.
+- **Custom themes:** `defineTheme({ name, mode, fonts, palette })` — returns a `Theme` object you pass into `<ThemeProvider extra={[myTheme]} />`.
+- **Color helpers:** `hex("#7c5cff")`, `rgb(124, 92, 255)` — both return CSS-ready strings.
+- **Density:** `useDensity()` hook returns `"compact" | "comfortable" | "cozy"`. Cascading via `<DensityProvider>`.
+- **Fonts (locked):** Geist Sans (display + body) + Geist Mono (mono). Loaded via CDN by default (`dist/fonts-cdn.css`) or locally (`dist/fonts.css`).
+- **Tailwind v4:** CSS-first config via `@usetheo/ui/preset` (zero JS config). v3 legacy preset available at `@usetheo/ui/preset-v3-legacy`.
+
+## Component catalog — primitives (89)
+
+Located in `src/components/primitives/{slug}/`. Each ships `.tsx` + `.test.tsx` + `.stories.tsx` + `index.ts` + a `registry/{slug}.json` descriptor.
+
+`agent-error-card`, `agent-event`, `agent-handoff`, `agent-profile`, `agent-starting-state`, `agent-streaming`, **`alert`** (NEW 0.9), `artifact-preview`, `attachment-chip`, `audit-log-entry`, `auto-compact-notice`, `avatar`, `badge`, `browser-controls`, `build-log-stream`, `button`, `capability-indicator`, `card`, `chat-thread`, `checkbox`, `context-card`, `context-window-bar`, **`copy-button`** (0.8), `cost-meter`, `created-files-card`, `cron-job-card`, **`danger-zone`** (0.8), `dialog`, `diff-viewer`, `empty-state`, `folder-context-card`, `folder-selector`, `form-field`, `hook-config`, `hook-event-log`, `input`, `intent-selector`, `label`, `lane-board`, `login-split`, `mcp-server-card`, `memory-editor`, `mention-menu`, `metrics-panel`, `model-card`, `model-selector`, **`pagination`** (NEW 0.9), `permission-matrix`, **`plan-badge`** (0.7), **`progress`** (0.7), `progress-checklist`, `project-switcher`, `quick-action-chips`, `radio-group`, `recent-folders-list`, `rule-card`, `running-tasks-panel`, `run-stats`, `scroll-area`, `select`, `session-list-item`, `session-timeline`, `sheet`, `sidebar`, `skeleton`, `skill-card`, `slide`, `social-auth-row`, **`stat-tile`** (0.8), **`status-dot`** (0.8), `steps-rail`, `sub-agent-dispatch`, `switch`, `system-prompt-editor`, **`table`** (0.8), `tabs`, `task-plan`, `terminal-panel`, `textarea`, **`timestamp`** (0.8), `toast`, `token-usage-chart`, `tool-call`, `tool-call-card`, `tool-result`, `tools-list`, `tooltip`, `topnav`, `whiteboard`.
+
+## Component catalog — composites (27)
+
+Located in `src/components/composites/{slug}/`.
+
+**`account-menu`** (0.7), `agent-composer`, `agent-editor`, `agent-stream`, `agent-timeline`, `approval-card`, `chat-composer`, `chat-message`, **`code-block`** (NEW 0.8), `command-palette`, **`confirm-dialog`** (NEW 0.8), `cron-jobs-list`, `deployment-row`, `domain-config`, `env-var-editor`, `mcp-server-list`, `permission-modal`, `preview-env-card`, `preview-panel`, `project-card`, `rollback-ui`, `rule-editor`, `skill-editor`, `skills-list`, `slide-deck`, `task-header`, **`usage-meter`** (0.7).
+
+## Recent deliveries (PaaS shape)
+
+- **0.11.0-next.0 (Brief #5 — 3 dashboard primitives + 2 pre-reqs, 2026-05-25):** Closes 3 measured TheoCloud Deep Review findings. `PinInput` (6-box OTP input with auto-advance, paste handling, mask, error — closes § 2.12 P2). `DataTable` composite (sortable + sticky + expandable rows with `expandMode="single"|"multiple"` + row actions via DropdownMenu + client-side pagination + loading skeleton + empty state — closes Top-5 #2 / § 2.2 + § 2.4 P1). `PageShell` composite (page-level scaffold with state precedence loading > error > empty > children; does NOT manage document.title — exposes `onTitleChange` callback for consumer-scope hook — closes CC-3 indirect; D3 scope decision). Plus 2 explicit pre-requisites the brief assumed existed: `DropdownMenu` primitive (Radix wrapper consolidating 5 prior direct usages) and `ActionBar` primitive (search + filter + primary action; composed by PageShell). Zero new peer-deps. ADR `page-shell-composite-pattern.md` documents the scope-narrowing decision.
+- **0.10.0-next.0 (Brief #4 — subpath tree-shaking, build pipeline fix):** ~100 cosmetic subpath exports (every entry pointed at the same 417 KB barrel) replaced with real per-component dist files via tsup auto-glob + `splitting: true`. `dist/index.js` shrank from 417 KB → 49 KB (−88%) because all component code now lives in 119 shared chunks. Per-component dist files (~150-200 bytes each) are tiny re-export wrappers. Per-component `.d.ts` not emitted (would OOM tsup worker pool) — types resolve via barrel `dist/index.d.ts`. `scripts/regen-subpath-exports.ts` runs after every build to keep `package.json#exports` honest (refuses to write if any straggler points at the barrel). Zero breaking change; consumer migration is opt-in file-by-file. ADR at `.claude/knowledge-base/decisions/subpath-exports-per-component.md`.
+- **0.9.0-next.0 (Brief #3 — deferred follow-ups, 2 components):** `Alert` (persistent inline notice; 4 intents — info/success/warning/destructive — with mapped lucide icons and role=alert for destructive vs role=status for others; optional title/description/action/onDismiss), `Pagination` (accessible nav landmark with first/prev/numbers/next/last + visual ellipses + aria-current=page; keyboard nav ArrowLeft/Right/Home/End; configurable siblingCount + jump buttons + size; returns null when totalPages <= 1; exports a pure `computePageRange` helper for unit-testing the range logic in isolation). Zero new peer-deps. Brief #3 consumer: TheoCloud `<VerificationBanner>` → 3-line `<Alert>`.
+- **0.8.0-next.0 (Brief #2 — cross-cutting, 8 components):** `Table` (sub-components + sortable headers), `StatusDot` (5 kinds + auto-pulse), `CopyButton` (clipboard + `aria-live` + SSR-safe), `Timestamp` (`Intl.RelativeTimeFormat`, native `title` tooltip, Unix ms only), `StatTile` (dual button/div mode), `DangerZone` (`.Action` sub-component), `ConfirmDialog` (typed-phrase guard + async loading + Enter-to-confirm), `CodeBlock` (terminal prefix + caption + raw-code copy). Consumer: TheoCloud dashboard. Zero new peer-deps; bundle +5.4% (rebaselined).
+- **0.7.0-next.0 (Brief #1 — PaaS-shape, 4 components):** `UsageMeter` (multi-metric, over-quota warning + clamping), `Progress` (4 intents + indeterminate + motion-reduce aware), `PlanBadge` (5 canonical tiers), `AccountMenu` (avatar + name + plan + secondary, dual button/div).
+
+## Component conventions (do this)
+
+Every component file MUST:
+
+1. Use `forwardRef<HTMLElementType, Props>` and set `displayName`. Example: `MyComponent.displayName = "MyComponent";`.
+2. Compose classes via `cn(...)` from `lib/cn.js` (`tailwind-merge` + `clsx` underneath).
+3. Use **design tokens** only — never raw hex/rgb. Approved tokens: `bg-card`, `bg-muted`, `bg-muted/40`, `bg-primary`, `bg-primary/10`, `bg-success`, `bg-warning`, `bg-destructive`, `bg-destructive/[0.02]`, `text-foreground`, `text-muted-foreground`, `text-success`, `text-warning`, `text-destructive`, `border-border/40`, `border-border/60`, `border-destructive/30`, `text-card-foreground`, `text-primary-foreground`, `ring-ring`, etc.
+4. Use **typography scale**: `text-display-md`, `text-title-sm`, `text-body-sm`, `text-label`, `text-label-caps`, `font-display`, `font-sans`, `font-mono` — never raw `text-xl`/`text-base`/`text-sm`.
+5. Use `lucide-react` for icons. Never inline SVG. Icons rendered as components (`<Copy aria-hidden="true" className="size-3.5" />`).
+6. Use CVA (`class-variance-authority`) for variant APIs that have ≥3 options (Button, Badge, Progress intent, etc.).
+7. Pass `aria-label` for icon-only triggers. Use `<span className="sr-only" aria-live="polite">` for state announcements (CopyButton pattern).
+8. Tests use `vitest` + `@testing-library/react` + `vitest-axe`. Every interactive primitive ships `expect(await axe(container)).toHaveNoViolations()`. Async assertions use `findBy*` with `{ timeout: 5000 }` headroom for parallel vitest pool.
+9. Stories ship in Ladle (`.stories.tsx`). Title pattern: `"Primitives / {Category} / {Name}"` or `"Composites / {Category} / {Name}"`.
+10. Registry descriptor in `registry/{slug}.json` with shadcn schema. Each entry declares `dependencies` (npm) + `registryDependencies` (other registry items in this project).
+
+## Anti-patterns (do NOT)
+
+- **Do NOT** add raw hex/rgb. Always use tokens. The design-audit gate fails the build if it finds them.
+- **Do NOT** install Radix / CVA / lucide-react separately — they're bundled `dependencies`.
+- **Do NOT** import a sibling primitive into another primitive (taxonomy gate hard-fails). Either inline the dep or promote to composite.
+- **Do NOT** import via `../../primitives/foo/foo.js` from a composite — use `../../primitives/foo/index.js` (gate hard-fails).
+- **Do NOT** wrap dropdown/dialog/select in your own Portal. Radix manages portals correctly.
+- **Do NOT** disable a quality gate or add `eslint-disable`/`biome-ignore` to silence one — fix the root cause. Acceptable biome-ignore comments must include a `WAI-ARIA …` or equivalent justification.
+- **Do NOT** roll your own clipboard, focus-trap, accessible dialog, color parser, markdown renderer, syntax highlighter, or relative-time formatter — use `<CopyButton>`, Radix Dialog, `Intl.RelativeTimeFormat`, etc.
+- **Do NOT** ship CJS (`require()`). ESM only. The TypeScript output is `.js` with `.d.ts` siblings.
+- **Do NOT** rename the locked names (see below) without a strategic review.
+- **Do NOT** use emojis in code, README, JSDoc, or CHANGELOG. (User-facing copy in docs is OK if explicitly requested.)
+- **Do NOT** invent integration that doesn't exist. As of 2026-05-23, `@usetheo/ui` has **no** import from `@usetheo/sdk`, `theokit`, or `theo-code`. Verify with `grep` before claiming wiring.
+
+## Locked names (immutable without strategic review)
+
+| Item | Value |
+|---|---|
+| npm package | `@usetheo/ui` |
+| Codename | Violet Forge |
+| Default theme | `violet-forge` |
+| Built-in themes (3 originals) | `violet-forge`, `classic-paper`, `aurora-terminal` |
+| ThemeProvider component | `<ThemeProvider />` |
+| Registry endpoint (planned canonical) | `ui.usetheo.dev/r/*.json` |
+| Module format | ESM only |
+| Quality-gate command | `pnpm quality:gates` |
+| Test framework | Vitest |
+| Stories framework | Ladle |
+| Linter / formatter | Biome (`biome check`, `biome format`) |
+| Component taxonomy | `primitive` (no internal deps) vs `composite` (≥1 internal dep) |
+| Fonts | Geist Sans + Geist Mono (CDN by default) |
+
+## Engines (subpath-isolated, opt-in)
+
+These ship under their own subpath because they require heavy peer-deps. **Do NOT** include in the main barrel.
+
+| Engine | Subpath | Required peer-deps |
+|---|---|---|
+| Whiteboard (Excalidraw-style view) | `@usetheo/ui/whiteboard` | `roughjs`, `perfect-freehand` |
+| Slide (Marp-style view) | `@usetheo/ui/slide` | `mdast-util-*`, `hast-util-*`, `micromark-extension-gfm`, `unist-util-visit*`, `yaml` |
+| SlideDeck | `@usetheo/ui/slide-deck` | inherits from Slide |
+| Slide plugin — Shiki | `@usetheo/ui/slide/plugins/shiki` | `shiki` |
+| Slide plugin — Math (KaTeX) | `@usetheo/ui/slide/plugins/math` | `katex`, `mdast-util-math`, `micromark-extension-math` |
+| Slide plugin — Mermaid | `@usetheo/ui/slide/plugins/mermaid` | `mermaid` |
+| Slide plugin — Emoji | `@usetheo/ui/slide/plugins/emoji` | `hast-util-from-html` |
+| Vite plugin | `@usetheo/ui/vite-plugin` | `vite ^6 || ^7`, `@tailwindcss/vite` |
+
+All engines documented under RFC 0001 / 0002 / 0003 / 0004 in `docs/rfcs/`. View-only (no editing) by design.
+
+## Quality gates (run via `pnpm quality:gates`)
+
+The full chain runs in CI and must be 100% green for any PR to merge:
+
+1. `format:check` — Biome formatter
+2. `lint:ci` — Biome linter (strict)
+3. `typecheck` — `tsc --noEmit` (strict TS)
+4. `test` — Vitest run (1532+ tests including `vitest-axe` a11y)
+5. `build` — tsup (ESM + d.ts + CSS)
+6. `registry:build` + `registry:validate` — shadcn descriptors
+7. `quality:structure` — taxonomy + readme drift + design-audit + test/story coverage
+8. `quality:bundle` — `dist/index.js` size delta within ±5% baseline (rebaseline explicit via `--update`)
+9. `quality:a11y` — every interactive Ladle story axe-validated (~226 tests)
+10. `ladle:build` — verify Ladle compiles
+11. `dogfood:*` — end-to-end smoke against each engine
+
+## Test conventions
+
+- Framework: **Vitest** (NOT Jest). Use `vi.fn()`, `vi.spyOn()`, `vi.useFakeTimers()`.
+- Renderer: `@testing-library/react`. Always `render(<C ... />)`, never manual `ReactDOM.render`.
+- A11y: `import { axe } from "vitest-axe"; expect(await axe(container)).toHaveNoViolations();`
+- Async assertions: `await screen.findByText(...)` (not `getByText` then `waitFor`). For tests under parallel vitest pool stress, add `{ timeout: 5000 }`.
+- Radix dialog tests: use `baseElement` (not `container`) for portal-rendered content. Disable `aria-hidden-focus` rule on axe runs over Dialog content — it's a false positive on Radix's focus-guard spans.
+- Clipboard tests: `vi.stubGlobal("navigator", { clipboard: { writeText: vi.fn() } });`.
+- Time/Date tests: `vi.useFakeTimers(); vi.setSystemTime(new Date("2026-05-23T12:00:00Z"));`.
+
+## Stories convention (Ladle)
+
+```tsx
+import type { Story } from "@ladle/react";
+import { MyComponent } from "./my-component.js";
+
+export default { title: "Primitives / Category / MyComponent" };
+
+export const Default: Story = () => <MyComponent prop="value" />;
+```
+
+Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `pnpm ladle:build`. Title pattern is enforced for sidebar grouping.
+
+## Documentation URLs (canonical)
+
+- **Site:** `https://docs.usetheo.dev/theoui`
+- **Per-component MDX pages (curated, not auto-gen):**
+  - Primitives: `https://docs.usetheo.dev/theoui/primitives/{slug}`
+  - Composites: most live under their domain dir — `infra/`, `code/`, `agent/`, `auth/`, `tools/`, `models/`, `tasks/`. Examples:
+    - `https://docs.usetheo.dev/theoui/infra/account-menu` (PaaS surface)
+    - `https://docs.usetheo.dev/theoui/infra/usage-meter`
+    - `https://docs.usetheo.dev/theoui/code/code-block`
+    - `https://docs.usetheo.dev/theoui/primitives/table`
+    - `https://docs.usetheo.dev/theoui/primitives/confirm-dialog`
+- **Theming guide:** `https://docs.usetheo.dev/theoui/theming`
+- **Engines:** `https://docs.usetheo.dev/theoui/engines/{whiteboard,slide,slide-deck}`
+- **CHANGELOG:** `https://github.com/usetheodev/theo-ui/blob/main/CHANGELOG.md`
+
+## Source-of-truth files (read these before claiming anything)
+
+1. `/CLAUDE.md` — project contract (locked names, taxonomy gate, voice/tone scope, inviolable rules)
+2. `/README.md` — public catalog + quality gates + dev scripts (auto-synced from filesystem by `pnpm sync:readme`)
+3. `/CHANGELOG.md` — every release entry, including [Unreleased] section
+4. `/package.json#exports` — the authoritative list of subpath imports (auto-synced by `pnpm sync:exports`)
+5. `/src/index.ts` — the barrel; every public component appears here
+6. `/docs/architecture.md` — folder layout + module boundaries
+7. `/docs/design-system.md` — tokens, fonts, type scale (Geist + Vercel scale, locked)
+8. `/docs/rfcs/*.md` — engine RFCs (whiteboard 0001, slide 0002, slide-deck 0003, slide-rich-content 0004, themes 0007, integration 0008, chat-message 0009)
+9. `/scripts/validate-quality-gates.ts` — the taxonomy + structure gate
+10. `/.claude/knowledge-base/plans/*.md` — every change of ≥3 phases has a written plan; the most recent is `dashboard-paas-primitives-2-plan.md` (Brief #2)
+
+## How to add a new component (the rote checklist)
+
+1. Decide taxonomy: does it import another `@usetheo/ui` component? If yes → composite. If no → primitive.
+2. Create folder: `src/components/{primitives,composites}/{kebab-name}/`
+3. Create 4 files: `{slug}.tsx`, `{slug}.test.tsx`, `{slug}.stories.tsx`, `index.ts`
+4. Implement with `forwardRef` + `displayName` + `cn()` + lucide icons + design tokens + typography scale
+5. Tests: ≥6 unit tests including 1 `vitest-axe` assertion
+6. Stories: ≥3 Ladle stories (variants/sizes/states)
+7. Add registry descriptor: `registry/{slug}.json` with `$schema`, `name`, `type: "registry:ui"`, `title`, `description`, `dependencies`, `registryDependencies`, `files`
+8. Add export to `src/index.ts` (the barrel)
+9. Run `pnpm sync:exports && pnpm sync:readme` to regenerate `package.json#exports` + README + architecture catalog + Ladle stats
+10. Add CHANGELOG entry under `## [Unreleased]` → `### Added` with one bullet per component
+11. Run `pnpm quality:gates` — must be 100% green
+12. If shipping to consumers, also write a curated MDX page in `theo-opendocs` (NEVER use auto-gen `/components/` dir — that's broken legacy)
+
+## Cross-project positioning
+
+`@usetheo/ui` is the **UI pillar** of the `usetheo` ecosystem. Other pillars:
+
+- **Harness** — `@usetheo/sdk` (Claude Agent SDK consumer). No current import from `@usetheo/ui`.
+- **Skills** — `theokit` (agent framework). No current import.
+- **Runtime** — Theo PaaS (cloud platform, pre-release). No current import; `<DeploymentRow>`, `<BuildLogStream>`, `<RollbackUI>`, `<EnvVarEditor>`, `<DomainConfig>`, `<PreviewEnvCard>`, `<ProjectCard>`, `<MetricsPanel>`, and the new Brief #1 + #2 components are designed for it but currently unused.
+
+`@usetheo/ui` is **community auxiliary**: Apache-2.0, usable standalone, no commitment to the rest of the stack. The integration story above is aspirational; verify with `grep` before claiming wiring exists in any consumer.
+
+## When this file is stale
+
+The code, the README, and the `package.json#exports` map are **authoritative**. If `llms.txt` disagrees with them, the code wins — update this file via PR with a one-line rationale. Locked names (Section "Locked names") and voice/narrative rules require a strategic review at the monorepo level before being weakened or repealed.
+
+— Generated 2026-05-23 (last updated 2026-05-25 for 0.11.0-next.0 / Brief #5 dashboard primitives) from filesystem inventory + `CLAUDE.md` + `README.md`. Regenerate by inspecting `src/components/{primitives,composites}/*/` directories and updating the catalog sections above.

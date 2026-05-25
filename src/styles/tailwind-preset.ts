@@ -112,10 +112,13 @@ export const theoUIPreset: Partial<Config> = {
         // Title tier — section / card heads
         "title-lg": ["24px", { lineHeight: "1.33", letterSpacing: "-0.04em", fontWeight: "600" }],
         "title-md": ["20px", { lineHeight: "1.4", letterSpacing: "-0.03em", fontWeight: "600" }],
-        // Body tier — reads at default weight, tight tracking still applies modestly
+        // Body tier — FAANG-density realignment 2026-05-22: body-md is the
+        // industry-standard 14px (shadcn / Vercel Geist / Linear / Stripe /
+        // Mantine). The previous 15px was idiosyncratic. body-sm (14px label
+        // weight) remains separate via its line-height / weight signature.
         "body-lg": ["18px", { lineHeight: "1.56", letterSpacing: "-0.01em", fontWeight: "400" }],
-        "body-md": ["15px", { lineHeight: "1.5", letterSpacing: "-0.005em", fontWeight: "400" }],
-        "body-sm": ["14px", { lineHeight: "1.43", fontWeight: "400" }],
+        "body-md": ["14px", { lineHeight: "1.43", letterSpacing: "0", fontWeight: "400" }],
+        "body-sm": ["13px", { lineHeight: "1.46", fontWeight: "400" }],
         // Label tier — used on buttons, nav, secondary actions
         label: ["14px", { lineHeight: "1.43", fontWeight: "500" }],
         "label-caps": ["12px", { lineHeight: "1.33", letterSpacing: "0.04em", fontWeight: "500" }],

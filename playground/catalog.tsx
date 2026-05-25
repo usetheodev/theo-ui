@@ -41,7 +41,6 @@ import {
   Input,
   Label,
   type LogLine,
-  type Message,
   type Metric,
   MetricsPanel,
   ModelSelector,
@@ -65,6 +64,7 @@ import {
   type TokenUsagePoint,
   Tooltip,
   TopNav,
+  type UIMessage,
 } from "@usetheo/ui";
 import {
   Bot,
@@ -86,19 +86,16 @@ import { useState } from "react";
  * Mock data (typed to match real public exports)
  * ───────────────────────────────────────────────────────────────────────── */
 
-const mockMessages: Message[] = [
+const mockMessages: UIMessage[] = [
   {
     id: "m1",
     role: "user",
-    content: "Refactor the auth module to use JWT.",
-    timestamp: "09:14",
+    parts: [{ type: "text", text: "Refactor the auth module to use JWT." }],
   },
   {
     id: "m2",
     role: "assistant",
-    content: "Plan: swap cookie middleware for bearer + add refresh flow.",
-    timestamp: "09:14",
-    model: "Sonnet 4.6",
+    parts: [{ type: "text", text: "Plan: swap cookie middleware for bearer + add refresh flow." }],
   },
 ];
 

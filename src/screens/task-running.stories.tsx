@@ -2,9 +2,13 @@ import type { Story } from "@ladle/react";
 import { Folder, Search, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import {
+  ChatMessage,
+  ChatMessageContent,
+  ChatMessageRoot,
+} from "../components/composites/chat-message/chat-message.js";
 import { TaskHeader } from "../components/composites/task-header/task-header.js";
 import { Button } from "../components/primitives/button/button.js";
-import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { ContextCard } from "../components/primitives/context-card/context-card.js";
 import { FolderContextCard } from "../components/primitives/folder-context-card/folder-context-card.js";
@@ -79,8 +83,12 @@ export const Default: Story = () => {
               message={{
                 id: "u1",
                 role: "user",
-                content:
-                  "Organize a pasta capturas do meu computador. Nela há diversos prints, imagens. Eu quero que você divida esses prints em sub-pastas de acordo com seu conteúdo.",
+                parts: [
+                  {
+                    type: "text",
+                    text: "Organize a pasta capturas do meu computador. Nela há diversos prints, imagens. Eu quero que você divida esses prints em sub-pastas de acordo com seu conteúdo.",
+                  },
+                ],
               }}
             />
             <ToolCall
@@ -96,40 +104,39 @@ export const Default: Story = () => {
               message={{
                 id: "a1",
                 role: "assistant",
-                model: "Sonnet 4.6",
-                content: "São 18 imagens! Vou analisar o conteúdo de cada uma e categorizar.",
+                parts: [
+                  {
+                    type: "text",
+                    text: "São 18 imagens! Vou analisar o conteúdo de cada uma e categorizar.",
+                  },
+                ],
               }}
             />
             <ToolCall name="read_file" summary="Leu 18 arquivos" />
-            <ChatMessage
-              message={{
-                id: "a2",
-                role: "assistant",
-                model: "Sonnet 4.6",
-                content: (
-                  <div className="grid gap-2">
-                    <p>Analisei todas as 18 imagens! Vou organizá-las nas seguintes subpastas:</p>
-                    <ul className="ml-4 list-disc text-body-sm">
-                      <li>
-                        <strong>Dashboards-Hashbot</strong> — 4 prints
-                      </li>
-                      <li>
-                        <strong>Videos-YouTube-Copilot</strong> — 4 thumbnails
-                      </li>
-                      <li>
-                        <strong>Plataforma-de-Cursos</strong> — 3 prints
-                      </li>
-                      <li>
-                        <strong>Noticias-IA</strong> — 6 notícias
-                      </li>
-                      <li>
-                        <strong>Outros</strong> — 1 print
-                      </li>
-                    </ul>
-                  </div>
-                ),
-              }}
-            />
+            <ChatMessageRoot from="assistant">
+              <ChatMessageContent variant="contained">
+                <div className="grid gap-2">
+                  <p>Analisei todas as 18 imagens! Vou organizá-las nas seguintes subpastas:</p>
+                  <ul className="ml-4 list-disc text-body-sm">
+                    <li>
+                      <strong>Dashboards-Hashbot</strong> — 4 prints
+                    </li>
+                    <li>
+                      <strong>Videos-YouTube-Copilot</strong> — 4 thumbnails
+                    </li>
+                    <li>
+                      <strong>Plataforma-de-Cursos</strong> — 3 prints
+                    </li>
+                    <li>
+                      <strong>Noticias-IA</strong> — 6 notícias
+                    </li>
+                    <li>
+                      <strong>Outros</strong> — 1 print
+                    </li>
+                  </ul>
+                </div>
+              </ChatMessageContent>
+            </ChatMessageRoot>
           </ChatThread>
           <ChatComposer
             mode="infra"

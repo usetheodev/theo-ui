@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "plan-badge",
+  "type": "registry:ui",
+  "title": "PlanBadge",
+  "description": "Semantic pricing-tier badge. Five canonical tiers (free, hobby, pro, team, enterprise) with distinct color tokens. Consumers self-document intent (plan=\"hobby\") instead of mapping generic Badge variants per app — future rebrand / dark-mode tweaks propagate automatically.",
+  "dependencies": [],
+  "registryDependencies": ["cn", "tailwind-preset"],
+  "files": [
+    {
+      "path": "components/primitives/plan-badge/plan-badge.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/plan-badge.tsx"
+    }
+  ]
+}

@@ -3,12 +3,12 @@ import { describe, expect, it } from "vitest";
 import { AgentStream, type AgentStreamItem } from "./agent-stream.js";
 
 describe("AgentStream", () => {
-  it("renders a heterogeneous stream of items in order", () => {
+  it("renders a heterogeneous stream of items in order", async () => {
     const items: AgentStreamItem[] = [
       {
         kind: "message",
         id: "m1",
-        message: { id: "m1", role: "user", content: "Hello agent" },
+        message: { id: "m1", role: "user", parts: [{ type: "text", text: "Hello agent" }] },
       },
       {
         kind: "tool-call",
@@ -33,7 +33,14 @@ describe("AgentStream", () => {
       { kind: "streaming", id: "s1", model: "Opus 4.7" },
     ];
     render(<AgentStream items={items} />);
-    expect(screen.getByText("Hello agent")).toBeInTheDocument();
+    // `ChatMessage` renders text via async markdown pipeline; wait for it.
+    // ChatMessage v2 renders text via the async markdown pipeline.
+    // Under heavy parallel test load (vitest's pool), the default 1s
+    // findByText timeout can race with the dynamic-import settle. Give
+    // it more headroom so the suite is robust on slower machines.
+    expect(
+      await screen.findByText("Hello agent", undefined, { timeout: 5000 }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Bash")).toBeInTheDocument();
     expect(screen.getByText("Run command?")).toBeInTheDocument();
     expect(screen.getByText("Rate limit hit")).toBeInTheDocument();

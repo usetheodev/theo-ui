@@ -31,9 +31,33 @@ describe("buildExports", () => {
     expect(entry.import).toBe("./dist/whiteboard/index.js");
   });
 
-  it("auto-scanned component subpaths point to the barrel (current behavior)", () => {
+  it("auto-scanned component subpaths point to per-component dist (Brief #4)", () => {
+    // Brief #4 / subpath tree-shaking plan: subpath imports now resolve to
+    // per-component dist files (e.g. `dist/primitives/button/index.js`)
+    // emitted by tsup auto-glob. Types still point at the barrel `.d.ts`
+    // per D5 escalation (per-component dts would OOM the worker pool).
     const exports = buildExports(["button"]);
     expect(exports["./button"]).toEqual({
+      types: "./dist/index.d.ts",
+      import: "./dist/primitives/button/index.js",
+    });
+  });
+
+  it("composite subpaths point to dist/composites/<name>/index.js", () => {
+    const exports = buildExports(["account-menu"]);
+    expect(exports["./account-menu"]).toEqual({
+      types: "./dist/index.d.ts",
+      import: "./dist/composites/account-menu/index.js",
+    });
+  });
+
+  it("symbols without a folder fall back to barrel (themes, types-only)", () => {
+    // If `src/index.ts` exports something like `violetForge` from themes/
+    // (no corresponding `src/components/<layer>/<name>/` folder), the
+    // subpath entry stays barrel-mapped because there's no per-component
+    // dist file to point at.
+    const exports = buildExports(["violetForge"]);
+    expect(exports["./violetForge"]).toEqual({
       types: "./dist/index.d.ts",
       import: "./dist/index.js",
     });

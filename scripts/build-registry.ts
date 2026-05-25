@@ -107,7 +107,18 @@ function rewriteRegistryImports(
   const sourceDir = dirname(sourcePathFromSrc);
 
   return content.replace(/from\s+["']([^"']+)["']/g, (match, specifier: string) => {
-    if (!specifier.startsWith(".")) return match;
+    if (!specifier.startsWith(".")) {
+      // External package import (e.g. "roughjs/bin/generator.js"). Strip the
+      // source-ESM extension so the shipped registry item matches the
+      // shadcn convention of bare specifiers. The validator rejects any
+      // `.js` survivors as consumer-unsafe. Limited to known source
+      // extensions so we never trim file basenames that happen to end in
+      // ".js" (e.g. a hypothetical `foo.js` token in a URL).
+      if (/\.(?:js|jsx|ts|tsx)$/.test(specifier)) {
+        return match.replace(specifier, stripExtension(specifier));
+      }
+      return match;
+    }
 
     const resolvedFromSrc = stripExtension(
       toPosix(relative(SRC_DIR, resolve(SRC_DIR, sourceDir, specifier)).replace(/^\.\//, "")),

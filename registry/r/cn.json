@@ -13,7 +13,7 @@
       "path": "lib/cn.ts",
       "type": "registry:lib",
       "target": "lib/cn.ts",
-      "content": "import { type ClassValue, clsx } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * Merge Tailwind classes with conflict resolution.\n * Standard utility across all @usetheo/ui components.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n"
+      "content": "import { type ClassValue, clsx } from \"clsx\";\nimport { extendTailwindMerge } from \"tailwind-merge\";\n\n/**\n * Custom tailwind-merge instance taught about the Violet Forge typescale.\n *\n * Vanilla `tailwind-merge` groups every `text-*` class together — so\n * `text-label` (a font-size from the typescale) and `text-accent`\n * (a foreground color) clash and the last wins. With cva variants that\n * keep size + color on independent dimensions, this collapsed one of\n * them. Extending the `font-size` group with the typescale tokens\n * declared in `src/styles/tailwind-preset.ts` keeps size + color\n * independent during merge.\n */\nconst twMerge = extendTailwindMerge({\n  extend: {\n    classGroups: {\n      \"font-size\": [\n        { text: [\"display-2xl\", \"display-xl\", \"display-lg\", \"display-md\"] },\n        { text: [\"headline\", \"title-lg\", \"title-md\"] },\n        { text: [\"body-lg\", \"body-md\", \"body-sm\"] },\n        { text: [\"label\", \"label-caps\"] },\n        { text: [\"code-md\", \"code-sm\"] },\n      ],\n    },\n  },\n});\n\n/**\n * Merge Tailwind classes with conflict resolution.\n * Standard utility across all @usetheo/ui components.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n"
     }
   ]
 }

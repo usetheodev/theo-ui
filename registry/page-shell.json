@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-shell",
+  "type": "registry:ui",
+  "title": "PageShell",
+  "description": "Page-level scaffold composite. Renders title + optional description + optional ActionBar (when search/primaryAction/onFilterClick provided), then one of four mutually-exclusive content states (loading > error > empty > children). Loading defaults to a centered spinner Card; loadingNode escape hatch lets consumers pass custom skeleton. Error state renders Card with message + optional retry button + optional docsHref. Empty state delegates to <EmptyState>. PageShell does NOT manage document.title — pass onTitleChange callback to wire your own hook.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": [
+    "cn",
+    "action-bar",
+    "card",
+    "empty-state",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/composites/page-shell/page-shell.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/page-shell.tsx"
+    }
+  ]
+}

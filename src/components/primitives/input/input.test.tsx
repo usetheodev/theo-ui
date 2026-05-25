@@ -39,4 +39,41 @@ describe("Input", () => {
   it("has no a11y violations", async () => {
     await expectNoA11yViolations(<Input placeholder="acme-api" />);
   });
+
+  // T1.1 — size prop (theming-and-sizes plan, EC-1 incorporated).
+  it("applies h-8 + text-body-sm classes when size='sm'", () => {
+    render(<Input data-testid="i" size="sm" />);
+    const input = screen.getByTestId("i");
+    expect(input.className).toContain("h-8");
+    expect(input.className).toContain("text-body-sm");
+  });
+
+  it("md (default) reads height from --theo-control-h CSS var + text-body-sm (FAANG density)", () => {
+    render(<Input data-testid="i" />);
+    const input = screen.getByTestId("i");
+    expect(input.className).toContain("h-[var(--theo-control-h,2.25rem)]");
+    expect(input.className).toContain("text-body-sm");
+  });
+
+  it("applies h-11 + text-body-md classes when size='lg' (FAANG-density)", () => {
+    render(<Input data-testid="i" size="lg" />);
+    const input = screen.getByTestId("i");
+    expect(input.className).toContain("h-11");
+    expect(input.className).toContain("text-body-md");
+  });
+
+  it("forwards ref and preserves extra className", () => {
+    const ref = { current: null } as { current: HTMLInputElement | null };
+    render(<Input ref={ref} className="custom-x" placeholder="r" />);
+    expect(ref.current).toBeInstanceOf(HTMLInputElement);
+    expect(ref.current?.className).toContain("custom-x");
+  });
+
+  // EC-1: confirm TypeScript rejects the native HTML size attribute. The
+  // assignment below would fail typecheck without @ts-expect-error.
+  it("type-rejects the HTML size={number} attribute (EC-1)", () => {
+    // @ts-expect-error — Input.size is now 'sm'|'md'|'lg', not number.
+    const _bad = <Input size={20} />;
+    expect(_bad).toBeTruthy();
+  });
 });

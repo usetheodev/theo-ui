@@ -87,16 +87,14 @@ async function main(): Promise<void> {
   // future refactor accidentally exports an engine from `src/index.ts`, the
   // barrel would balloon by tens of KB and break the contract documented in
   // `CLAUDE.md > Roadmap`. This grep is the runtime-metric proof.
-  const ENGINE_PEER_DEPS = [
-    "roughjs",
-    "perfect-freehand",
-    "mdast-util-from-markdown",
-    "mdast-util-gfm",
-    "micromark-extension-gfm",
-    "mdast-util-to-hast",
-    "hast-util-sanitize",
-    "hast-util-to-jsx-runtime",
-  ];
+  //
+  // RFC 0009 (chat-message parts API) intentionally uses the mdast/hast/jsx
+  // stack via DYNAMIC import (lazy peer-load with fallback) — those package
+  // names appear as string literals in the barrel, but NOTHING is vendored.
+  // The Slide engine still asserts its own isolated bundle never vendors
+  // them via the slide-dogfood scripts, which is a stricter test. So the
+  // engine-leak list here keeps only the Whiteboard-exclusive peers.
+  const ENGINE_PEER_DEPS = ["roughjs", "perfect-freehand"];
   const barrelPath = join(ROOT, "dist/index.js");
   if (existsSync(barrelPath) && !update) {
     const barrel = readFileSync(barrelPath, "utf-8");

@@ -57,4 +57,48 @@ describe("Card", () => {
     expect(Card.Body.displayName).toBe("Card.Body");
     expect(Card.Footer.displayName).toBe("Card.Footer");
   });
+
+  // T1.6 — size prop (theming-and-sizes plan)
+  it("applies p-3 + text-title-md on subparts when Card size='sm'", () => {
+    render(
+      <Card size="sm">
+        <Card.Header>
+          <Card.Title>x</Card.Title>
+        </Card.Header>
+        <Card.Body>y</Card.Body>
+      </Card>,
+    );
+    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-3");
+    expect(screen.getByText("x").className).toContain("text-title-md");
+    expect(screen.getByText("y").className).toContain("p-3");
+  });
+
+  it("applies p-5 + text-title-lg when Card size omitted (default md, FAANG-density)", () => {
+    render(
+      <Card>
+        <Card.Header>
+          <Card.Title>x</Card.Title>
+        </Card.Header>
+      </Card>,
+    );
+    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-5");
+    expect(screen.getByText("x").className).toContain("text-title-lg");
+  });
+
+  it("applies p-6 + text-headline when Card size='lg' (FAANG-density)", () => {
+    render(
+      <Card size="lg">
+        <Card.Header>
+          <Card.Title>x</Card.Title>
+        </Card.Header>
+      </Card>,
+    );
+    expect(screen.getByText("x").parentElement?.className ?? "").toContain("p-6");
+    expect(screen.getByText("x").className).toContain("text-headline");
+  });
+
+  it("Card.Title used in isolation renders without crash (Context default md)", () => {
+    render(<Card.Title>orphan</Card.Title>);
+    expect(screen.getByText("orphan").className).toContain("text-title-lg");
+  });
 });

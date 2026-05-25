@@ -34,3 +34,17 @@ export const WithStatusDot: Story = () => (
     </Badge>
   </div>
 );
+
+export const Sizes: Story = () => (
+  <div className="flex flex-wrap items-center gap-3">
+    <Badge size="sm">Small</Badge>
+    <Badge size="md">Medium (default)</Badge>
+    <Badge size="lg">Large</Badge>
+    <Badge size="sm" variant="success">
+      Live
+    </Badge>
+    <Badge size="lg" variant="destructive">
+      Failed
+    </Badge>
+  </div>
+);

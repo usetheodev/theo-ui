@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-plugin-math",
+  "type": "registry:ui",
+  "title": "Slide plugin · Math",
+  "description": "Tier 2 Slide plugin that renders $inline$ and $$block$$ math via KaTeX. Peer-deps katex + hast-util-from-html are opt-in.",
+  "dependencies": [
+    "hast",
+    "hast-util-from-html",
+    "katex"
+  ],
+  "registryDependencies": [
+    "slide",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/slide/plugins/math/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/plugins/math/index.ts"
+    }
+  ]
+}
