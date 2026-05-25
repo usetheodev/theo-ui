@@ -128,6 +128,16 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 </html>
 ```
 
+### Option C — install the agent skill
+
+For AI coding assistants (Claude Code, Cursor, Codex), `@usetheo/ui` ships a companion **skill** that teaches the assistant how to use the library correctly — pick the right composite, respect the design tokens, run the slop test before shipping.
+
+```bash
+npx skills add usetheodev/theo-ui
+```
+
+The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via the [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI. Four verbs: default (build), `audit`, `migrate`, `catalog`. See [`skills/theo-ui/README.md`](./skills/theo-ui/README.md) for details.
+
 ---
 
 ## Component catalog
