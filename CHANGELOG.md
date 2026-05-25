@@ -94,18 +94,27 @@ Brief: `theo/docs/handoff/2026-05-25-theo-ui-cloud-dashboard-brief-5.md`
 - Zero new peer-deps. `@radix-ui/react-dropdown-menu` was already
   bundled.
 
-### Bundle delta (consumer canary)
+### Bundle delta (consumer canary, measured 2026-05-25)
 
 Measured against TheoCloud dashboard (no consumer migration to the
 new primitives yet — pure version bump):
 
 | Metric | 0.10.0-next.0 | 0.11.0-next.0 | Δ |
 |---|---|---|---|
-| `@usetheo/ui` chunk | TBD | TBD | TBD |
-| TOTAL initial JS | TBD | TBD | TBD |
+| `@usetheo/ui` chunk | 10.96 KB brotli | 10.98 KB brotli | **+0.02 KB (+0.2%)** |
+| TOTAL initial JS | 134.68 KB brotli | 135.56 KB brotli | +0.88 KB (+0.6%) |
 
-(Evidence file:
-`.claude/knowledge-base/baselines/2026-05-26-post-brief-5/theocloud-bundle-delta.txt`)
+Per-chunk cap (18 KB): passes with 7.02 KB headroom.
+Total hard gate (180 KB): passes with 44.44 KB headroom.
+
+The +0.02 KB chunk delta is effectively noise — confirms Brief #4's
+per-component dist + tree-shaking works: 5 new components ship as
+separate chunks and the consumer correctly drops all of them while
+they aren't imported. Post-consumer-migration delta is expected at
++10-15 KB brotli (Brief #6 follow-up).
+
+Evidence:
+`.claude/knowledge-base/baselines/2026-05-26-post-brief-5/theocloud-bundle-delta.txt`
 
 ## [0.10.0-next.0] - 2026-05-25
 
