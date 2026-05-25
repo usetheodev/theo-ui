@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-plugin-mermaid",
+  "type": "registry:ui",
+  "title": "Slide plugin · Mermaid",
+  "description": "Tier 2 Slide plugin that converts <code class=\"language-mermaid\"> blocks into Mermaid SVG diagrams (lazy-loaded). Peer-dep mermaid is opt-in.",
+  "dependencies": [
+    "hast",
+    "mermaid"
+  ],
+  "registryDependencies": [
+    "slide",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/slide/plugins/mermaid/index.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/slide/plugins/mermaid/index.tsx"
+    }
+  ]
+}

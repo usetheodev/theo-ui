@@ -8,6 +8,957 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- **`DESIGN.md` at repo root (NEW)** — plain-text design system spec
+  for LLM assistants generating UI against `@usetheo/ui`. Follows the
+  awesome-design-md 9-section canonical structure (Visual Theme &
+  Atmosphere · Color Palette & Roles · Typography Rules · Layout
+  Principles · Depth & Elevation · Component Stylings · Responsive
+  Behavior · Do's and Don'ts · Agent Prompt Guide). Tokens mirror
+  `src/styles/tokens.css` and `src/themes/violet-forge.ts`. Shipped
+  via `package.json > files` alongside `llms.txt` and `CHANGELOG.md`
+  so consumers see the visual spec at `node_modules/@usetheo/ui/DESIGN.md`.
+  Reference research lives at
+  `.claude/knowledge-base/reference/design-md-convention.md`.
+
+## [0.11.0-next.0] - 2026-05-25
+
+Minor (additive, zero breaking change) — ships Brief #5 from the
+TheoCloud dashboard team, closing 3 measured Deep Review findings.
+Five new components: 3 brief-asks (PinInput, DataTable, PageShell)
++ 2 explicit pre-requisites (DropdownMenu, ActionBar) that the
+brief assumed existed but didn't.
+
+Plan: `.claude/knowledge-base/plans/dashboard-primitives-brief-5-plan.md`
+ADR: `.claude/knowledge-base/decisions/page-shell-composite-pattern.md`
+Brief: `theo/docs/handoff/2026-05-25-theo-ui-cloud-dashboard-brief-5.md`
+
+### Added
+
+- **`<DropdownMenu>` primitive (NEW, Brief #5 pre-req)** — accessible
+  menu built on `@radix-ui/react-dropdown-menu` (already a bundled
+  dep, no new peer needed). Sub-components attached via
+  `Object.assign`: `Trigger`, `Portal`, `Content`, `Item`,
+  `CheckboxItem`, `RadioItem`, `Label`, `Separator`, `Shortcut`,
+  `Group`, `Sub`, `SubTrigger`, `SubContent`, `RadioGroup`. Styled
+  with `@usetheo/ui` design tokens. Consolidates 5 prior direct-
+  Radix usages (`model-selector`, `intent-selector`, `agent-profile`,
+  `theme-switcher`, `theo-code-shell`) under a single styled
+  wrapper. 6 unit tests + 5 Ladle stories. SSR-safe.
+- **`<ActionBar>` primitive (NEW, Brief #5 pre-req)** — page-top
+  action strip with three optional slots: search input (flex-1,
+  grows to fill), filter icon button, primary action button
+  (right-aligned). Returns `null` when no slots are provided.
+  Primary action supports `loading` state with `Loader2` spinner.
+  Usable standalone or composed inside `<PageShell>`. 6 unit tests
+  + 5 Ladle stories.
+- **`<PinInput>` primitive (NEW)** — multi-slot OTP / code input
+  with auto-advance focus, paste handling (whitespace stripped),
+  arrow-key navigation, backspace clearing + focus back. Default
+  6 slots, configurable. `inputMode="numeric"` (default, triggers
+  mobile numeric keyboard via `pattern="[0-9]*"`) or
+  `alphanumeric` (auto-uppercase). Optional `mask` renders bullets.
+  Optional `error` state applies destructive border. `onComplete`
+  fires once on transitions to complete (NOT on mount with pre-
+  filled value — verified via test). Closes Deep Review § 2.12 P2
+  (Verification page off-brand single-input pattern). 17 unit
+  tests + 7 Ladle stories.
+- **`<DataTable>` composite (NEW)** — generic, sortable,
+  expandable composite over `<Table>` + `<Pagination>` +
+  `<Skeleton>` + `<EmptyState>` + `<DropdownMenu>`. Generic over
+  `T` (e.g. `DataTable<Domain>`). Sortable headers (controlled via
+  `onSortChange` OR uncontrolled client-side). Sticky header
+  (default true). Expandable rows with `expandable(row)` callback
+  — multi-row default, opt-in `expandMode="single"`. Row actions
+  via `rowActions(row)` opens DropdownMenu. Client-side pagination
+  with `pageSize`; sort changes reset to page 0. Loading state
+  renders 5 skeleton rows. Empty state delegates to `<EmptyState>`
+  or custom `emptyState` prop. Expanded row `colSpan` correctly
+  accounts for chevron + actions columns (EC-1 fix). pageSize<=0
+  clamps to 1 graceful degradation. Closes Deep Review Top-5
+  fix #2, § 2.2 P1, § 2.4 P1 (card-grid → sortable table for
+  Domains + Projects). 19 unit tests + 8 Ladle stories.
+- **`<PageShell>` composite (NEW)** — page-level scaffold. Title
+  + optional description + optional ActionBar (when search /
+  primaryAction / onFilterClick provided), then one of four
+  mutually-exclusive content states with strict precedence:
+  loading > error > empty > children. Default loading is a
+  centered spinner Card; `loadingNode?` escape hatch for custom
+  skeletons. Error renders Card with message + optional retry
+  button + optional docs link. Empty delegates to `<EmptyState>`.
+  `aria-busy="true"` on the `<main>` element while loading. Does
+  NOT manage `document.title` (D3 scope-narrowing); consumers
+  wire `onTitleChange?` callback to their own hook. Dedupes
+  ~20 LOC × 13 dashboard pages of boilerplate. 15 unit tests + 6
+  Ladle stories.
+
+### Notes
+
+- Edge-case review surfaced 1 MUST FIX (DataTable expanded row
+  colSpan miscalculation when rowActions present) + 14 SHOULD TEST
+  + 7 DOCUMENT — all incorporated into TDD blocks before
+  implementation.
+- D3 scope-narrowing: PageShell does NOT include `useSetPageTitle`
+  / `PageMetaProvider` — those are consumer-scope hooks. The
+  library exposes only the visible heading + an `onTitleChange?`
+  callback for the consumer to wire their own title management.
+- DropdownMenu consolidation is opt-in: the 5 existing direct-
+  Radix usages stay untouched in this release; migration is a
+  follow-up PR.
+- Zero new peer-deps. `@radix-ui/react-dropdown-menu` was already
+  bundled.
+
+### Bundle delta (consumer canary, measured 2026-05-25)
+
+Measured against TheoCloud dashboard (no consumer migration to the
+new primitives yet — pure version bump):
+
+| Metric | 0.10.0-next.0 | 0.11.0-next.0 | Δ |
+|---|---|---|---|
+| `@usetheo/ui` chunk | 10.96 KB brotli | 10.98 KB brotli | **+0.02 KB (+0.2%)** |
+| TOTAL initial JS | 134.68 KB brotli | 135.56 KB brotli | +0.88 KB (+0.6%) |
+
+Per-chunk cap (18 KB): passes with 7.02 KB headroom.
+Total hard gate (180 KB): passes with 44.44 KB headroom.
+
+The +0.02 KB chunk delta is effectively noise — confirms Brief #4's
+per-component dist + tree-shaking works: 5 new components ship as
+separate chunks and the consumer correctly drops all of them while
+they aren't imported. Post-consumer-migration delta is expected at
++10-15 KB brotli (Brief #6 follow-up).
+
+Evidence:
+`.claude/knowledge-base/baselines/2026-05-26-post-brief-5/theocloud-bundle-delta.txt`
+
+## [0.10.0-next.0] - 2026-05-25
+
+Minor (additive, zero breaking change) — fixes a publishing-pipeline
+defect surfaced by the TheoCloud dashboard bundle audit
+(`MEET-ASYNC-AMENDMENT-2026-05-24-002`). Since 0.7.0, the ~100 subpath
+exports declared in `package.json#exports` (`./alert`, `./button`,
+`./table`, …) were **cosmetic** — each pointed at the same
+`./dist/index.js` (the 417 KB barrel). `import { Alert } from
+"@usetheo/ui/alert"` resolved byte-identical to
+`import { Alert } from "@usetheo/ui"`, and barrel tree-shaking
+failed in consumers because of `forwardRef` side-effect bailouts,
+`Object.assign` compound components, and `sideEffects: ["**/*.css"]`
+conservatism. TheoCloud measured **0 KB dropped** from the 240 KB
+minified barrel regardless of how few exports were used.
+
+This release extends the per-component dist pattern that already
+worked for `whiteboard` / `slide` / `slide-deck` to every primitive
+and composite. The barrel `import { X } from "@usetheo/ui"` is
+preserved unchanged (additive migration shape, same as `@mui/material`).
+
+Plan: `.claude/knowledge-base/plans/subpath-tree-shaking-plan.md`
+ADR: `.claude/knowledge-base/decisions/subpath-exports-per-component.md`
+Brief: `theo/docs/handoff/2026-05-24-theo-ui-subpath-tree-shaking-brief-4.md`
+
+### Changed
+
+- **`tsup.config.ts`** auto-globs primitive + composite entries from
+  `src/components/{primitives,composites}/<name>/index.ts` at
+  config-load time. 87 primitives + 26 composites — 3 excluded
+  (`whiteboard`, `slide`, `slide-deck` retain their existing manual
+  isolated entries). New components ship subpath-shaped automatically
+  without `package.json#exports` hand-maintenance.
+- **`splitting: true`** in tsup now dedupes shared utilities (`cn`,
+  forwardRef wrappers, theme helpers, lucide icon imports) into
+  `dist/chunk-<hash>.js` instead of inlining into every per-component
+  bundle. ~119 shared chunks emitted; barrel + per-component dist
+  files re-export from them.
+- **`dts: { entry: ... }`** restricted to the barrel + isolated
+  engines only (D5 escalation). Generating per-component `.d.ts` for
+  all 114 entries OOMs the rollup-plugin-dts worker thread even with
+  `NODE_OPTIONS=--max-old-space-size=8192` (the flag does not
+  propagate to workers). Per-component subpaths resolve their `types`
+  field at the barrel `dist/index.d.ts` — TypeScript still finds
+  `Alert`/`AlertProps` from `import { Alert } from "@usetheo/ui/alert"`.
+  Trade-off: consumers' typecheck pulls the full type graph regardless
+  of subpath, but the JS dist (where tree-shaking matters) is
+  per-component and small.
+
+### Added
+
+- **`scripts/regen-subpath-exports.ts`** — runs after `tsup` and
+  rewrites `package.json#exports` so per-component subpaths point at
+  their own dist file. Refuses to write if any non-root entry still
+  points at `./dist/index.js` (permanent guard against the cosmetic-
+  subpath defect coming back). Verifies that every source-tree
+  component has a matching dist entry (EC-2 guard against silent
+  partial builds). Wired into `package.json#scripts.build` so
+  `pnpm build` produces a consistent `dist/` + `exports` map every
+  time.
+- **`scripts/sync-exports.ts`** updated to resolve each component's
+  layer (primitives vs composites) via filesystem and emit the
+  correct per-component dist path. Stays the source-of-truth for
+  the structure gate; `regen-subpath-exports.ts` is the same logic
+  applied post-build against the actual dist tree.
+
+### Bundle deltas
+
+| File | Before (0.9.0-next.0) | After (0.10.0-next.0) | Δ |
+|---|---|---|---|
+| `dist/index.js` | 417,113 B | 49,018 B | **−88.2%** |
+| `dist/slide/index.js` | 23,825 B | 400 B | −98.3% |
+| `dist/slide-deck/index.js` | 58,413 B | 35,795 B | −38.7% |
+| `dist/components.css` | 89,654 B | 93,069 B | +3.8% (within ±5%) |
+| `dist/styles.css` | 4,720 B | 4,720 B | 0% |
+| **Build time** | 17.72 s | 15.98 s | −10% |
+| **Tarball (`pnpm pack`)** | 1.1 MB | 1.2 MB | +9% |
+| **New per-component dist files** | 0 | 113 | + |
+| **Shared chunks (`dist/chunk-*.js`)** | 0 | 119 | + |
+
+The barrel shrank because all component code now lives in shared
+chunks. **Consumer-side bundle delta against TheoCloud dashboard
+(measured 2026-05-25):**
+
+| Metric | 0.9.0-next.0 | 0.10.0-next.0 | Δ |
+|---|---|---|---|
+| `@usetheo/ui` chunk | 36.96 KB brotli | 10.96 KB brotli | **−26.00 KB (−70.3%)** |
+| TOTAL initial JS | 176.27 KB brotli | 134.68 KB brotli | −41.59 KB (−23.6%) |
+
+Per-chunk cap (50 KB): passes with 39 KB headroom (was 13 KB).
+Total hard gate (240 KB): passes with 105 KB headroom (was 64 KB).
+
+**Notable:** the savings were realized WITHOUT migrating consumer
+imports to subpath form. The barrel benefits from tree-shaking now
+because `dist/index.js` is structured as a collection of
+per-component re-exports from shared chunks — Vite/Rollup's
+tree-shaker can drop individual chunks per consumer usage. Subpath-
+form migration is expected to yield additional savings on top.
+
+Evidence file:
+`.claude/knowledge-base/baselines/2026-05-25-post-subpath/theocloud-bundle-delta.txt`
+
+### Migration (consumer-side, opt-in)
+
+```diff
+- import { Card, Button, Alert } from "@usetheo/ui";
++ import { Card } from "@usetheo/ui/card";
++ import { Button } from "@usetheo/ui/button";
++ import { Alert } from "@usetheo/ui/alert";
+```
+
+The barrel import keeps working — migration is gradual, file by
+file. CSS, themes, and isolated engines stay barrel-imported:
+`import { ThemeProvider, violetForge } from "@usetheo/ui"`,
+`import "@usetheo/ui/styles.css"`.
+
+## [0.9.0-next.0] - 2026-05-23
+
+Minor — adds the two deferred primitives revealed by the Brief #3
+review (`Alert` + `Pagination`). Both are additive; zero breaking
+change. The release closes the lower-priority follow-ups left over
+from Briefs #1/#2 — `Alert` replaces the consumer's 27-LOC
+`<VerificationBanner>` composition; `Pagination` is forward-positioned
+for when `<Table>` (0.8) starts paginating Billing / Audit / Team
+data at scale.
+
+Plan: filed as Brief #3 in
+`theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief-3.md`.
+
+### Added
+
+- **`<Alert>` primitive (NEW)** — persistent inline notice. Four
+  intents: `info` (Info icon, primary token), `success`
+  (CheckCircle2, success), `warning` (TriangleAlert, warning),
+  `destructive` (AlertCircle, destructive). Optional `title`,
+  `description`, right-aligned `action` slot (consumer-provided
+  ReactNode), and `onDismiss` handler (renders an `X` button).
+  `destructive` intent renders `role="alert"` (assertive
+  announcement); other intents render `role="status"` (polite) —
+  matches WAI-ARIA conventions for status messaging. Distinct
+  from `Toast` (transient + corner) and `EmptyState` (centered
+  card). 13 unit tests + 5 Ladle stories. Brief #3 consumer:
+  TheoCloud `<VerificationBanner>` → 3-line `<Alert>`.
+- **`<Pagination>` primitive (NEW)** — accessible page-number
+  navigation. Renders `<nav aria-label="Pagination">` with
+  first / prev / numbers / next / last buttons + visual ellipses
+  when `totalPages` exceeds the visible range. Active page carries
+  `aria-current="page"`. Keyboard nav (`ArrowLeft` / `ArrowRight` /
+  `Home` / `End`) on the nav element. Configurable `siblingCount`
+  (default 1) + optional `showJumpButtons` (default true) +
+  `size` (`sm | md`). Returns `null` when `totalPages <= 1`. Also
+  exports a pure `computePageRange(currentPage, totalPages,
+  siblingCount)` helper for unit-testing the range logic in
+  isolation — most pagination bugs live in that function. 21 unit
+  tests (6 on `computePageRange` alone) + 6 Ladle stories.
+  Forward-positioned for `<Table>` v2 consumers.
+
+## [0.8.0-next.0] - 2026-05-23
+
+Minor — adds eight cross-cutting primitives revealed by the systematic
+review of the remaining 11 dashboard pages (Projects, Environments,
+Team, Billing, Domains, Settings, Profile, Login, Register,
+Verification, Recovery, DeviceSuccess) + recurring PaaS UI patterns.
+Each component is used in ≥3 distinct sites in the consumer dashboard.
+6 are true primitives (Table, StatusDot, CopyButton, Timestamp,
+StatTile, DangerZone); 2 are composites by taxonomy gate
+(ConfirmDialog depends on Dialog/Input/Button; CodeBlock depends on
+CopyButton). Zero breaking change; zero new peer-deps.
+
+Plan: `.claude/knowledge-base/plans/dashboard-paas-primitives-2-plan.md`.
+Edge-case review: `.claude/knowledge-base/reviews/edge-cases/dashboard-paas-primitives-2-edge-cases-2026-05-23.md`.
+Consumer brief: `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief-2.md`.
+
+### Added
+
+- **`<Table>` primitive (NEW)** — semantic data-table with sub-components
+  `Table.Header`, `Table.Body`, `Table.Row`, `Table.Cell`,
+  `Table.HeaderCell`. Supports `density` (`default` / `compact` via
+  Context), per-cell `align` (`left` / `center` / `right`), `numeric`
+  cells (`font-mono tabular-nums`), and sortable header cells
+  (`onSort` + `sortDirection` with ChevronUp/ChevronDown affordance
+  + `aria-sort`). `sortDirection` without `onSort` is a no-op (header
+  stays static); `sortDirection="none"` with `onSort` renders both
+  chevrons dimmed (`opacity-30`). 10 unit tests + 4 Ladle stories.
+  Brief #2 consumer: TheoCloud dashboard.
+- **`<StatusDot>` primitive (NEW)** — semantic status indicator
+  (small colored circle + optional label). Five `status` kinds:
+  `live` (success), `building` (warning, auto-pulses), `failed`
+  (destructive), `idle` (muted), `warning` (warning, static). Three
+  sizes (`xs` 6px / `sm` 8px default / `md` 10px). When neither
+  `label` nor `aria-label` is provided, auto-applies
+  `aria-label={status}` + emits a dev-only warning (color-only
+  status is invisible to screen readers). 12 unit tests + 3 stories.
+  Brief #2 consumer: TheoCloud dashboard (7+ sites).
+- **`<CopyButton>` primitive (NEW)** — click-to-copy primitive wrapping
+  `navigator.clipboard.writeText`. Icon swap (Copy → Check on success,
+  Copy → X on failure), `aria-live="polite"` announcement for screen
+  readers, optional `label`, `ghost`/`outline` variants, two sizes,
+  `onCopied` callback, configurable `feedbackDuration` (default
+  1500ms). SSR-safe (guards `navigator?.clipboard?.writeText`); HTTP
+  non-localhost contexts (where the Clipboard API is undefined) fall
+  back to the failed state instead of throwing. Auto-cleans the
+  revert timer on unmount; debounces double-clicks. 12 unit tests +
+  4 Ladle stories. Brief #2 consumer: TheoCloud dashboard.
+- **`<Timestamp>` primitive (NEW)** — accessible `<time datetime>`
+  element with `relative` (default) / `absolute` / `both` formats.
+  Uses zero-dep `Intl.RelativeTimeFormat`. Auto-refreshes via
+  `setInterval` (default 60s, `refreshInterval={0}` disables).
+  Native `title` HTML attribute carries the absolute time on hover
+  (no Tooltip component dependency — keeps Timestamp a true
+  primitive). `aria-label` always carries the full date. Invalid
+  date renders an empty `<time>` element; invalid locale falls back
+  to default with a dev warning. `value` accepts ISO string, Date,
+  or **Unix milliseconds** (documented in JSDoc — passing seconds
+  renders ~1970). 13 unit tests + 4 Ladle stories. Brief #2
+  consumer: TheoCloud dashboard (every dashboard page).
+- **`<StatTile>` primitive (NEW)** — big-number stat tile for
+  dashboard summary rows. `value` + `label` + optional `icon` +
+  optional `delta` (`{value, trend}` with `trend: "up" | "down" |
+  "flat"` driving TrendingUp/TrendingDown/Minus icons and
+  success/destructive/muted color). Dual mode (button/div) based on
+  `onClick` — same pattern as `AccountMenu`/`ProjectSwitcher`. Value
+  uses `font-display tabular-nums whitespace-nowrap`. 7 unit tests
+  + 4 Ladle stories. Brief #2 consumer: TheoCloud Overview
+  dashboard (3 tiles per page).
+- **`<DangerZone>` primitive (NEW)** — destructive-actions section
+  with sub-component `DangerZone.Action`. Red-bordered container
+  (`border-destructive/30`) with title bar (default `"Danger Zone"`)
+  and action rows. Each row carries `title` + `description` +
+  consumer-provided `action` slot (typically a destructive
+  `<Button>`). Rows separated by hairline dividers; last row drops
+  the bottom border via `last:border-b-0`. Consumer supplies the
+  destructive button — DangerZone never imports `<Button>`, keeping
+  it a true primitive. 6 unit tests + 3 Ladle stories. Brief #2
+  consumer: Settings + Profile + Team + Billing pages.
+- **`<ConfirmDialog>` composite (NEW)** — controlled confirmation
+  modal built on `Dialog`. Auto-focuses Cancel on open (deliberate
+  — NOT the destructive button). `intent="destructive"` styles the
+  confirm button with the destructive variant. `confirmationPhrase`
+  enables typed-confirmation guard (case-sensitive, empty string
+  treated as no phrase). Pressing Enter in the input triggers
+  confirm when matched. Async `onConfirm` shows `Loader2` spinner
+  while pending; resolve closes the dialog; reject keeps it open
+  so consumers can surface their own error. Phrase input resets
+  whenever the dialog closes. 13 unit tests + 4 Ladle stories.
+  Composite (depends on Dialog + Button + Input). Brief #2
+  consumer: 6+ destructive flows (Settings delete, Team remove,
+  Billing cancel, Profile delete, Domains remove, Environments
+  delete).
+- **`<CodeBlock>` composite (NEW)** — terminal command / code-snippet
+  surface. Pre-rendered code inside a `<pre>` with optional
+  `terminal` prefix per line (`"$ "`), optional `caption` (file
+  name), and optional inline `<CopyButton>` positioned top-right.
+  The CopyButton receives the RAW `code` (without the visual `"$ "`
+  prefix) — consumers paste only the executable command. `language`
+  prop is reserved for future syntax highlighting (v1 ignored).
+  7 unit tests + 4 Ladle stories. Composite (depends on
+  CopyButton). Brief #2 consumer: Overview EmptyState, Projects
+  EmptyState, Domains DNS records, API token display, LoginPage
+  CLI hint.
+
+### Implementation notes
+
+- **Taxonomy gate** classified ConfirmDialog + CodeBlock as composites
+  (D2 in the plan). Brief #2 listed all 8 as primitives, but the
+  validate-quality-gates.ts script is hard-fail for any
+  `primitives/` file that imports another `@usetheo/ui` component.
+- **Timestamp uses native `title` HTML attribute** (D3) instead of
+  the `<Tooltip>` component, to keep the file a true primitive
+  without sibling-primitive imports.
+- **Zero new peer-deps.** Every component uses only `lucide-react`
+  + Radix (both already peer) + `cn()`.
+- **Bundle delta** — `dist/index.js` grew from 395763 B to 417113 B
+  (+21350 B / +5.4%); `dist/index.d.ts` grew +11808 B / +7.5%. Both
+  exceeded the ±5% tolerance by a small margin (8 components ≈ +2.5 KB
+  each on average). The baseline was rebaselined in the same release
+  (`scripts/baselines/bundle-sizes.json`) — expected and explicit per
+  plan D6.
+- 10 SHOULD TEST edge cases from the `/edge-case-plan` review
+  incorporated into the TDD blocks (EC-1 through EC-10 — empty
+  CopyButton value, unmount during timer, clipboard undefined,
+  Table sort direction without onSort, dimmed affordance for
+  `none`, StatusDot dev warning, Timestamp Unix seconds vs ms,
+  invalid locale fallback, ConfirmDialog empty phrase semantics,
+  Enter-to-confirm in phrase input).
+
+## [0.7.0-next.0] - 2026-05-23
+
+Minor — adds four PaaS-shape primitives to cover the gaps surfaced by the
+TheoCloud dashboard migration: multi-metric `UsageMeter`, standalone
+`Progress` bar, semantic `PlanBadge`, and sidebar `AccountMenu`. Each
+primitive is a SIBLING of an existing agent-shape primitive — no breaking
+changes, no modifications to current components. The library's
+agent-first positioning (per `PITCH.md`) stays intact; both shapes now
+coexist with TypeScript dispatch by name.
+
+Plan: `.claude/knowledge-base/plans/dashboard-paas-primitives-plan.md`.
+Consumer brief: `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief.md`.
+
+### Added
+
+- **`<Progress>` primitive (NEW)** — accessible progress bar built on
+  `<div role="progressbar">` (not native `<progress>` — Tailwind classes
+  style cross-browser reliably). Variants:
+  - `intent`: `default` / `success` / `warning` / `destructive`
+  - `height`: `h-1` (default) / `h-1.5` / `h-2` / `h-3`
+  - `indeterminate`: animated bar with no value (omits `aria-valuenow`,
+    sets `aria-busy="true"`)
+  Clamping handles `value > max` (clamps to max) + `value < 0` (clamps to
+  0) + `max = 0` (no NaN/Infinity). Respects `prefers-reduced-motion`.
+  14 unit tests + 6 Ladle stories. (#TBD)
+- **`<UsageMeter>` primitive (NEW)** — multi-metric stacked usage card
+  for PaaS dashboards. Renders N metrics (data transfer, requests, build
+  minutes, seats, …) each with `label + value/max + <Progress>` bar.
+  Supports custom per-metric `formatter`, automatic over-quota warning
+  (value text gets `text-warning`, `<Progress>` uses `intent="warning"`
+  AND clamps the bar at 100%), and a `compact` bars-only mode. PaaS-shape
+  sibling of `<CostMeter>` (which stays single-USD-mono for agent token
+  spend). 12 unit tests + 4 Ladle stories. (#TBD)
+- **`<PlanBadge>` primitive (NEW)** — semantic pricing-tier badge with 5
+  canonical tiers (`free`, `hobby`, `pro`, `team`, `enterprise`) and two
+  sizes (`sm`, `md`). Each tier carries distinct color tokens. Consumers
+  self-document intent (`plan="hobby"`) instead of mapping a generic
+  `<Badge variant="outline">` to colors per app — future rebrand /
+  dark-mode tweaks propagate automatically. Default label capitalizes
+  the tier; `label` prop overrides. Runtime fallback to `free` styling
+  for unknown tier (TypeScript prevents this at compile time). 16 unit
+  tests + 2 Ladle stories. (#TBD)
+- **`<AccountMenu>` primitive (NEW)** — sidebar header for PaaS surfaces.
+  Avatar + name + (optional) `<PlanBadge>` + (optional) secondary line.
+  Dual mode: with `onClick`, renders as `<button>` with trailing
+  `ChevronsUpDown` icon; without, renders as a static `<div>` (not
+  focusable, no chevron). Avatar handling auto-detects URL vs short
+  string (≤2 chars treated as initials) vs undefined (derives initials
+  from `name`). PaaS-shape sibling of `<ProjectSwitcher>` (which stays
+  workspace+branch+agent-status for code-agent surfaces). 13 unit tests
+  + 4 Ladle stories. (#TBD)
+
+### Notes
+
+- **No breaking change.** `CostMeter`, `ProgressChecklist`, `Badge`,
+  `ProjectSwitcher` are untouched. Consumers on 0.6.x see only new
+  exports.
+- **Taxonomy invariant preserved.** `UsageMeter → Progress` and
+  `AccountMenu → Avatar + PlanBadge` use relative-path imports
+  (`../{slug}/index.js`), not barrel imports, so primitives still have
+  zero `@usetheo/ui` cross-dependencies per the structural gate.
+- **Bundle delta.** `dist/index.js` grows by ~6 KB (4 primitives + types
+  + small imports). Within the ±5% baseline tolerance (rebaselined).
+- **Subpath exports.** `package.json#exports` gains `./usage-meter`,
+  `./progress`, `./plan-badge`, `./account-menu` per existing
+  convention (auto-synced by `scripts/sync-exports.ts`).
+- **Registry items.** Four new `registry/r/*.json` descriptors ship for
+  shadcn-style copy-paste install. `usage-meter` declares `progress` as
+  a `registryDependencies`; `account-menu` declares `avatar` +
+  `plan-badge`.
+
+## [0.6.3-next.0] - 2026-05-23
+
+Patch — eliminate React hydration mismatch in `<ThemeProvider>`. Reported
+by the TheoKit framework team (2026-05-23): every SSR'd app using
+`<ThemeSwitcher>` threw `Hydration failed because the server rendered
+text didn't match the client` on every page reload after a user had
+changed themes, then re-rendered the entire React tree client-side,
+defeating SSR.
+
+### Fixed
+
+- **SSR hydration mismatch on `<ThemeProvider>`** — three `useState`
+  calls (`themeName`, `mode`, `density`) previously ran their initializer
+  on BOTH server (no `window`, returned default) AND client at hydration
+  time (with `window`, returned `localStorage.getItem(…)`). The two
+  diverged → React threw + discarded the SSR'd tree on every page load.
+  Fixed by initializing with the SSR default ALWAYS, then promoting to
+  the stored value via a post-mount `useEffect` after hydration. The
+  visible-text nodes the React reconciler compares (switcher label,
+  `sr-only` announcement, `aria-label`) now match server → client.
+  Stored preferences still apply within one render tick of mount;
+  `<ThemeScript>` continues to set `data-theme` / `data-mode` /
+  `data-density` on `<html>` before React mounts to suppress the
+  1-frame visual flicker. (#TBD)
+- **Persist effect first-mount guard** — a `useRef`-based skip-first
+  flag prevents the persist effect from writing the SSR-safe defaults
+  to `localStorage` between mount and the post-mount hydration
+  setState. Previously, the brief window between commit and the
+  hydration effect could clobber the user's stored preference if the
+  page closed mid-render. After the first call, every subsequent
+  change (user-driven OR hydration-promoted) persists normally. (#TBD)
+
+### Added
+
+- **`<ThemeScript defaultDensity>` prop** — the inline `<script>`
+  bootstrap now also sets `data-density` on `<html>` from
+  `localStorage.getItem(":density")` (or `defaultDensity`, default
+  `"comfortable"`) so density-driven layouts have zero FOUC at first
+  paint. Mirrors `ThemeProvider`'s `defaultDensity`. (#TBD)
+
+### Notes
+
+- Pattern mirrors `next-themes` (Vercel), `MantineProvider`, and
+  shadcn/ui's theme scaffold. The 1-frame state-promotion delay is the
+  React-canonical price for SSR-safe client-only state. `<ThemeScript>`
+  pre-paints the `<html>` attributes so the visible layer doesn't
+  flicker.
+- Two new unit tests guard the regression:
+  - `does NOT write to localStorage on first mount when nothing changes
+    (persist gate)` — verifies the skip-first guard.
+  - `writes to localStorage AFTER a user-driven change (persist fires
+    post-hydration)` — verifies the gate releases after the first call.
+- Existing `reads initial theme name from localStorage` and `reads
+  initial mode from localStorage` tests continue to pass because
+  testing-library's `render()` flushes effects synchronously inside
+  `act()`, so by the assertion phase the post-mount hydration effect
+  has already promoted the stored value.
+
+## [0.6.2-next.0] - 2026-05-23
+
+Patch — restore `cursor: pointer` on interactive buttons. Tailwind v4
+intentionally dropped the v3 preflight rule
+(https://tailwindcss.com/docs/upgrade-guide#default-button-cursor) so
+every `<button>` rendered by `Sidebar.Item`, `QuickActionChips`,
+`ChatComposer`, `ContextWindowBar`, `ToolCallCard`, `AgentProfile`,
+`CommandPalette`, etc. was showing the default arrow cursor instead of
+the pointing hand. Visual regression observed in TheoKit
+`examples/full-stack-agent` against `@usetheo/ui@0.6.1-next.0`.
+
+### Fixed
+
+- **Tailwind v4 preflight regression on `<button>` cursor** — restored
+  the v3 `button { cursor: pointer }` behavior via TWO defenses:
+  1. `<Button>` primitive (`src/components/primitives/button/button.tsx`)
+     gains `cursor-pointer disabled:cursor-default
+     aria-disabled:cursor-default` in its CVA base — explicit per
+     Tailwind v4 spec intent.
+  2. `dist/styles.css` `@layer base` adds a scoped preflight rule:
+     ```css
+     button:not(:disabled):not([aria-disabled="true"]),
+     [role="button"]:not([aria-disabled="true"]) {
+       cursor: pointer;
+     }
+     ```
+     This covers every native `<button>` the library composites render
+     directly (50+ across `Sidebar.Item`, `QuickActionChips`,
+     `ChatComposer`, `ToolCallCard`, `CommandPalette`, …) without
+     touching their per-component className strings. Disabled and
+     `aria-disabled="true"` paths keep `cursor: default` per
+     accessibility convention. (#TBD)
+
+The fix is opt-in by consumer choice — they imported
+`@usetheo/ui/styles.css`. Tailwind v4's global preflight remains
+untouched; only this stylesheet's `@layer base` adds the rule. (#TBD)
+
+### Notes
+
+- Verification recipe (matches the TheoKit reproduction):
+  ```bash
+  # Browser test:
+  # 1. cd theokit/examples/full-stack-agent && pnpm dev
+  # 2. Hover any Sidebar.Item → cursor MUST visibly change to the
+  #    pointing-hand icon (not the default arrow).
+  #
+  # CSS grep test:
+  grep -c "button:not(:disabled)" node_modules/@usetheo/ui/dist/styles.css
+  # MUST return >= 1 (pre-fix: 0)
+  ```
+
+## [0.6.1-next.0] - 2026-05-23
+
+Patch — pre-compile utility CSS at library build time so consumers see
+every hover / focus / active / data-state variant the library uses,
+regardless of package-manager layout. Fixes a critical regression where
+the entire library rendered flat under pnpm.
+
+### Fixed
+
+- **pnpm symlink + Tailwind v4 `@source` bug** — Tailwind v4's
+  `tinyglobby`-based scanner does **not** follow symbolic links. Under a
+  pnpm install, `node_modules/@usetheo/ui` is a symlink to a deep
+  `node_modules/.pnpm/@usetheo+ui@…/node_modules/@usetheo/ui` directory,
+  and the consumer-side pattern
+  `@source "node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}"` (the one
+  the `vite-plugin` previously emitted via the
+  `virtual:@usetheo/ui/library-sources.css` virtual module) expanded to
+  **zero** matches. Every `hover:bg-muted`, `hover:text-foreground`,
+  `data-[state=active]:…` variant the library's 79 primitives + 41
+  composites use was therefore never emitted into the consumer's CSS,
+  and components rendered flat (no hover feedback, no focus rings, no
+  active-tab highlight). The bug affected every modern Node toolchain
+  that uses pnpm — Vite ecosystem default, Bun, recent Turborepo
+  templates. (#TBD)
+
+### Added
+
+- **`dist/components.css` (NEW)** — pre-compiled utility CSS file
+  containing the materialized rules for every Tailwind class the
+  library's components reference. Generated at library build time by
+  `scripts/build-precompiled-css.ts`, which runs `@tailwindcss/cli@^4`
+  against `src/styles/components-entry.css` (a curated entry that
+  imports `tailwindcss`, the existing `tokens.css` and `tokens-v4.css`
+  `@theme` namespace, and declares `@source` globs against the library's
+  own `src/` — not `node_modules/`). Size: ~88 KB unminified, ~14 KB
+  gzipped. This is the canonical Tailwind v4 library pattern used by
+  Radix UI Themes, shadcn/ui pre-compiled, and Mantine v7. (#TBD)
+- **`dist/styles.css` chains `@import "./components.css"`** at the end,
+  so a single `@import "@usetheo/ui/styles.css"` in the consumer's CSS
+  now transitively pulls in every utility the library uses — zero
+  filesystem scanning required. Consumer-side `@theme` overrides still
+  win via the runtime CSS-var cascade (every utility resolves
+  `var(--color-*)` at paint time, not at compile time). (#TBD)
+- **`scripts/dogfood-precompiled-utilities.ts`** — 25 contract checks
+  asserting `dist/components.css` ships the required variants
+  (`hover:bg-muted`, `hover:text-foreground`, `hover:bg-secondary`,
+  `hover:shadow-md`, `hover:underline`, `focus-visible:outline`, every
+  base color/typescale token, the radii). Integrated to
+  `pnpm quality:gates` so the regression cannot reach npm again. (#TBD)
+- **`@tailwindcss/cli@^4`** added as a devDependency — required for the
+  pre-compile pass at library build time. Consumers do NOT need it; the
+  utility rules ship as static CSS bytes. (#TBD)
+
+### Changed
+
+- **`@usetheo/ui/vite-plugin` virtual module** — the
+  `virtual:@usetheo/ui/library-sources.css` module no longer emits the
+  broken `@source "node_modules/@usetheo/ui/..."` default globs. It is
+  retained for backwards compatibility (TheoKit's earlier integration
+  code may still resolve it) but now emits only an explanatory comment
+  block when no `contentExtra` option is passed. The plugin's primary
+  job remains chaining `@tailwindcss/vite` for the consumer's own
+  Tailwind v4 build. (#TBD)
+
+### Notes
+
+- Adopted from the canonical Tailwind v4 library pattern documented at
+  https://tailwindcss.com/docs/upgrade-guide. Reference implementations
+  studied: Radix UI Themes
+  (`packages/radix-ui-themes/scripts/build.mjs`), shadcn/ui pre-compiled
+  starter, Mantine v7.
+- Verification recipe matching TheoKit's reproduction script:
+  ```bash
+  grep -c "\.hover\\:bg-muted" node_modules/.pnpm/@usetheo+ui@*/node_modules/@usetheo/ui/dist/components.css
+  # MUST return >= 1 (pre-fix: 0)
+  ```
+
+## [0.6.0-next.0] - 2026-05-23
+
+Minor — `<ChatMessage>` rewritten on top of the Vercel AI SDK `UIMessage`
+shape with full markdown rendering, syntax-highlighted code blocks, math,
+mermaid diagrams, tool calls, reasoning panels, file/source citations,
+branching navigation, and a streaming-safe markdown preprocess.
+
+### Added
+
+- **`<ChatMessage>` v2 (RFC 0009)** — promoted from primitive to composite
+  (`src/components/composites/chat-message/`). Two consumption shapes:
+  (a) convenience `<ChatMessage message={uiMessage} />` auto-dispatches
+  every part to its built-in renderer; (b) composable
+  `<ChatMessage.Root from="assistant"><ChatMessage.Content>…</…></…>` for
+  full control. Forks structural shell from `vercel/ai-elements`
+  (Apache-2.0, see `NOTICE`). Renders 11 part types:
+  `text`, `reasoning`, `tool-${name}`, `dynamic-tool`, `file`,
+  `reasoning-file`, `source-url`, `source-document`, `step-start`,
+  `custom`, `data-${name}`. (#TBD)
+- **Branching navigation** — `<ChatMessageBranch>` + content / selector /
+  previous / next / page sub-components for cycling through alternate
+  responses on a single turn. (#TBD)
+- **Markdown engine (`src/lib/markdown/`)** — `parseMarkdownToReact()` +
+  `parseMarkdownToReactSafe()` build a mdast → hast → React pipeline
+  via the existing optional peer-deps (`mdast-util-from-markdown`,
+  `mdast-util-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`,
+  `hast-util-to-jsx-runtime`). Sanitize schema allows
+  `language-*` classes on `<code>`/`<pre>` so syntax highlight survives.
+  GFM tables, task lists, strikethrough, autolinks all render. (#TBD)
+- **Streaming-safe preprocessor** — `preprocessStreaming()` auto-closes
+  trailing `**bold`, `_italic`, `` `code ``, `[link](url`, `$math$`,
+  `$$blockmath$$`, and `` ```fence `` so token-by-token streaming output
+  never flashes raw markdown chars. Re-implemented (NOT
+  `streamdown`-dep) so we don't take a runtime dependency on a Vercel
+  package we compete with. (#TBD)
+- **`<CodeBlock>` + `<InlineCode>` (`src/lib/markdown/`)** — fenced code
+  ships Shiki SSR-friendly highlight (lazy `import("shiki")` — peer-dep
+  optional, graceful plain-`<pre>` fallback), language label header,
+  Copy → Check 2s button per `shadcn.io` AI code-block pattern. Inline
+  `<code>` is styled distinct from blocks. (#TBD)
+- **`<MathInline>` + `<MathBlock>`** — lazy-load KaTeX, render to safe
+  HTML, fall back to `<code>` / `<pre>` plain when peer-dep missing. (#TBD)
+- **`<MermaidDiagram>`** — lazy-load Mermaid with `securityLevel:
+  "strict"`, render to SVG. Failed parse or missing peer falls back to
+  a labeled `<pre>` block. (#TBD)
+- **11 Vercel-compat UIMessagePart types** + 10 type guards in
+  `src/types/chat.ts` (`UIMessage`, `UIMessagePart`, `TextUIPart`,
+  `ReasoningUIPart`, `ToolUIPart`, `DataUIPart`, `FileUIPart`,
+  `ReasoningFileUIPart`, `SourceUrlUIPart`, `SourceDocumentUIPart`,
+  `StepStartUIPart`, `CustomContentUIPart`, `ProviderMetadata`,
+  `ToolInvocationState`, `MessageRole`). Field-for-field compatible
+  with `useChat()` from `@ai-sdk/react` — zero-adapter interop. (#TBD)
+
+### Changed
+
+- **Taxonomy**: `ChatMessage` moves from `primitives/` → `composites/`.
+  Composite layer is the correct home — internal deps on `<Button>`,
+  native `<details>`, our `<Card>` patterns. README catalog counts
+  adjust automatically via the structure gate (`pnpm sync:readme`). (#TBD)
+- **`registry/chat-message.json`** — descriptor now lists 12 source
+  files + 6 lib files, declares `lucide-react` + `safe-href` + `button`
+  registry-deps. (#TBD)
+
+### Breaking changes
+
+- **`Message` type removed.** `import type { Message } from "@usetheo/ui"`
+  now fails — use `UIMessage` instead. TypeScript will hint
+  `Did you mean 'UIMessage'?`.
+- **`message.content` removed.** Replace every callsite:
+
+  ```diff
+  - { id, role: "user", content: "hello", timestamp: "10:00" }
+  + { id, role: "user", parts: [{ type: "text", text: "hello" }] }
+  ```
+
+  Internal callsites already migrated: `agent-stream`,
+  `chat-thread.stories`, `theo-code-shell.data`, `task-running.stories`,
+  `task-starting.stories`, `task-completed.stories`. For mockup data
+  with arbitrary JSX content, use the composable form:
+
+  ```tsx
+  <ChatMessage.Root from="assistant">
+    <ChatMessage.Content variant="contained">
+      <div>any JSX here</div>
+    </ChatMessage.Content>
+  </ChatMessage.Root>
+  ```
+
+- **`message.model` / `message.timestamp` no longer rendered** by
+  `<ChatMessage>` — fold them into custom UI under the message body, or
+  attach via `metadata?: unknown` (consumer-typed) and read from there.
+- **`./components/primitives/chat-message/`** deleted. Imports must move
+  to `./components/composites/chat-message/` (the public `@usetheo/ui`
+  barrel handles this; only relative imports inside the repo need
+  updating).
+
+### Notes
+
+- **License attribution**: a `NOTICE` file ships at the package root
+  with Apache-2.0 attribution to `vercel/ai-elements` for the
+  structural-shell components forked, and to `vercel/ai` for the
+  `UIMessage` shape mirrored. Both upstream and TheoUI are Apache-2.0
+  — compatible.
+- **Reference clones** of `vercel/ai-elements` and `vercel/ai` live in
+  `referencia/` (read-only). Not shipped in the npm tarball (excluded
+  via the `files` field).
+
+## [0.5.1-next.0] - 2026-05-22
+
+Patch — RFC 0008 follow-up. The 0.5.0-next.0 release declared `tailwindcss@^4`
+as a peer dependency and shipped the `./vite-plugin` + `./preset` subpaths,
+but the actual CSS / token / preset artifacts inside the tarball were still
+Tailwind v3 internally. Result: every TheoKit consumer of 0.5.0-next.0 booted
+with unstyled UI in dev and production — `bg-primary`, `text-muted-foreground`,
+`border-border`, `text-body-sm`, etc. emitted as className strings with no
+matching CSS rule.
+
+This release rewrites the three v3-shaped artifacts to v4-native syntax and
+ships a fixture-backed real-build dogfood so the regression cannot recur.
+
+### Changed
+
+- **`dist/styles.css` is now Tailwind v4 native.** Uses `@import "tailwindcss"`
+  (replaces the v3 `@tailwind base; @tailwind components; @tailwind utilities;`
+  trio that Tailwind v4 emits as literal strings, with zero utility generation).
+  Imports `tokens.css` (runtime cascade) AND `tokens-v4.css` (`@theme` namespace)
+  so consumers' Tailwind v4 build resolves both layers correctly. Same
+  `@layer base` content (border-color, body font, focus ring, scrollbar
+  styling) as before. (#TBD)
+- **`./preset` subpath is now a CSS file.** Tailwind v4 dropped the v3 JS
+  preset format — `theme.extend.colors.{name}` declarations are a no-op for
+  v4. The new `dist/preset.css` simply chains `@import "./tokens.css"` and
+  `@import "./tokens-v4.css"` so consumers can `@import "@usetheo/ui/preset.css"`
+  from their own Tailwind v4 entry CSS. (#TBD)
+
+### Added
+
+- **`@usetheo/ui/tokens-v4.css` (NEW)** — `@theme {}` block declaring 28
+  `--color-*` aliases (full color set), 14 `--text-*` typescale tiers
+  (Violet Forge — `--text-display-2xl` through `--text-code-sm` with companion
+  `--*--line-height`, `--*--letter-spacing`, `--*--font-weight`), 3 `--font-*`
+  family tokens, 7 `--radius-*` tiers, 5 `--shadow-*` levels, 3 `--ease-*`
+  timings, and 2 `--animate-*` keyframe-bound utilities. Every color alias
+  uses `hsl(var(--*))` indirection so `<ThemeProvider>`'s runtime
+  `[data-theme]` cascade keeps working — switching themes still recolors
+  every utility. (#TBD)
+- **`@usetheo/ui/styles-v3-legacy.css` (NEW)** — the previous v3-shaped
+  `@tailwind base/components/utilities` entry. Pinned consumers on
+  `tailwindcss@^3` who still want a prebuilt stylesheet can import this
+  subpath. New code SHOULD use `@usetheo/ui/styles.css` (v4) instead.
+- **`@usetheo/ui/preset-v3-legacy` (NEW)** — the v3 JS `Partial<Config>`
+  preset that previously lived at `./preset`. Renamed so the canonical
+  `./preset` subpath can host the v4 CSS preset. v3 consumers update
+  imports from `@usetheo/ui/preset` to `@usetheo/ui/preset-v3-legacy`.
+- **Dogfood scripts** — `pnpm dogfood:v4-zero-config` (shape check, runs in
+  `quality:gates`) and `pnpm dogfood:v4-real-build` (end-to-end: packs the
+  tarball, installs in a tmp project alongside `@tailwindcss/cli@^4`, runs
+  Tailwind v4 against `tests/fixtures/v4-zero-config/`, and grep-asserts the
+  expected utility classes appear in the emitted CSS — 12 assertions). The
+  real-build dogfood is opt-in (slow, requires network) but catches any
+  future regression where v3-shaped artifacts get shipped under a v4 peer
+  declaration. (#TBD)
+
+### Notes
+
+- **Breaking for any 0.5.0-next.0 consumer.** The `./preset` subpath changed
+  from JS (`Partial<Config>` default-export) to CSS file. Code importing
+  `import preset from "@usetheo/ui/preset"` will break and must migrate to
+  `@import "@usetheo/ui/preset.css"` in an entry CSS. Blast radius: TheoKit
+  (already reverted away from 0.5.x by the time this fix shipped) plus any
+  community consumer that adopted 0.5.0-next.0 in the same day — likely zero.
+- The runtime indirection via `hsl(var(--*))` aliases keeps `<ThemeProvider>`
+  and every built-in theme (`violet-forge`, `dracula`, `vercel-mono`, etc.)
+  working with zero changes — the v4 utilities transparently follow the v3
+  cascade.
+
+## [0.5.0-next.0] - 2026-05-22
+
+Minor bump — public API gains two subpath exports (`./vite-plugin` and
+`./preset`) so the TheoKit framework's `integrateUseTheoUI()` can
+auto-wire Tailwind v4 for consumers with zero further configuration.
+Zero visual break and no runtime behavior change for existing consumers.
+
+### Added
+
+- **`@usetheo/ui/vite-plugin` (NEW, RFC 0008)** — Default-export factory
+  returning one Vite `Plugin`. The plugin's `config()` hook
+  dynamic-imports `@tailwindcss/vite` v4 and chains it into the
+  consumer's plugin array when resolvable, and degrades to `console.warn`
+  + CSS-only mode (via the pre-built `@usetheo/ui/styles.css` subpath)
+  when the peer is not installed. A virtual module
+  `virtual:@usetheo/ui/library-sources.css` provides the `@source`
+  directive covering `node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}`
+  so Tailwind scans the library's published JS for utilities. Plugin
+  name slug: `@usetheo/ui/vite-plugin`. Options: `tailwind?: boolean`
+  (default `true`), `contentExtra?: string[]` (extra `@source` globs).
+  (#TBD)
+- **`@usetheo/ui/preset` (NEW, RFC 0008)** — Default-export Tailwind v4
+  `Partial<Config>` mirroring the design tokens in `tokens.css`
+  (colors via `hsl(var(--x) / <alpha-value>)`, font families, the
+  Violet Forge typescale, radii, shadows, animations, motion timing)
+  with `content` paths covering `./node_modules/@usetheo/ui/dist/**` and
+  the `tailwindcss-animate` plugin. Consumer usage:
+  `import preset from "@usetheo/ui/preset"; export default { presets: [preset] }`.
+  Internally delegates to the existing `src/styles/tailwind-preset.ts` —
+  the v3 shadcn-registry preset and the v4 import preset stay
+  byte-for-byte aligned and impossible to drift. (#TBD)
+- **`@tailwindcss/vite ^4`, `tailwindcss ^4`, `vite ^6 || ^7` peer-deps
+  (all optional)** — added to `peerDependenciesMeta` so consumers
+  importing `@usetheo/ui` standalone (no framework) are not forced into
+  Tailwind v4. Required only when consuming via TheoKit's auto-wire path
+  or the new `./vite-plugin` subpath. (#TBD)
+
+### Notes
+
+- Existing `tailwindcss@^3` consumers continue to work via the shadcn
+  registry preset (`registry/r/tailwind-preset.json`) and the prebuilt
+  `@usetheo/ui/styles.css`. The new subpaths are additive — they do not
+  break v3-based setups.
+- The `vite-plugin` returns ONE `Plugin` object (not `Plugin[]`) per the
+  cross-repo contract with TheoKit's `integrateUseTheoUI()`. The chain
+  to `@tailwindcss/vite` happens via the `config()` hook's `plugins`
+  field — Vite 5+ tightened the TypeScript signature, the runtime still
+  merges plugins as expected.
+
+## [0.4.0-next.0] - 2026-05-22
+
+Minor bump — public API gains 7 new theme exports. Zero visual break for
+consumers in 0.3.x (default theme remains `violet-forge`).
+
+### Added
+
+- **7 new built-in themes (2026-05-22, RFC 0007)** — `vercelMono`, `githubDark`, `dracula`, `oneDark`, `anthropicStyle`, `openaiStyle`, `linearGlass`. `builtinThemes` grows from 3 to 10 entries. Each ships light + dark mode. Derivative slugs from brand names use suffixes (`-mono`, `-style`, `-glass`) and descriptions include "Inspired by, not affiliated with [Company]" per D1.1 ADR (trademark protection / no false-affiliation). Canonical OSS themes (Dracula, One Dark, GitHub Dark) keep their reusable names. Bundle delta: ~60 KB CSS injection if consumer passes `builtinThemes` (alternative: `themes={[violetForge, dracula]}` for ~12 KB). (#TBD)
+- **`validateThemeContrast` quality gate (2026-05-22)** — Pure-JS WCAG 2.1 contrast validator in `scripts/lib/wcag-contrast.ts` + gate in `validate-quality-gates.ts`. Iterates 10 themes × 2 modes × 4 high-stakes pairs, enforces 4.5:1 (body) and 3:1 (large/button) thresholds. Runs <50ms. Caught 14 pre-existing AA failures in `violet-forge`, `classic-paper`, `aurora-terminal` accent contrast; `classic-paper` accent darkened from `37 92% 50%` → `37 92% 40%` and `openai-style` dark primary darkened from `155 78% 43%` → `155 78% 30%` to satisfy the gate. (#TBD)
+- **`scripts/lib/wcag-contrast.ts` + `.test.ts` (NEW)** — Pure functions `parseHsl`, `hslToLuminance`, `contrastRatio`. 9 tests cover edge cases (achromatic, hue overflow, percent stripping — EC-3). (#TBD)
+
+## [0.3.0-next.0] - 2026-05-22
+
+Minor bump — visual defaults realigned to FAANG-modern density baseline
+(shadcn / Linear / Vercel / Stripe). Public API unchanged; no type/prop
+signatures touched. Every consumer in 0.2.x will see tighter form controls,
+smaller body text, and a less-padded Card after upgrading.
+
+### Migration from 0.2.x
+
+If you depended on the prior visual defaults (Button 40px, Card 24px
+padding, body-md 15px), you have two options:
+
+1. **Per-component** — pass explicit `size="lg"` to Button/Input/Select/
+   Textarea/Card. These render the prior dimensions.
+2. **Global override** — set `<ThemeProvider defaultDensity="spacious">`
+   at the app root. All form controls bump to 44px globally.
+
+No code change required if you accept the new defaults. Type-only
+exports added: `Density`, `DensityContextValue`.
+
+### Added
+
+- **`useDensity()` hook + `data-density` attribute (2026-05-22, RFC 0006)** — Global density override without rewriting `size` props per call site. Three tiers: `compact` (32px), `comfortable` (36px, default), `spacious` (44px). `<ThemeProvider defaultDensity="compact">` at the app root flips the entire surface. Persisted to localStorage. **EC-1 fix**: density implemented via CSS variables on `:root` (`--theo-control-h`, `--theo-control-px`) injected by ThemeProvider, not Tailwind class modifiers. Only the `md` cva variant reads the var; `sm` and `lg` stay hardcoded so explicit `size` prop always overrides density. (#TBD)
+- **`docs/design-system.md > Density policy` section** — declares default heights per component + WCAG 2.5.8 AA tap-target policy + density override patterns. Closes the style-guide gap (previously implicit in source). (#TBD)
+- **`playground/density-demo.tsx`** — live preview with 3-way density toggle. Mount via `?view=density` in the Vite playground. (#TBD)
+
+### Changed (BREAKING visual default, not API)
+
+- **Form-control `md` defaults: 40px → 36px** (FAANG-tier modern density). Affects `Button`, `Input`, `Select.Trigger`, `Textarea`. `sm` stays 32px, `lg` recalibrated to 44px. (#TBD)
+- **`body-md` typescale: 15px → 14px** (shadcn / Vercel Geist / Linear standard). `body-sm` recalibrated 14px → 13px to preserve a distinct tier. `validateDesignSystemFidelity` gate updated atomically with `tailwind-preset.ts`. (#TBD)
+- **Card `md` padding: 24px → 20px** (`p-6` → `p-5`). `sm` unchanged (`p-3`); `lg` recalibrated 28px → 24px (`p-7` → `p-6`). (#TBD)
+- **Bundle baseline rebased** for the new defaults (~+700 bytes total — CSS-var class strings + Density type union). Engines (whiteboard / slide / slide-deck) untouched. (#TBD)
+
+## [0.2.0-next.0] - 2026-05-20
+
+Minor bump (not patch) because public API surface grew: new `defineTheme` /
+`hex` / `rgb` exports plus `size` prop standardized across 9 primitives.
+All additions are backwards-compatible — `defaultVariants.size = "md"`
+preserves rendered markup for callers that don't pass `size`.
+
+### Added
+- **`defineTheme(partial)` + `hex()` / `rgb()` helpers (2026-05-20, theming-and-sizes plan, Phase 2)** — Reduzem o atrito de criar tema customizado de "58 cor keys obrigatórias" para "só sobrescreva o que mudar". `defineTheme({ name, light: { primary: hex('#FF5722') } })` merja partial overrides em `violetForge` e retorna um `Theme` completo. `hex('#7C3AED')` e `rgb(124, 58, 237)` retornam HSL string-tuple (`"262 83% 58%"`) drop-in compatível com `ColorScale`. Suporta short hex (#abc), 8-char alpha (alpha descartado), case-insensitive. **EC-3** (last-writer-wins): passar `defineTheme({ name: 'violet-forge', ... })` sobrescreve o built-in, comportamento documentado em teste. **EC-4** (case-insensitive) e **EC-5** (4-char alpha) cobertos por testes. **EC-7** (override só light/dark): nota em JSDoc lembra o consumer que se omitir um modo, ele herda violetForge — pode gerar inconsistência visual intencional. Drop-in: `<ThemeProvider themes={[defineTheme({ name: 'corp' })]}>` funciona sem mudança no provider. (#TBD)
+- **9 primitives expose `size` prop (2026-05-20, theming-and-sizes plan, Phase 1)** — `Input`, `Badge`, `Toast`, `Checkbox`, `Switch`, `Card`, `FormField`, `Textarea`, `Select.Trigger` agora aceitam `size?: 'sm' | 'md' | 'lg'` (default `md`, backwards-compat preservada). Compounds `Card` e `FormField` propagam size via React Context para os subparts. **EC-1**: `Input` usa `Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>` no extends para evitar conflict com o HTML attribute nativo (`size: number` = text-input columns); type-test garantido via `@ts-expect-error`. **EC-2**: `Select.Trigger` confirmado Radix-button (sem `SelectHTMLAttributes` conflict). Subparts de Card/FormField não aceitam `size` próprio — use `className` para per-subpart tweaks (EC-8 documentado em JSDoc). (#TBD)
+- **`cn()` ensina tailwind-merge sobre o Violet Forge typescale (2026-05-20)** — `src/lib/cn.ts` substitui `twMerge` direto por `extendTailwindMerge` declarando o `font-size` classGroup com as 16 typescale tokens (`display-2xl`/`display-xl`/`headline`/`title-lg`/`body-md`/`label-caps`/`code-md`/etc.). Sem essa extensão, classes como `text-label` (font-size) e `text-accent` (color) colapsavam ambas no mesmo `text-*` group, e o último vencia — quebrando size+color em CVA variants. (#TBD)
+- **Registry descriptors for the engine surface (2026-05-19)** — Seven new shadcn-compatible registry items so `docs.usetheo.dev/theoui` and the `npx shadcn add` flow can deliver the engines as copy-paste components: `whiteboard` (14 files under `components/ui/whiteboard/`), `slide` (16 files under `components/ui/slide/`, including 3 CSS theme files), `slide-deck` (19 files under `components/blocks/slide-deck/`), and four Tier 2 plugins — `slide-plugin-shiki`, `slide-plugin-math`, `slide-plugin-mermaid`, `slide-plugin-emoji` — each shipping its own subpath under `components/ui/slide/plugins/<name>/`. Cross-item references resolved via `registryDependencies` (each plugin + slide-deck depend on `slide`). Honest install: dependencies arrays list every static or dynamic peer-dep a copy-paste consumer needs (`roughjs`, `perfect-freehand`, `zod` for whiteboard; the full markdown / mdast / hast stack for slide; `shiki` / `katex` / `mermaid` per plugin). Total: 121 registry items (was 114). (#TBD)
+- **`scripts/build-registry.ts` strips source ESM extensions on external imports** — `rewriteRegistryImports` now drops `.js` / `.jsx` / `.ts` / `.tsx` from non-relative specifiers (e.g. `roughjs/bin/generator.js` → `roughjs/bin/generator`). Previously only relative imports were normalized; engines that import third-party submodules with the explicit ESM extension (whiteboard does this for `roughjs/bin/*`) would fail `validate-registry`'s `consumer-unsafe extension` gate. Limited to known source extensions so basenames that happen to end in `.js` inside URLs are untouched. (#TBD)
+- **`scripts/validate-quality-gates.ts > validateRegistryStoriesAndTests` is entry-aware** — When a descriptor lists multiple files (engines like whiteboard / slide / slide-deck), the gate now only checks `<descriptor.name>.test.tsx` / `.stories.tsx` next to the entry file (`<name>.tsx` or `<name>.ts`), not every internal module. Internal helpers carry their own focused tests but don't need a story sibling. Single-file registry items are unaffected. (#TBD)
+
+## [0.1.0-next.1] - 2026-05-19
+
+### Added
 - **Slide rich content — Tier 1 baked-in + Tier 2 plugin system (2026-05-19, RFC 0004)** — Estende `<Slide>` (RFC 0002) e `<SlideDeck>` (RFC 0003) com conteúdo rico nível PowerPoint sem reinventar parsers. **Tier 1 (zero peer-deps novas):** (a) GFM alerts `> [!NOTE/TIP/IMPORTANT/WARNING/CAUTION]` detectados em mdast post-process (alerts.ts) → `<aside class="theo-slide-alert" data-theo-slide-alert-type>` temado em ambos os themes (default + violet-forge); (b) 7 layouts via frontmatter `layout` (`default`, `title`, `two-column`, `image-right`, `image-left`, `code-output`, `section`) em CSS grid templates (themes/layouts.css importado pelos dois themes); (c) backgroundImage + backgroundGradient com `sanitizeBgUrl` rejeitando `javascript:`/`vbscript:`/TODO data: URLs (EC-7), cap 500_000 chars; (d) Marpit `![bg](url)` syntax extraído em mdast walker → `ParsedSlide.extractedBackground = { url, modifier }` (D18/EC-5), sanitizado antes de armazenar com fallback `MARPIT_BG_UNSAFE_URL`, modifier-aware (`cover`/`fit`/`left`/`right`); (e) header/footer/paginate overlays via frontmatter (plain text ≤200 chars cada), CSS absolute positioned. **Tier 2 (opt-in plugin system):** plugin architecture com `<Slide plugins={SlidePlugin[]}>` e relay `<SlideDeck plugins>` para cada slide interno. `SlidePlugin` shape: `{ name, mdastTransform?, hastTransform?, components?, sanitizeSchemaExtension? }` com error isolation D16 (cada chamada em try/catch, throws agregadas em `errors[]` com `code: "PLUGIN_ERROR"`; pipeline **nunca** propaga exception) e sanitize-schema merge D17 (extensions unionadas com defaultSchema + Tier 1 baseline). Quatro plugins shipados em sub-subpaths `@usetheo/ui/slide/plugins/{shiki,math,mermaid,emoji}`: **shikiPlugin** (peer-dep `shiki`; lazy + singleton highlighter; pre-renderiza `<pre><code class="language-XXX">` em HTML temado dual-theme com sanitize ext `<span> style/className`); **mathPlugin** (peer-deps `katex` + `hast-util-from-html`; substitui `$inline$` + `$$block$$` por KaTeX displayMode/inline; skip em `<code>`/`<pre>`; sanitize ext com lista completa de ≥30 tags MathML — `math`, `mfrac`, `msqrt`, `msup`, `msub`, `msubsup`, `munder`, `mover`, `mtable`, `mtr`, `mtd`, `mphantom`, `mstyle`, `annotation`, etc. — EC-4); **mermaidPlugin** (peer-dep `mermaid`; converte `<pre><code class="language-mermaid">` em `<theo-mermaid source>` com React `<MermaidDiagram>` que lazy-importa mermaid e injeta SVG via innerHTML; SSR placeholder distinguível de erro com `role="img"` + source code preservado, EC-10; sanitize ext com ≥30 tags SVG — `svg`, `g`, `path`, `rect`, `circle`, `text`, `marker`, `foreignObject`, etc. — EC-4); **emojiPlugin** (zero peer-deps de runtime, usa `unist-util-visit-parents` já no stack; 100 shortcodes Unicode embedded; **EC-6: ancestor check** via `isInsideCodeOrPre` skipa replace dentro de `<code>`/`<pre>` para preservar type hints Python / YAML keys / Ruby symbols). Pipeline order: `validateSlide → parseBody → detectAlerts (Tier 1) → extractMarpitBackgrounds (Tier 1) → plugin.mdastTransform[] → mdastToHast → plugin.hastTransform[] → sanitize(defaultSchema + extensions) → hastToReact (consumer + plugin components)`. Bundle isolation invariant preservada: barrel `dist/index.js` **inalterado**; cada plugin é entry tsup próprio com peer-deps externalizados. `scripts/sync-exports.ts` ganha 4 entries em `ISOLATED_SUBPATHS`. `package.json` ganha 9 peer-deps opcionais (`shiki`, `katex`, `mermaid`, `micromark-extension-math`, `mdast-util-math`, `hast-util-from-html`, `unist-util-visit`, `unist-util-visit-parents`). RFC `docs/rfcs/0004-slide-rich-content.md` status `Implemented`. **128 testes novos** distribuídos em 13 phases (T0.1 plugin contract: 13 testes; T0.2 parseSlide integration: 11 testes; T1.1 alerts: 8 testes; T2/T3/T5 schema: 25 testes; T4.1 Marpit bg: 9 testes; T6.1 Shiki: 6 testes; T7.1 Math: 7 testes; T8.1 Mermaid: 7 testes; T9.1 Emoji: 10 testes; Slide component: 32 testes). Suite total: 1174 testes verdes. Codes de erro novos: `PLUGIN_ERROR`, `PLUGIN_PEER_DEP_MISSING`, `MARPIT_BG_UNSAFE_URL`. (#TBD)
 - **SlideDeck composite engine — multi-slide deck w/ navigation, presenter, fullscreen, PDF (2026-05-19)** — `@usetheo/ui/slide-deck` agora orquestra N `<Slide>` primitives com navegação completa: keyboard (←/→/Space/Home/End/Esc/F/N/Ctrl+P, com guard contra inputs/contentEditable), touch swipe (Pointer Events nativos, multi-touch filtrado, pointercancel limpo — EC-6/EC-7), hash routing bidirectional (`#/N` 1-based, via `history.replaceState` para evitar loop — EC-10), lazy initializer SSR-safe (D17/EC-5). Sub-componentes em namespace dot: `<SlideDeck.Slides>` `<SlideDeck.Controls>` `<SlideDeck.ProgressBar>` `<SlideDeck.SlideNumber>` `<SlideDeck.Thumbnails>` (IntersectionObserver lazy + EC-13 fallback) `<SlideDeck.PresenterView>` (inline panel com timer + speaker notes) `<SlideDeck.FullscreenButton>` (cross-browser API + EC-8 iOS guard) `<SlideDeck.PrintButton>` (window.print + `@page` CSS, afterprint cleanup). Transitions CSS-only (`none`/`fade`/`slide`) com timeout fallback 300ms (D16/EC-3) e respeito a `prefers-reduced-motion`. Progressive fragments via Marpit-style `*` lists (D12, contagem por regex anti-falsos-positivos em `**bold**` ou fenced code). Speaker notes via `<!-- notes: ... -->` HTML comments (D11). Aceita `slides: string | SlideDeckSlide[]` (D4); split string via mdast `thematicBreak` reusando algoritmo do Slide D12 + strip global frontmatter primeiro (D15/EC-1 — evita phantom empty slide). `useReducer` state machine com `UPDATE_TOTAL_SLIDES` que clampa `currentIndex` (EC-4). Zero peer-deps novas — reusa as 7 do Slide. Bundle isolado em `dist/slide-deck/index.js` (~48 KB com Slide vendored); barrel principal `dist/index.js` **inalterado**. RFC `docs/rfcs/0003-slide-deck.md` status `Implemented`. 160 testes específicos do SlideDeck verdes. Stories Ladle: `DefaultDeck`, `WithGfmTable`, `WithSpeakerNotes`, `WithFragments`, `WithFadeTransition`, `WithSlideTransition`, `HashRouting`, `HeadlessLayout`, `WithThumbnails`, `PresenterModeOn`, `LargeDeck` (50 slides), `EmptyDeck`, `SingleSlideDeck`, `ControlledNavigation`. (#TBD)
 - **Slide engine — view-only primitive funcional (2026-05-19)** — `@usetheo/ui/slide` agora renderiza markdown + frontmatter YAML como surface temada com canvas lógico fixo (default 16:9 → 1280×720), espelhando o padrão de bundle isolado entregue pelo Whiteboard. Pipeline: `validateSlide` (async — D11) → `parseBody` (micromark + GFM) → `mdastToHast` (`allowDangerousHtml: false`) → `sanitizeHast` (`defaultSchema` sem extensões — D8, com diff de tag-count que emite `BANNED_TAG` — D13) → `hastToReact` (real React VDOM via `hast-util-to-jsx-runtime` — D9, **sem `dangerouslySetInnerHTML`**). Frontmatter YAML único (sem HTML comment syntax do Marpit — D4), validado com Zod `.strict()` (4 keys aceitos: `theme`, `lang`, `color`, `backgroundColor`). Multi-slide input (top-level `---` detectado via mdast `thematicBreak` — D12, sem false-positive em fenced code blocks) emite `MULTIPLE_SLIDES` e renderiza somente o primeiro slide. Input guards (D14): BOM strip, `aspectRatio` inválido → fallback 16:9 + `INVALID_ASPECT_RATIO`, raw frontmatter > 10 KB → `FRONTMATTER_TOO_LARGE`. Container fit (D7) via `useSlideFit` hook (algoritmo Reveal.js: `scale = clamp(min(W/cw, H/ch), minScale, maxScale)` em `ResizeObserver` callback). Dois temas built-in (`default`, `violet-forge`) via CSS variables `--theo-slide-*` layered sobre Violet Forge tokens, com `light-dark()` para dark mode automático. A11y: `<section role="region" aria-roledescription="slide" aria-label>`. Race-resistant re-parse via `versionRef` counter (EC-7). 7 markdown peer-deps são **opcionais**: `mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`. Bundle isolado em `dist/slide/index.js`; barrel principal `dist/index.js` **inalterado**. RFC `docs/rfcs/0002-slide.md` status `Implemented`. 12 Ladle stories: `HappyPath`, `GfmTable`, `WithFrontmatter`, `VioletForgeTheme`, `AspectFourByThree`, `MultiSlideTruncated`, `MalformedFrontmatter`, `BannedScript`, `LongContent`, `CustomComponents`, `SmallContainer`, `LargeContainer`. (#TBD)

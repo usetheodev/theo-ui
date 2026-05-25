@@ -1,0 +1,27 @@
+/* Theo UI — Tailwind v4 CSS preset.
+ *
+ * For consumers running their own Tailwind v4 build (TheoKit framework
+ * path, custom Vite/Astro/Next apps with @tailwindcss/vite, etc.). The
+ * preset pulls in:
+ *   1. `tokens.css` — runtime `--*` vars `<ThemeProvider>` mutates per
+ *      theme cascade.
+ *   2. `tokens-v4.css` — the `@theme { --color-*, --font-*, --text-*,
+ *      --radius-*, --shadow-*, --ease-*, --animate-* }` namespace
+ *      Tailwind v4 actually reads to generate utilities.
+ *
+ * Consumer usage (their entry CSS):
+ *
+ *   @import "tailwindcss";
+ *   @import "@usetheo/ui/preset.css";
+ *
+ *   /* the consumer's own @theme overrides come AFTER, so they win. * /
+ *
+ * Tailwind v4 dropped the v3 JS preset format. The previous JS preset
+ * remains shipped under `@usetheo/ui/preset-v3-legacy` (which works only
+ * with `tailwindcss@^3`). New v4 consumers MUST use this CSS preset.
+ *
+ * See RFC 0008 follow-up.
+ */
+
+@import "./tokens.css";
+@import "./tokens-v4.css";

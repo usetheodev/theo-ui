@@ -25,6 +25,7 @@ import {
   AgentEditor,
 } from "../components/composites/agent-editor/agent-editor.js";
 import { AgentStream } from "../components/composites/agent-stream/agent-stream.js";
+import { ChatMessage } from "../components/composites/chat-message/chat-message.js";
 import { DeploymentRow } from "../components/composites/deployment-row/deployment-row.js";
 import { DomainConfig } from "../components/composites/domain-config/domain-config.js";
 import { EnvVarEditor } from "../components/composites/env-var-editor/env-var-editor.js";
@@ -35,7 +36,6 @@ import { AgentProfile } from "../components/primitives/agent-profile/agent-profi
 import { AuditLogEntry } from "../components/primitives/audit-log-entry/audit-log-entry.js";
 import { BuildLogStream } from "../components/primitives/build-log-stream/build-log-stream.js";
 import { Button } from "../components/primitives/button/button.js";
-import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { ContextWindowBar } from "../components/primitives/context-window-bar/context-window-bar.js";
 import { DiffViewer } from "../components/primitives/diff-viewer/diff-viewer.js";

@@ -2,10 +2,10 @@ import type { Story } from "@ladle/react";
 import { Folder, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
+import { ChatMessage } from "../components/composites/chat-message/chat-message.js";
 import { TaskHeader } from "../components/composites/task-header/task-header.js";
 import { AgentStartingState } from "../components/primitives/agent-starting-state/agent-starting-state.js";
 import { Button } from "../components/primitives/button/button.js";
-import { ChatMessage } from "../components/primitives/chat-message/chat-message.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { ContextCard } from "../components/primitives/context-card/context-card.js";
 import { FolderContextCard } from "../components/primitives/folder-context-card/folder-context-card.js";
@@ -71,8 +71,12 @@ export const Default: Story = () => {
               message={{
                 id: "u1",
                 role: "user",
-                content:
-                  "Organize a pasta capturas do meu computador. Nela há diversos prints, imagens. Eu quero que você divida esses prints em sub-pastas de acordo com seu conteúdo.",
+                parts: [
+                  {
+                    type: "text",
+                    text: "Organize a pasta capturas do meu computador. Nela há diversos prints, imagens. Eu quero que você divida esses prints em sub-pastas de acordo com seu conteúdo.",
+                  },
+                ],
               }}
             />
           </ChatThread>

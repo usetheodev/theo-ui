@@ -12,8 +12,7 @@ const items: AgentStreamItem[] = [
     message: {
       id: "u1",
       role: "user",
-      content: "Find every call site of stiffness and refactor to snap.",
-      timestamp: "9:58 PM",
+      parts: [{ type: "text", text: "Find every call site of stiffness and refactor to snap." }],
     },
   },
   {
@@ -22,9 +21,9 @@ const items: AgentStreamItem[] = [
     message: {
       id: "a1",
       role: "assistant",
-      content: "I'll start by grepping the codebase for stiffness call sites.",
-      timestamp: "9:58 PM",
-      model: "Opus 4.7",
+      parts: [
+        { type: "text", text: "I'll start by grepping the codebase for stiffness call sites." },
+      ],
     },
   },
   {
@@ -49,9 +48,7 @@ const items: AgentStreamItem[] = [
     message: {
       id: "a2",
       role: "assistant",
-      content: "Found 3 call sites. Patching AlignmentGrid.tsx first.",
-      timestamp: "9:58 PM",
-      model: "Opus 4.7",
+      parts: [{ type: "text", text: "Found 3 call sites. Patching AlignmentGrid.tsx first." }],
     },
   },
   {

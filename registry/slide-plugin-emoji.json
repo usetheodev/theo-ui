@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-plugin-emoji",
+  "type": "registry:ui",
+  "title": "Slide plugin · Emoji",
+  "description": "Tier 2 Slide plugin that replaces :shortcode: with Unicode emoji. Ancestor-aware: skips replacement inside <code> / <pre> to preserve type hints and YAML keys. Zero peer-deps.",
+  "dependencies": [
+    "hast"
+  ],
+  "registryDependencies": [
+    "slide",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/slide/plugins/emoji/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/plugins/emoji/index.ts"
+    },
+    {
+      "path": "components/primitives/slide/plugins/emoji/map.ts",
+      "type": "registry:ui",
+      "target": "components/ui/slide/plugins/emoji/map.ts"
+    }
+  ]
+}
