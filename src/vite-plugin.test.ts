@@ -42,9 +42,13 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
   });
 
   it("does NOT throw when @tailwindcss/vite is unresolvable", async () => {
-    // @tailwindcss/vite is intentionally NOT installed in this repo. The
-    // config() hook must degrade gracefully via console.warn instead of
-    // throwing — TheoKit's integrateUseTheoUI() expects this contract.
+    // Mock the dynamic import to simulate a consumer environment where the
+    // optional peer-dep `@tailwindcss/vite` is not installed. The config()
+    // hook must degrade gracefully via console.warn instead of throwing —
+    // TheoKit's integrateUseTheoUI() expects this contract.
+    vi.doMock("@tailwindcss/vite", () => {
+      throw new Error("Cannot find module '@tailwindcss/vite'");
+    });
     const plugin = useTheoUIVite();
     const config = plugin.config as (
       // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
@@ -55,9 +59,15 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
     await expect(
       Promise.resolve(config({}, { command: "serve", mode: "development" })),
     ).resolves.not.toThrow();
+    vi.doUnmock("@tailwindcss/vite");
   });
 
   it("warns the consumer when @tailwindcss/vite is missing", async () => {
+    // Force the dynamic import to fail so we exercise the graceful-degrade
+    // code path regardless of whether the peer-dep is installed locally.
+    vi.doMock("@tailwindcss/vite", () => {
+      throw new Error("Cannot find module '@tailwindcss/vite'");
+    });
     const plugin = useTheoUIVite();
     // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
     const config = plugin.config as (arg?: any, env?: any) => Promise<unknown>;
@@ -65,6 +75,7 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
     expect(warnSpy).toHaveBeenCalled();
     const message = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
     expect(message).toMatch(/@tailwindcss\/vite/);
+    vi.doUnmock("@tailwindcss/vite");
   });
 
   it("when opts.tailwind === false, does NOT warn and does NOT attempt resolution", async () => {
