@@ -37,9 +37,16 @@ const LIBRARY_CONTENT_GLOBS: string[] = [
   "./node_modules/@usetheo/ui/dist/**/*.{ts,tsx}",
 ];
 
-const preset: Partial<Config> = {
+// `theoUIPreset` is shape-compatible with v3 `Partial<Config>` at runtime
+// (tokens, theme, plugins, darkMode, etc are all carried through), but the
+// pnpm hoist places `tailwindcss@3` types alongside `tailwindcss@4` types in
+// the workspace — `theoUIPreset`'s inferred shape uses the v4 `UserConfig`
+// presets array type, which TS sees as incompatible with v3's `Config.presets`
+// (different element type). This file is the v3 LEGACY entry; its runtime
+// works for v3 consumers regardless. The cast bridges the v3/v4 type seam.
+const preset = {
   ...theoUIPreset,
   content: LIBRARY_CONTENT_GLOBS,
-};
+} as unknown as Partial<Config>;
 
 export default preset;
