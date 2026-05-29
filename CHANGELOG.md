@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (dogfood-fixes-and-coverage-expansion T4.1, 2026-05-28)
+
+- **`scripts/validate-exports.mjs`** (NEW) — FAANG-grade pre-publish gate com 6 runtime checks: (1) exports['.'] declared, (2) type:module consistency D13, (3) import condition file exists + dynamic import runtime, (4) require condition runtime check (skip se ESM-only), (5) ESM-only intentional notice, (6) TODOS subpath exports validados (não só `.`). Bloqueia `npm publish` se shape OR comportamento regridir.
+- **`prepublishOnly`** hook estendido: `pnpm build && pnpm test:contract && node scripts/validate-exports.mjs`. EC-8 fix do edge case review FAANG-grade.
+- **`validate:exports`** script standalone — pode rodar manual `pnpm validate:exports`.
+
+### Added (cross-repo-integration-coesao, 2026-05-28)
+
+- **Contract test mirror** — `tests/contract/theokit-consumer.test.ts` (6 BDD `it()`) validates `dist/vite-plugin.js` shape (default export factory + Plugin/Plugin[] return + `name: string`) and presence of `dist/preset.css`, `dist/styles.css`, `dist/fonts.css`. Roda via novo `pnpm test:contract`. Bloqueia publish via `prepublishOnly: pnpm build && pnpm test:contract`. Cumpre [ADR 0001](docs/adr/0001-vite-plugin-subpath-export-contract.md) (cross-repo contract). Plano coordenador no monorepo theokit-tools: [cross-repo-integration-coesao-plan.md](../.claude/knowledge-base/plans/cross-repo-integration-coesao-plan.md) T1.3.
+- **`vitest.config.ts`** include estendido para cobrir `tests/**/*.{test,spec}.ts` (era só `src/`).
+
 ## [0.12.0-next.0] - 2026-05-25
 
 Minor (additive, zero breaking change) — ships two LLM-facing artifacts

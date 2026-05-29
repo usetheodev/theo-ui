@@ -196,10 +196,10 @@ function DataTable<T>(props: DataTableProps<T>): ReactNode {
           <Table.Header className={stickyHeader ? "sticky top-0 bg-card" : undefined}>
             <Table.Row>
               {expandable ? (
-              <Table.HeaderCell>
-                <span className="sr-only">Expand</span>
-              </Table.HeaderCell>
-            ) : null}
+                <Table.HeaderCell>
+                  <span className="sr-only">Expand</span>
+                </Table.HeaderCell>
+              ) : null}
               {columns.map((col) => (
                 <Table.HeaderCell key={col.key} align={col.align}>
                   {col.label}
