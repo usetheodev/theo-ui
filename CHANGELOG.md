@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-05-28
+
+**Stable release — promoted from `0.12.0-next.0` after dogfood validation + cross-repo contract gates landed.**
+
+First `@usetheo/ui` release on the npm `latest` tag without a `-next.*` pre-release suffix. Content is the union of everything shipped in `0.12.0-next.0` (2026-05-25) plus the additions below from `[Unreleased]` consolidation. **Zero breaking changes vs `0.12.0-next.0`** — consumers on `^0.12.0-next.0` upgrade transparently.
+
 ### Added (dogfood-fixes-and-coverage-expansion T4.1, 2026-05-28)
 
 - **`scripts/validate-exports.mjs`** (NEW) — FAANG-grade pre-publish gate com 6 runtime checks: (1) exports['.'] declared, (2) type:module consistency D13, (3) import condition file exists + dynamic import runtime, (4) require condition runtime check (skip se ESM-only), (5) ESM-only intentional notice, (6) TODOS subpath exports validados (não só `.`). Bloqueia `npm publish` se shape OR comportamento regridir.
