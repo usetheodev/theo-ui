@@ -95,6 +95,42 @@ export type { TaskStatus, TaskStep, TaskStepStatus } from "./types/task.js";
 // Foundations
 export { Button, buttonVariants, type ButtonProps } from "./components/primitives/button/index.js";
 export { Badge, badgeVariants, type BadgeProps } from "./components/primitives/badge/index.js";
+// theokit-ui-parity Phase 1 — 7 new components
+export {
+  ThinkingLevelSelector,
+  type ThinkingLevel,
+  type ThinkingLevelOrInherited,
+  type ThinkingLevelSelectorProps,
+} from "./components/primitives/thinking-level-selector/index.js";
+export {
+  RunStatusPill,
+  type RunStatus,
+  type RunStatusPillProps,
+} from "./components/primitives/run-status-pill/index.js";
+export {
+  BranchIndicator,
+  type BranchIndicatorProps,
+} from "./components/primitives/branch-indicator/index.js";
+export {
+  GatewayStatusIndicator,
+  type GatewayStatus,
+  type GatewayStatusIndicatorProps,
+} from "./components/primitives/gateway-status-indicator/index.js";
+export {
+  UpdateBanner,
+  type UpdateBannerProps,
+} from "./components/primitives/update-banner/index.js";
+export {
+  ExportChatDialog,
+  type ExportChatDialogProps,
+  type ExportFormat,
+} from "./components/primitives/export-chat-dialog/index.js";
+export {
+  StabilityBundleViewer,
+  type StabilityBundle,
+  type StabilityBundleViewerProps,
+  type StabilitySeverity,
+} from "./components/composites/stability-bundle-viewer/index.js";
 export { Card } from "./components/primitives/card/index.js";
 export { Input, type InputProps } from "./components/primitives/input/index.js";
 export { Dialog } from "./components/primitives/dialog/index.js";
@@ -179,6 +215,12 @@ export {
   type MCPServer,
   type MCPServerStatus,
 } from "./components/primitives/mcp-server-card/index.js";
+export {
+  ChannelCard,
+  type Channel,
+  type ChannelPlatform,
+  type ChannelStatus,
+} from "./components/primitives/channel-card/index.js";
 export {
   ModelCard,
   modelCapabilityPresets,

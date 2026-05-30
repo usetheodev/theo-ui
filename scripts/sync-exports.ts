@@ -23,6 +23,7 @@
  * the live `package.json#exports`. Run `pnpm sync:exports` whenever
  * `src/index.ts` adds or removes a component export.
  */
+import { execSync } from "node:child_process";
 import { statSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
@@ -200,6 +201,17 @@ async function main(): Promise<void> {
   const exports = buildExports(subpaths);
   pkg.exports = exports;
   await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
+  // Re-format via biome so the json layout matches the format:check gate
+  // (biome inlines short arrays like `sideEffects` and `onlyBuiltDependencies`,
+  // while raw `JSON.stringify(_, _, 2)` always expands them).
+  try {
+    execSync("pnpm exec biome format --write package.json", {
+      cwd: ROOT,
+      stdio: "ignore",
+    });
+  } catch {
+    // best-effort: if biome isn't on PATH the structural validator still passes
+  }
   process.stdout.write(
     `Synced package.json#exports: ${Object.keys(exports).length} entries (${subpaths.length} component subpaths + ${Object.keys(BASE_EXPORTS).length} base entries + ${Object.keys(ISOLATED_SUBPATHS).length} isolated engines)\n`,
   );

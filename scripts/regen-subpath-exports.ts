@@ -20,10 +20,12 @@
  * because `Alert` is exported from the barrel `.d.ts` too. The JS dist
  * (where tree-shaking actually happens) is per-component and correct.
  */
-import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { execSync } from "node:child_process";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const pkgPath = "package.json";
+const ROOT = process.cwd();
 type ExportEntry = string | { types?: string; import?: string };
 interface Pkg {
   exports: Record<string, ExportEntry>;
@@ -136,11 +138,19 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-// Step 4: sort keys alphabetically for deterministic diffs.
-const sorted = Object.fromEntries(
-  Object.entries(newExports).sort(([a], [b]) => a.localeCompare(b)),
-);
-
-pkg.exports = sorted;
-writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
-console.log(`regen-subpath-exports: wrote ${Object.keys(sorted).length} entries.`);
+// Step 4: persist via `pnpm sync:exports`, which is the SINGLE source of truth
+// for ordering (BASE → sorted components → ISOLATED) and post-formats via
+// biome so the layout matches the `pnpm format:check` gate. Calling sync:exports
+// here also re-derives entries from `src/index.ts`, which is the canonical set
+// the structural validator (`quality:structure`) compares against — so a build
+// can never leave the file in a state the validator would reject.
+try {
+  execSync("pnpm exec tsx scripts/sync-exports.ts", {
+    cwd: ROOT,
+    stdio: "ignore",
+  });
+} catch (err) {
+  console.error("regen-subpath-exports: sync-exports failed", err);
+  process.exit(1);
+}
+console.log(`regen-subpath-exports: wrote ${Object.keys(newExports).length} entries.`);

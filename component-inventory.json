@@ -1,0 +1,1039 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-29T14:57:06.594Z",
+  "counts": {
+    "total": 128,
+    "primitives": 98,
+    "composites": 30,
+    "withStory": 128,
+    "withoutStory": 0,
+    "withTest": 128,
+    "exported": 125
+  },
+  "components": [
+    {
+      "name": "account-menu",
+      "path": "src/components/composites/account-menu/account-menu.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "action-bar",
+      "path": "src/components/primitives/action-bar/action-bar.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-composer",
+      "path": "src/components/composites/agent-composer/agent-composer.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-editor",
+      "path": "src/components/composites/agent-editor/agent-editor.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-error-card",
+      "path": "src/components/primitives/agent-error-card/agent-error-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-event",
+      "path": "src/components/primitives/agent-event/agent-event.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-handoff",
+      "path": "src/components/primitives/agent-handoff/agent-handoff.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-profile",
+      "path": "src/components/primitives/agent-profile/agent-profile.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-starting-state",
+      "path": "src/components/primitives/agent-starting-state/agent-starting-state.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-stream",
+      "path": "src/components/composites/agent-stream/agent-stream.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-streaming",
+      "path": "src/components/primitives/agent-streaming/agent-streaming.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "agent-timeline",
+      "path": "src/components/composites/agent-timeline/agent-timeline.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "alert",
+      "path": "src/components/primitives/alert/alert.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "approval-card",
+      "path": "src/components/composites/approval-card/approval-card.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "artifact-preview",
+      "path": "src/components/primitives/artifact-preview/artifact-preview.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "attachment-chip",
+      "path": "src/components/primitives/attachment-chip/attachment-chip.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "audit-log-entry",
+      "path": "src/components/primitives/audit-log-entry/audit-log-entry.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "auto-compact-notice",
+      "path": "src/components/primitives/auto-compact-notice/auto-compact-notice.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "avatar",
+      "path": "src/components/primitives/avatar/avatar.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "badge",
+      "path": "src/components/primitives/badge/badge.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "branch-indicator",
+      "path": "src/components/primitives/branch-indicator/branch-indicator.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "browser-controls",
+      "path": "src/components/primitives/browser-controls/browser-controls.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "build-log-stream",
+      "path": "src/components/primitives/build-log-stream/build-log-stream.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "button",
+      "path": "src/components/primitives/button/button.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "capability-indicator",
+      "path": "src/components/primitives/capability-indicator/capability-indicator.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "card",
+      "path": "src/components/primitives/card/card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "chat-composer",
+      "path": "src/components/composites/chat-composer/chat-composer.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "chat-message",
+      "path": "src/components/composites/chat-message/chat-message.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "chat-thread",
+      "path": "src/components/primitives/chat-thread/chat-thread.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "checkbox",
+      "path": "src/components/primitives/checkbox/checkbox.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "code-block",
+      "path": "src/components/composites/code-block/code-block.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "command-palette",
+      "path": "src/components/composites/command-palette/command-palette.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "confirm-dialog",
+      "path": "src/components/composites/confirm-dialog/confirm-dialog.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "context-card",
+      "path": "src/components/primitives/context-card/context-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "context-window-bar",
+      "path": "src/components/primitives/context-window-bar/context-window-bar.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "copy-button",
+      "path": "src/components/primitives/copy-button/copy-button.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "cost-meter",
+      "path": "src/components/primitives/cost-meter/cost-meter.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "created-files-card",
+      "path": "src/components/primitives/created-files-card/created-files-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "cron-job-card",
+      "path": "src/components/primitives/cron-job-card/cron-job-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "cron-jobs-list",
+      "path": "src/components/composites/cron-jobs-list/cron-jobs-list.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "danger-zone",
+      "path": "src/components/primitives/danger-zone/danger-zone.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "data-table",
+      "path": "src/components/composites/data-table/data-table.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "deployment-row",
+      "path": "src/components/composites/deployment-row/deployment-row.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "dialog",
+      "path": "src/components/primitives/dialog/dialog.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "diff-viewer",
+      "path": "src/components/primitives/diff-viewer/diff-viewer.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "domain-config",
+      "path": "src/components/composites/domain-config/domain-config.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "dropdown-menu",
+      "path": "src/components/primitives/dropdown-menu/dropdown-menu.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "empty-state",
+      "path": "src/components/primitives/empty-state/empty-state.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "env-var-editor",
+      "path": "src/components/composites/env-var-editor/env-var-editor.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "export-chat-dialog",
+      "path": "src/components/primitives/export-chat-dialog/export-chat-dialog.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "folder-context-card",
+      "path": "src/components/primitives/folder-context-card/folder-context-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "folder-selector",
+      "path": "src/components/primitives/folder-selector/folder-selector.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "form-field",
+      "path": "src/components/primitives/form-field/form-field.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "gateway-status-indicator",
+      "path": "src/components/primitives/gateway-status-indicator/gateway-status-indicator.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "hook-config",
+      "path": "src/components/primitives/hook-config/hook-config.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "hook-event-log",
+      "path": "src/components/primitives/hook-event-log/hook-event-log.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "input",
+      "path": "src/components/primitives/input/input.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "intent-selector",
+      "path": "src/components/primitives/intent-selector/intent-selector.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "label",
+      "path": "src/components/primitives/label/label.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "lane-board",
+      "path": "src/components/primitives/lane-board/lane-board.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "login-split",
+      "path": "src/components/primitives/login-split/login-split.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "mcp-server-card",
+      "path": "src/components/primitives/mcp-server-card/mcp-server-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "mcp-server-list",
+      "path": "src/components/composites/mcp-server-list/mcp-server-list.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "memory-editor",
+      "path": "src/components/primitives/memory-editor/memory-editor.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "mention-menu",
+      "path": "src/components/primitives/mention-menu/mention-menu.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "metrics-panel",
+      "path": "src/components/primitives/metrics-panel/metrics-panel.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "model-card",
+      "path": "src/components/primitives/model-card/model-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "model-selector",
+      "path": "src/components/primitives/model-selector/model-selector.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "page-shell",
+      "path": "src/components/composites/page-shell/page-shell.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "pagination",
+      "path": "src/components/primitives/pagination/pagination.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "permission-matrix",
+      "path": "src/components/primitives/permission-matrix/permission-matrix.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "permission-modal",
+      "path": "src/components/composites/permission-modal/permission-modal.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "pin-input",
+      "path": "src/components/primitives/pin-input/pin-input.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "plan-badge",
+      "path": "src/components/primitives/plan-badge/plan-badge.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "preview-env-card",
+      "path": "src/components/composites/preview-env-card/preview-env-card.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "preview-panel",
+      "path": "src/components/composites/preview-panel/preview-panel.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "progress",
+      "path": "src/components/primitives/progress/progress.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "progress-checklist",
+      "path": "src/components/primitives/progress-checklist/progress-checklist.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "project-card",
+      "path": "src/components/composites/project-card/project-card.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "project-switcher",
+      "path": "src/components/primitives/project-switcher/project-switcher.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "quick-action-chips",
+      "path": "src/components/primitives/quick-action-chips/quick-action-chips.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "radio-group",
+      "path": "src/components/primitives/radio-group/radio-group.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "recent-folders-list",
+      "path": "src/components/primitives/recent-folders-list/recent-folders-list.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "rollback-ui",
+      "path": "src/components/composites/rollback-ui/rollback-ui.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "rule-card",
+      "path": "src/components/primitives/rule-card/rule-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "rule-editor",
+      "path": "src/components/composites/rule-editor/rule-editor.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "run-stats",
+      "path": "src/components/primitives/run-stats/run-stats.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "run-status-pill",
+      "path": "src/components/primitives/run-status-pill/run-status-pill.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "running-tasks-panel",
+      "path": "src/components/primitives/running-tasks-panel/running-tasks-panel.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "scroll-area",
+      "path": "src/components/primitives/scroll-area/scroll-area.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "select",
+      "path": "src/components/primitives/select/select.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "session-list-item",
+      "path": "src/components/primitives/session-list-item/session-list-item.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "session-timeline",
+      "path": "src/components/primitives/session-timeline/session-timeline.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "sheet",
+      "path": "src/components/primitives/sheet/sheet.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "sidebar",
+      "path": "src/components/primitives/sidebar/sidebar.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "skeleton",
+      "path": "src/components/primitives/skeleton/skeleton.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "skill-card",
+      "path": "src/components/primitives/skill-card/skill-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "skill-editor",
+      "path": "src/components/composites/skill-editor/skill-editor.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "skills-list",
+      "path": "src/components/composites/skills-list/skills-list.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "slide",
+      "path": "src/components/primitives/slide/slide.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": false
+    },
+    {
+      "name": "slide-deck",
+      "path": "src/components/composites/slide-deck/slide-deck.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": false
+    },
+    {
+      "name": "social-auth-row",
+      "path": "src/components/primitives/social-auth-row/social-auth-row.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "stability-bundle-viewer",
+      "path": "src/components/composites/stability-bundle-viewer/stability-bundle-viewer.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "stat-tile",
+      "path": "src/components/primitives/stat-tile/stat-tile.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "status-dot",
+      "path": "src/components/primitives/status-dot/status-dot.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "steps-rail",
+      "path": "src/components/primitives/steps-rail/steps-rail.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "sub-agent-dispatch",
+      "path": "src/components/primitives/sub-agent-dispatch/sub-agent-dispatch.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "switch",
+      "path": "src/components/primitives/switch/switch.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "system-prompt-editor",
+      "path": "src/components/primitives/system-prompt-editor/system-prompt-editor.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "table",
+      "path": "src/components/primitives/table/table.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "tabs",
+      "path": "src/components/primitives/tabs/tabs.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "task-header",
+      "path": "src/components/composites/task-header/task-header.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "task-plan",
+      "path": "src/components/primitives/task-plan/task-plan.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "terminal-panel",
+      "path": "src/components/primitives/terminal-panel/terminal-panel.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "textarea",
+      "path": "src/components/primitives/textarea/textarea.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "thinking-level-selector",
+      "path": "src/components/primitives/thinking-level-selector/thinking-level-selector.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "timestamp",
+      "path": "src/components/primitives/timestamp/timestamp.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "toast",
+      "path": "src/components/primitives/toast/toast.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "token-usage-chart",
+      "path": "src/components/primitives/token-usage-chart/token-usage-chart.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "tool-call",
+      "path": "src/components/primitives/tool-call/tool-call.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "tool-call-card",
+      "path": "src/components/primitives/tool-call-card/tool-call-card.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "tool-result",
+      "path": "src/components/primitives/tool-result/tool-result.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "tools-list",
+      "path": "src/components/primitives/tools-list/tools-list.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "tooltip",
+      "path": "src/components/primitives/tooltip/tooltip.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "topnav",
+      "path": "src/components/primitives/topnav/topnav.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "update-banner",
+      "path": "src/components/primitives/update-banner/update-banner.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "usage-meter",
+      "path": "src/components/composites/usage-meter/usage-meter.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "whiteboard",
+      "path": "src/components/primitives/whiteboard/whiteboard.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": false
+    }
+  ]
+}

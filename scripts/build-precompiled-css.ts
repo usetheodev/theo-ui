@@ -66,10 +66,7 @@ async function ensureTailwindV4Resolvable(): Promise<void> {
   // wins the resolution race. Idempotent.
   const stylesNm = join(ROOT, "src/styles/node_modules");
   const linkPath = join(stylesNm, "tailwindcss");
-  const v4Target = join(
-    ROOT,
-    "node_modules/.pnpm/tailwindcss@4.3.0/node_modules/tailwindcss",
-  );
+  const v4Target = join(ROOT, "node_modules/.pnpm/tailwindcss@4.3.0/node_modules/tailwindcss");
   if (!existsSync(v4Target)) {
     throw new Error(
       `[build-precompiled-css] tailwindcss@4 not found at expected pnpm path ${v4Target}. Run \`pnpm install\`.`,

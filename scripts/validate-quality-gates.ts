@@ -752,6 +752,7 @@ async function validateAxeCoverage(): Promise<void> {
     "approval-card",
     "attachment-chip",
     "audit-log-entry",
+    "channel-card",
     "cron-job-card",
     "mcp-server-card",
     "mention-menu",
