@@ -7,6 +7,100 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-05-29
+
+**Minor (additive only — zero breaking changes).**
+
+Seven new components shipped as Phase 1 of the `theokit-ui-parity` plan
+(`.claude/knowledge-base/plans/theokit-ui-parity-plan.md` v1.1). All seven
+mirror OpenClaw Control UI patterns the framework lacked, designed to be
+composable into any theokit app via `@usetheo/ui` barrel.
+
+### Added — Phase 2 component
+
+- **`<ChannelCard>`** (primitive, `agent/`) — inbound gateway connection
+  surface (Telegram, Discord, Slack, WhatsApp, Webhook, MCP). 4 statuses
+  (`disconnected | connecting | connected | error`) with the toggle button
+  reflecting the current state: `connected` shows "Disconnect", others show
+  "Connect", `connecting` keeps the button disabled (transient state guard).
+  Closed `ChannelPlatform` enum prevents silent typos at the backend
+  boundary. 7 Vitest tests including vitest-axe. Ladle story with 5
+  variants (Connected/Disconnected/Connecting/ErrorState/MCP). Consumed by
+  the dogfood-app `/channels` page end-to-end against the
+  `server/routes/channels.ts` registry.
+
+### Added — Phase 1 components (44/44 Vitest GREEN)
+
+- **`<ThinkingLevelSelector>`** (primitive, `agent/`) — multi-state combobox
+  for LLM reasoning budget. Mirrors OpenClaw thinking selector. Values:
+  `"inherited" | "off" | "minimal" | "low" | "medium" | "high" | "xhigh"`.
+- **`<RunStatusPill>`** (primitive, `agent/`) — compact status indicator
+  for Run/Task lifecycle. 6 states mirror SDK `Task` enum (D362):
+  `queued | in_progress | finished | error | cancelled | interrupted`.
+- **`<BranchIndicator>`** (primitive, `agent/`) — small "×N" pill that
+  shows when a run was retried/branched. Returns `null` for `< 2` or
+  non-integer (EC-10 guard).
+- **`<GatewayStatusIndicator>`** (primitive, `infra/`) — live
+  connection-status dot. 4 statuses (online/offline/degraded/reconnecting)
+  × 2 variants (compact/labeled) + optional latency text.
+- **`<UpdateBanner>`** (primitive, `infra/`) — top-of-app alert for newer
+  version. Dismiss persistence is consumer's responsibility (EC-16).
+- **`<ExportChatDialog>`** (primitive, `agent/`) — modal exporting chat in
+  `markdown | json | jsonl | sharegpt`. Async-aware (disables buttons
+  during pending export).
+- **`<StabilityBundleViewer>`** (composite, `infra/`) — crash bundle JSON
+  inspector. Sections collapse independently. EC-9 absorbed: handles
+  missing optional sections gracefully.
+
+### Added — Phase 0 tooling
+
+- **`scripts/inventory-components.mjs`** — walks
+  `src/components/{primitives,composites}/<name>/` producing
+  `component-inventory.json`. CI drift-gate seed.
+- **`scripts/generate-missing-stories.mjs`** — gerador + CI check mode.
+  EC-5/D12 absorbed: ships `kebabToPascal(name)` helper with 9 Vitest
+  cases + match-confirmation via `export\s+...` regex.
+- **`wrangler.toml` + `.github/workflows/deploy-ladle.yml`** —
+  Cloudflare Pages deploy config for the Ladle component catalog.
+  Workflow contains `pnpm ladle:build` step BEFORE deploy (EC-14).
+- New package scripts: `inventory`, `stories:check`, `stories:generate`,
+  `stories:test`.
+
+### Changed — Build pipeline hardening
+
+- **`scripts/regen-subpath-exports.ts`** now delegates to `sync-exports.ts`
+  for the final write. Previously the post-build step sorted ALL exports
+  alphabetically while `sync-exports.buildExports` produced the canonical
+  `BASE → sorted components → ISOLATED` order — meaning `pnpm build &&
+  pnpm quality:structure` regressed every time. The validator and the
+  build now share a single source of truth.
+- **`scripts/sync-exports.ts`** now post-formats `package.json` via
+  `biome format --write` after writing. `JSON.stringify(_, _, 2)` always
+  expands short arrays like `sideEffects` and `onlyBuiltDependencies`,
+  while `pnpm format:check` (Biome) expects them inline; the two were
+  fighting after every sync.
+- **`tailwind.config.ts`** dropped the `satisfies Config` clause. The
+  preset (`src/styles/tailwind-preset.ts`) resolves the v4 `Config` type
+  via the `src/styles/node_modules/tailwindcss` symlink to v4.3.0, while
+  the root config would resolve v3.4.19 — the v3/v4 type seam mismatched
+  on `darkMode` (`DarkModeStrategy` vs `Partial<DarkModeConfig>`).
+  Runtime correctness is enforced by `pnpm dogfood:v4-zero-config`.
+- **`biome.json`** override extended to cover `scripts/**/*.mjs` so the
+  `noConsole` rule does not block tool scripts (it was already exempted
+  for `.ts`).
+- **`pin-input.tsx`** — removed stale `// biome-ignore lint/suspicious/noArrayIndexKey`
+  comment now flagged as unused suppression.
+- **`export-chat-dialog.tsx` + `run-status-pill.tsx` + `thinking-level-selector.tsx`** —
+  added precise `biome-ignore` comments documenting the `a11y/useSemanticElements`
+  and `suspicious/noConsole` exceptions, with the reason inline.
+
+### Documentation
+
+- 7 new component pages under `theo-opendocs/content/theoui/{agent,infra}/`.
+- New `ChannelCard` page under `theo-opendocs/content/theoui/agent/channel-card.mdx`
+  with live preview (`ComponentPreview` + `PropsTable`) deployed to
+  `https://channel-card.theo-opendocs.pages.dev/`.
+
 ## [0.12.0] - 2026-05-28
 
 **Stable release — promoted from `0.12.0-next.0` after dogfood validation + cross-repo contract gates landed.**

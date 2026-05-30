@@ -1,17 +1,26 @@
 {
   "name": "@usetheo/ui",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./styles.css": "./dist/styles.css",
+    "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
+    "./components.css": "./dist/components.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens-v4.css": "./dist/tokens-v4.css",
+    "./preset.css": "./dist/preset.css",
+    "./preset": "./dist/preset.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./fonts-cdn.css": "./dist/fonts-cdn.css",
+    "./slide/themes/default.css": "./dist/slide/themes/default.css",
+    "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
     "./account-menu": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/account-menu/index.js"
@@ -92,6 +101,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/badge/index.js"
     },
+    "./branch-indicator": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/branch-indicator/index.js"
+    },
     "./browser-controls": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/browser-controls/index.js"
@@ -111,6 +124,10 @@
     "./card": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/card/index.js"
+    },
+    "./channel-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/channel-card/index.js"
     },
     "./chat-composer": {
       "types": "./dist/index.d.ts",
@@ -136,7 +153,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/command-palette/index.js"
     },
-    "./components.css": "./dist/components.css",
     "./confirm-dialog": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/confirm-dialog/index.js"
@@ -205,6 +221,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/env-var-editor/index.js"
     },
+    "./export-chat-dialog": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/export-chat-dialog/index.js"
+    },
     "./folder-context-card": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/folder-context-card/index.js"
@@ -213,11 +233,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/folder-selector/index.js"
     },
-    "./fonts-cdn.css": "./dist/fonts-cdn.css",
-    "./fonts.css": "./dist/fonts.css",
     "./form-field": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/form-field/index.js"
+    },
+    "./gateway-status-indicator": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/gateway-status-indicator/index.js"
     },
     "./hook-config": {
       "types": "./dist/index.d.ts",
@@ -299,12 +321,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/plan-badge/index.js"
     },
-    "./preset": "./dist/preset.css",
-    "./preset-v3-legacy": {
-      "types": "./dist/preset-v3-legacy.d.ts",
-      "import": "./dist/preset-v3-legacy.js"
-    },
-    "./preset.css": "./dist/preset.css",
     "./preview-env-card": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/preview-env-card/index.js"
@@ -357,6 +373,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/run-stats/index.js"
     },
+    "./run-status-pill": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/run-status-pill/index.js"
+    },
     "./running-tasks-panel": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/running-tasks-panel/index.js"
@@ -401,35 +421,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/skills-list/index.js"
     },
-    "./slide": {
-      "types": "./dist/slide/index.d.ts",
-      "import": "./dist/slide/index.js"
-    },
-    "./slide-deck": {
-      "types": "./dist/slide-deck/index.d.ts",
-      "import": "./dist/slide-deck/index.js"
-    },
-    "./slide/plugins/emoji": {
-      "types": "./dist/slide/plugins/emoji/index.d.ts",
-      "import": "./dist/slide/plugins/emoji/index.js"
-    },
-    "./slide/plugins/math": {
-      "types": "./dist/slide/plugins/math/index.d.ts",
-      "import": "./dist/slide/plugins/math/index.js"
-    },
-    "./slide/plugins/mermaid": {
-      "types": "./dist/slide/plugins/mermaid/index.d.ts",
-      "import": "./dist/slide/plugins/mermaid/index.js"
-    },
-    "./slide/plugins/shiki": {
-      "types": "./dist/slide/plugins/shiki/index.d.ts",
-      "import": "./dist/slide/plugins/shiki/index.js"
-    },
-    "./slide/themes/default.css": "./dist/slide/themes/default.css",
-    "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
     "./social-auth-row": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/social-auth-row/index.js"
+    },
+    "./stability-bundle-viewer": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/stability-bundle-viewer/index.js"
     },
     "./stat-tile": {
       "types": "./dist/index.d.ts",
@@ -443,8 +441,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/steps-rail/index.js"
     },
-    "./styles-v3-legacy.css": "./dist/styles-v3-legacy.css",
-    "./styles.css": "./dist/styles.css",
     "./sub-agent-dispatch": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/sub-agent-dispatch/index.js"
@@ -481,6 +477,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/textarea/index.js"
     },
+    "./thinking-level-selector": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/thinking-level-selector/index.js"
+    },
     "./timestamp": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/timestamp/index.js"
@@ -493,8 +493,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/token-usage-chart/index.js"
     },
-    "./tokens-v4.css": "./dist/tokens-v4.css",
-    "./tokens.css": "./dist/tokens.css",
     "./tool-call": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/tool-call/index.js"
@@ -519,17 +517,49 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/topnav/index.js"
     },
+    "./update-banner": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/primitives/update-banner/index.js"
+    },
     "./usage-meter": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/usage-meter/index.js"
+    },
+    "./whiteboard": {
+      "types": "./dist/whiteboard/index.d.ts",
+      "import": "./dist/whiteboard/index.js"
+    },
+    "./slide": {
+      "types": "./dist/slide/index.d.ts",
+      "import": "./dist/slide/index.js"
+    },
+    "./slide/plugins/shiki": {
+      "types": "./dist/slide/plugins/shiki/index.d.ts",
+      "import": "./dist/slide/plugins/shiki/index.js"
+    },
+    "./slide/plugins/math": {
+      "types": "./dist/slide/plugins/math/index.d.ts",
+      "import": "./dist/slide/plugins/math/index.js"
+    },
+    "./slide/plugins/mermaid": {
+      "types": "./dist/slide/plugins/mermaid/index.d.ts",
+      "import": "./dist/slide/plugins/mermaid/index.js"
+    },
+    "./slide/plugins/emoji": {
+      "types": "./dist/slide/plugins/emoji/index.d.ts",
+      "import": "./dist/slide/plugins/emoji/index.js"
+    },
+    "./slide-deck": {
+      "types": "./dist/slide-deck/index.d.ts",
+      "import": "./dist/slide-deck/index.js"
     },
     "./vite-plugin": {
       "types": "./dist/vite-plugin.d.ts",
       "import": "./dist/vite-plugin.js"
     },
-    "./whiteboard": {
-      "types": "./dist/whiteboard/index.d.ts",
-      "import": "./dist/whiteboard/index.js"
+    "./preset-v3-legacy": {
+      "types": "./dist/preset-v3-legacy.d.ts",
+      "import": "./dist/preset-v3-legacy.js"
     }
   },
   "files": [
@@ -553,6 +583,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "biome check src",
     "lint:ci": "biome ci src scripts .ladle playground",
+    "inventory": "node scripts/inventory-components.mjs",
+    "stories:check": "node scripts/generate-missing-stories.mjs --check",
+    "stories:generate": "node scripts/generate-missing-stories.mjs --write",
+    "stories:test": "node scripts/__tests__/generate-missing-stories.test.mjs",
     "lint:fix": "biome check --write src",
     "format": "biome format --write src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
     "format:check": "biome format src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
@@ -742,11 +776,7 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "esbuild"
-    ],
+    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"],
     "overrides": {
       "postcss": ">=8.5.10"
     }
