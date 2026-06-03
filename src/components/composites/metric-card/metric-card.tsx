@@ -72,7 +72,14 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
         // T5.5: `@container/metric-card` makes the tile responsive to its PARENT
         // width, not the viewport. Consumers can drop multiple cards into any
         // grid and child elements scale via `@sm:`, `@md:`, `@lg:` variants.
-        className={cn("@container/metric-card flex flex-col gap-2 p-4", className)}
+        // `w-full` is the right default for a tile: consumers always wrap in a
+        // grid/flex parent (grid-cols-N, flex). Without it, the flex-col card
+        // collapses to min-content (~150px) when used in isolation — a real
+        // regression observed in the docs site preview pane.
+        className={cn(
+          "@container/metric-card flex w-full flex-col gap-2 p-4",
+          className,
+        )}
         data-testid="metric-card"
         {...rest}
       >
