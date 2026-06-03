@@ -7,6 +7,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-06-03
+
+**Minor (additive — full backward-compat preserved via legacy helpers).**
+
+Community best practices alignment cohort. Migrates `@theokit/ui` from HSL split to OKLCH as the canonical color format, introduces status semantic tokens, two new composites (StatusIndicator + MetricCard), a lint rule banning literal Tailwind color classes in components, `prefers-color-scheme` auto-detect, forced-colors (Windows High Contrast Mode) support, and a Playwright visual regression baseline. All 6 ADRs (0004-0009), full migration guide, and 5 new test files shipped. WCAG AA preserved across 10 themes × 2 modes. `classic-paper` rebalanced to visibly warm cream (per Vintage Paper + Anthropic Claude UI references) for reduced vision fatigue on long agent sessions.
+
+See [docs/migration/hsl-to-oklch.md](docs/migration/hsl-to-oklch.md) for the full upgrade guide.
+
+### Added — Community Best Practices Alignment (2026-06-03)
+
+- **Status semantic token group** (ADR-0007). New `ColorScale` keys
+  `--status-online`, `--status-offline`, `--status-degraded`, `--status-info`
+  plus foreground companions — 8 keys × 11 themes. Separates operational state
+  (gateway alive/dead/slow/info) from action-result (success/destructive/warning/info).
+- **`StatusIndicator` composite** consuming the status group. API:
+  `<StatusIndicator status="online" label="Connected" pulse?>`.
+- **`MetricCard` composite** for dashboard tiles. API:
+  `<MetricCard title value delta={{value,trend}} hint? icon? invertTrend? />`.
+  `invertTrend` flips trend semantics for cost/churn/latency metrics (EC-17).
+- **`respectSystemMode` prop** on `<ThemeProvider>` (default `true`, ADR-0009).
+  Reads `(prefers-color-scheme: dark)` on hydration and subscribes to OS changes.
+  User-driven `setMode()` overrides the system signal. `matchMedia` listener
+  cleanup on unmount (EC-12).
+- **`forced-colors` media query** in `tokens.css` (ADR-0008). Maps semantic
+  tokens to system colors (Canvas, CanvasText, Highlight, ...) for Windows
+  High Contrast Mode. WCAG 2.2 SC 1.4.1/1.4.3.
+- **Container query sizes** (`--container-3xs` through `--container-7xl`)
+  declared in `tokens-v4.css` for Tailwind v4 `@container` variants.
+- **Algorithmic tonal derivations** for `--primary-deep`, `--primary-glow`,
+  `--accent-deep` via OKLCH relative-color syntax with `max()`/`min()`
+  anti-overflow clamps (ADR-0006, EC-7).
+- **Lint rule scanner** `scripts/lib/literal-color-scanner.ts` blocks literal
+  Tailwind color classes in `src/components/**/*.tsx`. Wired into
+  `pnpm quality:structure` (ADR-0004). 14 unit tests.
+- **Valibot theme schema** `src/themes/schema.ts` (D5 revised — Valibot
+  ~1.5KB gzipped vs Zod ~12KB).
+- **OKLCH `color-value-pattern.ts`** extracted from `theme-provider.tsx`.
+  Accepts plain OKLCH, relative-color syntax (EC-5), HSL split, hex, var().
+
+### Changed — Community Best Practices Alignment (2026-06-03)
+
+- **All 11 built-in themes migrated from HSL split to OKLCH** (ADR-0005).
+  638 values converted via `scripts/migrate-themes-to-oklch.ts`. Round-trip
+  delta ~0.001 L per value (visually equivalent, < 0.5% pixel diff).
+  Legacy HSL split format still accepted by the runtime validator.
+- **`tokens-v4.css` aliases** drop `hsl()` wrapper —
+  `--color-primary: var(--primary)` direct.
+- **`tokens.css` shadows + texture utilities** use
+  `color-mix(in oklch, var(--x) N%, transparent)` for alpha composition.
+- **`hex()` and `rgb()` helpers** now return `oklch(L C H)` strings (T2.6).
+- **`gateway-status-indicator`, `run-status-pill`, `update-banner`,
+  `stability-bundle-viewer`** swept of 12 literal Tailwind color classes
+  → semantic tokens. Closes hidden theme-switching bug.
+- **`primary-deep` / `primary-glow` / `accent-deep`** are now `optional`
+  in `ColorScale`. CSS auto-derives via `oklch(from ...)` when omitted.
+- **`validateThemeContrast`** accepts both HSL split and OKLCH input.
+
+### Deprecated — Community Best Practices Alignment
+
+- **`hexToHsl(input)`** and **`rgbToHslLegacy(r, g, b)`** — use `hex()` /
+  `rgb()` (OKLCH output) instead. Removal scheduled for next major.
+
 ## [0.13.0] - 2026-05-29
 
 **Minor (additive only — zero breaking changes).**

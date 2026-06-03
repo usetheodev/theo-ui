@@ -82,3 +82,4 @@ referencia/
 # npm pack artifacts (publint creates these during quality:gates)
 *.tgz
 src/styles/node_modules/
+test-results/

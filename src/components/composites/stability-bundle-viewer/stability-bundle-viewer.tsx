@@ -41,12 +41,12 @@ const SEVERITY_META: Record<
   },
   error: {
     icon: AlertTriangle,
-    className: "text-amber-600 dark:text-amber-400",
+    className: "text-warning",
     label: "Error",
   },
   warn: {
     icon: Info,
-    className: "text-blue-600 dark:text-blue-400",
+    className: "text-info",
     label: "Warning",
   },
 };

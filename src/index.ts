@@ -413,6 +413,24 @@ export {
 } from "./components/composites/confirm-dialog/index.js";
 export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
 
+// StatusIndicator composite — operational state, consumes status-* tokens (ADR-0007).
+// Plan: theo-ui-community-best-practices-alignment T4.1.
+export {
+  StatusIndicator,
+  type StatusIndicatorKind,
+  type StatusIndicatorProps,
+  type StatusIndicatorSize,
+} from "./components/composites/status-indicator/index.js";
+
+// MetricCard composite — dashboard metric tile with trend semantics + invertTrend (EC-17).
+// Plan: theo-ui-community-best-practices-alignment T4.2.
+export {
+  MetricCard,
+  type MetricCardDelta,
+  type MetricCardProps,
+  type MetricCardTrend,
+} from "./components/composites/metric-card/index.js";
+
 // Brief #3 deferred primitives (0.9.0-next.0)
 export { Alert, type AlertProps, type AlertIntent } from "./components/primitives/alert/index.js";
 export {
