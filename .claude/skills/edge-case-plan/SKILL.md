@@ -1,6 +1,9 @@
 ---
 name: edge-case-plan
-description: Analisa um plano de implementacao e identifica edge cases nao previstos. Pragmatico — aponta riscos reais sem complicar o design. Use apos /to-plan ou quando revisar qualquer plano em docs/plans/.
+description: "Analisa um plano de implementação e identifica edge cases não previstos. Pragmático — aponta riscos reais sem complicar o design. Use após /to-plan ou quando revisar qualquer plano em .claude/knowledge-base/plans/."
+user-invocable: true
+allowed-tools: Read, Glob, Grep, Bash, Agent
+argument-hint: "[plan-slug|plan-file-path]"
 ---
 
 # Edge Case Plan Review
@@ -9,8 +12,8 @@ Analise o plano e identifique edge cases que NAO foram previstos. Seja pragmatic
 
 ## Argumento
 
-- `$ARGUMENTS` = slug do plano (busca em `docs/plans/{slug}-plan.md`) ou caminho completo
-- Sem argumento = analisa o plano mais recente em `docs/plans/`
+- `$ARGUMENTS` = slug do plano (busca em `.claude/knowledge-base/plans/{slug}-plan.md`) ou caminho completo
+- Sem argumento = analisa o plano mais recente em `.claude/knowledge-base/plans/`
 
 ## Filosofia
 
@@ -29,7 +32,7 @@ Regras de ouro:
 
 ```bash
 # Encontrar o plano
-ls docs/plans/*${ARGUMENTS}* 2>/dev/null || ls -t docs/plans/*.md | head -5
+ls .claude/knowledge-base/plans/*${ARGUMENTS}* 2>/dev/null || ls -t .claude/knowledge-base/plans/*.md | head -5
 ```
 
 Leia o plano completo. Entenda:
@@ -122,7 +125,7 @@ Para cada edge case encontrado, classifique:
 # Edge Case Review — {plano}
 
 Data: YYYY-MM-DD
-Plano: docs/plans/{slug}-plan.md
+Plano: .claude/knowledge-base/plans/{slug}-plan.md
 Tasks analisadas: N
 Edge cases encontrados: N (MUST FIX: N, SHOULD TEST: N, DOCUMENT: N)
 

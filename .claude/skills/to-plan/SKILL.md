@@ -1,6 +1,9 @@
 ---
 name: to-plan
 description: Turn the current conversation context into an implementation plan and save it to .claude/knowledge-base/plans/. Use when user wants to create a plan from the current context.
+user-invocable: true
+allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Agent
+argument-hint: "<plan topic>"
 ---
 
 This skill takes the current conversation context and codebase understanding and produces a detailed implementation plan. Do NOT interview the user — synthesize what you already know.
