@@ -1,6 +1,6 @@
 # CLAUDE.md — TheoUI
 
-Contract between Claude and the **TheoUI / `@theokit/ui`** project (the **UI** pillar of [usetheo](../CLAUDE.md)). Read this file **and** the root `CLAUDE.md` before editing anything here.
+Contract between Claude and the **TheoUI / `@theokit/ui`** project (the **UI** pillar of [Theo](../CLAUDE.md)). Read this file **and** the root `CLAUDE.md` before editing anything here.
 
 This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/.claude/CLAUDE.md`. Root rules apply unconditionally. TheoUI-specific rules layer on top.
 
@@ -8,11 +8,11 @@ This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/
 
 ## What this project is
 
-`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [usetheo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and cloud dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
+`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [Theo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and cloud dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
 
 Published as `@theokit/ui` on npm. Distributed two ways: install the whole package, or copy individual components via the shadcn-compatible registry.
 
-Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the ecosystem (Apache-2.0, not part of the paid funnel). Pairs naturally with TheoKit (framework) and `@theokit/sdk` (harness) but runs standalone.
+Positioned as the **UI pillar** of Theo and a **community auxiliary** of the ecosystem (Apache-2.0, not part of the paid funnel). Pairs naturally with TheoKit (framework) and `@theokit/sdk` (harness) but runs standalone.
 
 ## Locked names
 
@@ -49,7 +49,7 @@ Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the 
 
 **Cross-project narrative anchors that must hold (regardless of voice):**
 
-- **UI pillar of usetheo** — one of four pillars (UI, Harness, Skills, Runtime). Not the framework (TheoKit), not the SDK (TheoKit-SDK), not the runtime (Theo PaaS).
+- **UI pillar of Theo** — one of four pillars (UI, Harness, Skills, Runtime). Not the framework (TheoKit), not the SDK (TheoKit-SDK), not the runtime (Theo PaaS).
 - **Community auxiliary** — Apache-2.0, not part of the paid funnel. Usable standalone, no commitment to the rest of the stack.
 - **Built for AI agents + cloud dashboards** — the categorical wedge against generic component libraries (shadcn, MUI, Mantine, Tremor).
 - **shadcn-compatible registry** — copy-paste path is first-class, not a side feature.

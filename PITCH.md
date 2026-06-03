@@ -194,7 +194,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 ## Where this fits
 
-`@theokit/ui` is a **community auxiliary** of the [usetheo](https://usetheo.dev) ecosystem.
+`@theokit/ui` is a **community auxiliary** of the [Theo](https://usetheo.dev) ecosystem.
 
 | Step | Product | What it does |
 |---|---|---|

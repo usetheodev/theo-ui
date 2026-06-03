@@ -303,7 +303,7 @@ theme: violet-forge
 paginate: true
 ---
 
-# usetheo architecture
+# Theo architecture
 
 A 3-slide tour.
 
