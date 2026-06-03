@@ -321,3 +321,53 @@ Use this checklist in PR review:
 - Story demonstrates a realistic workflow.
 - `pnpm quality:gates` passes.
 
+---
+
+## Gate 10 — Community Best Practices Alignment (2026-06-03 cohort)
+
+Added by the community-best-practices plan and ADR-0004 through ADR-0009.
+All wired into `pnpm quality:gates`.
+
+### `validateNoLiteralTailwindColors` (ADR-0004)
+
+Scanner walks `src/components/**` and blocks literal Tailwind color
+utility classes (`bg-emerald-500`, `text-amber-600/40`, `border-blue-500`,
+etc.). Components MUST consume semantic tokens (`bg-primary`,
+`bg-success`, `bg-status-online`) so theme switching propagates.
+Whitelisted: `*.test.tsx`, `*.stories.tsx`, `tests/fixture-*/`.
+
+Implementation: `scripts/lib/literal-color-scanner.ts`, wired in
+`scripts/validate-quality-gates.ts > validateNoLiteralTailwindColors()`.
+
+### `validateThemeContrast` (WCAG 2.x AA)
+
+Audits all 10 built-in themes × 2 modes × 8 critical pairs. Body pairs
+(4.5:1): background↔foreground, card↔card-foreground, popover↔popover-foreground.
+Large pairs (3:1): primary↔primary-foreground, secondary↔secondary-foreground,
+accent↔accent-foreground, destructive↔destructive-foreground, muted↔muted-foreground.
+
+Standalone runner: `pnpm quality:contrast` (with `--update` to rebaseline).
+Baseline: `tests/contrast/contrast-baseline.json`. Wired as
+`validateThemeContrast()` in `validate-quality-gates.ts`.
+
+### `quality:visual` — Playwright snapshot diff (T0.1 / T5.3)
+
+Chromium baseline of 5 surfaces × 10 themes × 2 modes = 100 PNGs
+(committed under `tests/visual/__screenshots__/`). Plus 4 tonal
+derivation clamp tests (T3.1) and 1 smoke spec. Threshold 0.001 pixel
+diff. Animations disabled. Font load awaited (EC-1, EC-2).
+
+Run locally: `pnpm quality:visual` (or `pnpm quality:visual:update`
+after intentional visual change). CI runs under
+`mcr.microsoft.com/playwright:v1.49.0-jammy` to keep font rendering
+deterministic (EC-13 — see `tests/visual/README.md`).
+
+### Reference
+
+- [Migration guide: HSL → OKLCH](./migration/hsl-to-oklch.md)
+- [ADR-0004](./adr/0004-no-literal-tailwind-colors-in-source.md)
+- [ADR-0005](./adr/0005-oklch-as-canonical-color-format.md)
+- [ADR-0006](./adr/0006-algorithmic-tonal-derivations.md)
+- [ADR-0007](./adr/0007-status-semantic-tokens.md)
+- [ADR-0008](./adr/0008-forced-colors-whcm-support.md)
+- [ADR-0009](./adr/0009-prefers-color-scheme-default.md)

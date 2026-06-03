@@ -41,7 +41,7 @@ export const UpdateBanner = forwardRef<HTMLDivElement, UpdateBannerProps>(
         className={cn(
           "flex items-center justify-between gap-3 border-b px-4 py-2 text-sm",
           severity === "warn"
-            ? "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+            ? "border-warning/40 bg-warning/10 text-warning"
             : "border-primary/40 bg-primary/10 text-primary",
           className,
         )}

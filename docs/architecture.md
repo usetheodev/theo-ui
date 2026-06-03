@@ -74,11 +74,11 @@ but **must not import their own consumers** (no circular deps).
 <!-- END:primitives-list -->
 
 <!-- BEGIN:composites-census -->
-### Composites (48)
+### Composites (50)
 <!-- END:composites-census -->
 
 <!-- BEGIN:composites-list -->
-`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `CronJobsList`, `DataPart`, `DataTable`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `PageShell`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `StabilityBundleViewer`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
+`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `CronJobsList`, `DataPart`, `DataTable`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `MetricCard`, `PageShell`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `StabilityBundleViewer`, `StatusIndicator`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
 <!-- END:composites-list -->
 
 ### Notes

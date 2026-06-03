@@ -16,13 +16,22 @@ export interface ColorScale {
   popover: string;
   "popover-foreground": string;
   primary: string;
-  "primary-deep": string;
-  "primary-glow": string;
+  /**
+   * Tonal scale variants of `primary`. Optional since T3.2 (ADR-0006).
+   * When omitted, derived in CSS from `--primary` via `oklch(from ...)`.
+   * Override per-theme by providing an explicit string.
+   */
+  "primary-deep"?: string;
+  "primary-glow"?: string;
   "primary-foreground": string;
   secondary: string;
   "secondary-foreground": string;
   accent: string;
-  "accent-deep": string;
+  /**
+   * Tonal scale variant of `accent`. Optional since T3.2 — derived in CSS
+   * when omitted. Override per-theme by providing an explicit string.
+   */
+  "accent-deep"?: string;
   "accent-foreground": string;
   muted: string;
   "muted-foreground": string;
@@ -37,6 +46,23 @@ export interface ColorScale {
   "destructive-foreground": string;
   info: string;
   "info-foreground": string;
+  /**
+   * Status semantic group (D4 ADR — community-best-practices plan).
+   *
+   * Operational state colors (gateway connected/disconnected/slow/info-flag)
+   * separated from action-result semantics (success/destructive/warning/info).
+   * Defaults in built-in themes mirror their semantic counterparts; consumers
+   * may override for visually-distinct status surfaces. `defineTheme(partial)`
+   * auto-populates from semantic group when omitted.
+   */
+  "status-online": string;
+  "status-online-foreground": string;
+  "status-offline": string;
+  "status-offline-foreground": string;
+  "status-degraded": string;
+  "status-degraded-foreground": string;
+  "status-info": string;
+  "status-info-foreground": string;
 }
 
 export interface ThemeFonts {

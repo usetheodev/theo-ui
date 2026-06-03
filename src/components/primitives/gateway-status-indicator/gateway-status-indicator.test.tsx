@@ -4,11 +4,13 @@ import { describe, expect, it } from "vitest";
 import { type GatewayStatus, GatewayStatusIndicator } from "./gateway-status-indicator.js";
 
 describe("GatewayStatusIndicator", () => {
+  // Post-T1.2 (ADR-0004 + ADR-0007): swept from literal Tailwind colors to
+  // semantic status tokens so theme switching propagates.
   const cases: Array<{ status: GatewayStatus; dotClass: string }> = [
-    { status: "online", dotClass: "bg-emerald-500" },
-    { status: "offline", dotClass: "bg-red-500" },
-    { status: "degraded", dotClass: "bg-amber-500" },
-    { status: "reconnecting", dotClass: "bg-blue-500" },
+    { status: "online", dotClass: "bg-status-online" },
+    { status: "offline", dotClass: "bg-status-offline" },
+    { status: "degraded", dotClass: "bg-status-degraded" },
+    { status: "reconnecting", dotClass: "bg-status-info" },
   ];
 
   for (const c of cases) {

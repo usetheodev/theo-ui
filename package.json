@@ -1,12 +1,10 @@
 {
   "name": "@theokit/ui",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -287,6 +285,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/mention-menu/index.js"
     },
+    "./metric-card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/metric-card/index.js"
+    },
     "./metrics-panel": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/metrics-panel/index.js"
@@ -438,6 +440,10 @@
     "./status-dot": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/status-dot/index.js"
+    },
+    "./status-indicator": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/status-indicator/index.js"
     },
     "./steps-rail": {
       "types": "./dist/index.d.ts",
@@ -608,6 +614,10 @@
     "quality:bundle": "tsx scripts/validate-bundle-size.ts",
     "quality:bundle:update": "tsx scripts/validate-bundle-size.ts --update",
     "quality:a11y": "vitest run src/test/ladle-axe.test.tsx",
+    "quality:visual": "playwright test",
+    "quality:visual:update": "playwright test --update-snapshots",
+    "quality:contrast": "tsx scripts/validate-contrast.ts",
+    "quality:contrast:update": "tsx scripts/validate-contrast.ts --update",
     "dogfood:whiteboard": "tsx scripts/dogfood-whiteboard.ts",
     "dogfood:slide": "tsx scripts/dogfood-slide.ts",
     "dogfood:slide-deck": "tsx scripts/dogfood-slide-deck.ts",
@@ -615,7 +625,7 @@
     "dogfood:v4-zero-config": "tsx scripts/dogfood-v4-zero-config.ts",
     "dogfood:v4-real-build": "bash scripts/dogfood-v4-real-build.sh",
     "dogfood:precompiled-utilities": "tsx scripts/dogfood-precompiled-utilities.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm quality:publint && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm quality:publint && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm quality:visual && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm registry:build && pnpm registry:validate && pnpm quality:structure",
     "quality:knip": "knip",
     "quality:knip:fix": "knip --fix",
@@ -728,17 +738,20 @@
     "lucide-react": "^0.471.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "valibot": "^0.42.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@biomejs/biome": "^1.9.4",
     "@ladle/react": "^4.1.2",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/cli": "^4.3.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/culori": "^4.0.1",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",
     "@types/node": "^22.10.5",
@@ -747,6 +760,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "2.1.9",
     "autoprefixer": "^10.4.20",
+    "culori": "^4.0.2",
     "geist": "^1.7.0",
     "happy-dom": "^20.9.0",
     "hast-util-from-html": "^2.0.3",
@@ -778,11 +792,7 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "esbuild"
-    ],
+    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"],
     "overrides": {
       "postcss": ">=8.5.10"
     }

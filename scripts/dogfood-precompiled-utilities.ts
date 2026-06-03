@@ -92,9 +92,10 @@ const REQUIRED_BASE_RULES = [
   ".rounded-lg",
 ];
 for (const rule of REQUIRED_BASE_RULES) {
-  // Match `.X{` or `.X:` to avoid partial overlap (e.g. `.bg-primary-deep`
-  // matching `.bg-primary`).
-  const pattern = new RegExp(`\\${rule}[:{ ]`);
+  // Match `.X{` `.X:` `.X ` `.X,` `.X\` to avoid partial overlap (e.g.
+  // `.bg-primary-deep` matching `.bg-primary`) — Tailwind v4 groups selectors
+  // so `.bg-card,` / `.bg-card\` (Tailwind escape) appear, not just `.bg-card{`.
+  const pattern = new RegExp(`\\${rule}[:{ ,\\\\]`);
   assert(`dist/components.css contains \`${rule}\` rule`, pattern.test(components));
 }
 

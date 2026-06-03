@@ -42,6 +42,8 @@ import {
   Label,
   type LogLine,
   type Metric,
+  // Community-best-practices T4.2/T4.3 — dashboard tile composite
+  MetricCard,
   MetricsPanel,
   ModelSelector,
   PermissionModal,
@@ -54,6 +56,8 @@ import {
   Sheet,
   Sidebar,
   Skeleton,
+  // Community-best-practices T4.1 — operational state indicator
+  StatusIndicator,
   Switch,
   Tabs,
   TerminalPanel,
@@ -70,6 +74,7 @@ import {
   Bot,
   Cloud,
   Code,
+  DollarSign,
   FileText,
   Folder,
   Layers,
@@ -78,6 +83,7 @@ import {
   Settings,
   Shield,
   Sparkles,
+  Users,
   Zap,
 } from "lucide-react";
 import { useState } from "react";
@@ -614,6 +620,64 @@ export function Catalog() {
       <Section id="globals" title="Globals" icon={Zap}>
         <GlobalsDemo />
       </Section>
+      <Section id="dashboard" title="Dashboard tiles" icon={Layers}>
+        <DashboardDemo />
+      </Section>
+      <Section id="status" title="Status indicators" icon={Zap}>
+        <StatusDemo />
+      </Section>
     </main>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Community-best-practices T4.2/T4.3 — MetricCard demo
+ * ───────────────────────────────────────────────────────────────────────── */
+
+function DashboardDemo() {
+  return (
+    <Example label="MetricCard grid (default + invertTrend for cost)">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        <MetricCard
+          title="Revenue"
+          value="$12,345"
+          delta={{ value: "+12%", trend: "up" }}
+          hint="vs last month"
+          icon={<DollarSign className="size-4" />}
+        />
+        <MetricCard
+          title="Active Users"
+          value="1,234"
+          delta={{ value: "+8.5%", trend: "up" }}
+          hint="vs last week"
+          icon={<Users className="size-4" />}
+        />
+        <MetricCard
+          title="P95 Latency"
+          value="142ms"
+          delta={{ value: "+18ms", trend: "up" }}
+          hint="invertTrend: up is bad"
+          icon={<Zap className="size-4" />}
+          invertTrend
+        />
+      </div>
+    </Example>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Community-best-practices T4.1 — StatusIndicator demo
+ * ───────────────────────────────────────────────────────────────────────── */
+
+function StatusDemo() {
+  return (
+    <Example label="StatusIndicator (all 4 status × labels × pulse)">
+      <div className="flex flex-wrap gap-6">
+        <StatusIndicator status="online" label="Gateway online" />
+        <StatusIndicator status="offline" label="Worker offline" />
+        <StatusIndicator status="degraded" label="Cache slow" pulse />
+        <StatusIndicator status="info" label="Maintenance flag" />
+      </div>
+    </Example>
   );
 }

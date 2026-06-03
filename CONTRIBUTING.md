@@ -54,6 +54,17 @@ discretionary call. The full spec lives in [`docs/architecture.md`](./docs/archi
 - Value-importing `Button`, `Badge`, `Card`, `Dialog`, etc. from a sibling
   primitive folder — even if it "feels" atomic. Move to composites.
 
+**Forbidden everywhere in `src/components/**`:**
+- **Literal Tailwind color classes** (`bg-emerald-500`, `text-amber-600/40`,
+  `border-blue-500`, etc.). Components MUST consume semantic tokens
+  (`bg-primary`, `bg-success`, `bg-status-online`, `text-destructive`, ...)
+  so theme switching propagates. The build-gate scanner
+  (`scripts/lib/literal-color-scanner.ts`) fires on `pnpm quality:structure`
+  and prints suggested replacements. See
+  [`docs/adr/0004-no-literal-tailwind-colors-in-source.md`](./docs/adr/0004-no-literal-tailwind-colors-in-source.md).
+- Whitelisted paths: `*.test.tsx`, `*.stories.tsx`, `tests/fixture-*/` (allowed
+  to demonstrate raw colors).
+
 **Allowed exceptions ("Global Provider Primitives"):**
 - `Toaster` and `ThemeProvider` are app-wide context providers, traditionally
   classified as primitives across shadcn-aligned design systems. They live in
@@ -129,7 +140,26 @@ pnpm ladle:build         # Ladle SSR build (story smoke)
 | `validateAxeCoverage` | ≥30 interactive primitives run vitest-axe |
 | `validateNoStrayArtifacts` | no `.bak`, `.tmp`, `.orig`, `.rej` files in the tree |
 | `validateDesignSystemFidelity` | Geist tokens in tokens.css + preset; type scale |
+| `validateNoLiteralTailwindColors` | components MUST consume semantic tokens (ADR-0004) — `bg-emerald-500` etc. blocked |
+| `validateThemeContrast` | 10 themes × 2 modes × 8 pairs against WCAG 2.x AA (4.5:1 body / 3:1 large) |
 | `validateScriptsAndCi` | required npm scripts + `.github/workflows/quality-gates.yml` |
+
+Additional gates wired into `quality:gates` post-T5.3 / T5.4:
+
+| Gate | Command | Purpose |
+|---|---|---|
+| Visual snapshot | `pnpm quality:visual` | Playwright snapshot diff (chromium baseline, ADR-0005/0009 cohort) |
+| WCAG contrast standalone | `pnpm quality:contrast` | rerun the AA matrix and assert no regression vs `tests/contrast/contrast-baseline.json` |
+
+Relevant ADRs to read before changing visual/theme behavior:
+
+- [ADR-0004 — No literal Tailwind colors in source](./docs/adr/0004-no-literal-tailwind-colors-in-source.md)
+- [ADR-0005 — OKLCH as the canonical color format](./docs/adr/0005-oklch-as-canonical-color-format.md)
+- [ADR-0006 — Algorithmic tonal derivations via `oklch(from ...)`](./docs/adr/0006-algorithmic-tonal-derivations.md)
+- [ADR-0007 — Status semantic tokens (operational state group)](./docs/adr/0007-status-semantic-tokens.md)
+- [ADR-0008 — Forced colors (Windows High Contrast Mode) support](./docs/adr/0008-forced-colors-whcm-support.md)
+- [ADR-0009 — `prefers-color-scheme` respected by default](./docs/adr/0009-prefers-color-scheme-default.md)
+- [Migration guide HSL → OKLCH](./docs/migration/hsl-to-oklch.md)
 
 A failing gate ≠ broken code — it usually means a doc / count / registry
 file is out of sync. The error message tells you exactly how to fix it

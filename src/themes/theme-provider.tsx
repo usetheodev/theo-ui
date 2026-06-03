@@ -9,7 +9,9 @@ import {
 } from "react";
 import type { JSX, ReactNode } from "react";
 import { safeHref } from "../lib/safe-href.js";
+import { COLOR_VALUE_PATTERN } from "./color-value-pattern.js";
 import { type Density, DensityContext, injectDensityCss } from "./density.js";
+import { formatThemeIssues, validateTheme } from "./schema.js";
 import type { ColorScale, Theme, ThemeMode } from "./types.js";
 
 interface ThemeContextValue {
@@ -43,20 +45,11 @@ const STYLE_ELEMENT_ID = "theo-ui-theme-vars";
 // silently substitutes a safe fallback so a misconfigured theme can't
 // crash the app.
 
-// Color values. Multiple accepted shapes:
-//   1. Hex: `#fff`, `#0a0a0a`, `#0a0a0aff`.
-//   2. Fully-parenthesized CSS color functions: `oklch(...)`, `rgb(...)`,
-//      `hsl(...)`, etc. Inner content restricted to digits/dots/spaces/
-//      percent/slash/comma/dash/plus — no semicolons, no braces, no `url(`.
-//   3. HSL-component split (shadcn-ui convention used by the built-in
-//      themes): `"0 0% 100%"`, `"262 83% 58%"` — space-separated numeric
-//      components consumed via `hsl(var(--token))` in stylesheets.
-//   4. `var(--token)` references, optionally with a fallback value that
-//      contains no parens/braces/semicolons.
-//   5. CSS keywords: `transparent`, `currentColor`, `inherit`, `initial`,
-//      `unset`.
-const COLOR_VALUE_PATTERN =
-  /^(#[0-9a-fA-F]{3,8}|(?:oklch|oklab|rgb|rgba|hsl|hsla|lab|lch|color)\(\s*[\d.\s%,/+\-]+\s*\)|-?\d+(?:\.\d+)?%?(?:\s+-?\d+(?:\.\d+)?%?){1,3}|var\(--[a-zA-Z0-9-]+(?:\s*,\s*[^();{}]+)?\)|transparent|currentColor|inherit|initial|unset)$/;
+// COLOR_VALUE_PATTERN was inlined here pre-T2.5. Now extracted to
+// `color-value-pattern.ts` so the regex is reusable by the Valibot schema (T2.7)
+// and so the OKLCH relative-color syntax (`oklch(from var(--x) calc(l - 0.16) c h)`,
+// required by T3.1 tonal derivations) is supported without expanding the inline
+// regex monolith. See EC-5 in the edge-case review.
 
 // Font family: word chars, spaces, commas, hyphens, dots, quotes. Excludes
 // parens (blocks `url(...)`) and semicolons (blocks declaration breakouts).
@@ -195,6 +188,18 @@ interface ThemeProviderProps {
    * Plan: faang-density-tightening (D3).
    */
   defaultDensity?: Density;
+  /**
+   * Respect the consumer's OS `prefers-color-scheme` preference on initial
+   * mount (D6 / T5.1). When `true` (default) and no theme-mode is stored in
+   * `localStorage[storageKey]`, the provider reads
+   * `matchMedia('(prefers-color-scheme: dark)')` and subscribes to changes.
+   * User-driven `setMode()` overrides the system signal — subsequent OS
+   * changes are ignored after the user fixes a preference.
+   *
+   * Pass `false` to force `defaultMode` regardless of the system preference.
+   * EC-12: matchMedia listener is cleaned up on unmount.
+   */
+  respectSystemMode?: boolean;
 }
 
 /**
@@ -211,6 +216,15 @@ function warnStorageFailure(scope: string, err: unknown): void {
   if (typeof process === "undefined" || process.env.NODE_ENV === "production") return;
   // biome-ignore lint/suspicious/noConsole: dev-only diagnostic for storage failures (HIGH-006)
   console.warn(`[@theokit/ui] theme storage failure (${scope}):`, err);
+}
+
+// T2.7: production-mode diagnostic for invalid themes that fall through
+// dev-time throw. Single console.warn so engineer sees something instead of
+// total silence; theme is kept in the array but per-value regex fallback
+// substitutes `transparent` for unsafe values downstream.
+function warnInvalidTheme(message: string): void {
+  // biome-ignore lint/suspicious/noConsole: dev/prod diagnostic for invalid theme (T2.7/D5)
+  console.warn(message);
 }
 
 /**
@@ -231,6 +245,7 @@ function ThemeProvider({
   themes: themesProp,
   storageKey = "theo-ui:theme",
   defaultDensity = "comfortable",
+  respectSystemMode = true,
 }: ThemeProviderProps): JSX.Element {
   // Themes prop is required since v0.1.0-next.0 — see migration note in
   // the JSDoc on ThemeProviderProps. Pass `builtinThemes` for the legacy
@@ -257,6 +272,23 @@ function ThemeProvider({
   // inline array literals (`themes={[violetForge, classicPaper]}`) would
   // otherwise pay this on every parent update.
   const mergedThemes = useMemo<Theme[]>(() => {
+    // T2.7 (D5): valibot shape validation runs FIRST — catches missing keys,
+    // wrong types, malformed font URLs. Existing per-value regex validation
+    // below stays as the second defense layer against CSS injection.
+    for (const t of themesProp) {
+      const result = validateTheme(t);
+      if (!result.success) {
+        const message = formatThemeIssues(
+          (t as { name?: string }).name ?? "(unnamed)",
+          result.issues ?? [],
+        );
+        if (IS_DEV) throw new Error(message);
+        warnInvalidTheme(message);
+        // In production we keep the theme array intact; the per-value regex
+        // fallbacks below will substitute `transparent` for any value that
+        // still fails the second layer, so the app continues rendering.
+      }
+    }
     for (const t of themesProp) {
       validatedThemeName(t.name);
       validatedFontFamily("display", t.fonts.display);
@@ -307,6 +339,11 @@ function ThemeProvider({
   const [mode, setModeState] = useState<ThemeMode>(defaultMode);
   const [density, setDensityState] = useState<Density>(defaultDensity);
 
+  // T5.1 / D6: track whether the user has explicitly fixed the mode via
+  // setMode / toggleMode. Once true, OS prefers-color-scheme changes do
+  // NOT override the user's choice.
+  const userOverrodeModeRef = useRef(false);
+
   // First-run guard for the persist effect below. On initial mount the
   // state is the SSR-safe default; we MUST NOT clobber the user's stored
   // preference with that default before the post-mount hydration effect
@@ -325,7 +362,11 @@ function ThemeProvider({
       const storedMode = window.localStorage.getItem(`${storageKey}:mode`);
       const storedDensity = window.localStorage.getItem(`${storageKey}:density`);
       if (storedName) setThemeName(storedName);
-      if (storedMode === "dark" || storedMode === "light") setModeState(storedMode);
+      if (storedMode === "dark" || storedMode === "light") {
+        setModeState(storedMode);
+        // Stored value implies user fixed a preference at some point.
+        userOverrodeModeRef.current = true;
+      }
       if (
         storedDensity === "compact" ||
         storedDensity === "comfortable" ||
@@ -337,6 +378,31 @@ function ThemeProvider({
       warnStorageFailure("read theme + mode + density", err);
     }
   }, [storageKey]);
+
+  // T5.1 / D6 / EC-12: subscribe to OS prefers-color-scheme when
+  // respectSystemMode is true. On mount, if user has NOT overridden the
+  // mode (no stored preference), align with the OS signal. Re-aligns on
+  // OS changes UNLESS user explicitly fixed a preference. Cleanup on
+  // unmount via removeEventListener (EC-12) to avoid listener leaks in
+  // micro-frontend scenarios.
+  useEffect(() => {
+    if (!respectSystemMode) return;
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    // Align on first run if user hasn't overridden.
+    if (!userOverrodeModeRef.current) {
+      setModeState(mql.matches ? "dark" : "light");
+    }
+    const onChange = (event: MediaQueryListEvent): void => {
+      if (!userOverrodeModeRef.current) {
+        setModeState(event.matches ? "dark" : "light");
+      }
+    };
+    mql.addEventListener("change", onChange);
+    return () => {
+      mql.removeEventListener("change", onChange);
+    };
+  }, [respectSystemMode]);
 
   // Inject CSS vars whenever the themes list changes.
   useEffect(() => {
@@ -385,11 +451,15 @@ function ThemeProvider({
   }, [themeName, mode, density, storageKey]);
 
   const setTheme = useCallback((name: string) => setThemeName(name), []);
-  const setMode = useCallback((next: ThemeMode) => setModeState(next), []);
-  const toggleMode = useCallback(
-    () => setModeState((cur) => (cur === "light" ? "dark" : "light")),
-    [],
-  );
+  const setMode = useCallback((next: ThemeMode) => {
+    // T5.1 / D6: fix the user preference; subsequent system changes no longer override.
+    userOverrodeModeRef.current = true;
+    setModeState(next);
+  }, []);
+  const toggleMode = useCallback(() => {
+    userOverrodeModeRef.current = true;
+    setModeState((cur) => (cur === "light" ? "dark" : "light"));
+  }, []);
   const setDensity = useCallback((next: Density) => setDensityState(next), []);
   const registerTheme = useCallback((theme: Theme) => {
     setThemes((cur) => {

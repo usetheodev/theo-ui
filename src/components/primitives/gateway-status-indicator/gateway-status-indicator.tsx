@@ -25,22 +25,22 @@ export interface GatewayStatusIndicatorProps
 
 const STATUS_META: Record<GatewayStatus, { dot: string; label: string; aria: string }> = {
   online: {
-    dot: "bg-emerald-500",
+    dot: "bg-status-online",
     label: "Online",
     aria: "Gateway online",
   },
   offline: {
-    dot: "bg-red-500",
+    dot: "bg-status-offline",
     label: "Offline",
     aria: "Gateway offline",
   },
   degraded: {
-    dot: "bg-amber-500",
+    dot: "bg-status-degraded",
     label: "Degraded",
     aria: "Gateway degraded",
   },
   reconnecting: {
-    dot: "bg-blue-500",
+    dot: "bg-status-info",
     label: "Reconnecting…",
     aria: "Gateway reconnecting",
   },

@@ -409,6 +409,12 @@
       "description": "Keyboard-navigable popover for slash-command / @file / #memory"
     },
     {
+      "name": "metric-card",
+      "type": "registry:ui",
+      "title": "MetricCard",
+      "description": "Dashboard metric tile composite — title + value + delta with trend semantics. Supports invertTrend for cost/churn metrics (EC-17)."
+    },
+    {
       "name": "metrics-panel",
       "type": "registry:block",
       "title": "MetricsPanel",
@@ -683,6 +689,12 @@
       "type": "registry:ui",
       "title": "StatusDot",
       "description": "Semantic status indicator (small colored circle + optional label). Five status kinds: live (success), building (warning, auto-pulses), failed (destructive), idle (muted), warning (warning, static). Three sizes (xs 6px / sm 8px default / md 10px). When neither label nor aria-label is provided, auto-applies aria-label=status and emits a dev warning."
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:ui",
+      "title": "StatusIndicator",
+      "description": "Operational state indicator (online/offline/degraded/info) consuming status-* semantic tokens (ADR-0007)."
     },
     {
       "name": "steps-rail",

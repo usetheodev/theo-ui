@@ -53,7 +53,7 @@ const STATUS_META: Record<RunStatus, StatusMeta> = {
   finished: {
     icon: CheckCircle2,
     label: "Done",
-    className: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    className: "border-success/40 bg-success/10 text-success",
   },
   error: {
     icon: AlertCircle,
@@ -68,7 +68,7 @@ const STATUS_META: Record<RunStatus, StatusMeta> = {
   interrupted: {
     icon: PauseCircle,
     label: "Interrupted",
-    className: "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    className: "border-warning/40 bg-warning/10 text-warning",
   },
 };
 

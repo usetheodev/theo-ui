@@ -73,7 +73,6 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
           </summary>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
             {errors.slice(0, 5).map((e, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: positional, stable for a given input
               <li key={`${e.code}-${i}`}>
                 <code className="text-foreground">{e.code}</code>
                 {e.path.length > 0 ? (

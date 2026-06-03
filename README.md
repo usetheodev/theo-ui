@@ -13,8 +13,8 @@ A React component library built for AI agent surfaces and cloud dashboards. **10
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1384%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-147-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-1466%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-149-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -143,7 +143,7 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**147 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
+**149 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
@@ -178,12 +178,12 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 <details>
 <summary>
 <!-- BEGIN:composites-count -->
-**Composites** (48) — assembled flows
+**Composites** (50) — assembled flows
 <!-- END:composites-count -->
 </summary>
 
 <!-- BEGIN:composites -->
-`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `CodeBlock` · `CommandPalette` · `ConfirmDialog` · `CronJobsList` · `DataPart` · `DataTable` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `PageShell` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `TaskHeader` · `TextPart` · `ToolCallPart` · `UsageMeter`
+`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `CodeBlock` · `CommandPalette` · `ConfirmDialog` · `CronJobsList` · `DataPart` · `DataTable` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `MetricCard` · `PageShell` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `StatusIndicator` · `TaskHeader` · `TextPart` · `ToolCallPart` · `UsageMeter`
 <!-- END:composites -->
 
 </details>

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-indicator",
+  "type": "registry:ui",
+  "title": "StatusIndicator",
+  "description": "Operational state indicator (online/offline/degraded/info) consuming status-* semantic tokens (ADR-0007).",
+  "dependencies": [],
+  "registryDependencies": ["cn", "tailwind-preset"],
+  "files": [
+    {
+      "path": "components/composites/status-indicator/status-indicator.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/status-indicator.tsx"
+    }
+  ]
+}
