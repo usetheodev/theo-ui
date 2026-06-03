@@ -29,7 +29,7 @@
 
 ## Objective
 
-**Done** = `<ChatMessage message={UIMessage} />` renders all 11 part types correctly. Consumer using `useChat()` from `@ai-sdk/react` can map messages 1:1 with zero adapter. Code blocks ship Shiki SSR highlight + copy button. Markdown is streaming-safe (no broken syntax during token-by-token arrival). Math/Mermaid render when peer-deps present. Existing `agent-stream` + `chat-thread.stories` callsites migrated to `parts`. Quality gates green. Published as `@usetheo/ui@0.6.0-next.0`.
+**Done** = `<ChatMessage message={UIMessage} />` renders all 11 part types correctly. Consumer using `useChat()` from `@ai-sdk/react` can map messages 1:1 with zero adapter. Code blocks ship Shiki SSR highlight + copy button. Markdown is streaming-safe (no broken syntax during token-by-token arrival). Math/Mermaid render when peer-deps present. Existing `agent-stream` + `chat-thread.stories` callsites migrated to `parts`. Quality gates green. Published as `@theokit/ui@0.6.0-next.0`.
 
 ## ADRs
 
@@ -154,7 +154,7 @@ Phase 9 (quality:gates + publish 0.6.0-next.0)
 ### Phase 9 — Validate + publish
 - `pnpm quality:gates` exit 0
 - npm publish --tag next
-- Smoke: `npm install @usetheo/ui@0.6.0-next.0` in a tmp dir, import `ChatMessage`, render a `parts` array, snapshot the output.
+- Smoke: `npm install @theokit/ui@0.6.0-next.0` in a tmp dir, import `ChatMessage`, render a `parts` array, snapshot the output.
 
 ## Global Definition of Done
 
@@ -170,7 +170,7 @@ Phase 9 (quality:gates + publish 0.6.0-next.0)
 - [ ] RFC 0009 status Implemented
 - [ ] NOTICE file with Apache-2.0 attribution
 - [ ] CHANGELOG `[0.6.0-next.0]` with BREAKING + migration recipe
-- [ ] `@usetheo/ui@0.6.0-next.0` published to npm
+- [ ] `@theokit/ui@0.6.0-next.0` published to npm
 - [ ] Smoke test against published tarball passes
 
 ## Final Phase — Dogfood QA

@@ -1,7 +1,7 @@
-import { Button } from "@usetheo/ui";
-import { Slide, type SlideValidationError } from "@usetheo/ui/slide";
-import "@usetheo/ui/slide/themes/default.css";
-import "@usetheo/ui/slide/themes/violet-forge.css";
+import { Button } from "@theokit/ui";
+import { Slide, type SlideValidationError } from "@theokit/ui/slide";
+import "@theokit/ui/slide/themes/default.css";
+import "@theokit/ui/slide/themes/violet-forge.css";
 import { useCallback, useState } from "react";
 import { SLIDE_SCENES, type SlideScene } from "./slide-scenes.js";
 

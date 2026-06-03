@@ -301,12 +301,12 @@ When `<DataTable>` has selectable rows, the bulk-action bar floats at the top of
 ### Deployments list page
 
 ```tsx
-import { PageShell } from "@usetheo/ui/page-shell";
-import { DataTable } from "@usetheo/ui/data-table";
-import { DropdownMenu } from "@usetheo/ui/dropdown-menu";
-import { Badge } from "@usetheo/ui/badge";
-import { StatusDot } from "@usetheo/ui/status-dot";
-import { Timestamp } from "@usetheo/ui/timestamp";
+import { PageShell } from "@theokit/ui/page-shell";
+import { DataTable } from "@theokit/ui/data-table";
+import { DropdownMenu } from "@theokit/ui/dropdown-menu";
+import { Badge } from "@theokit/ui/badge";
+import { StatusDot } from "@theokit/ui/status-dot";
+import { Timestamp } from "@theokit/ui/timestamp";
 import { Plus } from "lucide-react";
 
 export function DeploymentsPage() {

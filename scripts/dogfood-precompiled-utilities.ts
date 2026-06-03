@@ -8,7 +8,7 @@
  * pnpm-symlink bug fixed in 0.6.1-next.0 — the exact contract grep the
  * TheoKit reproduction script uses:
  *
- *   $ grep -c "\.hover\\:bg-muted" .../@usetheo/ui/dist/*.css
+ *   $ grep -c "\.hover\\:bg-muted" .../@theokit/ui/dist/*.css
  *   must return >= 1 (pre-fix: 0)
  *
  * If any required class fails to appear, the gate fails — meaning the
@@ -111,8 +111,8 @@ for (const rule of REQUIRED_VARIANT_RULES) {
 
 /* ─── Negative assertions: no broken legacy patterns ─────────────────── */
 assert(
-  "dist/components.css does NOT include the broken `node_modules/@usetheo/ui` @source pattern",
-  !components.includes("node_modules/@usetheo/ui"),
+  "dist/components.css does NOT include the broken `node_modules/@theokit/ui` @source pattern",
+  !components.includes("node_modules/@theokit/ui"),
 );
 
 /* ─── Report ─────────────────────────────────────────────────────────── */

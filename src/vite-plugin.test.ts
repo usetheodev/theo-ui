@@ -21,7 +21,7 @@ describe("useTheoUIVite — factory shape (TheoKit contract)", () => {
 
   it("uses the documented name slug", () => {
     const plugin = useTheoUIVite();
-    expect(plugin.name).toBe("@usetheo/ui/vite-plugin");
+    expect(plugin.name).toBe("@theokit/ui/vite-plugin");
   });
 
   it("exposes a config() hook", () => {
@@ -88,11 +88,11 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
 });
 
 describe("useTheoUIVite — virtual library-sources module", () => {
-  it("resolves `virtual:@usetheo/ui/library-sources.css` via resolveId", () => {
+  it("resolves `virtual:@theokit/ui/library-sources.css` via resolveId", () => {
     const plugin = useTheoUIVite();
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     expect(typeof resolveId).toBe("function");
-    const resolved = resolveId("virtual:@usetheo/ui/library-sources.css");
+    const resolved = resolveId("virtual:@theokit/ui/library-sources.css");
     expect(resolved).toBeTruthy();
   });
 
@@ -100,11 +100,11 @@ describe("useTheoUIVite — virtual library-sources module", () => {
     const plugin = useTheoUIVite();
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     const load = plugin.load as (id: string) => string | undefined;
-    const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
+    const id = resolveId("virtual:@theokit/ui/library-sources.css") as string;
     const css = load(id);
     expect(css).toBeTruthy();
     // Default (no contentExtra) emits an explanatory comment block, NOT
-    // the broken `@source "node_modules/@usetheo/ui/..."` glob.
+    // the broken `@source "node_modules/@theokit/ui/..."` glob.
     expect(css).toMatch(/pre-compiled utility CSS/);
     expect(css).toContain("dist/components.css");
   });
@@ -113,7 +113,7 @@ describe("useTheoUIVite — virtual library-sources module", () => {
     const plugin = useTheoUIVite({ contentExtra: ["./my-app/**/*.tsx"] });
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     const load = plugin.load as (id: string) => string | undefined;
-    const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
+    const id = resolveId("virtual:@theokit/ui/library-sources.css") as string;
     const css = load(id);
     expect(css).toMatch(/@source "\.\/my-app\/\*\*\/\*\.tsx";/);
   });

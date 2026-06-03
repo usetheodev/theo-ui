@@ -55,7 +55,7 @@ Five ADRs govern the change. Rationale lives in
 ### Density
 
 ```tsx
-import { ThemeProvider, builtinThemes, useDensity } from "@usetheo/ui";
+import { ThemeProvider, builtinThemes, useDensity } from "@theokit/ui";
 
 // At the app root:
 <ThemeProvider themes={builtinThemes} defaultDensity="comfortable">
@@ -165,5 +165,5 @@ smoke, EC-3 storage failure, EC-4 atomic commit, EC-5 token pre-condition).
   `src/styles/tailwind-preset.ts`, `docs/design-system.md`
 - Playground demo: `playground/density-demo.tsx` (mount via `?view=density`)
 - Live preview: <https://docs.usetheo.dev/theoui/theming> (live preview already
-  reflects the new defaults via the `@usetheo/ui@0.3.0-next.0` upgrade in
+  reflects the new defaults via the `@theokit/ui@0.3.0-next.0` upgrade in
   theo-opendocs)

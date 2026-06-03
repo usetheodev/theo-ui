@@ -1,6 +1,6 @@
 # Quality Gates — Theo UI
 
-> Normative gates for `@usetheo/ui`.
+> Normative gates for `@theokit/ui`.
 > Reference model: `referencia/ui` for organization, registry rigor, documentation
 > and release discipline. We do not copy its visual identity.
 
@@ -293,7 +293,7 @@ on 2026-05-25 to close gaps a manual audit surfaced:
   No config file needed; reads `package.json` + tarball contents.
 - **`quality:attw`** — runs [@arethetypeswrong/cli](https://arethetypeswrong.github.io/)
   against the packed tarball. **NOT in the `quality:gates` chain by
-  default** — the tool currently crashes on `@usetheo/ui`'s intentional
+  default** — the tool currently crashes on `@theokit/ui`'s intentional
   package shape (per Brief #4 / RFC subpath-exports-per-component: ~130
   per-component subpath exports share the root `dist/index.d.ts` rather
   than generating per-component DTS files, which would OOM the tsup

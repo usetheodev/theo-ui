@@ -1,5 +1,5 @@
 <!--
-Pitch copy for @usetheo/ui (Violet Forge) landing page.
+Pitch copy for @theokit/ui (Violet Forge) landing page.
 Voice: TheoKit aspirational voice (extended to TheoUI 2026-05-15 via strategic review — see ../CLAUDE.md and ./CLAUDE.md).
 Three layers: HERO (no jargon), BODY (benefit-first, one technical anchor per item), DEEP DIVE (full technical vocabulary, after the "## How it works" delimiter).
 Every named component, count, and quality metric is verified against README.md and src/.
@@ -22,22 +22,22 @@ Restructure 2026-05-16 (PITCH Audit): "Built for surfaces nobody else builds for
 
 Other libraries ship `Button` and `Card`. We shipped `AgentEvent`, `ToolCall`, `DeploymentRow`, `BuildLogStream`, and 98 others.
 
-Generic primitives optimize for marketing pages. `@usetheo/ui` is built for the surfaces agents and dashboards actually need. You write product logic. We ship the interface.
+Generic primitives optimize for marketing pages. `@theokit/ui` is built for the surfaces agents and dashboards actually need. You write product logic. We ship the interface.
 
 ## What you get
 
 - **102 components, agent-shaped.** 81 primitives (`AgentEvent`, `ChatMessage`, `ToolCall`, `MCPServerCard`, `MemoryEditor`, `PermissionMatrix`, `TokenUsageChart`, `ContextCard`, `SkillCard`, `RunStats`, …) and 21 composites (`AgentComposer`, `ChatComposer`, `DeploymentRow`, `EnvVarEditor`, `RollbackUI`, `CommandPalette`, `PermissionModal`, …). No `Button`-shaped libraries pretending to fit agent surfaces.
 - **Three themes, runtime-swappable.** Violet Forge (dark, AI workspace energy), Classic Paper (warm light, document-first), Aurora Terminal (high-contrast dev). Swap live via `<ThemeProvider />`. Or define your own — HSL-split CSS variables, no fork required.
-- **Copy-paste OR install.** `npx shadcn add` to copy a single component into your repo, or `pnpm add @usetheo/ui` for the whole package. Same registry powers both paths.
+- **Copy-paste OR install.** `npx shadcn add` to copy a single component into your repo, or `pnpm add @theokit/ui` for the whole package. Same registry powers both paths.
 - **Framework-agnostic.** React peer-deps only. Drop into Vite, Next 14+, Remix, Astro, Tanstack Start.
 - **Quality-gated, not promised.** 453 tests passing. Zero a11y violations across 126 Ladle stories asserted by axe-core. Bundle size enforced ±5% of baseline. Structural taxonomy enforced. No PR ships otherwise.
 
 ## Feel it
 
 ```tsx
-import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@usetheo/ui";
-import "@usetheo/ui/tokens.css";
-import "@usetheo/ui/styles.css";
+import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@theokit/ui";
+import "@theokit/ui/tokens.css";
+import "@theokit/ui/styles.css";
 
 export default function App() {
   return (
@@ -60,11 +60,11 @@ Three components. Three primitives nobody else ships. Themed by default.
 - **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
 - **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
 
-## Why @usetheo/ui
+## Why @theokit/ui
 
 The agent UI gap is real. Most teams reach for shadcn for the primitives and then build the agent-specific parts from scratch — losing weeks before shipping a real surface.
 
-| Surface need | `@usetheo/ui` | shadcn / Radix | Tremor | Build it yourself |
+| Surface need | `@theokit/ui` | shadcn / Radix | Tremor | Build it yourself |
 |---|---|---|---|---|
 | **Frame** | The UI your agent already needs | "Copy-paste components" | "Dashboard primitives" | (you) |
 | Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
@@ -90,13 +90,13 @@ Agent surfaces emerged as a UI category in 2026. The components nobody had a nam
 ### Install — two paths
 
 ```bash
-pnpm add @usetheo/ui
+pnpm add @theokit/ui
 ```
 
 ```tsx
-import { Button, ThemeProvider } from "@usetheo/ui";
-import "@usetheo/ui/tokens.css";
-import "@usetheo/ui/styles.css";
+import { Button, ThemeProvider } from "@theokit/ui";
+import "@theokit/ui/tokens.css";
+import "@theokit/ui/styles.css";
 
 <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
   <Button>Deploy</Button>
@@ -119,7 +119,7 @@ Every item in [`registry/r/`](./registry/r) is a standalone copy-paste unit with
 Inject `<ThemeScript />` in `<head>` to prevent FOUC and hydration mismatch:
 
 ```tsx
-import { ThemeProvider, ThemeScript } from "@usetheo/ui";
+import { ThemeProvider, ThemeScript } from "@theokit/ui";
 
 <html lang="en" suppressHydrationWarning>
   <head>
@@ -141,13 +141,13 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 | `classic-paper` | Warm light, document-first reading | Indigo `#2563EB` | Amber `#F59E0B` |
 | `aurora-terminal` | High-contrast dev terminal feel | Cyan-aurora `#3DD9D6` | Aurora pink `#FF5C8A` |
 
-Define your own by extending `Theme` from `@usetheo/ui`. HSL-split CSS variables drive every component. Full spec: [`docs/design-system.md`](./docs/design-system.md).
+Define your own by extending `Theme` from `@theokit/ui`. HSL-split CSS variables drive every component. Full spec: [`docs/design-system.md`](./docs/design-system.md).
 
 ### Taxonomy — mechanical, not subjective
 
 Components split by a single rule:
 
-- **Primitive** — imports no other `@usetheo/ui` component. 81 of these.
+- **Primitive** — imports no other `@theokit/ui` component. 81 of these.
 - **Composite** — depends on one or more primitives via the barrel. 21 of these.
 
 Enforced by [`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts). Cross-imports across the boundary fail the gate.
@@ -155,9 +155,9 @@ Enforced by [`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gat
 ### Bundle & module format
 
 - **ESM-only.** Single `dist/index.js` (ESM) + per-component `.d.ts`. No CJS. Modern Vite / Next 14+ / Remix / Astro are ESM-first by assumption.
-- **Tree-shaking via the barrel.** `sideEffects: ["**/*.css"]` lets bundlers drop unused components from `import { Button } from "@usetheo/ui"`.
-- **CSS distribution.** `dist/styles.css` is the recommended single import (tokens + fonts + Tailwind base/components/utilities). `@usetheo/ui/tokens.css`, `@usetheo/ui/fonts.css`, and `@usetheo/ui/fonts-cdn.css` are available for finer control.
-- **Self-hosted fonts.** Geist Sans + Geist Mono ship as woff2 in `dist/fonts/` (~290 KB total). Opt into Google Fonts CDN with `@import "@usetheo/ui/fonts-cdn.css"` if you prefer not to host static assets.
+- **Tree-shaking via the barrel.** `sideEffects: ["**/*.css"]` lets bundlers drop unused components from `import { Button } from "@theokit/ui"`.
+- **CSS distribution.** `dist/styles.css` is the recommended single import (tokens + fonts + Tailwind base/components/utilities). `@theokit/ui/tokens.css`, `@theokit/ui/fonts.css`, and `@theokit/ui/fonts-cdn.css` are available for finer control.
+- **Self-hosted fonts.** Geist Sans + Geist Mono ship as woff2 in `dist/fonts/` (~290 KB total). Opt into Google Fonts CDN with `@import "@theokit/ui/fonts-cdn.css"` if you prefer not to host static assets.
 
 ### Quality gates
 
@@ -194,7 +194,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 ## Where this fits
 
-`@usetheo/ui` is a **community auxiliary** of the [usetheo](https://usetheo.dev) ecosystem.
+`@theokit/ui` is a **community auxiliary** of the [usetheo](https://usetheo.dev) ecosystem.
 
 | Step | Product | What it does |
 |---|---|---|
@@ -203,7 +203,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 | 3 | **TheoKit** | The full-stack framework for AI agents. Routing, auth, real-time, deploy. |
 | 4 | **Theo PaaS** | Managed runtime. `theo deploy` → live URL in ~4 minutes. **The paid product; the OSS stack is the funnel.** |
 
-> `@usetheo/ui` runs standalone — no commitment to the rest of the stack. Pairs naturally with TheoKit (the framework) and `@usetheo/sdk` (the agent runtime) when you build agents end-to-end.
+> `@theokit/ui` runs standalone — no commitment to the rest of the stack. Pairs naturally with TheoKit (the framework) and `@theokit/sdk` (the agent runtime) when you build agents end-to-end.
 
 ## Mission
 
@@ -211,7 +211,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 **Theo's vision.** Be to AI agents what Vercel became to the web: the default, obvious, developer-respected path — with an open runtime end to end.
 
-**`@usetheo/ui`'s vision.** The component library every AI agent UI and cloud dashboard converges on — built for surfaces nobody else builds for.
+**`@theokit/ui`'s vision.** The component library every AI agent UI and cloud dashboard converges on — built for surfaces nobody else builds for.
 
 > The full identity (mission, vision, values) lives in [`/IDENTITY.md`](../IDENTITY.md).
 
@@ -231,7 +231,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 **Primary:** Install the library.
 
 ```bash
-pnpm add @usetheo/ui
+pnpm add @theokit/ui
 ```
 
 **Or copy individual components shadcn-style:**
@@ -240,7 +240,7 @@ pnpm add @usetheo/ui
 npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
 ```
 
-**Next in the funnel:** Build any React surface today — install `@usetheo/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
+**Next in the funnel:** Build any React surface today — install `@theokit/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
 
 **Tertiary:** [Component catalog](https://github.com/usetheodev/theo-ui#component-catalog) · Gallery (coming soon at ui.usetheo.dev) · [GitHub](https://github.com/usetheodev/theo-ui)
 

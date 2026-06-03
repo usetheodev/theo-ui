@@ -54,10 +54,10 @@ RFC `docs/rfcs/0004-slide-rich-content.md` (T0.5) formaliza a entrada destas fea
 4. **Header/Footer overlays** via frontmatter (`header: "text"`, `footer: "text"`) renderizam como `<div>` absolutos top/bottom (respeitam padding do slide).
 5. **Pagination overlay** ativado via frontmatter (`paginate: true`) — slide individual ganha indicator no canto. (Deck-level já existe em SlideDeck.)
 6. **Plugin architecture** funcional: `<Slide plugins={[shikiPlugin, mathPlugin, mermaidPlugin, emojiPlugin]}>` aceita array tipado. Cada plugin é função `(opts) => SlidePlugin` com hooks `mdastTransform?`, `hastTransform?`, `components?`.
-7. **Shiki plugin** (`@usetheo/ui/slide/plugins/shiki`) — peer-dep opcional `shiki`. Detecta ` ```lang ` no mdast e injeta classes/spans estilo Shiki. Lazy: grammar do `lang` carregado on-demand.
-8. **KaTeX plugin** (`@usetheo/ui/slide/plugins/math`) — peer-deps opcionais `micromark-extension-math` + `mdast-util-math` + `katex`. Inline `$E=mc^2$` + block `$$ ... $$`.
-9. **Mermaid plugin** (`@usetheo/ui/slide/plugins/mermaid`) — peer-dep opcional `mermaid`. Detecta ` ```mermaid ` no hast e substitui por `<MermaidDiagram>` que renderiza SVG.
-10. **Emoji plugin** (`@usetheo/ui/slide/plugins/emoji`) — zero peer-deps. Substring replacement de 100 emoji shortcodes comuns (`:smile:`, `:rocket:`, `:check:`, etc.).
+7. **Shiki plugin** (`@theokit/ui/slide/plugins/shiki`) — peer-dep opcional `shiki`. Detecta ` ```lang ` no mdast e injeta classes/spans estilo Shiki. Lazy: grammar do `lang` carregado on-demand.
+8. **KaTeX plugin** (`@theokit/ui/slide/plugins/math`) — peer-deps opcionais `micromark-extension-math` + `mdast-util-math` + `katex`. Inline `$E=mc^2$` + block `$$ ... $$`.
+9. **Mermaid plugin** (`@theokit/ui/slide/plugins/mermaid`) — peer-dep opcional `mermaid`. Detecta ` ```mermaid ` no hast e substitui por `<MermaidDiagram>` que renderiza SVG.
+10. **Emoji plugin** (`@theokit/ui/slide/plugins/emoji`) — zero peer-deps. Substring replacement de 100 emoji shortcodes comuns (`:smile:`, `:rocket:`, `:check:`, etc.).
 11. Bundle do barrel `dist/index.js` **inalterado**.
 12. Bundle do Slide `dist/slide/index.js` **≤ 15 KB** (atual 13 KB; +2 KB para Tier 1 inline + plugin scaffolding).
 13. Cada plugin sub-bundle (`dist/slide/plugins/{shiki,math,mermaid,emoji}/index.js`) **≤ 5 KB sem peer-deps embedded**.
@@ -70,7 +70,7 @@ RFC `docs/rfcs/0004-slide-rich-content.md` (T0.5) formaliza a entrada destas fea
 ### D1 — Plugin system: explicit `plugins` prop, não auto-detect
 - **Decisão:** `<Slide plugins={[...]}>` aceita array de funções `SlidePlugin`. Sem auto-detect via `require.resolve` ou similar. Cada plugin é importado pelo consumer e passado explicitamente.
 - **Rationale:** Auto-detect cria comportamento condicional invisível (slide renderiza diferente dependendo se a peer-dep está no `node_modules`). Explicit é previsível, debuggable, e respeita o princípio de "consumer controla seu bundle".
-- **Consequences:** Habilita: tipos sólidos, comportamento determinístico, lazy loading garantido. Constrange: consumer escreve `import { shikiPlugin } from "@usetheo/ui/slide/plugins/shiki"; <Slide plugins={[shikiPlugin()]} />` — duas linhas extras vs auto-detect.
+- **Consequences:** Habilita: tipos sólidos, comportamento determinístico, lazy loading garantido. Constrange: consumer escreve `import { shikiPlugin } from "@theokit/ui/slide/plugins/shiki"; <Slide plugins={[shikiPlugin()]} />` — duas linhas extras vs auto-detect.
 
 ### D2 — Plugin shape: `{ mdastTransform?, hastTransform?, components? }`
 - **Decisão:** Cada plugin retorna objeto com 3 hooks opcionais, todos async:
@@ -117,22 +117,22 @@ RFC `docs/rfcs/0004-slide-rich-content.md` (T0.5) formaliza a entrada destas fea
 - **Consequences:** Habilita: backgrounds via markdown inline (sem ir ao frontmatter). Constrange: usuário que QUER renderizar `![bg](url)` como imagem normal não pode — alt `bg` é reservado. Documentar.
 
 ### D9 — Syntax highlighting via Shiki (não Prismjs)
-- **Decisão:** Plugin `@usetheo/ui/slide/plugins/shiki`. Peer-dep `shiki ^1.0` opcional. Plugin recebe opts `{ themes: ["github-light","github-dark"], langs: ["ts","js","python",...] }`. Pre-renderiza highlighted HTML no hastTransform stage. Lazy imports tudo.
+- **Decisão:** Plugin `@theokit/ui/slide/plugins/shiki`. Peer-dep `shiki ^1.0` opcional. Plugin recebe opts `{ themes: ["github-light","github-dark"], langs: ["ts","js","python",...] }`. Pre-renderiza highlighted HTML no hastTransform stage. Lazy imports tudo.
 - **Rationale:** Shiki usa TextMate grammars (mesmas do VS Code) — fidelidade visual superior a Prismjs. Bundle maior bruto, mas dado o caso de uso (apresentações com code) o trade-off favorece qualidade. Lazy + opt-in mitigam custo.
 - **Consequences:** Habilita: code blocks com cores idênticas ao VS Code. Constrange: peer-dep pesada (~50 KB com 5 línguas; ~200 KB com 30). Consumer escolhe quais línguas pré-carregar.
 
 ### D10 — Math via micromark-extension-math + mdast-util-math + KaTeX
-- **Decisão:** Plugin `@usetheo/ui/slide/plugins/math`. 3 peer-deps opcionais: `micromark-extension-math`, `mdast-util-math`, `katex`. Inline `$E=mc^2$` (single dollar) e block `$$ ... $$`. Renderização: KaTeX gera HTML pré-renderizado (não fórmula JS interativa).
+- **Decisão:** Plugin `@theokit/ui/slide/plugins/math`. 3 peer-deps opcionais: `micromark-extension-math`, `mdast-util-math`, `katex`. Inline `$E=mc^2$` (single dollar) e block `$$ ... $$`. Renderização: KaTeX gera HTML pré-renderizado (não fórmula JS interativa).
 - **Rationale:** KaTeX é o padrão de facto (mais rápido que MathJax, sem deps). Inline + block cobre 99% dos casos. Trade-off: KaTeX CSS + fontes devem ser servidos separadamente — consumer importa `katex/dist/katex.min.css`.
 - **Consequences:** Habilita: fórmulas matemáticas profissionais. Constrange: requer CSS + fontes setup pelo consumer; documentado.
 
 ### D11 — Mermaid via hast-level detection + lazy component
-- **Decisão:** Plugin `@usetheo/ui/slide/plugins/mermaid`. Peer-dep `mermaid ^11` opcional. Detecta `<pre><code class="language-mermaid">` no hast → substitui por um placeholder hast element `<div data-theo-slide-mermaid>`. O `components` map do plugin troca essa div por `<MermaidDiagram>` React component que lazy-importa `mermaid`, renderiza SVG via `mermaid.render()` numa div invisível, e injeta no DOM.
+- **Decisão:** Plugin `@theokit/ui/slide/plugins/mermaid`. Peer-dep `mermaid ^11` opcional. Detecta `<pre><code class="language-mermaid">` no hast → substitui por um placeholder hast element `<div data-theo-slide-mermaid>`. O `components` map do plugin troca essa div por `<MermaidDiagram>` React component que lazy-importa `mermaid`, renderiza SVG via `mermaid.render()` numa div invisível, e injeta no DOM.
 - **Rationale:** Mermaid não tem mdast plugin oficial — todo mundo faz hast-level swap. Lazy mandatory porque mermaid sozinho é 370 KB. Render no client (mermaid não SSR friendly — usa DOM measurement).
 - **Consequences:** Habilita: fluxogramas, sequence diagrams, mindmaps, etc. Constrange: render client-only (slide com mermaid mostra placeholder no SSR).
 
 ### D12 — Emoji shortcodes via roll-our-own map (sem twemoji)
-- **Decisão:** Plugin `@usetheo/ui/slide/plugins/emoji`. Zero peer-deps. Embutido: map literal de ~100 emojis comuns (`:smile:` → "😀", `:rocket:` → "🚀", `:check:` → "✅", `:warning:` → "⚠️", `:fire:` → "🔥", etc.). hastTransform walka text nodes e replace shortcodes via regex.
+- **Decisão:** Plugin `@theokit/ui/slide/plugins/emoji`. Zero peer-deps. Embutido: map literal de ~100 emojis comuns (`:smile:` → "😀", `:rocket:` → "🚀", `:check:` → "✅", `:warning:` → "⚠️", `:fire:` → "🔥", etc.). hastTransform walka text nodes e replace shortcodes via regex.
 - **Rationale:** Twemoji adicionaria 200 KB+ para a "feature" de emoji bonito. Unicode nativo já funciona em todos OS modernos. 100 emojis cobre 99% dos casos. v0.5 pode adicionar plugin alternativo `slide/plugins/emoji-twemoji` se demanda real.
 - **Consequences:** Habilita: shortcodes sem dep. Constrange: emojis seguem aparência nativa do OS do usuário (pode variar entre Mac/Windows/Linux); documentar.
 
@@ -142,8 +142,8 @@ RFC `docs/rfcs/0004-slide-rich-content.md` (T0.5) formaliza a entrada destas fea
 - **Consequences:** Habilita: composability previsível. Constrange: documentação explícita necessária; tests cobrem ordem.
 
 ### D14 — Plugin sub-bundles via tsup multi-entry
-- **Decisão:** Cada plugin é um sub-bundle em `dist/slide/plugins/{shiki,math,mermaid,emoji}/index.js`. tsup entries adicionais. Peer-deps específicas de cada plugin (shiki, katex, mermaid, etc.) declaradas em external. Subpaths declarados em ISOLATED_SUBPATHS: `@usetheo/ui/slide/plugins/shiki` etc.
-- **Rationale:** Cada plugin tem peer-deps próprias; agrupar todos em `@usetheo/ui/slide` violaria bundle isolation. Sub-subpath é a evolução natural (Slide já é subpath; plugins ficam um nível abaixo).
+- **Decisão:** Cada plugin é um sub-bundle em `dist/slide/plugins/{shiki,math,mermaid,emoji}/index.js`. tsup entries adicionais. Peer-deps específicas de cada plugin (shiki, katex, mermaid, etc.) declaradas em external. Subpaths declarados em ISOLATED_SUBPATHS: `@theokit/ui/slide/plugins/shiki` etc.
+- **Rationale:** Cada plugin tem peer-deps próprias; agrupar todos em `@theokit/ui/slide` violaria bundle isolation. Sub-subpath é a evolução natural (Slide já é subpath; plugins ficam um nível abaixo).
 - **Consequences:** Habilita: bundle granular — consumer paga apenas pelos plugins que usa. Constrange: 4 entries novos no tsup; 4 sync-exports entries novas.
 
 ### D16 — Plugin error isolation: try/catch around every plugin invocation
@@ -1233,7 +1233,7 @@ VERIFY:  pnpm test
 ```
 
 #### Acceptance Criteria
-- [ ] Subpath `@usetheo/ui/slide/plugins/shiki` resolve
+- [ ] Subpath `@theokit/ui/slide/plugins/shiki` resolve
 - [ ] 6 tests verdes
 - [ ] Bundle `dist/slide/plugins/shiki/index.js` < 5 KB sem shiki
 - [ ] Peer-dep ausente: degrade graceful para `<pre><code>` + erro tipado (EC-2)

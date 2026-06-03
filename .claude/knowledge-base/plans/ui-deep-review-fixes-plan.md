@@ -1,12 +1,12 @@
-# Plan: `@usetheo/ui` — Deep Review Remediation
+# Plan: `@theokit/ui` — Deep Review Remediation
 
-> **Version 1.0** — Este plano corrige integralmente os 7 BLOCKERs, 8 HIGH, 15 MEDIUM e ~26 LOW/NIT levantados pela auditoria técnica de 2026-05-13 sobre `@usetheo/ui`. O outcome esperado é (a) artefato `dist/` consumível em projeto externo via `pnpm add @usetheo/ui` sem assets quebrados; (b) registry shadcn livre de cssVars stale e JSDoc enganoso; (c) componentes com paridade documental real (README ↔ código ↔ docs/design-system.md); (d) `CommandPalette` + `ModeSwitcher` em conformidade com a própria Quality Gate §4; (e) suporte a `prefers-reduced-motion`, SSR seguro no `ThemeProvider`, sem fake affordances; (f) `CHANGELOG.md` + `LICENSE` presentes e bloqueados em CI; (g) testes com cobertura comportamental + a11y assertions via `jest-axe` nos primitives críticos. Pós-execução, o pacote está apto para tag `0.1.0-beta` no npm.
+> **Version 1.0** — Este plano corrige integralmente os 7 BLOCKERs, 8 HIGH, 15 MEDIUM e ~26 LOW/NIT levantados pela auditoria técnica de 2026-05-13 sobre `@theokit/ui`. O outcome esperado é (a) artefato `dist/` consumível em projeto externo via `pnpm add @theokit/ui` sem assets quebrados; (b) registry shadcn livre de cssVars stale e JSDoc enganoso; (c) componentes com paridade documental real (README ↔ código ↔ docs/design-system.md); (d) `CommandPalette` + `ModeSwitcher` em conformidade com a própria Quality Gate §4; (e) suporte a `prefers-reduced-motion`, SSR seguro no `ThemeProvider`, sem fake affordances; (f) `CHANGELOG.md` + `LICENSE` presentes e bloqueados em CI; (g) testes com cobertura comportamental + a11y assertions via `jest-axe` nos primitives críticos. Pós-execução, o pacote está apto para tag `0.1.0-beta` no npm.
 
 ## Context
 
 A revisão técnica produzida em `deep-review-2026-05-13` documentou divergências significativas entre o discurso público (README, badges, design-system.md) e o estado real do código. Os achados materiais:
 
-- **Empacotamento quebrado**: `dist/styles.css` referencia `./fonts.css` que não é copiado pelo `tsup.config.ts:12` (`onSuccess` cp só de `tokens.css` e `global.css`). Todo consumidor npm recebe 404 ao importar `@usetheo/ui/styles.css`.
+- **Empacotamento quebrado**: `dist/styles.css` referencia `./fonts.css` que não é copiado pelo `tsup.config.ts:12` (`onSuccess` cp só de `tokens.css` e `global.css`). Todo consumidor npm recebe 404 ao importar `@theokit/ui/styles.css`.
 - **Fontes da verdade conflitantes**: `tokens.css` declara Geist + paleta Vercel-grayscale; `docs/design-system.md` ainda descreve Boska/Switzer + paleta warm violet-tinted; `registry/tokens.json` `cssVars` repete a paleta antiga; JSDoc de `violet-forge.ts:7` cita Boska/Switzer literalmente. Três artefatos, três versões.
 - **Catálogo do README mente**: badges `components-84` e `tests-162` (real 99 / 389); composites listam 12 (real 14); seis nomes inexistentes anunciados como componentes (`ToolPalette`, `TerminalPane`, `TerminalLine`, `TaskBreadcrumbs`, `TaskStatusPill`, `ShellCommandCard`).
 - **Self-violation de Quality Gate**: `docs/quality-gates.md §4` exige "active item + arrow keys + Enter + Escape + ranking" para command surfaces; `command-palette.tsx` ship só substring + click.
@@ -17,11 +17,11 @@ A revisão técnica produzida em `deep-review-2026-05-13` documentou divergênci
 - **Doc-vs-code drift menor**: PermissionMatrix JSDoc promete `toolOptions=[]` esconde form (não esconde — array vazio é truthy); Dialog overlay JSDoc diz "violet-tinted 60%" mas código tem `bg-background/80`; `defaultMode="light"` contra README "dark-first".
 - **TS modernidade**: 3 arquivos usam `JSX.Element` global (quebra React 19+); composites importam `*/<name>.js` ao invés de `*/index.js` (bypassa barrel).
 
-Evidência completa: `<conversation>` desta sessão, seção "Deep Technical Review — `@usetheo/ui`".
+Evidência completa: `<conversation>` desta sessão, seção "Deep Technical Review — `@theokit/ui`".
 
 ## Objective
 
-"Done" = (a) `pnpm pack` produz tarball que instala em projeto vite vazio com `import "@usetheo/ui/styles.css"` resolvendo 200 para fonts.css + Geist carregando; (b) `pnpm quality:gates` continua verde com gates novos que bloqueiam regressão das classes de bug encontradas; (c) auditoria axe-core em primitives críticos retorna zero violations; (d) README, docs/design-system.md, JSDocs e registry concordam em 100% sobre nomes, contagens, paleta e tipografia.
+"Done" = (a) `pnpm pack` produz tarball que instala em projeto vite vazio com `import "@theokit/ui/styles.css"` resolvendo 200 para fonts.css + Geist carregando; (b) `pnpm quality:gates` continua verde com gates novos que bloqueiam regressão das classes de bug encontradas; (c) auditoria axe-core em primitives críticos retorna zero violations; (d) README, docs/design-system.md, JSDocs e registry concordam em 100% sobre nomes, contagens, paleta e tipografia.
 
 Metas mensuráveis:
 1. **Zero BLOCKERs abertos** após Fases 1-3.
@@ -779,7 +779,7 @@ package.json — exports field
 #### TDD
 ```
 RED:     'ls dist | grep fonts.css' returns nothing (before fix)
-RED:     fixture test: in tests/fixture-consumer/, importing @usetheo/ui/styles.css fails to resolve fonts.css (vite throws)
+RED:     fixture test: in tests/fixture-consumer/, importing @theokit/ui/styles.css fails to resolve fonts.css (vite throws)
 GREEN:   after fix, fonts.css present; vite resolves; Network tab in DevTools shows Geist 200
 REFACTOR: None
 VERIFY:  pnpm build && ls dist | grep fonts.css
@@ -1824,8 +1824,8 @@ Operacionalmente:
 3. `pnpm add ../theo-desktop/usetheo-ui-0.1.0-beta.tgz cmdk`.
 4. Em `src/main.tsx`:
    ```tsx
-   import "@usetheo/ui/styles.css";
-   import { ThemeProvider, Button, CommandPalette, ChatComposer, BuildLogStream } from "@usetheo/ui";
+   import "@theokit/ui/styles.css";
+   import { ThemeProvider, Button, CommandPalette, ChatComposer, BuildLogStream } from "@theokit/ui";
    ```
 5. Renderizar uma página com:
    - 3 themes via ThemeSwitcher.

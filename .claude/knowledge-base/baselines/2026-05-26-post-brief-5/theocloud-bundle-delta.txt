@@ -5,19 +5,19 @@ Source: cd theo/cloud/dashboard && pnpm run build && size-limit
 Methodology: vite build (rollup), brotli-compressed size of named chunks.
 Reference: Brief #4 evidence file (2026-05-25-post-subpath).
 
-BEFORE (@usetheo/ui@0.10.0-next.0, no Brief #5 components imported)
+BEFORE (@theokit/ui@0.10.0-next.0, no Brief #5 components imported)
 -------------------------------------------------------------------
-@usetheo/ui chunk:    10.96 KB brotli  (vite chunk: theo-ui-*.js)
+@theokit/ui chunk:    10.96 KB brotli  (vite chunk: theo-ui-*.js)
 TOTAL initial JS:    134.68 KB brotli
 
-AFTER (@usetheo/ui@0.11.0-next.0, no consumer migration yet — pure dep bump)
+AFTER (@theokit/ui@0.11.0-next.0, no consumer migration yet — pure dep bump)
 ---------------------------------------------------------------------------
-@usetheo/ui chunk:    10.98 KB brotli  (vite chunk: theo-ui-*.js, 43.32 KB minified)
+@theokit/ui chunk:    10.98 KB brotli  (vite chunk: theo-ui-*.js, 43.32 KB minified)
 TOTAL initial JS:    135.56 KB brotli
 
 DELTA
 -----
-@usetheo/ui chunk:    +0.02 KB brotli  (+0.2%)
+@theokit/ui chunk:    +0.02 KB brotli  (+0.2%)
 TOTAL initial JS:     +0.88 KB brotli  (+0.6%)
 
 Per-chunk cap (post-0.10 v1.4 — 18 KB):  passes with 7.02 KB headroom (was 7.04 KB).
@@ -57,7 +57,7 @@ Expected post-migration delta (TBD per Brief #6, after consumer PR):
 
 Raw size-limit output (after, 0.11.0-next.0):
 
-  02 — @usetheo/ui (design system, post-0.10 per-component dist)
+  02 — @theokit/ui (design system, post-0.10 per-component dist)
   Size limit:   18 kB
   Size:         10.98 kB brotlied
 

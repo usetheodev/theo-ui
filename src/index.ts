@@ -1,4 +1,4 @@
-// @usetheo/ui — barrel entry.
+// @theokit/ui — barrel entry.
 //
 // Architecture (see docs/architecture.md):
 //   - lib/         pure utilities (cn) — no React state
@@ -89,7 +89,7 @@ export type {
 export type { TaskStatus, TaskStep, TaskStepStatus } from "./types/task.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PRIMITIVES — atomic, do not depend on any other @usetheo/ui component.
+// PRIMITIVES — atomic, do not depend on any other @theokit/ui component.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Foundations

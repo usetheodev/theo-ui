@@ -72,7 +72,7 @@ import {
   anthropicStyle,
   openaiStyle,
   linearGlass,
-} from "@usetheo/ui";
+} from "@theokit/ui";
 
 <ThemeProvider themes={builtinThemes} defaultTheme="dracula">
   {children}
@@ -111,7 +111,7 @@ All 10 themes pass on the gate at commit time. Highlights from `validateThemeCon
 
 - **Apenas 3 dev themes (Dracula / One Dark / GitHub Dark)** sem inspirações corporate: simples, sem trademark risk, mas perde o "AI-modern feel" pedido.
 - **Replicar fontes (Söhne, Inter)**: ~250 KB extra, custo desproporcional.
-- **Empacotar temas como subpath separado (`@usetheo/ui/themes/dracula`)**: bundle isolation real mas DX pior (4 imports vs 1). Rejeitado em favor de barrel.
+- **Empacotar temas como subpath separado (`@theokit/ui/themes/dracula`)**: bundle isolation real mas DX pior (4 imports vs 1). Rejeitado em favor de barrel.
 
 ## 8. Unresolved questions
 

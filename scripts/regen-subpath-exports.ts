@@ -16,7 +16,7 @@
  * D5 escalation note: per-component `.d.ts` files are NOT emitted by
  * tsup (would OOM the worker pool with 114 entries). Instead, each
  * subpath entry's `types` field points at the barrel `dist/index.d.ts`
- * — TypeScript still resolves `import { Alert } from "@usetheo/ui/alert"`
+ * — TypeScript still resolves `import { Alert } from "@theokit/ui/alert"`
  * because `Alert` is exported from the barrel `.d.ts` too. The JS dist
  * (where tree-shaking actually happens) is per-component and correct.
  */
@@ -116,7 +116,7 @@ if (stragglers.length > 0) {
 // Step 3.5 (EC-2 fix): silent-skip guard. Compare source folders
 // against emitted entries. If tsup emitted a partial build, step 2
 // above silently skipped that folder. That would leave the consumer
-// with `import { X } from "@usetheo/ui/x"` returning
+// with `import { X } from "@theokit/ui/x"` returning
 // ERR_PACKAGE_PATH_NOT_EXPORTED at runtime. Fail loud here.
 const expectedSlugs = new Set<string>();
 for (const layer of ["primitives", "composites"] as const) {

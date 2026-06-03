@@ -3,7 +3,7 @@
  * speaker notes, thumbnails, presenter view, fullscreen, PDF export, hash
  * routing, custom layout. Mirrors `playground/slide-deck-demo.tsx`.
  */
-import type { SlideDeckSlide, SlideDeckTransition } from "@usetheo/ui/slide-deck";
+import type { SlideDeckSlide, SlideDeckTransition } from "@theokit/ui/slide-deck";
 
 export interface SlideDeckScene {
   id: string;

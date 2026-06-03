@@ -151,7 +151,7 @@ function Row({ entry, onRemove }: RowProps) {
         // fail-safe (user can still copy manually).
         if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
           // biome-ignore lint/suspicious/noConsole: dev-only clipboard diagnostic (T7.6)
-          console.warn("[@usetheo/ui] EnvVarEditor clipboard write failed:", err);
+          console.warn("[@theokit/ui] EnvVarEditor clipboard write failed:", err);
         }
       });
     }

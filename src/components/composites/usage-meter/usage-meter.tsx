@@ -32,7 +32,7 @@ import { Progress } from "../../primitives/progress/index.js";
  *
  * Imports the sibling `<Progress>` primitive via relative path (per RFC
  * dashboard-paas-primitives D3) — primitives must not depend on the
- * `@usetheo/ui` barrel.
+ * `@theokit/ui` barrel.
  */
 
 export interface UsageMetric {

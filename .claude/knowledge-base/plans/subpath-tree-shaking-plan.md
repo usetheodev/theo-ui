@@ -11,12 +11,12 @@
 > TheoCloud dashboard bundle audit (2026-05-24). All ~100 subpath
 > exports declared in `package.json#exports` since 0.7.0 (Brief #1)
 > currently point at the same `./dist/index.js` (417 KB minified),
-> making them cosmetic. `import { Alert } from "@usetheo/ui/alert"`
-> resolves byte-identical to `import { Alert } from "@usetheo/ui"`,
+> making them cosmetic. `import { Alert } from "@theokit/ui/alert"`
+> resolves byte-identical to `import { Alert } from "@theokit/ui"`,
 > and barrel tree-shaking fails in consumers because of `forwardRef`
 > side-effect bailouts + `Object.assign` compound components + the
 > barrel re-export chain. Result for TheoCloud (using ~30 of 116
-> components): the `@usetheo/ui` chunk is **43.05 KB brotli /
+> components): the `@theokit/ui` chunk is **43.05 KB brotli /
 > 240.56 KB minified**, with **0 KB dropped** by Vite/Rollup
 > tree-shaking. This plan extends the per-component dist pattern that
 > already works for `whiteboard` / `slide` / `slide-deck` /
@@ -37,11 +37,11 @@
     `slide-deck/index`, `vite-plugin`, `preset-v3-legacy` (per RFC
     0001 / 0002 / 0003 / 0008 — each owns a real `dist/<name>/`).
 - **Consumer impact (TheoCloud `MEET-ASYNC-AMENDMENT-2026-05-24-002`):**
-  - Current `@usetheo/ui` chunk: 43.05 KB brotli (cap 50 KB, 14% headroom).
+  - Current `@theokit/ui` chunk: 43.05 KB brotli (cap 50 KB, 14% headroom).
   - Total initial JS: 178.28 KB brotli (cap 240 KB, 26% headroom).
   - Headroom is ENOUGH for Phase 0 of consumer migration, NOT enough
     for 6-8 more dashboard pages (each ~2-5 KB brotli incremental
-    `@usetheo/ui` surface).
+    `@theokit/ui` surface).
 - **Why tree-shaking from the barrel fails (verified analysis):**
   - `forwardRef<...>(...)` is a call expression — Rollup's
     conservative side-effect analysis bails out.
@@ -70,9 +70,9 @@
 
 ## Objective
 
-Ship `@usetheo/ui@0.10.0-next.0` with **real per-component dist
+Ship `@theokit/ui@0.10.0-next.0` with **real per-component dist
 files** for every primitive + composite, with the barrel `import { X }
-from "@usetheo/ui"` preserved unchanged (back-compat). Acceptance
+from "@theokit/ui"` preserved unchanged (back-compat). Acceptance
 gate is the **measured consumer bundle-delta** against TheoCloud
 dashboard: ≥10 KB brotli reduction after migrating its top 10
 imports to subpath form.
@@ -87,7 +87,7 @@ Mensurable goals:
 - ADR `subpath-exports-per-component.md` in `.claude/knowledge-base/decisions/`
 - CHANGELOG entry under `[0.10.0-next.0]` with bundle-delta numbers
 - `pnpm test` 1577+ tests green, `pnpm typecheck` zero errors, `pnpm ladle:build` green
-- TheoCloud `@usetheo/ui` chunk: 43.05 → ≤33 KB brotli (≥10 KB savings) after top 10 subpath migration
+- TheoCloud `@theokit/ui` chunk: 43.05 → ≤33 KB brotli (≥10 KB savings) after top 10 subpath migration
 - npm publish `0.10.0-next.0 --tag next` + smoke install verifying subpath import returns smaller resolved module
 - theo-opendocs: bump dep, update llms.txt for 0.10, redeploy
 - Dogfood QA pass
@@ -115,7 +115,7 @@ Mensurable goals:
 ### D2 — Barrel stays; per-component dist is additive
 
 - **Decision:** `dist/index.js` (the full barrel) continues to exist
-  and continues to be the target of `import { X } from "@usetheo/ui"`.
+  and continues to be the target of `import { X } from "@theokit/ui"`.
   Per-component dist files (`dist/primitives/<x>/index.js`) are
   **additive** targets reached only via subpath imports.
 - **Rationale:** all existing consumers (TheoCloud, internal apps,
@@ -161,7 +161,7 @@ Mensurable goals:
   natively support per-component CSS extraction without an extra
   build step.
 - **Consequences:**
-  - Consumer still imports `@usetheo/ui/styles.css` once at the app
+  - Consumer still imports `@theokit/ui/styles.css` once at the app
     root. No change.
   - The 91 KB `dist/components.css` is unaffected by this plan.
 
@@ -170,7 +170,7 @@ Mensurable goals:
 - **Decision:** keep `dts: true` for all entries. Per-component
   `.d.ts` files emit alongside `.js`.
 - **Rationale:** TypeScript consumers expect `import { Alert } from
-  "@usetheo/ui/alert"` to resolve types from a `.d.ts` at that
+  "@theokit/ui/alert"` to resolve types from a `.d.ts` at that
   subpath. Pointing `types` at the barrel `dist/index.d.ts` would
   inflate consumer typecheck time (the barrel `.d.ts` is 169 KB).
   Per-component types stay small.
@@ -187,13 +187,13 @@ Mensurable goals:
 - **Decision:** bump `0.9.0-next.0` → `0.10.0-next.0`. Tag `next`.
 - **Rationale:** zero public API broken. New subpath capability
   exposed. Minor by SemVer.
-- **Consequences:** consumers can install `@usetheo/ui@next` and
+- **Consequences:** consumers can install `@theokit/ui@next` and
   opt in to subpath imports at their own pace. No forced migration.
 
 ### D7 — Acceptance is bundle-delta, not "feature shipped"
 
 - **Decision:** the merge gate is **measured ≥10 KB brotli savings**
-  on the TheoCloud `@usetheo/ui` chunk after migrating its top 10
+  on the TheoCloud `@theokit/ui` chunk after migrating its top 10
   imports to subpath. NOT "subpath imports exist and resolve".
 - **Rationale:** subpath imports that fail to actually reduce bundle
   size are worse than the current state — they suggest the fix
@@ -601,7 +601,7 @@ if (stragglers.length > 0) {
 // Step 3.5 (EC-2 fix): silent-skip guard. Compare source folders against
 // emitted entries. If tsup emitted a partial build (e.g. .js without
 // .d.ts), step 2 above silently skipped that folder. That would leave
-// the consumer with `import { X } from "@usetheo/ui/x"` returning
+// the consumer with `import { X } from "@theokit/ui/x"` returning
 // ERR_PACKAGE_PATH_NOT_EXPORTED at runtime. Fail loud here instead.
 const EXCLUDE = new Set(["whiteboard", "slide", "slide-deck"]);
 const expectedSlugs = new Set<string>();
@@ -810,7 +810,7 @@ canonical ADR location in this repo, per CLAUDE.md and prior ADRs).
   - Tarball grows ~50-100 KB compressed. Acceptable.
   - Build time goes up (DTS over 116 entries). Documented; mitigation path (D5) exists.
   - Bundle baseline JSON grows from 18 to ~128 entries.
-- **Validation methodology:** TheoCloud `cd cloud/dashboard && pnpm link <theo-ui> && npm run size` produces deterministic bundle measurements. Acceptance gate: ≥10 KB brotli savings on the `@usetheo/ui` chunk after migrating its top 10 imports.
+- **Validation methodology:** TheoCloud `cd cloud/dashboard && pnpm link <theo-ui> && npm run size` produces deterministic bundle measurements. Acceptance gate: ≥10 KB brotli savings on the `@theokit/ui` chunk after migrating its top 10 imports.
 
 ### T4.2 — Smoke test `vite-plugin` + `preset-v3-legacy` after `splitting: true`
 
@@ -871,13 +871,13 @@ gate.
 7. `pnpm quality:structure` — taxonomy + README drift gates
 8. `pnpm quality:bundle` — new baseline must pass
 9. `pnpm quality:a11y` — 237+ Ladle axe tests
-10. `pnpm ladle:build` — (EC-8) Ladle stories must still resolve all `@usetheo/ui` imports. Ladle uses Vite which reads source paths, so splitting:true in tsup should not impact — but confirm `pnpm ladle:build` exits 0 AND inspect `.ladle/build/` for at least one preview HTML mentioning "Alert" or another component.
+10. `pnpm ladle:build` — (EC-8) Ladle stories must still resolve all `@theokit/ui` imports. Ladle uses Vite which reads source paths, so splitting:true in tsup should not impact — but confirm `pnpm ladle:build` exits 0 AND inspect `.ladle/build/` for at least one preview HTML mentioning "Alert" or another component.
 
 ### T5.2 — Smoke test the barrel from a real install path
 
 #### Objective
-Prove `import { X } from "@usetheo/ui"` (barrel) still works
-identically AND `import { X } from "@usetheo/ui/x"` (subpath) now
+Prove `import { X } from "@theokit/ui"` (barrel) still works
+identically AND `import { X } from "@theokit/ui/x"` (subpath) now
 resolves to a different (smaller) file.
 
 #### Tasks
@@ -887,8 +887,8 @@ resolves to a different (smaller) file.
 3. Verify (EC-3 fix — behavioral equivalence, NOT reference equality):
    ```bash
    node --input-type=module -e "
-     import { Alert } from '@usetheo/ui';
-     import { Alert as AlertSub } from '@usetheo/ui/alert';
+     import { Alert } from '@theokit/ui';
+     import { Alert as AlertSub } from '@theokit/ui/alert';
      import { renderToString } from 'react-dom/server';
      import React from 'react';
      console.log('barrel:', Alert.displayName, '/ subpath:', AltAlert.displayName);
@@ -944,13 +944,13 @@ all placeholders with measured numbers.
 
 1. Pre-check: `curl -s https://registry.npmjs.org/-/whoami -H "Authorization: Bearer $(...)"` returns `usetheodev`
 2. `pnpm publish --access public --tag next --no-git-checks`
-3. `npm view @usetheo/ui@0.10.0-next.0 version` returns `0.10.0-next.0`
-4. Smoke install from npm: `npm install @usetheo/ui@0.10.0-next.0 ...` and verify the new `dist/primitives/alert/index.js` is included in `node_modules`
+3. `npm view @theokit/ui@0.10.0-next.0 version` returns `0.10.0-next.0`
+4. Smoke install from npm: `npm install @theokit/ui@0.10.0-next.0 ...` and verify the new `dist/primitives/alert/index.js` is included in `node_modules`
 
 #### Acceptance Criteria
 
-- [ ] `npm view @usetheo/ui@0.10.0-next.0` returns version
-- [ ] Fresh install includes `node_modules/@usetheo/ui/dist/primitives/alert/index.js`
+- [ ] `npm view @theokit/ui@0.10.0-next.0` returns version
+- [ ] Fresh install includes `node_modules/@theokit/ui/dist/primitives/alert/index.js`
 - [ ] Subpath import from npm install resolves to the per-component dist
 
 #### DoD
@@ -966,7 +966,7 @@ all placeholders with measured numbers.
 #### Files to edit
 
 ```
-/home/paulo/Projetos/usetheo/theo-opendocs/package.json  (MODIFY) — @usetheo/ui: 0.9.0 → 0.10.0
+/home/paulo/Projetos/usetheo/theo-opendocs/package.json  (MODIFY) — @theokit/ui: 0.9.0 → 0.10.0
 ```
 
 ### T7.2 — Update llms.txt
@@ -983,7 +983,7 @@ all placeholders with measured numbers.
 
 1. Bump version line in llms.txt: 0.9.0 → 0.10.0
 2. Add "Subpath imports (NEW 0.10) — every component now ships its
-   own dist file at `@usetheo/ui/<kebab-name>`. Bundle-delta evidence
+   own dist file at `@theokit/ui/<kebab-name>`. Bundle-delta evidence
    in the 0.10.0 CHANGELOG entry." paragraph in the "Import path
    canonical form" section.
 3. Copy updated llms.txt to opendocs public/ paths.
@@ -1007,7 +1007,7 @@ all placeholders with measured numbers.
 
 #### Objective
 Produce the empirical evidence that the fix achieves the acceptance
-goal: ≥10 KB brotli savings on the `@usetheo/ui` chunk in TheoCloud
+goal: ≥10 KB brotli savings on the `@theokit/ui` chunk in TheoCloud
 dashboard after migrating its top 10 imports to subpath form.
 
 #### Evidence
@@ -1034,26 +1034,26 @@ pnpm build
 cd /home/paulo/Projetos/usetheo/theo/cloud/dashboard
 pnpm install
 pnpm run build
-# Note the @usetheo/ui chunk size from the bundle report (current: ~43 KB brotli)
+# Note the @theokit/ui chunk size from the bundle report (current: ~43 KB brotli)
 
 # 3. Link the development theo-ui into the consumer
 pnpm link /home/paulo/Projetos/usetheo/theo-ui
 
 # 4. Migrate top 10 imports to subpath form. EC-4 fix: do NOT use
 # sed — the brief's example shows multi-component imports like
-# `import { Card, Button, Avatar, Alert, ... } from "@usetheo/ui"`
-# which sed `s|import { X } from "@usetheo/ui"|...|g` does NOT match.
+# `import { Card, Button, Avatar, Alert, ... } from "@theokit/ui"`
+# which sed `s|import { X } from "@theokit/ui"|...|g` does NOT match.
 # Sed migration would silently affect ~0 files and produce false-zero
 # bundle delta.
 #
 # Instead, do the migration MANUALLY in ~13 TheoCloud dashboard files:
-#   - In each .tsx that imports from "@usetheo/ui", split the import
+#   - In each .tsx that imports from "@theokit/ui", split the import
 #     line so each of the top 10 components has its own line:
-#       BEFORE:  import { Card, Button, Alert, OtherX, OtherY } from "@usetheo/ui";
-#       AFTER:   import { OtherX, OtherY } from "@usetheo/ui";
-#                import { Card } from "@usetheo/ui/card";
-#                import { Button } from "@usetheo/ui/button";
-#                import { Alert } from "@usetheo/ui/alert";
+#       BEFORE:  import { Card, Button, Alert, OtherX, OtherY } from "@theokit/ui";
+#       AFTER:   import { OtherX, OtherY } from "@theokit/ui";
+#                import { Card } from "@theokit/ui/card";
+#                import { Button } from "@theokit/ui/button";
+#                import { Alert } from "@theokit/ui/alert";
 #
 # Top 10 (from brief inventory): Avatar, Badge, Alert, Button, Card,
 # CodeBlock, ConfirmDialog, CopyButton, DangerZone, EmptyState.
@@ -1068,7 +1068,7 @@ pnpm run build
 pnpm run size  # produces size-limit report
 ```
 
-**Acceptance threshold:** the `@usetheo/ui` chunk in the size-limit
+**Acceptance threshold:** the `@theokit/ui` chunk in the size-limit
 report must drop from ~43 KB brotli to ≤33 KB brotli (≥10 KB savings).
 
 **Capture the report into:**
@@ -1093,7 +1093,7 @@ report must drop from ~43 KB brotli to ≤33 KB brotli (≥10 KB savings).
 #### TDD
 
 ```
-RED: theocloud_bundle_chunk_under_33kb  — size-limit report: @usetheo/ui chunk < 33 KB brotli
+RED: theocloud_bundle_chunk_under_33kb  — size-limit report: @theokit/ui chunk < 33 KB brotli
 RED: theocloud_total_under_240kb        — size-limit report: total initial JS < 240 KB brotli (no regression elsewhere)
 GREEN: link theo-ui → cloud/dashboard, migrate top 10, measure
 VERIFY: cat .claude/knowledge-base/baselines/2026-05-25-post-subpath/theocloud-bundle-delta.txt
@@ -1101,7 +1101,7 @@ VERIFY: cat .claude/knowledge-base/baselines/2026-05-25-post-subpath/theocloud-b
 
 #### Acceptance Criteria
 
-- [ ] `@usetheo/ui` chunk savings ≥ 10 KB brotli (HARD GATE for merge)
+- [ ] `@theokit/ui` chunk savings ≥ 10 KB brotli (HARD GATE for merge)
 - [ ] Total initial JS unchanged or smaller (no regression elsewhere)
 - [ ] Evidence file committed to `.claude/knowledge-base/baselines/2026-05-25-post-subpath/`
 - [ ] CHANGELOG updated with the actual delta numbers
@@ -1125,12 +1125,12 @@ experience them.
 
 #### Tasks
 
-1. Install `@usetheo/ui@0.10.0-next.0` from npm in a fresh smoke
+1. Install `@theokit/ui@0.10.0-next.0` from npm in a fresh smoke
    project.
 2. Verify both import styles work:
    ```ts
-   import { Alert } from "@usetheo/ui";              // barrel
-   import { Alert as AltAlert } from "@usetheo/ui/alert";  // subpath
+   import { Alert } from "@theokit/ui";              // barrel
+   import { Alert as AltAlert } from "@theokit/ui/alert";  // subpath
    ```
 3. Verify SSR renders identically for both:
    ```ts
@@ -1164,8 +1164,8 @@ experience them.
 | 3 | `dist/composites/<name>/index.js` exists for every composite folder | T1.1, T5.1 | Same |
 | 4 | `package.json#exports` entries point to per-component dist files | T2.1 | regen-subpath-exports.ts + validation step + sorted output |
 | 5 | NO duplicates pointing to `./dist/index.js` | T2.1 | Validation step in regen script refuses to write if stragglers found |
-| 6 | `import { X } from '@usetheo/ui'` (barrel) still works identically | T5.2 | Smoke install + identity check |
-| 7 | `import { X } from '@usetheo/ui/<x>'` works and resolves to smaller dist | T5.2, T8.1 | Smoke + canary |
+| 6 | `import { X } from '@theokit/ui'` (barrel) still works identically | T5.2 | Smoke install + identity check |
+| 7 | `import { X } from '@theokit/ui/<x>'` works and resolves to smaller dist | T5.2, T8.1 | Smoke + canary |
 | 8 | **Bundle-delta evidence**: TheoCloud drops ≥10 KB brotli | T8.1 | TheoCloud canary; HARD merge gate |
 | 9 | `pnpm test` passes — no test regressions | T5.1 | Full suite |
 | 10 | `pnpm typecheck` passes — types still resolve via subpath | T5.1, T5.2 | tsup `dts: true` per entry + smoke import |
@@ -1190,13 +1190,13 @@ experience them.
 - [ ] All tests passing (`pnpm test`)
 - [ ] Zero typecheck / lint warnings
 - [ ] `pnpm quality:gates` 100% green with new baseline
-- [ ] Barrel `import { X } from "@usetheo/ui"` works identically (no breaking change)
-- [ ] Subpath `import { X } from "@usetheo/ui/x"` resolves to a real per-component dist file
+- [ ] Barrel `import { X } from "@theokit/ui"` works identically (no breaking change)
+- [ ] Subpath `import { X } from "@theokit/ui/x"` resolves to a real per-component dist file
 - [ ] ADR `subpath-exports-per-component.md` committed
 - [ ] CHANGELOG `[0.10.0-next.0]` entry with bundle-delta numbers
 - [ ] `package.json` version = `0.10.0-next.0`
-- [ ] npm published `@usetheo/ui@0.10.0-next.0 --tag next`
-- [ ] **Bundle-delta gate (HARD)**: TheoCloud `@usetheo/ui` chunk drops ≥10 KB brotli after top 10 subpath migration
+- [ ] npm published `@theokit/ui@0.10.0-next.0 --tag next`
+- [ ] **Bundle-delta gate (HARD)**: TheoCloud `@theokit/ui` chunk drops ≥10 KB brotli after top 10 subpath migration
 - [ ] theo-opendocs redeploy verified; llms.txt at `docs.usetheo.dev/llms.txt` mentions 0.10
 - [ ] **Dogfood QA PASS** — T9.1 verifies both import styles, docs live, llms.txt updated, canary evidence on file
 - [ ] **Runtime-metric proof** — bundle delta measured against a real consumer build (TheoCloud), not estimated
@@ -1248,6 +1248,6 @@ experience them.
    measurement is manual today. Future plan (out-of-scope here)
    could automate it via a downstream-canary CI job.
 
-5. **Should we publish a separate `@usetheo/ui-subpath-test` as a
+5. **Should we publish a separate `@theokit/ui-subpath-test` as a
    smoke-validation package?** No — overengineering. The smoke
    install in T5.2 + T9.1 covers this.

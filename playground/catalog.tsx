@@ -1,6 +1,6 @@
 /**
  * Catalog — playground page that mounts a curated subset of public components
- * from `@usetheo/ui`, grouped by category. Imports come exclusively from the
+ * from `@theokit/ui`, grouped by category. Imports come exclusively from the
  * package's public barrel — no relative paths into `src/` — so the playground
  * proves that a consumer can build a real surface using only the published API.
  *
@@ -65,7 +65,7 @@ import {
   Tooltip,
   TopNav,
   type UIMessage,
-} from "@usetheo/ui";
+} from "@theokit/ui";
 import {
   Bot,
   Cloud,
@@ -575,10 +575,10 @@ export function Catalog() {
     <main className="mx-auto grid max-w-6xl gap-6 p-6 md:p-10">
       <header className="grid gap-2 border-border/40 border-b pb-6">
         <h1 className="font-display text-display-md tracking-tight">
-          @usetheo/ui — Component Catalog
+          @theokit/ui — Component Catalog
         </h1>
         <p className="text-body-md text-muted-foreground">
-          A curated subset of public components, imported exclusively from <code>@usetheo/ui</code>.
+          A curated subset of public components, imported exclusively from <code>@theokit/ui</code>.
           For the full reference, run <code>pnpm dev</code> (Ladle) — every primitive and composite
           has a dedicated story.
         </p>

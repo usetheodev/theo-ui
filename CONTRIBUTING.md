@@ -1,9 +1,9 @@
-# Contributing to `@usetheo/ui`
+# Contributing to `@theokit/ui`
 
 Welcome — this document is the operational handbook for the library. The
 strategic context (mission, narrative, four pillars) lives in the root
 `README.md` and `../CLAUDE.md`. This file is about the day-to-day mechanics
-of shipping code to `@usetheo/ui`.
+of shipping code to `@theokit/ui`.
 
 ---
 
@@ -37,7 +37,7 @@ Requirements:
 ## The taxonomy rule (non-negotiable)
 
 A component goes under `primitives/` **if and only if** it does not value-import
-another `@usetheo/ui` component. Otherwise it goes under `composites/`.
+another `@theokit/ui` component. Otherwise it goes under `composites/`.
 
 This is enforced mechanically by `pnpm quality:structure` — there's no
 discretionary call. The full spec lives in [`docs/architecture.md`](./docs/architecture.md).
@@ -143,8 +143,8 @@ file is out of sync. The error message tells you exactly how to fix it
 
 Every component is shipped two ways:
 
-1. **As part of the package** — `pnpm add @usetheo/ui`, then
-   `import { Button } from "@usetheo/ui"`. ESM-only, tree-shakable.
+1. **As part of the package** — `pnpm add @theokit/ui`, then
+   `import { Button } from "@theokit/ui"`. ESM-only, tree-shakable.
 2. **As copy-paste via shadcn CLI** — `npx shadcn add https://usetheodev.github.io/theo-ui/r/<name>.json` (branded `ui.usetheo.dev` URL pending DNS CNAME).
    The consumer's project receives the source `.tsx` file under
    `components/ui/<name>.tsx` (primitives) or `components/blocks/<name>.tsx`

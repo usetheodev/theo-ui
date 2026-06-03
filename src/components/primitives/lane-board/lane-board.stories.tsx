@@ -26,7 +26,7 @@ const LANES: Lane[] = [
     cards: [
       {
         id: "3",
-        title: "Publish @usetheo/ui to npm",
+        title: "Publish @theokit/ui to npm",
         description: "Waiting for org access from owner.",
         footer: "blocked by paulo · 1h",
       },

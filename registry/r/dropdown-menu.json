@@ -3,7 +3,7 @@
   "name": "dropdown-menu",
   "type": "registry:ui",
   "title": "DropdownMenu",
-  "description": "Accessible dropdown menu primitive built on @radix-ui/react-dropdown-menu. Sub-components attached via Object.assign (Trigger, Content, Item, CheckboxItem, RadioItem, Label, Separator, Shortcut, Group, Sub, SubTrigger, SubContent, RadioGroup). Styled with @usetheo/ui design tokens. Consolidates the 5 prior direct-Radix usages under a single wrapper.",
+  "description": "Accessible dropdown menu primitive built on @radix-ui/react-dropdown-menu. Sub-components attached via Object.assign (Trigger, Content, Item, CheckboxItem, RadioItem, Label, Separator, Shortcut, Group, Sub, SubTrigger, SubContent, RadioGroup). Styled with @theokit/ui design tokens. Consolidates the 5 prior direct-Radix usages under a single wrapper.",
   "dependencies": [
     "@radix-ui/react-dropdown-menu",
     "lucide-react"

@@ -1,12 +1,12 @@
 # Verb — `theo-ui migrate`
 
-Convert hand-rolled UI to its `@usetheo/ui` equivalent. Preserves behavior, replaces only the styling / structure layer.
+Convert hand-rolled UI to its `@theokit/ui` equivalent. Preserves behavior, replaces only the styling / structure layer.
 
 ---
 
 ## When to invoke
 
-The user has an existing React component / page / app and wants it converted to use `@usetheo/ui`. Or they ran `theo-ui audit` and want to apply the quick wins.
+The user has an existing React component / page / app and wants it converted to use `@theokit/ui`. Or they ran `theo-ui audit` and want to apply the quick wins.
 
 Triggers:
 
@@ -27,7 +27,7 @@ Same as audit — file, directory, or glob. Read each target file in full.
 
 ### 2. Pre-flight (visible for migrate)
 
-Emit the pre-flight block. The user needs to know what version + theme + density the migration will target. Without it, the migrated code may import from subpaths that don't exist on their `@usetheo/ui` version.
+Emit the pre-flight block. The user needs to know what version + theme + density the migration will target. Without it, the migrated code may import from subpaths that don't exist on their `@theokit/ui` version.
 
 ### 3. Migration plan
 
@@ -53,11 +53,11 @@ Before any edit, produce a migration plan and ask for confirmation:
 ### Imports to add
 
 ```ts
-import { Button } from "@usetheo/ui/button";
-import { Card } from "@usetheo/ui/card";
-import { DataTable } from "@usetheo/ui/data-table";
-import { DropdownMenu } from "@usetheo/ui/dropdown-menu";
-import { PageShell } from "@usetheo/ui/page-shell";
+import { Button } from "@theokit/ui/button";
+import { Card } from "@theokit/ui/card";
+import { DataTable } from "@theokit/ui/data-table";
+import { DropdownMenu } from "@theokit/ui/dropdown-menu";
+import { PageShell } from "@theokit/ui/page-shell";
 ```
 
 ### Imports to remove
@@ -142,7 +142,7 @@ Append a migration entry to `.theo-ui-skill/log.json`:
 
 ### Replace, don't rewrite
 
-The migrate verb's job is to swap hand-rolled UI for `@usetheo/ui` equivalents. It does NOT redesign the page structure. If the original has 4 sections in order A/B/C/D, the migrated version has the same 4 sections in the same order — just composed of theo-ui components.
+The migrate verb's job is to swap hand-rolled UI for `@theokit/ui` equivalents. It does NOT redesign the page structure. If the original has 4 sections in order A/B/C/D, the migrated version has the same 4 sections in the same order — just composed of theo-ui components.
 
 If the user wants a redesign, they ask for one explicitly (default verb) — that's a different invocation.
 

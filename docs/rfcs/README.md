@@ -1,6 +1,6 @@
 # RFCs — TheoUI
 
-Architecture decisions for `@usetheo/ui` that span multiple components or change shared invariants.
+Architecture decisions for `@theokit/ui` that span multiple components or change shared invariants.
 
 Engines (heavy primitives shipped under isolated subpaths) MUST land via an RFC per `CLAUDE.md > Roadmap`.
 

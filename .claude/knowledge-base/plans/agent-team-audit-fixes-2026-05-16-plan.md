@@ -1,6 +1,6 @@
-# Plan: `@usetheo/ui` — Agent Team Audit Fixes (2026-05-16)
+# Plan: `@theokit/ui` — Agent Team Audit Fixes (2026-05-16)
 
-> **Version 1.1** — Este plano resolve os 37 achados consolidados pelo time de 6 agentes especialistas (architecture-analyst, completeness-auditor, code-reviewer, test-auditor, dependency-analyzer, security-auditor) na reunião de 2026-05-16. O foco operacional: subir a nota agregada de **3.0/5** para **4.0+/5** fechando os 2 CRITICAL (npm 404, registry endpoint dead) + 9 HIGH + 13 MEDIUM + 13 LOW. Pós-execução, `pnpm add @usetheo/ui` resolve, `https://ui.usetheo.dev/r/button.json` retorna 200, branch `feat/deep-review-remediation` está em `main`, marketing copy está sincronizada com integrações reais, e o pacote ganha um `<TheoUIProvider>` root + guards de segurança que estavam ausentes.
+> **Version 1.1** — Este plano resolve os 37 achados consolidados pelo time de 6 agentes especialistas (architecture-analyst, completeness-auditor, code-reviewer, test-auditor, dependency-analyzer, security-auditor) na reunião de 2026-05-16. O foco operacional: subir a nota agregada de **3.0/5** para **4.0+/5** fechando os 2 CRITICAL (npm 404, registry endpoint dead) + 9 HIGH + 13 MEDIUM + 13 LOW. Pós-execução, `pnpm add @theokit/ui` resolve, `https://ui.usetheo.dev/r/button.json` retorna 200, branch `feat/deep-review-remediation` está em `main`, marketing copy está sincronizada com integrações reais, e o pacote ganha um `<TheoUIProvider>` root + guards de segurança que estavam ausentes.
 >
 > **Changelog do plano:**
 > - **v1.1 (2026-05-16)**: incorpora os 4 MUST FIX do edge-case review (`agent-team-audit-fixes-2026-05-16-edge-cases.md`). MF-1: reordena Phase 1 (T1.3 antes de T1.1 para não publicar tarball com claim falso). MF-2: T2.5 ganha sub-tasks de regeneração de registry items + nota de breaking change no CHANGELOG. MF-3: novo ADR D12 sobre compat vitest×happy-dom + fallback jsdom; T3.1 ganha pre-flight. MF-4: T4.1 expandida de 2 componentes para 7+ live regions + gate de regression.
@@ -11,14 +11,14 @@
 A revisão profunda de 2026-05-16 produzida pelos 6 agentes encontrou o seguinte padrão estrutural: **engenharia interna sólida (média 3.6/5 nas dimensões técnicas) vs produto inexistente como artefato consumível (completude 2.0/5)**. Os achados materiais, em ordem de impacto:
 
 **CRITICAL (2)** — toda promessa de instalação no README/PITCH retorna erro:
-- `pnpm add @usetheo/ui` → 404 no npm (versão `0.0.0`, nunca publicada). Confirmado via `curl https://registry.npmjs.org/@usetheo/ui` → HTTP/2 404.
+- `pnpm add @theokit/ui` → 404 no npm (versão `0.0.0`, nunca publicada). Confirmado via `curl https://registry.npmjs.org/@theokit/ui` → HTTP/2 404.
 - `npx shadcn add https://ui.usetheo.dev/r/button.json` → DNS-NXDOMAIN. Confirmado via `curl -sI` → zero resposta.
 
 **HIGH (9):**
 - Subpath exports decorativos: 102 entries no `package.json#exports` resolvem todas para `./dist/index.js` (`tsup.config.ts` com `splitting: false`).
 - Registry pasta `registry/r/*.json` usa `import { cn } from "@/lib/cn"` — alias `@/` é precondição ambiental não documentada.
 - Ausência de `<TheoUIProvider>` root: consumidor monta `ThemeProvider + Toaster` à mão.
-- `PITCH.md:239` afirma que TheoKit dashboard importa `@usetheo/ui` — confirmado via `grep -r "@usetheo/ui" /home/paulo/Projetos/usetheo/theokit/`: **zero matches**. Marketing-grade false claim.
+- `PITCH.md:239` afirma que TheoKit dashboard importa `@theokit/ui` — confirmado via `grep -r "@theokit/ui" /home/paulo/Projetos/usetheo/theokit/`: **zero matches**. Marketing-grade false claim.
 - `README.md:243` lista pipeline `quality:gates` desatualizado (omite `quality:bundle` e `quality:a11y`).
 - `AgentStream / FullStream` story skipada em `ladle-axe.test.tsx:81-84` por `<header role="button">` sem ticket.
 - `docs.usetheo.dev/ui` + `ui.usetheo.dev` dead.
@@ -33,7 +33,7 @@ Evidência completa: notificações de tarefa nos agent IDs `acef867fd24467546` 
 
 ## Objective
 
-"Done" = (a) `pnpm add @usetheo/ui` em projeto Vite vazio resolve sem erro; (b) `curl https://ui.usetheo.dev/r/button.json` retorna 200 com JSON válido; (c) `<TheoUIProvider>` exportado e documentado como primary entry point; (d) zero alegações falsas em README/PITCH/CHANGELOG; (e) ThemeProvider localStorage path tem cobertura de teste, Dialog/Sheet close-on-Escape tem cobertura; (f) `happy-dom >= 20`; (g) `pnpm quality:gates` passa verde em `main`; (h) nota agregada do agent-team-audit ≥ 4.0/5 em re-execução.
+"Done" = (a) `pnpm add @theokit/ui` em projeto Vite vazio resolve sem erro; (b) `curl https://ui.usetheo.dev/r/button.json` retorna 200 com JSON válido; (c) `<TheoUIProvider>` exportado e documentado como primary entry point; (d) zero alegações falsas em README/PITCH/CHANGELOG; (e) ThemeProvider localStorage path tem cobertura de teste, Dialog/Sheet close-on-Escape tem cobertura; (f) `happy-dom >= 20`; (g) `pnpm quality:gates` passa verde em `main`; (h) nota agregada do agent-team-audit ≥ 4.0/5 em re-execução.
 
 Metas mensuráveis:
 1. **Zero CRITICAL aberto** após Phase 1.
@@ -41,7 +41,7 @@ Metas mensuráveis:
 3. **`curl -sf` em todas as URLs anunciadas no README + PITCH retorna 200** após Phase 1.
 4. **Cobertura comportamental do ThemeProvider sobe de ~60% (sem branch localStorage) para ≥ 90%** após Phase 5.
 5. **`pnpm audit --prod`** com zero HIGH/CRITICAL após Phase 6.
-6. **`@usetheo/ui@0.1.0-next.0` disponível em `npm view`** após Phase 1.
+6. **`@theokit/ui@0.1.0-next.0` disponível em `npm view`** após Phase 1.
 
 ## ADRs
 
@@ -65,9 +65,9 @@ Metas mensuráveis:
 
 ### D4 — Manter `splitting: false` no tsup; documentar subpath exports como aliases de conveniência
 
-- **Decisão:** Não ativar code splitting do tsup. Manter `dist/index.js` único. Atualizar JSDoc/README explicando que os 102 subpath entries são aliases (`@usetheo/ui/button` = `@usetheo/ui` com tree-shaking pelo bundler do consumidor).
+- **Decisão:** Não ativar code splitting do tsup. Manter `dist/index.js` único. Atualizar JSDoc/README explicando que os 102 subpath entries são aliases (`@theokit/ui/button` = `@theokit/ui` com tree-shaking pelo bundler do consumidor).
 - **Rationale:** Code splitting cria N arquivos com overhead de imports cross-chunk. A library já é tree-shakeable (`sideEffects: ["**/*.css"]` + ESM puro). Mudar agora introduz risco de regressão sem ganho mensurável para consumer Vite/Next moderno. O gap real é **documentação**, não **bundling**.
-- **Consequences:** Subpath exports continuam funcionais para typecheck e DX, mas com expectativa correta. Consumer que importa `@usetheo/ui/button` em runtime sem tree-shaking (Jest, CDN browser direto) recebe o bundle completo — documentado.
+- **Consequences:** Subpath exports continuam funcionais para typecheck e DX, mas com expectativa correta. Consumer que importa `@theokit/ui/button` em runtime sem tree-shaking (Jest, CDN browser direto) recebe o bundle completo — documentado.
 
 ### D5 — Upgrade `happy-dom` 16 → 20 (não trocar por jsdom)
 
@@ -267,7 +267,7 @@ VERIFY:  gh pr view --json state,isDraft,statusCheckRollup
 Eliminar 4 alegações inverificáveis ou falsas detectadas pelo completeness-auditor. **Esta task PRECEDE T1.1 (npm publish) — qualquer mudança aqui deve estar commitada antes de qualquer `npm publish`, senão a tarball ship com docs erradas (MF-1).**
 
 #### Evidence
-- `PITCH.md:239`: "TheoKit dashboard template já importa @usetheo/ui" — `grep -r "@usetheo/ui" /home/paulo/Projetos/usetheo/theokit/` retorna zero. **Materialmente falso**.
+- `PITCH.md:239`: "TheoKit dashboard template já importa @theokit/ui" — `grep -r "@theokit/ui" /home/paulo/Projetos/usetheo/theokit/` retorna zero. **Materialmente falso**.
 - `README.md:243`: pipeline `quality:gates` documentado sem `quality:bundle` e `quality:a11y` (ver `package.json#scripts['quality:gates']`).
 - `CHANGELOG.md`: entry Phase 3 fala "canonical 5-entry set" para `package.json#exports` — código real tem 107+ entries após commit `77b2f7a`.
 - `PITCH.md:241` + tertiary CTAs: linkam `docs.usetheo.dev/ui` e `ui.usetheo.dev` (gallery) — DNS-NXDOMAIN.
@@ -287,8 +287,8 @@ CHANGELOG.md — adicionar nota corretiva em [Unreleased] sobre exports map
 #### Deep Dives
 - **PITCH.md linha 239 substituição**:
   ```diff
-  - Build a full agent app with TheoKit — `npx create-theokit my-app` already imports `@usetheo/ui` when you pick the dashboard template.
-  + Build any React surface — install `@usetheo/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
+  - Build a full agent app with TheoKit — `npx create-theokit my-app` already imports `@theokit/ui` when you pick the dashboard template.
+  + Build any React surface — install `@theokit/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
   ```
 - **Tertiary CTAs**: `docs.usetheo.dev/ui` e `ui.usetheo.dev` (gallery raiz). **Decisão**: `docs.usetheo.dev/ui` é responsabilidade do `theo-website` (fora deste projeto) — substituir link por `https://github.com/usetheodev/theo-ui#component-catalog`. `ui.usetheo.dev` (gallery) será resolvido em T1.2 servindo Ladle build em `/gallery`. Por enquanto, link aponta para `ui.usetheo.dev` que após T1.2 redireciona ou serve catálogo.
 - **Por que esta task vem PRIMEIRO (MF-1)**: `npm publish` empacota `README.md` (e qualquer asset listado em `files[]` do package.json — `PITCH.md` não está). Publicar com README contendo gates desatualizado é irreversível em < 72h sem `npm unpublish`. Hard ordering: T1.3 → T1.1.
@@ -304,16 +304,16 @@ CHANGELOG.md — adicionar nota corretiva em [Unreleased] sobre exports map
 
 #### TDD
 ```
-RED:     test_pitch_no_theokit_dashboard_claim() — grep "already imports @usetheo/ui" PITCH.md retorna 0 lines
+RED:     test_pitch_no_theokit_dashboard_claim() — grep "already imports @theokit/ui" PITCH.md retorna 0 lines
 RED:     test_readme_quality_gates_matches_package_json() — script que parseia ambos e diffa
 RED:     test_pitch_dead_links_removed() — curl-loop sobre href= no PITCH.md → todos ≤ 400 (com ui.usetheo.dev como exceção até T1.2)
 GREEN:   Após edit + commit: 3 testes verde
 REFACTOR: None expected
-VERIFY:  grep -c "already imports @usetheo/ui" PITCH.md  # esperado: 0
+VERIFY:  grep -c "already imports @theokit/ui" PITCH.md  # esperado: 0
 ```
 
 #### Acceptance Criteria
-- [ ] `grep -c "already imports @usetheo/ui" PITCH.md` retorna 0 (claim removida)
+- [ ] `grep -c "already imports @theokit/ui" PITCH.md` retorna 0 (claim removida)
 - [ ] `README.md:243` lista 11 gates conforme `package.json`
 - [ ] CHANGELOG `[Unreleased]` documenta correção do export map
 - [ ] `PITCH.md` rastreado em git (não mais untracked)
@@ -331,10 +331,10 @@ VERIFY:  grep -c "already imports @usetheo/ui" PITCH.md  # esperado: 0
 ### T1.1 — Bump version + `npm publish --tag next` (SECOND)
 
 #### Objective
-Publicar `@usetheo/ui@0.1.0-next.0` no registry público do npm. **Pré-requisito inviolável: T1.3 commitada e pusha em `feat/deep-review-remediation` (MF-1).**
+Publicar `@theokit/ui@0.1.0-next.0` no registry público do npm. **Pré-requisito inviolável: T1.3 commitada e pusha em `feat/deep-review-remediation` (MF-1).**
 
 #### Evidence
-`curl https://registry.npmjs.org/@usetheo/ui` → HTTP/2 404. Confirmado pelo completeness-auditor + verificação manual. ADR D1 justifica timing.
+`curl https://registry.npmjs.org/@theokit/ui` → HTTP/2 404. Confirmado pelo completeness-auditor + verificação manual. ADR D1 justifica timing.
 
 #### Files to edit
 ```
@@ -354,8 +354,8 @@ CHANGELOG.md — registrar release 0.1.0-next.0 movendo [Unreleased] entries
   - `pnpm pack --dry-run` → inspecionar conteúdo da tarball, confirmar `LICENSE`, `CHANGELOG.md`, `README.md` (com pipeline atualizado de T1.3), `dist/`
 - **Auth**: usuário precisa de `~/.npmrc` com `//registry.npmjs.org/:_authToken=<TOKEN>` e ser owner da org `@usetheo` ou ter permissão. Se a org não existe ainda:
   - `npm org create usetheo` (se nome livre) OU
-  - Verificar via `npm access ls-collaborators @usetheo/ui` quem é owner
-- **Tag**: `--tag next` impede que `npm install @usetheo/ui` (sem versão) puxe esta. Consumer precisa de `npm install @usetheo/ui@next`. Documentado em README.
+  - Verificar via `npm access ls-collaborators @theokit/ui` quem é owner
+- **Tag**: `--tag next` impede que `npm install @theokit/ui` (sem versão) puxe esta. Consumer precisa de `npm install @theokit/ui@next`. Documentado em README.
 
 #### Tasks
 1. **GATE MF-1**: `git log -1 --oneline` mostra commit `docs(truth):` (de T1.3). Se não, voltar para T1.3.
@@ -365,27 +365,27 @@ CHANGELOG.md — registrar release 0.1.0-next.0 movendo [Unreleased] entries
 5. Editar `CHANGELOG.md` movendo entries `[Unreleased]` → `[0.1.0-next.0] - 2026-05-16`.
 6. Commit: `chore(release): 0.1.0-next.0`.
 7. `npm publish --tag next` (com auth válida).
-8. Verificar: `npm view @usetheo/ui` → mostra metadata.
-9. Verificar: `npm install @usetheo/ui@next` em pasta `/tmp/test-install` vazia → resolve OK.
-10. Verificar: `cat /tmp/test-install/node_modules/@usetheo/ui/README.md | grep -c "quality:bundle"` ≥ 1 (provando que README publicado tem fixes de T1.3).
+8. Verificar: `npm view @theokit/ui` → mostra metadata.
+9. Verificar: `npm install @theokit/ui@next` em pasta `/tmp/test-install` vazia → resolve OK.
+10. Verificar: `cat /tmp/test-install/node_modules/@theokit/ui/README.md | grep -c "quality:bundle"` ≥ 1 (provando que README publicado tem fixes de T1.3).
 
 #### TDD
 ```
 RED:     test_t13_commit_landed() — git log mostra commit docs(truth):
-RED:     test_npm_view_returns_package() — antes do publish, `npm view @usetheo/ui` ERRO E404
-RED:     test_install_in_clean_project_resolves() — antes, `npm install @usetheo/ui@next` ERRO
+RED:     test_npm_view_returns_package() — antes do publish, `npm view @theokit/ui` ERRO E404
+RED:     test_install_in_clean_project_resolves() — antes, `npm install @theokit/ui@next` ERRO
 RED:     test_published_readme_contains_t13_fixes() — README na tarball menciona quality:bundle (proof MF-1 OK)
 GREEN:   Após publish: 4 testes verde
 REFACTOR: None expected
-VERIFY:  npm view @usetheo/ui version && tar tzf $(npm pack --dry-run --json | jq -r .[0].filename) | grep README
+VERIFY:  npm view @theokit/ui version && tar tzf $(npm pack --dry-run --json | jq -r .[0].filename) | grep README
 ```
 
 #### Acceptance Criteria
-- [ ] `npm view @usetheo/ui version` retorna `0.1.0-next.0`
-- [ ] `npm install @usetheo/ui@next` em projeto vazio resolve
+- [ ] `npm view @theokit/ui version` retorna `0.1.0-next.0`
+- [ ] `npm install @theokit/ui@next` em projeto vazio resolve
 - [ ] `pnpm pack --dry-run` lista `LICENSE`, `CHANGELOG.md`, `README.md`, `dist/`
-- [ ] Tag `next` aplicada: `npm view @usetheo/ui dist-tags` mostra `next: 0.1.0-next.0`
-- [ ] Versão `latest` NÃO existe (`npm view @usetheo/ui dist-tags.latest` undefined)
+- [ ] Tag `next` aplicada: `npm view @theokit/ui dist-tags` mostra `next: 0.1.0-next.0`
+- [ ] Versão `latest` NÃO existe (`npm view @theokit/ui dist-tags.latest` undefined)
 - [ ] **MF-1 proof**: README publicado contém `quality:bundle` e `quality:a11y` (fixes de T1.3 no shipped artifact)
 
 #### DoD
@@ -564,7 +564,7 @@ scripts/sync-exports.ts — adicionar comment header explicando policy
 
 #### Deep Dives
 - Conteúdo da seção:
-  > **Subpath exports.** `@usetheo/ui` exposes a subpath import per component (e.g., `import { Button } from "@usetheo/ui/button"`). All subpath entries resolve to the same single bundle (`dist/index.js`). The library is tree-shakeable when consumed by ESM-aware bundlers (Vite, Rollup, Webpack 5, esbuild) — only the imported components survive into your final bundle. Subpath entries exist for IDE intellisense and import organization, not for code-splitting. Consumers using non-tree-shaking runtimes (Jest classic, Node REPL, raw browser ESM) will load the full bundle regardless of subpath.
+  > **Subpath exports.** `@theokit/ui` exposes a subpath import per component (e.g., `import { Button } from "@theokit/ui/button"`). All subpath entries resolve to the same single bundle (`dist/index.js`). The library is tree-shakeable when consumed by ESM-aware bundlers (Vite, Rollup, Webpack 5, esbuild) — only the imported components survive into your final bundle. Subpath entries exist for IDE intellisense and import organization, not for code-splitting. Consumers using non-tree-shaking runtimes (Jest classic, Node REPL, raw browser ESM) will load the full bundle regardless of subpath.
 
 #### Tasks
 1. Editar `README.md` na seção existente.
@@ -737,7 +737,7 @@ scripts/validate-registry.ts — adicionar gate que detecta breaking-change drif
 
 #### Deep Dives
 - **Backward compat strategy**: dois canais distintos:
-  1. **Canal npm (`pnpm add @usetheo/ui`)**: consumer importa `ThemeProvider`. Quebra silenciosa se não passar `themes`. **Mitigação**: TypeScript pega em compile time (`themes` agora required). README + CHANGELOG migration recipe.
+  1. **Canal npm (`pnpm add @theokit/ui`)**: consumer importa `ThemeProvider`. Quebra silenciosa se não passar `themes`. **Mitigação**: TypeScript pega em compile time (`themes` agora required). README + CHANGELOG migration recipe.
   2. **Canal shadcn (`npx shadcn add theme-provider`)**: consumer recebe **source copy-paste**. Novos shadcn adds pegam o novo source automaticamente. Consumers antigos têm versão velha do source e não são afetados até decidirem re-rodar `shadcn add`. **Não há mecanismo de auto-update no shadcn pattern por design**. CHANGELOG documenta para quem fizer re-add.
 - **`<TheoUIProvider>` (T2.1)** default-inclui `defaultThemes` — então o "out-of-box" Quickstart do README continua funcionando com 0 mudança visível.
 - **Bundle impact**: consumer que importa só `<ThemeProvider>` (não `<TheoUIProvider>`) e passa seu próprio theme não inclui mais `violetForge.ts` (~6 KB).
@@ -747,15 +747,15 @@ scripts/validate-registry.ts — adicionar gate que detecta breaking-change drif
   - `<ThemeProvider>` now requires `themes` prop (was optional with implicit `violetForge` default). Migration:
     ```tsx
     // Before
-    import { ThemeProvider } from "@usetheo/ui";
+    import { ThemeProvider } from "@theokit/ui";
     <ThemeProvider>...</ThemeProvider>
 
     // After (option A — keep all built-ins)
-    import { ThemeProvider, defaultThemes } from "@usetheo/ui";
+    import { ThemeProvider, defaultThemes } from "@theokit/ui";
     <ThemeProvider themes={defaultThemes}>...</ThemeProvider>
 
     // After (option B — use wrapper, no migration needed)
-    import { TheoUIProvider } from "@usetheo/ui";
+    import { TheoUIProvider } from "@theokit/ui";
     <TheoUIProvider>...</TheoUIProvider>
     ```
   ```
@@ -1076,7 +1076,7 @@ docs/architecture.md — §"Live region discipline" com ADR inline
 ```
 
 #### Deep file dependency analysis
-- `src/lib/live-region-context.tsx`: context novo, primitive (no `@usetheo/ui` deps). Quality gate de taxonomia OK porque vai em `src/lib/`, não em `src/components/primitives/`.
+- `src/lib/live-region-context.tsx`: context novo, primitive (no `@theokit/ui` deps). Quality gate de taxonomia OK porque vai em `src/lib/`, não em `src/components/primitives/`.
 - Componentes **container** (provê `value={true}`): `agent-stream`, `chat-thread`. Renderizam outros componentes com aria-live dentro.
 - Componentes **child** (lê context, omite próprio aria-live se context==true): `agent-streaming`, `agent-error-card`, `agent-starting-state`, `auto-compact-notice`, `skeleton`. Hipóteses sobre `build-log-stream` e `terminal-panel`: provavelmente containers já (`<ol aria-live>` em volta de items), mas verify.
 - **Híbrido**: `build-log-stream` e `terminal-panel` aceitam `live` prop, são container do próprio scroll mas podem ser child de outro live region. Solução: se context==true E `live` foi explicitamente passado, respeitar prop (override consumer). Se context==true E `live` foi default, omitir.
@@ -1750,7 +1750,7 @@ CHANGELOG.md — registrar breaking change pre-1.0
 3. `pnpm typecheck`.
 
 #### Acceptance Criteria
-- [ ] `import { ScrollBar } from '@usetheo/ui'` falha typecheck
+- [ ] `import { ScrollBar } from '@theokit/ui'` falha typecheck
 - [ ] `ScrollArea.Bar` continua funcionando
 
 #### DoD
@@ -1837,7 +1837,7 @@ src/components/composites/env-var-editor/env-var-editor.tsx:147 — adicionar wa
 
 | # | Gap | Severity | Task(s) | Resolução |
 |---|---|---|---|---|
-| 1 | npm 404 (`@usetheo/ui` nunca publicado) | CRITICAL | T1.1 | `npm publish --tag next` versão 0.1.0-next.0 |
+| 1 | npm 404 (`@theokit/ui` nunca publicado) | CRITICAL | T1.1 | `npm publish --tag next` versão 0.1.0-next.0 |
 | 2 | Registry URL `ui.usetheo.dev/r/*.json` dead | CRITICAL | T1.2 | Deploy static em CF/GH Pages + DNS |
 | 3 | PITCH.md TheoKit dashboard false claim | HIGH | T1.3 | Remover claim |
 | 4 | README quality:gates pipeline stale | HIGH | T1.3, T7.1 | Sincronizar com package.json |
@@ -1893,7 +1893,7 @@ src/components/composites/env-var-editor/env-var-editor.tsx:147 — adicionar wa
 - [ ] `pnpm quality:gates` verde
 - [ ] Bundle size dentro de ±5% do baseline (T8 pode rebaseline se mudanças justificarem)
 - [ ] Backward compat preservada exceto onde ADR explicitamente quebra (T2.5 → `themes` required; T7.4 → ScrollBar standalone removido)
-- [ ] **Runtime-metric proof**: `npm view @usetheo/ui version` retorna `0.1.0-next.0` E `curl -sf https://ui.usetheo.dev/r/button.json | jq .name` retorna `"button"`. NÃO basta "código compila e test passa" — pelo menos 1 deploy real e 1 install real foram observados (D1, D2).
+- [ ] **Runtime-metric proof**: `npm view @theokit/ui version` retorna `0.1.0-next.0` E `curl -sf https://ui.usetheo.dev/r/button.json | jq .name` retorna `"button"`. NÃO basta "código compila e test passa" — pelo menos 1 deploy real e 1 install real foram observados (D1, D2).
 - [ ] **Dogfood QA PASS** — `/dogfood full` health score ≥ 70, zero CRITICAL
 - [ ] **Re-audit do agent-team com nota agregada ≥ 4.0/5** (T8.1)
 - [ ] PR `feat/deep-review-remediation` → `main` mergeado
@@ -1909,7 +1909,7 @@ src/components/composites/env-var-editor/env-var-editor.tsx:147 — adicionar wa
 Run `/dogfood full`. Always full. No shortcuts.
 
 Como adicional desta plan: também executar **end-to-end manual smoke**:
-1. Em `/tmp/dogfood-vite` (projeto Vite vazio): `pnpm add @usetheo/ui@next` → resolve OK.
+1. Em `/tmp/dogfood-vite` (projeto Vite vazio): `pnpm add @theokit/ui@next` → resolve OK.
 2. Importar `<TheoUIProvider>` e `<Button>` num App.tsx; `pnpm dev` → render correto.
 3. Em `/tmp/dogfood-shadcn` (projeto Next.js com tsconfig `@/*` configurado): `npx shadcn@latest add https://ui.usetheo.dev/r/button.json` → arquivo criado em `src/components/ui/button.tsx` com `import { cn } from "@/lib/cn"` resolvendo.
 

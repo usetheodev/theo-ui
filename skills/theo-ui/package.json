@@ -1,9 +1,9 @@
 {
-  "name": "@usetheo/skill",
+  "name": "@theokit/skill",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Design skill for AI coding assistants (Claude Code, Cursor, Codex) that uses @usetheo/ui correctly. Component-library-aware — picks from 121 existing components, respects Violet Forge tokens, refuses to hand-roll what the library already ships.",
+  "description": "Design skill for AI coding assistants (Claude Code, Cursor, Codex) that uses @theokit/ui correctly. Component-library-aware — picks from 121 existing components, respects Violet Forge tokens, refuses to hand-roll what the library already ships.",
   "license": "Apache-2.0",
   "keywords": [
     "skill",
@@ -15,7 +15,7 @@
     "design-system",
     "react",
     "tailwind",
-    "@usetheo/ui",
+    "@theokit/ui",
     "violet-forge"
   ],
   "author": "Theo",
@@ -45,7 +45,7 @@
     ]
   },
   "peerDependencies": {
-    "@usetheo/ui": ">=0.10.0"
+    "@theokit/ui": ">=0.10.0"
   },
   "engines": {
     "node": ">=18"

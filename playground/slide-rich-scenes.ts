@@ -187,8 +187,8 @@ $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$`,
     markdown: `# Code with real Shiki highlighting
 
 \`\`\`ts
-import { Slide } from "@usetheo/ui/slide";
-import { shikiPlugin } from "@usetheo/ui/slide/plugins/shiki";
+import { Slide } from "@theokit/ui/slide";
+import { shikiPlugin } from "@theokit/ui/slide/plugins/shiki";
 
 const plugins = [shikiPlugin({ langs: ["ts", "python"] })];
 export default function App() {

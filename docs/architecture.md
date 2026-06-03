@@ -1,4 +1,4 @@
-# Architecture — @usetheo/ui
+# Architecture — @theokit/ui
 
 > Last updated: 2026-05-13. This document defines the **taxonomy** rule for the library.
 > All future components must comply.
@@ -26,7 +26,7 @@ src/
 The split between `primitives/` and `composites/` is determined by a **mechanical rule**, not by domain feeling.
 
 > **A component is a primitive if and only if it does NOT import any other
-> `@usetheo/ui` component.**
+> `@theokit/ui` component.**
 >
 > Otherwise it is a composite.
 
@@ -148,7 +148,7 @@ This is **deliberate** and documented in `scripts/sync-exports.ts`. The
 trade-off:
 
 - **What subpath imports give you.** A clean per-component import surface
-  (`import { Button } from "@usetheo/ui/button"`), better IDE autocomplete,
+  (`import { Button } from "@theokit/ui/button"`), better IDE autocomplete,
   and an editorial signal that consumers can pin to a specific component.
 - **What subpath imports do NOT give you.** Separate bundles per component.
   tsup is configured with `splitting: false`. A 99-entry split would
@@ -158,8 +158,8 @@ trade-off:
 **Tree-shaking is what shrinks the bundle.** Modern bundlers (Vite, esbuild,
 Rollup, webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and drop
 unused components from the barrel regardless of which import form the
-consumer wrote. `import { Button } from "@usetheo/ui"` and
-`import { Button } from "@usetheo/ui/button"` produce the same final
+consumer wrote. `import { Button } from "@theokit/ui"` and
+`import { Button } from "@theokit/ui/button"` produce the same final
 bundle.
 
 **Runtimes that don't tree-shake** (Jest classic, Node REPL, raw browser
@@ -214,7 +214,7 @@ Adding a new global provider primitive requires:
 - **Renaming**: keep the old name as a re-export from the new path with a
   `@deprecated` JSDoc tag, and remove only in the next major version.
 - **Moving primitive → composite**: announced via CHANGELOG entry; the public
-  import from `@usetheo/ui` does NOT change (the barrel is the only stable
+  import from `@theokit/ui` does NOT change (the barrel is the only stable
   surface). Internal callers (other composites) must be migrated in the same
   PR.
 - **Deletion**: must wait one major version after the deprecation tag lands.

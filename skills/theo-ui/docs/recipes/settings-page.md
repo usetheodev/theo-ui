@@ -54,16 +54,16 @@ Inferred: surface=settings-form · use=update account preferences · density=com
 
 import { useId, useState, type FormEvent } from "react";
 
-import { PageShell } from "@usetheo/ui/page-shell";
-import { Card } from "@usetheo/ui/card";
-import { Input } from "@usetheo/ui/input";
-import { Switch } from "@usetheo/ui/switch";
-import { Label } from "@usetheo/ui/label";
-import { Button } from "@usetheo/ui/button";
-import { Avatar } from "@usetheo/ui/avatar";
-import { Alert } from "@usetheo/ui/alert";
-import { DangerZone } from "@usetheo/ui/danger-zone";
-import { ConfirmDialog } from "@usetheo/ui/confirm-dialog";
+import { PageShell } from "@theokit/ui/page-shell";
+import { Card } from "@theokit/ui/card";
+import { Input } from "@theokit/ui/input";
+import { Switch } from "@theokit/ui/switch";
+import { Label } from "@theokit/ui/label";
+import { Button } from "@theokit/ui/button";
+import { Avatar } from "@theokit/ui/avatar";
+import { Alert } from "@theokit/ui/alert";
+import { DangerZone } from "@theokit/ui/danger-zone";
+import { ConfirmDialog } from "@theokit/ui/confirm-dialog";
 
 import { useAccount } from "@/hooks/useAccount";
 

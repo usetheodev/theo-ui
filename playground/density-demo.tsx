@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Input, Select, Textarea, useDensity } from "@usetheo/ui";
+import { Badge, Button, Card, Input, Select, Textarea, useDensity } from "@theokit/ui";
 
 /**
  * DensityDemo — shows how `useDensity` toggles the global control density

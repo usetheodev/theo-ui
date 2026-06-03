@@ -1,4 +1,4 @@
-# @usetheo/ui — Theo UI (Violet Forge)
+# @theokit/ui — Theo UI (Violet Forge)
 
 > React component library for AI-agent surfaces and cloud (PaaS) dashboards. 121 components (92 primitives + 29 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
 
@@ -6,7 +6,7 @@ This file follows the [llms.txt convention](https://llmstxt.org/) and gives an L
 
 ## Project metadata
 
-- **npm package:** `@usetheo/ui`
+- **npm package:** `@theokit/ui`
 - **Current version:** `0.12.0-next.0` (npm dist-tag `next`; latest release line)
 - **License:** Apache-2.0
 - **Repository:** `https://github.com/usetheodev/theo-ui`
@@ -21,7 +21,7 @@ This file follows the [llms.txt convention](https://llmstxt.org/) and gives an L
 
 ```bash
 # Full package (recommended for new projects)
-pnpm add @usetheo/ui@next
+pnpm add @theokit/ui@next
 
 # Per-component copy (shadcn-style)
 npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/copy-button.json
@@ -31,27 +31,27 @@ npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/copy-button.json
 
 ```ts
 // All components ship via the single barrel.
-import { Button, Table, ConfirmDialog, CopyButton } from "@usetheo/ui";
+import { Button, Table, ConfirmDialog, CopyButton } from "@theokit/ui";
 
 // Themes + provider:
-import { ThemeProvider, violetForge, classicPaper, auroraTerminal } from "@usetheo/ui";
+import { ThemeProvider, violetForge, classicPaper, auroraTerminal } from "@theokit/ui";
 
 // Pure utility (no React):
-import { cn } from "@usetheo/ui";
+import { cn } from "@theokit/ui";
 
 // Engines ship under subpaths (separate bundles, opt-in peer-deps):
-import { Whiteboard } from "@usetheo/ui/whiteboard";
-import { Slide } from "@usetheo/ui/slide";
-import { SlideDeck } from "@usetheo/ui/slide-deck";
-import { Mermaid } from "@usetheo/ui/slide/plugins/mermaid";
-import { Math } from "@usetheo/ui/slide/plugins/math";
-import { Shiki } from "@usetheo/ui/slide/plugins/shiki";
-import { Emoji } from "@usetheo/ui/slide/plugins/emoji";
-import { theoUIVitePlugin } from "@usetheo/ui/vite-plugin";
-import "@usetheo/ui/preset";       // Tailwind v4 preset (zero-config)
+import { Whiteboard } from "@theokit/ui/whiteboard";
+import { Slide } from "@theokit/ui/slide";
+import { SlideDeck } from "@theokit/ui/slide-deck";
+import { Mermaid } from "@theokit/ui/slide/plugins/mermaid";
+import { Math } from "@theokit/ui/slide/plugins/math";
+import { Shiki } from "@theokit/ui/slide/plugins/shiki";
+import { Emoji } from "@theokit/ui/slide/plugins/emoji";
+import { theoUIVitePlugin } from "@theokit/ui/vite-plugin";
+import "@theokit/ui/preset";       // Tailwind v4 preset (zero-config)
 ```
 
-There are **134 subpath exports** in `package.json#exports` — one per component plus engine entry points. **As of 0.10.0-next.0** (Brief #4), per-component subpath imports (`@usetheo/ui/button`) point at real per-component dist files (`dist/primitives/button/index.js`) instead of the barrel — switching to subpath form measurably shrinks the consumer's `@usetheo/ui` chunk by dropping unused components. Before 0.10, subpath imports were cosmetic (all aliased the barrel). The barrel form keeps working, additive migration shape (same as `@mui/material`).
+There are **134 subpath exports** in `package.json#exports` — one per component plus engine entry points. **As of 0.10.0-next.0** (Brief #4), per-component subpath imports (`@theokit/ui/button`) point at real per-component dist files (`dist/primitives/button/index.js`) instead of the barrel — switching to subpath form measurably shrinks the consumer's `@theokit/ui` chunk by dropping unused components. Before 0.10, subpath imports were cosmetic (all aliased the barrel). The barrel form keeps working, additive migration shape (same as `@mui/material`).
 
 ## Peer dependencies (required vs optional)
 
@@ -61,19 +61,19 @@ There are **134 subpath exports** in `package.json#exports` — one per componen
 - `tailwindcss ^4.0.0`
 
 **Optional (only required if you use the matching engine subpath):**
-- `@tailwindcss/vite ^4.0.0`, `vite ^6 || ^7` — for `@usetheo/ui/vite-plugin`
-- `roughjs ^4.6`, `perfect-freehand ^1.2` — for `@usetheo/ui/whiteboard`
-- `mdast-util-from-markdown`, `mdast-util-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `micromark-extension-gfm`, `unist-util-visit`, `unist-util-visit-parents`, `yaml` — for `@usetheo/ui/slide`
-- `shiki ^1.0` — for `@usetheo/ui/slide/plugins/shiki`
-- `katex ^0.16`, `mdast-util-math`, `micromark-extension-math` — for `@usetheo/ui/slide/plugins/math`
-- `mermaid ^11.0` — for `@usetheo/ui/slide/plugins/mermaid`
-- `hast-util-from-html` — for `@usetheo/ui/slide/plugins/emoji`
+- `@tailwindcss/vite ^4.0.0`, `vite ^6 || ^7` — for `@theokit/ui/vite-plugin`
+- `roughjs ^4.6`, `perfect-freehand ^1.2` — for `@theokit/ui/whiteboard`
+- `mdast-util-from-markdown`, `mdast-util-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `micromark-extension-gfm`, `unist-util-visit`, `unist-util-visit-parents`, `yaml` — for `@theokit/ui/slide`
+- `shiki ^1.0` — for `@theokit/ui/slide/plugins/shiki`
+- `katex ^0.16`, `mdast-util-math`, `micromark-extension-math` — for `@theokit/ui/slide/plugins/math`
+- `mermaid ^11.0` — for `@theokit/ui/slide/plugins/mermaid`
+- `hast-util-from-html` — for `@theokit/ui/slide/plugins/emoji`
 
 **Already bundled (do NOT install separately):** `@radix-ui/*`, `class-variance-authority`, `clsx`, `cmdk`, `lucide-react`, `tailwind-merge`. These are `dependencies`, not peer.
 
 ## Taxonomy (mechanical rule, gate-enforced)
 
-- **Primitive** = a component that imports **zero** other `@usetheo/ui` components. Lives in `src/components/primitives/`.
+- **Primitive** = a component that imports **zero** other `@theokit/ui` components. Lives in `src/components/primitives/`.
 - **Composite** = a component that imports **one or more** primitives via their barrel `index.js`. Lives in `src/components/composites/`.
 - The gate `scripts/validate-quality-gates.ts` is **hard-fail** if either rule is violated. A primitive that grows to need a sibling primitive must be **promoted to composite** by moving the folder + renaming via PR with rationale.
 - Composites import siblings via barrel: `import { Button } from "../../primitives/button/index.js"` — NOT via the raw `.tsx` file (also gate-enforced).
@@ -87,7 +87,7 @@ There are **134 subpath exports** in `package.json#exports` — one per componen
 - **Color helpers:** `hex("#7c5cff")`, `rgb(124, 92, 255)` — both return CSS-ready strings.
 - **Density:** `useDensity()` hook returns `"compact" | "comfortable" | "cozy"`. Cascading via `<DensityProvider>`.
 - **Fonts (locked):** Geist Sans (display + body) + Geist Mono (mono). Loaded via CDN by default (`dist/fonts-cdn.css`) or locally (`dist/fonts.css`).
-- **Tailwind v4:** CSS-first config via `@usetheo/ui/preset` (zero JS config). v3 legacy preset available at `@usetheo/ui/preset-v3-legacy`.
+- **Tailwind v4:** CSS-first config via `@theokit/ui/preset` (zero JS config). v3 legacy preset available at `@theokit/ui/preset-v3-legacy`.
 
 ## Component catalog — primitives (89)
 
@@ -137,13 +137,13 @@ Every component file MUST:
 - **Do NOT** ship CJS (`require()`). ESM only. The TypeScript output is `.js` with `.d.ts` siblings.
 - **Do NOT** rename the locked names (see below) without a strategic review.
 - **Do NOT** use emojis in code, README, JSDoc, or CHANGELOG. (User-facing copy in docs is OK if explicitly requested.)
-- **Do NOT** invent integration that doesn't exist. As of 2026-05-23, `@usetheo/ui` has **no** import from `@usetheo/sdk`, `theokit`, or `theo-code`. Verify with `grep` before claiming wiring.
+- **Do NOT** invent integration that doesn't exist. As of 2026-05-23, `@theokit/ui` has **no** import from `@theokit/sdk`, `theokit`, or `theo-code`. Verify with `grep` before claiming wiring.
 
 ## Locked names (immutable without strategic review)
 
 | Item | Value |
 |---|---|
-| npm package | `@usetheo/ui` |
+| npm package | `@theokit/ui` |
 | Codename | Violet Forge |
 | Default theme | `violet-forge` |
 | Built-in themes (3 originals) | `violet-forge`, `classic-paper`, `aurora-terminal` |
@@ -163,14 +163,14 @@ These ship under their own subpath because they require heavy peer-deps. **Do NO
 
 | Engine | Subpath | Required peer-deps |
 |---|---|---|
-| Whiteboard (Excalidraw-style view) | `@usetheo/ui/whiteboard` | `roughjs`, `perfect-freehand` |
-| Slide (Marp-style view) | `@usetheo/ui/slide` | `mdast-util-*`, `hast-util-*`, `micromark-extension-gfm`, `unist-util-visit*`, `yaml` |
-| SlideDeck | `@usetheo/ui/slide-deck` | inherits from Slide |
-| Slide plugin — Shiki | `@usetheo/ui/slide/plugins/shiki` | `shiki` |
-| Slide plugin — Math (KaTeX) | `@usetheo/ui/slide/plugins/math` | `katex`, `mdast-util-math`, `micromark-extension-math` |
-| Slide plugin — Mermaid | `@usetheo/ui/slide/plugins/mermaid` | `mermaid` |
-| Slide plugin — Emoji | `@usetheo/ui/slide/plugins/emoji` | `hast-util-from-html` |
-| Vite plugin | `@usetheo/ui/vite-plugin` | `vite ^6 || ^7`, `@tailwindcss/vite` |
+| Whiteboard (Excalidraw-style view) | `@theokit/ui/whiteboard` | `roughjs`, `perfect-freehand` |
+| Slide (Marp-style view) | `@theokit/ui/slide` | `mdast-util-*`, `hast-util-*`, `micromark-extension-gfm`, `unist-util-visit*`, `yaml` |
+| SlideDeck | `@theokit/ui/slide-deck` | inherits from Slide |
+| Slide plugin — Shiki | `@theokit/ui/slide/plugins/shiki` | `shiki` |
+| Slide plugin — Math (KaTeX) | `@theokit/ui/slide/plugins/math` | `katex`, `mdast-util-math`, `micromark-extension-math` |
+| Slide plugin — Mermaid | `@theokit/ui/slide/plugins/mermaid` | `mermaid` |
+| Slide plugin — Emoji | `@theokit/ui/slide/plugins/emoji` | `hast-util-from-html` |
+| Vite plugin | `@theokit/ui/vite-plugin` | `vite ^6 || ^7`, `@tailwindcss/vite` |
 
 All engines documented under RFC 0001 / 0002 / 0003 / 0004 in `docs/rfcs/`. View-only (no editing) by design.
 
@@ -243,7 +243,7 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
 
 ## How to add a new component (the rote checklist)
 
-1. Decide taxonomy: does it import another `@usetheo/ui` component? If yes → composite. If no → primitive.
+1. Decide taxonomy: does it import another `@theokit/ui` component? If yes → composite. If no → primitive.
 2. Create folder: `src/components/{primitives,composites}/{kebab-name}/`
 3. Create 4 files: `{slug}.tsx`, `{slug}.test.tsx`, `{slug}.stories.tsx`, `index.ts`
 4. Implement with `forwardRef` + `displayName` + `cn()` + lucide icons + design tokens + typography scale
@@ -258,13 +258,13 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
 
 ## Cross-project positioning
 
-`@usetheo/ui` is the **UI pillar** of the `usetheo` ecosystem. Other pillars:
+`@theokit/ui` is the **UI pillar** of the `usetheo` ecosystem. Other pillars:
 
-- **Harness** — `@usetheo/sdk` (Claude Agent SDK consumer). No current import from `@usetheo/ui`.
+- **Harness** — `@theokit/sdk` (Claude Agent SDK consumer). No current import from `@theokit/ui`.
 - **Skills** — `theokit` (agent framework). No current import.
 - **Runtime** — Theo PaaS (cloud platform, pre-release). No current import; `<DeploymentRow>`, `<BuildLogStream>`, `<RollbackUI>`, `<EnvVarEditor>`, `<DomainConfig>`, `<PreviewEnvCard>`, `<ProjectCard>`, `<MetricsPanel>`, and the new Brief #1 + #2 components are designed for it but currently unused.
 
-`@usetheo/ui` is **community auxiliary**: Apache-2.0, usable standalone, no commitment to the rest of the stack. The integration story above is aspirational; verify with `grep` before claiming wiring exists in any consumer.
+`@theokit/ui` is **community auxiliary**: Apache-2.0, usable standalone, no commitment to the rest of the stack. The integration story above is aspirational; verify with `grep` before claiming wiring exists in any consumer.
 
 ## When this file is stale
 

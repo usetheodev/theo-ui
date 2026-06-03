@@ -179,7 +179,7 @@ The Violet Forge defaults target FAANG-tier modern dashboards
 Override globally via `<ThemeProvider defaultDensity="compact">`:
 
 ```tsx
-import { ThemeProvider, builtinThemes } from "@usetheo/ui";
+import { ThemeProvider, builtinThemes } from "@theokit/ui";
 
 <ThemeProvider themes={builtinThemes} defaultDensity="compact">
   {children}
@@ -338,7 +338,7 @@ Themes are frozen bundles of CSS-var values applied via `data-theme="<name>"` on
 **SSR (Next.js / Astro / Remix)**: wrap the app in `<ThemeProvider>` AND inject `<ThemeScript>` in `<head>` to prevent FOUC and hydration mismatch. Example:
 
 ```tsx
-import { ThemeProvider, ThemeScript, ThemeSwitcher } from "@usetheo/ui";
+import { ThemeProvider, ThemeScript, ThemeSwitcher } from "@theokit/ui";
 
 <html lang="en" suppressHydrationWarning>
   <head>
@@ -367,7 +367,7 @@ For apps that only need 1–2 themes, prefer an explicit subset to cut the
 payload to ~6–12 KB:
 
 ```tsx
-import { ThemeProvider, violetForge, dracula } from "@usetheo/ui";
+import { ThemeProvider, violetForge, dracula } from "@theokit/ui";
 
 <ThemeProvider themes={[violetForge, dracula]} defaultTheme="violet-forge">
   {children}

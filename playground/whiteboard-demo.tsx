@@ -1,5 +1,5 @@
-import { Button } from "@usetheo/ui";
-import { type ValidationError, Whiteboard } from "@usetheo/ui/whiteboard";
+import { Button } from "@theokit/ui";
+import { type ValidationError, Whiteboard } from "@theokit/ui/whiteboard";
 import { useState } from "react";
 import { SCENES, type SceneFixture } from "./whiteboard-scenes.js";
 

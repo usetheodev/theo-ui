@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `@usetheo/ui` are documented in this file.
+All notable changes to `@theokit/ui` are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Seven new components shipped as Phase 1 of the `theokit-ui-parity` plan
 (`.claude/knowledge-base/plans/theokit-ui-parity-plan.md` v1.1). All seven
 mirror OpenClaw Control UI patterns the framework lacked, designed to be
-composable into any theokit app via `@usetheo/ui` barrel.
+composable into any theokit app via `@theokit/ui` barrel.
 
 ### Added — Phase 2 component
 
@@ -105,7 +105,7 @@ composable into any theokit app via `@usetheo/ui` barrel.
 
 **Stable release — promoted from `0.12.0-next.0` after dogfood validation + cross-repo contract gates landed.**
 
-First `@usetheo/ui` release on the npm `latest` tag without a `-next.*` pre-release suffix. Content is the union of everything shipped in `0.12.0-next.0` (2026-05-25) plus the additions below from `[Unreleased]` consolidation. **Zero breaking changes vs `0.12.0-next.0`** — consumers on `^0.12.0-next.0` upgrade transparently.
+First `@theokit/ui` release on the npm `latest` tag without a `-next.*` pre-release suffix. Content is the union of everything shipped in `0.12.0-next.0` (2026-05-25) plus the additions below from `[Unreleased]` consolidation. **Zero breaking changes vs `0.12.0-next.0`** — consumers on `^0.12.0-next.0` upgrade transparently.
 
 ### Added (dogfood-fixes-and-coverage-expansion T4.1, 2026-05-28)
 
@@ -127,14 +127,14 @@ that complement the existing `llms.txt`: a structured visual spec
 ### Added
 
 - **`DESIGN.md` at repo root (NEW)** — plain-text design system spec
-  for LLM assistants generating UI against `@usetheo/ui`. Follows the
+  for LLM assistants generating UI against `@theokit/ui`. Follows the
   awesome-design-md 9-section canonical structure (Visual Theme &
   Atmosphere · Color Palette & Roles · Typography Rules · Layout
   Principles · Depth & Elevation · Component Stylings · Responsive
   Behavior · Do's and Don'ts · Agent Prompt Guide). Tokens mirror
   `src/styles/tokens.css` and `src/themes/violet-forge.ts`. Shipped
   via `package.json > files` alongside `llms.txt` and `CHANGELOG.md`
-  so consumers see the visual spec at `node_modules/@usetheo/ui/DESIGN.md`.
+  so consumers see the visual spec at `node_modules/@theokit/ui/DESIGN.md`.
   Reference research lives at
   `.claude/knowledge-base/reference/design-md-convention.md`.
 - **`skills/theo-ui/` companion agent skill (NEW)** — library-aware
@@ -176,7 +176,7 @@ Brief: `theo/docs/handoff/2026-05-25-theo-ui-cloud-dashboard-brief-5.md`
   `Object.assign`: `Trigger`, `Portal`, `Content`, `Item`,
   `CheckboxItem`, `RadioItem`, `Label`, `Separator`, `Shortcut`,
   `Group`, `Sub`, `SubTrigger`, `SubContent`, `RadioGroup`. Styled
-  with `@usetheo/ui` design tokens. Consolidates 5 prior direct-
+  with `@theokit/ui` design tokens. Consolidates 5 prior direct-
   Radix usages (`model-selector`, `intent-selector`, `agent-profile`,
   `theme-switcher`, `theo-code-shell`) under a single styled
   wrapper. 6 unit tests + 5 Ladle stories. SSR-safe.
@@ -250,7 +250,7 @@ new primitives yet — pure version bump):
 
 | Metric | 0.10.0-next.0 | 0.11.0-next.0 | Δ |
 |---|---|---|---|
-| `@usetheo/ui` chunk | 10.96 KB brotli | 10.98 KB brotli | **+0.02 KB (+0.2%)** |
+| `@theokit/ui` chunk | 10.96 KB brotli | 10.98 KB brotli | **+0.02 KB (+0.2%)** |
 | TOTAL initial JS | 134.68 KB brotli | 135.56 KB brotli | +0.88 KB (+0.6%) |
 
 Per-chunk cap (18 KB): passes with 7.02 KB headroom.
@@ -273,8 +273,8 @@ defect surfaced by the TheoCloud dashboard bundle audit
 exports declared in `package.json#exports` (`./alert`, `./button`,
 `./table`, …) were **cosmetic** — each pointed at the same
 `./dist/index.js` (the 417 KB barrel). `import { Alert } from
-"@usetheo/ui/alert"` resolved byte-identical to
-`import { Alert } from "@usetheo/ui"`, and barrel tree-shaking
+"@theokit/ui/alert"` resolved byte-identical to
+`import { Alert } from "@theokit/ui"`, and barrel tree-shaking
 failed in consumers because of `forwardRef` side-effect bailouts,
 `Object.assign` compound components, and `sideEffects: ["**/*.css"]`
 conservatism. TheoCloud measured **0 KB dropped** from the 240 KB
@@ -282,7 +282,7 @@ minified barrel regardless of how few exports were used.
 
 This release extends the per-component dist pattern that already
 worked for `whiteboard` / `slide` / `slide-deck` to every primitive
-and composite. The barrel `import { X } from "@usetheo/ui"` is
+and composite. The barrel `import { X } from "@theokit/ui"` is
 preserved unchanged (additive migration shape, same as `@mui/material`).
 
 Plan: `.claude/knowledge-base/plans/subpath-tree-shaking-plan.md`
@@ -308,7 +308,7 @@ Brief: `theo/docs/handoff/2026-05-24-theo-ui-subpath-tree-shaking-brief-4.md`
   `NODE_OPTIONS=--max-old-space-size=8192` (the flag does not
   propagate to workers). Per-component subpaths resolve their `types`
   field at the barrel `dist/index.d.ts` — TypeScript still finds
-  `Alert`/`AlertProps` from `import { Alert } from "@usetheo/ui/alert"`.
+  `Alert`/`AlertProps` from `import { Alert } from "@theokit/ui/alert"`.
   Trade-off: consumers' typecheck pulls the full type graph regardless
   of subpath, but the JS dist (where tree-shaking matters) is
   per-component and small.
@@ -350,7 +350,7 @@ chunks. **Consumer-side bundle delta against TheoCloud dashboard
 
 | Metric | 0.9.0-next.0 | 0.10.0-next.0 | Δ |
 |---|---|---|---|
-| `@usetheo/ui` chunk | 36.96 KB brotli | 10.96 KB brotli | **−26.00 KB (−70.3%)** |
+| `@theokit/ui` chunk | 36.96 KB brotli | 10.96 KB brotli | **−26.00 KB (−70.3%)** |
 | TOTAL initial JS | 176.27 KB brotli | 134.68 KB brotli | −41.59 KB (−23.6%) |
 
 Per-chunk cap (50 KB): passes with 39 KB headroom (was 13 KB).
@@ -369,16 +369,16 @@ Evidence file:
 ### Migration (consumer-side, opt-in)
 
 ```diff
-- import { Card, Button, Alert } from "@usetheo/ui";
-+ import { Card } from "@usetheo/ui/card";
-+ import { Button } from "@usetheo/ui/button";
-+ import { Alert } from "@usetheo/ui/alert";
+- import { Card, Button, Alert } from "@theokit/ui";
++ import { Card } from "@theokit/ui/card";
++ import { Button } from "@theokit/ui/button";
++ import { Alert } from "@theokit/ui/alert";
 ```
 
 The barrel import keeps working — migration is gradual, file by
 file. CSS, themes, and isolated engines stay barrel-imported:
-`import { ThemeProvider, violetForge } from "@usetheo/ui"`,
-`import "@usetheo/ui/styles.css"`.
+`import { ThemeProvider, violetForge } from "@theokit/ui"`,
+`import "@theokit/ui/styles.css"`.
 
 ## [0.9.0-next.0] - 2026-05-23
 
@@ -530,7 +530,7 @@ Consumer brief: `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief
 - **Taxonomy gate** classified ConfirmDialog + CodeBlock as composites
   (D2 in the plan). Brief #2 listed all 8 as primitives, but the
   validate-quality-gates.ts script is hard-fail for any
-  `primitives/` file that imports another `@usetheo/ui` component.
+  `primitives/` file that imports another `@theokit/ui` component.
 - **Timestamp uses native `title` HTML attribute** (D3) instead of
   the `<Tooltip>` component, to keep the file a true primitive
   without sibling-primitive imports.
@@ -610,7 +610,7 @@ Consumer brief: `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief
 - **Taxonomy invariant preserved.** `UsageMeter → Progress` and
   `AccountMenu → Avatar + PlanBadge` use relative-path imports
   (`../{slug}/index.js`), not barrel imports, so primitives still have
-  zero `@usetheo/ui` cross-dependencies per the structural gate.
+  zero `@theokit/ui` cross-dependencies per the structural gate.
 - **Bundle delta.** `dist/index.js` grows by ~6 KB (4 primitives + types
   + small imports). Within the ±5% baseline tolerance (rebaselined).
 - **Subpath exports.** `package.json#exports` gains `./usage-meter`,
@@ -688,7 +688,7 @@ every `<button>` rendered by `Sidebar.Item`, `QuickActionChips`,
 `ChatComposer`, `ContextWindowBar`, `ToolCallCard`, `AgentProfile`,
 `CommandPalette`, etc. was showing the default arrow cursor instead of
 the pointing hand. Visual regression observed in TheoKit
-`examples/full-stack-agent` against `@usetheo/ui@0.6.1-next.0`.
+`examples/full-stack-agent` against `@theokit/ui@0.6.1-next.0`.
 
 ### Fixed
 
@@ -713,7 +713,7 @@ the pointing hand. Visual regression observed in TheoKit
      accessibility convention. (#TBD)
 
 The fix is opt-in by consumer choice — they imported
-`@usetheo/ui/styles.css`. Tailwind v4's global preflight remains
+`@theokit/ui/styles.css`. Tailwind v4's global preflight remains
 untouched; only this stylesheet's `@layer base` adds the rule. (#TBD)
 
 ### Notes
@@ -726,7 +726,7 @@ untouched; only this stylesheet's `@layer base` adds the rule. (#TBD)
   #    pointing-hand icon (not the default arrow).
   #
   # CSS grep test:
-  grep -c "button:not(:disabled)" node_modules/@usetheo/ui/dist/styles.css
+  grep -c "button:not(:disabled)" node_modules/@theokit/ui/dist/styles.css
   # MUST return >= 1 (pre-fix: 0)
   ```
 
@@ -741,12 +741,12 @@ the entire library rendered flat under pnpm.
 
 - **pnpm symlink + Tailwind v4 `@source` bug** — Tailwind v4's
   `tinyglobby`-based scanner does **not** follow symbolic links. Under a
-  pnpm install, `node_modules/@usetheo/ui` is a symlink to a deep
-  `node_modules/.pnpm/@usetheo+ui@…/node_modules/@usetheo/ui` directory,
+  pnpm install, `node_modules/@theokit/ui` is a symlink to a deep
+  `node_modules/.pnpm/@usetheo+ui@…/node_modules/@theokit/ui` directory,
   and the consumer-side pattern
-  `@source "node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}"` (the one
+  `@source "node_modules/@theokit/ui/dist/**/*.{js,mjs,cjs}"` (the one
   the `vite-plugin` previously emitted via the
-  `virtual:@usetheo/ui/library-sources.css` virtual module) expanded to
+  `virtual:@theokit/ui/library-sources.css` virtual module) expanded to
   **zero** matches. Every `hover:bg-muted`, `hover:text-foreground`,
   `data-[state=active]:…` variant the library's 79 primitives + 41
   composites use was therefore never emitted into the consumer's CSS,
@@ -768,7 +768,7 @@ the entire library rendered flat under pnpm.
   gzipped. This is the canonical Tailwind v4 library pattern used by
   Radix UI Themes, shadcn/ui pre-compiled, and Mantine v7. (#TBD)
 - **`dist/styles.css` chains `@import "./components.css"`** at the end,
-  so a single `@import "@usetheo/ui/styles.css"` in the consumer's CSS
+  so a single `@import "@theokit/ui/styles.css"` in the consumer's CSS
   now transitively pulls in every utility the library uses — zero
   filesystem scanning required. Consumer-side `@theme` overrides still
   win via the runtime CSS-var cascade (every utility resolves
@@ -785,9 +785,9 @@ the entire library rendered flat under pnpm.
 
 ### Changed
 
-- **`@usetheo/ui/vite-plugin` virtual module** — the
-  `virtual:@usetheo/ui/library-sources.css` module no longer emits the
-  broken `@source "node_modules/@usetheo/ui/..."` default globs. It is
+- **`@theokit/ui/vite-plugin` virtual module** — the
+  `virtual:@theokit/ui/library-sources.css` module no longer emits the
+  broken `@source "node_modules/@theokit/ui/..."` default globs. It is
   retained for backwards compatibility (TheoKit's earlier integration
   code may still resolve it) but now emits only an explanatory comment
   block when no `contentExtra` option is passed. The plugin's primary
@@ -803,7 +803,7 @@ the entire library rendered flat under pnpm.
   starter, Mantine v7.
 - Verification recipe matching TheoKit's reproduction script:
   ```bash
-  grep -c "\.hover\\:bg-muted" node_modules/.pnpm/@usetheo+ui@*/node_modules/@usetheo/ui/dist/components.css
+  grep -c "\.hover\\:bg-muted" node_modules/.pnpm/@usetheo+ui@*/node_modules/@theokit/ui/dist/components.css
   # MUST return >= 1 (pre-fix: 0)
   ```
 
@@ -872,7 +872,7 @@ branching navigation, and a streaming-safe markdown preprocess.
 
 ### Breaking changes
 
-- **`Message` type removed.** `import type { Message } from "@usetheo/ui"`
+- **`Message` type removed.** `import type { Message } from "@theokit/ui"`
   now fails — use `UIMessage` instead. TypeScript will hint
   `Did you mean 'UIMessage'?`.
 - **`message.content` removed.** Replace every callsite:
@@ -899,7 +899,7 @@ branching navigation, and a streaming-safe markdown preprocess.
   `<ChatMessage>` — fold them into custom UI under the message body, or
   attach via `metadata?: unknown` (consumer-typed) and read from there.
 - **`./components/primitives/chat-message/`** deleted. Imports must move
-  to `./components/composites/chat-message/` (the public `@usetheo/ui`
+  to `./components/composites/chat-message/` (the public `@theokit/ui`
   barrel handles this; only relative imports inside the repo need
   updating).
 
@@ -939,12 +939,12 @@ ships a fixture-backed real-build dogfood so the regression cannot recur.
 - **`./preset` subpath is now a CSS file.** Tailwind v4 dropped the v3 JS
   preset format — `theme.extend.colors.{name}` declarations are a no-op for
   v4. The new `dist/preset.css` simply chains `@import "./tokens.css"` and
-  `@import "./tokens-v4.css"` so consumers can `@import "@usetheo/ui/preset.css"`
+  `@import "./tokens-v4.css"` so consumers can `@import "@theokit/ui/preset.css"`
   from their own Tailwind v4 entry CSS. (#TBD)
 
 ### Added
 
-- **`@usetheo/ui/tokens-v4.css` (NEW)** — `@theme {}` block declaring 28
+- **`@theokit/ui/tokens-v4.css` (NEW)** — `@theme {}` block declaring 28
   `--color-*` aliases (full color set), 14 `--text-*` typescale tiers
   (Violet Forge — `--text-display-2xl` through `--text-code-sm` with companion
   `--*--line-height`, `--*--letter-spacing`, `--*--font-weight`), 3 `--font-*`
@@ -953,14 +953,14 @@ ships a fixture-backed real-build dogfood so the regression cannot recur.
   uses `hsl(var(--*))` indirection so `<ThemeProvider>`'s runtime
   `[data-theme]` cascade keeps working — switching themes still recolors
   every utility. (#TBD)
-- **`@usetheo/ui/styles-v3-legacy.css` (NEW)** — the previous v3-shaped
+- **`@theokit/ui/styles-v3-legacy.css` (NEW)** — the previous v3-shaped
   `@tailwind base/components/utilities` entry. Pinned consumers on
   `tailwindcss@^3` who still want a prebuilt stylesheet can import this
-  subpath. New code SHOULD use `@usetheo/ui/styles.css` (v4) instead.
-- **`@usetheo/ui/preset-v3-legacy` (NEW)** — the v3 JS `Partial<Config>`
+  subpath. New code SHOULD use `@theokit/ui/styles.css` (v4) instead.
+- **`@theokit/ui/preset-v3-legacy` (NEW)** — the v3 JS `Partial<Config>`
   preset that previously lived at `./preset`. Renamed so the canonical
   `./preset` subpath can host the v4 CSS preset. v3 consumers update
-  imports from `@usetheo/ui/preset` to `@usetheo/ui/preset-v3-legacy`.
+  imports from `@theokit/ui/preset` to `@theokit/ui/preset-v3-legacy`.
 - **Dogfood scripts** — `pnpm dogfood:v4-zero-config` (shape check, runs in
   `quality:gates`) and `pnpm dogfood:v4-real-build` (end-to-end: packs the
   tarball, installs in a tmp project alongside `@tailwindcss/cli@^4`, runs
@@ -974,8 +974,8 @@ ships a fixture-backed real-build dogfood so the regression cannot recur.
 
 - **Breaking for any 0.5.0-next.0 consumer.** The `./preset` subpath changed
   from JS (`Partial<Config>` default-export) to CSS file. Code importing
-  `import preset from "@usetheo/ui/preset"` will break and must migrate to
-  `@import "@usetheo/ui/preset.css"` in an entry CSS. Blast radius: TheoKit
+  `import preset from "@theokit/ui/preset"` will break and must migrate to
+  `@import "@theokit/ui/preset.css"` in an entry CSS. Blast radius: TheoKit
   (already reverted away from 0.5.x by the time this fix shipped) plus any
   community consumer that adopted 0.5.0-next.0 in the same day — likely zero.
 - The runtime indirection via `hsl(var(--*))` aliases keeps `<ThemeProvider>`
@@ -992,31 +992,31 @@ Zero visual break and no runtime behavior change for existing consumers.
 
 ### Added
 
-- **`@usetheo/ui/vite-plugin` (NEW, RFC 0008)** — Default-export factory
+- **`@theokit/ui/vite-plugin` (NEW, RFC 0008)** — Default-export factory
   returning one Vite `Plugin`. The plugin's `config()` hook
   dynamic-imports `@tailwindcss/vite` v4 and chains it into the
   consumer's plugin array when resolvable, and degrades to `console.warn`
-  + CSS-only mode (via the pre-built `@usetheo/ui/styles.css` subpath)
+  + CSS-only mode (via the pre-built `@theokit/ui/styles.css` subpath)
   when the peer is not installed. A virtual module
-  `virtual:@usetheo/ui/library-sources.css` provides the `@source`
-  directive covering `node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}`
+  `virtual:@theokit/ui/library-sources.css` provides the `@source`
+  directive covering `node_modules/@theokit/ui/dist/**/*.{js,mjs,cjs}`
   so Tailwind scans the library's published JS for utilities. Plugin
-  name slug: `@usetheo/ui/vite-plugin`. Options: `tailwind?: boolean`
+  name slug: `@theokit/ui/vite-plugin`. Options: `tailwind?: boolean`
   (default `true`), `contentExtra?: string[]` (extra `@source` globs).
   (#TBD)
-- **`@usetheo/ui/preset` (NEW, RFC 0008)** — Default-export Tailwind v4
+- **`@theokit/ui/preset` (NEW, RFC 0008)** — Default-export Tailwind v4
   `Partial<Config>` mirroring the design tokens in `tokens.css`
   (colors via `hsl(var(--x) / <alpha-value>)`, font families, the
   Violet Forge typescale, radii, shadows, animations, motion timing)
-  with `content` paths covering `./node_modules/@usetheo/ui/dist/**` and
+  with `content` paths covering `./node_modules/@theokit/ui/dist/**` and
   the `tailwindcss-animate` plugin. Consumer usage:
-  `import preset from "@usetheo/ui/preset"; export default { presets: [preset] }`.
+  `import preset from "@theokit/ui/preset"; export default { presets: [preset] }`.
   Internally delegates to the existing `src/styles/tailwind-preset.ts` —
   the v3 shadcn-registry preset and the v4 import preset stay
   byte-for-byte aligned and impossible to drift. (#TBD)
 - **`@tailwindcss/vite ^4`, `tailwindcss ^4`, `vite ^6 || ^7` peer-deps
   (all optional)** — added to `peerDependenciesMeta` so consumers
-  importing `@usetheo/ui` standalone (no framework) are not forced into
+  importing `@theokit/ui` standalone (no framework) are not forced into
   Tailwind v4. Required only when consuming via TheoKit's auto-wire path
   or the new `./vite-plugin` subpath. (#TBD)
 
@@ -1024,7 +1024,7 @@ Zero visual break and no runtime behavior change for existing consumers.
 
 - Existing `tailwindcss@^3` consumers continue to work via the shadcn
   registry preset (`registry/r/tailwind-preset.json`) and the prebuilt
-  `@usetheo/ui/styles.css`. The new subpaths are additive — they do not
+  `@theokit/ui/styles.css`. The new subpaths are additive — they do not
   break v3-based setups.
 - The `vite-plugin` returns ONE `Plugin` object (not `Plugin[]`) per the
   cross-repo contract with TheoKit's `integrateUseTheoUI()`. The chain
@@ -1094,10 +1094,10 @@ preserves rendered markup for callers that don't pass `size`.
 ## [0.1.0-next.1] - 2026-05-19
 
 ### Added
-- **Slide rich content — Tier 1 baked-in + Tier 2 plugin system (2026-05-19, RFC 0004)** — Estende `<Slide>` (RFC 0002) e `<SlideDeck>` (RFC 0003) com conteúdo rico nível PowerPoint sem reinventar parsers. **Tier 1 (zero peer-deps novas):** (a) GFM alerts `> [!NOTE/TIP/IMPORTANT/WARNING/CAUTION]` detectados em mdast post-process (alerts.ts) → `<aside class="theo-slide-alert" data-theo-slide-alert-type>` temado em ambos os themes (default + violet-forge); (b) 7 layouts via frontmatter `layout` (`default`, `title`, `two-column`, `image-right`, `image-left`, `code-output`, `section`) em CSS grid templates (themes/layouts.css importado pelos dois themes); (c) backgroundImage + backgroundGradient com `sanitizeBgUrl` rejeitando `javascript:`/`vbscript:`/TODO data: URLs (EC-7), cap 500_000 chars; (d) Marpit `![bg](url)` syntax extraído em mdast walker → `ParsedSlide.extractedBackground = { url, modifier }` (D18/EC-5), sanitizado antes de armazenar com fallback `MARPIT_BG_UNSAFE_URL`, modifier-aware (`cover`/`fit`/`left`/`right`); (e) header/footer/paginate overlays via frontmatter (plain text ≤200 chars cada), CSS absolute positioned. **Tier 2 (opt-in plugin system):** plugin architecture com `<Slide plugins={SlidePlugin[]}>` e relay `<SlideDeck plugins>` para cada slide interno. `SlidePlugin` shape: `{ name, mdastTransform?, hastTransform?, components?, sanitizeSchemaExtension? }` com error isolation D16 (cada chamada em try/catch, throws agregadas em `errors[]` com `code: "PLUGIN_ERROR"`; pipeline **nunca** propaga exception) e sanitize-schema merge D17 (extensions unionadas com defaultSchema + Tier 1 baseline). Quatro plugins shipados em sub-subpaths `@usetheo/ui/slide/plugins/{shiki,math,mermaid,emoji}`: **shikiPlugin** (peer-dep `shiki`; lazy + singleton highlighter; pre-renderiza `<pre><code class="language-XXX">` em HTML temado dual-theme com sanitize ext `<span> style/className`); **mathPlugin** (peer-deps `katex` + `hast-util-from-html`; substitui `$inline$` + `$$block$$` por KaTeX displayMode/inline; skip em `<code>`/`<pre>`; sanitize ext com lista completa de ≥30 tags MathML — `math`, `mfrac`, `msqrt`, `msup`, `msub`, `msubsup`, `munder`, `mover`, `mtable`, `mtr`, `mtd`, `mphantom`, `mstyle`, `annotation`, etc. — EC-4); **mermaidPlugin** (peer-dep `mermaid`; converte `<pre><code class="language-mermaid">` em `<theo-mermaid source>` com React `<MermaidDiagram>` que lazy-importa mermaid e injeta SVG via innerHTML; SSR placeholder distinguível de erro com `role="img"` + source code preservado, EC-10; sanitize ext com ≥30 tags SVG — `svg`, `g`, `path`, `rect`, `circle`, `text`, `marker`, `foreignObject`, etc. — EC-4); **emojiPlugin** (zero peer-deps de runtime, usa `unist-util-visit-parents` já no stack; 100 shortcodes Unicode embedded; **EC-6: ancestor check** via `isInsideCodeOrPre` skipa replace dentro de `<code>`/`<pre>` para preservar type hints Python / YAML keys / Ruby symbols). Pipeline order: `validateSlide → parseBody → detectAlerts (Tier 1) → extractMarpitBackgrounds (Tier 1) → plugin.mdastTransform[] → mdastToHast → plugin.hastTransform[] → sanitize(defaultSchema + extensions) → hastToReact (consumer + plugin components)`. Bundle isolation invariant preservada: barrel `dist/index.js` **inalterado**; cada plugin é entry tsup próprio com peer-deps externalizados. `scripts/sync-exports.ts` ganha 4 entries em `ISOLATED_SUBPATHS`. `package.json` ganha 9 peer-deps opcionais (`shiki`, `katex`, `mermaid`, `micromark-extension-math`, `mdast-util-math`, `hast-util-from-html`, `unist-util-visit`, `unist-util-visit-parents`). RFC `docs/rfcs/0004-slide-rich-content.md` status `Implemented`. **128 testes novos** distribuídos em 13 phases (T0.1 plugin contract: 13 testes; T0.2 parseSlide integration: 11 testes; T1.1 alerts: 8 testes; T2/T3/T5 schema: 25 testes; T4.1 Marpit bg: 9 testes; T6.1 Shiki: 6 testes; T7.1 Math: 7 testes; T8.1 Mermaid: 7 testes; T9.1 Emoji: 10 testes; Slide component: 32 testes). Suite total: 1174 testes verdes. Codes de erro novos: `PLUGIN_ERROR`, `PLUGIN_PEER_DEP_MISSING`, `MARPIT_BG_UNSAFE_URL`. (#TBD)
-- **SlideDeck composite engine — multi-slide deck w/ navigation, presenter, fullscreen, PDF (2026-05-19)** — `@usetheo/ui/slide-deck` agora orquestra N `<Slide>` primitives com navegação completa: keyboard (←/→/Space/Home/End/Esc/F/N/Ctrl+P, com guard contra inputs/contentEditable), touch swipe (Pointer Events nativos, multi-touch filtrado, pointercancel limpo — EC-6/EC-7), hash routing bidirectional (`#/N` 1-based, via `history.replaceState` para evitar loop — EC-10), lazy initializer SSR-safe (D17/EC-5). Sub-componentes em namespace dot: `<SlideDeck.Slides>` `<SlideDeck.Controls>` `<SlideDeck.ProgressBar>` `<SlideDeck.SlideNumber>` `<SlideDeck.Thumbnails>` (IntersectionObserver lazy + EC-13 fallback) `<SlideDeck.PresenterView>` (inline panel com timer + speaker notes) `<SlideDeck.FullscreenButton>` (cross-browser API + EC-8 iOS guard) `<SlideDeck.PrintButton>` (window.print + `@page` CSS, afterprint cleanup). Transitions CSS-only (`none`/`fade`/`slide`) com timeout fallback 300ms (D16/EC-3) e respeito a `prefers-reduced-motion`. Progressive fragments via Marpit-style `*` lists (D12, contagem por regex anti-falsos-positivos em `**bold**` ou fenced code). Speaker notes via `<!-- notes: ... -->` HTML comments (D11). Aceita `slides: string | SlideDeckSlide[]` (D4); split string via mdast `thematicBreak` reusando algoritmo do Slide D12 + strip global frontmatter primeiro (D15/EC-1 — evita phantom empty slide). `useReducer` state machine com `UPDATE_TOTAL_SLIDES` que clampa `currentIndex` (EC-4). Zero peer-deps novas — reusa as 7 do Slide. Bundle isolado em `dist/slide-deck/index.js` (~48 KB com Slide vendored); barrel principal `dist/index.js` **inalterado**. RFC `docs/rfcs/0003-slide-deck.md` status `Implemented`. 160 testes específicos do SlideDeck verdes. Stories Ladle: `DefaultDeck`, `WithGfmTable`, `WithSpeakerNotes`, `WithFragments`, `WithFadeTransition`, `WithSlideTransition`, `HashRouting`, `HeadlessLayout`, `WithThumbnails`, `PresenterModeOn`, `LargeDeck` (50 slides), `EmptyDeck`, `SingleSlideDeck`, `ControlledNavigation`. (#TBD)
-- **Slide engine — view-only primitive funcional (2026-05-19)** — `@usetheo/ui/slide` agora renderiza markdown + frontmatter YAML como surface temada com canvas lógico fixo (default 16:9 → 1280×720), espelhando o padrão de bundle isolado entregue pelo Whiteboard. Pipeline: `validateSlide` (async — D11) → `parseBody` (micromark + GFM) → `mdastToHast` (`allowDangerousHtml: false`) → `sanitizeHast` (`defaultSchema` sem extensões — D8, com diff de tag-count que emite `BANNED_TAG` — D13) → `hastToReact` (real React VDOM via `hast-util-to-jsx-runtime` — D9, **sem `dangerouslySetInnerHTML`**). Frontmatter YAML único (sem HTML comment syntax do Marpit — D4), validado com Zod `.strict()` (4 keys aceitos: `theme`, `lang`, `color`, `backgroundColor`). Multi-slide input (top-level `---` detectado via mdast `thematicBreak` — D12, sem false-positive em fenced code blocks) emite `MULTIPLE_SLIDES` e renderiza somente o primeiro slide. Input guards (D14): BOM strip, `aspectRatio` inválido → fallback 16:9 + `INVALID_ASPECT_RATIO`, raw frontmatter > 10 KB → `FRONTMATTER_TOO_LARGE`. Container fit (D7) via `useSlideFit` hook (algoritmo Reveal.js: `scale = clamp(min(W/cw, H/ch), minScale, maxScale)` em `ResizeObserver` callback). Dois temas built-in (`default`, `violet-forge`) via CSS variables `--theo-slide-*` layered sobre Violet Forge tokens, com `light-dark()` para dark mode automático. A11y: `<section role="region" aria-roledescription="slide" aria-label>`. Race-resistant re-parse via `versionRef` counter (EC-7). 7 markdown peer-deps são **opcionais**: `mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`. Bundle isolado em `dist/slide/index.js`; barrel principal `dist/index.js` **inalterado**. RFC `docs/rfcs/0002-slide.md` status `Implemented`. 12 Ladle stories: `HappyPath`, `GfmTable`, `WithFrontmatter`, `VioletForgeTheme`, `AspectFourByThree`, `MultiSlideTruncated`, `MalformedFrontmatter`, `BannedScript`, `LongContent`, `CustomComponents`, `SmallContainer`, `LargeContainer`. (#TBD)
-- **Whiteboard engine — view-only primitive funcional (2026-05-18)** — `@usetheo/ui/whiteboard` agora renderiza JSON declarativo (`WhiteboardData`) como SVG com estética hand-drawn estilo Excalidraw. **Sete tipos** de elemento suportados: `rect`, `ellipse`, `diamond`, `line`, `arrow`, `text`, `freedraw`. **Pan + zoom built-in** via `viewBox` (wheel = zoom-to-cursor, mouse drag = pan, Space = hand mode, pinch touch supported). **Prop `fitOnLoad`** centra automaticamente os elementos na viewport. Schema Zod com clamps de sanidade (EC-3 `.finite()` rejeita NaN/Infinity; EC-4 `.max(20000)` em dimensões; `.max(500)` em labels; `.max(5000)` em text e points/elements). `<Whiteboard>` valida JSON em `useMemo`, dispara `onValidationError` em `useEffect` (EC-6 — nunca durante render), e cai em SVG vazio com `data-whiteboard-state="invalid"` quando o JSON falha. SSR-safe (`renderToString` produz markup estático correto). `roughjs` + `perfect-freehand` são peer-deps **opcionais**; `zod` entra em `dependencies` regulares (EC-5 opção A). Bundle isolado em `dist/whiteboard/index.js` (21.53KB ESM); barrel principal `dist/index.js` **inalterado** (320.41KB). RFC `docs/rfcs/0001-whiteboard.md` status `Implemented`. 86 testes específicos do Whiteboard verdes + 776 testes totais do projeto. Stories Ladle: `Empty`, `Flowchart`, `Architecture`, `FreedrawSketch`, `MixedAll`, `InvalidJSON`. (#TBD)
+- **Slide rich content — Tier 1 baked-in + Tier 2 plugin system (2026-05-19, RFC 0004)** — Estende `<Slide>` (RFC 0002) e `<SlideDeck>` (RFC 0003) com conteúdo rico nível PowerPoint sem reinventar parsers. **Tier 1 (zero peer-deps novas):** (a) GFM alerts `> [!NOTE/TIP/IMPORTANT/WARNING/CAUTION]` detectados em mdast post-process (alerts.ts) → `<aside class="theo-slide-alert" data-theo-slide-alert-type>` temado em ambos os themes (default + violet-forge); (b) 7 layouts via frontmatter `layout` (`default`, `title`, `two-column`, `image-right`, `image-left`, `code-output`, `section`) em CSS grid templates (themes/layouts.css importado pelos dois themes); (c) backgroundImage + backgroundGradient com `sanitizeBgUrl` rejeitando `javascript:`/`vbscript:`/TODO data: URLs (EC-7), cap 500_000 chars; (d) Marpit `![bg](url)` syntax extraído em mdast walker → `ParsedSlide.extractedBackground = { url, modifier }` (D18/EC-5), sanitizado antes de armazenar com fallback `MARPIT_BG_UNSAFE_URL`, modifier-aware (`cover`/`fit`/`left`/`right`); (e) header/footer/paginate overlays via frontmatter (plain text ≤200 chars cada), CSS absolute positioned. **Tier 2 (opt-in plugin system):** plugin architecture com `<Slide plugins={SlidePlugin[]}>` e relay `<SlideDeck plugins>` para cada slide interno. `SlidePlugin` shape: `{ name, mdastTransform?, hastTransform?, components?, sanitizeSchemaExtension? }` com error isolation D16 (cada chamada em try/catch, throws agregadas em `errors[]` com `code: "PLUGIN_ERROR"`; pipeline **nunca** propaga exception) e sanitize-schema merge D17 (extensions unionadas com defaultSchema + Tier 1 baseline). Quatro plugins shipados em sub-subpaths `@theokit/ui/slide/plugins/{shiki,math,mermaid,emoji}`: **shikiPlugin** (peer-dep `shiki`; lazy + singleton highlighter; pre-renderiza `<pre><code class="language-XXX">` em HTML temado dual-theme com sanitize ext `<span> style/className`); **mathPlugin** (peer-deps `katex` + `hast-util-from-html`; substitui `$inline$` + `$$block$$` por KaTeX displayMode/inline; skip em `<code>`/`<pre>`; sanitize ext com lista completa de ≥30 tags MathML — `math`, `mfrac`, `msqrt`, `msup`, `msub`, `msubsup`, `munder`, `mover`, `mtable`, `mtr`, `mtd`, `mphantom`, `mstyle`, `annotation`, etc. — EC-4); **mermaidPlugin** (peer-dep `mermaid`; converte `<pre><code class="language-mermaid">` em `<theo-mermaid source>` com React `<MermaidDiagram>` que lazy-importa mermaid e injeta SVG via innerHTML; SSR placeholder distinguível de erro com `role="img"` + source code preservado, EC-10; sanitize ext com ≥30 tags SVG — `svg`, `g`, `path`, `rect`, `circle`, `text`, `marker`, `foreignObject`, etc. — EC-4); **emojiPlugin** (zero peer-deps de runtime, usa `unist-util-visit-parents` já no stack; 100 shortcodes Unicode embedded; **EC-6: ancestor check** via `isInsideCodeOrPre` skipa replace dentro de `<code>`/`<pre>` para preservar type hints Python / YAML keys / Ruby symbols). Pipeline order: `validateSlide → parseBody → detectAlerts (Tier 1) → extractMarpitBackgrounds (Tier 1) → plugin.mdastTransform[] → mdastToHast → plugin.hastTransform[] → sanitize(defaultSchema + extensions) → hastToReact (consumer + plugin components)`. Bundle isolation invariant preservada: barrel `dist/index.js` **inalterado**; cada plugin é entry tsup próprio com peer-deps externalizados. `scripts/sync-exports.ts` ganha 4 entries em `ISOLATED_SUBPATHS`. `package.json` ganha 9 peer-deps opcionais (`shiki`, `katex`, `mermaid`, `micromark-extension-math`, `mdast-util-math`, `hast-util-from-html`, `unist-util-visit`, `unist-util-visit-parents`). RFC `docs/rfcs/0004-slide-rich-content.md` status `Implemented`. **128 testes novos** distribuídos em 13 phases (T0.1 plugin contract: 13 testes; T0.2 parseSlide integration: 11 testes; T1.1 alerts: 8 testes; T2/T3/T5 schema: 25 testes; T4.1 Marpit bg: 9 testes; T6.1 Shiki: 6 testes; T7.1 Math: 7 testes; T8.1 Mermaid: 7 testes; T9.1 Emoji: 10 testes; Slide component: 32 testes). Suite total: 1174 testes verdes. Codes de erro novos: `PLUGIN_ERROR`, `PLUGIN_PEER_DEP_MISSING`, `MARPIT_BG_UNSAFE_URL`. (#TBD)
+- **SlideDeck composite engine — multi-slide deck w/ navigation, presenter, fullscreen, PDF (2026-05-19)** — `@theokit/ui/slide-deck` agora orquestra N `<Slide>` primitives com navegação completa: keyboard (←/→/Space/Home/End/Esc/F/N/Ctrl+P, com guard contra inputs/contentEditable), touch swipe (Pointer Events nativos, multi-touch filtrado, pointercancel limpo — EC-6/EC-7), hash routing bidirectional (`#/N` 1-based, via `history.replaceState` para evitar loop — EC-10), lazy initializer SSR-safe (D17/EC-5). Sub-componentes em namespace dot: `<SlideDeck.Slides>` `<SlideDeck.Controls>` `<SlideDeck.ProgressBar>` `<SlideDeck.SlideNumber>` `<SlideDeck.Thumbnails>` (IntersectionObserver lazy + EC-13 fallback) `<SlideDeck.PresenterView>` (inline panel com timer + speaker notes) `<SlideDeck.FullscreenButton>` (cross-browser API + EC-8 iOS guard) `<SlideDeck.PrintButton>` (window.print + `@page` CSS, afterprint cleanup). Transitions CSS-only (`none`/`fade`/`slide`) com timeout fallback 300ms (D16/EC-3) e respeito a `prefers-reduced-motion`. Progressive fragments via Marpit-style `*` lists (D12, contagem por regex anti-falsos-positivos em `**bold**` ou fenced code). Speaker notes via `<!-- notes: ... -->` HTML comments (D11). Aceita `slides: string | SlideDeckSlide[]` (D4); split string via mdast `thematicBreak` reusando algoritmo do Slide D12 + strip global frontmatter primeiro (D15/EC-1 — evita phantom empty slide). `useReducer` state machine com `UPDATE_TOTAL_SLIDES` que clampa `currentIndex` (EC-4). Zero peer-deps novas — reusa as 7 do Slide. Bundle isolado em `dist/slide-deck/index.js` (~48 KB com Slide vendored); barrel principal `dist/index.js` **inalterado**. RFC `docs/rfcs/0003-slide-deck.md` status `Implemented`. 160 testes específicos do SlideDeck verdes. Stories Ladle: `DefaultDeck`, `WithGfmTable`, `WithSpeakerNotes`, `WithFragments`, `WithFadeTransition`, `WithSlideTransition`, `HashRouting`, `HeadlessLayout`, `WithThumbnails`, `PresenterModeOn`, `LargeDeck` (50 slides), `EmptyDeck`, `SingleSlideDeck`, `ControlledNavigation`. (#TBD)
+- **Slide engine — view-only primitive funcional (2026-05-19)** — `@theokit/ui/slide` agora renderiza markdown + frontmatter YAML como surface temada com canvas lógico fixo (default 16:9 → 1280×720), espelhando o padrão de bundle isolado entregue pelo Whiteboard. Pipeline: `validateSlide` (async — D11) → `parseBody` (micromark + GFM) → `mdastToHast` (`allowDangerousHtml: false`) → `sanitizeHast` (`defaultSchema` sem extensões — D8, com diff de tag-count que emite `BANNED_TAG` — D13) → `hastToReact` (real React VDOM via `hast-util-to-jsx-runtime` — D9, **sem `dangerouslySetInnerHTML`**). Frontmatter YAML único (sem HTML comment syntax do Marpit — D4), validado com Zod `.strict()` (4 keys aceitos: `theme`, `lang`, `color`, `backgroundColor`). Multi-slide input (top-level `---` detectado via mdast `thematicBreak` — D12, sem false-positive em fenced code blocks) emite `MULTIPLE_SLIDES` e renderiza somente o primeiro slide. Input guards (D14): BOM strip, `aspectRatio` inválido → fallback 16:9 + `INVALID_ASPECT_RATIO`, raw frontmatter > 10 KB → `FRONTMATTER_TOO_LARGE`. Container fit (D7) via `useSlideFit` hook (algoritmo Reveal.js: `scale = clamp(min(W/cw, H/ch), minScale, maxScale)` em `ResizeObserver` callback). Dois temas built-in (`default`, `violet-forge`) via CSS variables `--theo-slide-*` layered sobre Violet Forge tokens, com `light-dark()` para dark mode automático. A11y: `<section role="region" aria-roledescription="slide" aria-label>`. Race-resistant re-parse via `versionRef` counter (EC-7). 7 markdown peer-deps são **opcionais**: `mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`. Bundle isolado em `dist/slide/index.js`; barrel principal `dist/index.js` **inalterado**. RFC `docs/rfcs/0002-slide.md` status `Implemented`. 12 Ladle stories: `HappyPath`, `GfmTable`, `WithFrontmatter`, `VioletForgeTheme`, `AspectFourByThree`, `MultiSlideTruncated`, `MalformedFrontmatter`, `BannedScript`, `LongContent`, `CustomComponents`, `SmallContainer`, `LargeContainer`. (#TBD)
+- **Whiteboard engine — view-only primitive funcional (2026-05-18)** — `@theokit/ui/whiteboard` agora renderiza JSON declarativo (`WhiteboardData`) como SVG com estética hand-drawn estilo Excalidraw. **Sete tipos** de elemento suportados: `rect`, `ellipse`, `diamond`, `line`, `arrow`, `text`, `freedraw`. **Pan + zoom built-in** via `viewBox` (wheel = zoom-to-cursor, mouse drag = pan, Space = hand mode, pinch touch supported). **Prop `fitOnLoad`** centra automaticamente os elementos na viewport. Schema Zod com clamps de sanidade (EC-3 `.finite()` rejeita NaN/Infinity; EC-4 `.max(20000)` em dimensões; `.max(500)` em labels; `.max(5000)` em text e points/elements). `<Whiteboard>` valida JSON em `useMemo`, dispara `onValidationError` em `useEffect` (EC-6 — nunca durante render), e cai em SVG vazio com `data-whiteboard-state="invalid"` quando o JSON falha. SSR-safe (`renderToString` produz markup estático correto). `roughjs` + `perfect-freehand` são peer-deps **opcionais**; `zod` entra em `dependencies` regulares (EC-5 opção A). Bundle isolado em `dist/whiteboard/index.js` (21.53KB ESM); barrel principal `dist/index.js` **inalterado** (320.41KB). RFC `docs/rfcs/0001-whiteboard.md` status `Implemented`. 86 testes específicos do Whiteboard verdes + 776 testes totais do projeto. Stories Ladle: `Empty`, `Flowchart`, `Architecture`, `FreedrawSketch`, `MixedAll`, `InvalidJSON`. (#TBD)
 - **`scripts/validate-bundle-size.ts` ganha gate EC-1 anti-leak** — Após o check de tamanho, faz `grep` em `dist/index.js` por strings `roughjs` e `perfect-freehand`; falha o build se qualquer engine peer-dep aparecer no barrel. Previne regressões silenciosas onde uma engine vaze para o barrel principal e arraste KBs extras para todos os consumers, mesmo os que só usam shadcn primitives. Runtime-metric proof: `grep -c "roughjs\\|perfect-freehand" dist/index.js → 0` confirmado em 2026-05-18. (#TBD)
 - **`scripts/sync-exports.ts` ganha `ISOLATED_SUBPATHS`** — novo array de overrides para subpaths que devem apontar para `dist/<engine>/index.js` próprio, não re-export do barrel. Detecta colisão com auto-scanned subpaths e lança Error explícito. Suporta a regra de bundle isolation por engine declarada em `CLAUDE.md > Roadmap`. Cobertura via novo `scripts/sync-exports.test.ts` (6 testes). (#TBD)
 - **`tsup.config.ts` ganha multi-entry** — `entry` agora é objeto com `index` (barrel) + `whiteboard/index` (engine). External list inclui `roughjs`, `/^roughjs\//` e `perfect-freehand` para garantir que o engine bundle não vendoriza essas libs e o barrel não vaza. Build produz `dist/whiteboard/index.{js,d.ts}` ao lado de `dist/index.{js,d.ts}` sem afetar tamanho do barrel. (#TBD)
@@ -1108,7 +1108,7 @@ preserves rendered markup for callers that don't pass `size`.
 ## [0.1.0-next.0] - 2026-05-16
 
 First public pre-release on npm under the `next` dist-tag. Install with
-`pnpm add @usetheo/ui@next` (the default `latest` tag is intentionally
+`pnpm add @theokit/ui@next` (the default `latest` tag is intentionally
 unset until 1.0). Highlights from the agent-team-audit-fixes-2026-05-16
 remediation sprint:
 
@@ -1130,15 +1130,15 @@ remediation sprint:
 - **Migration**:
   ```tsx
   // Before
-  import { ThemeProvider } from "@usetheo/ui";
+  import { ThemeProvider } from "@theokit/ui";
   <ThemeProvider>...</ThemeProvider>
 
   // After — option A (recommended for parity with old behavior)
-  import { ThemeProvider, builtinThemes } from "@usetheo/ui";
+  import { ThemeProvider, builtinThemes } from "@theokit/ui";
   <ThemeProvider themes={builtinThemes}>...</ThemeProvider>
 
   // After — option B (new in v0.1.0-next.0)
-  import { TheoUIProvider } from "@usetheo/ui";
+  import { TheoUIProvider } from "@theokit/ui";
   <TheoUIProvider>...</TheoUIProvider>
   ```
 - **Why this is acceptable pre-1.0**: package is `0.0.0` and never published; first public release will be `0.1.0-next.0`. No external consumers exist yet (validated via `npm view`).
@@ -1153,12 +1153,12 @@ remediation sprint:
 - **`scripts/validate-registry.ts`** — `targetToItemName` reverse map resolves `@/components/ui/<target>` imports to the registry item that ships that file (fix for multi-file items like `toast` which ships `toaster.tsx`).
 
 ### Documentation (Agent-team audit fixes, 2026-05-16)
-- **`PITCH.md`** — removed false claim that `npx create-theokit my-app` already imports `@usetheo/ui` when picking the dashboard template (verified via `grep -r "@usetheo/ui" /home/paulo/Projetos/usetheo/theokit/` returning zero matches). Replaced with honest "TheoKit integration is on the roadmap." Aligned tertiary CTAs with reality (substituted dead `docs.usetheo.dev/ui` with GitHub anchor).
+- **`PITCH.md`** — removed false claim that `npx create-theokit my-app` already imports `@theokit/ui` when picking the dashboard template (verified via `grep -r "@theokit/ui" /home/paulo/Projetos/usetheo/theokit/` returning zero matches). Replaced with honest "TheoKit integration is on the roadmap." Aligned tertiary CTAs with reality (substituted dead `docs.usetheo.dev/ui` with GitHub anchor).
 - **`README.md`** — updated `pnpm quality:gates` pipeline listing to match `package.json#scripts['quality:gates']` exactly: now lists 11 gates (`format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `quality:bundle` → `quality:a11y` → `ladle:build`). Previous text omitted `quality:bundle` and `quality:a11y`.
 - **CHANGELOG correction** — earlier entry under "Phase 3 — Build correctness + exports surface" stated `validateExportsMap` "locks `package.json#exports` to the canonical 5-entry set". Since commit `77b2f7a` (`feat(exports): subpath import for every component`) the strategy expanded to 107+ subpath entries generated by `scripts/sync-exports.ts`. Authoritative source is `package.json` itself. Prior entries in versioned releases stay immutable per Keep a Changelog; this correction lives in `[Unreleased]`.
 
 ### Added (Pitch + Voice and Tone formalization, 2026-05-15)
-- **`PITCH.md`** at project root — landing-page copy for `@usetheo/ui` (Violet Forge) using the TheoKit aspirational voice. Three layers: HERO (no jargon), BODY (benefit-first with one technical anchor per item), DEEP DIVE (full technical vocabulary, after the `## How it works` delimiter). Companion to `README.md` for marketing surfaces; verified component counts and quality metrics against `README.md` and `src/`.
+- **`PITCH.md`** at project root — landing-page copy for `@theokit/ui` (Violet Forge) using the TheoKit aspirational voice. Three layers: HERO (no jargon), BODY (benefit-first with one technical anchor per item), DEEP DIVE (full technical vocabulary, after the `## How it works` delimiter). Companion to `README.md` for marketing surfaces; verified component counts and quality metrics against `README.md` and `src/`.
 - **`CLAUDE.md`** at project root — contract between Claude and this project. Defines what TheoUI is, the locked names (npm package, theme names, registry endpoint, module format, component taxonomy), the Voice and Tone section that formalizes adoption of the TheoKit aspirational voice for public copy (strategic review dated 2026-05-15), the relationship to the other usetheo pillars (Harness, Skills, Runtime), and the quality-gate non-bypass rule.
 
 ### Changed (Cross-project, 2026-05-15)
@@ -1166,9 +1166,9 @@ remediation sprint:
 - Root monorepo sub-project index: `theo-ui` "Read first" pointer updated from `theo-ui/README.md` to `theo-ui/CLAUDE.md` (was a fallback because no `CLAUDE.md` existed in this project until today).
 
 ### Changed (README alignment with PITCH, 2026-05-15)
-- `README.md` HERO + BODY layers rewritten in the TheoKit aspirational voice to match `PITCH.md`. New h1: *"The UI your agent already needs."* Tagline calls out the 102 agent-shaped components. `@usetheo/ui` demoted from h1 to a small tag above it (discoverability preserved without dominating the HERO).
-- Added `## The shift` storytelling block between the HERO and `## Why @usetheo/ui`.
-- `## Why @usetheo/ui` now closes with the comparison table from `PITCH.md` (`@usetheo/ui` vs shadcn/Radix, Tremor, build-yourself) and the punch line *"Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write."*
+- `README.md` HERO + BODY layers rewritten in the TheoKit aspirational voice to match `PITCH.md`. New h1: *"The UI your agent already needs."* Tagline calls out the 102 agent-shaped components. `@theokit/ui` demoted from h1 to a small tag above it (discoverability preserved without dominating the HERO).
+- Added `## The shift` storytelling block between the HERO and `## Why @theokit/ui`.
+- `## Why @theokit/ui` now closes with the comparison table from `PITCH.md` (`@theokit/ui` vs shadcn/Radix, Tremor, build-yourself) and the punch line *"Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write."*
 - Added `## What you'd build` (5 concrete surfaces) before `## Quickstart`.
 - Added `## How it works` DEEP DIVE delimiter before `## Quickstart`; everything from there downward stays technical-direct.
 - Quickstart code sample swapped from a generic `<Button>` example to `<AgentEvent>` + `<ToolCall>` + `<DeploymentRow>` — agent-shaped primitives nobody else ships.
@@ -1223,8 +1223,8 @@ remediation sprint:
 
 ### Changed (HIGH-002 / T4.1 — self-hosted fonts as default)
 - **`src/styles/fonts.css` no longer `@import`s from `fonts.googleapis.com`.** Now declares six `@font-face` rules pointing at `./fonts/geist-{400,500,600}.woff2` and `./fonts/geist-mono-{400,500,600}.woff2`. Total asset budget: ~290 KB of woff2 next to the CSS. Eliminates the render-blocking third-party fetch that previously hit `fonts.googleapis.com` on every cold page load — fixes GDPR / CSP friction for the enterprise audience.
-- `src/styles/fonts-cdn.css` (NEW) — opt-in entrypoint that preserves the legacy Google Fonts CDN behavior. Consumers who prefer not to host static assets can `@import "@usetheo/ui/fonts-cdn.css"` instead of `@usetheo/ui/fonts.css` / `@usetheo/ui/styles.css`.
-- `tsup.config.ts` `onSuccess` now also copies `src/styles/fonts/*.woff2` → `dist/fonts/` and `src/styles/fonts-cdn.css` → `dist/fonts-cdn.css`. The relative URLs in `fonts.css` (`./fonts/geist-400.woff2`) resolve correctly inside `node_modules/@usetheo/ui/dist/`.
+- `src/styles/fonts-cdn.css` (NEW) — opt-in entrypoint that preserves the legacy Google Fonts CDN behavior. Consumers who prefer not to host static assets can `@import "@theokit/ui/fonts-cdn.css"` instead of `@theokit/ui/fonts.css` / `@theokit/ui/styles.css`.
+- `tsup.config.ts` `onSuccess` now also copies `src/styles/fonts/*.woff2` → `dist/fonts/` and `src/styles/fonts-cdn.css` → `dist/fonts-cdn.css`. The relative URLs in `fonts.css` (`./fonts/geist-400.woff2`) resolve correctly inside `node_modules/@theokit/ui/dist/`.
 - Geist OFL license shipped at `src/styles/fonts/LICENSE-GEIST.txt` → `dist/fonts/LICENSE-GEIST.txt`. Apache-2.0 + OFL is a clean dual-license combination.
 - New `geist` devDependency: used only as the source of woff2 artifacts at install time; not bundled into `dist/index.js`.
 - `validateDocsTypography` now asserts that `src/styles/fonts.css` contains `@font-face` and does NOT `@import` from `fonts.googleapis.com`, and that `src/styles/fonts-cdn.css` exists.
@@ -1239,7 +1239,7 @@ remediation sprint:
 - `.ladle/generated/welcome.stats.ts` — `welcome.stats.ts` moved out of `src/` (HIGH-003 / T3.3). `sync-readme.ts` writes to the new path; `validateCountConsistency` reads from it. The file no longer ships in the npm tarball.
 
 ### Breaking
-- **Reclassification of 7 components from `primitives/` to `composites/`** (BLOCKER-001 remediation, D2): `AgentEditor`, `RuleEditor`, `SkillEditor`, `ApprovalCard`, `CronJobsList`, `SkillsList`, `MCPServerList`. Each value-imported one or more sibling primitives, which violated the mechanical taxonomy rule in `docs/architecture.md`. They are composites by every reasonable definition (FormField+Input+Button = composite; list-of-card = composite). Public barrel (`@usetheo/ui`) is unchanged — named exports preserved. Registry consumers via `npx shadcn add`: `type` changed from `registry:ui` to `registry:block` and `target` from `components/ui/<name>` to `components/blocks/<name>`. Migration: re-run `npx shadcn add <name>` to relocate the file, or rename the import path manually.
+- **Reclassification of 7 components from `primitives/` to `composites/`** (BLOCKER-001 remediation, D2): `AgentEditor`, `RuleEditor`, `SkillEditor`, `ApprovalCard`, `CronJobsList`, `SkillsList`, `MCPServerList`. Each value-imported one or more sibling primitives, which violated the mechanical taxonomy rule in `docs/architecture.md`. They are composites by every reasonable definition (FormField+Input+Button = composite; list-of-card = composite). Public barrel (`@theokit/ui`) is unchanged — named exports preserved. Registry consumers via `npx shadcn add`: `type` changed from `registry:ui` to `registry:block` and `target` from `components/ui/<name>` to `components/blocks/<name>`. Migration: re-run `npx shadcn add <name>` to relocate the file, or rename the import path manually.
 - **`form-field` now imports `@radix-ui/react-label` directly** (BLOCKER-001 / D2 exception). Previously imported the sibling `Label` primitive. `form-field.tsx` now inlines the same Radix LabelPrimitive + identical Tailwind tokens. Visual parity preserved. `registry/form-field.json` adds `@radix-ui/react-label` to `dependencies` and removes `label` from `registryDependencies`.
 
 ### Fixed

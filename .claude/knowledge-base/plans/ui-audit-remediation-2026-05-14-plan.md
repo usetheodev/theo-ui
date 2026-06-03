@@ -1,4 +1,4 @@
-# Plan: `@usetheo/ui` — Audit Remediation (2026-05-14)
+# Plan: `@theokit/ui` — Audit Remediation (2026-05-14)
 
 > **Version 1.0** — Este plano corrige os 32 findings (4 BLOCKERs · 9 HIGH · 9 MEDIUM · 5 LOW · 5 NIT) levantados pela auditoria técnica realizada em `2026-05-14` sobre `main@4c386cc`. O outcome esperado é (a) **ThemeScript** XSS-safe com escape de `</`, eliminando o vetor `</script>` em props; (b) **compound component pattern** consolidado em `Object.assign /*#__PURE__*/` nos 9 componentes (4 ainda usam mutation post-cast); (c) **FormField.Control** convertido para `cloneElement` eliminando dependência de invariantes internas do React; (d) **paridade README ↔ welcome ↔ architecture.md** auto-derivada do source-of-truth (sem números chumbados); (e) `vitest-axe` ativamente usado em ≥30 primitives interativos (atual: 6/101); (f) quality gates novos que falham em compound-pattern drift, axe-coverage drop, README count drift e architecture census drift; (g) Tailwind dark-mode config saneada (seletor morto removido); (h) tsup build portável (sem `cp` POSIX). Pós-execução, `pnpm quality:gates` é o único gate suficiente para liberar `0.1.0`.
 
@@ -17,7 +17,7 @@ A auditoria de 2026-05-14 — documentada na seção "Deep Technical Review" des
 
 Outros itens menores (`.bak`/`.tmp` no working tree, JSDoc inconsistências, `cp` POSIX em tsup, `theo-code-shell.tsx` com 2193 linhas, fonts CDN sem opt-in) completam a lista de 32 findings.
 
-Evidência completa: relatório "Deep Technical Review — `@usetheo/ui` (Violet Forge)" produzido nesta sessão.
+Evidência completa: relatório "Deep Technical Review — `@theokit/ui` (Violet Forge)" produzido nesta sessão.
 
 ## Objective
 
@@ -1199,7 +1199,7 @@ Permitir self-hosting de Geist sem editar `fonts.css` no source.
 
 #### Evidence
 - `fonts.css:15` — `@import url("https://fonts.googleapis.com/...")`.
-- README quickstart instrui `@import "@usetheo/ui/styles.css"` que arrasta o CDN call.
+- README quickstart instrui `@import "@theokit/ui/styles.css"` que arrasta o CDN call.
 
 #### Files to edit
 ```

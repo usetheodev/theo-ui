@@ -1,11 +1,11 @@
-import { Button } from "@usetheo/ui";
-import { Slide, type SlidePlugin } from "@usetheo/ui/slide";
-import { emojiPlugin } from "@usetheo/ui/slide/plugins/emoji";
-import { mathPlugin } from "@usetheo/ui/slide/plugins/math";
-import { mermaidPlugin } from "@usetheo/ui/slide/plugins/mermaid";
-import { shikiPlugin } from "@usetheo/ui/slide/plugins/shiki";
-import "@usetheo/ui/slide/themes/default.css";
-import "@usetheo/ui/slide/themes/violet-forge.css";
+import { Button } from "@theokit/ui";
+import { Slide, type SlidePlugin } from "@theokit/ui/slide";
+import { emojiPlugin } from "@theokit/ui/slide/plugins/emoji";
+import { mathPlugin } from "@theokit/ui/slide/plugins/math";
+import { mermaidPlugin } from "@theokit/ui/slide/plugins/mermaid";
+import { shikiPlugin } from "@theokit/ui/slide/plugins/shiki";
+import "@theokit/ui/slide/themes/default.css";
+import "@theokit/ui/slide/themes/violet-forge.css";
 import "katex/dist/katex.min.css";
 import { useMemo, useState } from "react";
 import { SLIDE_RICH_SCENES, type SlideRichScene } from "./slide-rich-scenes.js";
@@ -251,7 +251,7 @@ export function SlideRichDemo() {
           <code className="rounded bg-muted px-1 py-0.5">dist/index.js</code> nunca vendoriza shiki
           / katex / mermaid. Cada plugin é seu próprio sub-subpath{" "}
           <code className="rounded bg-muted px-1 py-0.5">
-            @usetheo/ui/slide/plugins/&lt;name&gt;
+            @theokit/ui/slide/plugins/&lt;name&gt;
           </code>
           .
         </p>

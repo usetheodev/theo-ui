@@ -6,11 +6,11 @@ consulted: claude
 informed: theokit-maintainers, theokit-sdk-maintainers
 ---
 
-# ADR 0003: `@usetheo/ui` permanece ESM-only intencional; consumers que precisam de `require()` recebem `ERR_PACKAGE_PATH_NOT_EXPORTED`
+# ADR 0003: `@theokit/ui` permanece ESM-only intencional; consumers que precisam de `require()` recebem `ERR_PACKAGE_PATH_NOT_EXPORTED`
 
 ## Context and Problem Statement
 
-`@usetheo/ui` é um React component library moderno (React 19+, Vite 6+). `package.json` tem:
+`@theokit/ui` é um React component library moderno (React 19+, Vite 6+). `package.json` tem:
 ```jsonc
 {
   "type": "module",

@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /**
  * Dogfood QA for the SlideDeck composite engine. Simulates a real consumer:
- *   1. Imports `@usetheo/ui/slide-deck` from the local dist.
+ *   1. Imports `@theokit/ui/slide-deck` from the local dist.
  *   2. Validates splitDeck behaviour on canonical inputs.
  *   3. Renders deck SSR to verify it doesn't throw + chrome is present.
  *   4. Verifies bundle isolation — barrel does not contain slide-deck markers.

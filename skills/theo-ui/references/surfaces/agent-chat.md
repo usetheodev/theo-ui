@@ -228,10 +228,10 @@ The renderer maps:
 ### Minimal chat surface
 
 ```tsx
-import { ChatThread } from "@usetheo/ui/chat-thread";
-import { ChatMessage } from "@usetheo/ui/chat-message";
-import { ChatComposer } from "@usetheo/ui/chat-composer";
-import { AgentStreaming } from "@usetheo/ui/agent-streaming";
+import { ChatThread } from "@theokit/ui/chat-thread";
+import { ChatMessage } from "@theokit/ui/chat-message";
+import { ChatComposer } from "@theokit/ui/chat-composer";
+import { AgentStreaming } from "@theokit/ui/agent-streaming";
 
 export function Chat() {
   const { messages, send, isStreaming } = useChat();

@@ -20,7 +20,7 @@
 ### EC-2: T2.1 `regen-subpath-exports.ts` silenciosamente pula componentes com build parcial
 - **Task afetada:** T2.1
 - **Família:** Format / State
-- **Cenário:** Se tsup falha emitindo `.d.ts` para um componente mas o `.js` saiu, o script faz `try { statSync(jsFile); statSync(dtsFile); } catch { continue; }` e **pula sem warning**. O `package.json#exports` fica sem a entry para esse componente. `import { X } from "@usetheo/ui/x"` quebra em runtime do consumer com `ERR_PACKAGE_PATH_NOT_EXPORTED`.
+- **Cenário:** Se tsup falha emitindo `.d.ts` para um componente mas o `.js` saiu, o script faz `try { statSync(jsFile); statSync(dtsFile); } catch { continue; }` e **pula sem warning**. O `package.json#exports` fica sem a entry para esse componente. `import { X } from "@theokit/ui/x"` quebra em runtime do consumer com `ERR_PACKAGE_PATH_NOT_EXPORTED`.
 - **Impacto:** silent drift entre source tree (87 primitives) e exports map (e.g. 86). Acceptance criterion "todos os primitives têm subpath" passa ou falha aleatoriamente.
 - **Fix sugerido:** comparar set(`src/components/{primitives,composites}/*/`) excluindo `EXCLUDE` contra entries geradas. Se contagem diverge, `process.exit(1)` com lista dos faltantes. Adicionar como step 3.5 entre validation e write:
   ```ts
@@ -45,13 +45,13 @@
 ### EC-4: T8.1 sed-based migration é não-robusto para imports multi-componente
 - **Task afetada:** T8.1
 - **Família:** Format
-- **Cenário:** O canary script faz `sed "s|import { Alert } from \"@usetheo/ui\"|import { Alert } from \"@usetheo/ui/alert\"|g"`. **Mas TheoCloud tem imports multi-componente** como `import { Card, Button, Avatar, Alert, ... } from "@usetheo/ui"` (literal da brief #4 §"The defect"). O sed pattern NÃO casa essa linha. Resultado: dos top 10 imports migrados, 0 ou poucos efetivamente movem para subpath; bundle delta medido será ~0 KB; gate falha; investiga-se a implementação que ESTÁ correta.
+- **Cenário:** O canary script faz `sed "s|import { Alert } from \"@theokit/ui\"|import { Alert } from \"@theokit/ui/alert\"|g"`. **Mas TheoCloud tem imports multi-componente** como `import { Card, Button, Avatar, Alert, ... } from "@theokit/ui"` (literal da brief #4 §"The defect"). O sed pattern NÃO casa essa linha. Resultado: dos top 10 imports migrados, 0 ou poucos efetivamente movem para subpath; bundle delta medido será ~0 KB; gate falha; investiga-se a implementação que ESTÁ correta.
 - **Impacto:** falha-positivo no Phase 8 hard gate. Plano não fecha porque medição não reflete realidade.
 - **Fix sugerido:** documentar no T8.1 que migration NÃO é via sed — usar manual split em ~13 arquivos do dashboard:
   ```diff
-  - import { Card, Button, Alert, ... } from "@usetheo/ui";
-  + import { Card, Button } from "@usetheo/ui";  // não migrados nesta fase
-  + import { Alert } from "@usetheo/ui/alert";    // top 10
+  - import { Card, Button, Alert, ... } from "@theokit/ui";
+  + import { Card, Button } from "@theokit/ui";  // não migrados nesta fase
+  + import { Alert } from "@theokit/ui/alert";    // top 10
   ```
   Ou usar `jscodeshift` com um codemod simples. Manter o sed só para imports já isolados (uma única import por linha). Aceitar que o canary requer ~30 min de migração manual cuidadosa, NÃO automação.
 

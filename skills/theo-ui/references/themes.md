@@ -1,6 +1,6 @@
 # Themes
 
-`@usetheo/ui` ships 10 built-in themes plus a `defineTheme()` API for custom themes. The skill respects the project's theme; it does NOT rotate themes per build.
+`@theokit/ui` ships 10 built-in themes plus a `defineTheme()` API for custom themes. The skill respects the project's theme; it does NOT rotate themes per build.
 
 ---
 
@@ -39,7 +39,7 @@ import {
   openaiStyle,
   linearGlass,
   builtinThemes,
-} from "@usetheo/ui";
+} from "@theokit/ui";
 ```
 
 `builtinThemes` is an array of all 10 — pass to `<ThemeProvider themes={builtinThemes}>` to enable the full theme switcher.
@@ -49,7 +49,7 @@ import {
 ## Setting the theme at the root
 
 ```tsx
-import { ThemeProvider } from "@usetheo/ui";
+import { ThemeProvider } from "@theokit/ui";
 
 <ThemeProvider defaultTheme="violet-forge" defaultDensity="comfortable">
   <App />
@@ -61,7 +61,7 @@ import { ThemeProvider } from "@usetheo/ui";
 For multi-theme apps with a theme switcher:
 
 ```tsx
-import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@usetheo/ui";
+import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@theokit/ui";
 
 <ThemeProvider themes={builtinThemes} defaultTheme="violet-forge">
   <App />
@@ -84,7 +84,7 @@ Reduces the payload to ~12 KB.
 ## Custom themes via `defineTheme()`
 
 ```tsx
-import { defineTheme, hex, rgb } from "@usetheo/ui";
+import { defineTheme, hex, rgb } from "@theokit/ui";
 
 export const myBrandTheme = defineTheme({
   name: "my-brand",
@@ -126,7 +126,7 @@ Failure throws at build time, not runtime. The validator lives in `scripts/lib/w
 ### Custom + built-in together
 
 ```tsx
-import { ThemeProvider, builtinThemes } from "@usetheo/ui";
+import { ThemeProvider, builtinThemes } from "@theokit/ui";
 import { myBrandTheme } from "./theme";
 
 <ThemeProvider
@@ -158,7 +158,7 @@ In all three cases, the skill wires `<ThemeProvider defaultTheme="...">` at the 
 Use `<ThemeSwitcher>` (composite) for a built-in dropdown:
 
 ```tsx
-import { ThemeSwitcher } from "@usetheo/ui";
+import { ThemeSwitcher } from "@theokit/ui";
 
 <ThemeSwitcher align="end" />
 ```
@@ -166,7 +166,7 @@ import { ThemeSwitcher } from "@usetheo/ui";
 Or roll your own via `useTheme()`:
 
 ```tsx
-import { useTheme } from "@usetheo/ui";
+import { useTheme } from "@theokit/ui";
 
 function CustomThemeToggle() {
   const { theme, setTheme, availableThemes } = useTheme();
@@ -252,7 +252,7 @@ Or integrate with `next-themes`:
 
 ```tsx
 import { ThemeProvider as NextThemeProvider } from "next-themes";
-import { ThemeProvider as TheoUIThemeProvider } from "@usetheo/ui";
+import { ThemeProvider as TheoUIThemeProvider } from "@theokit/ui";
 
 <NextThemeProvider attribute="class" defaultTheme="dark">
   <TheoUIThemeProvider defaultTheme="violet-forge">

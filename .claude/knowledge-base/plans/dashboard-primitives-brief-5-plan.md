@@ -18,23 +18,23 @@
 > + § 2.4 P1 (card-grid → sortable expandable `DataTable`), and a
 > CC-cross-cutting boilerplate-duplication win across 13 dashboard
 > pages via `PageShell`. The brief's spec is sound but assumes 3
-> primitives that **do not exist** in `@usetheo/ui`: `<DropdownMenu>`
+> primitives that **do not exist** in `@theokit/ui`: `<DropdownMenu>`
 > (used by DataTable.rowActions), `<ActionBar>` (used by PageShell),
 > and `useSetPageTitle` / `PageMetaProvider` (consumer-scope hooks
 > the lib should not own). This plan adds the 2 real pre-reqs as
 > Phases 1-2, narrows PageShell scope (EC-3 of the brief analysis),
 > then ships the 3 brief components in Phases 3-5. Total deliverable:
 > **5 new components** (2 primitives + 3 composites), shipped as
-> `@usetheo/ui@0.11.0-next.0` (additive minor, zero breaking
+> `@theokit/ui@0.11.0-next.0` (additive minor, zero breaking
 > change). Acceptance gate is the same shape as Brief #4: measured
 > consumer bundle delta against the TheoCloud canary.
 
 ## Context
 
-- **`@usetheo/ui@0.10.0-next.0`** ships per-component dist files
+- **`@theokit/ui@0.10.0-next.0`** ships per-component dist files
   (Brief #4) — every primitive/composite gets its own
   `dist/{primitives,composites}/<name>/index.js` and the consumer
-  bundle tree-shakes properly (TheoCloud `@usetheo/ui` chunk:
+  bundle tree-shakes properly (TheoCloud `@theokit/ui` chunk:
   36.96 → 10.96 KB brotli measured).
 - **Brief #5** issued 2026-05-25 by TheoCloud dashboard team. Each
   of the 3 requested primitives closes a P1/P2 finding in the
@@ -72,7 +72,7 @@
 
 ## Objective
 
-Ship `@usetheo/ui@0.11.0-next.0` with **5 new components**:
+Ship `@theokit/ui@0.11.0-next.0` with **5 new components**:
 
 1. `<DropdownMenu>` primitive (pre-req for DataTable.rowActions)
 2. `<ActionBar>` primitive (pre-req for PageShell)
@@ -172,11 +172,11 @@ Measurable goals:
 
 - **Decision:** bump `0.10.0-next.0` → `0.11.0-next.0`. Tag `next`.
 - **Rationale:** 5 new components = additive surface. Zero existing API breaks. Per-component subpath model from Brief #4 means each new component ships as its own chunk automatically.
-- **Consequences:** consumers install `@usetheo/ui@next` and opt in to using the new components at their pace.
+- **Consequences:** consumers install `@theokit/ui@next` and opt in to using the new components at their pace.
 
 ### D10 — Bundle-delta evidence required, mirrors Brief #4 pattern
 
-- **Decision:** Phase 10 measures consumer-side bundle delta against TheoCloud dashboard after upgrade (without migrating to the new primitives — measuring "free" delta from new components shipping as separate chunks vs being absent). Acceptance criterion: TheoCloud `@usetheo/ui` chunk grows by ≤5 KB brotli (the new components are not yet imported, so most should tree-shake away; only ActionBar's shared dependencies, if any, leak through).
+- **Decision:** Phase 10 measures consumer-side bundle delta against TheoCloud dashboard after upgrade (without migrating to the new primitives — measuring "free" delta from new components shipping as separate chunks vs being absent). Acceptance criterion: TheoCloud `@theokit/ui` chunk grows by ≤5 KB brotli (the new components are not yet imported, so most should tree-shake away; only ActionBar's shared dependencies, if any, leak through).
 - **Rationale:** Brief #4 set the precedent. Empirical measurement against a real consumer beats estimates.
 - **Consequences:** if the delta exceeds 5 KB without consumer migration, investigate why unused components are leaking (sign of shared chunk regression or sideEffects mis-configuration).
 
@@ -224,10 +224,10 @@ Phases 1, 2, 3 are independent and run in parallel. Phase 4 (DataTable) depends 
 ### T0.1 — Capture pre-state
 
 #### Objective
-Record `dist/` shape, bundle-sizes baseline, and TheoCloud dashboard's current `@usetheo/ui` chunk size (10.96 KB brotli at 0.10.0-next.0) as the reference for Phase 10.
+Record `dist/` shape, bundle-sizes baseline, and TheoCloud dashboard's current `@theokit/ui` chunk size (10.96 KB brotli at 0.10.0-next.0) as the reference for Phase 10.
 
 #### Evidence
-- Brief #4 measurement: TheoCloud `@usetheo/ui` chunk = 10.96 KB brotli at 0.10.0-next.0.
+- Brief #4 measurement: TheoCloud `@theokit/ui` chunk = 10.96 KB brotli at 0.10.0-next.0.
 - Current `dist/index.js` = 49 KB minified post-splitting.
 
 #### Files to edit
@@ -255,12 +255,12 @@ pnpm run size 2>&1 | tee .claude/knowledge-base/baselines/2026-05-26-pre-brief-5
 #### Tasks
 1. `mkdir -p .claude/knowledge-base/baselines/2026-05-26-pre-brief-5`
 2. Run capture commands above
-3. Verify `theocloud.txt` shows `@usetheo/ui chunk: ~10.96 KB brotli`
+3. Verify `theocloud.txt` shows `@theokit/ui chunk: ~10.96 KB brotli`
 
 #### TDD
 ```
 N/A — capture only.
-VERIFY: grep -c "@usetheo/ui" .claude/knowledge-base/baselines/2026-05-26-pre-brief-5/theocloud.txt >= 1
+VERIFY: grep -c "@theokit/ui" .claude/knowledge-base/baselines/2026-05-26-pre-brief-5/theocloud.txt >= 1
 ```
 
 #### Acceptance Criteria
@@ -359,7 +359,7 @@ VERIFY: pnpm vitest run src/components/primitives/dropdown-menu
 
 - [ ] 5/5 tests green
 - [ ] axe-clean with the Radix focus-guard exception
-- [ ] `validate-quality-gates.ts` accepts as primitive (zero `@usetheo/ui` internal imports)
+- [ ] `validate-quality-gates.ts` accepts as primitive (zero `@theokit/ui` internal imports)
 - [ ] Registry descriptor valid
 - [ ] Sub-components attached via `Object.assign` (matches Sidebar/Table/Dialog pattern)
 
@@ -397,7 +397,7 @@ registry/action-bar.json                                       (NEW)
 #### Deep file dependency analysis
 
 - `action-bar.tsx` imports `react`, `lucide-react` (`Search`, `Filter`, optionally `Plus`), `cn` from `lib/cn.js`. Zero internal deps → primitive.
-- Search input uses native `<input type="search">` styled via tokens (NOT `<Input>` from `@usetheo/ui` — keep primitive isolation; Input is also a primitive so cross-primitive import would fail the taxonomy gate).
+- Search input uses native `<input type="search">` styled via tokens (NOT `<Input>` from `@theokit/ui` — keep primitive isolation; Input is also a primitive so cross-primitive import would fail the taxonomy gate).
 
 #### Deep Dives
 
@@ -971,12 +971,12 @@ CHANGELOG entry covers: 5 new components, D3 scope narrowing, no breaking change
 
 1. Pre-check: `curl -sH "Authorization: Bearer $TOKEN" https://registry.npmjs.org/-/whoami` returns `usetheodev`
 2. `pnpm publish --access public --tag next --no-git-checks`
-3. `npm view @usetheo/ui@0.11.0-next.0 version` returns 0.11.0-next.0
+3. `npm view @theokit/ui@0.11.0-next.0 version` returns 0.11.0-next.0
 4. Fresh smoke install in `/tmp/smoke-0.11` verifies 5 new exports resolve
 
 #### Acceptance Criteria
 
-- [ ] `npm view @usetheo/ui@0.11.0-next.0` returns version
+- [ ] `npm view @theokit/ui@0.11.0-next.0` returns version
 - [ ] Smoke install: `DropdownMenu`, `ActionBar`, `PinInput`, `DataTable`, `PageShell` all importable
 - [ ] Per-component dist files present in fresh install
 
@@ -992,7 +992,7 @@ CHANGELOG entry covers: 5 new components, D3 scope narrowing, no breaking change
 
 #### Files to edit
 ```
-/home/paulo/Projetos/usetheo/theo-opendocs/package.json  (MODIFY) — @usetheo/ui 0.11.0
+/home/paulo/Projetos/usetheo/theo-opendocs/package.json  (MODIFY) — @theokit/ui 0.11.0
 /home/paulo/Projetos/usetheo/theo-opendocs/components/theoui-mdx.tsx  (MODIFY) — 5 new dynamic component bridges
 /home/paulo/Projetos/usetheo/theo-opendocs/lib/preview-defaults.tsx   (MODIFY) — defaults for those that can render statically
 ```
@@ -1069,7 +1069,7 @@ content/theoui/composites/meta.json            (MODIFY) — 2 new slugs in alpha
 Per Brief #4 precedent, measure the consumer-side bundle delta from the version bump alone (no consumer migration to the new primitives yet).
 
 #### Evidence
-- Pre-state baseline captured in T0.1: TheoCloud `@usetheo/ui` chunk = ~10.96 KB brotli at 0.10.0-next.0
+- Pre-state baseline captured in T0.1: TheoCloud `@theokit/ui` chunk = ~10.96 KB brotli at 0.10.0-next.0
 
 #### Files to edit
 
@@ -1085,11 +1085,11 @@ CHANGELOG.md (MODIFY again — fill in measured delta)
 3. Compute delta vs pre-state baseline
 4. Write evidence file
 5. Update CHANGELOG entry with the real delta numbers (replace placeholders)
-6. Restore `@usetheo/ui: 0.10.0-next.0` in dashboard `package.json` if the consumer doesn't want to upgrade yet (this is the consumer's call)
+6. Restore `@theokit/ui: 0.10.0-next.0` in dashboard `package.json` if the consumer doesn't want to upgrade yet (this is the consumer's call)
 
 #### Acceptance Criteria
 
-- [ ] `@usetheo/ui` chunk delta documented (expected: <= +5 KB brotli; new components are not yet imported, so unused chunks should tree-shake away)
+- [ ] `@theokit/ui` chunk delta documented (expected: <= +5 KB brotli; new components are not yet imported, so unused chunks should tree-shake away)
 - [ ] Total initial JS regression: ≤ +5 KB brotli
 - [ ] CHANGELOG updated with measured numbers
 - [ ] EC-9 gate (no placeholders left)
@@ -1109,12 +1109,12 @@ Validate that the 5 new components work as a real consumer would experience them
 
 #### Tasks
 
-1. Install `@usetheo/ui@0.11.0-next.0` from npm in fresh smoke project
+1. Install `@theokit/ui@0.11.0-next.0` from npm in fresh smoke project
 2. Verify all 5 exports importable from barrel AND subpath:
    ```ts
-   import { DropdownMenu, ActionBar, PinInput, DataTable, PageShell } from "@usetheo/ui";
-   import { PinInput as PI2 } from "@usetheo/ui/pin-input";
-   import { DataTable as DT2 } from "@usetheo/ui/data-table";
+   import { DropdownMenu, ActionBar, PinInput, DataTable, PageShell } from "@theokit/ui";
+   import { PinInput as PI2 } from "@theokit/ui/pin-input";
+   import { DataTable as DT2 } from "@theokit/ui/data-table";
    ```
 3. SSR render PinInput / ActionBar to confirm no crash
 4. Pull up live docs pages — 5 new pages return 200
@@ -1174,8 +1174,8 @@ Validate that the 5 new components work as a real consumer would experience them
 - [ ] ADR `page-shell-composite-pattern.md` committed
 - [ ] CHANGELOG `[0.11.0-next.0]` entry with measured bundle delta
 - [ ] `package.json` version = `0.11.0-next.0`
-- [ ] npm published `@usetheo/ui@0.11.0-next.0 --tag next`
-- [ ] Subpath imports work for all 5 new components from both barrel and `@usetheo/ui/<slug>`
+- [ ] npm published `@theokit/ui@0.11.0-next.0 --tag next`
+- [ ] Subpath imports work for all 5 new components from both barrel and `@theokit/ui/<slug>`
 - [ ] theo-opendocs: 5 new MDX pages live; llms.txt mentions 0.11
 - [ ] TheoCloud canary measurement on file; delta ≤ +5 KB brotli without consumer migration
 - [ ] **Dogfood QA PASS** — T11.1 verifies all 5 components importable, SSR-safe where applicable, docs live, evidence on file
@@ -1220,4 +1220,4 @@ Validate that the 5 new components work as a real consumer would experience them
 | DataTable expandable: single vs multi default? | Multi default + opt-in single via `expandMode` (D5) |
 | PageShell loading: spinner vs skeleton? | Spinner default + `loadingNode?` escape hatch (D8) |
 | PageShell error: retry vs docs link? | Both as optional props |
-| Other consumers besides TheoCloud? | Only TheoCloud uses `@usetheo/ui` directly today |
+| Other consumers besides TheoCloud? | Only TheoCloud uses `@theokit/ui` directly today |

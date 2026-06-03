@@ -1,10 +1,10 @@
 # Plan: 4 PaaS-shape primitives — UsageMeter, Progress, PlanBadge, AccountMenu
 
-> **Version 1.0** — Adds four PaaS-shape primitives to `@usetheo/ui` to cover the gaps surfaced by TheoCloud's dashboard migration: multi-metric `UsageMeter`, standalone `Progress` bar, semantic `PlanBadge`, and sidebar `AccountMenu`. Each primitive is a SIBLING of an existing agent-shape primitive (`CostMeter`, `ProgressChecklist`, `Badge`, `ProjectSwitcher`) — no breaking changes, no modifications to current components. Ships as 0.7.0-next.0 (minor, additive public API).
+> **Version 1.0** — Adds four PaaS-shape primitives to `@theokit/ui` to cover the gaps surfaced by TheoCloud's dashboard migration: multi-metric `UsageMeter`, standalone `Progress` bar, semantic `PlanBadge`, and sidebar `AccountMenu`. Each primitive is a SIBLING of an existing agent-shape primitive (`CostMeter`, `ProgressChecklist`, `Badge`, `ProjectSwitcher`) — no breaking changes, no modifications to current components. Ships as 0.7.0-next.0 (minor, additive public API).
 
 ## Context
 
-**Trigger:** TheoCloud's dashboard migrating to `@usetheo/ui@0.6.3-next.0` (companion plan `theo/docs/plans/2026-05-23-dashboard-theo-ui-migration-plan.md` v1.1) ran a gap analysis against the canonical mockup `cloud/dashboard/design/theo_overview_dashboard_mockup.html`. ~95% of the mockup maps to existing primitives/composites; **4 PaaS-shape gaps** force consumers to misuse agent-first primitives or duplicate components locally.
+**Trigger:** TheoCloud's dashboard migrating to `@theokit/ui@0.6.3-next.0` (companion plan `theo/docs/plans/2026-05-23-dashboard-theo-ui-migration-plan.md` v1.1) ran a gap analysis against the canonical mockup `cloud/dashboard/design/theo_overview_dashboard_mockup.html`. ~95% of the mockup maps to existing primitives/composites; **4 PaaS-shape gaps** force consumers to misuse agent-first primitives or duplicate components locally.
 
 **Brief authored by the consumer:** `theo/docs/handoff/2026-05-23-theo-ui-cloud-dashboard-gaps-brief.md` (2026-05-23). It contains the full API spec, visual spec, edge-case list, TDD test list, and minimum Ladle story set for each of the four primitives. This plan operationalizes that brief.
 
@@ -17,11 +17,11 @@
 | `PlanBadge` (semantic pricing tier) | `Badge variant="outline"` (generic visual) | Generic `Badge` requires consumers to map plan→variant per app, leaking design tokens |
 | `AccountMenu` (PaaS sidebar header) | `ProjectSwitcher` (workspace+branch+agent-status) | `ProjectSwitcher` is agent-shape; PaaS sidebars need account+plan instead of workspace+branch |
 
-**Architectural invariant (CLAUDE.md):** primitives have ZERO internal `@usetheo/ui` deps. `UsageMeter` violates this if it imports `<Progress>` from the barrel — handled per D3 below.
+**Architectural invariant (CLAUDE.md):** primitives have ZERO internal `@theokit/ui` deps. `UsageMeter` violates this if it imports `<Progress>` from the barrel — handled per D3 below.
 
 ## Objective
 
-**Done =** four primitives exist under `src/components/primitives/{usage-meter,progress,plan-badge,account-menu}/`, each with `*.tsx` + `*.test.tsx` + `*.stories.tsx` + `index.ts`; all tests pass + axe-clean; barrel `src/index.ts` + `package.json#exports` updated; published as `@usetheo/ui@0.7.0-next.0`.
+**Done =** four primitives exist under `src/components/primitives/{usage-meter,progress,plan-badge,account-menu}/`, each with `*.tsx` + `*.test.tsx` + `*.stories.tsx` + `index.ts`; all tests pass + axe-clean; barrel `src/index.ts` + `package.json#exports` updated; published as `@theokit/ui@0.7.0-next.0`.
 
 Specific goals:
 
@@ -50,8 +50,8 @@ Specific goals:
 ### D3 — `UsageMeter` imports `Progress` via relative path (not the barrel)
 
 - **Decision:** `usage-meter.tsx` uses `import { Progress } from "../progress/index.js"` — relative import to the sibling primitive directory.
-- **Rationale:** Primitives MUST NOT depend on `@usetheo/ui` barrel imports (the taxonomy gate `validate-quality-gates.ts` enforces zero internal cross-imports for primitives). The relative import sidesteps the gate because it's a peer-folder path, not a barrel resolution, AND it preserves the "primitive = composable, no upward dep" mental model. `Progress` and `UsageMeter` are sibling primitives — `UsageMeter` is composite-class semantically but stays a primitive because it has no external API requirement beyond its own props.
-- **Alternative considered:** Move `UsageMeter` to `composites/`. Rejected: brief explicitly lists it under `primitives/`; the consumer expects to import it from `@usetheo/ui` not `@usetheo/ui/composites`.
+- **Rationale:** Primitives MUST NOT depend on `@theokit/ui` barrel imports (the taxonomy gate `validate-quality-gates.ts` enforces zero internal cross-imports for primitives). The relative import sidesteps the gate because it's a peer-folder path, not a barrel resolution, AND it preserves the "primitive = composable, no upward dep" mental model. `Progress` and `UsageMeter` are sibling primitives — `UsageMeter` is composite-class semantically but stays a primitive because it has no external API requirement beyond its own props.
+- **Alternative considered:** Move `UsageMeter` to `composites/`. Rejected: brief explicitly lists it under `primitives/`; the consumer expects to import it from `@theokit/ui` not `@theokit/ui/composites`.
 - **Consequences:** Future `Progress` API change ripples to `UsageMeter` at type level via the relative import — that's good, not bad. Adds one allowlisted exception in the structural gate.
 
 ### D4 — `AccountMenu` reuses `Avatar` via relative path, `PlanBadge` via relative path
@@ -165,7 +165,7 @@ src/components/primitives/progress/index.ts (NEW) — barrel
 ```
 
 #### Deep file dependency analysis
-- **progress.tsx (NEW)**: standalone primitive. Uses `cn()` from `lib/cn.js`. No `@usetheo/ui` cross-imports. Exports `Progress` (forwardRef) + `ProgressProps`.
+- **progress.tsx (NEW)**: standalone primitive. Uses `cn()` from `lib/cn.js`. No `@theokit/ui` cross-imports. Exports `Progress` (forwardRef) + `ProgressProps`.
 - **progress.test.tsx (NEW)**: imports `@testing-library/react`, `vitest`, `vitest-axe`. Consumes only `./progress.js`. Independent of any other primitive.
 - **progress.stories.tsx (NEW)**: Ladle stories. Imports `./progress.js`.
 - **index.ts (NEW)**: re-exports `{ Progress, type ProgressProps }`.
@@ -585,7 +585,7 @@ VERIFY: pnpm vitest run src/components/primitives/account-menu/
 
 ## Phase 5: Barrel + exports + registry
 
-**Objective:** Make the four primitives importable from `@usetheo/ui` and through `./<slug>` subpaths.
+**Objective:** Make the four primitives importable from `@theokit/ui` and through `./<slug>` subpaths.
 
 ### T5.1 — Update `src/index.ts` barrel
 
@@ -730,7 +730,7 @@ N/A.
 
 ## Phase 6: CHANGELOG + bump + publish
 
-**Objective:** Ship `@usetheo/ui@0.7.0-next.0` to npm with a complete CHANGELOG entry.
+**Objective:** Ship `@theokit/ui@0.7.0-next.0` to npm with a complete CHANGELOG entry.
 
 ### T6.1 — CHANGELOG entry
 
@@ -768,13 +768,13 @@ package.json — version 0.6.3-next.0 → 0.7.0-next.0
 2. `pnpm quality:gates` exit 0.
 3. Pre-condition: `curl -sH "Authorization: Bearer $NPM_TOKEN" https://registry.npmjs.org/-/whoami` returns `usetheodev`.
 4. `npm publish --tag next`.
-5. Verify `npm view @usetheo/ui versions` lists `0.7.0-next.0`.
+5. Verify `npm view @theokit/ui versions` lists `0.7.0-next.0`.
 
 #### TDD
 N/A — release task.
 
 #### Acceptance Criteria
-- [ ] `@usetheo/ui@0.7.0-next.0` resolves on registry (HTTP 200).
+- [ ] `@theokit/ui@0.7.0-next.0` resolves on registry (HTTP 200).
 - [ ] dist-tag `next` → `0.7.0-next.0`.
 
 #### DoD
@@ -783,12 +783,12 @@ N/A — release task.
 ### T6.4 — Smoke test against published tarball
 
 #### Tasks
-1. `npm install @usetheo/ui@0.7.0-next.0` in a tmp dir.
+1. `npm install @theokit/ui@0.7.0-next.0` in a tmp dir.
 2. SSR-render one composed example: `<AccountMenu name="paulo" plan="hobby" avatar="P" /><UsageMeter title="Last 30 days" metrics={[{label:"Data",value:50,max:100,unit:"GB"}]} />`.
 3. `renderToString` → assert `data-theo-*` attributes, presence of `aria-valuenow="50"`, "Hobby" text, "Data" label, "50 / 100 GB" value.
 
 #### Acceptance Criteria
-- [ ] All 4 primitives importable from `@usetheo/ui` barrel.
+- [ ] All 4 primitives importable from `@theokit/ui` barrel.
 - [ ] SSR render produces expected DOM markers.
 
 #### DoD
@@ -804,7 +804,7 @@ N/A — release task.
 
 #### Files to edit
 ```
-theo-opendocs/package.json — @usetheo/ui pin
+theo-opendocs/package.json — @theokit/ui pin
 theo-opendocs/pnpm-lock.yaml — regenerated
 theo-opendocs/content/theoui/agent/usage-meter.mdx (auto-generated by generate:theoui script)
 ... (3 more auto-generated mdx for progress / plan-badge / account-menu)
@@ -863,7 +863,7 @@ theo-opendocs/lib/preview-defaults.tsx — add 4 stubs (one per primitive)
 - [ ] `pnpm quality:gates` exit 0
 - [ ] `pnpm registry:validate` clean (4 new registry items)
 - [ ] CHANGELOG entry `[0.7.0-next.0]` present
-- [ ] `@usetheo/ui@0.7.0-next.0` published to npm
+- [ ] `@theokit/ui@0.7.0-next.0` published to npm
 - [ ] Smoke test against tarball passes (SSR render of composed example)
 - [ ] `theo-opendocs` bumped + redeployed
 - [ ] **Dogfood QA PASS** — `quality:gates` green + 4 Ladle pages render the new primitives
@@ -879,7 +879,7 @@ theo-opendocs/lib/preview-defaults.tsx — add 4 stubs (one per primitive)
 2. `pnpm ladle:build` — 4 new component pages render without errors
 3. Manual visual check via Ladle of all 15 new stories (5 Progress + 4 UsageMeter + 2 PlanBadge + 4 AccountMenu)
 4. SSR smoke (Phase 6.4) — renders without `useEffect`-only logic
-5. `npm install @usetheo/ui@0.7.0-next.0` in a fresh tmp project; import each of the 4 → no TypeScript errors
+5. `npm install @theokit/ui@0.7.0-next.0` in a fresh tmp project; import each of the 4 → no TypeScript errors
 
 ### Acceptance Criteria
 

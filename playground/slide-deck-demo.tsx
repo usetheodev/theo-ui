@@ -1,7 +1,7 @@
-import { Button } from "@usetheo/ui";
-import { SlideDeck } from "@usetheo/ui/slide-deck";
-import "@usetheo/ui/slide/themes/default.css";
-import "@usetheo/ui/slide/themes/violet-forge.css";
+import { Button } from "@theokit/ui";
+import { SlideDeck } from "@theokit/ui/slide-deck";
+import "@theokit/ui/slide/themes/default.css";
+import "@theokit/ui/slide/themes/violet-forge.css";
 import { useState } from "react";
 import { SLIDE_DECK_SCENES, type SlideDeckScene } from "./slide-deck-scenes.js";
 

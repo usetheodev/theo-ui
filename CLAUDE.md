@@ -1,6 +1,6 @@
 # CLAUDE.md — TheoUI
 
-Contract between Claude and the **TheoUI / `@usetheo/ui`** project (the **UI** pillar of [usetheo](../CLAUDE.md)). Read this file **and** the root `CLAUDE.md` before editing anything here.
+Contract between Claude and the **TheoUI / `@theokit/ui`** project (the **UI** pillar of [usetheo](../CLAUDE.md)). Read this file **and** the root `CLAUDE.md` before editing anything here.
 
 This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/.claude/CLAUDE.md`. Root rules apply unconditionally. TheoUI-specific rules layer on top.
 
@@ -8,11 +8,11 @@ This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/
 
 ## What this project is
 
-`@usetheo/ui` — codenamed **Violet Forge** — is the React component library of the [usetheo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and cloud dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
+`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [usetheo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and cloud dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
 
-Published as `@usetheo/ui` on npm. Distributed two ways: install the whole package, or copy individual components via the shadcn-compatible registry.
+Published as `@theokit/ui` on npm. Distributed two ways: install the whole package, or copy individual components via the shadcn-compatible registry.
 
-Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the ecosystem (Apache-2.0, not part of the paid funnel). Pairs naturally with TheoKit (framework) and `@usetheo/sdk` (harness) but runs standalone.
+Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the ecosystem (Apache-2.0, not part of the paid funnel). Pairs naturally with TheoKit (framework) and `@theokit/sdk` (harness) but runs standalone.
 
 ## Locked names
 
@@ -20,14 +20,14 @@ Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the 
 
 | Item | Value |
 | --- | --- |
-| npm package | `@usetheo/ui` |
+| npm package | `@theokit/ui` |
 | Design system codename | **Violet Forge** |
 | Default theme | `violet-forge` |
 | Built-in themes | `violet-forge`, `classic-paper`, `aurora-terminal` |
 | ThemeProvider component | `<ThemeProvider />` |
 | Registry endpoint (planned) | `ui.usetheo.dev/r/*.json` |
 | Module format | ESM-only (no CJS) |
-| Component taxonomy | `primitive` (no internal `@usetheo/ui` deps) vs `composite` (depends on primitives) |
+| Component taxonomy | `primitive` (no internal `@theokit/ui` deps) vs `composite` (depends on primitives) |
 | Quality gate command | `pnpm quality:gates` |
 
 ## Voice and Tone
@@ -37,7 +37,7 @@ Positioned as the **UI pillar** of usetheo and a **community auxiliary** of the 
 **Applies to:**
 
 - `PITCH.md` — landing-page copy at project root
-- `README.md` HERO + "Why `@usetheo/ui`" sections (everything above the `## Component catalog` section)
+- `README.md` HERO + "Why `@theokit/ui`" sections (everything above the `## Component catalog` section)
 - Future TheoUI launch material, blog posts, site sections referencing Violet Forge or the design system as a brand
 
 **Does NOT apply to (stays technical-direct):**
@@ -62,8 +62,8 @@ If a piece of TheoUI copy contradicts the locked narrative in [`../CLAUDE.md`](.
 
 | Pillar | Project | Current integration (verify before claiming) |
 | --- | --- | --- |
-| Harness | `@usetheo/sdk` | None as of 2026-05-15. `SDKAgent` events (`SDKMessage`, `tool_call`, `assistant`) are natural data sources for `AgentEvent`, `ToolCall`, `ChatMessage` primitives, but no import exists. |
-| Skills | `theokit` | None as of 2026-05-15. TheoKit apps can consume `@usetheo/ui` like any other React lib; no specific wiring. |
+| Harness | `@theokit/sdk` | None as of 2026-05-15. `SDKAgent` events (`SDKMessage`, `tool_call`, `assistant`) are natural data sources for `AgentEvent`, `ToolCall`, `ChatMessage` primitives, but no import exists. |
+| Skills | `theokit` | None as of 2026-05-15. TheoKit apps can consume `@theokit/ui` like any other React lib; no specific wiring. |
 | Runtime | Theo PaaS | None (PaaS pre-release). `DeploymentRow`, `BuildLogStream`, `RollbackUI`, `EnvVarEditor`, `DomainConfig`, `PreviewEnvCard`, `ProjectCard`, `MetricsPanel` are PaaS-shaped primitives waiting for the PaaS surface to consume them. |
 | Coding assistant | `theo-code` | TheoCode Desktop is a likely first-party consumer (Tauri + web view); no explicit dependency declared yet. |
 
@@ -75,16 +75,16 @@ Four future engines / composites are explicitly in scope but **not implemented**
 
 | Item | Type | Inspiration | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `Whiteboard` | Primitive (engine, view-only) | Excalidraw | **Available** (2026-05-18, RFC 0001) | Subpath `@usetheo/ui/whiteboard`. JSON → SVG with hand-drawn aesthetic via `roughjs` + `perfect-freehand` (optional peer-deps). Pan + zoom built-in. NOT an editor — no toolbar / selection / undo. See `docs/rfcs/0001-whiteboard.md`. |
-| `Slide` | Primitive (engine, view-only) | Marp | **Available** (2026-05-19, RFC 0002) | Subpath `@usetheo/ui/slide`. Markdown + YAML frontmatter → themed SVG/HTML surface via `mdast-util-from-markdown` + `mdast-util-gfm` + `mdast-util-to-hast` + `hast-util-sanitize` + `hast-util-to-jsx-runtime` (optional peer-deps). Fixed 1280×720 canvas (16:9 default), Reveal.js scale-to-fit, two built-in themes (`default`, `violet-forge`). View-only — no deck navigation. See `docs/rfcs/0002-slide.md`. |
-| `SlideDeck` | Composite (engine, view-only) | Marp / Reveal.js | **Available** (2026-05-19, RFC 0003) | Subpath `@usetheo/ui/slide-deck`. Orchestrates N `<Slide>` primitives with keyboard/touch/hash navigation, thumbnails sidebar, presenter view (inline panel w/ next + notes + timer), fullscreen API, CSS transitions (`none`/`fade`/`slide` + prefers-reduced-motion), Marpit-style fragments (`*` lists), PDF export via `window.print()` + `@page` CSS. Zero new peer-deps (reuses Slide's 7). See `docs/rfcs/0003-slide-deck.md`. |
-| `Slide` rich content (Tier 1 + Tier 2 plugins) | Slide extension (engine + 4 plugins) | Marp + Reveal.js + GitHub callouts + Shiki/KaTeX/Mermaid | **Available** (2026-05-19, RFC 0004) | **Tier 1 baked into `@usetheo/ui/slide`**: GFM alerts (`> [!NOTE/TIP/IMPORTANT/WARNING/CAUTION]`), 7 layouts (`default`/`title`/`two-column`/`image-right`/`image-left`/`code-output`/`section`), background image/gradient (sanitized — http(s) only, data: rejected), Marpit `![bg](url)` syntax, header/footer/paginate overlays. **Tier 2 opt-in plugins** in sub-subpaths `@usetheo/ui/slide/plugins/{shiki,math,mermaid,emoji}` — each with its own peer-deps externalized. Plugin architecture: explicit `plugins={SlidePlugin[]}` prop (`<Slide>` + `<SlideDeck>` relay), error isolation (D16 — plugin throws collected as `PLUGIN_ERROR`) + sanitize-schema merge (D17 — plugins MUST declare `sanitizeSchemaExtension` for custom tags). Pipeline order: `mdast → hast → sanitize → components`. **128 new tests**; bundle isolation invariant preserved (barrel unchanged). See `docs/rfcs/0004-slide-rich-content.md`. |
+| `Whiteboard` | Primitive (engine, view-only) | Excalidraw | **Available** (2026-05-18, RFC 0001) | Subpath `@theokit/ui/whiteboard`. JSON → SVG with hand-drawn aesthetic via `roughjs` + `perfect-freehand` (optional peer-deps). Pan + zoom built-in. NOT an editor — no toolbar / selection / undo. See `docs/rfcs/0001-whiteboard.md`. |
+| `Slide` | Primitive (engine, view-only) | Marp | **Available** (2026-05-19, RFC 0002) | Subpath `@theokit/ui/slide`. Markdown + YAML frontmatter → themed SVG/HTML surface via `mdast-util-from-markdown` + `mdast-util-gfm` + `mdast-util-to-hast` + `hast-util-sanitize` + `hast-util-to-jsx-runtime` (optional peer-deps). Fixed 1280×720 canvas (16:9 default), Reveal.js scale-to-fit, two built-in themes (`default`, `violet-forge`). View-only — no deck navigation. See `docs/rfcs/0002-slide.md`. |
+| `SlideDeck` | Composite (engine, view-only) | Marp / Reveal.js | **Available** (2026-05-19, RFC 0003) | Subpath `@theokit/ui/slide-deck`. Orchestrates N `<Slide>` primitives with keyboard/touch/hash navigation, thumbnails sidebar, presenter view (inline panel w/ next + notes + timer), fullscreen API, CSS transitions (`none`/`fade`/`slide` + prefers-reduced-motion), Marpit-style fragments (`*` lists), PDF export via `window.print()` + `@page` CSS. Zero new peer-deps (reuses Slide's 7). See `docs/rfcs/0003-slide-deck.md`. |
+| `Slide` rich content (Tier 1 + Tier 2 plugins) | Slide extension (engine + 4 plugins) | Marp + Reveal.js + GitHub callouts + Shiki/KaTeX/Mermaid | **Available** (2026-05-19, RFC 0004) | **Tier 1 baked into `@theokit/ui/slide`**: GFM alerts (`> [!NOTE/TIP/IMPORTANT/WARNING/CAUTION]`), 7 layouts (`default`/`title`/`two-column`/`image-right`/`image-left`/`code-output`/`section`), background image/gradient (sanitized — http(s) only, data: rejected), Marpit `![bg](url)` syntax, header/footer/paginate overlays. **Tier 2 opt-in plugins** in sub-subpaths `@theokit/ui/slide/plugins/{shiki,math,mermaid,emoji}` — each with its own peer-deps externalized. Plugin architecture: explicit `plugins={SlidePlugin[]}` prop (`<Slide>` + `<SlideDeck>` relay), error isolation (D16 — plugin throws collected as `PLUGIN_ERROR`) + sanitize-schema merge (D17 — plugins MUST declare `sanitizeSchemaExtension` for custom tags). Pipeline order: `mdast → hast → sanitize → components`. **128 new tests**; bundle isolation invariant preserved (barrel unchanged). See `docs/rfcs/0004-slide-rich-content.md`. |
 | `Diagram` | Primitive | Mermaid | Explorer (RFC) | DSL → SVG. Reuse `dagre` / `elk` for layout algorithms. MVP: one diagram type (flowchart). |
 
 **Rules in force for each engine (non-negotiable):**
 
 - **Don't reinvent the algorithmic core** (global rule 9). Markdown parsing, DSL parsing, graph layout, and freedraw stroke rendering use mature OSS deps. TheoUI ships the React shell, theming, a11y, and the agent-surface integration — not the algorithm.
-- **Bundle isolation**: every engine likely blows the current `quality:bundle` ±5% baseline. Plan a subpath import (`@usetheo/ui/whiteboard`) with peer-dep opt-in; **do not include in the main barrel**. Update `quality:bundle` baseline only after subpath isolation is confirmed.
+- **Bundle isolation**: every engine likely blows the current `quality:bundle` ±5% baseline. Plan a subpath import (`@theokit/ui/whiteboard`) with peer-dep opt-in; **do not include in the main barrel**. Update `quality:bundle` baseline only after subpath isolation is confirmed.
 - **YAGNI gate**: no engine moves out of "Explorer" without a documented agent-surface or PaaS-dashboard consumer asking for it.
 - **License compatibility**: Apache-2.0 compatible deps only (no GPL transitive).
 - **Honesty**: until shipped, every public surface (README, PITCH, site) must label these as Roadmap, not Available.
@@ -95,7 +95,7 @@ No version commitment yet. These are not on the 0.1 / 1.0 line.
 
 The split between **primitive** and **composite** is enforced by [`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts), not chosen subjectively:
 
-- **Primitive** — imports zero other `@usetheo/ui` components. 81 of these.
+- **Primitive** — imports zero other `@theokit/ui` components. 81 of these.
 - **Composite** — imports one or more primitives via the barrel. 21 of these.
 
 Cross-imports across the boundary fail the gate. A primitive that grows to need another primitive must either inline what it needs or be promoted to a composite (and renamed via PR with rationale).

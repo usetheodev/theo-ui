@@ -1,10 +1,10 @@
 // Public-API imports only — no relative paths into `src/`. The Vite alias in
-// `playground/vite.config.ts` resolves `@usetheo/ui` to `src/index.ts`, so this
+// `playground/vite.config.ts` resolves `@theokit/ui` to `src/index.ts`, so this
 // file demonstrates how a real consumer would wire the library.
-import { Button, ThemeProvider, ThemeScript, builtinThemes } from "@usetheo/ui";
+import { Button, ThemeProvider, ThemeScript, builtinThemes } from "@theokit/ui";
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
-import "@usetheo/ui/styles.css";
+import "@theokit/ui/styles.css";
 // TheoCodeShell is a screen story (not part of the public API). It's imported
 // via relative path because it deliberately lives outside the published
 // barrel; the playground composes it on top of the public components below.
@@ -42,7 +42,7 @@ function PlaygroundRoot() {
   return (
     <div className="grid h-full grid-rows-[auto_1fr] overflow-hidden">
       <header className="flex h-12 items-center justify-between border-border/40 border-b bg-card px-4">
-        <span className="font-display text-title-md tracking-tight">@usetheo/ui playground</span>
+        <span className="font-display text-title-md tracking-tight">@theokit/ui playground</span>
         <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-muted p-1">
           <Button
             size="sm"

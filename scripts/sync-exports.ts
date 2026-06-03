@@ -5,7 +5,7 @@
  * Strategy (T3.2 / HIGH-005):
  *
  * The package ships a single ESM barrel (`dist/index.js`). For consumer-
- * friendly subpath imports (`import { Button } from "@usetheo/ui/button"`),
+ * friendly subpath imports (`import { Button } from "@theokit/ui/button"`),
  * we emit one `./<name>` entry per exported component — each pointing at
  * the same barrel + canonical type declarations. Modern bundlers (Vite,
  * esbuild, Rollup, webpack 5, Bun) tree-shake `Button` from the barrel
@@ -114,7 +114,7 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
   },
   // RFC 0008 follow-up — Tailwind v4 dropped JS presets, so the v3-shaped
   // JS preset stays available under `./preset-v3-legacy`. New v4 consumers
-  // should use `@usetheo/ui/preset.css` declared in BASE_EXPORTS above.
+  // should use `@theokit/ui/preset.css` declared in BASE_EXPORTS above.
   "./preset-v3-legacy": {
     types: "./dist/preset-v3-legacy.d.ts",
     import: "./dist/preset-v3-legacy.js",

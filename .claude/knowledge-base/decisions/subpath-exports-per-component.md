@@ -9,16 +9,16 @@
 
 ## Context
 
-Since `@usetheo/ui@0.7.0` (Brief #1), the package declared ~100 subpath exports
+Since `@theokit/ui@0.7.0` (Brief #1), the package declared ~100 subpath exports
 in `package.json#exports` (`./alert`, `./button`, `./table`, …). Every entry
 pointed at the same `./dist/index.js` (the full 417 KB barrel). The subpath
-form was **cosmetic**: `import { Alert } from "@usetheo/ui/alert"` resolved
-byte-identical to `import { Alert } from "@usetheo/ui"`.
+form was **cosmetic**: `import { Alert } from "@theokit/ui/alert"` resolved
+byte-identical to `import { Alert } from "@theokit/ui"`.
 
 The TheoCloud dashboard team measured (MEET-ASYNC-AMENDMENT-2026-05-24-002):
 
 ```
-@usetheo/ui chunk:  43.05 KB brotli / 240.56 KB minified
+@theokit/ui chunk:  43.05 KB brotli / 240.56 KB minified
 Components used:    ~30 of 116
 Tree-shaking drop:  0 bytes
 ```
@@ -41,9 +41,9 @@ After every build, `scripts/regen-subpath-exports.ts` rewrites
 Isolated engines (`whiteboard`, `slide`, `slide-deck`, `vite-plugin`,
 `preset-v3-legacy`) and CSS entries are preserved verbatim.
 
-The barrel `import { X } from "@usetheo/ui"` continues to work — additive,
+The barrel `import { X } from "@theokit/ui"` continues to work — additive,
 non-breaking. Consumers opt into bundle savings by switching to
-`import { X } from "@usetheo/ui/<x>"` at their own pace.
+`import { X } from "@theokit/ui/<x>"` at their own pace.
 
 ## Alternatives rejected
 
@@ -69,7 +69,7 @@ non-breaking. Consumers opt into bundle savings by switching to
   propagate to worker threads). **Resolution:** restrict `dts: { entry: ... }`
   to the barrel + isolated engines only. Per-component subpaths point their
   `types` field at the barrel `dist/index.d.ts` — TypeScript still resolves
-  `import { Alert } from "@usetheo/ui/alert"` because `Alert` is exported
+  `import { Alert } from "@theokit/ui/alert"` because `Alert` is exported
   from the barrel `.d.ts` too. Trade-off: consumers' typecheck pulls in the
   full 167 KB type graph regardless of which subpath they import, but the
   **JS** dist (where tree-shaking matters) is per-component and small.
@@ -95,15 +95,15 @@ non-breaking. Consumers opt into bundle savings by switching to
 ## Validation methodology
 
 Acceptance gate is **measured ≥10 KB brotli savings** on the TheoCloud
-`@usetheo/ui` chunk after migrating its top 10 imports to subpath form.
+`@theokit/ui` chunk after migrating its top 10 imports to subpath form.
 Workflow:
 
 1. `cd theo-ui && pnpm build && pnpm pack`
 2. `cd theo/cloud/dashboard && pnpm install <theo-ui-tarball>` (or `pnpm link`)
 3. Manually split multi-component imports in the consumer's ~13 dashboard
-   files: replace `import { Card, Button, Alert, ... } from "@usetheo/ui"`
-   with one line per top-10 component using `@usetheo/ui/<kebab-name>`.
-4. `pnpm run build && pnpm run size` → compare `@usetheo/ui` chunk size
+   files: replace `import { Card, Button, Alert, ... } from "@theokit/ui"`
+   with one line per top-10 component using `@theokit/ui/<kebab-name>`.
+4. `pnpm run build && pnpm run size` → compare `@theokit/ui` chunk size
    against the pre-migration baseline.
 
 The hard merge gate requires ≥10 KB brotli reduction. If savings < 8 KB, the

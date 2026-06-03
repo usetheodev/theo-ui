@@ -5,7 +5,7 @@
 | Author | paulohenriquevn |
 | Date | 2026-05-18 |
 | Status | **Implemented** (2026-05-18) |
-| Subpath | `@usetheo/ui/whiteboard` |
+| Subpath | `@theokit/ui/whiteboard` |
 | Plan | `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md` |
 | Edge-case review | `.claude/knowledge-base/reviews/edge-cases/whiteboard-view-primitive-edge-cases-2026-05-18.md` |
 | Consumer documented | Confirmed verbally by repo owner (paulohenriquevn) on 2026-05-18 during plan kickoff. Concrete consumer reference (specific TheoCode Desktop screen, TheoKit app, or Theo cloud dashboard panel) to be linked here in the follow-up PR that wires Whiteboard into the consumer surface. |
@@ -14,7 +14,7 @@
 
 `Whiteboard` é um primitive **view-only** que renderiza um JSON declarativo em SVG com a estética hand-drawn do Excalidraw. Foco: consumir output de LLMs (tool calls como `{"type":"whiteboard","data":{...}}`) e mostrar imediatamente. Sem editor, sem toolbar, sem hit-testing — apenas render + pan/zoom para navegação.
 
-Vive em subpath isolado `@usetheo/ui/whiteboard` com peer-deps opcionais (`roughjs`, `perfect-freehand`). Não inflando o barrel principal (`@usetheo/ui`).
+Vive em subpath isolado `@theokit/ui/whiteboard` com peer-deps opcionais (`roughjs`, `perfect-freehand`). Não inflando o barrel principal (`@theokit/ui`).
 
 ## 2. Motivation
 
@@ -81,7 +81,7 @@ Schema completo em `src/components/primitives/whiteboard/schema.ts`.
 ## 5. Public API
 
 ```tsx
-import { Whiteboard, type WhiteboardData } from "@usetheo/ui/whiteboard";
+import { Whiteboard, type WhiteboardData } from "@theokit/ui/whiteboard";
 
 const scene: WhiteboardData = { version: 1, width: 800, height: 600, elements: [...] };
 
@@ -98,7 +98,7 @@ const scene: WhiteboardData = { version: 1, width: 800, height: 600, elements: [
 
 Peer-deps requeridos pelo consumer:
 ```bash
-pnpm add @usetheo/ui roughjs perfect-freehand
+pnpm add @theokit/ui roughjs perfect-freehand
 ```
 
 ## 6. Phases

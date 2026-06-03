@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /**
  * Dogfood QA for the Slide subpath. Simulates a real consumer:
- *   1. Imports `@usetheo/ui/slide` resolved via the local dist (after `pnpm build`).
+ *   1. Imports `@theokit/ui/slide` resolved via the local dist (after `pnpm build`).
  *   2. Feeds it markdown a Claude / GPT agent could realistically emit.
  *   3. Renders to a static HTML string via React's renderToString (SSR path).
  *   4. Asserts the output is well-formed and contains expected elements.

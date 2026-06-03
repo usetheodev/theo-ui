@@ -9,14 +9,14 @@ import { spawnSync } from "node:child_process";
  * included) to `dist/components.css`.
  *
  * `dist/styles.css` is then amended to `@import "./components.css"`,
- * so a single `@import "@usetheo/ui/styles.css"` in the consumer's CSS
+ * so a single `@import "@theokit/ui/styles.css"` in the consumer's CSS
  * pulls in every utility the library uses — no filesystem scanning,
  * no symlink dependency, no package-manager fragility.
  *
  * Why this exists: Tailwind v4's `@source` glob does not follow
- * symlinks. Under pnpm, `node_modules/@usetheo/ui` is a symlink to a
+ * symlinks. Under pnpm, `node_modules/@theokit/ui` is a symlink to a
  * deep `.pnpm` content-hash directory, and the consumer-side
- * `@source "node_modules/@usetheo/ui/dist/**\/*.{js,mjs,cjs}"` pattern
+ * `@source "node_modules/@theokit/ui/dist/**\/*.{js,mjs,cjs}"` pattern
  * expands to zero files. Pre-compiling at the library side fixes that
  * for every consumer regardless of package manager.
  *

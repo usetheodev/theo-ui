@@ -1,4 +1,4 @@
-# Plan: Theming customizável + padronização de `size` no `@usetheo/ui`
+# Plan: Theming customizável + padronização de `size` no `@theokit/ui`
 
 > **Version 1.0** — Esse plano corrige duas lacunas explicitamente identificadas em conversa com o usuário (2026-05-20): (1) só 2 dos 102 componentes (`Button`, `Avatar`) expõem prop `size`, mesmo com toda a escala (typescale + spacing + radii) já tokenizada; (2) consumidores conseguem criar temas próprios, mas o atrito é alto — 29 cor keys obrigatórias por modo, sem helper de partial override, sem documentação dedicada, sem theme builder. O outcome esperado é: (a) prop `size` consistente em 9 primitives adicionais (Input, Badge, Toast, Checkbox, Switch, Card, FormField, Textarea, Select) totalizando 11 componentes com `size` (Button + Avatar + 9 novos), (b) um helper `defineTheme(partial)` que merja com `violetForge`, eliminando o requisito de preencher 58 cor keys (29×2), (c) uma página dedicada `/theoui/theming` em `docs.usetheo.dev` com tutorial passo a passo e color picker live para preview de temas customizados, (d) uma RFC `0005-theming-and-sizes.md` arquivando a decisão.
 
@@ -37,7 +37,7 @@
 Concretamente:
 
 1. **Sizes** — 11 primitives expõem prop `size` opcional, default `md`, com escala `sm | md | lg`. Cobertura mínima da lista: `Button`, `Avatar` (já existem, validar), `Input`, `Badge`, `Toast`, `Checkbox`, `Switch`, `Card`, `FormField`, `Textarea`, `Select`. Cada um tem teste de regressão que valida que `size='sm'` aplica height/padding/text-size diferentes de `size='md'` e `size='lg'`.
-2. **Theme builder API** — `defineTheme(partial)` exportado de `@usetheo/ui`. Recebe `Partial<Theme>` + nome obrigatório, retorna `Theme` completo merged com `violetForge`. Tipos TypeScript permitem omitir qualquer key.
+2. **Theme builder API** — `defineTheme(partial)` exportado de `@theokit/ui`. Recebe `Partial<Theme>` + nome obrigatório, retorna `Theme` completo merged com `violetForge`. Tipos TypeScript permitem omitir qualquer key.
 3. **Hex/RGB helpers** — `hex('#7C3AED')` e `rgb(124, 58, 237)` retornam HSL string-tuple compatível com `ColorScale`. Documentado. Testado para 6+ inputs incluindo edge cases (`#000`, `#fff`, alpha hex).
 4. **Página de theming** — `docs.usetheo.dev/theoui/theming` com (a) tutorial passo a passo, (b) live preview color picker (3 cores principais: primary, accent, background), (c) snippet copy-paste do tema gerado, (d) link de download `.ts` do tema final.
 5. **RFC arquivada** — `docs/rfcs/0005-theming-and-sizes.md` status `Implemented`, com as 4 ADRs deste plano formalizadas.
@@ -76,7 +76,7 @@ Concretamente:
 
 ### D4 — Página de theming usa `<Slide>` para live preview ao invés de iframe
 
-- **Decisão:** A página `/theoui/theming` em `theo-opendocs` renderiza um preview ao vivo usando componentes reais do `@usetheo/ui` (Button, Card, Input, Badge, etc.) dentro de um `<ThemeProvider themes={[generatedTheme]}>` local — não em iframe. Cores do tema generado vêm de 3 color pickers controlados (primary, accent, background).
+- **Decisão:** A página `/theoui/theming` em `theo-opendocs` renderiza um preview ao vivo usando componentes reais do `@theokit/ui` (Button, Card, Input, Badge, etc.) dentro de um `<ThemeProvider themes={[generatedTheme]}>` local — não em iframe. Cores do tema generado vêm de 3 color pickers controlados (primary, accent, background).
 - **Rationale:**
   - **Iframe complica**: comunicação via postMessage, hot reload do tema sem reload da página, scroll lock — todos solúveis mas custosos.
   - **In-page funciona**: `<ThemeProvider>` aceita re-renderização do prop `themes` (verificado em `theme-provider.tsx:267`). Trocar `themes` re-injeta CSS vars no `<style>` interno. Não há vazamento de tema para o resto da página porque cada ThemeProvider escopa por `data-theme`.
@@ -101,7 +101,7 @@ Phase 0 (Snapshot) ──▶ Phase 1 (size CVA refactor — 9 primitives)
                        Phase 5 (Dogfood QA + cross-validation)
 ```
 
-Phase 1 e Phase 2 são logicamente independentes mas Phase 2 depende de não conflitar com mudanças de Phase 1 (ambas mexem em arquivos diferentes — Phase 1 em primitives, Phase 2 em themes/). **Em prática rodam sequenciais para evitar merge conflicts** em `CHANGELOG.md`. Phase 3 só pode rodar depois das duas. Phase 4 depende de @usetheo/ui ter o novo `defineTheme` exportado e versão bumped. Phase 5 é gate final.
+Phase 1 e Phase 2 são logicamente independentes mas Phase 2 depende de não conflitar com mudanças de Phase 1 (ambas mexem em arquivos diferentes — Phase 1 em primitives, Phase 2 em themes/). **Em prática rodam sequenciais para evitar merge conflicts** em `CHANGELOG.md`. Phase 3 só pode rodar depois das duas. Phase 4 depende de @theokit/ui ter o novo `defineTheme` exportado e versão bumped. Phase 5 é gate final.
 
 ---
 
@@ -634,7 +634,7 @@ VERIFY:  pnpm test src/themes/define
 
 #### Acceptance Criteria
 - [ ] 9 testes verdes (8 originais + EC-3 last-writer-wins)
-- [ ] `defineTheme` exportado de `@usetheo/ui` (via barrel)
+- [ ] `defineTheme` exportado de `@theokit/ui` (via barrel)
 - [ ] TypeScript: `Partial<ColorScale>` permite omitir qualquer key sem erro de compilação
 - [ ] Validação de nome: aceita `corp-dark`, rejeita `corp dark` ou `corp/dark`
 - [ ] JSDoc completa em `define.ts` com exemplo end-to-end **e** nota sobre EC-7 (override só light/dark gera inconsistência visual entre modos — intencional)
@@ -717,7 +717,7 @@ VERIFY:  pnpm test src/themes/color
 
 #### Acceptance Criteria
 - [ ] 12 testes verdes (10 originais + EC-4 case-insensitive + EC-5 4-char alpha)
-- [ ] `hex` + `rgb` exportados de `@usetheo/ui`
+- [ ] `hex` + `rgb` exportados de `@theokit/ui`
 - [ ] JSDoc com exemplos: `hex('#7C3AED')` → `'262 83% 58%'`
 - [ ] Error messages claras (input + razão da falha)
 
@@ -824,7 +824,7 @@ CHANGELOG.md — promover [Unreleased] para [0.2.0-next.0]
 
 **Objective:** Documentação dedicada + theme builder live em `docs.usetheo.dev/theoui/theming`.
 
-### T4.1 — Bump `@usetheo/ui` em `theo-opendocs` para `0.2.0-next.0`
+### T4.1 — Bump `@theokit/ui` em `theo-opendocs` para `0.2.0-next.0`
 
 #### Files to edit
 ```
@@ -833,11 +833,11 @@ CHANGELOG.md — promover [Unreleased] para [0.2.0-next.0]
 ```
 
 #### Tasks
-1. `cd ../theo-opendocs && pnpm add @usetheo/ui@next` (após publish via npm pelo user).
-2. Verificar que `defineTheme` é importável: `node -e "console.log(typeof (await import('@usetheo/ui')).defineTheme)"`.
+1. `cd ../theo-opendocs && pnpm add @theokit/ui@next` (após publish via npm pelo user).
+2. Verificar que `defineTheme` é importável: `node -e "console.log(typeof (await import('@theokit/ui')).defineTheme)"`.
 
 #### Acceptance Criteria
-- [ ] `@usetheo/ui@0.2.0-next.0` instalado
+- [ ] `@theokit/ui@0.2.0-next.0` instalado
 - [ ] `defineTheme` resolvível via import
 
 ### T4.2 — Página `/theoui/theming` com tutorial + live preview
@@ -861,7 +861,7 @@ CHANGELOG.md — promover [Unreleased] para [0.2.0-next.0]
 ```tsx
 'use client';
 import { useState } from 'react';
-import { ThemeProvider, defineTheme, hex, Button, Card, Input, Badge } from '@usetheo/ui';
+import { ThemeProvider, defineTheme, hex, Button, Card, Input, Badge } from '@theokit/ui';
 
 export function ThemeBuilder() {
   const [primary, setPrimary] = useState('#7C3AED');
@@ -873,7 +873,7 @@ export function ThemeBuilder() {
     light: { primary: hex(primary), accent: hex(accent), background: hex(bg) },
   });
 
-  const snippet = `import { defineTheme, hex } from '@usetheo/ui';
+  const snippet = `import { defineTheme, hex } from '@theokit/ui';
 
 export const myTheme = defineTheme({
   name: 'custom',

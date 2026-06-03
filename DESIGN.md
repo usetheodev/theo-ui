@@ -1,6 +1,6 @@
-# DESIGN.md — `@usetheo/ui` (Violet Forge)
+# DESIGN.md — `@theokit/ui` (Violet Forge)
 
-> Plain-text design system spec for LLM assistants generating UI against `@usetheo/ui`. Companion to [`llms.txt`](./llms.txt) (component catalog) and [`docs/design-system.md`](./docs/design-system.md) (human-facing long-form). Read these three together; this file is the visual layer.
+> Plain-text design system spec for LLM assistants generating UI against `@theokit/ui`. Companion to [`llms.txt`](./llms.txt) (component catalog) and [`docs/design-system.md`](./docs/design-system.md) (human-facing long-form). Read these three together; this file is the visual layer.
 >
 > Tokens here are normative — they mirror [`src/styles/tokens.css`](./src/styles/tokens.css) and [`src/themes/violet-forge.ts`](./src/themes/violet-forge.ts). Drift between this file and those is enforced in CI.
 
@@ -8,7 +8,7 @@
 
 ## 1. Visual Theme & Atmosphere
 
-`@usetheo/ui` ships under the design system codename **Violet Forge** — a Vercel-inspired neutral-grayscale system with a Theo violet primary (`#7C3AED`) and a burnt-sienna accent (`#C96442`). The voice is **engineered, calm, agent-surface-ready**. Surfaces are pure neutrals (zero hue tint); color enters only through `primary`, `accent`, and semantic states (success / warning / destructive / info).
+`@theokit/ui` ships under the design system codename **Violet Forge** — a Vercel-inspired neutral-grayscale system with a Theo violet primary (`#7C3AED`) and a burnt-sienna accent (`#C96442`). The voice is **engineered, calm, agent-surface-ready**. Surfaces are pure neutrals (zero hue tint); color enters only through `primary`, `accent`, and semantic states (success / warning / destructive / info).
 
 The system targets two adjacent surfaces:
 
@@ -381,7 +381,7 @@ The token layer respects `prefers-reduced-motion: reduce` — all `transition-*`
 
 ## 9. Agent Prompt Guide
 
-Quick fragments for LLM assistants generating UI against `@usetheo/ui`. Drop into a prompt verbatim.
+Quick fragments for LLM assistants generating UI against `@theokit/ui`. Drop into a prompt verbatim.
 
 ### 9.1 Quick token reference
 
@@ -407,39 +407,39 @@ RADIUS         sm 4 / md 6 / lg 10 / xl 14 / 2xl 20 / full 9999
 
 ### 9.2 Prompt: build a dashboard list page
 
-> Build a [DOMAIN] list page using `@usetheo/ui`. Compose `<PageShell title="…" description="…">` with an `<ActionBar>` (search input + primary action button). Inside, render `<DataTable>` with sticky header. Use `{typography.display-md}` for the title via PageShell's built-in. Status indicators use `<StatusDot variant="success|warning|destructive|info">`. Row actions use `<DropdownMenu>` with `variant="ghost"` trigger. No emojis, no inline hex — only token references. Match the `comfortable` density default.
+> Build a [DOMAIN] list page using `@theokit/ui`. Compose `<PageShell title="…" description="…">` with an `<ActionBar>` (search input + primary action button). Inside, render `<DataTable>` with sticky header. Use `{typography.display-md}` for the title via PageShell's built-in. Status indicators use `<StatusDot variant="success|warning|destructive|info">`. Row actions use `<DropdownMenu>` with `variant="ghost"` trigger. No emojis, no inline hex — only token references. Match the `comfortable` density default.
 
 ### 9.3 Prompt: build a settings panel
 
-> Build a settings page using `@usetheo/ui`. Wrap content in `<PageShell title="Settings" description="…">`. Inside, stack `<Card>` sections per setting group. Each Card has `Card.Header` (title `{typography.title-lg}` + description `{typography.body-sm} text-muted-foreground`), `Card.Content` with form fields (`<Input>`, `<Switch>`, `<Select>`), and `Card.Footer` with a `<Button variant="primary">` save action. Destructive actions go in a final `<DangerZone>` composite. Spacing between Cards is `{spacing.6}` (24 px).
+> Build a settings page using `@theokit/ui`. Wrap content in `<PageShell title="Settings" description="…">`. Inside, stack `<Card>` sections per setting group. Each Card has `Card.Header` (title `{typography.title-lg}` + description `{typography.body-sm} text-muted-foreground`), `Card.Content` with form fields (`<Input>`, `<Switch>`, `<Select>`), and `Card.Footer` with a `<Button variant="primary">` save action. Destructive actions go in a final `<DangerZone>` composite. Spacing between Cards is `{spacing.6}` (24 px).
 
 ### 9.4 Prompt: build an agent chat surface
 
-> Build a chat surface using `@usetheo/ui`. Wrap in a flex column with internal max-width 768 px. Render messages via `<ChatMessage role="user|assistant|system" parts={…}>`. Tool calls and tool results inside `parts[]` render as `<ToolCall>` / `<ToolResult>` blocks (mono labels via `{typography.code-sm}`, prose via `{typography.body-sm}`). Use `<AgentEvent>` for non-message stream events. Composer at the bottom uses `<ChatComposer>` (a composite with `<Textarea>` + send button). No emojis. Streaming state uses `<AgentStreaming>`.
+> Build a chat surface using `@theokit/ui`. Wrap in a flex column with internal max-width 768 px. Render messages via `<ChatMessage role="user|assistant|system" parts={…}>`. Tool calls and tool results inside `parts[]` render as `<ToolCall>` / `<ToolResult>` blocks (mono labels via `{typography.code-sm}`, prose via `{typography.body-sm}`). Use `<AgentEvent>` for non-message stream events. Composer at the bottom uses `<ChatComposer>` (a composite with `<Textarea>` + send button). No emojis. Streaming state uses `<AgentStreaming>`.
 
 ### 9.5 Prompt: build a billing / pricing surface
 
-> Build a pricing/billing page using `@usetheo/ui`. Wrap in `<PageShell title="Billing" description="…">`. Pricing tiers render as a 3-up grid of `<Card>` (tablet 2-up, mobile 1-up). Featured tier uses `<PlanBadge variant="primary">` and an outline on the Card (`border-primary`). Tier name in `{typography.title-lg}`, price in `{typography.display-xl}` with `font-mono` for digits, feature list in `{typography.body-md}` rows with a `<Check>` icon. CTA at the bottom: `<Button variant="primary" size="lg">` for the featured tier, `<Button variant="secondary" size="lg">` for the rest. Usage meters use `<UsageMeter>` and `<CostMeter>`.
+> Build a pricing/billing page using `@theokit/ui`. Wrap in `<PageShell title="Billing" description="…">`. Pricing tiers render as a 3-up grid of `<Card>` (tablet 2-up, mobile 1-up). Featured tier uses `<PlanBadge variant="primary">` and an outline on the Card (`border-primary`). Tier name in `{typography.title-lg}`, price in `{typography.display-xl}` with `font-mono` for digits, feature list in `{typography.body-md}` rows with a `<Check>` icon. CTA at the bottom: `<Button variant="primary" size="lg">` for the featured tier, `<Button variant="secondary" size="lg">` for the rest. Usage meters use `<UsageMeter>` and `<CostMeter>`.
 
 ### 9.6 Prompt: use the design system tokens
 
-> All styling must use `@usetheo/ui` tokens. Colors via Tailwind preset classes (`bg-primary`, `text-foreground`, `border-border`) or CSS vars (`hsl(var(--primary))`). Typography via preset (`text-display-md`, `text-body-md`, `text-label-caps`) — never raw `text-4xl`. Spacing via Tailwind utilities (`gap-4`, `p-5`) which map to the 4-px base. Radii via `rounded-lg` / `rounded-xl` / `rounded-md` mapped to system tokens. Never inline hex, never inline pixel values for spacing — always tokens. The `@usetheo/ui` Tailwind preset must be installed via `presets: [theoUiPreset]` in `tailwind.config.{ts,js}`.
+> All styling must use `@theokit/ui` tokens. Colors via Tailwind preset classes (`bg-primary`, `text-foreground`, `border-border`) or CSS vars (`hsl(var(--primary))`). Typography via preset (`text-display-md`, `text-body-md`, `text-label-caps`) — never raw `text-4xl`. Spacing via Tailwind utilities (`gap-4`, `p-5`) which map to the 4-px base. Radii via `rounded-lg` / `rounded-xl` / `rounded-md` mapped to system tokens. Never inline hex, never inline pixel values for spacing — always tokens. The `@theokit/ui` Tailwind preset must be installed via `presets: [theoUiPreset]` in `tailwind.config.{ts,js}`.
 
 ### 9.7 Component subpath import map (post-Brief-4 tree-shaking)
 
 For Tailwind v4 / Vite projects, prefer subpath imports — they tree-shake per-component:
 
 ```ts
-import { Button } from "@usetheo/ui/button";
-import { Card } from "@usetheo/ui/card";
-import { Input } from "@usetheo/ui/input";
-import { DataTable } from "@usetheo/ui/data-table";
-import { PageShell } from "@usetheo/ui/page-shell";
-import { ActionBar } from "@usetheo/ui/action-bar";
-import { ChatMessage } from "@usetheo/ui/chat-message";
+import { Button } from "@theokit/ui/button";
+import { Card } from "@theokit/ui/card";
+import { Input } from "@theokit/ui/input";
+import { DataTable } from "@theokit/ui/data-table";
+import { PageShell } from "@theokit/ui/page-shell";
+import { ActionBar } from "@theokit/ui/action-bar";
+import { ChatMessage } from "@theokit/ui/chat-message";
 ```
 
-Barrel imports (`import { Button } from "@usetheo/ui"`) work but ship the full barrel — acceptable for prototyping, not for production bundles.
+Barrel imports (`import { Button } from "@theokit/ui"`) work but ship the full barrel — acceptable for prototyping, not for production bundles.
 
 ---
 
@@ -453,4 +453,4 @@ Barrel imports (`import { Button } from "@usetheo/ui"`) work but ship the full b
 
 ---
 
-**End of DESIGN.md** — Violet Forge, `@usetheo/ui` 0.11.0-next.0
+**End of DESIGN.md** — Violet Forge, `@theokit/ui` 0.11.0-next.0

@@ -4,7 +4,7 @@
  * aspect ratios, container fit. Mirrors the structure used by the Whiteboard
  * demo (`playground/whiteboard-scenes.ts`).
  */
-import type { SlideTheme } from "@usetheo/ui/slide";
+import type { SlideTheme } from "@theokit/ui/slide";
 
 export interface SlideScene {
   id: string;
@@ -69,7 +69,7 @@ The block above is a **YAML mapping**. Recognised keys: \`theme\`, \`lang\`, \`c
 
 The branded palette running on the slide canvas.
 
-> Tokens live in \`@usetheo/ui/slide/themes/violet-forge.css\`.
+> Tokens live in \`@theokit/ui/slide/themes/violet-forge.css\`.
 
 \`\`\`ts
 <Slide markdown={md} theme="violet-forge" />

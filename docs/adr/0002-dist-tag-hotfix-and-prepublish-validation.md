@@ -10,7 +10,7 @@ informed: release-engineer, theokit-maintainers
 
 ## Context and Problem Statement
 
-`@usetheo/ui` ships com `npm dist-tag latest = 0.1.0-next.0` enquanto workspace está em `0.12.0-next.0`. Stranger `npm install @usetheo/ui` pega versão 11 minors atrás. Causa raiz: dist-tag não foi atualizado em release anterior.
+`@theokit/ui` ships com `npm dist-tag latest = 0.1.0-next.0` enquanto workspace está em `0.12.0-next.0`. Stranger `npm install @theokit/ui` pega versão 11 minors atrás. Causa raiz: dist-tag não foi atualizado em release anterior.
 
 Pre-publish gate ausente — nenhum check previne quebra de `exports['.']` antes de `npm publish`.
 
@@ -22,7 +22,7 @@ Pre-publish gate ausente — nenhum check previne quebra de `exports['.']` antes
 
 ## Considered Options
 
-### D1 — Hotfix `npm dist-tag add @usetheo/ui@0.12.0-next.0 latest` (operacional URGENTE)
+### D1 — Hotfix `npm dist-tag add @theokit/ui@0.12.0-next.0 latest` (operacional URGENTE)
 - 1 comando, reversível
 - Reset stranger experience imediato
 
@@ -43,7 +43,7 @@ Mudanças (implementadas):
 - `scripts/validate-exports.mjs` novo (~80 LOC, 6 runtime checks)
 - `package.json:prepublishOnly` estendido com validate-exports
 - `package.json:validate:exports` script standalone
-- **Pendente:** release engineer executa `npm dist-tag add @usetheo/ui@0.12.0-next.0 latest` (D12 — 2-eyes)
+- **Pendente:** release engineer executa `npm dist-tag add @theokit/ui@0.12.0-next.0 latest` (D12 — 2-eyes)
 
 CI regression guard:
 - Script `validate-ui-latest-tag.mjs` no meta-repo (`theokit-tools/scripts/`)
@@ -52,7 +52,7 @@ CI regression guard:
 ### Consequences
 
 **Positivas:**
-- Próximo stranger `npm install @usetheo/ui` pega versão correta
+- Próximo stranger `npm install @theokit/ui` pega versão correta
 - Publish quebrado impossível (6 runtime checks bloqueiam)
 - Regressão dist-tag detectada por CI antes de afetar consumers
 

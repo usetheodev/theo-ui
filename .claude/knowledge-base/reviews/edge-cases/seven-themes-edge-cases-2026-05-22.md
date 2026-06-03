@@ -66,7 +66,7 @@ Edge cases encontrados: 5 (MUST FIX: 1, SHOULD TEST: 2, DOCUMENT: 2)
 
 ### EC-5: npm 2FA + Cloudflare IP allowlist são pré-condições recorrentes
 
-- **Risco aceito:** T10.4 (npm publish) e T11.3 (wrangler pages deploy) caíram em incident em ambos plans anteriores (theming-and-sizes, faang-density). T10.4 exige token granular com `read+write @usetheo/*` e (idealmente) `2FA bypass`. T11.3 exige IP atual na allowlist do Cloudflare token. Adicionar pré-condition explícita em ambos:
+- **Risco aceito:** T10.4 (npm publish) e T11.3 (wrangler pages deploy) caíram em incident em ambos plans anteriores (theming-and-sizes, faang-density). T10.4 exige token granular com `read+write @theokit/*` e (idealmente) `2FA bypass`. T11.3 exige IP atual na allowlist do Cloudflare token. Adicionar pré-condition explícita em ambos:
   - T10.4 → `curl -sH "Authorization: Bearer $NPM_TOKEN" https://registry.npmjs.org/-/whoami | jq -r .username` deve retornar `usetheodev` antes de tentar publish.
   - T11.3 → `curl -sH "Authorization: Bearer $CLOUDFLARE_API_TOKEN" https://api.cloudflare.com/client/v4/accounts | jq '.success'` deve retornar `true`.
 

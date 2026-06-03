@@ -536,6 +536,6 @@ The archetype is a starting point, not a cage. Break it when:
 
 In all these cases, state the break out loud:
 
-> *"This brief doesn't fit any archetype cleanly — building a custom split-screen comparison layout. I'll still use `@usetheo/ui` primitives + tokens, but the page shape is custom."*
+> *"This brief doesn't fit any archetype cleanly — building a custom split-screen comparison layout. I'll still use `@theokit/ui` primitives + tokens, but the page shape is custom."*
 
 Don't break archetypes silently. The accountability is the diff between "following the system" and "drifting back to defaults."

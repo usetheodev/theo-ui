@@ -10,7 +10,7 @@ informed: theokit-maintainers
 
 ## Context and Problem Statement
 
-`@usetheo/ui` exporta hoje (`package.json:exports`):
+`@theokit/ui` exporta hoje (`package.json:exports`):
 
 ```jsonc
 {

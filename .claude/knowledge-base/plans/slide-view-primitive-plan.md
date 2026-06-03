@@ -2,13 +2,13 @@
 
 > **Version 1.1** (2026-05-19 — incorporates `/edge-case-plan` MUST FIX: validateSlide async, BANNED_TAG detection, aspectRatio guard, BOM strip, mdast-based multi-slide detection, frontmatter size cap). Edge case review: `.claude/knowledge-base/reviews/edge-cases/slide-view-primitive-edge-cases-2026-05-19.md`.
 
-> **Version 1.0** — Entrega o primitive `Slide` em `@usetheo/ui/slide` como **view declarativo**: recebe uma string markdown (CommonMark + GFM + frontmatter YAML) e renderiza numa superfície temada com aspect-ratio fixo (default 16:9, 1280×720 lógico). Não é editor — sem toolbar, sem deck navigation, sem transições. Reusa `mdast-util-from-markdown` + `micromark-extension-gfm` + `mdast-util-to-hast` + `hast-util-sanitize` + `hast-util-to-jsx-runtime` (todos MIT). Subpath isolado de bundle, peer-deps opcionais, fora do barrel principal. Espelha o padrão entregue pelo `Whiteboard` (RFC 0001, 2026-05-18). Outcome esperado: agente do TheoCode/TheoKit emite `tool_call` com `{"type":"slide","markdown":"..."}` e a UI renderiza imediatamente, sem injeção XSS, com tema consistente.
+> **Version 1.0** — Entrega o primitive `Slide` em `@theokit/ui/slide` como **view declarativo**: recebe uma string markdown (CommonMark + GFM + frontmatter YAML) e renderiza numa superfície temada com aspect-ratio fixo (default 16:9, 1280×720 lógico). Não é editor — sem toolbar, sem deck navigation, sem transições. Reusa `mdast-util-from-markdown` + `micromark-extension-gfm` + `mdast-util-to-hast` + `hast-util-sanitize` + `hast-util-to-jsx-runtime` (todos MIT). Subpath isolado de bundle, peer-deps opcionais, fora do barrel principal. Espelha o padrão entregue pelo `Whiteboard` (RFC 0001, 2026-05-18). Outcome esperado: agente do TheoCode/TheoKit emite `tool_call` com `{"type":"slide","markdown":"..."}` e a UI renderiza imediatamente, sem injeção XSS, com tema consistente.
 
 ## Context
 
 **Estado em 2026-05-19:**
 - Slide está em `Explorer (RFC)` no roadmap do TheoUI (`CLAUDE.md` linhas 131-148, entrada formalizada 2026-05-18). Decisões "parser stack", "frontmatter syntax", "theme inheritance", "isolation strategy" estavam **pendentes**.
-- TheoUI tem 81 primitives + 21 composites no barrel + 1 engine isolada (Whiteboard) em `@usetheo/ui/whiteboard`. Bundle isolation é invariante: Whiteboard NÃO aparece em `dist/index.js`.
+- TheoUI tem 81 primitives + 21 composites no barrel + 1 engine isolada (Whiteboard) em `@theokit/ui/whiteboard`. Bundle isolation é invariante: Whiteboard NÃO aparece em `dist/index.js`.
 - `referencia/marp/` foi clonado para inspeção. Análise mecânica: contém apenas o workspace `website/` (não a engine `marpit`/`marp-core`). A engine real foi lida via WebFetch direto dos repos `marp-team/marpit` e `marp-team/marp-core`. **Marp React (`marp-team/marp-react`) está INACTIVE** — direct evidence de que redistribuir a engine completa como wrapper React não sobrevive.
 - Pesquisa exaustiva concluída em `.claude/knowledge-base/reference/slide.md` (1089 linhas, 16 seções) — cobre Marpit, Marp Core, Marp website, Reveal.js (divergente), `mdast-util-from-markdown` (canonical). Identificados: 5 padrões convergentes, 5 divergentes, 12 edge cases com fonte, 6 anti-patterns, 3 cookbook snippets adaptados.
 
@@ -39,9 +39,9 @@ O componente é **view-only single-slide**, focado em consumir markdown gerado p
 
 ## Objective
 
-**Done = `pnpm quality:gates` verde com o subpath `@usetheo/ui/slide` exportando um componente que renderiza markdown + frontmatter como surface temada single-slide, sem alterar o bundle baseline do barrel principal.** Especificamente:
+**Done = `pnpm quality:gates` verde com o subpath `@theokit/ui/slide` exportando um componente que renderiza markdown + frontmatter como surface temada single-slide, sem alterar o bundle baseline do barrel principal.** Especificamente:
 
-1. `@usetheo/ui/slide` resolve para `dist/slide/index.js` próprio (não re-export do barrel) e funciona quando o consumer instala as 6 peer-deps de markdown opcionais.
+1. `@theokit/ui/slide` resolve para `dist/slide/index.js` próprio (não re-export do barrel) e funciona quando o consumer instala as 6 peer-deps de markdown opcionais.
 2. Frontmatter YAML é extraído, validado via Zod (`SlideFrontmatter`), tipado, e tem mensagens de erro estruturadas para auto-correção LLM.
 3. Markdown body é parseado (CommonMark + GFM), convertido para hast, sanitizado com `hast-util-sanitize.defaultSchema` (sem extensões em v0.1), convertido para React VDOM.
 4. Multi-slide markdown (contém top-level `hr`/`---`) → emite `MULTIPLE_SLIDES` validation error, renderiza apenas o primeiro slide.
@@ -63,11 +63,11 @@ O componente é **view-only single-slide**, focado em consumir markdown gerado p
 
 ### D2 — Peer-deps opcionais para a markdown stack
 - **Decisão:** Adicionar `mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml` em `peerDependencies` + `peerDependenciesMeta.optional=true`. Em `devDependencies` para build/test locais.
-- **Rationale:** Consumer que NÃO importa `@usetheo/ui/slide` não baixa nenhuma dessas. Consumer que importa, instala explicitamente — sinaliza intent. Mesmo princípio que motivou D2 do Whiteboard com roughjs/perfect-freehand. CLAUDE.md TheoUI §Roadmap exige: "Plan a subpath import with peer-dep opt-in".
+- **Rationale:** Consumer que NÃO importa `@theokit/ui/slide` não baixa nenhuma dessas. Consumer que importa, instala explicitamente — sinaliza intent. Mesmo princípio que motivou D2 do Whiteboard com roughjs/perfect-freehand. CLAUDE.md TheoUI §Roadmap exige: "Plan a subpath import with peer-dep opt-in".
 - **Consequences:** Habilita: bundle isolation real. Constrange: README precisa documentar bloco de install (`pnpm add mdast-util-from-markdown mdast-util-gfm micromark-extension-gfm mdast-util-to-hast hast-util-sanitize hast-util-to-jsx-runtime yaml`); CI dev e usuários do barrel não pagam o custo.
 
 ### D3 — Subpath isolado com bundle próprio (não re-export do barrel)
-- **Decisão:** `@usetheo/ui/slide` aponta para `./dist/slide/index.js`. Bundle separado emitido pelo tsup com entry `src/components/primitives/slide/index.ts`. Adicionado em `ISOLATED_SUBPATHS` do `sync-exports.ts`. NÃO entra em `src/index.ts`.
+- **Decisão:** `@theokit/ui/slide` aponta para `./dist/slide/index.js`. Bundle separado emitido pelo tsup com entry `src/components/primitives/slide/index.ts`. Adicionado em `ISOLATED_SUBPATHS` do `sync-exports.ts`. NÃO entra em `src/index.ts`.
 - **Rationale:** Reutiliza a infra criada para Whiteboard (`sync-exports.ts:65` já existe, `tsup.config.ts:6` já aceita múltiplas entries). Bundle separado garante que consumer do barrel não arrasta a stack markdown. O custo é uma entrada adicional em `ISOLATED_SUBPATHS` — auditável e padronizada.
 - **Consequences:** Habilita: `quality:bundle` baseline do barrel permanece intacto. Constrange: tsup build ganha mais ~1s; baseline JSON ganha 1 entry (`dist/slide/index.js`).
 
@@ -171,7 +171,7 @@ Annotations:
 ### T0.1 — Adicionar `./slide` em `ISOLATED_SUBPATHS` (sync-exports.ts)
 
 #### Objective
-Registrar o subpath isolado `@usetheo/ui/slide` em `scripts/sync-exports.ts` para que `pnpm sync:exports` emita o entry correto em `package.json#exports`.
+Registrar o subpath isolado `@theokit/ui/slide` em `scripts/sync-exports.ts` para que `pnpm sync:exports` emita o entry correto em `package.json#exports`.
 
 #### Evidence
 - `scripts/sync-exports.ts:65` já tem `ISOLATED_SUBPATHS` mapa (criado pelo Whiteboard, D3).
@@ -463,7 +463,7 @@ docs/rfcs/README.md — adicionar linha apontando para 0002 (se README listar RF
   | Author | paulohenriquevn |
   | Date | 2026-05-19 |
   | Status | PROPOSED → IMPLEMENTED na T5.3 |
-  | Subpath | `@usetheo/ui/slide` |
+  | Subpath | `@theokit/ui/slide` |
   | Plan | `.claude/knowledge-base/plans/slide-view-primitive-plan.md` |
   | Reference | `.claude/knowledge-base/reference/slide.md` |
   | Consumer documented | TODO (placeholder — bloqueia merge) |
@@ -519,7 +519,7 @@ CHANGELOG.md — adicionar bullet em [Unreleased] > Added
 - Conteúdo:
   ```markdown
   ### Added
-  - `<Slide>` view-only primitive at `@usetheo/ui/slide` (RFC 0002). Renders markdown + YAML frontmatter into a themed surface (16:9 default canvas, scale-to-fit container). Single-slide only — multi-slide input emits `MULTIPLE_SLIDES` validation error. Peer-deps opt-in: `mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`. (#TBD)
+  - `<Slide>` view-only primitive at `@theokit/ui/slide` (RFC 0002). Renders markdown + YAML frontmatter into a themed surface (16:9 default canvas, scale-to-fit container). Single-slide only — multi-slide input emits `MULTIPLE_SLIDES` validation error. Peer-deps opt-in: `mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`. (#TBD)
   ```
 - **Invariante:** `(#TBD)` é placeholder; substituído por PR number quando PR for aberto.
 
@@ -538,7 +538,7 @@ VERIFY:  grep -A 3 "Unreleased" CHANGELOG.md | grep -i "slide"
 #### Acceptance Criteria
 - [ ] CHANGELOG.md atualizado em `[Unreleased] > Added`
 - [ ] Entry inclui referência ao RFC 0002
-- [ ] Entry inclui menção do subpath `@usetheo/ui/slide`
+- [ ] Entry inclui menção do subpath `@theokit/ui/slide`
 - [ ] Formato Keep a Changelog respeitado
 
 #### DoD
@@ -1557,7 +1557,7 @@ scripts/sync-readme.ts — se necessário, adicionar whitelist
 #### Deep Dives
 - Conteúdo a inserir:
   ```markdown
-  - **Slide** (`@usetheo/ui/slide`) — markdown → themed surface, 16:9 default, peer-deps opcionais (mdast/micromark/hast stack).
+  - **Slide** (`@theokit/ui/slide`) — markdown → themed surface, 16:9 default, peer-deps opcionais (mdast/micromark/hast stack).
   ```
 
 #### Tasks
@@ -1693,7 +1693,7 @@ Rodar `pnpm quality:gates` completo. Garantir os 11 gates verdes.
 
 | # | Gap / Requirement | Task(s) | Resolution |
 |---|---|---|---|
-| 1 | Subpath isolation `@usetheo/ui/slide` sem inflar barrel | T0.1, T0.2, T0.3 | ISOLATED_SUBPATHS + tsup entry + bundle baseline |
+| 1 | Subpath isolation `@theokit/ui/slide` sem inflar barrel | T0.1, T0.2, T0.3 | ISOLATED_SUBPATHS + tsup entry + bundle baseline |
 | 2 | Peer-deps de markdown opcionais (7 packages) | T0.3 | peerDependencies + optional metas em package.json |
 | 3 | Stack mdast/micromark/hast em vez de markdown-it | D1, T2.1-T2.4 | Pipeline implementada via 6 utilities unified-style |
 | 4 | YAML frontmatter validado via Zod | D4, T1.1, T1.2 | slideFrontmatter strict schema + validateSlide |

@@ -5,7 +5,7 @@
 | Author | paulohenriquevn |
 | Date | 2026-05-19 |
 | Status | **Implemented** (2026-05-19) |
-| Subpath | `@usetheo/ui/slide-deck` |
+| Subpath | `@theokit/ui/slide-deck` |
 | Plan | `.claude/knowledge-base/plans/slide-deck-composite-plan.md` |
 | Edge-case review | `.claude/knowledge-base/reviews/edge-cases/slide-deck-composite-edge-cases-2026-05-19.md` |
 | Reference research | `.claude/knowledge-base/reference/slide.md` (Marpit/Reveal.js prior art shared with Slide RFC) |
@@ -13,7 +13,7 @@
 
 ## 1. Summary
 
-`SlideDeck` is a **composite engine** that orchestrates N `<Slide>` primitives into a navigable, presenter-aware, fullscreen-capable, printable deck. Lives at `@usetheo/ui/slide-deck`. Reuses Slide's markdown peer-deps (zero new ones). Designed to consume LLM tool-call output (`{"type":"slide-deck","markdown":"..."}`) and deliver a PowerPoint-like experience in the browser without Reveal.js / Marp / impress.js.
+`SlideDeck` is a **composite engine** that orchestrates N `<Slide>` primitives into a navigable, presenter-aware, fullscreen-capable, printable deck. Lives at `@theokit/ui/slide-deck`. Reuses Slide's markdown peer-deps (zero new ones). Designed to consume LLM tool-call output (`{"type":"slide-deck","markdown":"..."}`) and deliver a PowerPoint-like experience in the browser without Reveal.js / Marp / impress.js.
 
 Two API shapes:
 - `<SlideDeck slides="# A\n\n---\n\n# B" />` — full markdown string, auto-split.
