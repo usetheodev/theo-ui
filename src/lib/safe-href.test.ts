@@ -36,7 +36,7 @@ describe("safeHref", () => {
   });
 
   it("accepts mailto: unchanged", () => {
-    expect(safeHref("mailto:dev@usetheo.dev")).toBe("mailto:dev@usetheo.dev");
+    expect(safeHref("mailto:dev@theokit.dev")).toBe("mailto:dev@theokit.dev");
   });
 
   it("accepts tel: unchanged", () => {
