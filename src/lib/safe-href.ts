@@ -14,7 +14,7 @@
  * Allowed (returns input unchanged):
  *   - "https://example.com/path?query"
  *   - "/internal/route"
- *   - "mailto:dev@usetheo.dev"
+ *   - "mailto:dev@theokit.dev"
  *   - "tel:+15551234567"
  *
  * Blocked (returns undefined):

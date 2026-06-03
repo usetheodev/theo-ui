@@ -11,12 +11,12 @@ describe("FormField", () => {
       <FormField>
         <FormField.Label>Email</FormField.Label>
         <FormField.Control>
-          <Input placeholder="you@usetheo.dev" />
+          <Input placeholder="you@theokit.dev" />
         </FormField.Control>
       </FormField>,
     );
     const label = screen.getByText("Email").closest("label");
-    const input = screen.getByPlaceholderText("you@usetheo.dev");
+    const input = screen.getByPlaceholderText("you@theokit.dev");
     expect(label).toHaveAttribute("for", input.id);
   });
 
@@ -113,7 +113,7 @@ describe("FormField", () => {
       <FormField>
         <FormField.Label>Email</FormField.Label>
         <FormField.Control>
-          <Input placeholder="you@usetheo.dev" />
+          <Input placeholder="you@theokit.dev" />
         </FormField.Control>
       </FormField>,
     );

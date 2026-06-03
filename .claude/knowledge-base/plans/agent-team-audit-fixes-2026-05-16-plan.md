@@ -352,7 +352,7 @@ CHANGELOG.md — registrar release 0.1.0-next.0 movendo [Unreleased] entries
   - `pnpm install --frozen-lockfile`
   - `pnpm quality:gates` → verde
   - `pnpm pack --dry-run` → inspecionar conteúdo da tarball, confirmar `LICENSE`, `CHANGELOG.md`, `README.md` (com pipeline atualizado de T1.3), `dist/`
-- **Auth**: usuário precisa de `~/.npmrc` com `//registry.npmjs.org/:_authToken=<TOKEN>` e ser owner da org `@usetheo` ou ter permissão. Se a org não existe ainda:
+- **Auth**: usuário precisa de `~/.npmrc` com `//registry.npmjs.org/:_authToken=<TOKEN>` e ser owner da org `@theokit` ou ter permissão. Se a org não existe ainda:
   - `npm org create usetheo` (se nome livre) OU
   - Verificar via `npm access ls-collaborators @theokit/ui` quem é owner
 - **Tag**: `--tag next` impede que `npm install @theokit/ui` (sem versão) puxe esta. Consumer precisa de `npm install @theokit/ui@next`. Documentado em README.

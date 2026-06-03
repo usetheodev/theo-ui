@@ -742,7 +742,7 @@ the entire library rendered flat under pnpm.
 - **pnpm symlink + Tailwind v4 `@source` bug** — Tailwind v4's
   `tinyglobby`-based scanner does **not** follow symbolic links. Under a
   pnpm install, `node_modules/@theokit/ui` is a symlink to a deep
-  `node_modules/.pnpm/@usetheo+ui@…/node_modules/@theokit/ui` directory,
+  `node_modules/.pnpm/@theokit+ui@…/node_modules/@theokit/ui` directory,
   and the consumer-side pattern
   `@source "node_modules/@theokit/ui/dist/**/*.{js,mjs,cjs}"` (the one
   the `vite-plugin` previously emitted via the
@@ -803,7 +803,7 @@ the entire library rendered flat under pnpm.
   starter, Mantine v7.
 - Verification recipe matching TheoKit's reproduction script:
   ```bash
-  grep -c "\.hover\\:bg-muted" node_modules/.pnpm/@usetheo+ui@*/node_modules/@theokit/ui/dist/components.css
+  grep -c "\.hover\\:bg-muted" node_modules/.pnpm/@theokit+ui@*/node_modules/@theokit/ui/dist/components.css
   # MUST return >= 1 (pre-fix: 0)
   ```
 

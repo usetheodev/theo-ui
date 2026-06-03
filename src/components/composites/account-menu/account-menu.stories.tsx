@@ -30,7 +30,7 @@ export const WithSecondary: Story = () => (
   <div className="w-72 rounded-lg border border-border/40 bg-card">
     <AccountMenu
       name="paulohenriquevn"
-      secondary="paulo@usetheo.dev"
+      secondary="paulo@theokit.dev"
       plan="team"
       onClick={() => undefined}
     />

@@ -57,7 +57,7 @@ export const Default: Story = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@usetheo.dev"
+                  placeholder="you@theokit.dev"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />

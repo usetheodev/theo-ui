@@ -213,7 +213,7 @@ Plan diz Tooltip mantém per-instance provider (Radix recomenda). Mas Radix tamb
 ### NTH-4 — Backup plan para `npm publish` falha
 
 Se publish falha por org/account, plan não tem contingência. Adicionar:
-- Plan B: publicar em `@usetheodev/ui` (com username em vez de org) se `@usetheo` indisponível.
+- Plan B: publicar em `@usetheodev/ui` (com username em vez de org) se `@theokit` indisponível.
 - Plan C: publicar em GitHub Packages como bridge.
 
 ### NTH-5 — Coverage Matrix 75% — 10 itens em backlog

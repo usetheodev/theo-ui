@@ -661,7 +661,7 @@ Implementado em T1.7. Aqui consolidamos: a seção fica entre "Anti-patterns" e 
 
 #### Files to edit
 ```
-SECURITY.md — (NEW) política de disclosure, supported versions, contact (security@usetheo.dev?)
+SECURITY.md — (NEW) política de disclosure, supported versions, contact (security@theokit.dev?)
 ```
 
 #### Acceptance Criteria
