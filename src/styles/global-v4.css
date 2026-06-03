@@ -1,6 +1,6 @@
 /* Theo UI — Tailwind v4 prebuilt entry stylesheet.
  *
- * What ships at `@usetheo/ui/styles.css` since RFC 0008 follow-up
+ * What ships at `@theokit/ui/styles.css` since RFC 0008 follow-up
  * (`0.5.1-next.0`). Consumer imports this once and the framework's
  * Tailwind v4 build picks up:
  *   - `@import "tailwindcss"` — Tailwind v4 core (preflight + utilities)
@@ -12,7 +12,7 @@
  *     styling that depend on the runtime vars
  *
  * v3-only consumers (Tailwind 3.x + the shadcn registry preset) should
- * load `@usetheo/ui/styles-v3-legacy.css` instead — that file is the
+ * load `@theokit/ui/styles-v3-legacy.css` instead — that file is the
  * unchanged `@tailwind base; @tailwind components; @tailwind utilities`
  * variant. See RFC 0008 follow-up.
  */
@@ -44,7 +44,7 @@
    *     (where the button stays focusable but acts as no-op).
    *
    * This is an EXPLICIT opt-in by the library author for consumers who
-   * imported `@usetheo/ui/styles.css` — it does NOT alter Tailwind's
+   * imported `@theokit/ui/styles.css` — it does NOT alter Tailwind's
    * global preflight, only this stylesheet's @layer base.
    */
   button:not(:disabled):not([aria-disabled="true"]),

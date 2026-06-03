@@ -71,7 +71,7 @@ const IS_DEV = typeof process === "undefined" || process.env.NODE_ENV !== "produ
 function rejectOrFallback(scope: string, value: string, fallback: string): string {
   if (IS_DEV) {
     throw new Error(
-      `[@usetheo/ui] invalid ${scope} value: ${JSON.stringify(value)}. Theme values must match the allowlist (see src/themes/theme-provider.tsx). Refusing to inject potentially unsafe CSS.`,
+      `[@theokit/ui] invalid ${scope} value: ${JSON.stringify(value)}. Theme values must match the allowlist (see src/themes/theme-provider.tsx). Refusing to inject potentially unsafe CSS.`,
     );
   }
   return fallback;
@@ -210,7 +210,7 @@ interface ThemeProviderProps {
 function warnStorageFailure(scope: string, err: unknown): void {
   if (typeof process === "undefined" || process.env.NODE_ENV === "production") return;
   // biome-ignore lint/suspicious/noConsole: dev-only diagnostic for storage failures (HIGH-006)
-  console.warn(`[@usetheo/ui] theme storage failure (${scope}):`, err);
+  console.warn(`[@theokit/ui] theme storage failure (${scope}):`, err);
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- * Tailwind configuration for the @usetheo/ui repo itself.
+ * Tailwind configuration for the @theokit/ui repo itself.
  *
  * The `theme.extend` block previously lived inline here. It has been
  * extracted to `src/styles/tailwind-preset.ts` (D3) so consumers can

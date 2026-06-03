@@ -1,5 +1,5 @@
 /**
- * Public surface of `@usetheo/ui/slide-deck`. Subpath-isolated composite engine.
+ * Public surface of `@theokit/ui/slide-deck`. Subpath-isolated composite engine.
  */
 export { SlideDeck } from "./slide-deck.js";
 export type { SlideDeckProps } from "./slide-deck.js";

@@ -1,16 +1,16 @@
 /**
- * `@usetheo/ui/vite-plugin` — auto-wire Tailwind v4 for consumers.
+ * `@theokit/ui/vite-plugin` — auto-wire Tailwind v4 for consumers.
  *
  * Default export is a factory returning ONE Vite Plugin. Internally:
  *   1. chains `@tailwindcss/vite` v4 via the `config()` hook when resolvable
  *      and `opts.tailwind !== false`,
- *   2. exposes a virtual module `virtual:@usetheo/ui/library-sources.css`
+ *   2. exposes a virtual module `virtual:@theokit/ui/library-sources.css`
  *      whose contents register `@source` directives covering the library's
- *      published files, so consumer-side Tailwind scans `@usetheo/ui` JSX
+ *      published files, so consumer-side Tailwind scans `@theokit/ui` JSX
  *      and emits its utility classes,
  *   3. degrades gracefully via `console.warn` (never throws) when
  *      `@tailwindcss/vite` is not installed — the surface stays usable in
- *      CSS-only mode via the pre-built `@usetheo/ui/styles.css` subpath.
+ *      CSS-only mode via the pre-built `@theokit/ui/styles.css` subpath.
  *
  * This is the cross-repo contract TheoKit's `integrateUseTheoUI()` probes
  * for. See `docs/rfcs/0008-vite-plugin-and-preset.md`.
@@ -24,16 +24,16 @@ export interface UseTheoUIPluginOptions {
   contentExtra?: string[];
 }
 
-const PLUGIN_NAME = "@usetheo/ui/vite-plugin";
-const VIRTUAL_ID = "virtual:@usetheo/ui/library-sources.css";
+const PLUGIN_NAME = "@theokit/ui/vite-plugin";
+const VIRTUAL_ID = "virtual:@theokit/ui/library-sources.css";
 const RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_ID}`;
 
 function buildLibrarySourcesCss(extra: string[] = []): string {
   // RFC 0008 follow-up #2 (0.6.1-next.0):
   // The previous implementation emitted `@source` globs pointing at
-  // `node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}` so Tailwind v4 would
+  // `node_modules/@theokit/ui/dist/**/*.{js,mjs,cjs}` so Tailwind v4 would
   // scan the library's published JS for utility classes. Under pnpm,
-  // `node_modules/@usetheo/ui` is a symlink to a deep `.pnpm` directory
+  // `node_modules/@theokit/ui` is a symlink to a deep `.pnpm` directory
   // and Tailwind v4's tinyglobby scanner does NOT follow symlinks — the
   // glob expanded to zero matches and the consumer saw flat-rendered
   // components (no hover/focus/active variants emitted).
@@ -42,7 +42,7 @@ function buildLibrarySourcesCss(extra: string[] = []): string {
   // chains `@import "./components.css"`, a pre-compiled CSS file built
   // by `scripts/build-precompiled-css.ts` containing the materialized
   // utility rules for every class the library uses. Consumers get every
-  // variant for free with a single `@import "@usetheo/ui/styles.css"` —
+  // variant for free with a single `@import "@theokit/ui/styles.css"` —
   // no filesystem scanning, no symlink dependency.
   //
   // The virtual module below is retained for backwards compatibility
@@ -53,7 +53,7 @@ function buildLibrarySourcesCss(extra: string[] = []): string {
   // empty CSS.
   if (extra.length === 0) {
     return [
-      "/* @usetheo/ui/vite-plugin — `virtual:@usetheo/ui/library-sources.css` */",
+      "/* @theokit/ui/vite-plugin — `virtual:@theokit/ui/library-sources.css` */",
       "/* The library now ships pre-compiled utility CSS via `dist/components.css` */",
       "/* (chained from `dist/styles.css`), so no `@source` glob is needed here. */",
       "/* This virtual module remains resolvable for backwards compatibility. */",
@@ -73,7 +73,7 @@ export default function useTheoUIVite(opts: UseTheoUIPluginOptions = {}): Plugin
     warned = true;
     // biome-ignore lint/suspicious/noConsole: TheoKit cross-repo contract requires `console.warn` (not throw) when the optional `@tailwindcss/vite` peer is missing. See RFC 0008 §3 D1.
     console.warn(
-      `[${PLUGIN_NAME}] @tailwindcss/vite was not resolvable; falling back to CSS-only mode. Install \`@tailwindcss/vite@^4\` to get the utility-driven design tokens, or import \`@usetheo/ui/styles.css\` directly for the pre-built surface.`,
+      `[${PLUGIN_NAME}] @tailwindcss/vite was not resolvable; falling back to CSS-only mode. Install \`@tailwindcss/vite@^4\` to get the utility-driven design tokens, or import \`@theokit/ui/styles.css\` directly for the pre-built surface.`,
     );
   };
 

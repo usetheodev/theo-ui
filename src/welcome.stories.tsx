@@ -96,7 +96,7 @@ export const Default: Story = () => (
     {/* Hero */}
     <header className="relative grid gap-6 overflow-hidden rounded-3xl border bg-card bg-hero-glow px-10 py-12">
       <span className="font-mono text-label-caps text-primary uppercase tracking-wider">
-        @usetheo/ui · 0.0.0
+        @theokit/ui · 0.0.0
       </span>
       <h1 className="text-balance font-display text-display-2xl tracking-tight">
         Forged for <span className="text-accent">AI agents</span>.
@@ -176,12 +176,12 @@ export const Default: Story = () => (
     <section className="grid gap-3">
       <h2 className="font-display text-headline tracking-tight">Quickstart</h2>
       <pre className="overflow-x-auto rounded-2xl border bg-card p-5 font-mono text-code-md">
-        {`pnpm add @usetheo/ui
+        {`pnpm add @theokit/ui
 
 # in your app root
-import { ThemeProvider, builtinThemes, Button } from "@usetheo/ui";
-import "@usetheo/ui/tokens.css";
-import "@usetheo/ui/styles.css";
+import { ThemeProvider, builtinThemes, Button } from "@theokit/ui";
+import "@theokit/ui/tokens.css";
+import "@theokit/ui/styles.css";
 
 <ThemeProvider themes={builtinThemes}>
   <Button><Rocket /> Deploy</Button>

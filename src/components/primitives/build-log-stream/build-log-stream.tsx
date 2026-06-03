@@ -108,7 +108,7 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
       if (wasControlled.current !== isControlled) {
         // biome-ignore lint/suspicious/noConsole: dev-only diagnostic (MEDIUM-002)
         console.warn(
-          `[@usetheo/ui] BuildLogStream: \`visibleLevels\` prop switched between ${
+          `[@theokit/ui] BuildLogStream: \`visibleLevels\` prop switched between ${
             wasControlled.current ? "controlled" : "uncontrolled"
           } and ${isControlled ? "controlled" : "uncontrolled"} between renders. Pick one mode and keep it consistent.`,
         );

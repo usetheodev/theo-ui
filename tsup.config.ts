@@ -93,7 +93,7 @@ export default defineConfig({
   // aggregates the full type graph in memory and worker --max-old-space
   // does not propagate. Per-component types resolve via `index.d.ts`
   // (the barrel) — TypeScript still finds `Alert`/`AlertProps` from
-  // `import { Alert } from "@usetheo/ui/alert"` because regen-subpath-
+  // `import { Alert } from "@theokit/ui/alert"` because regen-subpath-
   // exports.ts points the `types` field at the barrel for entries
   // lacking a sibling .d.ts. Trade-off: slightly larger types resolved
   // per subpath import, but build completes and the JS dist (where
@@ -185,12 +185,12 @@ export default defineConfig({
     // v4 needs to actually emit `.bg-primary`, `.text-body-md`, etc.
     await copyFile("src/styles/tokens-v4.css", "dist/tokens-v4.css");
     // CSS preset for consumers running their own Tailwind v4 build (chain
-    // via `@import "@usetheo/ui/preset.css"`).
+    // via `@import "@theokit/ui/preset.css"`).
     await copyFile("src/styles/preset.css", "dist/preset.css");
     // Geist woff2 assets — self-hosted by default per HIGH-002 / D6.
     // dist/fonts/ mirrors src/styles/fonts/ so the relative URLs in
     // fonts.css (`./fonts/geist-400.woff2`) resolve correctly inside the
-    // consumer's node_modules/@usetheo/ui/dist/ tree.
+    // consumer's node_modules/@theokit/ui/dist/ tree.
     await mkdir("dist/fonts", { recursive: true });
     for (const entry of await readdir("src/styles/fonts")) {
       await copyFile(join("src/styles/fonts", entry), join("dist/fonts", entry));
@@ -215,7 +215,7 @@ export default defineConfig({
     }
 
     // Slide theme CSS (D7 / T3.2 of the slide plan). Mirror src/themes/ to
-    // dist/slide/themes/ so consumers can `import "@usetheo/ui/slide/themes/default.css"`.
+    // dist/slide/themes/ so consumers can `import "@theokit/ui/slide/themes/default.css"`.
     await mkdir("dist/slide/themes", { recursive: true });
     for (const entry of await readdir("src/components/primitives/slide/themes")) {
       if (entry.endsWith(".css")) {

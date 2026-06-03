@@ -1,5 +1,5 @@
 /**
- * T1.3 — Contract test mirror: ensure @usetheo/ui's dist/ honors the
+ * T1.3 — Contract test mirror: ensure @theokit/ui's dist/ honors the
  * consumer (theokit) expectations defined in ADR 0001.
  *
  * Roda como `pnpm test:contract`. Gateado por `prepublishOnly` —
@@ -40,7 +40,7 @@ function normalizePluginReturn(value: unknown): unknown[] | null {
   return isValidPlugin(value) ? [value] : null
 }
 
-describe('Contract: @usetheo/ui/vite-plugin honors theokit consumer expectations (ADR 0001)', () => {
+describe('Contract: @theokit/ui/vite-plugin honors theokit consumer expectations (ADR 0001)', () => {
   it('precondition — dist/ exists (run pnpm build first)', () => {
     expect(existsSync(DIST('vite-plugin.js'))).toBe(true)
   })
@@ -75,7 +75,7 @@ describe('Contract: @usetheo/ui/vite-plugin honors theokit consumer expectations
   })
 
   it('./preset is a .css file', () => {
-    // Given the consumer can `import preset from '@usetheo/ui/preset'`,
+    // Given the consumer can `import preset from '@theokit/ui/preset'`,
     // When the dist is shipped,
     // Then preset.css must be present.
     expect(existsSync(DIST('preset.css'))).toBe(true)
@@ -83,7 +83,7 @@ describe('Contract: @usetheo/ui/vite-plugin honors theokit consumer expectations
   })
 
   it('./styles.css and ./fonts.css subpaths exist', () => {
-    // Given theokit injects `import '@usetheo/ui/styles.css'` (and fonts.css),
+    // Given theokit injects `import '@theokit/ui/styles.css'` (and fonts.css),
     // When the dist is shipped,
     // Then both files must be present.
     expect(existsSync(DIST('styles.css'))).toBe(true)

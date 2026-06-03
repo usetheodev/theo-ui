@@ -17,7 +17,7 @@
  * to keep them in sync.
  *
  * @example
- *   import { defineTheme, hex } from "@usetheo/ui";
+ *   import { defineTheme, hex } from "@theokit/ui";
  *   export const corp = defineTheme({
  *     name: "corp",
  *     light: { primary: hex("#0EA5E9") },
