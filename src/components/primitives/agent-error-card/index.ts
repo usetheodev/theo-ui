@@ -1,1 +1,5 @@
-export { AgentErrorCard, type AgentErrorKind } from "./agent-error-card.js";
+export {
+  AgentErrorCard,
+  type AgentErrorKind,
+  kindFromEnvelopeCode,
+} from "./agent-error-card.js";
