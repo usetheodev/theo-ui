@@ -37,8 +37,58 @@ const ICON_FOR_KIND: Record<AgentErrorKind, LucideIcon> = {
   generic: AlertOctagon,
 };
 
+/**
+ * G5 T2.3 — derive an AgentErrorKind from a TheoErrorEnvelope `code` string.
+ *
+ * Maps the canonical TheoErrorCode union (theokit/server + @theokit/sdk
+ * cross-layer envelope) to the AgentErrorKind that drives the icon + visual
+ * severity in this primitive. Unknown codes fall back to 'generic'.
+ *
+ * Consumer pattern (without coupling to theokit/server types):
+ *
+ * ```tsx
+ * <AgentErrorCard envelopeCode={env.code} title={env.message} />
+ * ```
+ *
+ * Or use the helper directly when fully controlling the kind prop:
+ *
+ * ```tsx
+ * <AgentErrorCard kind={kindFromEnvelopeCode(env.code)} title={env.message} />
+ * ```
+ */
+export function kindFromEnvelopeCode(code: string): AgentErrorKind {
+  switch (code) {
+    case "UNAUTHORIZED":
+    case "FORBIDDEN":
+    case "PROVIDER_KEY_MISSING":
+      return "auth";
+    case "RATE_LIMITED":
+    case "TOO_MANY_REQUESTS":
+    case "CREDENTIAL_POOL_EXHAUSTED":
+      return "rate-limit";
+    case "BAD_GATEWAY":
+    case "SERVICE_UNAVAILABLE":
+    case "GATEWAY_TIMEOUT":
+      return "network";
+    case "AGENT_RUN_ERROR":
+      return "tool-failure";
+    case "PAYLOAD_TOO_LARGE":
+    case "CONTENT_TOO_LARGE":
+      return "context-overflow";
+    default:
+      return "generic";
+  }
+}
+
 interface AgentErrorCardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   kind?: AgentErrorKind;
+  /**
+   * G5 T2.3 — canonical TheoErrorCode (e.g. `"UNAUTHORIZED"`, `"RATE_LIMITED"`)
+   * used to derive `kind` automatically. The explicit `kind` prop takes
+   * precedence when both are passed. Pass `envelope.code` from a
+   * `TheoErrorEnvelope` directly — no coupling to theokit/server types.
+   */
+  envelopeCode?: string;
   title: ReactNode;
   detail?: ReactNode;
   /** Recovery action slot (Retry, Reset, Re-auth, etc.). */
@@ -47,8 +97,11 @@ interface AgentErrorCardProps extends Omit<HTMLAttributes<HTMLElement>, "title">
 }
 
 const AgentErrorCard = forwardRef<HTMLElement, AgentErrorCardProps>(
-  ({ className, kind = "generic", title, detail, actions, timestamp, ...props }, ref) => {
-    const Icon = ICON_FOR_KIND[kind];
+  ({ className, kind, envelopeCode, title, detail, actions, timestamp, ...props }, ref) => {
+    // G5 T2.3: explicit `kind` wins; otherwise derive from envelopeCode; else 'generic'.
+    const effectiveKind: AgentErrorKind =
+      kind ?? (envelopeCode !== undefined ? kindFromEnvelopeCode(envelopeCode) : "generic");
+    const Icon = ICON_FOR_KIND[effectiveKind];
     // T4.1 (MF-4): omit own aria-live when nested in a container live region.
     // role="alert" stays — alerts should announce even via outer region —
     // but we drop the explicit aria-live="assertive" attribute so AT doesn't
