@@ -83,3 +83,4 @@ referencia/
 *.tgz
 src/styles/node_modules/
 test-results/
+.npmrc

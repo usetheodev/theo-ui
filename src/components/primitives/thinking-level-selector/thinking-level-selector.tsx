@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 
 import { cn } from "../../../lib/cn.js";
+import { isDev } from "../../../lib/env.js";
 
 /**
  * ThinkingLevelSelector — multi-state combobox for LLM reasoning budget.
@@ -47,7 +48,7 @@ export const ThinkingLevelSelector = forwardRef<HTMLSelectElement, ThinkingLevel
     ref,
   ) => {
     if (
-      process.env.NODE_ENV !== "production" &&
+      isDev() &&
       value === "inherited" &&
       inheritedValue === undefined
     ) {

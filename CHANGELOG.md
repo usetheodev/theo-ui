@@ -7,7 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.14.1] - 2026-06-09
+## [0.14.2] - 2026-06-09
+
+**Patch — build-pipeline correctness. Bundles the 0.14.1 color migration
+plus two FAANG-grade fixes that were required to ship a clean build to
+npm. 0.14.1 was tagged in git but never published to the npm registry;
+0.14.2 is the first published artifact carrying the violet unification.**
+
+### Added
+- **`src/lib/env.ts` — typed environment helpers (`isDev()`, `isProd()`).**
+  Centralizes `process.env.NODE_ENV` reads through a single typed accessor
+  that uses `globalThis.process?.env?.NODE_ENV`. Works in browser via
+  bundler `define` injection (Vite/Webpack/esbuild), in Node (SSR/tests),
+  and defensively in browser-without-bundler-injection (returns
+  `isDev() === true` to err on the side of more diagnostics). This is the
+  same pattern React, Radix, and Stripe Elements use — funnel every
+  `NODE_ENV` read through a typed helper so consumers' bundlers can
+  dead-code-eliminate dev-only branches in their production build.
+
+### Changed
+- **Six components migrated from raw `process.env.NODE_ENV` to `isDev()`.**
+  `theme-provider`, `status-dot`, `timestamp`, `env-var-editor`,
+  `thinking-level-selector`, `build-log-stream`. No behavior change in
+  consumer production builds — only a typecheck-cleanliness and
+  build-stability improvement. The previous direct `process.env` reads
+  triggered TypeScript `TS2591` failures unless `@types/node` was listed
+  in `tsconfig.json#compilerOptions.types`. Adding `"node"` there is the
+  workaround we explicitly rejected: it pollutes the ambient global
+  namespace of a UI library with Node-only APIs (`Buffer`, `fs`, `path`,
+  `Stream`) and surfaces them in author autocomplete inside React
+  components. The typed helper is the right pattern.
+
+### Fixed
+- **`src/vite-plugin.test.ts:76` — implicit `any` on `.map` callback parameter.**
+  Annotated as `(c: unknown[])`. Pre-existing TypeScript strictness
+  violation unrelated to the violet migration, but the typecheck job in
+  `prepublishOnly`'s `quality:gates` must be clean for publish to proceed.
+
+## [0.14.1] - 2026-06-09 — NOT PUBLISHED
+
+Tagged in git as `v0.14.1` but never published to the npm registry. The
+build pipeline surfaced two pre-existing TypeScript errors (six raw
+`process.env.NODE_ENV` reads + one implicit-`any` test assertion) that
+needed to be fixed before publish. The color migration carried out by
+this commit is bundled into `0.14.2` (see above) along with those fixes.
 
 **Patch (token value change only — full backward-compat preserved).**
 
