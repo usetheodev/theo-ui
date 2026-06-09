@@ -73,7 +73,7 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
     const config = plugin.config as (arg?: any, env?: any) => Promise<unknown>;
     await config({}, { command: "serve", mode: "development" });
     expect(warnSpy).toHaveBeenCalled();
-    const message = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    const message = warnSpy.mock.calls.map((c: unknown[]) => c.join(" ")).join("\n");
     expect(message).toMatch(/@tailwindcss\/vite/);
     vi.doUnmock("@tailwindcss/vite");
   });

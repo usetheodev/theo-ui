@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import type { JSX, ReactNode } from "react";
+import { isDev } from "../lib/env.js";
 import { safeHref } from "../lib/safe-href.js";
 import { COLOR_VALUE_PATTERN } from "./color-value-pattern.js";
 import { type Density, DensityContext, injectDensityCss } from "./density.js";
@@ -59,7 +60,7 @@ const FONT_FAMILY_PATTERN = /^[\w\s,"'\-.]+$/;
 // of an attribute selector or inject additional rules.
 const THEME_NAME_PATTERN = /^[a-z][a-z0-9-]*$/;
 
-const IS_DEV = typeof process === "undefined" || process.env.NODE_ENV !== "production";
+const IS_DEV = isDev();
 
 function rejectOrFallback(scope: string, value: string, fallback: string): string {
   if (IS_DEV) {
@@ -213,7 +214,7 @@ interface ThemeProviderProps {
  * fallback is correct, but we surface a single warn per call site in dev.
  */
 function warnStorageFailure(scope: string, err: unknown): void {
-  if (typeof process === "undefined" || process.env.NODE_ENV === "production") return;
+  if (!isDev()) return;
   // biome-ignore lint/suspicious/noConsole: dev-only diagnostic for storage failures (HIGH-006)
   console.warn(`[@theokit/ui] theme storage failure (${scope}):`, err);
 }

@@ -1,6 +1,7 @@
 import { forwardRef, useEffect } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
+import { isDev } from "../../../lib/env.js";
 
 /**
  * StatusDot — semantic status indicator (colored circle + optional label).
@@ -63,7 +64,7 @@ const StatusDot = forwardRef<HTMLSpanElement, StatusDotProps>(
 
     // EC-6: dev warning when neither label nor aria-label is provided.
     useEffect(() => {
-      if (process.env.NODE_ENV !== "production" && !hasVisibleLabel && ariaLabel === undefined) {
+      if (isDev() && !hasVisibleLabel && ariaLabel === undefined) {
         // biome-ignore lint/suspicious/noConsole: dev-only diagnostic for a11y misconfiguration.
         console.warn(
           `<StatusDot status="${status}" />: no \`label\` or \`aria-label\` provided. Color-only status is invisible to screen readers. Falling back to aria-label="${status}".`,

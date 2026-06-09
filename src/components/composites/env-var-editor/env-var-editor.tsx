@@ -2,6 +2,7 @@ import { Copy, Eye, EyeOff, Lock, Plus, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
+import { isDev } from "../../../lib/env.js";
 import { Badge } from "../../primitives/badge/index.js";
 import { Button } from "../../primitives/button/index.js";
 import { Input } from "../../primitives/input/index.js";
@@ -149,7 +150,7 @@ function Row({ entry, onRemove }: RowProps) {
         // fails (Safari/Firefox iframe sandbox, document not focused,
         // Permissions-Policy block). Production stays silent — behavior is
         // fail-safe (user can still copy manually).
-        if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+        if (isDev()) {
           // biome-ignore lint/suspicious/noConsole: dev-only clipboard diagnostic (T7.6)
           console.warn("[@theokit/ui] EnvVarEditor clipboard write failed:", err);
         }
