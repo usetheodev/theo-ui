@@ -178,7 +178,14 @@ const PageShell = forwardRef<HTMLElement, PageShellProps>(
         {hasActionBar ? (
           <ActionBar search={search} primaryAction={primaryAction} onFilterClick={onFilterClick} />
         ) : null}
-        <div>{content}</div>
+        {/* Content slot: `flex flex-col gap-6` matches the outer <main> gap so
+         * direct children (e.g. multiple <Card>s, a <Table>, an inline <Alert>)
+         * automatically receive consistent section spacing. Without this,
+         * pages with 2+ top-level children would render them flush against
+         * each other — a regression observed in dashboard /memory landing
+         * (5 sibling sections collided). Pages that already wrap their content
+         * in a single grid/div are unaffected (gap only applies between siblings). */}
+        <div className="flex flex-col gap-6">{content}</div>
       </main>
     );
   },

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.3] - 2026-06-09
+
+**Patch — PageShell content spacing standardization.**
+
+### Fixed
+- **`PageShell` content slot now renders direct children with `flex flex-col gap-6`.**
+  Previously the content `<div>` had no internal spacing, so pages with 2+
+  top-level children (e.g. dashboard `/memory` landing with 5 sibling
+  sections: KPI strip + trend grid + getting-started card + Explore
+  heading + Explore grid) rendered them flush against each other. The new
+  wrapper matches the outer `<main className="flex flex-col gap-6">` gap,
+  so spacing is uniform across the page. Pages that already wrap content
+  in a single grid or div are unaffected — `gap-6` only applies between
+  sibling elements. Equivalent to manually wrapping every page's content
+  in `<div className="flex flex-col gap-6">`, but enforced at the
+  composite level so every consumer benefits without per-page churn.
+
 ## [0.14.2] - 2026-06-09
 
 **Patch — build-pipeline correctness. Bundles the 0.14.1 color migration

@@ -85,6 +85,21 @@ describe("PageShell — content states", () => {
     expect(screen.getByText("CHILDREN-MARKER")).toBeInTheDocument();
   });
 
+  // 0.14.3 — content slot wraps children with `flex flex-col gap-6` so multiple
+  // top-level siblings get consistent section spacing without per-page churn.
+  it("content slot renders children inside a flex/gap-6 wrapper", () => {
+    const { container } = render(
+      <PageShell title="x">
+        <div data-testid="a">A</div>
+        <div data-testid="b">B</div>
+      </PageShell>,
+    );
+    const wrapper = container.querySelector('[data-testid="a"]')?.parentElement;
+    expect(wrapper?.className).toContain("flex");
+    expect(wrapper?.className).toContain("flex-col");
+    expect(wrapper?.className).toContain("gap-6");
+  });
+
   it("state precedence: loading > error > empty > children", () => {
     render(
       <PageShell
