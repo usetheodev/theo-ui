@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-06-09
+
+**Patch (token value change only — full backward-compat preserved).**
+
+### Changed
+- **Theo violet primary unified to `#A855F7` electric violet**. The Violet Forge theme's `--primary` (and matching `--ring`) moved from `#7C3AED` (`oklch(0.542 0.245 293)`) to `#A855F7` (`oklch(0.628 0.225 296)`) — same family, higher chroma at higher lightness, calmer execution without cyberpunk halos. Decision based on cross-surface unification (marketing + cloud/dashboard share one cor): the new value reads as production-grade premium and works consistently across light + dark surfaces. Burnt sienna accent `#C96442` is preserved (warmth complement unchanged). `--primary-deep` and `--primary-glow` continue to derive algorithmically via OKLCH relative-color syntax — no manual override needed. Files touched: `src/styles/tokens.css` (light + dark `--primary` and `--ring`), `src/themes/violet-forge.ts` (light + dark `primary` and `ring`), `src/components/primitives/slide/themes/violet-forge.css` (`--theo-slide-accent`), `src/components/primitives/whiteboard/whiteboard.stories.tsx` (stroke demo), `src/themes/color.ts` (JSDoc examples refreshed). Tests in `src/themes/color.test.ts` intentionally left unchanged — they test the `hex()` function with `#7C3AED` as a static example, decoupled from brand color choice. Consumers (theo-website, theo-cloud/dashboard, theokit framework) pick up the new color automatically on next install/rebuild via `@theokit/ui/preset.css`.
+
 ## [0.14.0] - 2026-06-03
 
 **Minor (additive — full backward-compat preserved via legacy helpers).**

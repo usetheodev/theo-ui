@@ -118,7 +118,7 @@ const sketch: WhiteboardData = {
       type: "freedraw",
       x: 0,
       y: 0,
-      stroke: "#7c3aed",
+      stroke: "#A855F7",
       points: [
         [40, 40],
         [60, 60],
