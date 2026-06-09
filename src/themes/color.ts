@@ -145,8 +145,8 @@ function rgbToHsl(r: number, g: number, b: number): string {
  * @throws if the input is malformed.
  *
  * @example
- *   hex("#7C3AED")   // "oklch(0.542 0.245 293)"
- *   hex("#7c3aed")   // same — case-insensitive
+ *   hex("#A855F7")   // "oklch(0.628 0.225 296)"
+ *   hex("#a855f7")   // same — case-insensitive
  *   hex("#abc")      // expanded to "#aabbcc"
  */
 export function hex(input: string): string {
@@ -174,7 +174,7 @@ export function hexToHsl(input: string): string {
  * @throws if any channel is out of `[0, 255]`.
  *
  * @example
- *   rgb(124, 58, 237)  // "oklch(0.542 0.245 293)"
+ *   rgb(168, 85, 247)  // "oklch(0.628 0.225 296)"
  */
 export function rgb(r: number, g: number, b: number): string {
   for (const value of [r, g, b]) {

@@ -3,9 +3,9 @@ import type { Theme } from "./types.js";
 /**
  * Violet Forge — the default Theo theme.
  *
- * Identity: Theo violet primary (#7C3AED), burnt sienna accent (#C96442),
- * Vercel-style neutral surfaces (pure white light / charcoal dark),
- * Geist Sans + Geist Mono throughout.
+ * Identity: Theo violet electric primary (#A855F7, unified 2026-06-09),
+ * burnt sienna accent (#C96442), Vercel-style neutral surfaces
+ * (pure white light / charcoal dark), Geist Sans + Geist Mono throughout.
  *
  * Source of truth for `data-theme` overrides. Values mirror
  * src/styles/tokens.css for the default `:root`.
@@ -29,7 +29,7 @@ export const violetForge: Theme = {
     "card-foreground": "oklch(0.146 0 0)",
     popover: "oklch(1 0 0)",
     "popover-foreground": "oklch(0.146 0 0)",
-    primary: "oklch(0.542 0.245 293)",
+    primary: "oklch(0.628 0.225 296)",
     "primary-foreground": "oklch(1 0 0)",
     secondary: "oklch(0.97 0 0)",
     "secondary-foreground": "oklch(0.146 0 0)",
@@ -39,7 +39,7 @@ export const violetForge: Theme = {
     "muted-foreground": "oklch(0.555 0 0)",
     border: "oklch(0.931 0 0)",
     input: "oklch(0.931 0 0)",
-    ring: "oklch(0.542 0.245 293)",
+    ring: "oklch(0.628 0.225 296)",
     success: "oklch(0.611 0.161 149.7)",
     "success-foreground": "oklch(1 0 0)",
     warning: "oklch(0.67 0.154 60.6)",
@@ -64,7 +64,7 @@ export const violetForge: Theme = {
     "card-foreground": "oklch(0.97 0 0)",
     popover: "oklch(0.204 0 0)",
     "popover-foreground": "oklch(0.97 0 0)",
-    primary: "oklch(0.542 0.245 293)",
+    primary: "oklch(0.628 0.225 296)",
     "primary-foreground": "oklch(1 0 0)",
     secondary: "oklch(0.227 0 0)",
     "secondary-foreground": "oklch(0.97 0 0)",
@@ -74,7 +74,7 @@ export const violetForge: Theme = {
     "muted-foreground": "oklch(0.683 0 0)",
     border: "oklch(0.28 0 0)",
     input: "oklch(0.227 0 0)",
-    ring: "oklch(0.542 0.245 293)",
+    ring: "oklch(0.628 0.225 296)",
     success: "oklch(0.814 0.192 155.7)",
     "success-foreground": "oklch(0.146 0 0)",
     warning: "oklch(0.77 0.165 70.6)",
