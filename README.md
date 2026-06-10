@@ -208,7 +208,7 @@ Three themes ship out of the box, all driven by HSL-split CSS variables. Swap at
 
 | Theme | Vibe | Primary | Accent |
 |---|---|---|---|
-| `violet-forge` *(default)* | Editorial dark, AI workspace energy | Theo violet `#7C3AED` | Burnt sienna `#C96442` |
+| `violet-forge` *(default)* | Editorial dark, AI workspace energy | Theo violet `#A855F7` | Burnt sienna `#C96442` |
 | `classic-paper` | Warm light, document-first reading | Indigo `#2563EB` | Amber `#F59E0B` |
 | `aurora-terminal` | High-contrast dev terminal feel | Cyan-aurora `#3DD9D6` | Aurora pink `#FF5C8A` |
 
@@ -229,7 +229,7 @@ Define your own theme by extending `Theme` from `@theokit/ui` — see [`docs/des
 
 | Token | Light | Dark |
 |---|---|---|
-| Primary (Theo violet) | `#7C3AED` | `#7C3AED` |
+| Primary (Theo violet) | `#A855F7` | `#A855F7` |
 | Accent (burnt sienna) | `#C96442` | `#C96442` |
 | Background | `#FFFFFF` pure white (Vercel-style) | `#0A0A0A` charcoal |
 | Display font | **Geist Sans** | **Geist Sans** |
