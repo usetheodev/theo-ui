@@ -11,15 +11,15 @@
 
 ## 1. Summary
 
-Add two new subpath exports to `@usetheo/ui` so the TheoKit framework's
+Add two new subpath exports to `@theokit/ui` so the TheoKit framework's
 `integrateUseTheoUI()` Vite plugin can auto-wire Tailwind v4 for
 consumers with zero further configuration:
 
-- **`@usetheo/ui/vite-plugin`** — default-export factory returning ONE
+- **`@theokit/ui/vite-plugin`** — default-export factory returning ONE
   Vite `Plugin`. Dynamic-imports `@tailwindcss/vite` v4 and chains it
   into the consumer's plugin array via the `config()` hook. Degrades
   via `console.warn` (never throws) when the peer is missing.
-- **`@usetheo/ui/preset`** — default-export Tailwind v4 `Partial<Config>`
+- **`@theokit/ui/preset`** — default-export Tailwind v4 `Partial<Config>`
   mirroring `tokens.css` (colors, fonts, typescale, radii, shadows,
   animations) with `content` paths covering the published artifact
   tree and the `tailwindcss-animate` plugin.
@@ -30,11 +30,11 @@ existing consumers).
 
 ## 2. Motivation
 
-Before this RFC, the TheoKit framework's "consumer adds `@usetheo/ui` →
+Before this RFC, the TheoKit framework's "consumer adds `@theokit/ui` →
 framework wires Tailwind for free" promise had no implementation path
-on the `@usetheo/ui` side. TheoKit's Phase 3 (cross-repo work) shipped
+on the `@theokit/ui` side. TheoKit's Phase 3 (cross-repo work) shipped
 `packages/theo/src/vite-plugin/integrate-ui.ts` which dynamic-imports
-`@usetheo/ui/vite-plugin` and validates four shape checks on the
+`@theokit/ui/vite-plugin` and validates four shape checks on the
 returned plugin. Without these subpath exports, that detection
 unconditionally returned `[]` and consumers fell back to manually
 authoring a `tailwind.config.ts`.
@@ -52,7 +52,7 @@ no less.
 | D4 | `vite` peer is `^6.0.0 \|\| ^7.0.0` (literal contract) | TheoKit ships on Vite 6+. Vite Plugin API is stable from 3.x, so this is the framework-side requirement, not a technical floor. The local devDep stays on Vite 5 — the `vite` peer is optional, so the local dev surface is unaffected. |
 | D5 | `./preset` delegates to `src/styles/tailwind-preset.ts` | Single source of truth for tokens; the shadcn-registry v3 preset and the v4 import preset stay byte-for-byte aligned. DRY trumps slight code duplication. |
 | D6 | `config()` returns `{ plugins }` even though Vite 5+ types forbid it | Vite 5+ tightened the TypeScript signature to nudge authors toward `Plugin[]` factories, but the runtime still honors `plugins` merge from `config()`. The contract requires ONE plugin object, so the cast is honest. |
-| D7 | Virtual module `virtual:@usetheo/ui/library-sources.css` for `@source` | Tailwind v4 `@source` directives are CSS-side. A virtual module is the cleanest hook — consumers import it once and Tailwind picks up the library's published JS as content. |
+| D7 | Virtual module `virtual:@theokit/ui/library-sources.css` for `@source` | Tailwind v4 `@source` directives are CSS-side. A virtual module is the cleanest hook — consumers import it once and Tailwind picks up the library's published JS as content. |
 | D8 | Minor bump (`0.4.0-next.0` → `0.5.0-next.0`) | Convention established in RFCs 0005/0006/0007: minor on API-surface additions, even when additive. Patch would be semver-correct but unconventional for this project. |
 
 ## 4. Implementation
@@ -69,7 +69,7 @@ export interface UseTheoUIPluginOptions {
 
 export default function useTheoUIVite(opts: UseTheoUIPluginOptions = {}): Plugin {
   return {
-    name: "@usetheo/ui/vite-plugin",
+    name: "@theokit/ui/vite-plugin",
     async config(_userConfig, _env): Promise<Omit<UserConfig, "plugins"> | undefined> {
       if (opts.tailwind === false) return undefined;
       try {
@@ -80,17 +80,17 @@ export default function useTheoUIVite(opts: UseTheoUIPluginOptions = {}): Plugin
         const tw = factory();
         return { plugins: Array.isArray(tw) ? tw : [tw] } as Omit<UserConfig, "plugins">;
       } catch {
-        console.warn("[@usetheo/ui/vite-plugin] @tailwindcss/vite was not resolvable; falling back to CSS-only mode.");
+        console.warn("[@theokit/ui/vite-plugin] @tailwindcss/vite was not resolvable; falling back to CSS-only mode.");
         return undefined;
       }
     },
     resolveId(id) {
-      if (id === "virtual:@usetheo/ui/library-sources.css")
-        return "\0virtual:@usetheo/ui/library-sources.css";
+      if (id === "virtual:@theokit/ui/library-sources.css")
+        return "\0virtual:@theokit/ui/library-sources.css";
     },
     load(id) {
-      if (id === "\0virtual:@usetheo/ui/library-sources.css") {
-        return `@source "../node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}";\n`;
+      if (id === "\0virtual:@theokit/ui/library-sources.css") {
+        return `@source "../node_modules/@theokit/ui/dist/**/*.{js,mjs,cjs}";\n`;
       }
     },
   };
@@ -106,8 +106,8 @@ import { theoUIPreset } from "./styles/tailwind-preset.js";
 const preset: Partial<Config> = {
   ...theoUIPreset,
   content: [
-    "./node_modules/@usetheo/ui/dist/**/*.{js,mjs,cjs}",
-    "./node_modules/@usetheo/ui/dist/**/*.{ts,tsx}",
+    "./node_modules/@theokit/ui/dist/**/*.{js,mjs,cjs}",
+    "./node_modules/@theokit/ui/dist/**/*.{ts,tsx}",
   ],
 };
 
@@ -190,7 +190,7 @@ token coverage, and plugin array presence.
 - **Standalone consumers unaffected.** The new subpaths are additive.
   Existing v3 setups continue to work via
   `registry/r/tailwind-preset.json` and the pre-built
-  `@usetheo/ui/styles.css`.
+  `@theokit/ui/styles.css`.
 - **Bundle.** `dist/vite-plugin.js` ~2.4 KB; `dist/preset.js` ~5.8 KB.
   Both isolated subpaths — the main barrel is untouched. Quality-gate
   bundle baseline gets two new entries.
@@ -241,4 +241,4 @@ Verification:
 | D10 | `./preset` becomes CSS (not JS); JS preset stays under `./preset-v3-legacy` | Tailwind v4 dropped JS presets; CSS is the canonical surface. Preserving the JS shape under a legacy name keeps shadcn-style v3 consumers viable. |
 | D11 | Ship two prebuilt entry stylesheets: `dist/styles.css` (v4) and `dist/styles-v3-legacy.css` (v3) | Same as D10 logic — v3 consumers shouldn't break when 0.5.x ships. |
 | D12 | Add `dogfood:v4-real-build` shell script (NOT in `quality:gates` by default) | The real build needs `@tailwindcss/cli@^4` installed; adding it to local devDeps conflicts with our existing `tailwindcss@^3` Ladle path. The script runs in an isolated tmp dir. Slow (~30s w/ network). Opt-in for local verification; runs in CI under a dedicated job. |
-| D13 | Bump to `0.5.1-next.0` (patch, not minor/major) | Technically breaking for any 0.5.0-next.0 consumer using `import preset from "@usetheo/ui/preset"` (JS) — but TheoKit reverted away by the time this shipped, and 0.5.0-next.0 was out for only hours. Patch is honest: this is a bug fix on a release that wasn't actually working. |
+| D13 | Bump to `0.5.1-next.0` (patch, not minor/major) | Technically breaking for any 0.5.0-next.0 consumer using `import preset from "@theokit/ui/preset"` (JS) — but TheoKit reverted away by the time this shipped, and 0.5.0-next.0 was out for only hours. Patch is honest: this is a bug fix on a release that wasn't actually working. |

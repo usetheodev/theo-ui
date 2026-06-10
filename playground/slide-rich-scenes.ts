@@ -98,7 +98,7 @@ Customer Journey`,
 backgroundImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600"
 color: "#fff"
 ---
-# usetheo
+# Theo
 Build. Deploy. Iterate.`,
   },
   {
@@ -187,8 +187,8 @@ $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$`,
     markdown: `# Code with real Shiki highlighting
 
 \`\`\`ts
-import { Slide } from "@usetheo/ui/slide";
-import { shikiPlugin } from "@usetheo/ui/slide/plugins/shiki";
+import { Slide } from "@theokit/ui/slide";
+import { shikiPlugin } from "@theokit/ui/slide/plugins/shiki";
 
 const plugins = [shikiPlugin({ langs: ["ts", "python"] })];
 export default function App() {

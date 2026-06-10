@@ -1,6 +1,6 @@
 # Slide — LLM authoring guide
 
-> System prompt — paste this verbatim into your LLM context when you want it to emit markdown for `@usetheo/ui/slide` or `@usetheo/ui/slide-deck`. Every example below is valid input.
+> System prompt — paste this verbatim into your LLM context when you want it to emit markdown for `@theokit/ui/slide` or `@theokit/ui/slide-deck`. Every example below is valid input.
 
 ---
 
@@ -224,7 +224,7 @@ This avoids interference (e.g. emoji shortcodes inside highlighted code stay lit
 For structured-output / function-calling pipelines, import the JSON Schema:
 
 ```ts
-import { slideFrontmatterJsonSchema } from "@usetheo/ui/slide";
+import { slideFrontmatterJsonSchema } from "@theokit/ui/slide";
 
 // Anthropic tool use:
 const tool = {
@@ -303,7 +303,7 @@ theme: violet-forge
 paginate: true
 ---
 
-# usetheo architecture
+# Theo architecture
 
 A 3-slide tour.
 

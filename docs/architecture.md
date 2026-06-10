@@ -1,4 +1,4 @@
-# Architecture — @usetheo/ui
+# Architecture — @theokit/ui
 
 > Last updated: 2026-05-13. This document defines the **taxonomy** rule for the library.
 > All future components must comply.
@@ -26,7 +26,7 @@ src/
 The split between `primitives/` and `composites/` is determined by a **mechanical rule**, not by domain feeling.
 
 > **A component is a primitive if and only if it does NOT import any other
-> `@usetheo/ui` component.**
+> `@theokit/ui` component.**
 >
 > Otherwise it is a composite.
 
@@ -66,19 +66,19 @@ but **must not import their own consumers** (no circular deps).
 > `validateArchitectureCensus` quality gate fails the build if they drift.
 
 <!-- BEGIN:primitives-census -->
-### Primitives (92)
+### Primitives (99)
 <!-- END:primitives-census -->
 
 <!-- BEGIN:primitives-list -->
-`ActionBar`, `AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `Alert`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `Avatar`, `Badge`, `BrowserControls`, `BuildLogStream`, `Button`, `CapabilityIndicator`, `Card`, `ChatThread`, `Checkbox`, `ContextCard`, `ContextWindowBar`, `CopyButton`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `DangerZone`, `Dialog`, `DiffViewer`, `DropdownMenu`, `EmptyState`, `FolderContextCard`, `FolderSelector`, `FormField`, `HookConfig`, `HookEventLog`, `Input`, `IntentSelector`, `Label`, `LaneBoard`, `LoginSplit`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `MetricsPanel`, `ModelCard`, `ModelSelector`, `Pagination`, `PermissionMatrix`, `PinInput`, `PlanBadge`, `Progress`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RadioGroup`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunningTasksPanel`, `ScrollArea`, `Select`, `SessionListItem`, `SessionTimeline`, `Sheet`, `Sidebar`, `Skeleton`, `SkillCard`, `SocialAuthRow`, `StatTile`, `StatusDot`, `StepsRail`, `SubAgentDispatch`, `Switch`, `SystemPromptEditor`, `Table`, `Tabs`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `Textarea`, `Timestamp`, `Toast`, `Toaster`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `Tooltip`, `TopNav`
+`ActionBar`, `AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `Alert`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `Avatar`, `Badge`, `BranchIndicator`, `BrowserControls`, `BuildLogStream`, `Button`, `CapabilityIndicator`, `Card`, `ChannelCard`, `ChatThread`, `Checkbox`, `ContextCard`, `ContextWindowBar`, `CopyButton`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `DangerZone`, `Dialog`, `DiffViewer`, `DropdownMenu`, `EmptyState`, `ExportChatDialog`, `FolderContextCard`, `FolderSelector`, `FormField`, `GatewayStatusIndicator`, `HookConfig`, `HookEventLog`, `Input`, `IntentSelector`, `Label`, `LaneBoard`, `LoginSplit`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `MetricsPanel`, `ModelCard`, `ModelSelector`, `Pagination`, `PermissionMatrix`, `PinInput`, `PlanBadge`, `Progress`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RadioGroup`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunStatusPill`, `RunningTasksPanel`, `ScrollArea`, `Select`, `SessionListItem`, `SessionTimeline`, `Sheet`, `Sidebar`, `Skeleton`, `SkillCard`, `SocialAuthRow`, `StatTile`, `StatusDot`, `StepsRail`, `SubAgentDispatch`, `Switch`, `SystemPromptEditor`, `Table`, `Tabs`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `Textarea`, `ThinkingLevelSelector`, `Timestamp`, `Toast`, `Toaster`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `Tooltip`, `TopNav`, `UpdateBanner`
 <!-- END:primitives-list -->
 
 <!-- BEGIN:composites-census -->
-### Composites (47)
+### Composites (50)
 <!-- END:composites-census -->
 
 <!-- BEGIN:composites-list -->
-`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `CronJobsList`, `DataPart`, `DataTable`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `PageShell`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
+`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `CronJobsList`, `DataPart`, `DataTable`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `MetricCard`, `PageShell`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `StabilityBundleViewer`, `StatusIndicator`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
 <!-- END:composites-list -->
 
 ### Notes
@@ -148,7 +148,7 @@ This is **deliberate** and documented in `scripts/sync-exports.ts`. The
 trade-off:
 
 - **What subpath imports give you.** A clean per-component import surface
-  (`import { Button } from "@usetheo/ui/button"`), better IDE autocomplete,
+  (`import { Button } from "@theokit/ui/button"`), better IDE autocomplete,
   and an editorial signal that consumers can pin to a specific component.
 - **What subpath imports do NOT give you.** Separate bundles per component.
   tsup is configured with `splitting: false`. A 99-entry split would
@@ -158,8 +158,8 @@ trade-off:
 **Tree-shaking is what shrinks the bundle.** Modern bundlers (Vite, esbuild,
 Rollup, webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and drop
 unused components from the barrel regardless of which import form the
-consumer wrote. `import { Button } from "@usetheo/ui"` and
-`import { Button } from "@usetheo/ui/button"` produce the same final
+consumer wrote. `import { Button } from "@theokit/ui"` and
+`import { Button } from "@theokit/ui/button"` produce the same final
 bundle.
 
 **Runtimes that don't tree-shake** (Jest classic, Node REPL, raw browser
@@ -214,7 +214,7 @@ Adding a new global provider primitive requires:
 - **Renaming**: keep the old name as a re-export from the new path with a
   `@deprecated` JSDoc tag, and remove only in the next major version.
 - **Moving primitive → composite**: announced via CHANGELOG entry; the public
-  import from `@usetheo/ui` does NOT change (the barrel is the only stable
+  import from `@theokit/ui` does NOT change (the barrel is the only stable
   surface). Internal callers (other composites) must be migrated in the same
   PR.
 - **Deletion**: must wait one major version after the deprecation tag lands.

@@ -12,12 +12,12 @@
  * Consumer usage (their entry CSS):
  *
  *   @import "tailwindcss";
- *   @import "@usetheo/ui/preset.css";
+ *   @import "@theokit/ui/preset.css";
  *
  *   /* the consumer's own @theme overrides come AFTER, so they win. * /
  *
  * Tailwind v4 dropped the v3 JS preset format. The previous JS preset
- * remains shipped under `@usetheo/ui/preset-v3-legacy` (which works only
+ * remains shipped under `@theokit/ui/preset-v3-legacy` (which works only
  * with `tailwindcss@^3`). New v4 consumers MUST use this CSS preset.
  *
  * See RFC 0008 follow-up.

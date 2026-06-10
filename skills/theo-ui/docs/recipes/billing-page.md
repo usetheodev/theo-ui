@@ -23,12 +23,12 @@ Worked example of P8 BillingPage with current plan + usage meters + pricing tier
 
 import { CreditCard, Check } from "lucide-react";
 
-import { PageShell } from "@usetheo/ui/page-shell";
-import { Card } from "@usetheo/ui/card";
-import { PlanBadge } from "@usetheo/ui/plan-badge";
-import { UsageMeter } from "@usetheo/ui/usage-meter";
-import { Button } from "@usetheo/ui/button";
-import { Badge } from "@usetheo/ui/badge";
+import { PageShell } from "@theokit/ui/page-shell";
+import { Card } from "@theokit/ui/card";
+import { PlanBadge } from "@theokit/ui/plan-badge";
+import { UsageMeter } from "@theokit/ui/usage-meter";
+import { Button } from "@theokit/ui/button";
+import { Badge } from "@theokit/ui/badge";
 
 import { useBilling } from "@/hooks/useBilling";
 

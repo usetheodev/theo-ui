@@ -62,7 +62,7 @@
 
 - **Task afetada:** T1.1 + T4.1 (conflito entre os dois)
 - **Família:** Integration / Resource
-- **Cenário:** T1.1 instrui adicionar Zod como peer-dep `optional: true`. T4.1 sugere `validateScene(data)` rodar em `useMemo` por padrão. Consumer que importa `@usetheo/ui/whiteboard` sem instalar Zod recebe `Cannot find module 'zod'` em runtime no primeiro render.
+- **Cenário:** T1.1 instrui adicionar Zod como peer-dep `optional: true`. T4.1 sugere `validateScene(data)` rodar em `useMemo` por padrão. Consumer que importa `@theokit/ui/whiteboard` sem instalar Zod recebe `Cannot find module 'zod'` em runtime no primeiro render.
 - **Impacto:** Subpath quebra para qualquer consumer que não souber instalar Zod. Mensagem de erro do bundler é confusa (parece bug da lib, não falta de peer).
 - **Fix sugerido:** Decidir uma das três (recomendo opção A):
   - **A.** Zod sai dos peers opcionais e entra em **dependencies** normais do subpath. ~12KB gz cabe em "engine bundle". Documentar no RFC.

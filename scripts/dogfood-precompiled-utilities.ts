@@ -8,7 +8,7 @@
  * pnpm-symlink bug fixed in 0.6.1-next.0 — the exact contract grep the
  * TheoKit reproduction script uses:
  *
- *   $ grep -c "\.hover\\:bg-muted" .../@usetheo/ui/dist/*.css
+ *   $ grep -c "\.hover\\:bg-muted" .../@theokit/ui/dist/*.css
  *   must return >= 1 (pre-fix: 0)
  *
  * If any required class fails to appear, the gate fails — meaning the
@@ -92,9 +92,10 @@ const REQUIRED_BASE_RULES = [
   ".rounded-lg",
 ];
 for (const rule of REQUIRED_BASE_RULES) {
-  // Match `.X{` or `.X:` to avoid partial overlap (e.g. `.bg-primary-deep`
-  // matching `.bg-primary`).
-  const pattern = new RegExp(`\\${rule}[:{ ]`);
+  // Match `.X{` `.X:` `.X ` `.X,` `.X\` to avoid partial overlap (e.g.
+  // `.bg-primary-deep` matching `.bg-primary`) — Tailwind v4 groups selectors
+  // so `.bg-card,` / `.bg-card\` (Tailwind escape) appear, not just `.bg-card{`.
+  const pattern = new RegExp(`\\${rule}[:{ ,\\\\]`);
   assert(`dist/components.css contains \`${rule}\` rule`, pattern.test(components));
 }
 
@@ -111,8 +112,8 @@ for (const rule of REQUIRED_VARIANT_RULES) {
 
 /* ─── Negative assertions: no broken legacy patterns ─────────────────── */
 assert(
-  "dist/components.css does NOT include the broken `node_modules/@usetheo/ui` @source pattern",
-  !components.includes("node_modules/@usetheo/ui"),
+  "dist/components.css does NOT include the broken `node_modules/@theokit/ui` @source pattern",
+  !components.includes("node_modules/@theokit/ui"),
 );
 
 /* ─── Report ─────────────────────────────────────────────────────────── */

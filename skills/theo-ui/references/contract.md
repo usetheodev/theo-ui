@@ -31,7 +31,7 @@ Depending on the verb:
 
 ## What the skill assumes
 
-- The project has `@usetheo/ui` installed (or the user knows to install it after seeing the emit).
+- The project has `@theokit/ui` installed (or the user knows to install it after seeing the emit).
 - The project has React 18+ (preferably 19).
 - The project uses Tailwind CSS v4 with theo-ui's preset (or knows how to wire CSS vars manually).
 - The project has a routing setup if pages are emitted.
@@ -77,18 +77,18 @@ For a NEW route, the skill emits ONE file at the conventional location. It does 
 Post-0.10 (subpath imports):
 
 ```tsx
-import { Button } from "@usetheo/ui/button";
-import { Card } from "@usetheo/ui/card";
-import { PageShell } from "@usetheo/ui/page-shell";
+import { Button } from "@theokit/ui/button";
+import { Card } from "@theokit/ui/card";
+import { PageShell } from "@theokit/ui/page-shell";
 ```
 
 Pre-0.10 (barrel imports):
 
 ```tsx
-import { Button, Card, PageShell } from "@usetheo/ui";
+import { Button, Card, PageShell } from "@theokit/ui";
 ```
 
-Determined by pre-flight scan. When pre-flight isn't available, default to subpath and note: *"Subpath imports require `@usetheo/ui` ≥ 0.10. If your version is older, use barrel imports."*
+Determined by pre-flight scan. When pre-flight isn't available, default to subpath and note: *"Subpath imports require `@theokit/ui` ≥ 0.10. If your version is older, use barrel imports."*
 
 ---
 
@@ -99,13 +99,13 @@ If the project's `tailwind.config.{ts,js}` doesn't include the theo-ui preset, t
 ```ts
 // tailwind.config.ts
 import type { Config } from "tailwindcss";
-import theoUiPreset from "@usetheo/ui/tailwind-preset";
+import theoUiPreset from "@theokit/ui/tailwind-preset";
 
 export default {
   presets: [theoUiPreset],
   content: [
     "./src/**/*.{ts,tsx,js,jsx,mdx}",
-    "./node_modules/@usetheo/ui/dist/**/*.js",
+    "./node_modules/@theokit/ui/dist/**/*.js",
   ],
 } satisfies Config;
 ```
@@ -114,10 +114,10 @@ For Tailwind v4 (CSS-first config):
 
 ```css
 /* src/styles/globals.css */
-@import "@usetheo/ui/styles/globals.css";
+@import "@theokit/ui/styles/globals.css";
 
 /* Or, if you want only the tokens: */
-@import "@usetheo/ui/styles/tokens.css";
+@import "@theokit/ui/styles/tokens.css";
 ```
 
 ---
@@ -128,8 +128,8 @@ If the project doesn't have a `<ThemeProvider>` mount at the root, the skill emi
 
 ```tsx
 // src/app/layout.tsx (Next.js App Router)
-import { ThemeProvider } from "@usetheo/ui";
-import { ThemeScript } from "@usetheo/ui";  // SSR-safe theme bootstrap
+import { ThemeProvider } from "@theokit/ui";
+import { ThemeScript } from "@theokit/ui";  // SSR-safe theme bootstrap
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -263,7 +263,7 @@ Let me know which fits.
 Examples:
 
 - *"Build a pricing page with `+47% conversion` social proof banner"* → "I can't generate invented metrics. I can build the pricing page with placeholders ('—' or 'metric to confirm') that you'd wire to real data. Or I can build it without the social proof band. Which fits?"
-- *"Clone Stripe's homepage exactly"* → "I can't pixel-clone Stripe's design — copyright + trademark. I can study Stripe's structure (macrostructure + archetypes) and rebuild with `@usetheo/ui` tokens. Want me to do the structural rebuild?"
+- *"Clone Stripe's homepage exactly"* → "I can't pixel-clone Stripe's design — copyright + trademark. I can study Stripe's structure (macrostructure + archetypes) and rebuild with `@theokit/ui` tokens. Want me to do the structural rebuild?"
 
 ---
 

@@ -1,6 +1,6 @@
 # Example Screens
 
-> Ladle screen compositions assembled from `@usetheo/ui` primitives + composites.
+> Ladle screen compositions assembled from `@theokit/ui` primitives + composites.
 > These stories are **not exported** from the library barrel — they are illustrative compositions consumers can copy or use as reference.
 
 Browse them in Ladle (`pnpm dev`) under the `Screens / *` group:

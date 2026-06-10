@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /**
  * Dogfood QA for the Whiteboard subpath. Simulates a real consumer:
- *   1. Imports `@usetheo/ui/whiteboard` resolved via the local dist (after `pnpm build`).
+ *   1. Imports `@theokit/ui/whiteboard` resolved via the local dist (after `pnpm build`).
  *   2. Feeds it a JSON scene a Claude / GPT agent could realistically emit.
  *   3. Renders to a static SVG string via React's renderToString (SSR path).
  *   4. Asserts the SVG is well-formed and contains all expected elements.

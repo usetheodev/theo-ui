@@ -11,7 +11,7 @@
  *   - `fillStyle: "hachure"` with `fill: "currentColor"` lets rough.js draw
  *     theme-aware hatching — the lines pick up the inherited color.
  */
-import type { WhiteboardData } from "@usetheo/ui/whiteboard";
+import type { WhiteboardData } from "@theokit/ui/whiteboard";
 
 export interface SceneFixture {
   id: string;

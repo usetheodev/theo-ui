@@ -752,6 +752,7 @@ async function validateAxeCoverage(): Promise<void> {
     "approval-card",
     "attachment-chip",
     "audit-log-entry",
+    "channel-card",
     "cron-job-card",
     "mcp-server-card",
     "mention-menu",
@@ -880,6 +881,20 @@ async function validateThemeContrast(): Promise<void> {
   }
 }
 
+// Validate that no src/components file uses literal Tailwind color utility
+// classes (D3 / ADR-0004 / community-best-practices T1.3). Components MUST
+// consume semantic tokens (bg-primary, bg-success, bg-status-online, ...) so
+// theme switching propagates. Literal classes (bg-emerald-500) bypass the
+// cascade — same hex regardless of active theme. Whitelisted: *.test.tsx,
+// *.stories.tsx, tests/fixture-*/.
+async function validateNoLiteralTailwindColors(): Promise<void> {
+  const { scan, formatViolations } = await import("./lib/literal-color-scanner.js");
+  const violations = scan({ rootDir: join(ROOT, "src/components") });
+  if (violations.length === 0) return;
+  // Single-fail with the full formatted report so reviewers see the suggestions inline.
+  fail("components:tokens", `\n${formatViolations(violations)}`);
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(ROOT, "docs/quality-gates.md"))) {
     fail("docs", "missing docs/quality-gates.md");
@@ -901,6 +916,7 @@ async function main(): Promise<void> {
   await validateAxeCoverage();
   await validateNoStrayArtifacts();
   validateDesignSystemFidelity();
+  await validateNoLiteralTailwindColors();
   await validateThemeContrast();
   validateScriptsAndCi();
 

@@ -2,7 +2,7 @@
 
 Landing pages, pricing pages, feature pages, homepage. The surface vocabulary is **typographic, hierarchy-led, restrained** — the user is unfamiliar with the product and you have ~3 seconds to communicate value.
 
-This is the ONE surface where theo-ui composites take a backseat to typography + custom layout. `@usetheo/ui` is primarily a product UI library, not a marketing site builder. Use primitives + tokens; reach for composites only where they fit (pricing tier Cards, plan badges, usage examples).
+This is the ONE surface where theo-ui composites take a backseat to typography + custom layout. `@theokit/ui` is primarily a product UI library, not a marketing site builder. Use primitives + tokens; reach for composites only where they fit (pricing tier Cards, plan badges, usage examples).
 
 ---
 

@@ -89,7 +89,12 @@ assert(
 
 /* ─── dist/tokens-v4.css ─────────────────────────────────────────────── */
 const tokensV4 = readDist("tokens-v4.css");
-assert("dist/tokens-v4.css declares an `@theme {}` block", /@theme\s*\{/.test(tokensV4));
+assert(
+  // Post-T2.5: tokens-v4 uses `@theme inline` so var() references resolve at
+  // runtime instead of being inlined at build time (preserves theme cascade).
+  "dist/tokens-v4.css declares an `@theme` block (inline form for OKLCH)",
+  /@theme(?:\s+inline)?\s*\{/.test(tokensV4),
+);
 
 const requiredColorAliases = [
   "--color-background",
@@ -162,8 +167,10 @@ assert(
 );
 
 assert(
-  "dist/tokens-v4.css aliases `--color-primary` to hsl(var(--primary)) — runtime indirection preserved",
-  /--color-primary:\s*hsl\(\s*var\(--primary\)/.test(tokensV4),
+  // Post-T2.5 (ADR-0005): tokens are OKLCH; the wrapper hsl(var(--x)) is dropped
+  // and Tailwind v4 reads `--color-primary: var(--primary)` directly.
+  "dist/tokens-v4.css aliases `--color-primary` to var(--primary) — OKLCH passthrough",
+  /--color-primary:\s*var\(--primary\)/.test(tokensV4),
 );
 
 /* ─── dist/preset.css ────────────────────────────────────────────────── */

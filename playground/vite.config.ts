@@ -6,7 +6,7 @@ import { defineConfig } from "vite";
 
 const rootDir = fileURLToPath(new URL("./", import.meta.url));
 
-// Alias `@usetheo/ui` to the live src tree so the playground consumes the
+// Alias `@theokit/ui` to the live src tree so the playground consumes the
 // library exactly like an external consumer would (via the public barrel)
 // while still hot-reloading during development.
 const libEntry = fileURLToPath(new URL("../src/index.ts", import.meta.url));
@@ -46,22 +46,22 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
-      { find: /^@usetheo\/ui\/styles\.css$/, replacement: libStyles },
-      { find: /^@usetheo\/ui\/tokens\.css$/, replacement: libTokens },
-      { find: /^@usetheo\/ui\/fonts\.css$/, replacement: libFonts },
-      { find: /^@usetheo\/ui\/whiteboard$/, replacement: libWhiteboard },
-      { find: /^@usetheo\/ui\/slide\/themes\/default\.css$/, replacement: libSlideThemeDefault },
+      { find: /^@theokit\/ui\/styles\.css$/, replacement: libStyles },
+      { find: /^@theokit\/ui\/tokens\.css$/, replacement: libTokens },
+      { find: /^@theokit\/ui\/fonts\.css$/, replacement: libFonts },
+      { find: /^@theokit\/ui\/whiteboard$/, replacement: libWhiteboard },
+      { find: /^@theokit\/ui\/slide\/themes\/default\.css$/, replacement: libSlideThemeDefault },
       {
-        find: /^@usetheo\/ui\/slide\/themes\/violet-forge\.css$/,
+        find: /^@theokit\/ui\/slide\/themes\/violet-forge\.css$/,
         replacement: libSlideThemeVioletForge,
       },
-      { find: /^@usetheo\/ui\/slide-deck$/, replacement: libSlideDeck },
-      { find: /^@usetheo\/ui\/slide\/plugins\/shiki$/, replacement: libSlideShiki },
-      { find: /^@usetheo\/ui\/slide\/plugins\/math$/, replacement: libSlideMath },
-      { find: /^@usetheo\/ui\/slide\/plugins\/mermaid$/, replacement: libSlideMermaid },
-      { find: /^@usetheo\/ui\/slide\/plugins\/emoji$/, replacement: libSlideEmoji },
-      { find: /^@usetheo\/ui\/slide$/, replacement: libSlide },
-      { find: /^@usetheo\/ui$/, replacement: libEntry },
+      { find: /^@theokit\/ui\/slide-deck$/, replacement: libSlideDeck },
+      { find: /^@theokit\/ui\/slide\/plugins\/shiki$/, replacement: libSlideShiki },
+      { find: /^@theokit\/ui\/slide\/plugins\/math$/, replacement: libSlideMath },
+      { find: /^@theokit\/ui\/slide\/plugins\/mermaid$/, replacement: libSlideMermaid },
+      { find: /^@theokit\/ui\/slide\/plugins\/emoji$/, replacement: libSlideEmoji },
+      { find: /^@theokit\/ui\/slide$/, replacement: libSlide },
+      { find: /^@theokit\/ui$/, replacement: libEntry },
     ],
   },
   css: {

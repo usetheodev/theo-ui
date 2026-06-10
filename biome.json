@@ -64,7 +64,13 @@
   },
   "overrides": [
     {
-      "include": ["**/*.stories.tsx", "**/*.test.tsx", "**/*.test.ts", "scripts/**/*.ts"],
+      "include": [
+        "**/*.stories.tsx",
+        "**/*.test.tsx",
+        "**/*.test.ts",
+        "scripts/**/*.ts",
+        "scripts/**/*.mjs"
+      ],
       "linter": {
         "rules": {
           "suspicious": {

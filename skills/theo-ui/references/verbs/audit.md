@@ -6,7 +6,7 @@ Score existing code against the slop-test gates without editing. Produces a rank
 
 ## When to invoke
 
-The user wants to know how well an existing component / page / app uses `@usetheo/ui` before they invest in changes. Or they want to validate a recent PR against the design system contract.
+The user wants to know how well an existing component / page / app uses `@theokit/ui` before they invest in changes. Or they want to validate a recent PR against the design system contract.
 
 Triggers:
 
@@ -41,7 +41,7 @@ If the resolution yields > 50 files, ask the user to scope:
 > *"That's 73 files. Should I audit:*
 > *- A — the top 10 by line count (biggest first)*
 > *- B — only `page.tsx` / `layout.tsx` (page-level)*
-> *- C — only files mentioning `@usetheo/ui`*
+> *- C — only files mentioning `@theokit/ui`*
 > *- D — all 73 (slow but thorough)"*
 
 Default: D (thorough). The audit must be complete by default.
@@ -211,9 +211,9 @@ Don't proceed. Don't infer the user meant something else.
 
 If the target is `.ts` (logic only, no JSX), audit a small set of gates only (L-* skipped since no components emit there). Report only T-* gates that apply to constants / type definitions.
 
-### Target file doesn't import `@usetheo/ui`
+### Target file doesn't import `@theokit/ui`
 
-Flag it explicitly: *"This file does not import `@usetheo/ui`. The audit applies the universal slop-test gates (token-fidelity, a11y, responsive). For full coverage, migrate the file to use `@usetheo/ui` composites first."*
+Flag it explicitly: *"This file does not import `@theokit/ui`. The audit applies the universal slop-test gates (token-fidelity, a11y, responsive). For full coverage, migrate the file to use `@theokit/ui` composites first."*
 
 ### Target file is a stories file
 

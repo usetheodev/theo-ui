@@ -18,7 +18,7 @@ Before running the 32 gates, score the output 1–5 on six axes. Stamp at the to
 
 | Axis | What you're scoring |
 |---|---|
-| **L · Library-fit** | Did you reach for the right `@usetheo/ui` components? Or did you hand-roll? |
+| **L · Library-fit** | Did you reach for the right `@theokit/ui` components? Or did you hand-roll? |
 | **T · Token-fidelity** | Did every color, font, size resolve to a token? Any inline hex / raw size class? |
 | **C · Composition** | Did you use composites (`<PageShell>`, `<DataTable>`, etc.) where they fit? Or primitives + manual layout? |
 | **A · A11y** | Focus rings, tap targets, labels, semantic HTML, ARIA, keyboard nav. |

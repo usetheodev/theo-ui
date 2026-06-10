@@ -60,7 +60,7 @@ const stripExtension = (value: string): string => value.replace(/\.(tsx|ts|jsx|j
 
 const importSpecifiers = (content: string): string[] => {
   // Strip block + line comments before scanning for imports. Without this,
-  // CSS `/* ... @import "@usetheo/ui/fonts-cdn.css" ... */` narrative
+  // CSS `/* ... @import "@theokit/ui/fonts-cdn.css" ... */` narrative
   // comments are falsely treated as runtime imports.
   const stripped = content.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/[^\n]*/g, "$1");
 

@@ -256,7 +256,7 @@ async function main(): Promise<void> {
   readme = replaceRegion(
     readme,
     "component-catalog-intro",
-    `**${counts.components} components**, organized by mechanical rule: a *primitive* imports no other \`@usetheo/ui\` component; a *composite* does.`,
+    `**${counts.components} components**, organized by mechanical rule: a *primitive* imports no other \`@theokit/ui\` component; a *composite* does.`,
   );
 
   // architecture.md census updates

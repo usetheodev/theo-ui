@@ -17,6 +17,13 @@ describe("TheoUIProvider", () => {
     document.documentElement.removeAttribute("data-theme");
     document.documentElement.removeAttribute("data-mode");
     document.documentElement.classList.remove("dark");
+    // T5.1/D6: localStorage state leak across tests can promote a stored
+    // mode that disagrees with the per-test defaultMode assertion.
+    try {
+      window.localStorage.clear();
+    } catch {
+      /* ignore */
+    }
   });
 
   afterEach(() => {
@@ -44,8 +51,12 @@ describe("TheoUIProvider", () => {
   });
 
   it("applies default mode (dark) to <html>", () => {
+    // Post-T5.1 (ADR-0009): respect-system-mode default = true; jsdom's
+    // matchMedia returns matches=false → mode resolves to "light" unless
+    // explicitly disabled. Pass theme.respectSystemMode={false} to assert
+    // the legacy dark-first default behavior in isolation.
     render(
-      <TheoUIProvider>
+      <TheoUIProvider theme={{ respectSystemMode: false }}>
         <div>content</div>
       </TheoUIProvider>,
     );

@@ -304,7 +304,7 @@
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "DropdownMenu",
-      "description": "Accessible dropdown menu primitive built on @radix-ui/react-dropdown-menu. Sub-components attached via Object.assign (Trigger, Content, Item, CheckboxItem, RadioItem, Label, Separator, Shortcut, Group, Sub, SubTrigger, SubContent, RadioGroup). Styled with @usetheo/ui design tokens. Consolidates the 5 prior direct-Radix usages under a single wrapper."
+      "description": "Accessible dropdown menu primitive built on @radix-ui/react-dropdown-menu. Sub-components attached via Object.assign (Trigger, Content, Item, CheckboxItem, RadioItem, Label, Separator, Shortcut, Group, Sub, SubTrigger, SubContent, RadioGroup). Styled with @theokit/ui design tokens. Consolidates the 5 prior direct-Radix usages under a single wrapper."
     },
     {
       "name": "empty-state",
@@ -407,6 +407,12 @@
       "type": "registry:ui",
       "title": "MentionMenu",
       "description": "Keyboard-navigable popover for slash-command / @file / #memory"
+    },
+    {
+      "name": "metric-card",
+      "type": "registry:ui",
+      "title": "MetricCard",
+      "description": "Dashboard metric tile composite — title + value + delta with trend semantics. Supports invertTrend for cost/churn metrics (EC-17)."
     },
     {
       "name": "metrics-panel",
@@ -634,7 +640,7 @@
       "name": "slide-deck",
       "type": "registry:block",
       "title": "SlideDeck",
-      "description": "Composite engine that orchestrates N <Slide> primitives. Keyboard / touch / hash routing, thumbnails, presenter view, fullscreen, CSS transitions, Marpit-style fragments, PDF export. Subpath-isolated bundle in @usetheo/ui."
+      "description": "Composite engine that orchestrates N <Slide> primitives. Keyboard / touch / hash routing, thumbnails, presenter view, fullscreen, CSS transitions, Marpit-style fragments, PDF export. Subpath-isolated bundle in @theokit/ui."
     },
     {
       "name": "slide-plugin-emoji",
@@ -664,7 +670,7 @@
       "name": "slide",
       "type": "registry:ui",
       "title": "Slide",
-      "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @usetheo/ui."
+      "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @theokit/ui."
     },
     {
       "name": "social-auth-row",
@@ -683,6 +689,12 @@
       "type": "registry:ui",
       "title": "StatusDot",
       "description": "Semantic status indicator (small colored circle + optional label). Five status kinds: live (success), building (warning, auto-pulses), failed (destructive), idle (muted), warning (warning, static). Three sizes (xs 6px / sm 8px default / md 10px). When neither label nor aria-label is provided, auto-applies aria-label=status and emits a dev warning."
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:ui",
+      "title": "StatusIndicator",
+      "description": "Operational state indicator (online/offline/degraded/info) consuming status-* semantic tokens (ADR-0007)."
     },
     {
       "name": "steps-rail",
@@ -850,7 +862,7 @@
       "name": "whiteboard",
       "type": "registry:ui",
       "title": "Whiteboard",
-      "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @usetheo/ui."
+      "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @theokit/ui."
     }
   ]
 }

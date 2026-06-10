@@ -19,7 +19,7 @@ The skill's primary failure mode: hand-rolling UI that the library already ships
 </button>
 
 // RIGHT
-import { Button } from "@usetheo/ui/button";
+import { Button } from "@theokit/ui/button";
 <Button variant="primary">Save</Button>
 ```
 
@@ -34,7 +34,7 @@ Reason: `<Button>` already handles hover, focus-visible, active, disabled, loadi
 </div>
 
 // RIGHT
-import { Card } from "@usetheo/ui/card";
+import { Card } from "@theokit/ui/card";
 <Card>
   <Card.Header>
     <Card.Title>Title</Card.Title>
@@ -52,7 +52,7 @@ import { Card } from "@usetheo/ui/card";
 </div>
 
 // RIGHT
-import { Dialog } from "@usetheo/ui/dialog";
+import { Dialog } from "@theokit/ui/dialog";
 <Dialog open={open} onOpenChange={setOpen}>
   <Dialog.Content>
     <Dialog.Header><Dialog.Title>…</Dialog.Title></Dialog.Header>
@@ -70,7 +70,7 @@ Reason: Radix-backed `<Dialog>` handles focus trap, escape-to-close, return-focu
 <table><thead><tr>…</tr></thead><tbody>{rows.map(…)}</tbody></table>
 
 // RIGHT
-import { DataTable } from "@usetheo/ui/data-table";
+import { DataTable } from "@theokit/ui/data-table";
 <DataTable
   columns={[
     { key: "name", label: "Name", sortable: true },
@@ -96,7 +96,7 @@ return (
 );
 
 // RIGHT
-import { DropdownMenu } from "@usetheo/ui/dropdown-menu";
+import { DropdownMenu } from "@theokit/ui/dropdown-menu";
 <DropdownMenu>
   <DropdownMenu.Trigger asChild>
     <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
@@ -117,7 +117,7 @@ import { DropdownMenu } from "@usetheo/ui/dropdown-menu";
 </div>
 
 // RIGHT
-import { ChatMessage } from "@usetheo/ui/chat-message";
+import { ChatMessage } from "@theokit/ui/chat-message";
 <ChatMessage role="assistant" parts={[{ type: "text", text: message }]} />
 ```
 

@@ -1,6 +1,6 @@
 # Baseline: Density Audit (2026-05-22)
 
-Snapshot **pré-tightening** das dimensões atuais do `@usetheo/ui@0.2.0-next.0` vs sites FAANG-tier de referência (Linear / Vercel / Stripe / shadcn / Mantine).
+Snapshot **pré-tightening** das dimensões atuais do `@theokit/ui@0.2.0-next.0` vs sites FAANG-tier de referência (Linear / Vercel / Stripe / shadcn / Mantine).
 
 ## Form controls
 

@@ -1,6 +1,6 @@
 # Plan: `Whiteboard` — view-only primitive (JSON → SVG, estilo Excalidraw)
 
-> **Version 1.0** — Entrega o primitive `Whiteboard` em `@usetheo/ui/whiteboard` como **view declarativo**: recebe um JSON pequeno e LLM-friendly e renderiza em SVG com o look hand-drawn do Excalidraw (rough.js para shapes, perfect-freehand para strokes). Não é editor — sem toolbar, sem drag/resize, sem undo/redo, sem hit-testing. Tem pan+zoom built-in para navegar diagramas grandes. Subpath isolado de bundle, peer-deps opcionais, fora do barrel principal. Outcome esperado: agente do TheoKit/TheoCode emite uma `tool_call` com `{"type": "whiteboard", "data": {...}}` e a UI renderiza imediatamente — análogo ao papel do `Diagram` (Mermaid-like) já no roadmap, mas com a estética Excalidraw em vez de fluxograma estruturado.
+> **Version 1.0** — Entrega o primitive `Whiteboard` em `@theokit/ui/whiteboard` como **view declarativo**: recebe um JSON pequeno e LLM-friendly e renderiza em SVG com o look hand-drawn do Excalidraw (rough.js para shapes, perfect-freehand para strokes). Não é editor — sem toolbar, sem drag/resize, sem undo/redo, sem hit-testing. Tem pan+zoom built-in para navegar diagramas grandes. Subpath isolado de bundle, peer-deps opcionais, fora do barrel principal. Outcome esperado: agente do TheoKit/TheoCode emite uma `tool_call` com `{"type": "whiteboard", "data": {...}}` e a UI renderiza imediatamente — análogo ao papel do `Diagram` (Mermaid-like) já no roadmap, mas com a estética Excalidraw em vez de fluxograma estruturado.
 
 ## Context
 
@@ -30,9 +30,9 @@ O componente é **view-only**, focado em consumir JSON gerado por LLM e renderiz
 
 ## Objective
 
-**Done = `pnpm quality:gates` verde com o subpath `@usetheo/ui/whiteboard` exportando um componente que renderiza o JSON v1 (com pan/zoom) em SVG estilo Excalidraw, sem alterar o bundle baseline do barrel principal.** Especificamente:
+**Done = `pnpm quality:gates` verde com o subpath `@theokit/ui/whiteboard` exportando um componente que renderiza o JSON v1 (com pan/zoom) em SVG estilo Excalidraw, sem alterar o bundle baseline do barrel principal.** Especificamente:
 
-1. `@usetheo/ui/whiteboard` resolve para um arquivo `dist/whiteboard/index.js` próprio (não re-export do barrel) e funciona sem que o consumer instale `roughjs`/`perfect-freehand` (lazy loaded via dynamic import dentro do subpath).
+1. `@theokit/ui/whiteboard` resolve para um arquivo `dist/whiteboard/index.js` próprio (não re-export do barrel) e funciona sem que o consumer instale `roughjs`/`perfect-freehand` (lazy loaded via dynamic import dentro do subpath).
 2. JSON v1 (formato `WhiteboardScene`) é definido com Zod, validável e documentado com exemplos LLM-friendly.
 3. 7 tipos de elementos renderizam corretamente: `rect`, `ellipse`, `diamond`, `line`, `arrow`, `text`, `freedraw`.
 4. Pan (drag com mouse esquerdo OU middle-click) + zoom (wheel) funcionam built-in via transformação de `viewBox`.
@@ -50,11 +50,11 @@ O componente é **view-only**, focado em consumir JSON gerado por LLM e renderiz
 
 ### D2 — rough.js + perfect-freehand como peer-deps opcionais
 - **Decisão:** Adicionar `roughjs@4.6.6` e `perfect-freehand@1.2.3` como `peerDependencies` + `peerDependenciesMeta.optional=true`. Mantidos em `devDependencies` para build/test locais.
-- **Rationale:** Consumer que **não** importa `@usetheo/ui/whiteboard` não baixa essas libs. Consumer que importa, instala explicitamente — sinaliza intent. Optional peerDep evita warnings espúrios no `npm install` de quem só usa o barrel. CLAUDE.md TheoUI Roadmap exige exatamente isso: "Plan a subpath import (`@usetheo/ui/whiteboard`) with peer-dep opt-in".
+- **Rationale:** Consumer que **não** importa `@theokit/ui/whiteboard` não baixa essas libs. Consumer que importa, instala explicitamente — sinaliza intent. Optional peerDep evita warnings espúrios no `npm install` de quem só usa o barrel. CLAUDE.md TheoUI Roadmap exige exatamente isso: "Plan a subpath import (`@theokit/ui/whiteboard`) with peer-dep opt-in".
 - **Consequences:** Habilita bundle isolation real. Constrange: subpath precisa documentar claramente os requisitos de instalação ("Install peers: `pnpm add roughjs perfect-freehand`").
 
 ### D3 — Subpath isolado com bundle próprio (não re-export do barrel)
-- **Decisão:** `@usetheo/ui/whiteboard` aponta para `./dist/whiteboard/index.js` — um bundle separado emitido pelo `tsup` com entry `src/components/primitives/whiteboard/index.ts`. NÃO entra no barrel `src/index.ts`. `sync-exports.ts` ganha um array `ISOLATED_SUBPATHS` que escapa do scan automático de `src/index.ts`.
+- **Decisão:** `@theokit/ui/whiteboard` aponta para `./dist/whiteboard/index.js` — um bundle separado emitido pelo `tsup` com entry `src/components/primitives/whiteboard/index.ts`. NÃO entra no barrel `src/index.ts`. `sync-exports.ts` ganha um array `ISOLATED_SUBPATHS` que escapa do scan automático de `src/index.ts`.
 - **Rationale:** Os 99 subpaths atuais re-exportam o mesmo `dist/index.js` — tree-shaking faz o trabalho. Para Whiteboard isso não basta: o consumer do barrel arrastaria `roughjs` + `perfect-freehand` mesmo sem usar (porque o barrel re-exportaria). Bundle separado garante zero impacto no `quality:bundle` do barrel. O custo é uma exceção no `sync-exports.ts` — explícita e auditável.
 - **Consequences:** Habilita: `quality:bundle` baseline permanece intacto; consumers do barrel não pagam pelo Whiteboard. Constrange: `tsup` ganha entry adicional (build mais lento por ~1s); `sync-exports.ts` ganha complexidade (passa de scanner-only para scanner+overrides); `validateExportsMap` precisa aceitar o subpath isolado sem flagrar drift.
 
@@ -80,7 +80,7 @@ O componente é **view-only**, focado em consumir JSON gerado por LLM e renderiz
 
 ### D8 — Whiteboard fora do barrel `src/index.ts` E fora do census
 - **Decisão:** Não adicionar `export { Whiteboard } from "./components/primitives/whiteboard/index.js"` no barrel. Whiteboard não conta no badge `components-N` do README, não aparece em `docs/architecture.md` Census, e não passa por `validateAxeCoverage`.
-- **Rationale:** O barrel é o pacote "tudo junto" que carrega no `import { Anything } from "@usetheo/ui"`. Engines pesadas (Whiteboard, Slide, SlideDeck, Diagram) vivem em subpaths dedicados. Isso é literalmente o que CLAUDE.md TheoUI §Roadmap exige: "do not include in the main barrel". O census reflete o barrel; subpaths isolados são documentados em README separado (`### Engines (subpath imports)` ou similar).
+- **Rationale:** O barrel é o pacote "tudo junto" que carrega no `import { Anything } from "@theokit/ui"`. Engines pesadas (Whiteboard, Slide, SlideDeck, Diagram) vivem em subpaths dedicados. Isso é literalmente o que CLAUDE.md TheoUI §Roadmap exige: "do not include in the main barrel". O census reflete o barrel; subpaths isolados são documentados em README separado (`### Engines (subpath imports)` ou similar).
 - **Consequences:** Habilita: census e badge ficam estáveis; futuras engines seguem mesmo padrão. Constrange: README precisa de seção própria para listar engines. `validateReadmeDrift` precisa whitelist-ar `Whiteboard` (ou a seção fica fora dos backticks que ele inspeciona).
 
 ### D9 — Seed determinístico em rough.js para evitar re-renders "tremulantes"
@@ -251,7 +251,7 @@ Declarar `roughjs` e `perfect-freehand` como peer-deps opcionais, mantendo-os em
 #### Evidence
 - `package.json:453-456` tem `peerDependencies` só com react/react-dom hoje.
 - `peerDependenciesMeta.optional=true` é o padrão npm/pnpm para "peer opcional, sem warning se ausente".
-- Sem essa declaração, consumer que use `@usetheo/ui/whiteboard` precisa adivinhar quais peers instalar.
+- Sem essa declaração, consumer que use `@theokit/ui/whiteboard` precisa adivinhar quais peers instalar.
 
 #### Files to edit
 ```
@@ -466,7 +466,7 @@ CHANGELOG.md                                                  — adicionar entr
 ```
 
 #### Tasks
-1. Adicionar bullet em `[Unreleased] > Added`: "**Whiteboard primitive — Phase 0 (scaffold)**. Subpath `@usetheo/ui/whiteboard` esqueleto com bundle isolado, peer-deps opcionais (`roughjs`, `perfect-freehand`), RFC `docs/rfcs/0001-whiteboard.md` em `Proposed`. View-only render de JSON LLM-friendly estilo Excalidraw, com pan/zoom built-in. (#TBD)"
+1. Adicionar bullet em `[Unreleased] > Added`: "**Whiteboard primitive — Phase 0 (scaffold)**. Subpath `@theokit/ui/whiteboard` esqueleto com bundle isolado, peer-deps opcionais (`roughjs`, `perfect-freehand`), RFC `docs/rfcs/0001-whiteboard.md` em `Proposed`. View-only render de JSON LLM-friendly estilo Excalidraw, com pan/zoom built-in. (#TBD)"
 2. Confirmar que `validateGovernanceFiles` continua passando (procura `## [Unreleased]`).
 
 #### TDD
@@ -1198,7 +1198,7 @@ scripts/validate-bundle-size.ts                               — adicionar veri
 
 ### Execution
 
-1. **Playground integration:** adicionar `playground/whiteboard-demo.tsx` que importa `import { Whiteboard } from "@usetheo/ui/whiteboard"` (via path resolution local), passa um JSON gerado por uma LLM (Claude Sonnet, prompt: "produza um diagrama de arquitetura simples no formato `{version:1, width, height, elements:[]}` com 5-10 elementos"), valida que renderiza sem erros e parece correto visualmente.
+1. **Playground integration:** adicionar `playground/whiteboard-demo.tsx` que importa `import { Whiteboard } from "@theokit/ui/whiteboard"` (via path resolution local), passa um JSON gerado por uma LLM (Claude Sonnet, prompt: "produza um diagrama de arquitetura simples no formato `{version:1, width, height, elements:[]}` com 5-10 elementos"), valida que renderiza sem erros e parece correto visualmente.
 2. **Self-pack install:** `pnpm pack && cd /tmp/install-test && pnpm init && pnpm add ../theo-ui/usetheo-ui-*.tgz roughjs perfect-freehand` — confirmar resolução do subpath.
 3. **Browser smoke:** abrir `playground:build` em browser, exercitar pan+zoom em uma scene grande (50+ elementos), checar 60fps em devtools performance tab.
 

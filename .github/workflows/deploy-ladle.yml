@@ -1,0 +1,56 @@
+name: Deploy Ladle catalog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - ".ladle/**"
+      - "package.json"
+      - "wrangler.toml"
+      - ".github/workflows/deploy-ladle.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify story coverage (EC-5 + drift gate)
+        run: |
+          pnpm inventory
+          pnpm stories:check
+
+      - name: Build Ladle
+        # EC-14 absorbed: build runs in the workflow before any deploy step.
+        # Without this, pages would deploy stale ./build/ from git history.
+        run: pnpm ladle:build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: theo-ui
+          directory: build
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

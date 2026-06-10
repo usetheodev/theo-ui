@@ -14,7 +14,7 @@ export const Variants: Story = () => (
       <Label htmlFor="email" required>
         Email
       </Label>
-      <Input id="email" type="email" placeholder="you@usetheo.dev" />
+      <Input id="email" type="email" placeholder="you@theokit.dev" />
     </div>
     <div className="grid gap-2 opacity-60">
       <Label htmlFor="readonly">Disabled field</Label>

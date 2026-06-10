@@ -35,7 +35,7 @@
 
 ## Objective
 
-**Done = `import { dracula, oneDark, anthropic, openai, vercel, linear, githubDark } from "@usetheo/ui"` resolve, cada tema é um `Theme` válido (passa Zod-style runtime shape check), `<ThemeProvider themes={builtinThemes}>` registra 10 entries no `<ThemeSwitcher>`, e cada tema renderiza um Button + Card + Input sem violações WCAG 2.5.8 AA contrast (4.5:1 body / 3:1 large) em ambos os modos.**
+**Done = `import { dracula, oneDark, anthropic, openai, vercel, linear, githubDark } from "@theokit/ui"` resolve, cada tema é um `Theme` válido (passa Zod-style runtime shape check), `<ThemeProvider themes={builtinThemes}>` registra 10 entries no `<ThemeSwitcher>`, e cada tema renderiza um Button + Card + Input sem violações WCAG 2.5.8 AA contrast (4.5:1 body / 3:1 large) em ambos os modos.**
 
 Concretamente:
 
@@ -316,7 +316,7 @@ VERIFY:  pnpm test src/themes/vercel
 ```
 
 #### Acceptance Criteria
-- [ ] `import { vercel } from "@usetheo/ui"` resolve
+- [ ] `import { vercel } from "@theokit/ui"` resolve
 - [ ] WCAG AA passa em ambos modos
 
 ---
@@ -535,7 +535,7 @@ Status `Implemented`. Lista os 7 com fonte canonical, ADRs D1-D4.
 
 ### T10.4 — Publish `0.4.0-next.0` to npm
 
-**Pre-condition (EC-5):** confirm npm token autenticado e com `read+write @usetheo/*` permission:
+**Pre-condition (EC-5):** confirm npm token autenticado e com `read+write @theokit/*` permission:
 ```bash
 curl -sH "Authorization: Bearer $NPM_TOKEN" https://registry.npmjs.org/-/whoami | jq -r .username
 # Must return "usetheodev"
@@ -616,8 +616,8 @@ Validar `docs.usetheo.dev/theoui/theming` mostra 10 themes; switcher funciona; c
 3. `pnpm pages:build` exit 0; output contém 10 themes
 4. Deploy via `wrangler pages deploy out`
 5. Browse smoke: `https://docs.usetheo.dev/theoui/theming/` — switcher mostra 10 entries; click em `dracula` recolora preview (Button vira pink, Card escurece); click em `vercel` (preview vira branco/preto com blue Button); switch para `anthropic` (cream + burnt sienna)
-6. `npm publish --tag next` publica `@usetheo/ui@0.4.0-next.0`
-7. `npm view @usetheo/ui versions` mostra `0.4.0-next.0` na lista
+6. `npm publish --tag next` publica `@theokit/ui@0.4.0-next.0`
+7. `npm view @theokit/ui versions` mostra `0.4.0-next.0` na lista
 
 ### Acceptance Criteria
 - [ ] Health score >= 70/100

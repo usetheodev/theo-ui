@@ -1,5 +1,5 @@
-import { Button } from "@usetheo/ui";
-import { type ValidationError, Whiteboard } from "@usetheo/ui/whiteboard";
+import { Button } from "@theokit/ui";
+import { type ValidationError, Whiteboard } from "@theokit/ui/whiteboard";
 import { useState } from "react";
 import { SCENES, type SceneFixture } from "./whiteboard-scenes.js";
 
@@ -61,7 +61,6 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
           </summary>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
             {errors.slice(0, 5).map((e, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: validation errors are positional and stable for a given input.
               <li key={`${e.path}-${i}`}>
                 <code className="text-foreground">{e.path || "(root)"}</code> — {e.message}
                 {e.got !== undefined ? (

@@ -14,7 +14,7 @@ A worked example of the default verb building a P4 ChatSurface. Skim before tack
 
 ```
 Pre-flight findings:
-- @usetheo/ui: 0.12.0-next.0
+- @theokit/ui: 0.12.0-next.0
 - Tailwind preset: loaded
 - ThemeProvider: violet-forge, density=comfortable
 - React: 19
@@ -66,12 +66,12 @@ User says: *"surface=agent-chat, use=interactive code assistant chat, density=co
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare } from "lucide-react";
 
-import { ChatThread } from "@usetheo/ui/chat-thread";
-import { ChatMessage } from "@usetheo/ui/chat-message";
-import { ChatComposer } from "@usetheo/ui/chat-composer";
-import { AgentStreaming } from "@usetheo/ui/agent-streaming";
-import { RunStats } from "@usetheo/ui/run-stats";
-import { EmptyState } from "@usetheo/ui/empty-state";
+import { ChatThread } from "@theokit/ui/chat-thread";
+import { ChatMessage } from "@theokit/ui/chat-message";
+import { ChatComposer } from "@theokit/ui/chat-composer";
+import { AgentStreaming } from "@theokit/ui/agent-streaming";
+import { RunStats } from "@theokit/ui/run-stats";
+import { EmptyState } from "@theokit/ui/empty-state";
 
 import { useChat } from "@/hooks/useChat";
 
@@ -187,7 +187,7 @@ Build complete: src/app/chat/page.tsx (62 lines, replaces 184-line hand-rolled v
 
 Next steps:
 - Deprecate src/components/Message.tsx (old bubble component) — replaced by <ChatMessage>.
-- Wire the parts array shape from your existing backend to match the @usetheo/ui spec.
+- Wire the parts array shape from your existing backend to match the @theokit/ui spec.
 - If you need an agent-history sidebar, add <CommandPalette> as a left rail.
 - For the agent editor surface, see P5 AgentEditor archetype.
 ```

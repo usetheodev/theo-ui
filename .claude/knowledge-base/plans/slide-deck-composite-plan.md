@@ -2,12 +2,12 @@
 
 > **Version 1.1** (2026-05-19 — incorporates `/edge-case-plan` MUST FIX: frontmatter strip em splitDeck, popup blocker guard no presenter, transition timeout fallback, slides prop reconciliation, SSR hash lazy init). Edge case review: `.claude/knowledge-base/reviews/edge-cases/slide-deck-composite-edge-cases-2026-05-19.md`.
 
-> **Version 1.0** — Entrega o `<SlideDeck>` em `@usetheo/ui/slide-deck` como **composite engine** que orquestra N `<Slide>` primitives com navegação (keyboard + touch + hash routing), thumbnails sidebar, presenter view (notas + próximo slide + timer), fullscreen, transições CSS, progressive fragments e PDF export via `window.print()`. Reusa o subpath `@usetheo/ui/slide` já shipado (RFC 0002) — mesmas peer-deps markdown, bundle isolado próprio, fora do barrel principal. Outcome esperado: agente do TheoCode/TheoKit emite um deck multi-slide markdown e o consumer obtém uma apresentação PowerPoint-like operável sem instalar Reveal.js / Marp / impress.js. Tier 3 do roadmap discutido com o usuário em 2026-05-19.
+> **Version 1.0** — Entrega o `<SlideDeck>` em `@theokit/ui/slide-deck` como **composite engine** que orquestra N `<Slide>` primitives com navegação (keyboard + touch + hash routing), thumbnails sidebar, presenter view (notas + próximo slide + timer), fullscreen, transições CSS, progressive fragments e PDF export via `window.print()`. Reusa o subpath `@theokit/ui/slide` já shipado (RFC 0002) — mesmas peer-deps markdown, bundle isolado próprio, fora do barrel principal. Outcome esperado: agente do TheoCode/TheoKit emite um deck multi-slide markdown e o consumer obtém uma apresentação PowerPoint-like operável sem instalar Reveal.js / Marp / impress.js. Tier 3 do roadmap discutido com o usuário em 2026-05-19.
 
 ## Context
 
 **Estado em 2026-05-19:**
-- `<Slide>` primitive shipado em 2026-05-19 (RFC 0002, plan `slide-view-primitive-plan.md`). Subpath `@usetheo/ui/slide`, bundle isolado (~13 KB), markdown + frontmatter → React tree temado.
+- `<Slide>` primitive shipado em 2026-05-19 (RFC 0002, plan `slide-view-primitive-plan.md`). Subpath `@theokit/ui/slide`, bundle isolado (~13 KB), markdown + frontmatter → React tree temado.
 - `<Slide>` é **single-slide only** por contrato (D5 de RFC 0002): input multi-slide (contém top-level `thematicBreak`) dispara `MULTIPLE_SLIDES` validation error e renderiza só o primeiro slide. **Não há cobertura para deck.**
 - Whiteboard primitive shipado em 2026-05-18 (RFC 0001) estabeleceu o pattern de engine isolada: subpath dedicado, peer-deps opcionais, fora do barrel + census.
 - Demo do Slide existe (`playground/slide-demo.tsx`) renderizando 11 cenas single-slide. Não há demo de deck.
@@ -19,8 +19,8 @@ SlideDeck é a **camada "experiência PowerPoint"** acima do Slide. Decisões pr
 
 | Decisão | Travada |
 | --- | --- |
-| Empacotamento | **Subpath isolado** `@usetheo/ui/slide-deck` (não barrel) — composite mas com engine peer-deps |
-| Dependências novas | **Zero** — reutiliza as 7 peer-deps de `@usetheo/ui/slide` + roll-our-own para hotkeys, swipe, transitions |
+| Empacotamento | **Subpath isolado** `@theokit/ui/slide-deck` (não barrel) — composite mas com engine peer-deps |
+| Dependências novas | **Zero** — reutiliza as 7 peer-deps de `@theokit/ui/slide` + roll-our-own para hotkeys, swipe, transitions |
 | Deck splitter | **Reutiliza algoritmo mdast** do `validateSlide` (D12 do Slide) — mesma quebra por `thematicBreak` |
 | Presenter view | **`window.open()` + `BroadcastChannel`** para sync entre janelas (fallback `localStorage` para Safari antigo) |
 | PDF export | **`window.print()` + `@page` CSS** — sem headless chrome, sem marp-cli |
@@ -40,9 +40,9 @@ SlideDeck é a **camada "experiência PowerPoint"** acima do Slide. Decisões pr
 
 ## Objective
 
-**Done = `pnpm quality:gates` verde com o subpath `@usetheo/ui/slide-deck` exportando `<SlideDeck>` que renderiza um array de slides com navegação completa, sem alterar o bundle baseline do barrel principal nem do subpath Slide.** Especificamente:
+**Done = `pnpm quality:gates` verde com o subpath `@theokit/ui/slide-deck` exportando `<SlideDeck>` que renderiza um array de slides com navegação completa, sem alterar o bundle baseline do barrel principal nem do subpath Slide.** Especificamente:
 
-1. `@usetheo/ui/slide-deck` resolve para `dist/slide-deck/index.js` próprio, bundle target **< 25 KB gzipped** sem peer-deps embutidas.
+1. `@theokit/ui/slide-deck` resolve para `dist/slide-deck/index.js` próprio, bundle target **< 25 KB gzipped** sem peer-deps embutidas.
 2. `<SlideDeck>` aceita prop `slides` em DUAS formas: string markdown completa (split automático em `---`) OU array `SlideDeckSlide[]` pre-parsed.
 3. Navegação **keyboard** funciona out-of-the-box: ← prev, → next, Space next, Home first, End last, Esc exit fullscreen, F fullscreen, N presenter, P presenter alias.
 4. Navegação **touch** funciona em mobile: swipe left → next, swipe right → prev (threshold 50px, velocity > 0.3 px/ms).
@@ -64,9 +64,9 @@ SlideDeck é a **camada "experiência PowerPoint"** acima do Slide. Decisões pr
 ## ADRs
 
 ### D1 — Subpath isolado `dist/slide-deck/` (não barrel, não junto com Slide)
-- **Decisão:** SlideDeck ship em `@usetheo/ui/slide-deck` com bundle próprio. NÃO entra no barrel `src/index.ts`. NÃO mergeia no bundle do `@usetheo/ui/slide`.
+- **Decisão:** SlideDeck ship em `@theokit/ui/slide-deck` com bundle próprio. NÃO entra no barrel `src/index.ts`. NÃO mergeia no bundle do `@theokit/ui/slide`.
 - **Rationale:** (a) Consumer que só usa `<Slide>` single-slide não paga o custo do deck (navigation, presenter, thumbnails ≈ ~12 KB adicionais); (b) Mesma infra de ISOLATED_SUBPATHS já existe (sync-exports.ts, tsup multi-entry); (c) Padrão consistente com Whiteboard + Slide — engines isoladas; (d) Composite-em-barrel quebraria a regra de bundle isolation (CLAUDE.md TheoUI §Roadmap).
-- **Consequences:** Habilita: zero impacto em consumer Slide-only. Constrange: SlideDeck precisa import Slide via `@usetheo/ui/slide` (mesmo path público do consumer) — sem atalho para src interno. Tsup config ganha mais um entry.
+- **Consequences:** Habilita: zero impacto em consumer Slide-only. Constrange: SlideDeck precisa import Slide via `@theokit/ui/slide` (mesmo path público do consumer) — sem atalho para src interno. Tsup config ganha mais um entry.
 
 ### D2 — Zero peer-deps novas além das que Slide já declara
 - **Decisão:** SlideDeck NÃO adiciona nenhuma peer-dep ao `package.json`. Reusa as 7 markdown peer-deps de Slide. Hotkeys, swipe, transitions, broadcast — todos implementados em ~30-50 LOC cada.
@@ -207,7 +207,7 @@ Annotations:
 ### T0.1 — Adicionar `./slide-deck` em `ISOLATED_SUBPATHS`
 
 #### Objective
-Registrar `@usetheo/ui/slide-deck` em `scripts/sync-exports.ts` mirrorando Whiteboard + Slide.
+Registrar `@theokit/ui/slide-deck` em `scripts/sync-exports.ts` mirrorando Whiteboard + Slide.
 
 #### Evidence
 - `scripts/sync-exports.ts:65` já tem `ISOLATED_SUBPATHS` com 2 entries (`./whiteboard`, `./slide`). Pattern estabelecido.
@@ -276,7 +276,7 @@ Adicionar entry `slide-deck/index` em `tsup.config.ts`. Reusa externals do Slide
 
 #### Files to edit
 ```
-tsup.config.ts — adicionar entry "slide-deck/index" + (opcionalmente) externalizar @usetheo/ui/slide se quisermos lazy
+tsup.config.ts — adicionar entry "slide-deck/index" + (opcionalmente) externalizar @theokit/ui/slide se quisermos lazy
 ```
 
 #### Deep file dependency analysis
@@ -284,10 +284,10 @@ tsup.config.ts — adicionar entry "slide-deck/index" + (opcionalmente) external
 - **Downstream:** `dist/slide-deck/index.{js,d.ts}` existe após build. Baseline JSON (T0.3) registra esses arquivos novos.
 
 #### Deep Dives
-- Decision point: importar `<Slide>` via path source (`../slide/index.js`) ou via package name (`@usetheo/ui/slide`)?
-  - Source path = direct, mas tsup precisa NÃO vendorizar (externalizar `@usetheo/ui/slide`).
-  - Package path = mesma coisa do consumer, mas requer alias no build OU tsup config para externalize `@usetheo/ui/slide`.
-- **Decisão (sub-ADR):** Importar via source path `../slide/index.js` e adicionar `@usetheo/ui` paths à external list para qualquer self-import. Mais simples.
+- Decision point: importar `<Slide>` via path source (`../slide/index.js`) ou via package name (`@theokit/ui/slide`)?
+  - Source path = direct, mas tsup precisa NÃO vendorizar (externalizar `@theokit/ui/slide`).
+  - Package path = mesma coisa do consumer, mas requer alias no build OU tsup config para externalize `@theokit/ui/slide`.
+- **Decisão (sub-ADR):** Importar via source path `../slide/index.js` e adicionar `@theokit/ui` paths à external list para qualquer self-import. Mais simples.
 - **Invariante:** `dist/slide-deck/index.js` NÃO contém bytes de `dist/slide/index.js` — Slide carrega via `import` dinâmica.
 
 #### Tasks
@@ -341,7 +341,7 @@ scripts/dogfood-slide-deck.ts (NEW) — script de dogfood mirror de dogfood-slid
 
 #### Deep Dives
 - Script dogfood-slide-deck.ts strategy:
-  - Importar `@usetheo/ui/slide-deck` do dist
+  - Importar `@theokit/ui/slide-deck` do dist
   - Cenário 1: deck simple (3 slides) renderiza primeiro slide SSR
   - Cenário 2: `splitDeck(markdown)` retorna array correto
   - Cenário 3: speaker notes extraction do `<!-- notes: ... -->`
@@ -505,7 +505,7 @@ CHANGELOG.md
 ```
 
 #### Deep Dives
-- Estrutura mirror do Slide entry. Inclui menção a `@usetheo/ui/slide-deck`, RFC 0003, dependências reusadas de Slide.
+- Estrutura mirror do Slide entry. Inclui menção a `@theokit/ui/slide-deck`, RFC 0003, dependências reusadas de Slide.
 
 #### Tasks
 1. Editar CHANGELOG.md adicionando bullet em `[Unreleased] > Added` (acima do bullet do Slide).
@@ -616,7 +616,7 @@ src/components/composites/slide-deck/notes.ts — extractor de <!-- notes: ... -
   ```ts
   async function splitDeck(markdown: string): Promise<SlideDeckSlide[]> {
     // D15: strip frontmatter first, mirror Slide validateSlide D12.
-    // Reuse extractFrontmatter from @usetheo/ui/slide (same package family).
+    // Reuse extractFrontmatter from @theokit/ui/slide (same package family).
     const { extractFrontmatter } = await import("../slide/frontmatter.js");
     const { body: bodyAfterFM } = extractFrontmatter(markdown);
     const { fromMarkdown } = await import("mdast-util-from-markdown");
@@ -1748,7 +1748,7 @@ Adicionar aba "Slide Deck" no playground (mirror das abas Slide e Whiteboard).
 playground/slide-deck-demo.tsx (NEW) — main demo component
 playground/slide-deck-scenes.ts (NEW) — cenas representativas
 playground/main.tsx — adicionar aba slide-deck
-playground/vite.config.ts — adicionar aliases @usetheo/ui/slide-deck
+playground/vite.config.ts — adicionar aliases @theokit/ui/slide-deck
 ```
 
 #### Deep Dives
@@ -1792,11 +1792,11 @@ README.md — adicionar bloco de install + import + status table
 - Bloco mirror de Slide:
   ```bash
   # SlideDeck — multi-slide deck w/ navigation, presenter, fullscreen, PDF
-  pnpm add @usetheo/ui mdast-util-from-markdown mdast-util-gfm ...
+  pnpm add @theokit/ui mdast-util-from-markdown mdast-util-gfm ...
   ```
 - Status table linha:
   ```
-  | SlideDeck (multi-slide deck, navigation + presenter + PDF) | `@usetheo/ui/slide-deck` | Available | [RFC 0003](./docs/rfcs/0003-slide-deck.md) |
+  | SlideDeck (multi-slide deck, navigation + presenter + PDF) | `@theokit/ui/slide-deck` | Available | [RFC 0003](./docs/rfcs/0003-slide-deck.md) |
   ```
 
 #### Tasks
@@ -1933,7 +1933,7 @@ Rodar `pnpm quality:gates`. Garantir 13 gates verdes (12 anteriores + dogfood:sl
 
 | # | Gap / Requirement | Task(s) | Resolution |
 |---|---|---|---|
-| 1 | Subpath isolation `@usetheo/ui/slide-deck` | T0.1, T0.2, T0.3 | ISOLATED_SUBPATHS + tsup entry + baseline |
+| 1 | Subpath isolation `@theokit/ui/slide-deck` | T0.1, T0.2, T0.3 | ISOLATED_SUBPATHS + tsup entry + baseline |
 | 2 | Zero new peer-deps (reusa Slide) | D2, T0.3 | package.json sem novas entries |
 | 3 | Slides input como string OR array | D4, T1.1 | slideDeckInput union schema |
 | 4 | splitDeck via mdast (mirror Slide D12) | D3, T1.2 | mdast-util-from-markdown walker |

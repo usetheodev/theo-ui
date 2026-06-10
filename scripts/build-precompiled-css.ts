@@ -9,14 +9,14 @@ import { spawnSync } from "node:child_process";
  * included) to `dist/components.css`.
  *
  * `dist/styles.css` is then amended to `@import "./components.css"`,
- * so a single `@import "@usetheo/ui/styles.css"` in the consumer's CSS
+ * so a single `@import "@theokit/ui/styles.css"` in the consumer's CSS
  * pulls in every utility the library uses — no filesystem scanning,
  * no symlink dependency, no package-manager fragility.
  *
  * Why this exists: Tailwind v4's `@source` glob does not follow
- * symlinks. Under pnpm, `node_modules/@usetheo/ui` is a symlink to a
+ * symlinks. Under pnpm, `node_modules/@theokit/ui` is a symlink to a
  * deep `.pnpm` content-hash directory, and the consumer-side
- * `@source "node_modules/@usetheo/ui/dist/**\/*.{js,mjs,cjs}"` pattern
+ * `@source "node_modules/@theokit/ui/dist/**\/*.{js,mjs,cjs}"` pattern
  * expands to zero files. Pre-compiling at the library side fixes that
  * for every consumer regardless of package manager.
  *
@@ -56,8 +56,32 @@ async function ensureDistDir(): Promise<void> {
   await mkdir(join(ROOT, "dist"), { recursive: true });
 }
 
+async function ensureTailwindV4Resolvable(): Promise<void> {
+  // EC-9 (2026-05-28) — `tailwindcss-animate@1.0.7` peer-dep `tailwindcss@^3`
+  // pulls v3 into pnpm's hoist (`node_modules/tailwindcss -> .pnpm/tailwindcss@3.x`).
+  // When `@tailwindcss/cli@4` resolves `@import "tailwindcss"` from the input
+  // CSS file's directory, it walks UP from `src/styles/` and finds the v3
+  // hoist first → "Can't resolve tailwindcss" because v3 isn't the v4 entry
+  // shape. Place a v4 symlink AT the input file's directory level so v4
+  // wins the resolution race. Idempotent.
+  const stylesNm = join(ROOT, "src/styles/node_modules");
+  const linkPath = join(stylesNm, "tailwindcss");
+  const v4Target = join(ROOT, "node_modules/.pnpm/tailwindcss@4.3.0/node_modules/tailwindcss");
+  if (!existsSync(v4Target)) {
+    throw new Error(
+      `[build-precompiled-css] tailwindcss@4 not found at expected pnpm path ${v4Target}. Run \`pnpm install\`.`,
+    );
+  }
+  await mkdir(stylesNm, { recursive: true });
+  if (!existsSync(linkPath)) {
+    const { symlinkSync } = await import("node:fs");
+    symlinkSync(v4Target, linkPath, "dir");
+  }
+}
+
 async function compileUtilities(): Promise<void> {
   const cli = resolveTailwindCliBinary();
+  await ensureTailwindV4Resolvable();
   const inputPath = join(ROOT, "src/styles/components-entry.css");
   const outputPath = join(ROOT, "dist/components.css");
 

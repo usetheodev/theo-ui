@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
+import { isDev } from "../../../lib/env.js";
 import { useInLiveRegion } from "../../../lib/live-region-context.js";
 
 export type LogLevel = "info" | "warn" | "error" | "success" | "debug";
@@ -99,7 +100,7 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
     // `defaultValue` on form inputs but doesn't see our custom prop pair.
     const wasControlled = useRef<boolean | null>(null);
     useEffect(() => {
-      if (typeof process === "undefined" || process.env.NODE_ENV === "production") return;
+      if (!isDev()) return;
       const isControlled = visibleLevels !== undefined;
       if (wasControlled.current === null) {
         wasControlled.current = isControlled;
@@ -108,7 +109,7 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
       if (wasControlled.current !== isControlled) {
         // biome-ignore lint/suspicious/noConsole: dev-only diagnostic (MEDIUM-002)
         console.warn(
-          `[@usetheo/ui] BuildLogStream: \`visibleLevels\` prop switched between ${
+          `[@theokit/ui] BuildLogStream: \`visibleLevels\` prop switched between ${
             wasControlled.current ? "controlled" : "uncontrolled"
           } and ${isControlled ? "controlled" : "uncontrolled"} between renders. Pick one mode and keep it consistent.`,
         );

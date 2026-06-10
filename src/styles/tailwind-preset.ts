@@ -29,7 +29,11 @@
 import type { Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
 
-const hsl = (token: string) => `hsl(var(${token}) / <alpha-value>)`;
+// Post-T2.4 (ADR-0005): tokens are OKLCH. The previous `hsl(var(--x) / <alpha>)`
+// pattern resolves to `hsl(oklch(...))` which is invalid CSS — utilities
+// silently fall back to transparent. OKLCH relative-color syntax preserves
+// Tailwind's `<alpha-value>` slot for opacity modifiers (e.g. `bg-primary/50`).
+const hsl = (token: string) => `oklch(from var(${token}) l c h / <alpha-value>)`;
 
 export const theoUIPreset: Partial<Config> = {
   theme: {

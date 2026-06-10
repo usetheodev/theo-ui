@@ -332,7 +332,7 @@ export const ENVIRONMENTS_LIB = [
 export const AUDIT_LIB = [
   {
     id: "a1",
-    actor: { kind: "user" as const, name: "alfredo@usetheo.dev" },
+    actor: { kind: "user" as const, name: "alfredo@theokit.dev" },
     action: "rollback",
     target: "acme-web → v1.2.3",
     timestamp: "9:51 PM",
@@ -354,7 +354,7 @@ export const AUDIT_LIB = [
   },
   {
     id: "a4",
-    actor: { kind: "user" as const, name: "alfredo@usetheo.dev" },
+    actor: { kind: "user" as const, name: "alfredo@theokit.dev" },
     action: "secret.set",
     target: "STRIPE_SECRET_KEY · production",
     timestamp: "yesterday",

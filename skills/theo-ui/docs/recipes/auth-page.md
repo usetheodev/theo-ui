@@ -23,13 +23,13 @@ Worked examples of P10 SignInPage and P11 OTPVerifyPage.
 
 import { useState, type FormEvent } from "react";
 
-import { LoginSplit } from "@usetheo/ui/login-split";
-import { SocialAuthRow } from "@usetheo/ui/social-auth-row";
-import { Card } from "@usetheo/ui/card";
-import { Input } from "@usetheo/ui/input";
-import { Label } from "@usetheo/ui/label";
-import { Button } from "@usetheo/ui/button";
-import { Alert } from "@usetheo/ui/alert";
+import { LoginSplit } from "@theokit/ui/login-split";
+import { SocialAuthRow } from "@theokit/ui/social-auth-row";
+import { Card } from "@theokit/ui/card";
+import { Input } from "@theokit/ui/input";
+import { Label } from "@theokit/ui/label";
+import { Button } from "@theokit/ui/button";
+import { Alert } from "@theokit/ui/alert";
 
 import { useAuth } from "@/hooks/useAuth";
 
@@ -188,10 +188,10 @@ export default function SignInPage() {
 
 import { useState } from "react";
 
-import { Card } from "@usetheo/ui/card";
-import { PinInput } from "@usetheo/ui/pin-input";
-import { Button } from "@usetheo/ui/button";
-import { Alert } from "@usetheo/ui/alert";
+import { Card } from "@theokit/ui/card";
+import { PinInput } from "@theokit/ui/pin-input";
+import { Button } from "@theokit/ui/button";
+import { Alert } from "@theokit/ui/alert";
 
 import { useAuth } from "@/hooks/useAuth";
 

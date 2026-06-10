@@ -1,0 +1,58 @@
+name: Release
+
+# Per technical-hardening-sprint plan v1.1 T1.1 (NEW) + ADR D1:
+# theo-ui ships 1 root package (@theokit/ui) — simple npm publish single-pkg pattern.
+# OIDC trusted-publisher binding (configured at npmjs.com/package/@theokit/ui/settings)
+# attests provenance automatically. NPM_TOKEN intentionally NOT used —
+# per EC-2 absorbed, token env disables OIDC silently.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'npm dist-tag (next | latest)'
+        type: choice
+        options: [next, latest]
+        default: next
+      dry_run:
+        description: 'Run npm publish --dry-run (validates OIDC token exchange only)'
+        type: boolean
+        default: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release @theokit/ui
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Publish @theokit/ui
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            npm publish --dry-run --provenance --access public --tag ${{ inputs.tag || 'next' }}
+          else
+            npm publish --provenance --access public --tag ${{ inputs.tag || 'next' }}
+          fi
+        env:
+          NPM_CONFIG_PROVENANCE: true

@@ -1,0 +1,12 @@
+# Cloudflare Pages deploy config for the Ladle component catalog.
+# Mirrors the theo-opendocs pattern (memory: theo-ui-0-12-0-published).
+#
+# Deploy commands:
+#   pnpm ladle:build                            # builds ./build/
+#   npx wrangler pages deploy build --project-name=theo-ui
+#
+# CI: see .github/workflows/deploy-ladle.yml.
+
+name = "theo-ui"
+pages_build_output_dir = "build"
+compatibility_date = "2026-05-29"

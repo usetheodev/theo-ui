@@ -21,7 +21,7 @@ describe("useTheoUIVite — factory shape (TheoKit contract)", () => {
 
   it("uses the documented name slug", () => {
     const plugin = useTheoUIVite();
-    expect(plugin.name).toBe("@usetheo/ui/vite-plugin");
+    expect(plugin.name).toBe("@theokit/ui/vite-plugin");
   });
 
   it("exposes a config() hook", () => {
@@ -42,9 +42,13 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
   });
 
   it("does NOT throw when @tailwindcss/vite is unresolvable", async () => {
-    // @tailwindcss/vite is intentionally NOT installed in this repo. The
-    // config() hook must degrade gracefully via console.warn instead of
-    // throwing — TheoKit's integrateUseTheoUI() expects this contract.
+    // Mock the dynamic import to simulate a consumer environment where the
+    // optional peer-dep `@tailwindcss/vite` is not installed. The config()
+    // hook must degrade gracefully via console.warn instead of throwing —
+    // TheoKit's integrateUseTheoUI() expects this contract.
+    vi.doMock("@tailwindcss/vite", () => {
+      throw new Error("Cannot find module '@tailwindcss/vite'");
+    });
     const plugin = useTheoUIVite();
     const config = plugin.config as (
       // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
@@ -55,16 +59,23 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
     await expect(
       Promise.resolve(config({}, { command: "serve", mode: "development" })),
     ).resolves.not.toThrow();
+    vi.doUnmock("@tailwindcss/vite");
   });
 
   it("warns the consumer when @tailwindcss/vite is missing", async () => {
+    // Force the dynamic import to fail so we exercise the graceful-degrade
+    // code path regardless of whether the peer-dep is installed locally.
+    vi.doMock("@tailwindcss/vite", () => {
+      throw new Error("Cannot find module '@tailwindcss/vite'");
+    });
     const plugin = useTheoUIVite();
     // biome-ignore lint/suspicious/noExplicitAny: vite Plugin config hook
     const config = plugin.config as (arg?: any, env?: any) => Promise<unknown>;
     await config({}, { command: "serve", mode: "development" });
     expect(warnSpy).toHaveBeenCalled();
-    const message = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    const message = warnSpy.mock.calls.map((c: unknown[]) => c.join(" ")).join("\n");
     expect(message).toMatch(/@tailwindcss\/vite/);
+    vi.doUnmock("@tailwindcss/vite");
   });
 
   it("when opts.tailwind === false, does NOT warn and does NOT attempt resolution", async () => {
@@ -77,11 +88,11 @@ describe("useTheoUIVite — graceful peer-dep handling", () => {
 });
 
 describe("useTheoUIVite — virtual library-sources module", () => {
-  it("resolves `virtual:@usetheo/ui/library-sources.css` via resolveId", () => {
+  it("resolves `virtual:@theokit/ui/library-sources.css` via resolveId", () => {
     const plugin = useTheoUIVite();
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     expect(typeof resolveId).toBe("function");
-    const resolved = resolveId("virtual:@usetheo/ui/library-sources.css");
+    const resolved = resolveId("virtual:@theokit/ui/library-sources.css");
     expect(resolved).toBeTruthy();
   });
 
@@ -89,11 +100,11 @@ describe("useTheoUIVite — virtual library-sources module", () => {
     const plugin = useTheoUIVite();
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     const load = plugin.load as (id: string) => string | undefined;
-    const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
+    const id = resolveId("virtual:@theokit/ui/library-sources.css") as string;
     const css = load(id);
     expect(css).toBeTruthy();
     // Default (no contentExtra) emits an explanatory comment block, NOT
-    // the broken `@source "node_modules/@usetheo/ui/..."` glob.
+    // the broken `@source "node_modules/@theokit/ui/..."` glob.
     expect(css).toMatch(/pre-compiled utility CSS/);
     expect(css).toContain("dist/components.css");
   });
@@ -102,7 +113,7 @@ describe("useTheoUIVite — virtual library-sources module", () => {
     const plugin = useTheoUIVite({ contentExtra: ["./my-app/**/*.tsx"] });
     const resolveId = plugin.resolveId as (id: string) => string | undefined;
     const load = plugin.load as (id: string) => string | undefined;
-    const id = resolveId("virtual:@usetheo/ui/library-sources.css") as string;
+    const id = resolveId("virtual:@theokit/ui/library-sources.css") as string;
     const css = load(id);
     expect(css).toMatch(/@source "\.\/my-app\/\*\*\/\*\.tsx";/);
   });

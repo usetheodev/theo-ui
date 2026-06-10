@@ -4,7 +4,7 @@
 >
 > Source corpus: [`VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) — 73 real-world DESIGN.md files extracted from production marketing sites (Vercel, Linear, Stripe, ClickHouse, Claude, Notion, Figma, Apple, BMW, Tesla, …).
 >
-> Date: 2026-05-25 · Investigated by: Claude · Target consumer: `@usetheo/ui` (Violet Forge, 121 components, Geist + Tailwind v4)
+> Date: 2026-05-25 · Investigated by: Claude · Target consumer: `@theokit/ui` (Violet Forge, 121 components, Geist + Tailwind v4)
 
 ---
 
@@ -27,7 +27,7 @@ CSS files tell the model *how to implement*. They don't tell it *why this radius
 
 ### Where this doc lands
 
-Target project: `@usetheo/ui` — already has:
+Target project: `@theokit/ui` — already has:
 - 121 components (92 primitives + 29 composites) under `src/components/`
 - 10 themes (Violet Forge default + Classic Paper + Aurora Terminal + 7 RFC-0007 themes)
 - Vercel-style design system docs at `docs/design-system.md`
@@ -184,7 +184,7 @@ Practical mistakes that show up when comparing weaker DESIGN.md files (some entr
 
 ---
 
-## 6. Implementation guide for `@usetheo/ui`
+## 6. Implementation guide for `@theokit/ui`
 
 This section is the actionable output. Everything above is reference; this is what to **write into `DESIGN.md` at the repo root**.
 
@@ -207,7 +207,7 @@ This section is the actionable output. Everything above is reference; this is wh
 | 6 | **Component Stylings** | Top ~15 representative components — Button, Card, Input, Dialog, Badge, Alert, DataTable, PageShell, ActionBar, DropdownMenu, ChatMessage, AgentEvent, ToolCall, ToolResult, CodeBlock. Token-reference shorthand per §3.6. |
 | 7 | **Responsive Behavior** | Breakpoints from Tailwind preset (sm/md/lg/xl/2xl). Tap-target policy from `docs/design-system.md > Tap target policy` — WCAG 2.5.8 AA, 24×24 floor, density tiers. Collapsing strategy per signature composite (PageShell, ChatThread, DataTable). |
 | 8 | **Do's and Don'ts** | Sourced from `docs/design-system.md > Principles` (Anti-glass guideline, calm restraint, no chrome glass) + locked CLAUDE.md rules (no emojis, Apache-2.0 only deps). |
-| 9 | **Agent Prompt Guide** | Original — Vercel/Claude don't have this. Copy-pasteable prompt fragments for: "build a settings panel", "build a chat surface", "build a dashboard list page", "use the design system tokens via `@usetheo/ui`". |
+| 9 | **Agent Prompt Guide** | Original — Vercel/Claude don't have this. Copy-pasteable prompt fragments for: "build a settings panel", "build a chat surface", "build a dashboard list page", "use the design system tokens via `@theokit/ui`". |
 
 ### 6.3 Tone and voice
 
@@ -234,7 +234,7 @@ Add to `package.json > files`:
 "files": ["dist", "src", "registry", "README.md", "CHANGELOG.md", "llms.txt", "DESIGN.md"]
 ```
 
-So consumers of the npm package see the spec via `node_modules/@usetheo/ui/DESIGN.md`.
+So consumers of the npm package see the spec via `node_modules/@theokit/ui/DESIGN.md`.
 
 ### 6.6 ADR draft
 

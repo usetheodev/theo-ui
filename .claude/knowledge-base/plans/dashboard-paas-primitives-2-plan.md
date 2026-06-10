@@ -11,14 +11,14 @@
 > (Table, StatusDot, CopyButton, Timestamp, StatTile, ConfirmDialog,
 > CodeBlock, DangerZone). Continuação direta do Brief #1
 > (`dashboard-paas-primitives-plan.md` — 4 PaaS-shape primitives já em
-> `0.7.0-next.0`). Após esta entrega, `@usetheo/ui` cobre tanto as
+> `0.7.0-next.0`). Após esta entrega, `@theokit/ui` cobre tanto as
 > superfícies agent-first quanto as ~12 páginas do dashboard TheoCloud
 > sem que os consumidores hand-rollem clipboard, status dots, tabelas
 > sortáveis, tooltips de timestamp ou confirmações destrutivas.
 
 ## Context
 
-- **Versão atual:** `@usetheo/ui@0.7.0-next.0`. Brief #1 fechou os
+- **Versão atual:** `@theokit/ui@0.7.0-next.0`. Brief #1 fechou os
   4 buracos PaaS-shape (`UsageMeter`, `Progress`, `PlanBadge`,
   `AccountMenu`). MDX curado já no ar em `docs.usetheo.dev`.
 - **Brief #2** (issued 2026-05-23 pela equipe TheoCloud dashboard) cobre
@@ -52,7 +52,7 @@
 Entregar 8 novas primitives (6 primitives + 2 composites por força do
 taxonomy gate) cobrindo casos PaaS cross-cutting, sem alterar
 componentes existentes, sem breaking change na API pública, em
-`@usetheo/ui@0.8.0-next.0` (minor bump aditivo).
+`@theokit/ui@0.8.0-next.0` (minor bump aditivo).
 
 Metas mensuráveis:
 - 32 arquivos novos em `src/components/{primitives,composites}/` (8 × 4)
@@ -89,14 +89,14 @@ Metas mensuráveis:
 - **Decisão:** classificação dos 8 componentes:
   - **Primitives** (6): `Table`, `StatusDot`, `CopyButton`,
     `Timestamp`, `StatTile`, `DangerZone` — todos sem imports
-    internos de `@usetheo/ui`.
+    internos de `@theokit/ui`.
   - **Composites** (2): `ConfirmDialog` (depende de `Dialog`, `Input`,
     `Button`), `CodeBlock` (depende de `CopyButton` quando
     `copyable=true`).
 - **Rationale:** o brief lista todos como primitives, mas o
   taxonomy gate em `scripts/validate-quality-gates.ts` é hard-fail
   para qualquer componente sob `primitives/` que importe outro
-  componente do `@usetheo/ui`. `ConfirmDialog` precisa de Dialog
+  componente do `@theokit/ui`. `ConfirmDialog` precisa de Dialog
   (Radix wrapper) + Input (typed phrase) + Button — não dá pra
   evitar. `CodeBlock` precisa de `CopyButton` quando `copyable=true`.
   Composite é a classificação semanticamente correta — mesma
@@ -106,15 +106,15 @@ Metas mensuráveis:
   - Pastas `src/components/composites/{confirm-dialog,code-block}/`
     em vez de `primitives/`
   - Barrel export e MDX docs vão para `composites/` no opendocs
-  - Sem impacto no consumer (import path é `@usetheo/ui`, não
-    `@usetheo/ui/primitives/...`)
+  - Sem impacto no consumer (import path é `@theokit/ui`, não
+    `@theokit/ui/primitives/...`)
 
 ### D3 — Timestamp v1 usa `title` nativo, NÃO o componente Tooltip
 
 - **Decisão:** o tooltip de hora absoluta no Timestamp é renderizado
   via atributo `title="Dec 5, 2026, 14:32:01 GMT-3"` do
   `<time>` HTML nativo, NÃO via componente `<Tooltip>` do
-  `@usetheo/ui`.
+  `@theokit/ui`.
 - **Rationale:** o brief diz simultaneamente "Timestamp é primitive"
   e "tooltip uses existing Tooltip primitive" — contradição com o
   taxonomy gate. O atributo `title` HTML nativo:
@@ -153,12 +153,12 @@ Metas mensuráveis:
     `Table.HeaderCell`
   - `DangerZone.Action`
 - **Rationale:** padrão Sidebar (`Sidebar.Header`, `Sidebar.Section`,
-  `Sidebar.Item`, `Sidebar.Footer`) já é a convenção do `@usetheo/ui`
+  `Sidebar.Item`, `Sidebar.Footer`) já é a convenção do `@theokit/ui`
   para containers compostos. Brief explicitamente pede esse padrão.
   Alternativa (props array `rows={[…]}`) é menos flexível, mais
   pesada para tabelas com cells customizados e quebra em casos como
   EnvVarEditor underneath.
-- **Consequences:** import único `import { Table } from "@usetheo/ui"`
+- **Consequences:** import único `import { Table } from "@theokit/ui"`
   expõe `Table` + sub-components como propriedades anexas (Object
   attachment pattern, sem React.Children magic).
 
@@ -186,7 +186,7 @@ Metas mensuráveis:
   bump por semver. Sem breaking changes; nenhum componente existente
   muda. Tag npm `next` mantém o canal de pré-release.
 - **Consequences:** consumer `cloud/dashboard` instala com
-  `npm install @usetheo/ui@next`; downgrade fácil se algo quebrar.
+  `npm install @theokit/ui@next`; downgrade fácil se algo quebrar.
 
 ### D8 — CopyButton + CodeBlock: ordering blocker
 
@@ -271,7 +271,7 @@ registry/copy-button.json                                 (NEW) — shadcn descr
 
 - `src/components/primitives/copy-button/copy-button.tsx` — novo arquivo.
   Importa apenas `react`, `lucide-react` (`Copy`, `Check`, `X` icons) e
-  `../../../lib/cn.js`. Zero deps internas de `@usetheo/ui` → primitive.
+  `../../../lib/cn.js`. Zero deps internas de `@theokit/ui` → primitive.
 - `src/components/primitives/copy-button/copy-button.test.tsx` —
   importa vitest + @testing-library/react + vitest-axe + `./copy-button.js`.
   Mocka `navigator.clipboard.writeText` via `vi.stubGlobal`.
@@ -368,7 +368,7 @@ VERIFY: pnpm vitest run src/components/primitives/copy-button
 - [ ] Todas as tasks T1.1 concluídas
 - [ ] 8 testes passing + axe-clean
 - [ ] `validate-quality-gates.ts` aceita o componente sob `primitives/`
-  (zero imports internos de `@usetheo/ui`)
+  (zero imports internos de `@theokit/ui`)
 - [ ] Registry descriptor válido (`pnpm validate:registry`)
 
 ---
@@ -516,7 +516,7 @@ registry/table.json                             (NEW)
 - `table.tsx` — importa `react`, `lucide-react` (`ChevronUp`, `ChevronDown`),
   `../../../lib/cn.js`. Zero deps internas → primitive.
 - Sub-components atachados via `Table.Header = Header; Table.Body = Body; ...`
-  no fim do arquivo, então `import { Table } from "@usetheo/ui"` expõe
+  no fim do arquivo, então `import { Table } from "@theokit/ui"` expõe
   todos via property access.
 
 #### Deep Dives
@@ -923,7 +923,7 @@ registry/confirm-dialog.json                                 (NEW)
 #### Deep file dependency analysis
 
 - `confirm-dialog.tsx` — importa `Dialog` (Radix wrapper), `Button`, `Input`
-  do próprio `@usetheo/ui` → composite (D2).
+  do próprio `@theokit/ui` → composite (D2).
 - Adicional: `lucide-react` (`Loader2` para spinner).
 - `confirm-dialog.test.tsx` — usa `userEvent` para typing no input, +
   await async submission.
@@ -1255,7 +1255,7 @@ qualquer regressão.
 ### T11.1 — Publish 0.8.0-next.0
 
 #### Objective
-Publicar `@usetheo/ui@0.8.0-next.0` no npm com tag `next`, verificando
+Publicar `@theokit/ui@0.8.0-next.0` no npm com tag `next`, verificando
 token antes.
 
 #### Tasks
@@ -1264,35 +1264,35 @@ token antes.
 2. Pre-check: `curl -s https://registry.npmjs.org/-/whoami -H "Authorization: Bearer $NPM_TOKEN"` → `usetheodev`
 3. `pnpm build` (sanity)
 4. `pnpm publish --access public --tag next --no-git-checks`
-5. Verificar disponibilidade: `npm view @usetheo/ui@0.8.0-next.0 version`
+5. Verificar disponibilidade: `npm view @theokit/ui@0.8.0-next.0 version`
 6. Smoke install num diretório temp:
    - `mkdir /tmp/theo-ui-smoke && cd /tmp/theo-ui-smoke && pnpm init -y`
-   - `pnpm add @usetheo/ui@next react react-dom`
-   - `node -e "console.log(Object.keys(require('@usetheo/ui')))" | grep -E "Table|StatusDot|CopyButton|Timestamp|StatTile|ConfirmDialog|CodeBlock|DangerZone"` → 8 matches
+   - `pnpm add @theokit/ui@next react react-dom`
+   - `node -e "console.log(Object.keys(require('@theokit/ui')))" | grep -E "Table|StatusDot|CopyButton|Timestamp|StatTile|ConfirmDialog|CodeBlock|DangerZone"` → 8 matches
 
 #### Acceptance Criteria
 
-- [ ] `npm view @usetheo/ui versions` mostra `0.8.0-next.0`
+- [ ] `npm view @theokit/ui versions` mostra `0.8.0-next.0`
 - [ ] Smoke install resolve 8 exports
 
 ---
 
 ## Phase 12: theo-opendocs MDX pages
 
-### T12.1 — Bump @usetheo/ui dependency no opendocs
+### T12.1 — Bump @theokit/ui dependency no opendocs
 
 #### Objective
-Atualizar `theo-opendocs` para consumir `@usetheo/ui@0.8.0-next.0`.
+Atualizar `theo-opendocs` para consumir `@theokit/ui@0.8.0-next.0`.
 
 #### Files to edit
 ```
-/home/paulo/Projetos/usetheo/theo-opendocs/package.json (MODIFY) — dep @usetheo/ui
+/home/paulo/Projetos/usetheo/theo-opendocs/package.json (MODIFY) — dep @theokit/ui
 ```
 
 #### Tasks
 
 1. `cd /home/paulo/Projetos/usetheo/theo-opendocs`
-2. `pnpm add @usetheo/ui@0.8.0-next.0`
+2. `pnpm add @theokit/ui@0.8.0-next.0`
 3. Verificar build: `pnpm build`
 
 ### T12.2 — 8 curated MDX pages

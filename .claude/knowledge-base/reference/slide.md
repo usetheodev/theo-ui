@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-19
 **Depth:** exhaustive
-**Project:** `@usetheo/ui` v0.1.0-next.0 (TheoUI / Violet Forge)
+**Project:** `@theokit/ui` v0.1.0-next.0 (TheoUI / Violet Forge)
 **Project language:** TypeScript (primary) + React 18 (peer) + Tailwind CSS + SCSS-free (vanilla CSS via tokens)
 **Project layout:** Single package, `src/components/primitives/{name}/` + `src/components/composites/{name}/`. Subpath barrel exports declared in `package.json#exports`.
 **Sources analyzed:**
@@ -11,7 +11,7 @@
 - **Remote (Source C):** Marpit core, Marp-Core, Marp React (deprecated), Reveal.js — fetched live via raw.githubusercontent.com / `gh api`.
 - **External docs (Source D):** Marpit docs/directives.md, mdast-util-from-markdown README, Marpit CHANGELOG.
 **Frameworks analyzed:** Marpit (`@marp-team/marpit` v3.x, the canonical engine), Marp Core (`@marp-team/marp-core` latest main), Marp React (`@marp-team/marp-react` INACTIVE), Reveal.js (`hakimel/reveal.js` master) — architectural divergent comparison only, Marp Website (`marp-team/marp` website workspace) — real React+Shadow DOM consumer pattern.
-**Target directory:** `src/components/primitives/slide/` (subpath export `@usetheo/ui/slide`).
+**Target directory:** `src/components/primitives/slide/` (subpath export `@theokit/ui/slide`).
 **Related references:**
 - `docs/rfcs/0001-whiteboard.md` — direct precedent for primitive shape (subpath, peer-deps, view-only, Zod schema, RFC governance)
 - `CLAUDE.md` (TheoUI) — roadmap entry locking `Slide` + `SlideDeck` + `Diagram` as upcoming primitives, all governed by "Don't reinvent the algorithmic core" (markdown parsing via mature OSS deps)
@@ -515,7 +515,7 @@ Direct benchmarks publicly published by the projects: **none located in the prov
 
 ### Implicações para este projeto
 - Target render budget: **< 16ms for a single slide on a 4× CPU throttle Chrome** (one frame). Validate in benchmark gate (§16.7).
-- Bundle target for `@usetheo/ui/slide` subpath: **< 30 kB gzipped** without peer-deps. Verify via `quality:bundle` after isolation.
+- Bundle target for `@theokit/ui/slide` subpath: **< 30 kB gzipped** without peer-deps. Verify via `quality:bundle` after isolation.
 - Concorrência: **single-threaded React render**; do the markdown parse async at the caller (loader / RSC) and pass parsed AST or already-rendered React tree as prop.
 
 ## 10. Security & threat model
@@ -764,7 +764,7 @@ export const looseSlideSanitizeSchema: Schema = {
 ## 15. ADR template (PROPOSED)
 
 ```markdown
-# ADR — Slide primitive (`<Slide>`, `@usetheo/ui/slide`)
+# ADR — Slide primitive (`<Slide>`, `@theokit/ui/slide`)
 
 **Status:** PROPOSED
 **Date:** 2026-05-19
@@ -775,7 +775,7 @@ export const looseSlideSanitizeSchema: Schema = {
 TheoUI needs a single-slide rendering primitive that takes markdown + optional frontmatter and produces a themed, fixed-aspect surface. Roadmap entry in `CLAUDE.md` requires reuse of `remark`/`micromark` ("do not reinvent the markdown layer"). The Whiteboard primitive (RFC 0001) established the pattern: subpath-isolated, view-only, peer-deps optional, Zod-validated input. Prior art from Marpit/Marp Core/Marp website (this doc §4) provides the canvas + theme model; Reveal.js provides container fit. Marp React's inactive status is direct evidence (this doc §13.1) that redistributing the full Marp engine inside a React component does not survive — keep our shell thin.
 
 ## Decision
-1. **Subpath isolation**: ship as `@usetheo/ui/slide` (mirrors `@usetheo/ui/whiteboard`).
+1. **Subpath isolation**: ship as `@theokit/ui/slide` (mirrors `@theokit/ui/whiteboard`).
 2. **Parser**: `mdast-util-from-markdown` + `micromark-extension-gfm` + `mdast-util-to-hast` + `hast-util-sanitize` + `hast-util-to-jsx-runtime`. All optional peer-deps.
 3. **Slide model**: single `<section role="region" aria-roledescription="slide">` with fixed logical canvas (default 1280×720, 16:9), scaled to container via Reveal.js algorithm (this doc §14.2).
 4. **Theme**: CSS variables layered on Violet Forge tokens. Built-in themes: `default`, `violet-forge-slide` (light + dark). No PostCSS at runtime.
@@ -937,7 +937,7 @@ export const Slide: React.FC<SlideProps>;
 | `zod` | ^4.4.3 | MIT | Already a direct dep — reuse for frontmatter schema |
 | `yaml` (or `js-yaml`) | ^2.x / ^4.x | MIT | Frontmatter parsing — `yaml` (eemeli) is smaller + ESM-first |
 
-**All as `peerDependenciesMeta.optional = true`** — mirrors Whiteboard's roughjs/perfect-freehand pattern (`package.json` precedent verified). Consumer only pays the cost if they import `@usetheo/ui/slide`.
+**All as `peerDependenciesMeta.optional = true`** — mirrors Whiteboard's roughjs/perfect-freehand pattern (`package.json` precedent verified). Consumer only pays the cost if they import `@theokit/ui/slide`.
 
 ### 16.5 Test strategy
 

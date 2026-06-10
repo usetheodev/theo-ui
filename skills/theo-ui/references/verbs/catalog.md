@@ -80,7 +80,7 @@ For each match, emit:
 Copy-to-clipboard button with built-in success / error state and timed reset.
 
 ```tsx
-import { CopyButton } from "@usetheo/ui/copy-button";
+import { CopyButton } from "@theokit/ui/copy-button";
 
 <CopyButton value="dep_abc123" />
 ```
@@ -104,7 +104,7 @@ import { CopyButton } from "@usetheo/ui/copy-button";
 Multi-slot OTP / verification code input with auto-advance, paste handling, and mask.
 
 ```tsx
-import { PinInput } from "@usetheo/ui/pin-input";
+import { PinInput } from "@theokit/ui/pin-input";
 
 const [code, setCode] = useState("");
 
@@ -139,8 +139,8 @@ If you can't upgrade to 0.11 yet, the legacy pattern is 6 controlled `<Input>` e
 This needs two components composed together — `<ConfirmDialog>` for the confirmation flow + a destructive trigger button.
 
 ```tsx
-import { ConfirmDialog } from "@usetheo/ui/confirm-dialog";
-import { Button } from "@usetheo/ui/button";
+import { ConfirmDialog } from "@theokit/ui/confirm-dialog";
+import { Button } from "@theokit/ui/button";
 
 <ConfirmDialog
   title="Delete project?"
@@ -168,7 +168,7 @@ import { Button } from "@usetheo/ui/button";
 ```markdown
 ## No match
 
-`@usetheo/ui` doesn't currently ship a component for "draggable kanban board". The closest building blocks would be:
+`@theokit/ui` doesn't currently ship a component for "draggable kanban board". The closest building blocks would be:
 
 - `<Card>` — render each kanban card.
 - Manual drag handling via `@dnd-kit` or `react-beautiful-dnd` (you'd add this dep).
@@ -194,7 +194,7 @@ If a component is on the roadmap (mentioned in CLAUDE.md, e.g., `<Diagram>`), no
 
 ### Show subpath imports post-0.10
 
-Always emit subpath imports (`import { Button } from "@usetheo/ui/button"`) unless the user's project is pre-0.10. The pre-flight scan (when available) determines this — for catalog without pre-flight context, default to subpath and add a note: *"If your `@usetheo/ui` is pre-0.10, use the barrel import `from \"@usetheo/ui\"` instead."*
+Always emit subpath imports (`import { Button } from "@theokit/ui/button"`) unless the user's project is pre-0.10. The pre-flight scan (when available) determines this — for catalog without pre-flight context, default to subpath and add a note: *"If your `@theokit/ui` is pre-0.10, use the barrel import `from \"@theokit/ui\"` instead."*
 
 ### Show the minimal usage
 

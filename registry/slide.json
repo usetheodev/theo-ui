@@ -3,7 +3,7 @@
   "name": "slide",
   "type": "registry:ui",
   "title": "Slide",
-  "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @usetheo/ui.",
+  "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @theokit/ui.",
   "dependencies": [
     "hast",
     "hast-util-from-html",

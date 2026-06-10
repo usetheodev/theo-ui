@@ -43,7 +43,7 @@ Four ADRs govern the design. Full rationale lives in `.claude/knowledge-base/pla
 ### `size` prop
 
 ```tsx
-import { Input, Badge, Toast, Checkbox, Switch, Card, FormField, Textarea, Select } from "@usetheo/ui";
+import { Input, Badge, Toast, Checkbox, Switch, Card, FormField, Textarea, Select } from "@theokit/ui";
 
 <Input size="sm" />
 <Input size="md" />  // default — backwards compat
@@ -79,7 +79,7 @@ Per-primitive token mapping (full table in the plan):
 ### `defineTheme(partial)`
 
 ```tsx
-import { defineTheme, hex, rgb, ThemeProvider, builtinThemes } from "@usetheo/ui";
+import { defineTheme, hex, rgb, ThemeProvider, builtinThemes } from "@theokit/ui";
 
 const corp = defineTheme({
   name: "corp",

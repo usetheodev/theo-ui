@@ -27,7 +27,7 @@ function Inspector() {
 describe("ThemeProvider", () => {
   it("defaults to violet-forge in dark mode (dark-first) when builtinThemes passed", () => {
     render(
-      <ThemeProvider themes={builtinThemes} storageKey={null}>
+      <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
@@ -37,7 +37,12 @@ describe("ThemeProvider", () => {
 
   it("accepts defaultMode='light' explicitly", () => {
     render(
-      <ThemeProvider themes={builtinThemes} defaultMode="light" storageKey={null}>
+      <ThemeProvider
+        respectSystemMode={false}
+        themes={builtinThemes}
+        defaultMode="light"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
@@ -46,7 +51,12 @@ describe("ThemeProvider", () => {
 
   it("uses only the themes passed (T2.5 — decoupled from violet-forge)", () => {
     render(
-      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
+      <ThemeProvider
+        respectSystemMode={false}
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
@@ -56,7 +66,12 @@ describe("ThemeProvider", () => {
 
   it("does not inject violet-forge CSS vars when not in themes (T2.5)", () => {
     render(
-      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
+      <ThemeProvider
+        respectSystemMode={false}
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
@@ -69,7 +84,7 @@ describe("ThemeProvider", () => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     expect(() =>
       render(
-        <ThemeProvider themes={[]} storageKey={null}>
+        <ThemeProvider respectSystemMode={false} themes={[]} storageKey={null}>
           <Inspector />
         </ThemeProvider>,
       ),
@@ -93,7 +108,11 @@ describe("ThemeProvider", () => {
   it("setTheme swaps the active theme", async () => {
     const user = userEvent.setup();
     render(
-      <ThemeProvider themes={[violetForge, classicPaper]} storageKey={null}>
+      <ThemeProvider
+        respectSystemMode={false}
+        themes={[violetForge, classicPaper]}
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
@@ -104,7 +123,7 @@ describe("ThemeProvider", () => {
   it("toggleMode flips dark <> light", async () => {
     const user = userEvent.setup();
     render(
-      <ThemeProvider themes={builtinThemes} storageKey={null}>
+      <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={null}>
         <Inspector />
       </ThemeProvider>,
     );
@@ -130,7 +149,12 @@ describe("ThemeProvider", () => {
 
   it("re-syncs when themes prop changes between renders", () => {
     const { rerender } = render(
-      <ThemeProvider themes={[classicPaper]} defaultTheme="classic-paper" storageKey={null}>
+      <ThemeProvider
+        respectSystemMode={false}
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
         <Inspector />
       </ThemeProvider>,
     );
@@ -176,11 +200,16 @@ describe("ThemeProvider", () => {
     };
     expect(() =>
       render(
-        <ThemeProvider themes={[malicious]} defaultTheme={classicPaper.name} storageKey={null}>
+        <ThemeProvider
+          respectSystemMode={false}
+          themes={[malicious]}
+          defaultTheme={classicPaper.name}
+          storageKey={null}
+        >
           <Inspector />
         </ThemeProvider>,
       ),
-    ).toThrow(/invalid color "background" value/);
+    ).toThrow(/(invalid color "background" value|color value did not match)/);
     spy.mockRestore();
   });
 
@@ -195,11 +224,16 @@ describe("ThemeProvider", () => {
     };
     expect(() =>
       render(
-        <ThemeProvider themes={[malicious]} defaultTheme={classicPaper.name} storageKey={null}>
+        <ThemeProvider
+          respectSystemMode={false}
+          themes={[malicious]}
+          defaultTheme={classicPaper.name}
+          storageKey={null}
+        >
           <Inspector />
         </ThemeProvider>,
       ),
-    ).toThrow(/invalid fontFamily "display" value/);
+    ).toThrow(/(invalid fontFamily "display" value|font family contains)/);
     spy.mockRestore();
   });
 
@@ -211,11 +245,16 @@ describe("ThemeProvider", () => {
     };
     expect(() =>
       render(
-        <ThemeProvider themes={[malicious]} defaultTheme='foo" }' storageKey={null}>
+        <ThemeProvider
+          respectSystemMode={false}
+          themes={[malicious]}
+          defaultTheme='foo" }'
+          storageKey={null}
+        >
           <Inspector />
         </ThemeProvider>,
       ),
-    ).toThrow(/invalid theme.name/);
+    ).toThrow(/(invalid theme\.name|theme name must match)/);
     spy.mockRestore();
   });
 
@@ -244,7 +283,7 @@ describe("ThemeProvider", () => {
     it("reads initial theme name from localStorage", () => {
       window.localStorage.setItem(`${STORAGE_KEY}:name`, "classic-paper");
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -254,7 +293,7 @@ describe("ThemeProvider", () => {
     it("reads initial mode from localStorage", () => {
       window.localStorage.setItem(`${STORAGE_KEY}:mode`, "light");
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -264,7 +303,7 @@ describe("ThemeProvider", () => {
     it("persists theme + mode on toggleMode", async () => {
       const user = userEvent.setup();
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -276,7 +315,7 @@ describe("ThemeProvider", () => {
     it("persists theme name on setTheme (Test NEW-A from re-audit)", async () => {
       const user = userEvent.setup();
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -289,7 +328,7 @@ describe("ThemeProvider", () => {
         throw new Error("SecurityError: blocked");
       });
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -302,7 +341,7 @@ describe("ThemeProvider", () => {
     it("ignores invalid stored mode and uses default", () => {
       window.localStorage.setItem(`${STORAGE_KEY}:mode`, "twilight");
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -318,7 +357,7 @@ describe("ThemeProvider", () => {
       window.localStorage.setItem(`${STORAGE_KEY}:mode`, "light");
 
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -340,7 +379,7 @@ describe("ThemeProvider", () => {
       // on every mount, briefly clobbering a stored value before the
       // hydration effect could promote it.
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -354,7 +393,7 @@ describe("ThemeProvider", () => {
     it("writes to localStorage AFTER a user-driven change (persist fires post-hydration)", async () => {
       const user = userEvent.setup();
       render(
-        <ThemeProvider themes={builtinThemes} storageKey={STORAGE_KEY}>
+        <ThemeProvider respectSystemMode={false} themes={builtinThemes} storageKey={STORAGE_KEY}>
           <Inspector />
         </ThemeProvider>,
       );
@@ -376,7 +415,12 @@ describe("ThemeProvider", () => {
         light: { primary: "0 0% 0%" },
       });
       render(
-        <ThemeProvider themes={[corp]} defaultTheme="corp" storageKey={null}>
+        <ThemeProvider
+          respectSystemMode={false}
+          themes={[corp]}
+          defaultTheme="corp"
+          storageKey={null}
+        >
           <Inspector />
         </ThemeProvider>,
       );

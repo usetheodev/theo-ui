@@ -12,6 +12,8 @@
  * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T1.1
  */
 
+import { parse as culoriParse, rgb as culoriRgb } from "culori";
+
 export interface Hsl {
   h: number;
   s: number;
@@ -79,12 +81,34 @@ export function hslToLuminance({ h, s, l }: Hsl): number {
 }
 
 /**
- * WCAG contrast ratio between two HSL string-tuples.
+ * Compute relative luminance for any color format using culori.
+ * Post-T2.4 the built-in themes use OKLCH; pre-T2.4 they used HSL split.
+ * Both must work in the same gate.
+ */
+function valueToLuminance(value: string): number {
+  // Try HSL split first (legacy ColorScale convention) — fast path with no dep.
+  const cleaned = value.replace(/%/g, "").trim();
+  const splitParts = cleaned.split(/\s+/).filter(Boolean);
+  if (splitParts.length === 3 && splitParts.every((p) => /^-?\d+(\.\d+)?$/.test(p))) {
+    return hslToLuminance(parseHsl(value));
+  }
+  // Otherwise: delegate to culori (handles oklch, hex, rgb, hsl wrapped, ...).
+  const parsed = culoriParse(value);
+  const rgb = parsed === undefined ? undefined : culoriRgb(parsed);
+  if (rgb === undefined) {
+    throw new Error(`valueToLuminance: cannot parse "${value}"`);
+  }
+  const lin = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * lin(rgb.r) + 0.7152 * lin(rgb.g) + 0.0722 * lin(rgb.b);
+}
+
+/**
+ * WCAG contrast ratio between two color values (HSL split, OKLCH, hex, rgb).
  * Returns a number in [1, 21].
  */
 export function contrastRatio(a: string, b: string): number {
-  const la = hslToLuminance(parseHsl(a));
-  const lb = hslToLuminance(parseHsl(b));
+  const la = valueToLuminance(a);
+  const lb = valueToLuminance(b);
   const max = Math.max(la, lb);
   const min = Math.min(la, lb);
   return (max + 0.05) / (min + 0.05);

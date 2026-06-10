@@ -3,7 +3,7 @@
   "name": "whiteboard",
   "type": "registry:ui",
   "title": "Whiteboard",
-  "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @usetheo/ui.",
+  "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @theokit/ui.",
   "dependencies": [
     "perfect-freehand",
     "roughjs",

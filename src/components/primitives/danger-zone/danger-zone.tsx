@@ -12,7 +12,7 @@ import { cn } from "../../../lib/cn.js";
  * has no bottom border via `last:border-b-0`.
  *
  * The consumer supplies the destructive button — this primitive never
- * imports `<Button>`, keeping it free of internal `@usetheo/ui` deps
+ * imports `<Button>`, keeping it free of internal `@theokit/ui` deps
  * (true primitive).
  *
  * @example

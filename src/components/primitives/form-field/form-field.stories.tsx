@@ -17,7 +17,7 @@ export const Variants: Story = () => (
     <FormField>
       <FormField.Label required>Email</FormField.Label>
       <FormField.Control>
-        <Input type="email" placeholder="you@usetheo.dev" />
+        <Input type="email" placeholder="you@theokit.dev" />
       </FormField.Control>
       <FormField.Hint>We never share your email.</FormField.Hint>
     </FormField>

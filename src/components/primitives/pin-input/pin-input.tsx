@@ -180,7 +180,6 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
           const display = mask && ch !== "" ? "•" : ch;
           return (
             <input
-              // biome-ignore lint/suspicious/noArrayIndexKey: PinInput slots are positional; reorder is impossible by design.
               key={i}
               ref={(el) => {
                 inputRefs.current[i] = el;

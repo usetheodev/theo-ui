@@ -10,7 +10,7 @@ export const Default: Story = () => (
       <Input id="project" placeholder="acme-api" />
     </Field>
     <Field id="email" label="Email">
-      <Input id="email" type="email" placeholder="you@usetheo.dev" />
+      <Input id="email" type="email" placeholder="you@theokit.dev" />
     </Field>
     <Field id="token" label="API token">
       <Input id="token" type="password" placeholder="••••••••••••" />

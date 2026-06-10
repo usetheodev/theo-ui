@@ -1,7 +1,7 @@
-import { Button } from "@usetheo/ui";
-import { Slide, type SlideValidationError } from "@usetheo/ui/slide";
-import "@usetheo/ui/slide/themes/default.css";
-import "@usetheo/ui/slide/themes/violet-forge.css";
+import { Button } from "@theokit/ui";
+import { Slide, type SlideValidationError } from "@theokit/ui/slide";
+import "@theokit/ui/slide/themes/default.css";
+import "@theokit/ui/slide/themes/violet-forge.css";
 import { useCallback, useState } from "react";
 import { SLIDE_SCENES, type SlideScene } from "./slide-scenes.js";
 
@@ -73,7 +73,6 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
           </summary>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
             {errors.slice(0, 5).map((e, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: positional, stable for a given input
               <li key={`${e.code}-${i}`}>
                 <code className="text-foreground">{e.code}</code>
                 {e.path.length > 0 ? (

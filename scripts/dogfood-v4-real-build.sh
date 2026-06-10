@@ -3,7 +3,7 @@
 #
 # The companion `dogfood-v4-zero-config.ts` script asserts the SHAPE of the
 # shipped artifacts. This script proves the SEMANTICS — it actually packs
-# `@usetheo/ui`, installs it in a tmp project alongside `@tailwindcss/cli@^4`,
+# `@theokit/ui`, installs it in a tmp project alongside `@tailwindcss/cli@^4`,
 # runs Tailwind v4 against the fixture HTML, and grep-asserts that the
 # expected utility classes appear in the emitted CSS.
 #
@@ -38,7 +38,7 @@ cat > package.json <<'EOF'
 {"name":"v4-zero-config-runner","version":"0.0.0","private":true,"type":"module"}
 EOF
 
-echo "==> install @usetheo/ui (local tarball) + tailwindcss@^4 + @tailwindcss/cli@^4 ..."
+echo "==> install @theokit/ui (local tarball) + tailwindcss@^4 + @tailwindcss/cli@^4 ..."
 npm install --silent --no-audit --no-fund \
   "$PKG_TGZ" @tailwindcss/cli@^4 tailwindcss@^4 >/dev/null
 

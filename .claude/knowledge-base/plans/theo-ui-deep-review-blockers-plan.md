@@ -1,6 +1,6 @@
-# Plan: `@usetheo/ui` — Deep Review Remediation (2026-05-14, BLOCKER + HIGH + MEDIUM cleanup)
+# Plan: `@theokit/ui` — Deep Review Remediation (2026-05-14, BLOCKER + HIGH + MEDIUM cleanup)
 
-> **Version 1.0** — Plano corretivo que resolve **todos os 37 achados** da auditoria técnica conduzida em 2026-05-14 (snapshot em `main@799b5ec`): 3 BLOCKERS, 9 HIGH, 13 MEDIUM, 7 LOW, 5 NIT. Outcome esperado: (a) `validateComponentStructure` passa a detectar imports sibling-primitive (o regex atual aceita silenciosamente 8 violações); (b) registry inclui um `tailwind-preset` consumível, eliminando o gap em que `text-body-md` / `text-display-2xl` etc. não chegam ao consumidor; (c) `test:registry` builda CSS real (não só `tsc --noEmit`); (d) `package.json#files` enxuto, sem expor `src/` testes e mocks ao npm; (e) Geist self-hosted como default (CDN vira opt-in); (f) subpath exports `@usetheo/ui/<component>` permitem bundle granular; (g) documentação alinhada (`CONTRIBUTING.md`, exception nomeada para `Toaster`); (h) snapshot de bundle e a11y agregado fora do per-component axe. Pós-execução, a lib está em estado de tag `0.1.0` sob `--tag next`, com critério humano de release verde nos 8 checkboxes do gate final.
+> **Version 1.0** — Plano corretivo que resolve **todos os 37 achados** da auditoria técnica conduzida em 2026-05-14 (snapshot em `main@799b5ec`): 3 BLOCKERS, 9 HIGH, 13 MEDIUM, 7 LOW, 5 NIT. Outcome esperado: (a) `validateComponentStructure` passa a detectar imports sibling-primitive (o regex atual aceita silenciosamente 8 violações); (b) registry inclui um `tailwind-preset` consumível, eliminando o gap em que `text-body-md` / `text-display-2xl` etc. não chegam ao consumidor; (c) `test:registry` builda CSS real (não só `tsc --noEmit`); (d) `package.json#files` enxuto, sem expor `src/` testes e mocks ao npm; (e) Geist self-hosted como default (CDN vira opt-in); (f) subpath exports `@theokit/ui/<component>` permitem bundle granular; (g) documentação alinhada (`CONTRIBUTING.md`, exception nomeada para `Toaster`); (h) snapshot de bundle e a11y agregado fora do per-component axe. Pós-execução, a lib está em estado de tag `0.1.0` sob `--tag next`, com critério humano de release verde nos 8 checkboxes do gate final.
 
 ## Context
 
@@ -30,8 +30,8 @@
 3. `registry/tailwind-preset.json` distribui um Tailwind preset consumível; `npx shadcn add tailwind-preset` em projeto Vite vanilla resulta em Button renderizado com a typescale correta (verificado em screenshot/snapshot).
 4. `scripts/test-registry-install.ts` builda CSS real (Tailwind CLI) e assert sobre classes `.text-body-md`, `.text-display-2xl`, `.text-label-caps` no output.
 5. `package.json#files` reduzido para apenas `dist`, `registry/r`, `registry/index.json`, `LICENSE`, `CHANGELOG.md`. Tarball ≤ 5 MB.
-6. `src/styles/fonts.css` default é self-hosted (woff2 empacotado em `dist/fonts/`); o CDN do Google vira entrypoint opt-in `@usetheo/ui/fonts-cdn.css`.
-7. `package.json#exports` mapeia cada primitive/composite (`@usetheo/ui/button`, `@usetheo/ui/dialog`, …) via script `scripts/sync-exports.ts` automático.
+6. `src/styles/fonts.css` default é self-hosted (woff2 empacotado em `dist/fonts/`); o CDN do Google vira entrypoint opt-in `@theokit/ui/fonts-cdn.css`.
+7. `package.json#exports` mapeia cada primitive/composite (`@theokit/ui/button`, `@theokit/ui/dialog`, …) via script `scripts/sync-exports.ts` automático.
 8. `CONTRIBUTING.md` publicado, `docs/architecture.md` nomeia explicitamente a exceção "global provider primitives" para `Toaster`/`ThemeProvider`, NITs e LOWs aplicados.
 
 ## ADRs
@@ -62,7 +62,7 @@
 - **Consequences:** Build mais lento (102 entries vs 1). Permite tree-shaking trivial mesmo em bundlers ruins. Possibilidade de regressão se `tsup` não gerar bem cada entry — mitigar com snapshot test do `dist/`. Remove ambiguidade de "posso importar do src/?" para sempre.
 
 ### D6 — Fonts self-hosted como default; CDN opt-in via entrypoint paralelo
-- **Decisão:** Empacotar Geist Sans + Geist Mono em `dist/fonts/` como woff2. `src/styles/fonts.css` usa `@font-face` apontando para paths relativos (`./fonts/geist-...woff2`). Criar entrypoint adicional `@usetheo/ui/fonts-cdn.css` que mantém o `@import` do Google Fonts para quem quer zero asset hosting.
+- **Decisão:** Empacotar Geist Sans + Geist Mono em `dist/fonts/` como woff2. `src/styles/fonts.css` usa `@font-face` apontando para paths relativos (`./fonts/geist-...woff2`). Criar entrypoint adicional `@theokit/ui/fonts-cdn.css` que mantém o `@import` do Google Fonts para quem quer zero asset hosting.
 - **Rationale:** A audiência declarada (PaaS, AI agents, dev tools enterprise) tem CSP estrito e GDPR — Google Fonts CDN é fricção real. Self-host é o padrão moderno em libs (shadcn, Radix themes, Tremor). Tamanho: Geist 5 weights × 2 famílias = ~150KB woff2 total — comparable to lucide-icons que já é dep. Quem não quer asset: usa `fonts-cdn.css`.
 - **Consequences:** Licença Geist é OFL — compatível com Apache-2.0 do projeto. Build `tsup` copia woff2 para `dist/fonts/`. `package.json#exports` adiciona `"./fonts-cdn.css"`. README quickstart muda: o snippet padrão fica self-hosted.
 
@@ -539,7 +539,7 @@ scripts/sync-exports.ts — (NEW) gerador do exports map a partir de src/index.t
 1. Criar `scripts/sync-exports.ts` que regenera `package.json#exports` a partir de `src/index.ts`.
 2. Atualizar `tsup.config.ts` para multi-entry.
 3. Rodar `pnpm sync:exports`.
-4. Validar com fixture: `import { Button } from "@usetheo/ui/button"` resolve via subpath.
+4. Validar com fixture: `import { Button } from "@theokit/ui/button"` resolve via subpath.
 5. Adicionar gate `validateExportsMap` (cross-check entre named exports e exports map).
 6. Adicionar `sync:exports` ao `quality:gates:fast` para evitar drift.
 
@@ -552,7 +552,7 @@ VERIFY:  pnpm build && pnpm test:registry
 ```
 
 #### Acceptance Criteria
-- [ ] `import { Button } from "@usetheo/ui/button"` resolve no fixture.
+- [ ] `import { Button } from "@theokit/ui/button"` resolve no fixture.
 - [ ] Todos os 102 componentes têm entry em `exports`.
 - [ ] Gate `validateExportsMap` no `quality:gates`.
 - [ ] Build size por subpath em `scripts/baselines/bundle-sizes.json` (preparação para T6.3).
@@ -627,8 +627,8 @@ VERIFY:  pnpm build && ls dist/fonts/ | wc -l (espera ≥6)
 #### Acceptance Criteria
 - [ ] `dist/fonts/*.woff2` presentes (≥6 arquivos).
 - [ ] `dist/styles.css` resolve `url(./fonts/geist-*.woff2)` (paths relativos OK).
-- [ ] `@import "@usetheo/ui/styles.css"` em fixture não dispara request para `fonts.googleapis.com`.
-- [ ] `@import "@usetheo/ui/fonts-cdn.css"` (opt-in) preserva comportamento atual.
+- [ ] `@import "@theokit/ui/styles.css"` em fixture não dispara request para `fonts.googleapis.com`.
+- [ ] `@import "@theokit/ui/fonts-cdn.css"` (opt-in) preserva comportamento atual.
 - [ ] `LICENSE-GEIST` (OFL) incluso no `dist/fonts/`.
 
 ### T4.2 — Atualizar `validateDesignSystemFidelity` para aceitar @font-face
@@ -661,7 +661,7 @@ Implementado em T1.7. Aqui consolidamos: a seção fica entre "Anti-patterns" e 
 
 #### Files to edit
 ```
-SECURITY.md — (NEW) política de disclosure, supported versions, contact (security@usetheo.dev?)
+SECURITY.md — (NEW) política de disclosure, supported versions, contact (security@theokit.dev?)
 ```
 
 #### Acceptance Criteria
@@ -671,7 +671,7 @@ SECURITY.md — (NEW) política de disclosure, supported versions, contact (secu
 ### T5.4 — Decidir destino de `referencia/`
 
 #### Options
-- **A:** mover para repo separado (`@usetheo/design-references` privado).
+- **A:** mover para repo separado (`@theokit/design-references` privado).
 - **B:** documentar em `CONTRIBUTING.md` como "exploration archive — not maintained, may be removed".
 - **C:** deletar do repo (perde history se não estiver em outro lugar).
 
@@ -698,7 +698,7 @@ biome.json — overrides para theme-provider (noConsole = off no path específic
    } catch (err) {
      if (process.env.NODE_ENV !== "production") {
        // biome-ignore lint/suspicious/noConsole: dev-only diagnostic
-       console.warn("[@usetheo/ui] theme storage unavailable:", err);
+       console.warn("[@theokit/ui] theme storage unavailable:", err);
      }
    }
    ```

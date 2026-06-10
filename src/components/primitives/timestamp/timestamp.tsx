@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useState } from "react";
 import type { TimeHTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
+import { isDev } from "../../../lib/env.js";
 
 /**
  * Timestamp — accessible relative/absolute time primitive.
@@ -53,7 +54,7 @@ function safeRelativeFormatter(locale: string | undefined): Intl.RelativeTimeFor
     return new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
   } catch {
     // EC-8: invalid locale tag — fall back to default locale.
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev()) {
       // biome-ignore lint/suspicious/noConsole: dev-only diagnostic.
       console.warn(`<Timestamp locale="${locale}">: invalid locale tag, falling back to default.`);
     }

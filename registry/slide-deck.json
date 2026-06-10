@@ -3,7 +3,7 @@
   "name": "slide-deck",
   "type": "registry:block",
   "title": "SlideDeck",
-  "description": "Composite engine that orchestrates N <Slide> primitives. Keyboard / touch / hash routing, thumbnails, presenter view, fullscreen, CSS transitions, Marpit-style fragments, PDF export. Subpath-isolated bundle in @usetheo/ui.",
+  "description": "Composite engine that orchestrates N <Slide> primitives. Keyboard / touch / hash routing, thumbnails, presenter view, fullscreen, CSS transitions, Marpit-style fragments, PDF export. Subpath-isolated bundle in @theokit/ui.",
   "dependencies": [
     "zod"
   ],

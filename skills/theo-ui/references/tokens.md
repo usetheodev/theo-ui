@@ -10,7 +10,7 @@ Mirror of [`src/styles/tokens.css`](../../../src/styles/tokens.css) and [`src/th
 src/styles/tokens.css  (HSL triplets in CSS custom props)
         │
         ▼
-@usetheo/ui Tailwind preset (registry/tailwind-preset.json + src/styles/tailwind-preset.ts)
+@theokit/ui Tailwind preset (registry/tailwind-preset.json + src/styles/tailwind-preset.ts)
         │
         ▼
 Consumer's tailwind.config.{ts,js}  →  bg-primary, text-foreground, …

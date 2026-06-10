@@ -102,7 +102,7 @@ correctness UX.
 - **Risco aceito:** Browsers throttlam setInterval em background tabs (mínimo 1s, ou pausam total). "Última atividade 30s ago" pode ficar desatualizado por minutos em tab inativa. Aceitável — quando user volta ao tab, próximo intervalo dispara e atualiza. Sem fix necessário.
 
 ### EC-14: Version bump local conflict (T9.3)
-- **Risco aceito:** Cenário operacional, não de código: se alguém faz bump local `0.8.0-next.0` antes deste plano completar, segundo bump tenta o mesmo número e `npm publish` rejeita. Mitigado por: (a) pre-check `npm view @usetheo/ui versions | grep 0.8.0-next.0` em T11.1; (b) `git status package.json` antes de bumpar. Operacional, não vale teste automatizado.
+- **Risco aceito:** Cenário operacional, não de código: se alguém faz bump local `0.8.0-next.0` antes deste plano completar, segundo bump tenta o mesmo número e `npm publish` rejeita. Mitigado por: (a) pre-check `npm view @theokit/ui versions | grep 0.8.0-next.0` em T11.1; (b) `git status package.json` antes de bumpar. Operacional, não vale teste automatizado.
 
 ---
 

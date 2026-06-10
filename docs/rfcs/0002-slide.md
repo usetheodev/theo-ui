@@ -5,7 +5,7 @@
 | Author | paulohenriquevn |
 | Date | 2026-05-19 |
 | Status | **Implemented** (2026-05-19) |
-| Subpath | `@usetheo/ui/slide` |
+| Subpath | `@theokit/ui/slide` |
 | Plan | `.claude/knowledge-base/plans/slide-view-primitive-plan.md` |
 | Reference research | `.claude/knowledge-base/reference/slide.md` |
 | Edge-case review | `.claude/knowledge-base/reviews/edge-cases/slide-view-primitive-edge-cases-2026-05-19.md` |
@@ -15,7 +15,7 @@
 
 `Slide` is a **view-only** primitive that renders a markdown string + optional YAML frontmatter into a themed surface with a fixed logical canvas (default 1280×720, 16:9). Designed to consume LLM tool-call output (`{"type":"slide","markdown":"..."}`) and render it immediately, safely, and with a consistent visual identity. Not an editor — no deck navigation, no transitions, no presenter mode.
 
-The component lives in the isolated subpath `@usetheo/ui/slide` with optional peer-deps for the markdown stack (`mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`). The main barrel (`@usetheo/ui`) does not pay any of that cost.
+The component lives in the isolated subpath `@theokit/ui/slide` with optional peer-deps for the markdown stack (`mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`, `mdast-util-to-hast`, `hast-util-sanitize`, `hast-util-to-jsx-runtime`, `yaml`). The main barrel (`@theokit/ui`) does not pay any of that cost.
 
 ## 2. Motivation
 

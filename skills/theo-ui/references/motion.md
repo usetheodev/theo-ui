@@ -24,7 +24,7 @@ For state-change motion (button hover, dialog open, etc.), see microinteractions
 
 ## Page transitions
 
-`@usetheo/ui` does NOT ship a page-transition primitive. If the user wants page transitions:
+`@theokit/ui` does NOT ship a page-transition primitive. If the user wants page transitions:
 
 - **Next.js App Router** — use `next/navigation`'s `useTransition()` + suspense. Or roll a `motion.div` wrapper with framer-motion.
 - **React Router** — use `react-router-dom`'s `useTransition()` + custom CSS.

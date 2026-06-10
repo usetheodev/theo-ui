@@ -5,7 +5,7 @@
 | Author | paulohenriquevn |
 | Date | 2026-05-19 |
 | Status | **Implemented** (2026-05-19) |
-| Subpath | `@usetheo/ui/slide` (Tier 1 baked in) · `@usetheo/ui/slide/plugins/{shiki,math,mermaid,emoji}` (Tier 2 opt-in) |
+| Subpath | `@theokit/ui/slide` (Tier 1 baked in) · `@theokit/ui/slide/plugins/{shiki,math,mermaid,emoji}` (Tier 2 opt-in) |
 | Plan | `.claude/knowledge-base/plans/slide-rich-content-plan.md` (v1.1) |
 | Edge-case review | `.claude/knowledge-base/reviews/edge-cases/slide-rich-content-edge-cases-2026-05-19.md` |
 | Depends on | RFC 0002 (Slide), RFC 0003 (SlideDeck) |
@@ -68,7 +68,7 @@ Sanitize-schema merge (D17): plugins that emit non-default tags (Shiki spans, Ka
 
 ### 3.3 Tier 2 plugins
 
-Each plugin is its own sub-subpath: `@usetheo/ui/slide/plugins/{shiki,math,mermaid,emoji}`. tsup multi-entry; peer-deps stay external.
+Each plugin is its own sub-subpath: `@theokit/ui/slide/plugins/{shiki,math,mermaid,emoji}`. tsup multi-entry; peer-deps stay external.
 
 | Plugin | Peer-deps (optional) | Hooks | Key invariants |
 |---|---|---|---|
@@ -87,12 +87,12 @@ Each plugin is its own sub-subpath: `@usetheo/ui/slide/plugins/{shiki,math,merma
 ## 4. Consumer surface
 
 ```tsx
-import { Slide } from "@usetheo/ui/slide";
-import "@usetheo/ui/slide/themes/default.css";
-import { shikiPlugin } from "@usetheo/ui/slide/plugins/shiki";
-import { mathPlugin } from "@usetheo/ui/slide/plugins/math";
-import { mermaidPlugin } from "@usetheo/ui/slide/plugins/mermaid";
-import { emojiPlugin } from "@usetheo/ui/slide/plugins/emoji";
+import { Slide } from "@theokit/ui/slide";
+import "@theokit/ui/slide/themes/default.css";
+import { shikiPlugin } from "@theokit/ui/slide/plugins/shiki";
+import { mathPlugin } from "@theokit/ui/slide/plugins/math";
+import { mermaidPlugin } from "@theokit/ui/slide/plugins/mermaid";
+import { emojiPlugin } from "@theokit/ui/slide/plugins/emoji";
 import "katex/dist/katex.min.css"; // KaTeX fonts/styles served by consumer
 
 const plugins = [

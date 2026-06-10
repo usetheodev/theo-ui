@@ -18,7 +18,7 @@ Skill response:
 Copy-to-clipboard button with built-in success / error state and timed reset.
 
 ```tsx
-import { CopyButton } from "@usetheo/ui/copy-button";
+import { CopyButton } from "@theokit/ui/copy-button";
 
 <CopyButton value="dep_abc123" />
 ```
@@ -67,8 +67,8 @@ Skill response:
 For displaying LLM tool invocations inside a chat thread. These render as collapsible blocks with mono-formatted arguments and output. Used together — the result references the call by ID.
 
 ```tsx
-import { ToolCall } from "@usetheo/ui/tool-call";
-import { ToolResult } from "@usetheo/ui/tool-result";
+import { ToolCall } from "@theokit/ui/tool-call";
+import { ToolResult } from "@theokit/ui/tool-result";
 
 <ToolCall
   id="tc-1"
@@ -139,7 +139,7 @@ Skill response:
 ```markdown
 ## No match
 
-`@usetheo/ui` doesn't ship a kanban-board component. The closest building blocks would be:
+`@theokit/ui` doesn't ship a kanban-board component. The closest building blocks would be:
 
 - `<Card>` — for each kanban tile.
 - `<Badge>` — for status / priority labels on tiles.
@@ -162,9 +162,9 @@ pnpm add @atlaskit/pragmatic-drag-and-drop
 A minimal kanban skeleton using theo-ui primitives:
 
 ```tsx
-import { Card } from "@usetheo/ui/card";
-import { Badge } from "@usetheo/ui/badge";
-import { Avatar } from "@usetheo/ui/avatar";
+import { Card } from "@theokit/ui/card";
+import { Badge } from "@theokit/ui/badge";
+import { Avatar } from "@theokit/ui/avatar";
 
 function KanbanColumn({ title, items }: { title: string; items: any[] }) {
   return (
@@ -191,7 +191,7 @@ function KanbanColumn({ title, items }: { title: string; items: any[] }) {
 }
 ```
 
-If you want a `<KanbanBoard>` composite in `@usetheo/ui` going forward, the contribution workflow lives in `/CONTRIBUTING.md`. Worth proposing if your team needs it across multiple surfaces.
+If you want a `<KanbanBoard>` composite in `@theokit/ui` going forward, the contribution workflow lives in `/CONTRIBUTING.md`. Worth proposing if your team needs it across multiple surfaces.
 
 ---
 

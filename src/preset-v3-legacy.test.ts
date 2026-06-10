@@ -13,7 +13,7 @@ describe("preset-v3-legacy — Tailwind v3 JS preset default-export shape", () =
     const content = preset.content as string[];
     expect(
       content.some(
-        (p) => p.includes("node_modules/@usetheo/ui/dist") && p.match(/\{?(js|mjs|cjs)/),
+        (p) => p.includes("node_modules/@theokit/ui/dist") && p.match(/\{?(js|mjs|cjs)/),
       ),
     ).toBe(true);
   });

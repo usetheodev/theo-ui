@@ -8,7 +8,14 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     css: false,
-    include: ["src/**/*.{test,spec}.{ts,tsx}", "scripts/**/*.{test,spec}.ts"],
+    include: [
+      "src/**/*.{test,spec}.{ts,tsx}",
+      "scripts/**/*.{test,spec}.ts",
+      "tests/**/*.{test,spec}.ts",
+    ],
+    // tests/visual/ are Playwright specs (run via `pnpm quality:visual`).
+    // Excluded from vitest to avoid duplicate runs and `expect` API mismatch.
+    exclude: ["**/node_modules/**", "**/dist/**", "tests/visual/**"],
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
