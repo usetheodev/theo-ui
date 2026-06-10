@@ -32,7 +32,7 @@ import { ThemeProvider } from "./themes/theme-provider.js";
  *   - Wrap `<html lang="en" suppressHydrationWarning>`.
  *
  * @example
- *   import { TheoUIProvider } from "@usetheo/ui";
+ *   import { TheoUIProvider } from "@theokit/ui";
  *
  *   export default function App({ children }) {
  *     return <TheoUIProvider>{children}</TheoUIProvider>;

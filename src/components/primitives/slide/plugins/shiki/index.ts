@@ -17,7 +17,7 @@
  *     as plain `<pre><code>` (defaultSchema allows that).
  *
  * @example
- *   import { shikiPlugin } from "@usetheo/ui/slide/plugins/shiki";
+ *   import { shikiPlugin } from "@theokit/ui/slide/plugins/shiki";
  *   import "shiki";  // installed as peer-dep
  *   <Slide markdown={md} plugins={[shikiPlugin({ langs: ["ts","python"] })]} />
  */

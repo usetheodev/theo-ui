@@ -1,6 +1,6 @@
 /* Theo UI — font loading via Google Fonts CDN (opt-in).
  *
- * Use this entrypoint instead of `@usetheo/ui/fonts.css` if you prefer to
+ * Use this entrypoint instead of `@theokit/ui/fonts.css` if you prefer to
  * fetch Geist + Geist Mono from `fonts.googleapis.com` rather than ship the
  * 290 KB of woff2 assets that the self-hosted entrypoint includes.
  *
@@ -10,14 +10,14 @@
  *   - CON: third-party network request on every page load; conflicts with
  *     strict CSP and GDPR jurisdictions; render-blocking on cold cache.
  *
- * The default for `@usetheo/ui/styles.css` (and `@usetheo/ui/fonts.css`)
+ * The default for `@theokit/ui/styles.css` (and `@theokit/ui/fonts.css`)
  * is the self-hosted path (HIGH-002 / D6). Switch to this only if your
  * threat model permits the third-party fetch.
  *
  * Usage:
  *
- *   @import "@usetheo/ui/tokens.css";
- *   @import "@usetheo/ui/fonts-cdn.css";  // NOT styles.css (which bundles
+ *   @import "@theokit/ui/tokens.css";
+ *   @import "@theokit/ui/fonts-cdn.css";  // NOT styles.css (which bundles
  *                                          // the self-hosted @font-face)
  *
  * The CSS variables (`--font-display`, `--font-body`, `--font-mono`) in

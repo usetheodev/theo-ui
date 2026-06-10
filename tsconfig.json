@@ -17,14 +17,15 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "types": ["@testing-library/jest-dom"],
     "declaration": false,
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "@usetheo/ui": ["./src/index.ts"],
-      "@usetheo/ui/whiteboard": ["./src/components/primitives/whiteboard/index.ts"],
-      "@usetheo/ui/*": ["./src/*"]
+      "@theokit/ui": ["./src/index.ts"],
+      "@theokit/ui/whiteboard": ["./src/components/primitives/whiteboard/index.ts"],
+      "@theokit/ui/*": ["./src/*"]
     }
   },
   "include": [

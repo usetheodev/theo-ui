@@ -4,7 +4,7 @@
  *
  * Forked from `vercel/ai-elements` `<MessageActions>` + `<MessageAction>`
  * (Apache-2.0, see NOTICE). Adapted to TheoUI primitives: `<Button>` from
- * `@usetheo/ui` instead of shadcn, no Tooltip primitive yet (Vercel uses
+ * `@theokit/ui` instead of shadcn, no Tooltip primitive yet (Vercel uses
  * one — we render the `tooltip` prop as a `title` attribute for now; a
  * proper Tooltip primitive lands in a follow-up RFC).
  */

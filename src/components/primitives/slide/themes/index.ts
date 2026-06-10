@@ -1,6 +1,6 @@
 /**
  * Theme registry for the Slide primitive. Built-in themes that ship with the
- * `@usetheo/ui/slide` subpath. Custom themes are NOT registered through this
+ * `@theokit/ui/slide` subpath. Custom themes are NOT registered through this
  * module in v0.1 — consumers override CSS variables on `.theo-slide` directly.
  */
 

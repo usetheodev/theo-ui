@@ -96,7 +96,7 @@ export const Default: Story = () => {
         <section className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-8 px-6">
           <header className="grid gap-3 text-center">
             <span className="font-mono text-label-caps text-primary uppercase tracking-wider">
-              @usetheo · welcome back
+              @theokit · welcome back
             </span>
             <h1 className="text-balance font-display text-display-xl tracking-tight">
               De volta ao trabalho, <span className="text-accent">Alfredo</span>?

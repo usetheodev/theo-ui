@@ -73,7 +73,7 @@ export const VioletForgeTheme: Story = () => {
 
 The branded palette running on the slide canvas.
 
-> Tokens live in \`@usetheo/ui/slide/themes/violet-forge.css\`.
+> Tokens live in \`@theokit/ui/slide/themes/violet-forge.css\`.
 
 \`\`\`ts
 const slide = <Slide markdown={md} theme="violet-forge" />

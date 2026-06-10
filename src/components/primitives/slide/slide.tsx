@@ -10,7 +10,7 @@ import {
 /**
  * `<Slide>` — view-only primitive that renders markdown + YAML frontmatter
  * into a themed, fixed-aspect surface. Lives in the isolated subpath
- * `@usetheo/ui/slide`.
+ * `@theokit/ui/slide`.
  *
  * See RFC 0002 (`docs/rfcs/0002-slide.md`) and the plan in
  * `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.

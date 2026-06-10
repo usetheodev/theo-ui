@@ -6,7 +6,7 @@ export { violetForge } from "./violet-forge.js";
 export { classicPaper } from "./classic-paper.js";
 export { auroraTerminal } from "./aurora-terminal.js";
 export { defineTheme, type DefineThemeInput } from "./define.js";
-export { hex, rgb } from "./color.js";
+export { hex, hexToHsl, rgb, rgbToHslLegacy } from "./color.js";
 export { useDensity, type Density, type DensityContextValue } from "./density.js";
 // Seven new themes — RFC 0007, plan: seven-themes (2026-05-22).
 // Trademark-safe slugs (D1.1) — `*-style` / `*-mono` / `*-glass` suffixes,

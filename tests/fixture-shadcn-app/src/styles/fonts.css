@@ -12,7 +12,7 @@
  * triggered a third-party network request on every page load — friction for
  * CSP-strict deployments, GDPR jurisdictions, and offline-first products.
  * The fonts ship as woff2 next to this CSS; consumers who installed
- * `@usetheo/ui/styles.css` get Geist with zero external dependencies.
+ * `@theokit/ui/styles.css` get Geist with zero external dependencies.
  *
  * Asset budget: 6 woff2 files (~290 KB total). Three weights per family
  * cover the entire Violet Forge typescale (display-2xl through code-sm).
@@ -21,7 +21,7 @@
  * Consumers who prefer Google Fonts CDN (e.g. don't want to host static
  * assets) can use the parallel entrypoint instead:
  *
- *   @import "@usetheo/ui/fonts-cdn.css";
+ *   @import "@theokit/ui/fonts-cdn.css";
  *
  * That file keeps the legacy @import to fonts.googleapis.com.
  */

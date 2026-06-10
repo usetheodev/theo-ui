@@ -43,7 +43,9 @@ describe("ChatMessage — part dispatch", () => {
       parts: [{ type: "text", text: "Hello **world**" }],
     };
     render(<ChatMessage message={msg} />);
-    const strong = await screen.findByText("world");
+    // Async markdown parse can take longer in parallel-suite runs (shared
+    // happy-dom event loop). Default 1000ms findBy timeout is borderline.
+    const strong = await screen.findByText("world", undefined, { timeout: 5000 });
     expect(strong.tagName).toBe("STRONG");
   });
 

@@ -9,7 +9,7 @@
  *
  * Usage (Anthropic tool use):
  *
- *     import { slideFrontmatterJsonSchema } from "@usetheo/ui/slide";
+ *     import { slideFrontmatterJsonSchema } from "@theokit/ui/slide";
  *
  *     const tool = {
  *       name: "render_slide",

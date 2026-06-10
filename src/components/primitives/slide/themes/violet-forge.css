@@ -26,7 +26,7 @@
 
   /* Violet accent — the brand hue. Used for relative mixing so it adapts
      to light/dark surfaces (mixed with `currentColor`). */
-  --theo-slide-accent: #7c3aed;
+  --theo-slide-accent: #A855F7;
 
   /* Derived tints — relative to inherited `currentColor` so they auto-flip
      when the parent surface flips. */

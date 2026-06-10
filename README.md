@@ -2,7 +2,7 @@
 
 <img src="https://usetheo.dev/logo-128.webp" alt="Theo" width="96" height="96" />
 
-**`@usetheo/ui`** · the **Build** (UI) auxiliary of the [Theo ecosystem](https://usetheo.dev)
+**`@theokit/ui`** · the **Build** (UI) auxiliary of the [Theo ecosystem](https://usetheo.dev)
 
 # The UI your agent already needs.
 
@@ -13,8 +13,8 @@ A React component library built for AI agent surfaces and cloud dashboards. **10
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1344%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-139-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-1466%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-149-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -30,9 +30,9 @@ There is a version of your product where the agent UI is half-built before you s
 
 The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the deployment status, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
 
-## Why `@usetheo/ui`
+## Why `@theokit/ui`
 
-Most component libraries optimize for marketing pages. `@usetheo/ui` is built for the surfaces that AI agents and cloud dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
+Most component libraries optimize for marketing pages. `@theokit/ui` is built for the surfaces that AI agents and cloud dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
 
 - **Built for AI agents.** Primitives for skills, cron jobs, permission matrices, MCP servers, memory editing, hook config, audit logs, model cards, token usage charts, sub-agent dispatch — the components a transparent agent UI actually needs.
 - **Built for PaaS.** Composites for project cards, deployment rows, build log streams, env var editors, domain config, preview environments, rollback flows, metrics panels.
@@ -42,7 +42,7 @@ Most component libraries optimize for marketing pages. `@usetheo/ui` is built fo
 
 The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
 
-| Surface need | `@usetheo/ui` | shadcn / Radix | Tremor | Build it yourself |
+| Surface need | `@theokit/ui` | shadcn / Radix | Tremor | Build it yourself |
 |---|---|---|---|---|
 | Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
 | Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
@@ -73,17 +73,17 @@ Below this line, full technical vocabulary is in play. Installation, themes, the
 ### Option A — install the package
 
 ```bash
-pnpm add @usetheo/ui
+pnpm add @theokit/ui
 ```
 
 ```css
 /* app entrypoint */
-@import "@usetheo/ui/tokens.css";
-@import "@usetheo/ui/styles.css";
+@import "@theokit/ui/tokens.css";
+@import "@theokit/ui/styles.css";
 ```
 
 ```tsx
-import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@usetheo/ui";
+import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@theokit/ui";
 
 export default function App() {
   return (
@@ -114,7 +114,7 @@ Every item under [`registry/r/`](./registry/r) is a standalone copy-paste unit w
 Inject `<ThemeScript>` in `<head>` to prevent FOUC and hydration mismatch:
 
 ```tsx
-import { ThemeProvider, ThemeScript } from "@usetheo/ui";
+import { ThemeProvider, ThemeScript } from "@theokit/ui";
 
 <html lang="en" suppressHydrationWarning>
   <head>
@@ -130,7 +130,7 @@ import { ThemeProvider, ThemeScript } from "@usetheo/ui";
 
 ### Option C — install the agent skill
 
-For AI coding assistants (Claude Code, Cursor, Codex), `@usetheo/ui` ships a companion **skill** that teaches the assistant how to use the library correctly — pick the right composite, respect the design tokens, run the slop test before shipping.
+For AI coding assistants (Claude Code, Cursor, Codex), `@theokit/ui` ships a companion **skill** that teaches the assistant how to use the library correctly — pick the right composite, respect the design tokens, run the slop test before shipping.
 
 ```bash
 npx skills add usetheodev/theo-ui
@@ -143,33 +143,34 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**139 components**, organized by mechanical rule: a *primitive* imports no other `@usetheo/ui` component; a *composite* does.
+**149 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (92) — building blocks
+**Primitives** (99) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
 <!-- BEGIN:primitives -->
 `ActionBar` · `AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState`
 `AgentStreaming` · `Alert` · `ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice`
-`Avatar` · `Badge` · `BrowserControls` · `BuildLogStream` · `Button` · `CapabilityIndicator`
-`Card` · `ChatThread` · `Checkbox` · `ContextCard` · `ContextWindowBar` · `CopyButton`
-`CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DangerZone` · `Dialog` · `DiffViewer`
-`DropdownMenu` · `EmptyState` · `FolderContextCard` · `FolderSelector` · `FormField` · `HookConfig`
-`HookEventLog` · `Input` · `IntentSelector` · `Label` · `LaneBoard` · `LoginSplit`
-`MCPServerCard` · `MemoryEditor` · `MentionMenu` · `MetricsPanel` · `ModelCard` · `ModelSelector`
-`Pagination` · `PermissionMatrix` · `PinInput` · `PlanBadge` · `Progress` · `ProgressChecklist`
-`ProjectSwitcher` · `QuickActionChips` · `RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats`
-`RunningTasksPanel` · `ScrollArea` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet`
-`Sidebar` · `Skeleton` · `SkillCard` · `SocialAuthRow` · `StatTile` · `StatusDot`
-`StepsRail` · `SubAgentDispatch` · `Switch` · `SystemPromptEditor` · `Table` · `Tabs`
-`TaskNode` · `TaskPlan` · `TerminalPanel` · `Textarea` · `Timestamp` · `Toast`
+`Avatar` · `Badge` · `BranchIndicator` · `BrowserControls` · `BuildLogStream` · `Button`
+`CapabilityIndicator` · `Card` · `ChannelCard` · `ChatThread` · `Checkbox` · `ContextCard`
+`ContextWindowBar` · `CopyButton` · `CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DangerZone`
+`Dialog` · `DiffViewer` · `DropdownMenu` · `EmptyState` · `ExportChatDialog` · `FolderContextCard`
+`FolderSelector` · `FormField` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog` · `Input`
+`IntentSelector` · `Label` · `LaneBoard` · `LoginSplit` · `MCPServerCard` · `MemoryEditor`
+`MentionMenu` · `MetricsPanel` · `ModelCard` · `ModelSelector` · `Pagination` · `PermissionMatrix`
+`PinInput` · `PlanBadge` · `Progress` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
+`RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunStatusPill` · `RunningTasksPanel`
+`ScrollArea` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
+`Skeleton` · `SkillCard` · `SocialAuthRow` · `StatTile` · `StatusDot` · `StepsRail`
+`SubAgentDispatch` · `Switch` · `SystemPromptEditor` · `Table` · `Tabs` · `TaskNode`
+`TaskPlan` · `TerminalPanel` · `Textarea` · `ThinkingLevelSelector` · `Timestamp` · `Toast`
 `Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
-`Tooltip` · `TopNav`
+`Tooltip` · `TopNav` · `UpdateBanner`
 <!-- END:primitives -->
 
 </details>
@@ -177,12 +178,12 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 <details>
 <summary>
 <!-- BEGIN:composites-count -->
-**Composites** (47) — assembled flows
+**Composites** (50) — assembled flows
 <!-- END:composites-count -->
 </summary>
 
 <!-- BEGIN:composites -->
-`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `CodeBlock` · `CommandPalette` · `ConfirmDialog` · `CronJobsList` · `DataPart` · `DataTable` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `PageShell` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `TaskHeader` · `TextPart` · `ToolCallPart` · `UsageMeter`
+`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `CodeBlock` · `CommandPalette` · `ConfirmDialog` · `CronJobsList` · `DataPart` · `DataTable` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `MetricCard` · `PageShell` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `StatusIndicator` · `TaskHeader` · `TextPart` · `ToolCallPart` · `UsageMeter`
 <!-- END:composites -->
 
 </details>
@@ -212,7 +213,7 @@ Three themes ship out of the box, all driven by HSL-split CSS variables. Swap at
 | `aurora-terminal` | High-contrast dev terminal feel | Cyan-aurora `#3DD9D6` | Aurora pink `#FF5C8A` |
 
 ```tsx
-import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@usetheo/ui";
+import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@theokit/ui";
 
 <ThemeProvider defaultTheme="violet-forge" themes={builtinThemes}>
   <ThemeSwitcher />
@@ -220,7 +221,7 @@ import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@usetheo/ui";
 </ThemeProvider>
 ```
 
-Define your own theme by extending `Theme` from `@usetheo/ui` — see [`docs/design-system.md`](./docs/design-system.md).
+Define your own theme by extending `Theme` from `@theokit/ui` — see [`docs/design-system.md`](./docs/design-system.md).
 
 ---
 
@@ -241,11 +242,11 @@ Full spec: [`docs/design-system.md`](./docs/design-system.md). Visual audit of c
 
 ### Self-hosting fonts
 
-By default `@usetheo/ui/styles.css` `@import`s Geist + Geist Mono from `fonts.googleapis.com`. For GDPR-sensitive deployments or strict CSP environments, self-host instead:
+By default `@theokit/ui/styles.css` `@import`s Geist + Geist Mono from `fonts.googleapis.com`. For GDPR-sensitive deployments or strict CSP environments, self-host instead:
 
 1. Download Geist from [Vercel](https://vercel.com/font) (or the `geist` npm package).
 2. Drop the assets into your `public/fonts/` folder.
-3. In your app's global CSS, comment the `@usetheo/ui/styles.css` `@import` rule for Google Fonts (or import `@usetheo/ui/tokens.css` only) and add your own `@font-face` blocks for `Geist` and `Geist Mono`.
+3. In your app's global CSS, comment the `@theokit/ui/styles.css` `@import` rule for Google Fonts (or import `@theokit/ui/tokens.css` only) and add your own `@font-face` blocks for `Geist` and `Geist Mono`.
 
 The CSS variables (`--font-body`, `--font-display`, `--font-mono`) are already wired to consume whichever `@font-face` rules are present — no component changes needed.
 
@@ -291,7 +292,7 @@ pnpm quality:gates     # full chain
 ```
 src/
   components/
-    primitives/    atomic building blocks (no internal @usetheo/ui deps)
+    primitives/    atomic building blocks (no internal @theokit/ui deps)
     composites/    assembled flows (compose primitives via barrel imports)
   foundations/     Ladle stories for colors, typography, spacing, elevation, motion
   themes/          ThemeProvider, ThemeScript, ThemeSwitcher, 3 themes
@@ -310,7 +311,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 ## Bundle & module format
 
-- **ESM-only** — `@usetheo/ui` ships a single `dist/index.js` (ESM) plus
+- **ESM-only** — `@theokit/ui` ships a single `dist/index.js` (ESM) plus
   per-component `dist/components/.../index.d.ts` type declarations. No CJS
   build. Consumers running on CommonJS Node need to transpile or use a
   bundler. This is intentional: the four-pillar audience (modern Vite,
@@ -318,25 +319,25 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 - **Tree-shaking via the barrel** — modern bundlers (Vite, esbuild, Rollup,
   webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and tree-shake
   unused components from the barrel import (`import { Button } from
-  "@usetheo/ui"` drops every other component from the final bundle). No
+  "@theokit/ui"` drops every other component from the final bundle). No
   per-component subpath exports are needed for this to work.
 - **Subpath imports are aliases (not separate bundles).** `package.json#exports`
-  publishes 99 component subpaths (`@usetheo/ui/button`, `@usetheo/ui/agent-event`,
+  publishes 99 component subpaths (`@theokit/ui/button`, `@theokit/ui/agent-event`,
   …). Every subpath resolves to the same `dist/index.js`. tsup is configured with
   `splitting: false` deliberately — a 99-entry split would duplicate shared code
   (cn, types, Radix runtime) into every chunk and inflate the tarball. Subpath
   imports exist for IDE intellisense and import organization. Modern bundlers
-  tree-shake the same way whether you write `import { Button } from "@usetheo/ui"`
-  or `import { Button } from "@usetheo/ui/button"`. Runtimes that don't tree-shake
+  tree-shake the same way whether you write `import { Button } from "@theokit/ui"`
+  or `import { Button } from "@theokit/ui/button"`. Runtimes that don't tree-shake
   (Jest classic, Node REPL, raw browser ESM) will load the full barrel either way
   — accept that cost or pre-bundle with the consumer's tooling.
 - **CSS distribution** — `dist/styles.css` is the recommended single import
   (combines tokens, fonts self-hosted, Tailwind base/components/utilities).
-  `@usetheo/ui/tokens.css`, `@usetheo/ui/fonts.css`, and
-  `@usetheo/ui/fonts-cdn.css` (opt-in) are available for finer control.
+  `@theokit/ui/tokens.css`, `@theokit/ui/fonts.css`, and
+  `@theokit/ui/fonts-cdn.css` (opt-in) are available for finer control.
 - **Self-hosted fonts** — Geist Sans + Geist Mono ship as woff2 under
   `dist/fonts/` (~290 KB total). Opt into Google Fonts CDN with
-  `@import "@usetheo/ui/fonts-cdn.css"` instead of the default if you
+  `@import "@theokit/ui/fonts-cdn.css"` instead of the default if you
   prefer not to host static assets.
 
 ---
@@ -352,15 +353,15 @@ Honest claims only.
 
 ## Engines (isolated subpaths)
 
-Engines ship as bundle-isolated subpaths — they are NOT in the main barrel (`@usetheo/ui`). Each one has its own dist file, its own optional peer-deps, and its own RFC.
+Engines ship as bundle-isolated subpaths — they are NOT in the main barrel (`@theokit/ui`). Each one has its own dist file, its own optional peer-deps, and its own RFC.
 
 ```bash
 # Whiteboard — view-only renderer for JSON in Excalidraw style.
-pnpm add @usetheo/ui roughjs perfect-freehand
+pnpm add @theokit/ui roughjs perfect-freehand
 ```
 
 ```tsx
-import { Whiteboard, type WhiteboardData } from "@usetheo/ui/whiteboard";
+import { Whiteboard, type WhiteboardData } from "@theokit/ui/whiteboard";
 
 const scene: WhiteboardData = {
   version: 1,
@@ -378,14 +379,14 @@ const scene: WhiteboardData = {
 
 ```bash
 # Slide — view-only renderer for markdown + YAML frontmatter, Marp-inspired.
-pnpm add @usetheo/ui mdast-util-from-markdown mdast-util-gfm \
+pnpm add @theokit/ui mdast-util-from-markdown mdast-util-gfm \
   micromark-extension-gfm mdast-util-to-hast hast-util-sanitize \
   hast-util-to-jsx-runtime yaml
 ```
 
 ```tsx
-import { Slide } from "@usetheo/ui/slide";
-import "@usetheo/ui/slide/themes/default.css";
+import { Slide } from "@theokit/ui/slide";
+import "@theokit/ui/slide/themes/default.css";
 
 const md = `---
 theme: default
@@ -406,14 +407,14 @@ Note: IDs generated from markdown headings are prefixed with `user-content-` by 
 
 ```bash
 # SlideDeck — multi-slide deck w/ navigation, presenter, fullscreen, PDF.
-pnpm add @usetheo/ui mdast-util-from-markdown mdast-util-gfm \
+pnpm add @theokit/ui mdast-util-from-markdown mdast-util-gfm \
   micromark-extension-gfm mdast-util-to-hast hast-util-sanitize \
   hast-util-to-jsx-runtime yaml
 ```
 
 ```tsx
-import { SlideDeck } from "@usetheo/ui/slide-deck";
-import "@usetheo/ui/slide/themes/default.css";
+import { SlideDeck } from "@theokit/ui/slide-deck";
+import "@theokit/ui/slide/themes/default.css";
 
 const deck = `# Welcome
 
@@ -436,9 +437,9 @@ Use ← / → / Space, swipe on mobile, or click thumbnails.
 
 | Engine | Subpath | Status | RFC |
 |---|---|---|---|
-| Whiteboard (view-only, JSON → SVG, Excalidraw aesthetic) | `@usetheo/ui/whiteboard` | Available | [RFC 0001](./docs/rfcs/0001-whiteboard.md) |
-| Slide (view-only, markdown → themed surface, Marp-inspired) | `@usetheo/ui/slide` | Available | [RFC 0002](./docs/rfcs/0002-slide.md) |
-| SlideDeck (multi-slide deck w/ navigation + presenter + fullscreen + PDF) | `@usetheo/ui/slide-deck` | Available | [RFC 0003](./docs/rfcs/0003-slide-deck.md) |
+| Whiteboard (view-only, JSON → SVG, Excalidraw aesthetic) | `@theokit/ui/whiteboard` | Available | [RFC 0001](./docs/rfcs/0001-whiteboard.md) |
+| Slide (view-only, markdown → themed surface, Marp-inspired) | `@theokit/ui/slide` | Available | [RFC 0002](./docs/rfcs/0002-slide.md) |
+| SlideDeck (multi-slide deck w/ navigation + presenter + fullscreen + PDF) | `@theokit/ui/slide-deck` | Available | [RFC 0003](./docs/rfcs/0003-slide-deck.md) |
 | Diagram | TBD | Roadmap | TBD |
 
 Each engine ships behind the same gate chain (test + story + a11y + registry + bundle isolation). No version commitment for the Roadmap items — these are not on the 0.1 / 1.0 line.

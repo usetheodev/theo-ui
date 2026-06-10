@@ -1,19 +1,23 @@
 /**
- * Color helpers that return values in the HSL string-tuple format the
- * `ColorScale` shape expects (e.g. `"262 83% 58%"`).
+ * Color helpers for `ColorScale` and `defineTheme`.
  *
- * Why this format: matches the shadcn / Violet Forge convention where
- * CSS variables hold the H S% L% components and consumers write
- * `hsl(var(--primary))` (allowing alpha overlays via
- * `hsl(var(--primary) / 0.5)`). Returning an object would force callers
- * to write `${theme.light.primary.h} ${theme.light.primary.s}% …` —
- * exactly the friction `hex()` is meant to remove.
+ * Post-T2.6 (community-best-practices alignment, ADR-0005): the canonical
+ * output format is OKLCH (`"oklch(L C H)"`). Built-in themes also use OKLCH
+ * after the T2.4 migration. The CSS regex (`COLOR_VALUE_PATTERN`) accepts
+ * both formats for backward compatibility — legacy themes pinned to the
+ * HSL split format keep working.
  *
- * No external dependency: vanilla algorithm from CSS Color spec.
+ * Helpers:
+ *   - hex(input)      → "oklch(L C H)"  (NEW — primary path post-T2.6)
+ *   - rgb(r, g, b)    → "oklch(L C H)"  (NEW)
+ *   - hexToHsl(input) → "H S% L%"       (legacy — deprecated, kept 1 minor)
+ *   - rgbToHsl(...)   → "H S% L%"       (legacy — deprecated)
+ *
  * Alpha channels are intentionally discarded — `ColorScale` is opaque;
- * use `hsl(var(--primary) / 0.5)` in CSS for transparency.
+ * compose alpha in CSS via `color-mix(in oklch, var(--primary) 50%, transparent)`.
  *
- * Plan: `.claude/knowledge-base/plans/theming-and-sizes-plan.md` T2.2.
+ * Original plan: `.claude/knowledge-base/plans/theming-and-sizes-plan.md` T2.2.
+ * Updated by: `.claude/knowledge-base/plans/theo-ui-community-best-practices-alignment-plan.md` T2.6.
  */
 
 function hexCharToNibble(ch: string): number {
@@ -53,6 +57,50 @@ function parseHex(input: string): { r: number; g: number; b: number } {
     );
   }
   return { r, g, b };
+}
+
+/**
+ * Convert sRGB ([0, 255]^3) to OKLCH via D65 linearization and Oklab matrices.
+ * Inline implementation (no external dep): the Oklab paper (Björn Ottosson,
+ * 2020) defines the conversion as two matrix products + cube-root nonlinearity.
+ * Output: rounded to 3 decimals for L/C, 1 decimal for H.
+ */
+function rgbToOklch(r: number, g: number, b: number): string {
+  // sRGB → linear RGB (gamma decoding).
+  const linearize = (c: number): number => {
+    const cn = c / 255;
+    return cn <= 0.04045 ? cn / 12.92 : ((cn + 0.055) / 1.055) ** 2.4;
+  };
+  const rl = linearize(r);
+  const gl = linearize(g);
+  const bl = linearize(b);
+
+  // Linear RGB → LMS via Oklab matrix.
+  const l_ = 0.4122214708 * rl + 0.5363325363 * gl + 0.0514459929 * bl;
+  const m_ = 0.2119034982 * rl + 0.6806995451 * gl + 0.1073969566 * bl;
+  const s_ = 0.0883024619 * rl + 0.2817188376 * gl + 0.6299787005 * bl;
+
+  const l = Math.cbrt(l_);
+  const m = Math.cbrt(m_);
+  const s = Math.cbrt(s_);
+
+  // LMS' → Oklab.
+  const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+  const bComp = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+
+  // Oklab → OKLCH.
+  const C = Math.sqrt(a * a + bComp * bComp);
+  let H = (Math.atan2(bComp, a) * 180) / Math.PI;
+  if (H < 0) H += 360;
+
+  const round = (n: number, d: number): number => {
+    const f = 10 ** d;
+    return Math.round(n * f) / f;
+  };
+  // Neutrals (C ≈ 0) have an undefined hue; emit 0 to keep regex-friendly.
+  const hOut = C < 1e-4 ? 0 : round(H, 1);
+  return `oklch(${round(L, 3)} ${round(C, 3)} ${hOut})`;
 }
 
 function rgbToHsl(r: number, g: number, b: number): string {
@@ -97,11 +145,24 @@ function rgbToHsl(r: number, g: number, b: number): string {
  * @throws if the input is malformed.
  *
  * @example
- *   hex("#7C3AED")   // "262 83% 58%"
- *   hex("#7c3aed")   // "262 83% 58%"  (same)
+ *   hex("#A855F7")   // "oklch(0.628 0.225 296)"
+ *   hex("#a855f7")   // same — case-insensitive
  *   hex("#abc")      // expanded to "#aabbcc"
  */
 export function hex(input: string): string {
+  const { r, g, b } = parseHex(input);
+  return rgbToOklch(r, g, b);
+}
+
+/**
+ * Legacy helper that returns HSL string-tuple format (pre-T2.6).
+ *
+ * @deprecated Since 2026-06-03 — use `hex(input)` which returns OKLCH.
+ *   Kept for one minor cycle to avoid breaking consumers that authored
+ *   themes using the HSL split format. Both formats are accepted by
+ *   `ColorScale` and by `<ThemeProvider>` runtime validation.
+ */
+export function hexToHsl(input: string): string {
   const { r, g, b } = parseHex(input);
   return rgbToHsl(r, g, b);
 }
@@ -113,7 +174,7 @@ export function hex(input: string): string {
  * @throws if any channel is out of `[0, 255]`.
  *
  * @example
- *   rgb(124, 58, 237)  // "262 83% 58%"
+ *   rgb(168, 85, 247)  // "oklch(0.628 0.225 296)"
  */
 export function rgb(r: number, g: number, b: number): string {
   for (const value of [r, g, b]) {
@@ -121,6 +182,20 @@ export function rgb(r: number, g: number, b: number): string {
       throw new Error(
         `rgb(): channel out of range — expected 0..255, got ${value}. Did you mix percentage values?`,
       );
+    }
+  }
+  return rgbToOklch(Math.round(r), Math.round(g), Math.round(b));
+}
+
+/**
+ * Legacy helper that returns HSL string-tuple format (pre-T2.6).
+ *
+ * @deprecated Since 2026-06-03 — use `rgb(r, g, b)` which returns OKLCH.
+ */
+export function rgbToHslLegacy(r: number, g: number, b: number): string {
+  for (const value of [r, g, b]) {
+    if (!Number.isFinite(value) || value < 0 || value > 255) {
+      throw new Error(`rgbToHslLegacy(): channel out of range — expected 0..255, got ${value}.`);
     }
   }
   return rgbToHsl(Math.round(r), Math.round(g), Math.round(b));

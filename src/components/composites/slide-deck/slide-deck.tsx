@@ -11,7 +11,7 @@ import {
 /**
  * `<SlideDeck>` — composite engine orchestrating N `<Slide>` primitives.
  *
- * Subpath-isolated at `@usetheo/ui/slide-deck` (ADR D1). Imports `<Slide>` via
+ * Subpath-isolated at `@theokit/ui/slide-deck` (ADR D1). Imports `<Slide>` via
  * the public package path so consumer's installed peer-deps are reused.
  *
  * See RFC 0003 and the plan in

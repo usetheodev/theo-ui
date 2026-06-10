@@ -6,15 +6,15 @@
  * with the materialized utility rules for every class the library's
  * components reference. The output is `dist/components.css`, which
  * `dist/styles.css` then `@import`s — so a single
- * `@import "@usetheo/ui/styles.css"` in the consumer's CSS pulls in
+ * `@import "@theokit/ui/styles.css"` in the consumer's CSS pulls in
  * every utility the library needs, regardless of package-manager
  * layout (pnpm symlinks, yarn berry PnP, bun flat, …).
  *
  * Why this exists (the bug it fixes):
  *   Tailwind v4's `@source` glob does NOT follow symbolic links. In a
- *   pnpm install, `node_modules/@usetheo/ui` is a symlink to
- *   `node_modules/.pnpm/@usetheo+ui@…/node_modules/@usetheo/ui`. The
- *   pattern `@source "node_modules/@usetheo/ui/dist/**\/*.{js,mjs,cjs}"`
+ *   pnpm install, `node_modules/@theokit/ui` is a symlink to
+ *   `node_modules/.pnpm/@usetheo+ui@…/node_modules/@theokit/ui`. The
+ *   pattern `@source "node_modules/@theokit/ui/dist/**\/*.{js,mjs,cjs}"`
  *   expands to ZERO matches under pnpm, and every hover/focus/active/
  *   data-state variant the library uses goes unemitted. Consumers see
  *   flat-rendered components.

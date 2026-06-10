@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 /**
  * Merge Tailwind classes with conflict resolution.
- * Standard utility across all @usetheo/ui components.
+ * Standard utility across all @theokit/ui components.
  */
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));

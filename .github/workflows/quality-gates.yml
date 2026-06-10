@@ -34,6 +34,13 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # T5.3 (community-best-practices plan, ADR-0005 cohort): install Playwright
+      # Chromium so `pnpm quality:visual` runs as part of `pnpm quality:gates`.
+      # Linux Chromium binary is cached by the actions/setup-node step above
+      # via pnpm — no separate cache needed.
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Run quality gates
         run: pnpm quality:gates
 

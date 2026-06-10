@@ -1,5 +1,5 @@
 /**
- * Public surface of `@usetheo/ui/slide`. Subpath-isolated engine: this bundle
+ * Public surface of `@theokit/ui/slide`. Subpath-isolated engine: this bundle
  * is emitted separately from the barrel (see `tsup.config.ts`) and depends on
  * the markdown stack via optional peer-deps.
  */

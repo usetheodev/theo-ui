@@ -3,7 +3,7 @@
  *
  * Verbatim of the part-type shape from `packages/ai/src/ui/ui-messages.ts`
  * (Apache-2.0, copyright Vercel Inc., see NOTICE). Re-declared standalone so
- * `@usetheo/ui` does not take `ai` as a direct dependency — the goal is
+ * `@theokit/ui` does not take `ai` as a direct dependency — the goal is
  * interop without coupling.
  *
  * Consumer code using `useChat()` from `@ai-sdk/react`:

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { injectPrintStyles, printDeck, removePrintStyles } from "./print-styles.js";
 
 afterEach(() => {
@@ -36,6 +36,15 @@ describe("removePrintStyles", () => {
 });
 
 describe("printDeck", () => {
+  beforeEach(() => {
+    // jsdom doesn't implement window.print; stub it so vi.spyOn can hook
+    vi.stubGlobal("print", vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("calls window.print and registers afterprint listener", () => {
     const printSpy = vi.spyOn(window, "print").mockImplementation(() => {});
     const addSpy = vi.spyOn(window, "addEventListener");

@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-`@usetheo/ui` is pre-1.0 (currently `0.0.0`). Security fixes are applied to
+`@theokit/ui` is pre-1.0 (currently `0.0.0`). Security fixes are applied to
 `main` and the most recent `0.x` release on the `--tag next` channel. Once
 `1.0.0` ships, this section will list a supported-versions matrix.
 
@@ -26,7 +26,7 @@ release within 14 days for `HIGH` / `CRITICAL` issues.
 
 ## What counts as a vulnerability
 
-`@usetheo/ui` is a presentation-layer React component library. The
+`@theokit/ui` is a presentation-layer React component library. The
 security surface is narrower than a server SDK, but the following classes
 are in scope:
 

@@ -67,7 +67,7 @@ jobs:
           <html lang="en">
           <head>
             <meta charset="utf-8" />
-            <title>@usetheo/ui — registry</title>
+            <title>@theokit/ui — registry</title>
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <style>
               body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 40px auto; max-width: 720px; padding: 0 20px; color: #111; }
@@ -76,13 +76,13 @@ jobs:
             </style>
           </head>
           <body>
-            <h1>@usetheo/ui — registry</h1>
-            <p>shadcn-compatible component registry for <a href="https://github.com/usetheodev/theo-ui">@usetheo/ui</a>.</p>
+            <h1>@theokit/ui — registry</h1>
+            <p>shadcn-compatible component registry for <a href="https://github.com/usetheodev/theo-ui">@theokit/ui</a>.</p>
             <p>Install any component:</p>
             <pre><code>npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json</code></pre>
             <p>See the <a href="index.json">catalog index</a> for all 114 items.</p>
             <hr />
-            <p>npm: <a href="https://www.npmjs.com/package/@usetheo/ui"><code>pnpm add @usetheo/ui@next</code></a></p>
+            <p>npm: <a href="https://www.npmjs.com/package/@theokit/ui"><code>pnpm add @theokit/ui@next</code></a></p>
           </body>
           </html>
           HTML
