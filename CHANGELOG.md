@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.4] - 2026-06-13
+
+### Added
+
+- `pnpm dev:pack` script for local cross-repo consumption — generates tarball at `dist/theokit-ui-{version}.tgz` that installs without dual-React symlink issues. Documented in CONTRIBUTING.md.
+
 ## [0.14.3] - 2026-06-09
 
 **Patch — PageShell content spacing standardization.**
