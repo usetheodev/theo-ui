@@ -253,6 +253,36 @@ See `docs/quality-gates.md` Gate 9 for the full Release Readiness checklist.
 
 ---
 
+## Local development (cross-repo)
+
+When developing a project that consumes `@theokit/ui` locally (e.g., TheoCode, TheoKit examples):
+
+### Why not `npm link`?
+
+`npm link` (or `npm install ../theo-ui`) creates a symlink that exposes
+theo-ui's own `node_modules/react` (devDependency), causing dual-React errors
+in the consumer project. This is a known Node.js limitation with symlinks +
+pnpm strict hoisting. Symptoms: `"useState null"`, `"Element from older version"`.
+
+### Workflow (2 commands)
+
+```bash
+# 1. In theo-ui — build + generate tarball
+pnpm dev:pack
+
+# 2. In the consumer project — install the tarball
+npm install file:../theo-ui/dist/theokit-ui-0.14.3.tgz
+```
+
+The tarball installs exactly like the npm registry version: no symlinks, no
+nested `node_modules`, peerDependencies resolve to the consumer's copies.
+
+After changing theo-ui components, re-run both commands.
+
+### Prerequisites
+
+Both repos must be under the same parent directory (e.g., `theokit-tools/`).
+
 ## Security
 
 See [`SECURITY.md`](./SECURITY.md) for the disclosure policy. In short:

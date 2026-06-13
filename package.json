@@ -602,6 +602,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:contract": "vitest run tests/contract",
+    "dev:pack": "pnpm build && pnpm pack --pack-destination dist/",
     "prepublishOnly": "pnpm build && pnpm test:contract && node scripts/validate-exports.mjs",
     "validate:exports": "node scripts/validate-exports.mjs",
     "registry:build": "tsx scripts/build-registry.ts",
