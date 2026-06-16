@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "confirm-prompt",
+  "type": "registry:block",
+  "title": "ConfirmPrompt",
+  "description": "Binary yes/no ask-the-user card with an optional destructive variant exposed as an alertdialog.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "cn",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/composites/confirm-prompt/confirm-prompt.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/confirm-prompt.tsx"
+    }
+  ]
+}

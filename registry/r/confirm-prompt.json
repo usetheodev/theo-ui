@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "confirm-prompt",
+  "type": "registry:block",
+  "title": "ConfirmPrompt",
+  "description": "Binary yes/no ask-the-user card with an optional destructive variant exposed as an alertdialog.",
+  "registryDependencies": [
+    "https://usetheodev.github.io/theo-ui/r/badge.json",
+    "https://usetheodev.github.io/theo-ui/r/button.json",
+    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
+  ],
+  "files": [
+    {
+      "path": "components/composites/confirm-prompt/confirm-prompt.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/confirm-prompt.tsx",
+      "content": "import { forwardRef, useId } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\n\n/**\n * ConfirmPrompt — binary yes/no \"ask the user\" card for agent surfaces.\n *\n * The simplest member of the prompt family: a question with an optional header\n * chip and two actions. Use `variant=\"destructive\"` for dangerous confirmations\n * (delete, drop, force-push) — it tones the confirm button red and exposes the\n * card as an `alertdialog` so assistive tech announces the stakes.\n *\n * Renders one question at a time — sequencing is the consumer's responsibility.\n */\n\nexport interface ConfirmPromptProps extends Omit<HTMLAttributes<HTMLElement>, \"onSelect\"> {\n  /** The question being asked. */\n  question: ReactNode;\n  /** Optional secondary line under the question. */\n  description?: ReactNode;\n  /** Optional short header chip (rendered as a Badge). */\n  badge?: ReactNode;\n  /** Tone of the confirm action. `destructive` also exposes role=alertdialog. */\n  variant?: \"primary\" | \"destructive\";\n  /** Confirm button label. Defaults to \"Confirm\". */\n  confirmLabel?: ReactNode;\n  /** Cancel button label. Defaults to \"Cancel\". Omit `onCancel` to hide it. */\n  cancelLabel?: ReactNode;\n  /** Pressing Confirm. */\n  onConfirm?: () => void;\n  /** Pressing Cancel. */\n  onCancel?: () => void;\n}\n\nconst ConfirmPrompt = forwardRef<HTMLElement, ConfirmPromptProps>(\n  (\n    {\n      className,\n      question,\n      description,\n      badge,\n      variant = \"primary\",\n      confirmLabel = \"Confirm\",\n      cancelLabel = \"Cancel\",\n      onConfirm,\n      onCancel,\n      ...props\n    },\n    ref,\n  ) => {\n    const baseId = useId();\n    const questionId = `${baseId}-question`;\n    const isDestructive = variant === \"destructive\";\n\n    return (\n      <section\n        ref={ref}\n        role={isDestructive ? \"alertdialog\" : undefined}\n        aria-labelledby={questionId}\n        className={cn(\n          \"grid w-full gap-4 rounded-xl border bg-card p-5 text-card-foreground shadow-md\",\n          \"transition-shadow duration-base ease-out-soft\",\n          isDestructive && \"border-destructive/40 bg-destructive/5\",\n          className,\n        )}\n        {...props}\n      >\n        <header className=\"flex items-start justify-between gap-3\">\n          <h3 id={questionId} className=\"font-display text-foreground text-title-md tracking-tight\">\n            {question}\n          </h3>\n          {badge != null ? (\n            <Badge\n              variant={isDestructive ? \"destructive\" : \"primary\"}\n              size=\"sm\"\n              className=\"shrink-0\"\n            >\n              {badge}\n            </Badge>\n          ) : null}\n        </header>\n        {description != null ? (\n          <p className=\"text-body-sm text-muted-foreground\">{description}</p>\n        ) : null}\n\n        <footer className=\"flex items-center justify-end gap-2\">\n          <Button size=\"sm\" variant=\"secondary\" onClick={onCancel}>\n            {cancelLabel}\n          </Button>\n          <Button size=\"sm\" variant={isDestructive ? \"destructive\" : \"primary\"} onClick={onConfirm}>\n            {confirmLabel}\n          </Button>\n        </footer>\n      </section>\n    );\n  },\n);\nConfirmPrompt.displayName = \"ConfirmPrompt\";\n\nexport { ConfirmPrompt };\n"
+    }
+  ]
+}

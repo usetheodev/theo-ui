@@ -47,11 +47,7 @@ export const ThinkingLevelSelector = forwardRef<HTMLSelectElement, ThinkingLevel
     { value, inheritedValue, onChange, disabled = false, className, "data-testid": dataTestId },
     ref,
   ) => {
-    if (
-      isDev() &&
-      value === "inherited" &&
-      inheritedValue === undefined
-    ) {
+    if (isDev() && value === "inherited" && inheritedValue === undefined) {
       // biome-ignore lint/suspicious/noConsole: dev-only warning when caller passes value="inherited" without inheritedValue
       console.warn(
         '[ThinkingLevelSelector] value="inherited" but no inheritedValue prop — rendering as "Inherited: ?".',
