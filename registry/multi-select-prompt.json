@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "multi-select-prompt",
+  "type": "registry:block",
+  "title": "MultiSelectPrompt",
+  "description": "Multi-select ask-the-user card with number-key toggles, an Other free-text option, and a side-by-side preview pane.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "checkbox",
+    "cn",
+    "input",
+    "label",
+    "prompt",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/composites/multi-select-prompt/multi-select-prompt.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/multi-select-prompt.tsx"
+    }
+  ]
+}

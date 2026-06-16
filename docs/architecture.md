@@ -74,11 +74,11 @@ but **must not import their own consumers** (no circular deps).
 <!-- END:primitives-list -->
 
 <!-- BEGIN:composites-census -->
-### Composites (50)
+### Composites (54)
 <!-- END:composites-census -->
 
 <!-- BEGIN:composites-list -->
-`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `CronJobsList`, `DataPart`, `DataTable`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `MetricCard`, `PageShell`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `StabilityBundleViewer`, `StatusIndicator`, `TaskHeader`, `TextPart`, `ToolCallPart`, `UsageMeter`
+`AccountMenu`, `AgentComposer`, `AgentEditor`, `AgentStream`, `AgentTimeline`, `ApprovalCard`, `ChatComposer`, `ChatMessage`, `ChatMessageAction`, `ChatMessageActions`, `ChatMessageBranch`, `ChatMessageBranchContent`, `ChatMessageBranchNext`, `ChatMessageBranchPage`, `ChatMessageBranchPrevious`, `ChatMessageBranchSelector`, `ChatMessageContent`, `ChatMessageResponse`, `ChatMessageRoot`, `ChatMessageToolbar`, `ChoicePrompt`, `CodeBlock`, `CommandPalette`, `ConfirmDialog`, `ConfirmPrompt`, `CronJobsList`, `DataPart`, `DataTable`, `DeploymentRow`, `DomainConfig`, `EnvVarEditor`, `FilePart`, `MCPServerList`, `MetricCard`, `MultiSelectPrompt`, `PageShell`, `PermissionModal`, `PreviewEnvCard`, `PreviewPanel`, `ProjectCard`, `ReasoningPart`, `RollbackUI`, `RuleEditor`, `SkillEditor`, `SkillsList`, `SourceDocumentPart`, `SourceUrlPart`, `StabilityBundleViewer`, `StatusIndicator`, `TaskHeader`, `TextPart`, `TextPrompt`, `ToolCallPart`, `UsageMeter`
 <!-- END:composites-list -->
 
 ### Notes

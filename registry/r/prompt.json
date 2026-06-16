@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "prompt",
+  "type": "registry:lib",
+  "title": "Prompt option helpers",
+  "description": "Shared option type + helpers (PromptOption, Other-value, number-key mapping) used by the prompt composites.",
+  "files": [
+    {
+      "path": "lib/prompt.ts",
+      "type": "registry:lib",
+      "target": "lib/prompt.ts",
+      "content": "import type { ReactNode } from \"react\";\n\n/**\n * A selectable option shared by the prompt composites (`ChoicePrompt`,\n * `MultiSelectPrompt`). Modeled on the question/option shape that drives an\n * AI-agent \"ask the user\" surface (the same UX Claude Code's question card\n * exposes): a stable value, a visible label, an optional secondary line, and\n * an optional rich preview shown side-by-side.\n */\nexport interface PromptOption {\n  /** Stable value returned on selection. Must be unique within the option set. */\n  value: string;\n  /** Visible primary label. */\n  label: ReactNode;\n  /** Optional secondary line rendered under the label. */\n  description?: ReactNode;\n  /** When true, the option cannot be selected. */\n  disabled?: boolean;\n  /**\n   * Optional rich preview (markdown-ish mockup, code snippet, diagram) shown in\n   * the side-by-side pane while the option is selected. The presence of any\n   * preview across the option set switches the layout to two columns — matching\n   * the Claude Code question card's focused-option preview.\n   */\n  preview?: ReactNode;\n}\n\n/**\n * Reserved value for the synthesized free-text \"Other\" option that the choice\n * composites inject when `allowOther` is set. Kept out of the public barrel so\n * consumers cannot collide with it accidentally; compare against it via the\n * exported `isOtherValue` helper instead.\n */\nexport const OTHER_OPTION_VALUE = \"__theo_other__\";\n\n/** True when `value` is the synthesized free-text \"Other\" option. */\nexport function isOtherValue(value: string | undefined): boolean {\n  return value === OTHER_OPTION_VALUE;\n}\n\n/**\n * Map a single keyboard digit to a zero-based option index. Returns `null` when\n * the key is not a `1`..`9` digit. `\"1\"` → `0`, `\"9\"` → `8`. Used by the choice\n * composites to wire number-key shortcuts (terminal-style selection).\n */\nexport function digitKeyToIndex(key: string): number | null {\n  if (key.length !== 1 || key < \"1\" || key > \"9\") return null;\n  return Number(key) - 1;\n}\n"
+    }
+  ]
+}

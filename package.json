@@ -145,6 +145,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/checkbox/index.js"
     },
+    "./choice-prompt": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/choice-prompt/index.js"
+    },
     "./code-block": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/code-block/index.js"
@@ -156,6 +160,10 @@
     "./confirm-dialog": {
       "types": "./dist/index.d.ts",
       "import": "./dist/composites/confirm-dialog/index.js"
+    },
+    "./confirm-prompt": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/confirm-prompt/index.js"
     },
     "./context-card": {
       "types": "./dist/index.d.ts",
@@ -300,6 +308,10 @@
     "./model-selector": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/model-selector/index.js"
+    },
+    "./multi-select-prompt": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/multi-select-prompt/index.js"
     },
     "./page-shell": {
       "types": "./dist/index.d.ts",
@@ -480,6 +492,10 @@
     "./terminal-panel": {
       "types": "./dist/index.d.ts",
       "import": "./dist/primitives/terminal-panel/index.js"
+    },
+    "./text-prompt": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/composites/text-prompt/index.js"
     },
     "./textarea": {
       "types": "./dist/index.d.ts",

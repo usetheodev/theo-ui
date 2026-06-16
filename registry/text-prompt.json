@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-prompt",
+  "type": "registry:block",
+  "title": "TextPrompt",
+  "description": "Free-text ask-the-user card with single-line or multi-line input and an optional required gate.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "cn",
+    "input",
+    "label",
+    "tailwind-preset",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "components/composites/text-prompt/text-prompt.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/text-prompt.tsx"
+    }
+  ]
+}

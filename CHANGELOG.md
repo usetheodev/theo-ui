@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Prompt composites — "ask the user" cards for agent surfaces, modeled on
+  Claude Code's question UX.** Four self-contained composites, each rendering
+  one question at a time (sequencing across questions is the consumer's
+  responsibility — there is no built-in flow orchestrator):
+  - **`ChoicePrompt`** — single-select (radio). Header chip, options with
+    label + description, `1`..`9` number-key shortcuts (terminal-style
+    selection), injectable free-text "Other" option, and a side-by-side preview
+    pane when options carry preview content. Emits `onConfirm` with the chosen
+    value (plus the typed Other text when relevant).
+  - **`MultiSelectPrompt`** — multi-select (checkbox). Same surface as
+    `ChoicePrompt` with number-key toggles, an Other row, a `minSelected` gate,
+    and a stacked preview pane for every selected option. Emits `onConfirm`
+    with the value array.
+  - **`TextPrompt`** — free-text. Single-line `Input` or multi-line `Textarea`
+    with an optional `required` gate. Emits `onConfirm` with the typed text.
+  - **`ConfirmPrompt`** — binary yes/no. Optional `destructive` variant that
+    tones the confirm action red and exposes the card as an `alertdialog`.
+  Controlled or uncontrolled. Ships a `prompt` registry lib item carrying the
+  shared `PromptOption` type + helpers consumed by the choice composites.
+
 ## [0.14.3] - 2026-06-09
 
 **Patch — PageShell content spacing standardization.**

@@ -10,6 +10,7 @@
   ],
   "registryDependencies": [
     "cn",
+    "env",
     "tokens"
   ],
   "files": [

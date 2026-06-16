@@ -199,6 +199,12 @@
       "description": "Built on Radix Checkbox — accessible binary control with focus ring and indeterminate state support."
     },
     {
+      "name": "choice-prompt",
+      "type": "registry:block",
+      "title": "ChoicePrompt",
+      "description": "Single-select ask-the-user card with number-key shortcuts, an Other free-text option, and a side-by-side preview pane."
+    },
+    {
       "name": "cn",
       "type": "registry:lib",
       "title": "cn (Tailwind class merger)",
@@ -221,6 +227,12 @@
       "type": "registry:ui",
       "title": "ConfirmDialog",
       "description": "Controlled confirmation modal built on Dialog. Auto-focuses Cancel on open (deliberate — NOT the destructive button). Optional intent=destructive switches the confirm button to destructive variant. Optional confirmationPhrase enables typed-confirmation guard (case-sensitive, empty string = no phrase). Async onConfirm shows Loader2 spinner; resolve closes the dialog; reject keeps it open so consumers can surface their own error. Enter in the phrase input triggers confirm when matched."
+    },
+    {
+      "name": "confirm-prompt",
+      "type": "registry:block",
+      "title": "ConfirmPrompt",
+      "description": "Binary yes/no ask-the-user card with an optional destructive variant exposed as an alertdialog."
     },
     {
       "name": "context-card",
@@ -317,6 +329,12 @@
       "type": "registry:block",
       "title": "EnvVarEditor",
       "description": "Table-like editor for environment variables."
+    },
+    {
+      "name": "env",
+      "type": "registry:lib",
+      "title": "Environment helpers",
+      "description": "Typed environment helpers (isDev / isProd) reading NODE_ENV through a single accessor that works in browser bundlers, Node/SSR, and unbundled browsers."
     },
     {
       "name": "folder-context-card",
@@ -439,6 +457,12 @@
       "description": "Chip dropdown for picking the active LLM."
     },
     {
+      "name": "multi-select-prompt",
+      "type": "registry:block",
+      "title": "MultiSelectPrompt",
+      "description": "Multi-select ask-the-user card with number-key toggles, an Other free-text option, and a side-by-side preview pane."
+    },
+    {
       "name": "page-shell",
       "type": "registry:ui",
       "title": "PageShell",
@@ -515,6 +539,12 @@
       "type": "registry:ui",
       "title": "ProjectSwitcher",
       "description": "Sidebar header for a code agent app."
+    },
+    {
+      "name": "prompt",
+      "type": "registry:lib",
+      "title": "Prompt option helpers",
+      "description": "Shared option type + helpers (PromptOption, Other-value, number-key mapping) used by the prompt composites."
     },
     {
       "name": "quick-action-chips",
@@ -761,6 +791,12 @@
       "type": "registry:ui",
       "title": "TerminalPanel",
       "description": "Minimal terminal output viewer."
+    },
+    {
+      "name": "text-prompt",
+      "type": "registry:block",
+      "title": "TextPrompt",
+      "description": "Free-text ask-the-user card with single-line or multi-line input and an optional required gate."
     },
     {
       "name": "textarea",
