@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-06-16
+
 ### Added
 - **Prompt composites — "ask the user" cards for agent surfaces, modeled on
   Claude Code's question UX.** Four self-contained composites, each rendering
@@ -27,6 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     tones the confirm action red and exposes the card as an `alertdialog`.
   Controlled or uncontrolled. Ships a `prompt` registry lib item carrying the
   shared `PromptOption` type + helpers consumed by the choice composites.
+
+## [0.14.4] - 2026-06-13
+
+### Added
+
+- `pnpm dev:pack` script for local cross-repo consumption — generates tarball at `dist/theokit-ui-{version}.tgz` that installs without dual-React symlink issues. Documented in CONTRIBUTING.md.
 
 ## [0.14.3] - 2026-06-09
 
