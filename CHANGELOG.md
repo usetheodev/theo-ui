@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   exported for class reuse. (community-standard-componentization, T5.1)
 
 ### Changed
+- Bundle baseline updated for the new per-subpath declaration strategy: the
+  barrel `dist/index.d.ts` is now a thin re-export (15 KB vs the old 206 KB
+  inlined monolith) because per-component types live in their own files under
+  `dist/components/`. Engine `.d.ts` moved from `dist/<engine>/` to
+  `dist/components/.../`. (community-standard-componentization, T3.1)
 - Bundle baseline for `dist/components.css` corrected to the full `@source`
   scan size (the prior baseline was set in an environment where Tailwind v4's
   `@source` glob under-scanned the library tree — a known pnpm-symlink
