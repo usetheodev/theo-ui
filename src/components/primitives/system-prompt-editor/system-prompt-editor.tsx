@@ -1,3 +1,5 @@
+"use client";
+
 import { RotateCcw, Sparkles } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";

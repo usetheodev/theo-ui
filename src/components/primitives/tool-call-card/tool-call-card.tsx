@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, ChevronRight, Loader2, X } from "lucide-react";
 import { useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";

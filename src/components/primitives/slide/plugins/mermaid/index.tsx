@@ -1,3 +1,5 @@
+"use client";
+
 import type { Element, Root as HastRoot } from "hast";
 /**
  * Slide rich-content plugin — Mermaid diagrams.

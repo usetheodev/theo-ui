@@ -597,7 +597,7 @@
     "DESIGN.md"
   ],
   "scripts": {
-    "build": "tsup && tsx scripts/regen-subpath-exports.ts",
+    "build": "tsup && tsx scripts/inject-use-client.ts && tsx scripts/regen-subpath-exports.ts",
     "dev": "ladle serve",
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",

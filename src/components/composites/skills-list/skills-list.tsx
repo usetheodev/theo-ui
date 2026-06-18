@@ -1,3 +1,5 @@
+"use client";
+
 import { Search } from "lucide-react";
 import { forwardRef, useMemo, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";

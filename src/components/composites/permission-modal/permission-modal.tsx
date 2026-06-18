@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertTriangle, FolderOpen, ShieldAlert } from "lucide-react";
 import { useRef } from "react";
 import type { ReactNode } from "react";

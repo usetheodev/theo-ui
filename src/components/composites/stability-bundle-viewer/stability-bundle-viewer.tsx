@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertOctagon, AlertTriangle, Info, type LucideIcon } from "lucide-react";
 import { forwardRef, useState } from "react";
 
