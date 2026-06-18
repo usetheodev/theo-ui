@@ -21,6 +21,7 @@ export const Controls: FC<ControlsProps> = ({ className }) => {
         alignItems: "center",
         gap: 8,
       }}
+      data-slot="controls"
     >
       <button
         type="button"

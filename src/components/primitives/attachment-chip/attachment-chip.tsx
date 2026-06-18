@@ -35,6 +35,7 @@ const AttachmentChip = forwardRef<HTMLDivElement, AttachmentChipProps>(
           className,
         )}
         {...props}
+        data-slot="attachment-chip"
       >
         <Icon className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
         <span className="truncate text-foreground" title={attachment.name}>

@@ -72,6 +72,7 @@ export function ToolCallCard({
         className,
       )}
       {...props}
+      data-slot="tool-call-card"
     >
       {/* T5.4: <header role="button"> previously failed axe's
        * aria-prohibited-attr + semantic-landmark guidance. Replaced by

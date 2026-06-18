@@ -39,7 +39,12 @@ const RunningTasksPanel = forwardRef<HTMLElement, RunningTasksPanelProps>(
     const running = tasks.filter((t) => t.status === "running");
     const completed = tasks.filter((t) => t.status !== "running");
     return (
-      <section ref={ref} className={cn("rounded-xl border bg-card p-4", className)} {...props}>
+      <section
+        ref={ref}
+        className={cn("rounded-xl border bg-card p-4", className)}
+        {...props}
+        data-slot="running-tasks-panel"
+      >
         <Group title="Running" empty="Nothing running" items={running} />
         {completed.length > 0 ? (
           <div className="mt-4">

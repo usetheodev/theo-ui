@@ -65,7 +65,12 @@ const ContextWindowBar = forwardRef<HTMLDivElement, ContextWindowBarProps>(
     }[tone];
 
     return (
-      <div ref={ref} className={cn("grid gap-1.5", className)} {...props}>
+      <div
+        ref={ref}
+        className={cn("grid gap-1.5", className)}
+        {...props}
+        data-slot="context-window-bar"
+      >
         {!compact ? (
           <div className="flex items-baseline justify-between gap-2">
             <span className="font-mono text-label-caps text-muted-foreground uppercase tracking-wider">

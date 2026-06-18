@@ -56,6 +56,7 @@ const SessionTimeline = forwardRef<HTMLDivElement, SessionTimelineProps>(
       className={cn("rounded-xl border bg-card", className)}
       aria-label="Session history"
       {...props}
+      data-slot="session-timeline"
     >
       {title ? (
         <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">

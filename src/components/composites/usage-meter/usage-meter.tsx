@@ -82,6 +82,7 @@ const UsageMeter = forwardRef<HTMLDivElement, UsageMeterProps>(
         )}
         data-theo-usage-meter=""
         {...props}
+        data-slot="usage-meter"
       >
         {hasHeader ? (
           <header className="flex items-baseline justify-between gap-3">

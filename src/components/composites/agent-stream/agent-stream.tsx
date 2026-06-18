@@ -106,6 +106,7 @@ const AgentStream = forwardRef<HTMLDivElement, AgentStreamProps>(
         aria-atomic="false"
         className={cn("flex flex-col gap-3", className)}
         {...props}
+        data-slot="agent-stream"
       >
         {items.map((item) => {
           if (item.kind === "message") return <ChatMessage key={item.id} message={item.message} />;

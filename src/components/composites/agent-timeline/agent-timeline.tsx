@@ -34,6 +34,7 @@ const AgentTimeline = forwardRef<HTMLOListElement, AgentTimelineProps>(
         className,
       )}
       {...props}
+      data-slot="agent-timeline"
     >
       {events.map((event) => (
         <li key={event.id} className="animate-fade-in-up">

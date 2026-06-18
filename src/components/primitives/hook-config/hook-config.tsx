@@ -59,7 +59,12 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
     };
 
     return (
-      <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
+      <section
+        ref={ref}
+        className={cn("rounded-xl border bg-card", className)}
+        {...props}
+        data-slot="hook-config"
+      >
         <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">
             <Zap className="size-4 text-primary" aria-hidden="true" />

@@ -156,6 +156,7 @@ const MultiSelectPrompt = forwardRef<HTMLElement, MultiSelectPromptProps>(
           className,
         )}
         {...props}
+        data-slot="multi-select-prompt"
       >
         <header className="flex items-start justify-between gap-3">
           <h3 id={questionId} className="font-display text-foreground text-title-md tracking-tight">

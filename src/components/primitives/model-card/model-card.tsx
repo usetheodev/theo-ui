@@ -77,6 +77,7 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
         )}
         aria-pressed={onSelect ? !!selected : undefined}
         {...(props as HTMLAttributes<HTMLElement>)}
+        data-slot="model-card"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">

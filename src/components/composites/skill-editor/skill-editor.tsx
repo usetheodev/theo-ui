@@ -88,6 +88,7 @@ export function SkillEditor({
       onSubmit={handleSubmit}
       className={cn("flex h-full flex-col gap-4", className)}
       {...formProps}
+      data-slot="skill-editor"
     >
       <FormField>
         <FormField.Label>Name</FormField.Label>

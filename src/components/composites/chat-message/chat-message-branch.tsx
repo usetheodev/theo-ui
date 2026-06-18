@@ -101,7 +101,7 @@ export function ChatMessageBranch({
   );
 
   return (
-    <MessageBranchContext.Provider value={value}>
+    <MessageBranchContext.Provider value={value} data-slot="chat-message-branch">
       <div className={cn("grid w-full gap-2", className)} {...props} />
     </MessageBranchContext.Provider>
   );
@@ -177,6 +177,7 @@ export function ChatMessageBranchPrevious({
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
       {...props}
+      data-slot="chat-message-branch-previous"
     >
       {children ?? <ChevronLeftIcon className="size-3.5" aria-hidden="true" />}
     </Button>
@@ -199,6 +200,7 @@ export function ChatMessageBranchNext({
       disabled={totalBranches <= 1}
       onClick={goToNext}
       {...props}
+      data-slot="chat-message-branch-next"
     >
       {children ?? <ChevronRightIcon className="size-3.5" aria-hidden="true" />}
     </Button>
@@ -219,6 +221,7 @@ export function ChatMessageBranchPage({
         className,
       )}
       {...props}
+      data-slot="chat-message-branch-page"
     >
       {currentBranch + 1} of {totalBranches}
     </span>

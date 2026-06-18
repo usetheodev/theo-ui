@@ -54,6 +54,7 @@ const SkillCard = forwardRef<HTMLDivElement, SkillCardProps>(
           className,
         )}
         {...props}
+        data-slot="skill-card"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">

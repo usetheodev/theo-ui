@@ -90,6 +90,7 @@ export const RunStatusPill = forwardRef<HTMLSpanElement, RunStatusPillProps>(
         data-testid={dataTestId ?? "run-status-pill"}
         data-status={status}
         {...rest}
+        data-slot="run-status-pill"
       >
         <Icon className={cn("size-3", meta.spin && "animate-spin")} aria-hidden />
         <span>{meta.label}</span>

@@ -74,6 +74,7 @@ export const ExportChatDialog = forwardRef<HTMLDivElement, ExportChatDialogProps
           className,
         )}
         data-testid={dataTestId ?? "export-chat-dialog"}
+        data-slot="export-chat-dialog"
       >
         <div className="w-full max-w-sm rounded-lg border border-border bg-card p-4 shadow-lg">
           <h2 id="export-chat-dialog-title" className="font-semibold text-base">

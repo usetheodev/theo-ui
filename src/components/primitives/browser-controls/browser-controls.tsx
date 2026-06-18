@@ -29,6 +29,7 @@ const BrowserControls = forwardRef<HTMLDivElement, BrowserControlsProps>(
         className,
       )}
       {...props}
+      data-slot="browser-controls"
     >
       <NavBtn aria-label="Back" {...(onBack ? { onClick: onBack } : {})}>
         <ArrowLeft className="size-3.5" />

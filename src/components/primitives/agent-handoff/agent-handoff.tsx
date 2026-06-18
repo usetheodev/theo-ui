@@ -62,6 +62,7 @@ const AgentHandoff = forwardRef<HTMLElement, AgentHandoffProps>(
         className,
       )}
       {...props}
+      data-slot="agent-handoff"
     >
       <header className="flex items-center gap-2">
         <Avatar party={from} />

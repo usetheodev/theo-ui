@@ -90,6 +90,7 @@ const ApprovalCard = forwardRef<HTMLElement, ApprovalCardProps>(
         aria-label={typeof title === "string" ? title : "Approval required"}
         className={cn(cardVariants({ severity: resolvedSeverity }), className)}
         {...props}
+        data-slot="approval-card"
       >
         <header className="flex items-start gap-3">
           <span

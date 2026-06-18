@@ -26,6 +26,7 @@ const RunStats = forwardRef<HTMLDivElement, RunStatsProps>(
         className,
       )}
       {...props}
+      data-slot="run-stats"
     >
       {duration ? (
         <span className="inline-flex items-center gap-1.5">

@@ -42,6 +42,7 @@ const ToolCall = forwardRef<HTMLDivElement, ToolCallProps>(
         ref={ref}
         className={cn("rounded-md border border-border/40 bg-muted/30", className)}
         {...props}
+        data-slot="tool-call"
       >
         <button
           type="button"

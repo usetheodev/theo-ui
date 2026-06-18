@@ -21,6 +21,7 @@ export function SourceUrlPart({ part }: SourceUrlPartProps): JSX.Element {
         "align-middle font-mono text-label",
       )}
       data-theo-source="url"
+      data-slot="source-url-part"
     >
       <ExternalLinkIcon className="size-3 text-muted-foreground" aria-hidden="true" />
       {safe ? (
@@ -51,6 +52,7 @@ export function SourceDocumentPart({ part }: SourceDocumentPartProps): JSX.Eleme
         "align-middle font-mono text-label",
       )}
       data-theo-source="document"
+      data-slot="source-document-part"
     >
       <FileTextIcon className="size-3 text-muted-foreground" aria-hidden="true" />
       <span className="truncate text-foreground">{part.title}</span>

@@ -136,7 +136,12 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
     };
 
     return (
-      <div ref={ref} className={cn("flex flex-col gap-2", className)} {...props}>
+      <div
+        ref={ref}
+        className={cn("flex flex-col gap-2", className)}
+        {...props}
+        data-slot="build-log-stream"
+      >
         {filterable ? (
           <div className="flex flex-wrap gap-1.5">
             {ALL_LEVELS.map((level) => {

@@ -196,6 +196,7 @@ export const MermaidDiagram: FC<{ source: string; theme?: string }> = ({ source,
         role="img"
         aria-label={error}
         className="theo-slide-mermaid-host"
+        data-slot="mermaid-diagram"
       >
         <pre style={{ fontSize: "0.8em", opacity: 0.7, whiteSpace: "pre-wrap" }}>{source}</pre>
       </div>

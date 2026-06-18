@@ -38,7 +38,12 @@ const RESULT_CONFIG = {
  */
 const HookEventLog = forwardRef<HTMLDivElement, HookEventLogProps>(
   ({ className, events, title = "Hook log", ...props }, ref) => (
-    <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
+    <section
+      ref={ref}
+      className={cn("rounded-xl border bg-card", className)}
+      {...props}
+      data-slot="hook-event-log"
+    >
       <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">
         <h3 className="font-display text-title-md tracking-tight">{title}</h3>
         <span className="font-mono text-label text-muted-foreground">

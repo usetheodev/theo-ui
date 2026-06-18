@@ -53,6 +53,7 @@ const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
         ref={ref}
         className={cn("overflow-hidden rounded-xl border bg-card", className)}
         {...props}
+        data-slot="terminal-panel"
       >
         <header className="flex items-center gap-2 border-border/40 border-b px-3 py-2">
           <TerminalIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />

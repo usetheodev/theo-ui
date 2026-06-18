@@ -17,6 +17,7 @@ export function ChatMessageToolbar({
       className={cn("mt-3 flex w-full items-center justify-between gap-3", className)}
       data-theo-chat-toolbar=""
       {...props}
+      data-slot="chat-message-toolbar"
     >
       {children}
     </div>

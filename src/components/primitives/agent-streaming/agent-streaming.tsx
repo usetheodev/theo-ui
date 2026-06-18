@@ -36,6 +36,7 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
           className,
         )}
         {...props}
+        data-slot="agent-streaming"
       >
         <span
           className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/15 text-primary"
