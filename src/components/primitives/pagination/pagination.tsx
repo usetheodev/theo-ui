@@ -154,12 +154,12 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     return (
       <nav
+        data-slot="pagination"
         ref={ref}
         aria-label="Pagination"
         onKeyDown={handleKeyDown}
         className={cn("flex items-center gap-1", className)}
         {...props}
-        data-slot="pagination"
       >
         {showJumpButtons ? (
           <button

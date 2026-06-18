@@ -49,6 +49,7 @@ const AuditLogEntry = forwardRef<HTMLElement, AuditLogEntryProps>(
     const sev = entry.severity ?? "info";
     return (
       <article
+        data-slot="audit-log-entry"
         ref={ref}
         className={cn(
           "grid grid-cols-[auto_1fr_auto] items-start gap-3 border-border/30 border-b px-3 py-2",
@@ -56,7 +57,6 @@ const AuditLogEntry = forwardRef<HTMLElement, AuditLogEntryProps>(
           className,
         )}
         {...props}
-        data-slot="audit-log-entry"
       >
         <span
           className={cn(

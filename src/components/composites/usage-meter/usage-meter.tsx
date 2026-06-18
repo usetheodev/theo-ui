@@ -74,6 +74,7 @@ const UsageMeter = forwardRef<HTMLDivElement, UsageMeterProps>(
     const hasHeader = Boolean(title) || Boolean(action);
     return (
       <div
+        data-slot="usage-meter"
         ref={ref}
         className={cn(
           "grid gap-3 rounded-xl border border-border bg-card p-4",
@@ -82,7 +83,6 @@ const UsageMeter = forwardRef<HTMLDivElement, UsageMeterProps>(
         )}
         data-theo-usage-meter=""
         {...props}
-        data-slot="usage-meter"
       >
         {hasHeader ? (
           <header className="flex items-baseline justify-between gap-3">

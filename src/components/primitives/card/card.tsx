@@ -43,6 +43,7 @@ const Root = forwardRef<HTMLDivElement, CardRootProps>(
   ({ className, size = "md", ...props }, ref) => (
     <CardContext.Provider value={{ size }}>
       <div
+        data-slot="card"
         ref={ref}
         className={cn(
           "rounded-xl border bg-card text-card-foreground shadow-md",
@@ -50,7 +51,6 @@ const Root = forwardRef<HTMLDivElement, CardRootProps>(
           className,
         )}
         {...props}
-        data-slot="root"
       />
     </CardContext.Provider>
   ),
@@ -68,10 +68,10 @@ const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     const size = useCardSize();
     return (
       <div
+        data-slot="card-header"
         ref={ref}
         className={cn("flex flex-col", headerPadBySize[size], className)}
         {...props}
-        data-slot="header"
       />
     );
   },
@@ -99,6 +99,7 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>(
     const size = useCardSize();
     return (
       <Comp
+        data-slot="card-title"
         ref={ref}
         className={cn(
           "font-display text-foreground tracking-tight",
@@ -106,7 +107,6 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>(
           className,
         )}
         {...props}
-        data-slot="title"
       />
     );
   },
@@ -116,10 +116,10 @@ Title.displayName = "Card.Title";
 const Description = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
     <p
+      data-slot="card-description"
       ref={ref}
       className={cn("text-body-sm text-muted-foreground", className)}
       {...props}
-      data-slot="description"
     />
   ),
 );
@@ -135,7 +135,12 @@ const Body = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
     return (
-      <div ref={ref} className={cn(bodyPadBySize[size], className)} {...props} data-slot="body" />
+      <div
+        data-slot="card-body"
+        ref={ref}
+        className={cn(bodyPadBySize[size], className)}
+        {...props}
+      />
     );
   },
 );
@@ -152,6 +157,7 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     const size = useCardSize();
     return (
       <div
+        data-slot="card-footer"
         ref={ref}
         className={cn(
           "flex items-center border-border/40 border-t",
@@ -159,7 +165,6 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
           className,
         )}
         {...props}
-        data-slot="footer"
       />
     );
   },

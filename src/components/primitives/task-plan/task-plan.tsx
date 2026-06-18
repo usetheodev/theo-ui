@@ -53,11 +53,11 @@ const TaskNode = forwardRef<HTMLLIElement, TaskNodeProps>(
     const Icon = STATUS_ICON[node.status];
     return (
       <li
+        data-slot="task-node"
         ref={ref}
         className={cn("grid gap-1", className)}
         style={{ marginLeft: `${depth * 1.25}rem` }}
         {...props}
-        data-slot="task-node"
       >
         <div className="grid grid-cols-[auto_1fr] items-baseline gap-2">
           <Icon
@@ -110,10 +110,10 @@ const TaskPlan = forwardRef<HTMLElement, TaskPlanProps>(
     const computedSummary = summary ?? (auto > 0 ? `${done} of ${auto} done` : "no steps");
     return (
       <section
+        data-slot="task-plan"
         ref={ref}
         className={cn("rounded-xl border bg-card p-4", className)}
         {...props}
-        data-slot="task-plan"
       >
         <header className="mb-3 flex items-baseline justify-between gap-3">
           {title ? (

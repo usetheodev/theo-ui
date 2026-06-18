@@ -52,6 +52,7 @@ const CronJobCard = forwardRef<HTMLElement, CronJobCardProps>(
     const enabled = job.status !== "disabled";
     return (
       <article
+        data-slot="cron-job-card"
         ref={ref}
         className={cn(
           "grid gap-3 rounded-xl border bg-card p-4",
@@ -59,7 +60,6 @@ const CronJobCard = forwardRef<HTMLElement, CronJobCardProps>(
           className,
         )}
         {...props}
-        data-slot="cron-job-card"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">

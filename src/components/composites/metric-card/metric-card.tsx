@@ -68,6 +68,7 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
   ({ title, value, delta, hint, icon, invertTrend = false, className, ...rest }, ref) => {
     return (
       <Card
+        data-slot="metric-card"
         ref={ref}
         // T5.5: `@container/metric-card` makes the tile responsive to its PARENT
         // width, not the viewport. Consumers can drop multiple cards into any
@@ -79,7 +80,6 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
         className={cn("@container/metric-card flex w-full flex-col gap-2 p-4", className)}
         data-testid="metric-card"
         {...rest}
-        data-slot="metric-card"
       >
         <div className="flex items-start justify-between gap-3">
           <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">

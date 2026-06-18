@@ -27,10 +27,10 @@ interface LoginSplitProps extends HTMLAttributes<HTMLDivElement> {
 const LoginSplit = forwardRef<HTMLDivElement, LoginSplitProps>(
   ({ className, left, right, footer, reverse, ...props }, ref) => (
     <div
+      data-slot="login-split"
       ref={ref}
       className={cn("flex min-h-screen flex-col bg-background", className)}
       {...props}
-      data-slot="login-split"
     >
       <div
         className={cn(

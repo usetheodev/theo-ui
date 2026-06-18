@@ -55,6 +55,7 @@ export const ThinkingLevelSelector = forwardRef<HTMLSelectElement, ThinkingLevel
     }
     return (
       <select
+        data-slot="thinking-level-selector"
         ref={ref}
         aria-label="Thinking level"
         className={cn(
@@ -67,7 +68,6 @@ export const ThinkingLevelSelector = forwardRef<HTMLSelectElement, ThinkingLevel
         value={value}
         onChange={(e) => onChange(e.target.value as ThinkingLevelOrInherited)}
         data-testid={dataTestId ?? "thinking-level-selector"}
-        data-slot="thinking-level-selector"
       >
         <option value="inherited">{inheritedLabel(inheritedValue)}</option>
         {OVERRIDE_OPTIONS.map((level) => (

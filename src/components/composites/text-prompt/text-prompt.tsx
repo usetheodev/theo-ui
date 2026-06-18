@@ -100,6 +100,7 @@ const TextPrompt = forwardRef<HTMLElement, TextPromptProps>(
 
     return (
       <section
+        data-slot="text-prompt"
         ref={ref}
         aria-labelledby={questionId}
         className={cn(
@@ -108,7 +109,6 @@ const TextPrompt = forwardRef<HTMLElement, TextPromptProps>(
           className,
         )}
         {...props}
-        data-slot="text-prompt"
       >
         <header className="flex items-start justify-between gap-3">
           <Label

@@ -47,6 +47,7 @@ const SkillCard = forwardRef<HTMLDivElement, SkillCardProps>(
     const enabled = state === "enabled";
     return (
       <article
+        data-slot="skill-card"
         ref={ref}
         className={cn(
           "grid gap-3 rounded-xl border bg-card p-4",
@@ -54,7 +55,6 @@ const SkillCard = forwardRef<HTMLDivElement, SkillCardProps>(
           className,
         )}
         {...props}
-        data-slot="skill-card"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">

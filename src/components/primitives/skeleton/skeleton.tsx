@@ -29,13 +29,13 @@ const Skeleton = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     const inLiveRegion = useInLiveRegion();
     return (
       <div
+        data-slot="skeleton"
         ref={ref}
         role={inLiveRegion ? undefined : "status"}
         aria-live={inLiveRegion ? undefined : "polite"}
         aria-label={inLiveRegion ? undefined : "Loading"}
         className={cn("animate-pulse rounded-md bg-muted", className)}
         {...props}
-        data-slot="skeleton"
       />
     );
   },

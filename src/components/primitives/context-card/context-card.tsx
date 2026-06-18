@@ -24,10 +24,10 @@ const ContextCard = forwardRef<HTMLElement, ContextCardProps>(
     const Icon = icon ?? BookOpen;
     return (
       <section
+        data-slot="context-card"
         ref={ref}
         className={cn("grid gap-3 rounded-xl border border-border/40 bg-muted/30 p-4", className)}
         {...props}
-        data-slot="context-card"
       >
         {illustration ? (
           <div className="flex justify-center">{illustration}</div>

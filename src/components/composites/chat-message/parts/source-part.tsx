@@ -16,12 +16,12 @@ export function SourceUrlPart({ part }: SourceUrlPartProps): JSX.Element {
   const label = part.title || part.url;
   return (
     <span
+      data-slot="source-url-part"
       className={cn(
         "my-1 inline-flex max-w-full items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1",
         "align-middle font-mono text-label",
       )}
       data-theo-source="url"
-      data-slot="source-url-part"
     >
       <ExternalLinkIcon className="size-3 text-muted-foreground" aria-hidden="true" />
       {safe ? (
@@ -47,12 +47,12 @@ export interface SourceDocumentPartProps {
 export function SourceDocumentPart({ part }: SourceDocumentPartProps): JSX.Element {
   return (
     <span
+      data-slot="source-document-part"
       className={cn(
         "my-1 inline-flex max-w-full items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1",
         "align-middle font-mono text-label",
       )}
       data-theo-source="document"
-      data-slot="source-document-part"
     >
       <FileTextIcon className="size-3 text-muted-foreground" aria-hidden="true" />
       <span className="truncate text-foreground">{part.title}</span>

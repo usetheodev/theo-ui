@@ -63,6 +63,7 @@ export const GatewayStatusIndicator = forwardRef<HTMLSpanElement, GatewayStatusI
     const latency = formatLatency(latencyMs);
     return (
       <span
+        data-slot="gateway-status-indicator"
         ref={ref}
         role="img"
         aria-label={meta.aria}
@@ -70,7 +71,6 @@ export const GatewayStatusIndicator = forwardRef<HTMLSpanElement, GatewayStatusI
         data-testid={dataTestId ?? "gateway-status-indicator"}
         data-status={status}
         {...rest}
-        data-slot="gateway-status-indicator"
       >
         <span
           className={cn(

@@ -101,7 +101,7 @@ export function ChatMessageBranch({
   );
 
   return (
-    <MessageBranchContext.Provider value={value} data-slot="chat-message-branch">
+    <MessageBranchContext.Provider data-slot="chat-message-branch" value={value}>
       <div className={cn("grid w-full gap-2", className)} {...props} />
     </MessageBranchContext.Provider>
   );
@@ -170,6 +170,7 @@ export function ChatMessageBranchPrevious({
   const { goToPrevious, totalBranches } = useMessageBranch();
   return (
     <Button
+      data-slot="chat-message-branch-previous"
       type="button"
       variant="ghost"
       size="icon"
@@ -177,7 +178,6 @@ export function ChatMessageBranchPrevious({
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
       {...props}
-      data-slot="chat-message-branch-previous"
     >
       {children ?? <ChevronLeftIcon className="size-3.5" aria-hidden="true" />}
     </Button>
@@ -193,6 +193,7 @@ export function ChatMessageBranchNext({
   const { goToNext, totalBranches } = useMessageBranch();
   return (
     <Button
+      data-slot="chat-message-branch-next"
       type="button"
       variant="ghost"
       size="icon"
@@ -200,7 +201,6 @@ export function ChatMessageBranchNext({
       disabled={totalBranches <= 1}
       onClick={goToNext}
       {...props}
-      data-slot="chat-message-branch-next"
     >
       {children ?? <ChevronRightIcon className="size-3.5" aria-hidden="true" />}
     </Button>
@@ -216,12 +216,12 @@ export function ChatMessageBranchPage({
   const { currentBranch, totalBranches } = useMessageBranch();
   return (
     <span
+      data-slot="chat-message-branch-page"
       className={cn(
         "inline-flex items-center px-2 font-mono text-label-caps text-muted-foreground",
         className,
       )}
       {...props}
-      data-slot="chat-message-branch-page"
     >
       {currentBranch + 1} of {totalBranches}
     </span>

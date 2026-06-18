@@ -131,6 +131,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
 
     return (
       <Tag
+        data-slot="project-card"
         ref={ref as Ref<HTMLAnchorElement & HTMLDivElement>}
         href={sanitizedHref}
         className={cn(
@@ -141,7 +142,6 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
           className,
         )}
         {...(props as HTMLAttributes<HTMLAnchorElement> & HTMLAttributes<HTMLDivElement>)}
-        data-slot="project-card"
       >
         {content}
       </Tag>

@@ -45,10 +45,10 @@ interface FolderContextCardProps extends Omit<HTMLAttributes<HTMLElement>, "titl
 const FolderContextCard = forwardRef<HTMLElement, FolderContextCardProps>(
   ({ className, title, entries, onEntryClick, ...props }, ref) => (
     <section
+      data-slot="folder-context-card"
       ref={ref}
       className={cn("rounded-xl border bg-card p-4", className)}
       {...props}
-      data-slot="folder-context-card"
     >
       {title ? (
         <header className="mb-3 flex items-center justify-between">

@@ -40,6 +40,7 @@ const Content = forwardRef<
 >(({ className, sideOffset = 4, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
+      data-slot="dropdown-menu-content"
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
@@ -50,7 +51,6 @@ const Content = forwardRef<
         className,
       )}
       {...props}
-      data-slot="content"
     />
   </DropdownMenuPrimitive.Portal>
 ));
@@ -63,6 +63,7 @@ interface ItemProps extends ComponentPropsWithoutRef<typeof DropdownMenuPrimitiv
 const Item = forwardRef<ElementRef<typeof DropdownMenuPrimitive.Item>, ItemProps>(
   ({ className, inset, ...props }, ref) => (
     <DropdownMenuPrimitive.Item
+      data-slot="dropdown-menu-item"
       ref={ref}
       className={cn(
         "relative flex cursor-default select-none items-center gap-2 rounded-md px-2 py-1.5",
@@ -74,7 +75,6 @@ const Item = forwardRef<ElementRef<typeof DropdownMenuPrimitive.Item>, ItemProps
         className,
       )}
       {...props}
-      data-slot="item"
     />
   ),
 );
@@ -85,6 +85,7 @@ const CheckboxItem = forwardRef<
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
+    data-slot="dropdown-menu-checkbox-item"
     ref={ref}
     checked={checked}
     className={cn(
@@ -95,7 +96,6 @@ const CheckboxItem = forwardRef<
       className,
     )}
     {...props}
-    data-slot="checkbox-item"
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
@@ -112,6 +112,7 @@ const RadioItem = forwardRef<
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
+    data-slot="dropdown-menu-radio-item"
     ref={ref}
     className={cn(
       "relative flex cursor-default select-none items-center rounded-md py-1.5 pr-2 pl-8",
@@ -121,7 +122,6 @@ const RadioItem = forwardRef<
       className,
     )}
     {...props}
-    data-slot="radio-item"
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
@@ -140,6 +140,7 @@ interface LabelProps extends ComponentPropsWithoutRef<typeof DropdownMenuPrimiti
 const Label = forwardRef<ElementRef<typeof DropdownMenuPrimitive.Label>, LabelProps>(
   ({ className, inset, ...props }, ref) => (
     <DropdownMenuPrimitive.Label
+      data-slot="dropdown-menu-label"
       ref={ref}
       className={cn(
         "px-2 py-1.5 font-medium font-sans text-label-caps text-muted-foreground uppercase tracking-wider",
@@ -147,7 +148,6 @@ const Label = forwardRef<ElementRef<typeof DropdownMenuPrimitive.Label>, LabelPr
         className,
       )}
       {...props}
-      data-slot="label"
     />
   ),
 );
@@ -158,10 +158,10 @@ const Separator = forwardRef<
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
+    data-slot="dropdown-menu-separator"
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border/40", className)}
     {...props}
-    data-slot="separator"
   />
 ));
 Separator.displayName = "DropdownMenu.Separator";
@@ -179,6 +179,7 @@ const SubTrigger = forwardRef<
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & { inset?: boolean }
 >(({ className, inset, children, ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger
+    data-slot="dropdown-menu-sub-trigger"
     ref={ref}
     className={cn(
       "flex cursor-default select-none items-center gap-2 rounded-md px-2 py-1.5",
@@ -188,7 +189,6 @@ const SubTrigger = forwardRef<
       className,
     )}
     {...props}
-    data-slot="sub-trigger"
   >
     {children}
     <ChevronRight aria-hidden="true" className="ml-auto size-3.5" />
@@ -201,6 +201,7 @@ const SubContent = forwardRef<
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.SubContent
+    data-slot="dropdown-menu-sub-content"
     ref={ref}
     className={cn(
       "z-50 min-w-32 overflow-hidden rounded-lg border border-border/40 bg-card p-1",
@@ -210,7 +211,6 @@ const SubContent = forwardRef<
       className,
     )}
     {...props}
-    data-slot="sub-content"
   />
 ));
 SubContent.displayName = "DropdownMenu.SubContent";

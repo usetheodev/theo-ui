@@ -58,6 +58,7 @@ const ConfirmPrompt = forwardRef<HTMLElement, ConfirmPromptProps>(
 
     return (
       <section
+        data-slot="confirm-prompt"
         ref={ref}
         role={isDestructive ? "alertdialog" : undefined}
         aria-labelledby={questionId}
@@ -68,7 +69,6 @@ const ConfirmPrompt = forwardRef<HTMLElement, ConfirmPromptProps>(
           className,
         )}
         {...props}
-        data-slot="confirm-prompt"
       >
         <header className="flex items-start justify-between gap-3">
           <h3 id={questionId} className="font-display text-foreground text-title-md tracking-tight">

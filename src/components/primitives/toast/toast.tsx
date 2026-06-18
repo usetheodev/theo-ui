@@ -65,12 +65,12 @@ interface ToastProps
 const ToastRoot = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>(
   ({ className, variant = "default", size, children, ...props }, ref) => (
     <ToastPrimitive.Root
+      data-slot="toast"
+      data-variant={variant}
+      data-size={size}
       ref={ref}
       className={cn(toastVariants({ variant, size }), className)}
       {...props}
-      data-slot="toast-root"
-      data-variant={variant}
-      data-size={size}
     >
       <span aria-hidden="true">{iconForVariant[variant as ToastVariant]}</span>
       <div className="min-w-0 flex-1">{children}</div>
@@ -84,10 +84,10 @@ const ToastTitle = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Title
+    data-slot="toast-title"
     ref={ref}
     className={cn("font-medium text-body-sm text-foreground", className)}
     {...props}
-    data-slot="toast-title"
   />
 ));
 ToastTitle.displayName = "Toast.Title";
@@ -97,10 +97,10 @@ const ToastDescription = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Description
+    data-slot="toast-description"
     ref={ref}
     className={cn("mt-0.5 text-body-sm text-muted-foreground", className)}
     {...props}
-    data-slot="toast-description"
   />
 ));
 ToastDescription.displayName = "Toast.Description";
@@ -110,6 +110,7 @@ const ToastClose = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Close>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Close
+    data-slot="toast-close"
     ref={ref}
     className={cn(
       "absolute top-2 right-2 rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:opacity-100",
@@ -118,7 +119,6 @@ const ToastClose = forwardRef<
     )}
     toast-close=""
     {...props}
-    data-slot="toast-close"
   >
     <X className="size-3.5" />
     <span className="sr-only">Close</span>
@@ -131,6 +131,7 @@ const ToastAction = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Action>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Action
+    data-slot="toast-action"
     ref={ref}
     className={cn(
       "mt-2 inline-flex h-7 items-center rounded-md border border-border/60 bg-card px-2 font-sans text-foreground text-label",
@@ -138,7 +139,6 @@ const ToastAction = forwardRef<
       className,
     )}
     {...props}
-    data-slot="toast-action"
   />
 ));
 ToastAction.displayName = "Toast.Action";

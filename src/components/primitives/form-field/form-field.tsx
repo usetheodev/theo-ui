@@ -91,10 +91,10 @@ const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
     return (
       <FormFieldContext.Provider value={ctx}>
         <div
+          data-slot="form-field"
           ref={ref}
           className={cn("grid", rootGapBySize[size], className)}
           {...props}
-          data-slot="form-field-root"
         />
       </FormFieldContext.Provider>
     );
@@ -127,6 +127,7 @@ const FormFieldLabel = forwardRef<ElementRef<typeof LabelPrimitive.Root>, FormFi
     const { fieldId, size } = useFormField();
     return (
       <LabelPrimitive.Root
+        data-slot="form-field-label"
         ref={ref}
         htmlFor={fieldId}
         className={cn(
@@ -136,7 +137,6 @@ const FormFieldLabel = forwardRef<ElementRef<typeof LabelPrimitive.Root>, FormFi
           className,
         )}
         {...props}
-        data-slot="form-field-label"
       >
         {children}
         {required ? (
@@ -168,7 +168,7 @@ const FormFieldControl = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
         } as Partial<typeof only.props>)
       : only;
     return (
-      <div ref={ref} {...props} data-slot="form-field-control">
+      <div data-slot="form-field-control" ref={ref} {...props}>
         {cloned}
       </div>
     );
@@ -182,11 +182,11 @@ const FormFieldHint = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagr
     if (hasError) return null;
     return (
       <p
+        data-slot="form-field-hint"
         ref={ref}
         id={hintId}
         className={cn("text-muted-foreground", hintFontBySize[size], className)}
         {...props}
-        data-slot="form-field-hint"
       >
         {children}
       </p>
@@ -201,12 +201,12 @@ const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParag
     if (!hasError) return null;
     return (
       <p
+        data-slot="form-field-error"
         ref={ref}
         id={errorId}
         role="alert"
         className={cn("flex items-center gap-1 text-destructive", hintFontBySize[size], className)}
         {...props}
-        data-slot="form-field-error"
       >
         <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />
         {children as ReactNode}

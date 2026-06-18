@@ -66,6 +66,7 @@ const SessionListItem = forwardRef<HTMLButtonElement, SessionListItemProps>(
     ref,
   ) => (
     <button
+      data-slot="session-list-item"
       ref={ref}
       type="button"
       onClick={onClick}
@@ -82,7 +83,6 @@ const SessionListItem = forwardRef<HTMLButtonElement, SessionListItemProps>(
         className,
       )}
       {...props}
-      data-slot="session-list-item"
     >
       <span
         className={cn("size-2 shrink-0 rounded-full", STATUS_CLASS[status])}

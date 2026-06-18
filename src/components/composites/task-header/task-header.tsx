@@ -56,13 +56,13 @@ interface TaskHeaderProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 const TaskHeader = forwardRef<HTMLElement, TaskHeaderProps>(
   ({ className, title, status, onToggle, actions, ...props }, ref) => (
     <header
+      data-slot="task-header"
       ref={ref}
       className={cn(
         "flex items-center justify-between gap-3 rounded-xl border border-border/40 bg-card px-4 py-3",
         className,
       )}
       {...props}
-      data-slot="task-header"
     >
       <div className="flex min-w-0 items-center gap-2">
         <h2 className="truncate font-display text-title-lg tracking-tight">{title}</h2>

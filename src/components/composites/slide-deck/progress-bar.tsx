@@ -15,12 +15,12 @@ export const ProgressBar: FC<ProgressBarProps> = ({ className }) => {
   const max = Math.max(1, state.totalSlides);
   return (
     <progress
+      data-slot="progress-bar"
       className={["theo-slide-deck-progress", className].filter(Boolean).join(" ")}
       data-theo-slide-deck-progress
       value={value}
       max={max}
       aria-label="Slide progress"
-      data-slot="progress-bar"
     />
   );
 };

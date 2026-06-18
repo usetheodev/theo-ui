@@ -104,12 +104,12 @@ const AccountMenu = forwardRef<HTMLElement, AccountMenuProps>(
       const { ...buttonProps } = props as ButtonHTMLAttributes<HTMLButtonElement>;
       return (
         <button
+          data-slot="account-menu"
           ref={ref as React.Ref<HTMLButtonElement>}
           type="button"
           className={baseClass}
           onClick={onClick}
           {...buttonProps}
-          data-slot="account-menu"
         >
           {content}
         </button>
@@ -118,10 +118,10 @@ const AccountMenu = forwardRef<HTMLElement, AccountMenuProps>(
 
     return (
       <div
+        data-slot="account-menu"
         ref={ref as React.Ref<HTMLDivElement>}
         className={baseClass}
         {...(props as HTMLAttributes<HTMLDivElement>)}
-        data-slot="account-menu"
       >
         {content}
       </div>

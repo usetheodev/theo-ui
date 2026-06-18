@@ -29,6 +29,7 @@ const CostMeter = forwardRef<HTMLDivElement, CostMeterProps>(
     if (compact) {
       return (
         <div
+          data-slot="cost-meter"
           ref={ref}
           className={cn(
             "inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-2.5 py-1",
@@ -36,7 +37,6 @@ const CostMeter = forwardRef<HTMLDivElement, CostMeterProps>(
             className,
           )}
           {...props}
-          data-slot="cost-meter"
         >
           <Coins className="size-3 text-primary" aria-hidden="true" />
           <span className="text-foreground tabular-nums">{formatUsd(cost)}</span>
@@ -51,10 +51,10 @@ const CostMeter = forwardRef<HTMLDivElement, CostMeterProps>(
 
     return (
       <div
+        data-slot="cost-meter"
         ref={ref}
         className={cn("grid gap-2 rounded-xl border bg-card p-4", className)}
         {...props}
-        data-slot="cost-meter"
       >
         <header className="flex items-baseline justify-between">
           <span className="font-mono text-label-caps text-muted-foreground uppercase tracking-wider">

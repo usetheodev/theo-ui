@@ -62,6 +62,7 @@ const PlanBadge = forwardRef<HTMLSpanElement, PlanBadgeProps>(
     const displayLabel = label ?? defaultLabel(plan);
     return (
       <span
+        data-slot="plan-badge"
         ref={ref}
         className={cn(
           "inline-flex items-center rounded-md border",
@@ -72,7 +73,6 @@ const PlanBadge = forwardRef<HTMLSpanElement, PlanBadgeProps>(
         )}
         data-plan={plan}
         {...props}
-        data-slot="plan-badge"
       >
         {displayLabel}
       </span>

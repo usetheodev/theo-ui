@@ -72,6 +72,7 @@ interface PreviewEnvCardProps extends HTMLAttributes<HTMLDivElement> {
 const PreviewEnvCard = forwardRef<HTMLDivElement, PreviewEnvCardProps>(
   ({ className, env, actions, ...props }, ref) => (
     <article
+      data-slot="preview-env-card"
       ref={ref}
       className={cn(
         "rounded-xl border bg-card p-5 shadow-sm",
@@ -80,7 +81,6 @@ const PreviewEnvCard = forwardRef<HTMLDivElement, PreviewEnvCardProps>(
         className,
       )}
       {...(props as HTMLAttributes<HTMLDivElement>)}
-      data-slot="preview-env-card"
     >
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">

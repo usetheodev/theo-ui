@@ -130,6 +130,7 @@ const AgentEvent = forwardRef<HTMLDivElement, AgentEventProps>(
 
     return (
       <div
+        data-slot="agent-event"
         ref={ref}
         className={cn(
           "rounded-md border border-transparent",
@@ -137,7 +138,6 @@ const AgentEvent = forwardRef<HTMLDivElement, AgentEventProps>(
           className,
         )}
         {...props}
-        data-slot="agent-event"
       >
         {isExpandable ? (
           <button

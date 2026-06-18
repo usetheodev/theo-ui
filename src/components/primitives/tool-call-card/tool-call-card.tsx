@@ -67,12 +67,12 @@ export function ToolCallCard({
 
   return (
     <article
+      data-slot="tool-call-card"
       className={cn(
         "overflow-hidden rounded-lg border border-border/40 bg-card/40 text-card-foreground",
         className,
       )}
       {...props}
-      data-slot="tool-call-card"
     >
       {/* T5.4: <header role="button"> previously failed axe's
        * aria-prohibited-attr + semantic-landmark guidance. Replaced by

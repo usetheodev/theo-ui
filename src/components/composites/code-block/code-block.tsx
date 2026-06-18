@@ -36,13 +36,13 @@ const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
 
     return (
       <div
+        data-slot="code-block"
         ref={ref}
         className={cn(
           "relative rounded-lg border border-border/40 bg-muted/40 font-mono text-body-sm",
           className,
         )}
         {...props}
-        data-slot="code-block"
       >
         {caption !== undefined ? (
           <div className="border-border/40 border-b px-3 py-1.5 font-sans text-label text-muted-foreground">

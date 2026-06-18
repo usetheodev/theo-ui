@@ -48,11 +48,11 @@ interface AvatarProps
 const AvatarRoot = forwardRef<ElementRef<typeof AvatarPrimitive.Root>, AvatarProps>(
   ({ className, size, tone, ...props }, ref) => (
     <AvatarPrimitive.Root
+      data-slot="avatar"
+      data-size={size}
       ref={ref}
       className={cn(avatarVariants({ size, tone }), className)}
       {...props}
-      data-slot="avatar-root"
-      data-size={size}
     />
   ),
 );
@@ -63,10 +63,10 @@ const AvatarImage = forwardRef<
   ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Image
+    data-slot="avatar-image"
     ref={ref}
     className={cn("aspect-square size-full object-cover", className)}
     {...props}
-    data-slot="avatar-image"
   />
 ));
 AvatarImage.displayName = "Avatar.Image";
@@ -76,6 +76,7 @@ const AvatarFallback = forwardRef<
   ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Fallback
+    data-slot="avatar-fallback"
     ref={ref}
     className={cn(
       "flex h-full w-full items-center justify-center font-medium leading-none",
@@ -83,7 +84,6 @@ const AvatarFallback = forwardRef<
     )}
     delayMs={300}
     {...props}
-    data-slot="avatar-fallback"
   />
 ));
 AvatarFallback.displayName = "Avatar.Fallback";

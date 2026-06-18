@@ -49,6 +49,7 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <button
+            data-slot="agent-profile"
             ref={ref}
             type="button"
             className={cn(
@@ -58,7 +59,6 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
               className,
             )}
             {...props}
-            data-slot="agent-profile"
           >
             <span
               className={cn(

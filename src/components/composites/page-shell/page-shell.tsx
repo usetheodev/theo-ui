@@ -165,10 +165,10 @@ const PageShell = forwardRef<HTMLElement, PageShellProps>(
 
     return (
       <main
+        data-slot="page-shell"
         ref={ref}
         aria-busy={loading || undefined}
         className={cn("flex flex-col gap-6", className)}
-        data-slot="page-shell"
       >
         <header className="flex flex-col gap-1">
           <h1 className="font-display font-semibold text-display-sm text-foreground tracking-tight">

@@ -55,10 +55,10 @@ const RollbackUI = forwardRef<HTMLDivElement, RollbackUIProps>(
 
     return (
       <div
+        data-slot="rollback-ui"
         ref={ref}
         className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
         {...props}
-        data-slot="rollback-ui"
       >
         <header className="mb-4 flex items-baseline justify-between gap-3">
           <div>

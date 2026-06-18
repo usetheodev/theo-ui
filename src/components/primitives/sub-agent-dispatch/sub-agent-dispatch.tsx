@@ -50,13 +50,13 @@ const SubAgentDispatch = forwardRef<HTMLElement, SubAgentDispatchProps>(
     const isLive = run.state === "spawning" || run.state === "running";
     return (
       <article
+        data-slot="sub-agent-dispatch"
         ref={ref}
         className={cn(
           "grid gap-2 rounded-lg border border-primary/30 border-l-2 border-l-primary bg-card px-4 py-3",
           className,
         )}
         {...props}
-        data-slot="sub-agent-dispatch"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2">

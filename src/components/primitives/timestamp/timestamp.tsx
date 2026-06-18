@@ -153,11 +153,11 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
     if (date === null) {
       return (
         <time
+          data-slot="timestamp"
           ref={ref}
           className={cn(className)}
           suppressHydrationWarning
           {...props}
-          data-slot="timestamp"
         />
       );
     }
@@ -170,6 +170,7 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
 
     return (
       <time
+        data-slot="timestamp"
         ref={ref}
         dateTime={iso}
         title={noTooltip ? undefined : absolute}
@@ -177,7 +178,6 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
         suppressHydrationWarning
         className={cn(className)}
         {...props}
-        data-slot="timestamp"
       >
         {visibleText}
       </time>

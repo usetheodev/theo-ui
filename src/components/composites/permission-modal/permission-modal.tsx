@@ -123,7 +123,7 @@ function PermissionModal({
   );
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange} data-slot="permission-modal">
+    <Dialog data-slot="permission-modal" open={open} onOpenChange={handleOpenChange}>
       <Dialog.Content className="max-w-xl">
         <Dialog.Header>
           <Dialog.Title>{title ?? defaultTitle}</Dialog.Title>

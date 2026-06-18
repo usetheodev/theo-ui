@@ -77,6 +77,7 @@ const ThumbnailItem: FC<ThumbnailItemProps> = ({
   const h = Math.round(CANVAS_H * scale);
   return (
     <button
+      data-slot="thumbnail-item"
       ref={setRef}
       type="button"
       onClick={() => onSelect(index)}
@@ -97,7 +98,6 @@ const ThumbnailItem: FC<ThumbnailItemProps> = ({
         flexShrink: 0,
         background: "transparent",
       }}
-      data-slot="thumbnail-item"
     >
       <div
         style={{
@@ -157,6 +157,7 @@ export const Thumbnails: FC<ThumbnailsProps> = ({ className, scale = 0.18 }) => 
 
   return (
     <ul
+      data-slot="thumbnails"
       className={["theo-slide-deck-thumbnails", className].filter(Boolean).join(" ")}
       data-theo-slide-deck-thumbnails
       aria-label="Slide thumbnails"
@@ -169,7 +170,6 @@ export const Thumbnails: FC<ThumbnailsProps> = ({ className, scale = 0.18 }) => 
         listStyle: "none",
         margin: 0,
       }}
-      data-slot="thumbnails"
     >
       {slides.map((slide, index) => (
         <li key={`${slide.id ?? index}-${index}`}>

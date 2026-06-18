@@ -48,12 +48,12 @@ export interface InputProps
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", size, ...props }, ref) => (
     <input
+      data-slot="input"
+      data-size={size}
       ref={ref}
       type={type}
       className={cn(inputVariants({ size }), className)}
       {...props}
-      data-slot="input"
-      data-size={size}
     />
   ),
 );

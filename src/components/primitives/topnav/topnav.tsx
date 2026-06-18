@@ -21,13 +21,13 @@ import { cn } from "../../../lib/cn.js";
 const Root = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   ({ className, ...props }, ref) => (
     <header
+      data-slot="top-nav"
       ref={ref}
       className={cn(
         "flex h-16 items-center justify-between gap-4 border-border/40 border-b bg-card px-6",
         className,
       )}
       {...props}
-      data-slot="root"
     />
   ),
 );
@@ -36,10 +36,10 @@ Root.displayName = "TopNav";
 const Left = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
+      data-slot="top-nav-left"
       ref={ref}
       className={cn("flex flex-1 items-center gap-3", className)}
       {...props}
-      data-slot="left"
     />
   ),
 );
@@ -48,10 +48,10 @@ Left.displayName = "TopNav.Left";
 const Center = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
+      data-slot="top-nav-center"
       ref={ref}
       className={cn("hidden flex-1 justify-center md:flex", className)}
       {...props}
-      data-slot="center"
     />
   ),
 );
@@ -60,10 +60,10 @@ Center.displayName = "TopNav.Center";
 const Right = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
+      data-slot="top-nav-right"
       ref={ref}
       className={cn("flex flex-1 items-center justify-end gap-2", className)}
       {...props}
-      data-slot="right"
     />
   ),
 );
@@ -81,11 +81,11 @@ interface BreadcrumbsProps extends HTMLAttributes<HTMLElement> {
 const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
   ({ className, items, ...props }, ref) => (
     <nav
+      data-slot="top-nav-breadcrumbs"
       ref={ref}
       aria-label="Breadcrumb"
       className={cn("flex items-center gap-1.5 text-body-sm", className)}
       {...props}
-      data-slot="breadcrumbs"
     >
       {items.map((item, idx) => {
         const isLast = idx === items.length - 1;
@@ -170,6 +170,7 @@ const ModeSwitcher = forwardRef<HTMLDivElement, ModeSwitcherProps>(
 
     return (
       <div
+        data-slot="top-nav-mode-switcher"
         ref={ref}
         role="radiogroup"
         aria-label={ariaLabel}
@@ -179,7 +180,6 @@ const ModeSwitcher = forwardRef<HTMLDivElement, ModeSwitcherProps>(
           className,
         )}
         {...props}
-        data-slot="mode-switcher"
       >
         {options.map((opt) => {
           const isActive = opt.value === value;

@@ -170,13 +170,13 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
 
     return (
       <div
+        data-slot="pin-input"
         ref={ref}
         // biome-ignore lint/a11y/useSemanticElements: <fieldset> would force a different visual layout (rectangular border by default) and is form-bound; we use a div with role="group" + aria-label for grouping semantics.
         role="group"
         aria-label={ariaLabel}
         className={cn("inline-flex items-center gap-2", className)}
         {...props}
-        data-slot="pin-input"
       >
         {slots.map((i) => {
           const ch = value[i] ?? "";

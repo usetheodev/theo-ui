@@ -78,6 +78,7 @@ export const RunStatusPill = forwardRef<HTMLSpanElement, RunStatusPillProps>(
     const Icon = meta.icon;
     return (
       <span
+        data-slot="run-status-pill"
         ref={ref}
         // biome-ignore lint/a11y/useSemanticElements: inline status badge — <span role="status"> keeps it phrasing-content compatible inside chat headers and table cells, where the implicit <output> placement would break layout
         role="status"
@@ -90,7 +91,6 @@ export const RunStatusPill = forwardRef<HTMLSpanElement, RunStatusPillProps>(
         data-testid={dataTestId ?? "run-status-pill"}
         data-status={status}
         {...rest}
-        data-slot="run-status-pill"
       >
         <Icon className={cn("size-3", meta.spin && "animate-spin")} aria-hidden />
         <span>{meta.label}</span>

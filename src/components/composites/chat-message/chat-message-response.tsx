@@ -110,6 +110,7 @@ function ChatMessageResponseImpl({
 
   return (
     <div
+      data-slot="chat-message-response-impl"
       className={cn(
         "prose-theo max-w-none text-body-md text-foreground leading-relaxed",
         // First/last child margin reset — fork from vercel/ai-elements
@@ -131,7 +132,6 @@ function ChatMessageResponseImpl({
         className,
       )}
       data-theo-chat-response=""
-      data-slot="chat-message-response-impl"
     >
       {tree}
     </div>

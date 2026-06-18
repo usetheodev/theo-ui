@@ -89,10 +89,10 @@ const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
 
     return (
       <section
+        data-slot="permission-matrix"
         ref={ref}
         className={cn("rounded-xl border bg-card", className)}
         {...props}
-        data-slot="permission-matrix"
       >
         {title ? (
           <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">

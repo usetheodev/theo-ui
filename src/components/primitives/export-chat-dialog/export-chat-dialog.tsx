@@ -64,6 +64,7 @@ export const ExportChatDialog = forwardRef<HTMLDivElement, ExportChatDialogProps
 
     return (
       <div
+        data-slot="export-chat-dialog"
         ref={ref}
         // biome-ignore lint/a11y/useSemanticElements: custom modal backdrop, not browser <dialog>; aria-modal preserves a11y semantics
         role="dialog"
@@ -74,7 +75,6 @@ export const ExportChatDialog = forwardRef<HTMLDivElement, ExportChatDialogProps
           className,
         )}
         data-testid={dataTestId ?? "export-chat-dialog"}
-        data-slot="export-chat-dialog"
       >
         <div className="w-full max-w-sm rounded-lg border border-border bg-card p-4 shadow-lg">
           <h2 id="export-chat-dialog-title" className="font-semibold text-base">

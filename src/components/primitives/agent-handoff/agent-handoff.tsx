@@ -56,13 +56,13 @@ function Avatar({ party }: { party: HandoffParty }) {
 const AgentHandoff = forwardRef<HTMLElement, AgentHandoffProps>(
   ({ className, from, to, reason, footer, ...props }, ref) => (
     <article
+      data-slot="agent-handoff"
       ref={ref}
       className={cn(
         "grid gap-2 rounded-lg border border-primary/30 border-dashed bg-primary/5 px-4 py-3",
         className,
       )}
       {...props}
-      data-slot="agent-handoff"
     >
       <header className="flex items-center gap-2">
         <Avatar party={from} />

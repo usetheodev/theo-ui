@@ -73,6 +73,7 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     return (
       // biome-ignore lint/a11y/useFocusableInteractive: WAI-ARIA `progressbar` is a status role (https://www.w3.org/TR/wai-aria-1.2/#progressbar) — NOT supposed to be focusable; screen readers announce updates without keyboard navigation.
       <div
+        data-slot="progress"
         ref={ref}
         role="progressbar"
         aria-valuemin={0}
@@ -81,7 +82,6 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>(
         aria-busy={indeterminate ? true : undefined}
         className={cn("relative w-full overflow-hidden rounded-full bg-muted", height, className)}
         {...props}
-        data-slot="progress"
       >
         {indeterminate ? (
           <div

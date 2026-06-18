@@ -75,10 +75,10 @@ export function RuleEditor({
 
   return (
     <form
+      data-slot="rule-editor"
       onSubmit={handleSubmit}
       className={cn("flex h-full flex-col gap-4", className)}
       {...formProps}
-      data-slot="rule-editor"
     >
       <FormField>
         <FormField.Label>Title</FormField.Label>

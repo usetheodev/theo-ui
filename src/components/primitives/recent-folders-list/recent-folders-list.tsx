@@ -27,10 +27,10 @@ interface RecentFoldersListProps
 const RecentFoldersList = forwardRef<HTMLDivElement, RecentFoldersListProps>(
   ({ className, title = "Recent folders", folders, onSelect, ...props }, ref) => (
     <div
+      data-slot="recent-folders-list"
       ref={ref}
       className={cn("rounded-xl border bg-card", className)}
       {...props}
-      data-slot="recent-folders-list"
     >
       {title ? (
         <p className="border-border/40 border-b px-3 py-2 font-sans text-label-caps text-muted-foreground uppercase tracking-wider">

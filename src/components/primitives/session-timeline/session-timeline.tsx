@@ -52,11 +52,11 @@ const STATUS_LABEL: Record<SessionStatus, string> = {
 const SessionTimeline = forwardRef<HTMLDivElement, SessionTimelineProps>(
   ({ className, sessions, title = "Recent sessions", onOpen, ...props }, ref) => (
     <section
+      data-slot="session-timeline"
       ref={ref}
       className={cn("rounded-xl border bg-card", className)}
       aria-label="Session history"
       {...props}
-      data-slot="session-timeline"
     >
       {title ? (
         <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">

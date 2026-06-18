@@ -976,6 +976,18 @@ async function validateDataSlot(): Promise<void> {
           `${layer}/${name} has no \`data-slot\` attribute on its root element (shadcn v4 convention; run \`pnpm tsx scripts/codemod-data-slot.ts\`).`,
         );
       }
+      // Naming guard (review F-dom-3): compound sub-parts must be namespaced
+      // (`card-header`, not `header`/`root`). The original codemod derived slot
+      // names from the local const, producing bare/wrong values. `data-slot="root"`
+      // is never valid; flag it so the regression cannot return.
+      for (const m of txt.matchAll(/data-slot="([^"]+)"/g)) {
+        if (m[1] === "root") {
+          fail(
+            "design/data-slot",
+            `${layer}/${name} emits \`data-slot="root"\` — slots are named after the component's displayName (e.g. \`card\`/\`card-header\`), never "root". Run \`pnpm tsx scripts/codemod-data-slot-fix.ts\`.`,
+          );
+        }
+      }
     }
   }
 }

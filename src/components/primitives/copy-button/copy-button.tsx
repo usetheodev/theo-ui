@@ -123,6 +123,7 @@ const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(
 
     return (
       <button
+        data-slot="copy-button"
         ref={ref}
         type="button"
         onClick={handleClick}
@@ -136,7 +137,6 @@ const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(
           className,
         )}
         {...props}
-        data-slot="copy-button"
       >
         <Icon
           aria-hidden="true"

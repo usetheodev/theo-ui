@@ -109,10 +109,10 @@ export function AgentEditor({
 
   return (
     <form
+      data-slot="agent-editor"
       onSubmit={handleSubmit}
       className={cn("flex h-full flex-col gap-4", className)}
       {...formProps}
-      data-slot="agent-editor"
     >
       <div className="grid grid-cols-[1fr_auto] gap-3">
         <FormField>

@@ -47,10 +47,10 @@ const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
 
     return (
       <div
+        data-slot="action-bar"
         ref={ref}
         className={cn("flex w-full items-center gap-2", className)}
         {...props}
-        data-slot="action-bar"
       >
         {search ? (
           <div className="relative flex-1">

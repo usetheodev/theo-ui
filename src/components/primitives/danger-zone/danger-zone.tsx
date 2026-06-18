@@ -32,11 +32,11 @@ export interface DangerZoneProps extends Omit<HTMLAttributes<HTMLElement>, "titl
 const Root = forwardRef<HTMLElement, DangerZoneProps>(
   ({ className, title = "Danger Zone", children, ...props }, ref) => (
     <section
+      data-slot="danger-zone"
       ref={ref}
       aria-label={typeof title === "string" ? title : "Danger Zone"}
       className={cn("rounded-xl border border-destructive/30 bg-destructive/[0.02]", className)}
       {...props}
-      data-slot="root"
     >
       <div className="border-destructive/20 border-b px-5 py-3 font-sans text-destructive text-label-caps uppercase tracking-wider">
         {title}
@@ -57,13 +57,13 @@ export interface DangerZoneActionProps extends Omit<HTMLAttributes<HTMLDivElemen
 const Action = forwardRef<HTMLDivElement, DangerZoneActionProps>(
   ({ className, title, description, action, ...props }, ref) => (
     <div
+      data-slot="danger-zone-action"
       ref={ref}
       className={cn(
         "flex items-center justify-between gap-4 border-destructive/10 border-b px-5 py-4 last:border-b-0",
         className,
       )}
       {...props}
-      data-slot="action"
     >
       <div className="flex flex-col">
         <span className="font-medium font-sans text-body-sm text-foreground">{title}</span>
