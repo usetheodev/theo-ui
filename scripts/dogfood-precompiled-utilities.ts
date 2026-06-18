@@ -50,7 +50,13 @@ assert("dist/components.css exists", existsSync(componentsPath));
 if (existsSync(componentsPath)) {
   const bytes = statSync(componentsPath).size;
   assert(`dist/components.css >= 5 KB (got ${bytes} bytes)`, bytes >= 5_000);
-  assert(`dist/components.css <= 200 KB sanity ceiling (got ${bytes} bytes)`, bytes <= 200_000);
+  // Sanity ceiling raised 200 KB → 600 KB. The old ceiling was calibrated when
+  // Tailwind v4's `@source` under-scanned the library tree (pnpm-symlink
+  // fragility documented in build-precompiled-css.ts), producing a ~104 KB
+  // INCOMPLETE CSS. A full scan emits ~470 KB — the complete utility set every
+  // component actually references (verified by the per-utility checks below).
+  // 600 KB leaves headroom for future components while still guarding bloat.
+  assert(`dist/components.css <= 600 KB sanity ceiling (got ${bytes} bytes)`, bytes <= 600_000);
 }
 
 /* ─── dist/styles.css chains components.css ──────────────────────────── */
