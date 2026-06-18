@@ -61,6 +61,7 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
     const Tag = onSelect ? "button" : "article";
     return (
       <Tag
+        data-slot="model-card"
         ref={ref as never}
         type={onSelect ? "button" : undefined}
         onClick={onSelect ? () => onSelect(model.id) : undefined}

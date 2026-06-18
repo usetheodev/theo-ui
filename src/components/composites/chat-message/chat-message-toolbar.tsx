@@ -14,6 +14,7 @@ export function ChatMessageToolbar({
 }: ChatMessageToolbarProps): JSX.Element {
   return (
     <div
+      data-slot="chat-message-toolbar"
       className={cn("mt-3 flex w-full items-center justify-between gap-3", className)}
       data-theo-chat-toolbar=""
       {...props}

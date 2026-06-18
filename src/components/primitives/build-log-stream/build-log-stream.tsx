@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -134,7 +136,12 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
     };
 
     return (
-      <div ref={ref} className={cn("flex flex-col gap-2", className)} {...props}>
+      <div
+        data-slot="build-log-stream"
+        ref={ref}
+        className={cn("flex flex-col gap-2", className)}
+        {...props}
+      >
         {filterable ? (
           <div className="flex flex-wrap gap-1.5">
             {ALL_LEVELS.map((level) => {

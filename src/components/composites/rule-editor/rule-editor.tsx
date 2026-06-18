@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import type { FormEvent, HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -73,6 +75,7 @@ export function RuleEditor({
 
   return (
     <form
+      data-slot="rule-editor"
       onSubmit={handleSubmit}
       className={cn("flex h-full flex-col gap-4", className)}
       {...formProps}

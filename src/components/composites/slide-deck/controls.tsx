@@ -14,6 +14,7 @@ export const Controls: FC<ControlsProps> = ({ className }) => {
   const atEnd = state.currentIndex >= state.totalSlides - 1;
   return (
     <div
+      data-slot="controls"
       className={["theo-slide-deck-controls", className].filter(Boolean).join(" ")}
       data-theo-slide-deck-controls
       style={{

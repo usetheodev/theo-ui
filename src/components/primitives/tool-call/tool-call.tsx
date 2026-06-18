@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronRight, Wrench } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
@@ -37,6 +39,7 @@ const ToolCall = forwardRef<HTMLDivElement, ToolCallProps>(
     const expandable = detail !== undefined;
     return (
       <div
+        data-slot="tool-call"
         ref={ref}
         className={cn("rounded-md border border-border/40 bg-muted/30", className)}
         {...props}

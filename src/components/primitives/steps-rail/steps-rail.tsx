@@ -28,6 +28,7 @@ interface StepsRailProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 const StepsRail = forwardRef<HTMLElement, StepsRailProps>(
   ({ className, steps, title, ...props }, ref) => (
     <aside
+      data-slot="steps-rail"
       ref={ref}
       className={cn(
         "flex w-14 flex-col items-center gap-6 border-border/40 border-l py-6",

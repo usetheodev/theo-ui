@@ -27,6 +27,7 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
     const inLiveRegion = useInLiveRegion();
     return (
       <div
+        data-slot="agent-streaming"
         ref={ref}
         role={inLiveRegion ? undefined : "status"}
         aria-live={inLiveRegion ? undefined : "polite"}

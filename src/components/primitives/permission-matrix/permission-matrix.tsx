@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, Lock, Plus, ShieldQuestion, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
@@ -86,7 +88,12 @@ const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
     };
 
     return (
-      <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
+      <section
+        data-slot="permission-matrix"
+        ref={ref}
+        className={cn("rounded-xl border bg-card", className)}
+        {...props}
+      >
         {title ? (
           <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">
             <h3 className="font-display text-title-md tracking-tight">{title}</h3>

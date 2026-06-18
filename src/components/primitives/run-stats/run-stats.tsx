@@ -20,6 +20,7 @@ interface RunStatsProps extends HTMLAttributes<HTMLDivElement> {
 const RunStats = forwardRef<HTMLDivElement, RunStatsProps>(
   ({ className, duration, tokens, filesChanged, ...props }, ref) => (
     <div
+      data-slot="run-stats"
       ref={ref}
       className={cn(
         "flex flex-wrap items-center gap-3 font-mono text-code-sm text-muted-foreground",

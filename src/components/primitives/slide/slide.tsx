@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type FC,
   type ReactElement,
@@ -215,6 +217,7 @@ export const Slide: FC<SlideProps> = ({
 
   return (
     <div
+      data-slot="slide"
       ref={containerRef}
       className={["theo-slide-host", className].filter(Boolean).join(" ")}
       data-theo-slide-host

@@ -32,6 +32,7 @@ const ArtifactPreview = forwardRef<HTMLElement, ArtifactPreviewProps>(
     ref,
   ) => (
     <section
+      data-slot="artifact-preview"
       ref={ref}
       className={cn("flex h-full flex-col overflow-hidden rounded-xl border bg-card", className)}
       {...props}

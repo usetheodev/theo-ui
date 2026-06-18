@@ -16,6 +16,7 @@ const ChatThread = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <LiveRegionProvider value={true}>
       <div
+        data-slot="chat-thread"
         ref={ref}
         role="log"
         aria-live="polite"

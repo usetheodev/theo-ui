@@ -52,6 +52,7 @@ const CronJobCard = forwardRef<HTMLElement, CronJobCardProps>(
     const enabled = job.status !== "disabled";
     return (
       <article
+        data-slot="cron-job-card"
         ref={ref}
         className={cn(
           "grid gap-3 rounded-xl border bg-card p-4",

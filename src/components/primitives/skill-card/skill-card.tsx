@@ -47,6 +47,7 @@ const SkillCard = forwardRef<HTMLDivElement, SkillCardProps>(
     const enabled = state === "enabled";
     return (
       <article
+        data-slot="skill-card"
         ref={ref}
         className={cn(
           "grid gap-3 rounded-xl border bg-card p-4",

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useRef } from "react";
 /**
  * `<Whiteboard>` — view-only primitive that turns a JSON scene into a
@@ -141,6 +143,7 @@ export function Whiteboard({
 
   return (
     <svg
+      data-slot="whiteboard"
       ref={svgRef}
       viewBox={viewport.viewBox({ width: sceneWidth, height: sceneHeight })}
       width={sceneWidth}

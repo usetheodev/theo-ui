@@ -1,3 +1,5 @@
+"use client";
+
 import type { Element, Root as HastRoot } from "hast";
 /**
  * Slide rich-content plugin — Mermaid diagrams.
@@ -189,6 +191,7 @@ export const MermaidDiagram: FC<{ source: string; theme?: string }> = ({ source,
   if (error) {
     return (
       <div
+        data-slot="mermaid-diagram"
         data-theo-slide-mermaid
         data-state="error"
         role="img"

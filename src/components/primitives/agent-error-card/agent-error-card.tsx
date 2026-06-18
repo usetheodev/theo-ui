@@ -109,6 +109,7 @@ const AgentErrorCard = forwardRef<HTMLElement, AgentErrorCardProps>(
     const inLiveRegion = useInLiveRegion();
     return (
       <section
+        data-slot="agent-error-card"
         ref={ref}
         role="alert"
         aria-live={inLiveRegion ? undefined : "assertive"}

@@ -12,5 +12,11 @@ export interface TextPartProps {
 }
 
 export function TextPart({ part }: TextPartProps): JSX.Element {
-  return <ChatMessageResponse text={part.text} isStreaming={part.state === "streaming"} />;
+  return (
+    <ChatMessageResponse
+      data-slot="text-part"
+      text={part.text}
+      isStreaming={part.state === "streaming"}
+    />
+  );
 }

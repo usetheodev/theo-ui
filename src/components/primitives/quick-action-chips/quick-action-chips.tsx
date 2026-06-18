@@ -26,6 +26,7 @@ interface QuickActionChipsProps extends Omit<HTMLAttributes<HTMLDivElement>, "on
 const QuickActionChips = forwardRef<HTMLDivElement, QuickActionChipsProps>(
   ({ className, actions, onSelect, ...props }, ref) => (
     <div
+      data-slot="quick-action-chips"
       ref={ref}
       className={cn("flex flex-wrap items-center justify-center gap-2", className)}
       {...props}

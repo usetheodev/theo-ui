@@ -101,7 +101,7 @@ export function ChatMessageBranch({
   );
 
   return (
-    <MessageBranchContext.Provider value={value}>
+    <MessageBranchContext.Provider data-slot="chat-message-branch" value={value}>
       <div className={cn("grid w-full gap-2", className)} {...props} />
     </MessageBranchContext.Provider>
   );
@@ -170,6 +170,7 @@ export function ChatMessageBranchPrevious({
   const { goToPrevious, totalBranches } = useMessageBranch();
   return (
     <Button
+      data-slot="chat-message-branch-previous"
       type="button"
       variant="ghost"
       size="icon"
@@ -192,6 +193,7 @@ export function ChatMessageBranchNext({
   const { goToNext, totalBranches } = useMessageBranch();
   return (
     <Button
+      data-slot="chat-message-branch-next"
       type="button"
       variant="ghost"
       size="icon"
@@ -214,6 +216,7 @@ export function ChatMessageBranchPage({
   const { currentBranch, totalBranches } = useMessageBranch();
   return (
     <span
+      data-slot="chat-message-branch-page"
       className={cn(
         "inline-flex items-center px-2 font-mono text-label-caps text-muted-foreground",
         className,

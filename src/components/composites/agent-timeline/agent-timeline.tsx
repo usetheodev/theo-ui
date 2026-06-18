@@ -26,6 +26,7 @@ interface AgentTimelineProps extends HTMLAttributes<HTMLOListElement> {
 const AgentTimeline = forwardRef<HTMLOListElement, AgentTimelineProps>(
   ({ className, events, collapsible = true, showLine = true, ...props }, ref) => (
     <ol
+      data-slot="agent-timeline"
       ref={ref}
       className={cn(
         "grid gap-1",

@@ -1,3 +1,5 @@
+"use client";
+
 import { Hash, type LucideIcon, Slash } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
@@ -114,6 +116,7 @@ export function MentionMenu({
 
   return (
     <div
+      data-slot="mention-menu"
       role="menu"
       aria-orientation="vertical"
       aria-label={typeof resolvedTitle === "string" ? resolvedTitle : "Mention menu"}

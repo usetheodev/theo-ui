@@ -35,6 +35,7 @@ interface CreatedFilesCardProps extends Omit<HTMLAttributes<HTMLElement>, "title
 const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
   ({ className, title = "Files created", files, cta, ...props }, ref) => (
     <section
+      data-slot="created-files-card"
       ref={ref}
       className={cn("rounded-xl border border-primary/40 bg-primary/5 p-4", className)}
       {...props}

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type FC,
   type ReactNode,
@@ -215,7 +217,7 @@ const SlideDeckBase: FC<SlideDeckProps> = ({
   );
 
   return (
-    <DeckContext.Provider value={contextValue}>
+    <DeckContext.Provider data-slot="slide-deck-base" value={contextValue}>
       <div
         ref={rootRef}
         aria-roledescription="slide deck"
@@ -260,6 +262,7 @@ const SlidesView: FC<{ className?: string }> = ({ className }) => {
   const current = slides[state.currentIndex];
   return (
     <div
+      data-slot="slides-view"
       className={["theo-slide-deck-slide-frame", className].filter(Boolean).join(" ")}
       data-theo-slide-deck-transition={transition}
       data-theo-slide-deck-direction={state.transitionDirection}
@@ -305,6 +308,7 @@ const PresenterButton: FC<{ className?: string }> = ({ className }) => {
   const { state, dispatch } = useDeckContext();
   return (
     <button
+      data-slot="presenter-button"
       type="button"
       onClick={() => dispatch({ type: "TOGGLE_PRESENTER" })}
       aria-pressed={state.presenterMode}
@@ -320,6 +324,7 @@ const FullscreenButton: FC<{ className?: string }> = ({ className }) => {
   const { state, toggleFullscreen } = useDeckContext();
   return (
     <button
+      data-slot="fullscreen-button"
       type="button"
       onClick={() => void toggleFullscreen()}
       aria-pressed={state.fullscreen}
@@ -335,6 +340,7 @@ const PrintButton: FC<{ className?: string }> = ({ className }) => {
   const { print } = useDeckContext();
   return (
     <button
+      data-slot="print-button"
       type="button"
       onClick={() => print()}
       aria-label="Print or save deck as PDF"
@@ -351,6 +357,7 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> 
 }) => {
   return (
     <div
+      data-slot="print-container"
       className="theo-slide-deck-print-container"
       aria-hidden="true"
       style={{
@@ -380,6 +387,7 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> 
 const DefaultDeckLayout: FC = () => {
   return (
     <div
+      data-slot="default-deck-layout"
       className="theo-slide-deck-default-layout"
       style={{
         display: "grid",

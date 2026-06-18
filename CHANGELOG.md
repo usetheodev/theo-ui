@@ -7,6 +7,101 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.16.0] - 2026-06-18
+
+### Added
+- **`data-slot` attribute on every component (shadcn v4 convention).** All 135
+  components now emit `data-slot="<name>"` on their root element (compound
+  sub-parts carry `data-slot="<name>-<part>"`), so consumers can target and
+  override styles via stable attribute selectors instead of relying on Tailwind
+  class order. New quality gate `validateDataSlot` enforces presence on every
+  component. (community-standard-componentization, T2.1)
+- **Per-subpath TypeScript declarations.** Importing `@theokit/ui/button` now
+  resolves an isolated `Button`-only `.d.ts` instead of the entire barrel's
+  type surface, so type-checking a single subpath no longer loads all 135
+  components' types. Declarations are emitted by `tsc -p tsconfig.dts.json`
+  (tsup's bundler OOMs at 130+ entries). (community-standard-componentization, T3.1)
+- **`data-variant` / `data-size` on cva components (shadcn v4).** The 9
+  variant-driven components (Button, Badge, Avatar, Select, Switch, Input,
+  Textarea, Checkbox, Toast) now emit `data-variant`/`data-size` alongside
+  `data-slot`, so consumers can style by attribute (e.g.
+  `[data-slot=button][data-variant=secondary]`). The `*Variants` helpers remain
+  exported for class reuse. (community-standard-componentization, T5.1)
+
+- `"use client"` directive added to the 45 client component source files
+  (anything using React hooks/context), matching shadcn/ui conventions.
+- Post-build step `scripts/inject-use-client.ts` re-injects the directive into
+  the output entry shims + component chunks (esbuild strips it during
+  `splitting`). Wired into the `build` script.
+- New quality gate `validateUseClientDirective` — fails the build if a client
+  component ships without the directive in `dist/`. (T1.2)
+
+
+### Changed
+- Tailwind v4 devDep alignment + v3-legacy removal (Phase 4) is deferred to a
+  dedicated `tailwind-v4-migration` cycle — see ADR 0001. The shipped
+  `dist/components.css` is already built with Tailwind v4; the deferred work is
+  the dev/test version label + the v3-legacy compat artifacts.
+- Bundle baseline updated for the new per-subpath declaration strategy: the
+  barrel `dist/index.d.ts` is now a thin re-export (15 KB vs the old 206 KB
+  inlined monolith) because per-component types live in their own files under
+  `dist/components/`. Engine `.d.ts` moved from `dist/<engine>/` to
+  `dist/components/.../`. (community-standard-componentization, T3.1)
+- Bundle baseline for `dist/components.css` corrected to the full `@source`
+  scan size (the prior baseline was set in an environment where Tailwind v4's
+  `@source` glob under-scanned the library tree — a known pnpm-symlink
+  fragility documented in `scripts/build-precompiled-css.ts`). The
+  `data-slot` / `"use client"` work is bundle-neutral — verified empirically
+  (removing `data-slot` leaves `components.css` byte-identical). `dist/slide`
+  and `dist/slide-deck` grew by a few bytes from the directive + data-slot.
+  NOTE: `components.css` size is `@source`-environment-sensitive; CI should
+  confirm the full-scan value reproduces in its environment.
+
+
+### Fixed
+- **`@theokit/ui` now works in Next.js App Router (React Server Components).**
+  The `"use client"` directive is preserved in the published build so importing
+  a client component (anything using hooks) no longer throws *"useState only
+  works in a Client Component"*. Previously esbuild stripped the directive under
+  code-splitting, so every npm-installed client component was broken in RSC
+  projects. Both consumption paths are fixed — subpath (`@theokit/ui/agent-event`)
+  and barrel (`@theokit/ui`). (community-standard-componentization, T1.1)
+
+## [0.15.0] - 2026-06-16
+
+### Added
+- **Prompt composites — "ask the user" cards for agent surfaces, modeled on
+  Claude Code's question UX.** Four self-contained composites, each rendering
+  one question at a time (sequencing across questions is the consumer's
+  responsibility — there is no built-in flow orchestrator):
+  - **`ChoicePrompt`** — single-select (radio). Header chip, options with
+    label + description, `1`..`9` number-key shortcuts (terminal-style
+    selection), injectable free-text "Other" option, and a side-by-side preview
+    pane when options carry preview content. Emits `onConfirm` with the chosen
+    value (plus the typed Other text when relevant).
+  - **`MultiSelectPrompt`** — multi-select (checkbox). Same surface as
+    `ChoicePrompt` with number-key toggles, an Other row, a `minSelected` gate,
+    and a stacked preview pane for every selected option. Emits `onConfirm`
+    with the value array.
+  - **`TextPrompt`** — free-text. Single-line `Input` or multi-line `Textarea`
+    with an optional `required` gate. Emits `onConfirm` with the typed text.
+  - **`ConfirmPrompt`** — binary yes/no. Optional `destructive` variant that
+    tones the confirm action red and exposes the card as an `alertdialog`.
+  Controlled or uncontrolled. Ships a `prompt` registry lib item carrying the
+  shared `PromptOption` type + helpers consumed by the choice composites.
+
 ## [0.14.4] - 2026-06-13
 
 ### Added

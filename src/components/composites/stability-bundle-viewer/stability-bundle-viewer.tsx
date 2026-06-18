@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertOctagon, AlertTriangle, Info, type LucideIcon } from "lucide-react";
 import { forwardRef, useState } from "react";
 
@@ -92,6 +94,7 @@ export const StabilityBundleViewer = forwardRef<HTMLDivElement, StabilityBundleV
 
     return (
       <div
+        data-slot="stability-bundle-viewer"
         ref={ref}
         className={cn("flex flex-col gap-3", className)}
         data-testid={dataTestId ?? "stability-bundle-viewer"}

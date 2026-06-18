@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AlertTriangle,
   CheckCircle2,
@@ -128,6 +130,7 @@ const AgentEvent = forwardRef<HTMLDivElement, AgentEventProps>(
 
     return (
       <div
+        data-slot="agent-event"
         ref={ref}
         className={cn(
           "rounded-md border border-transparent",

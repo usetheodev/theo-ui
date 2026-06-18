@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * `<SlideDeck.Thumbnails>` — sidebar with mini Slide instances.
  *
@@ -75,6 +77,7 @@ const ThumbnailItem: FC<ThumbnailItemProps> = ({
   const h = Math.round(CANVAS_H * scale);
   return (
     <button
+      data-slot="thumbnail-item"
       ref={setRef}
       type="button"
       onClick={() => onSelect(index)}
@@ -154,6 +157,7 @@ export const Thumbnails: FC<ThumbnailsProps> = ({ className, scale = 0.18 }) => 
 
   return (
     <ul
+      data-slot="thumbnails"
       className={["theo-slide-deck-thumbnails", className].filter(Boolean).join(" ")}
       data-theo-slide-deck-thumbnails
       aria-label="Slide thumbnails"
