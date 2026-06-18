@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   exported for class reuse. (community-standard-componentization, T5.1)
 
 ### Changed
+- Tailwind v4 devDep alignment + v3-legacy removal (Phase 4) is deferred to a
+  dedicated `tailwind-v4-migration` cycle — see ADR 0001. The shipped
+  `dist/components.css` is already built with Tailwind v4; the deferred work is
+  the dev/test version label + the v3-legacy compat artifacts.
 - Bundle baseline updated for the new per-subpath declaration strategy: the
   barrel `dist/index.d.ts` is now a thin re-export (15 KB vs the old 206 KB
   inlined monolith) because per-component types live in their own files under
