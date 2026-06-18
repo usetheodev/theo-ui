@@ -91,6 +91,26 @@ export const theoUIPreset: Partial<Config> = {
           DEFAULT: hsl("--info"),
           foreground: hsl("--info-foreground"),
         },
+        // Status palette (online/offline/degraded/info) consumed by
+        // StatusIndicator via `bg-status-*`. The `--status-*` tokens already
+        // live in tokens.css; this block was missing from the v3 preset (only
+        // the v4 `@theme` declared `--color-status-*`), so `bg-status-online`
+        // resolved to nothing in the v3/Ladle build — transparent dots.
+        status: {
+          online: {
+            DEFAULT: hsl("--status-online"),
+            foreground: hsl("--status-online-foreground"),
+          },
+          offline: {
+            DEFAULT: hsl("--status-offline"),
+            foreground: hsl("--status-offline-foreground"),
+          },
+          degraded: {
+            DEFAULT: hsl("--status-degraded"),
+            foreground: hsl("--status-degraded-foreground"),
+          },
+          info: { DEFAULT: hsl("--status-info"), foreground: hsl("--status-info-foreground") },
+        },
         border: hsl("--border"),
         input: hsl("--input"),
         ring: hsl("--ring"),

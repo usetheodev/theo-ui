@@ -20,6 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+- **Status indicators now render their colors under the v3 Tailwind preset.**
+  `StatusIndicator` uses `bg-status-online` / `-offline` / `-degraded` / `-info`,
+  but the `status` color palette was never added to `tailwind-preset.ts` (only
+  the v4 `@theme` declared `--color-status-*`), so those utilities resolved to
+  transparent in the v3 build path (e.g. the Ladle dev server) — the dots were
+  invisible. Added the `status` palette to the preset, mapped to the existing
+  `--status-*` tokens. The npm/v4 build was already correct. Registry
+  `tailwind-preset.json` regenerated.
 - **npm publish CI restored.** The `release.yml` (and `deploy-ladle.yml`) GitHub
   Actions workflow failed on every tagged release since v0.14.1 because
   `pnpm/action-setup@v4` pinned `version: 9.15.0`, conflicting with
