@@ -13,6 +13,7 @@ interface LabelProps {
 function Label({ cx, cy, label, stroke }: LabelProps) {
   return (
     <text
+      data-slot="label"
       x={cx}
       y={cy}
       textAnchor="middle"
@@ -21,7 +22,6 @@ function Label({ cx, cy, label, stroke }: LabelProps) {
       fontFamily="ui-sans-serif, system-ui, sans-serif"
       fill={stroke ?? "currentColor"}
       style={{ pointerEvents: "none" }}
-      data-slot="label"
     >
       {label}
     </text>

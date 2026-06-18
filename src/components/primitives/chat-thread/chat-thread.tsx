@@ -16,13 +16,13 @@ const ChatThread = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <LiveRegionProvider value={true}>
       <div
+        data-slot="chat-thread"
         ref={ref}
         role="log"
         aria-live="polite"
         aria-relevant="additions"
         className={cn("flex flex-col gap-6", className)}
         {...props}
-        data-slot="chat-thread"
       />
     </LiveRegionProvider>
   ),

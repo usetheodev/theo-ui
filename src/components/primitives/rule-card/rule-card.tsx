@@ -49,6 +49,7 @@ const RuleCard = forwardRef<HTMLElement, RuleCardProps>(
     };
     return (
       <article
+        data-slot="rule-card"
         ref={ref}
         className={cn(
           "grid gap-2 rounded-lg border border-border/40 bg-card/40 p-3",
@@ -59,7 +60,6 @@ const RuleCard = forwardRef<HTMLElement, RuleCardProps>(
         )}
         onClick={onSelect ? () => onSelect(rule.id) : undefined}
         {...props}
-        data-slot="rule-card"
       >
         <header className="flex items-start gap-2">
           <h4 className="flex-1 truncate font-display text-foreground text-title-md tracking-tight">

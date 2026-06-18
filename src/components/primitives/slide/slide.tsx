@@ -217,6 +217,7 @@ export const Slide: FC<SlideProps> = ({
 
   return (
     <div
+      data-slot="slide"
       ref={containerRef}
       className={["theo-slide-host", className].filter(Boolean).join(" ")}
       data-theo-slide-host
@@ -226,7 +227,6 @@ export const Slide: FC<SlideProps> = ({
         width: "100%",
         height: "100%",
       }}
-      data-slot="slide"
     >
       {/*
         Section is taken out of normal flow with position:absolute so its

@@ -23,6 +23,7 @@ const AgentStartingState = forwardRef<HTMLOutputElement, AgentStartingStateProps
     const inLiveRegion = useInLiveRegion();
     return (
       <output
+        data-slot="agent-starting-state"
         ref={ref}
         aria-live={inLiveRegion ? undefined : "polite"}
         className={cn(
@@ -30,7 +31,6 @@ const AgentStartingState = forwardRef<HTMLOutputElement, AgentStartingStateProps
           className,
         )}
         {...props}
-        data-slot="agent-starting-state"
       >
         <Loader2 className="size-4 animate-spin text-primary" aria-hidden="true" />
         <div className="grid">

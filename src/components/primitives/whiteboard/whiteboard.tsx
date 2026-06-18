@@ -143,6 +143,7 @@ export function Whiteboard({
 
   return (
     <svg
+      data-slot="whiteboard"
       ref={svgRef}
       viewBox={viewport.viewBox({ width: sceneWidth, height: sceneHeight })}
       width={sceneWidth}
@@ -154,7 +155,6 @@ export function Whiteboard({
       data-whiteboard-state={scene ? "ok" : "invalid"}
       style={{ touchAction: "none", userSelect: "none" }}
       {...handlers}
-      data-slot="whiteboard"
     >
       <title>{label}</title>
       {sceneBackground ? (

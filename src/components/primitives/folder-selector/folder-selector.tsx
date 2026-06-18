@@ -22,6 +22,7 @@ interface FolderSelectorProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const FolderSelector = forwardRef<HTMLButtonElement, FolderSelectorProps>(
   ({ className, path, compact, ...props }, ref) => (
     <button
+      data-slot="folder-selector"
       ref={ref}
       type="button"
       className={cn(
@@ -34,7 +35,6 @@ const FolderSelector = forwardRef<HTMLButtonElement, FolderSelectorProps>(
         className,
       )}
       {...props}
-      data-slot="folder-selector"
     >
       <Folder className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
       <span className="min-w-0 flex-1 truncate text-left">{path}</span>

@@ -72,6 +72,7 @@ export type ChatMessageRootProps = HTMLAttributes<HTMLDivElement> & {
 export const ChatMessageRoot = forwardRef<HTMLDivElement, ChatMessageRootProps>(
   ({ className, from, children, ...props }, ref) => (
     <div
+      data-slot="chat-message-root"
       ref={ref}
       className={cn(
         "group flex w-full max-w-[95%] flex-col gap-2",
@@ -84,7 +85,6 @@ export const ChatMessageRoot = forwardRef<HTMLDivElement, ChatMessageRootProps>(
       )}
       data-theo-chat-message={from}
       {...props}
-      data-slot="chat-message-root"
     >
       {children}
     </div>
@@ -109,6 +109,7 @@ export interface ChatMessageContentProps extends HTMLAttributes<HTMLDivElement> 
 export const ChatMessageContent = forwardRef<HTMLDivElement, ChatMessageContentProps>(
   ({ className, variant, children, ...props }, ref) => (
     <div
+      data-slot="chat-message-content"
       ref={ref}
       className={cn(
         "flex w-fit min-w-0 max-w-full flex-col gap-2 overflow-hidden text-body-md",
@@ -126,7 +127,6 @@ export const ChatMessageContent = forwardRef<HTMLDivElement, ChatMessageContentP
       )}
       data-theo-chat-content=""
       {...props}
-      data-slot="chat-message-content"
     >
       {children}
     </div>
@@ -231,11 +231,11 @@ export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
     if (message.role === "user") {
       return (
         <ChatMessageRoot
+          data-slot="chat-message"
           ref={ref}
           from="user"
           className={className}
           {...props}
-          data-slot="chat-message"
         >
           {inner}
           {avatar ? <div className="shrink-0">{avatar}</div> : null}
@@ -245,11 +245,11 @@ export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
 
     return (
       <ChatMessageRoot
+        data-slot="chat-message"
         ref={ref}
         from={message.role}
         className={className}
         {...props}
-        data-slot="chat-message"
       >
         {avatar ? <div className="shrink-0">{avatar}</div> : null}
         {inner}

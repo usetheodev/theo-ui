@@ -81,11 +81,11 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
 
     return (
       <section
+        data-slot="token-usage-chart"
         ref={ref}
         className={cn("rounded-xl border bg-card p-4", className)}
         aria-label="Token usage over time"
         {...props}
-        data-slot="token-usage-chart"
       >
         <header className="flex items-baseline justify-between gap-3">
           {title ? (

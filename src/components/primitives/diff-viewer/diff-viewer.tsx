@@ -62,10 +62,10 @@ const sign: Record<DiffLineKind, string> = {
 const DiffViewer = forwardRef<HTMLDivElement, DiffViewerProps>(
   ({ className, path, stats, hunks, ...props }, ref) => (
     <div
+      data-slot="diff-viewer"
       ref={ref}
       className={cn("overflow-hidden rounded-xl border bg-card font-mono", className)}
       {...props}
-      data-slot="diff-viewer"
     >
       <header className="flex items-center justify-between gap-3 border-border/40 border-b bg-muted/30 px-3 py-2">
         <span className="truncate text-code-sm text-foreground">{path}</span>

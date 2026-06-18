@@ -151,6 +151,7 @@ const ChoicePrompt = forwardRef<HTMLElement, ChoicePromptProps>(
 
     return (
       <section
+        data-slot="choice-prompt"
         ref={ref}
         aria-labelledby={questionId}
         onKeyDown={handleKeyDown}
@@ -160,7 +161,6 @@ const ChoicePrompt = forwardRef<HTMLElement, ChoicePromptProps>(
           className,
         )}
         {...props}
-        data-slot="choice-prompt"
       >
         <header className="flex items-start justify-between gap-3">
           <h3 id={questionId} className="font-display text-foreground text-title-md tracking-tight">

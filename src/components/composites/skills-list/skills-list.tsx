@@ -38,11 +38,11 @@ const SkillsList = forwardRef<HTMLDivElement, SkillsListProps>(
 
     return (
       <section
+        data-slot="skills-list"
         ref={ref}
         className={cn("grid gap-3", className)}
         aria-label="Available skills"
         {...props}
-        data-slot="skills-list"
       >
         {title || searchable ? (
           <header className="flex flex-wrap items-center justify-between gap-3">

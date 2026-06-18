@@ -109,6 +109,7 @@ const AgentErrorCard = forwardRef<HTMLElement, AgentErrorCardProps>(
     const inLiveRegion = useInLiveRegion();
     return (
       <section
+        data-slot="agent-error-card"
         ref={ref}
         role="alert"
         aria-live={inLiveRegion ? undefined : "assertive"}
@@ -117,7 +118,6 @@ const AgentErrorCard = forwardRef<HTMLElement, AgentErrorCardProps>(
           className,
         )}
         {...props}
-        data-slot="agent-error-card"
       >
         <header className="flex items-start gap-3">
           <span className="mt-0.5 inline-flex shrink-0 text-destructive" aria-hidden="true">

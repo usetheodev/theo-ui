@@ -156,7 +156,7 @@ export function AgentComposer({
   };
 
   return (
-    <div className={cn("relative", containerClassName)} data-slot="agent-composer">
+    <div data-slot="agent-composer" className={cn("relative", containerClassName)}>
       <MentionMenu
         open={!!activeTrigger && items !== null}
         trigger={(activeTrigger ?? "/") as MentionTrigger}

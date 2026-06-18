@@ -21,10 +21,10 @@ export function ChatMessageActions({
 }: ChatMessageActionsProps): JSX.Element {
   return (
     <div
+      data-slot="chat-message-actions"
       className={cn("flex items-center gap-1", className)}
       data-theo-chat-actions=""
       {...props}
-      data-slot="chat-message-actions"
     >
       {children}
     </div>
@@ -50,13 +50,13 @@ export function ChatMessageAction({
 }: ChatMessageActionProps): JSX.Element {
   return (
     <Button
+      data-slot="chat-message-action"
       type="button"
       variant={variant}
       size={size}
       title={tooltip}
       className={cn(className)}
       {...props}
-      data-slot="chat-message-action"
     >
       {children}
       <span className="sr-only">{label || tooltip}</span>

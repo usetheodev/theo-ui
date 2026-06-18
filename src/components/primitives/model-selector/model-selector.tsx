@@ -31,6 +31,7 @@ const ModelSelector = forwardRef<HTMLButtonElement, ModelSelectorProps>(
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <button
+            data-slot="model-selector"
             ref={ref}
             type="button"
             className={cn(
@@ -42,7 +43,6 @@ const ModelSelector = forwardRef<HTMLButtonElement, ModelSelectorProps>(
               className,
             )}
             {...props}
-            data-slot="model-selector"
           >
             <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
             {current?.label ?? "Select model"}

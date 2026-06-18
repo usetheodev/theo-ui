@@ -217,7 +217,7 @@ const SlideDeckBase: FC<SlideDeckProps> = ({
   );
 
   return (
-    <DeckContext.Provider value={contextValue} data-slot="slide-deck-base">
+    <DeckContext.Provider data-slot="slide-deck-base" value={contextValue}>
       <div
         ref={rootRef}
         aria-roledescription="slide deck"
@@ -262,6 +262,7 @@ const SlidesView: FC<{ className?: string }> = ({ className }) => {
   const current = slides[state.currentIndex];
   return (
     <div
+      data-slot="slides-view"
       className={["theo-slide-deck-slide-frame", className].filter(Boolean).join(" ")}
       data-theo-slide-deck-transition={transition}
       data-theo-slide-deck-direction={state.transitionDirection}
@@ -272,7 +273,6 @@ const SlidesView: FC<{ className?: string }> = ({ className }) => {
         minHeight: 0,
         overflow: "hidden",
       }}
-      data-slot="slides-view"
     >
       {current ? (
         <div
@@ -308,12 +308,12 @@ const PresenterButton: FC<{ className?: string }> = ({ className }) => {
   const { state, dispatch } = useDeckContext();
   return (
     <button
+      data-slot="presenter-button"
       type="button"
       onClick={() => dispatch({ type: "TOGGLE_PRESENTER" })}
       aria-pressed={state.presenterMode}
       aria-label={state.presenterMode ? "Close presenter view" : "Open presenter view"}
       className={["theo-slide-deck-presenter-button", className].filter(Boolean).join(" ")}
-      data-slot="presenter-button"
     >
       {state.presenterMode ? "Close presenter" : "Presenter"}
     </button>
@@ -324,12 +324,12 @@ const FullscreenButton: FC<{ className?: string }> = ({ className }) => {
   const { state, toggleFullscreen } = useDeckContext();
   return (
     <button
+      data-slot="fullscreen-button"
       type="button"
       onClick={() => void toggleFullscreen()}
       aria-pressed={state.fullscreen}
       aria-label={state.fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
       className={["theo-slide-deck-fullscreen-button", className].filter(Boolean).join(" ")}
-      data-slot="fullscreen-button"
     >
       {state.fullscreen ? "Exit fullscreen" : "Fullscreen"}
     </button>
@@ -340,11 +340,11 @@ const PrintButton: FC<{ className?: string }> = ({ className }) => {
   const { print } = useDeckContext();
   return (
     <button
+      data-slot="print-button"
       type="button"
       onClick={() => print()}
       aria-label="Print or save deck as PDF"
       className={["theo-slide-deck-print-button", className].filter(Boolean).join(" ")}
-      data-slot="print-button"
     >
       Print
     </button>
@@ -357,6 +357,7 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> 
 }) => {
   return (
     <div
+      data-slot="print-container"
       className="theo-slide-deck-print-container"
       aria-hidden="true"
       style={{
@@ -365,7 +366,6 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> 
         pointerEvents: "none",
         visibility: "hidden",
       }}
-      data-slot="print-container"
     >
       {slides.map((slide, index) => (
         <div
@@ -387,6 +387,7 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> 
 const DefaultDeckLayout: FC = () => {
   return (
     <div
+      data-slot="default-deck-layout"
       className="theo-slide-deck-default-layout"
       style={{
         display: "grid",
@@ -395,7 +396,6 @@ const DefaultDeckLayout: FC = () => {
         gap: 8,
         height: "100%",
       }}
-      data-slot="default-deck-layout"
     >
       <SlidesView />
       <div

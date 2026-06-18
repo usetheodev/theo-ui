@@ -52,10 +52,10 @@ const MemoryEditor = forwardRef<HTMLDivElement, MemoryEditorProps>(
     const ActiveIcon = active ? SCOPE_META[active.scope].icon : Brain;
     return (
       <section
+        data-slot="memory-editor"
         ref={ref}
         className={cn("rounded-xl border bg-card", className)}
         {...props}
-        data-slot="memory-editor"
       >
         <header className="flex items-center justify-between gap-3 border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">

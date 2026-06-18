@@ -61,6 +61,7 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
     const Tag = onSelect ? "button" : "article";
     return (
       <Tag
+        data-slot="model-card"
         ref={ref as never}
         type={onSelect ? "button" : undefined}
         onClick={onSelect ? () => onSelect(model.id) : undefined}
@@ -77,7 +78,6 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
         )}
         aria-pressed={onSelect ? !!selected : undefined}
         {...(props as HTMLAttributes<HTMLElement>)}
-        data-slot="model-card"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">

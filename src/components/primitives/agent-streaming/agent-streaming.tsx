@@ -27,6 +27,7 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
     const inLiveRegion = useInLiveRegion();
     return (
       <div
+        data-slot="agent-streaming"
         ref={ref}
         role={inLiveRegion ? undefined : "status"}
         aria-live={inLiveRegion ? undefined : "polite"}
@@ -36,7 +37,6 @@ const AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(
           className,
         )}
         {...props}
-        data-slot="agent-streaming"
       >
         <span
           className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/15 text-primary"

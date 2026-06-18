@@ -46,10 +46,10 @@ const SystemPromptEditor = forwardRef<HTMLDivElement, SystemPromptEditorProps>(
 
     return (
       <section
+        data-slot="system-prompt-editor"
         ref={ref}
         className={cn("rounded-xl border bg-card", className)}
         {...props}
-        data-slot="system-prompt-editor"
       >
         <header className="flex items-center justify-between gap-3 border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">

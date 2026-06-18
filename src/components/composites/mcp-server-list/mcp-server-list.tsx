@@ -49,11 +49,11 @@ const MCPServerList = forwardRef<HTMLDivElement, MCPServerListProps>(
 
     return (
       <section
+        data-slot="mcp-server-list"
         ref={ref}
         className={cn("grid gap-3", className)}
         aria-label="MCP servers"
         {...props}
-        data-slot="mcp-server-list"
       >
         <header className="flex flex-wrap items-center justify-between gap-3">
           {title ? (
