@@ -40,6 +40,7 @@ const SocialAuthRow = forwardRef<HTMLDivElement, SocialAuthRowProps>(
           : undefined
       }
       {...props}
+      data-slot="social-auth-row"
     >
       {providers.map((p) => {
         const Icon = p.icon;

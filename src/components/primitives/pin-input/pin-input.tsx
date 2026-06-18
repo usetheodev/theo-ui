@@ -176,6 +176,7 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
         aria-label={ariaLabel}
         className={cn("inline-flex items-center gap-2", className)}
         {...props}
+        data-slot="pin-input"
       >
         {slots.map((i) => {
           const ch = value[i] ?? "";

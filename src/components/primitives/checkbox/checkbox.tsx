@@ -57,6 +57,7 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, CheckboxP
         ref={ref}
         className={cn(checkboxVariants({ size }), className)}
         {...props}
+        data-slot="checkbox"
       >
         <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
           {props.checked === "indeterminate" ? (

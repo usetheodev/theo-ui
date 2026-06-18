@@ -97,6 +97,7 @@ const ThumbnailItem: FC<ThumbnailItemProps> = ({
         flexShrink: 0,
         background: "transparent",
       }}
+      data-slot="thumbnail-item"
     >
       <div
         style={{
@@ -168,6 +169,7 @@ export const Thumbnails: FC<ThumbnailsProps> = ({ className, scale = 0.18 }) => 
         listStyle: "none",
         margin: 0,
       }}
+      data-slot="thumbnails"
     >
       {slides.map((slide, index) => (
         <li key={`${slide.id ?? index}-${index}`}>

@@ -30,6 +30,7 @@ export const BranchIndicator = forwardRef<HTMLSpanElement, BranchIndicatorProps>
         data-testid={dataTestId ?? "branch-indicator"}
         data-branch-count={branchCount}
         {...rest}
+        data-slot="branch-indicator"
       >
         ×{branchCount}
       </span>

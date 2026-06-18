@@ -109,6 +109,7 @@ const AccountMenu = forwardRef<HTMLElement, AccountMenuProps>(
           className={baseClass}
           onClick={onClick}
           {...buttonProps}
+          data-slot="account-menu"
         >
           {content}
         </button>
@@ -120,6 +121,7 @@ const AccountMenu = forwardRef<HTMLElement, AccountMenuProps>(
         ref={ref as React.Ref<HTMLDivElement>}
         className={baseClass}
         {...(props as HTMLAttributes<HTMLDivElement>)}
+        data-slot="account-menu"
       >
         {content}
       </div>

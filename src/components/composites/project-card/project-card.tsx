@@ -141,6 +141,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
           className,
         )}
         {...(props as HTMLAttributes<HTMLAnchorElement> & HTMLAttributes<HTMLDivElement>)}
+        data-slot="project-card"
       >
         {content}
       </Tag>

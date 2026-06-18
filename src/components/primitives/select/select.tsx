@@ -66,6 +66,7 @@ const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, Sel
       ref={ref}
       className={cn(selectTriggerVariants({ size }), className)}
       {...props}
+      data-slot="select-trigger"
     >
       {children}
       <SelectPrimitive.Icon asChild>
@@ -84,6 +85,7 @@ const SelectScrollUpButton = forwardRef<
     ref={ref}
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
+    data-slot="select-scroll-up-button"
   >
     <ChevronUp className="size-4" />
   </SelectPrimitive.ScrollUpButton>
@@ -98,6 +100,7 @@ const SelectScrollDownButton = forwardRef<
     ref={ref}
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
+    data-slot="select-scroll-down-button"
   >
     <ChevronDown className="size-4" />
   </SelectPrimitive.ScrollDownButton>
@@ -120,6 +123,7 @@ const SelectContent = forwardRef<
         className,
       )}
       {...props}
+      data-slot="select-content"
     >
       <SelectScrollUpButton />
       <SelectPrimitive.Viewport
@@ -148,6 +152,7 @@ const SelectLabel = forwardRef<
       className,
     )}
     {...props}
+    data-slot="select-label"
   />
 ));
 SelectLabel.displayName = "Select.Label";
@@ -166,6 +171,7 @@ const SelectItem = forwardRef<
       className,
     )}
     {...props}
+    data-slot="select-item"
   >
     <span className="absolute left-1.5 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
@@ -185,6 +191,7 @@ const SelectSeparator = forwardRef<
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border/40", className)}
     {...props}
+    data-slot="select-separator"
   />
 ));
 SelectSeparator.displayName = "Select.Separator";

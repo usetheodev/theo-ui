@@ -97,6 +97,7 @@ export const StabilityBundleViewer = forwardRef<HTMLDivElement, StabilityBundleV
         ref={ref}
         className={cn("flex flex-col gap-3", className)}
         data-testid={dataTestId ?? "stability-bundle-viewer"}
+        data-slot="stability-bundle-viewer"
       >
         <header className="flex items-start gap-3 rounded border border-border bg-card p-3">
           <Icon className={cn("size-5", meta.className)} aria-hidden />

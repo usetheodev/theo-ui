@@ -28,6 +28,7 @@ export function ReasoningPart({ part, defaultOpen }: ReasoningPartProps): JSX.El
       )}
       open={open}
       data-theo-reasoning=""
+      data-slot="reasoning-part"
     >
       <summary
         className={cn(

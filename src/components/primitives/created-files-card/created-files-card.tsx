@@ -38,6 +38,7 @@ const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
       ref={ref}
       className={cn("rounded-xl border border-primary/40 bg-primary/5 p-4", className)}
       {...props}
+      data-slot="created-files-card"
     >
       <header className="mb-3 flex items-center gap-2">
         <Cloud className="size-4 text-primary" aria-hidden="true" />

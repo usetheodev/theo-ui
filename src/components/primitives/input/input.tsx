@@ -47,7 +47,13 @@ export interface InputProps
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", size, ...props }, ref) => (
-    <input ref={ref} type={type} className={cn(inputVariants({ size }), className)} {...props} />
+    <input
+      ref={ref}
+      type={type}
+      className={cn(inputVariants({ size }), className)}
+      {...props}
+      data-slot="input"
+    />
   ),
 );
 Input.displayName = "Input";

@@ -50,6 +50,7 @@ const Content = forwardRef<
         className,
       )}
       {...props}
+      data-slot="content"
     />
   </DropdownMenuPrimitive.Portal>
 ));
@@ -73,6 +74,7 @@ const Item = forwardRef<ElementRef<typeof DropdownMenuPrimitive.Item>, ItemProps
         className,
       )}
       {...props}
+      data-slot="item"
     />
   ),
 );
@@ -93,6 +95,7 @@ const CheckboxItem = forwardRef<
       className,
     )}
     {...props}
+    data-slot="checkbox-item"
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
@@ -118,6 +121,7 @@ const RadioItem = forwardRef<
       className,
     )}
     {...props}
+    data-slot="radio-item"
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
@@ -143,6 +147,7 @@ const Label = forwardRef<ElementRef<typeof DropdownMenuPrimitive.Label>, LabelPr
         className,
       )}
       {...props}
+      data-slot="label"
     />
   ),
 );
@@ -156,6 +161,7 @@ const Separator = forwardRef<
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border/40", className)}
     {...props}
+    data-slot="separator"
   />
 ));
 Separator.displayName = "DropdownMenu.Separator";
@@ -182,6 +188,7 @@ const SubTrigger = forwardRef<
       className,
     )}
     {...props}
+    data-slot="sub-trigger"
   >
     {children}
     <ChevronRight aria-hidden="true" className="ml-auto size-3.5" />
@@ -203,6 +210,7 @@ const SubContent = forwardRef<
       className,
     )}
     {...props}
+    data-slot="sub-content"
   />
 ));
 SubContent.displayName = "DropdownMenu.SubContent";

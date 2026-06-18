@@ -65,6 +65,7 @@ const EnvVarEditor = forwardRef<HTMLDivElement, EnvVarEditorProps>(
         ref={ref}
         className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
         {...props}
+        data-slot="env-var-editor"
       >
         <header className="mb-4 flex items-baseline justify-between gap-3">
           <div>

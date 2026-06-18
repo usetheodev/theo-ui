@@ -56,7 +56,7 @@ function Toaster({ children, position = "bottom-right", className }: ToasterProp
   const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
 
   return (
-    <ToastContext.Provider value={value}>
+    <ToastContext.Provider value={value} data-slot="toaster">
       <Toast.Provider swipeDirection="right" duration={5000}>
         {children}
         {toasts.map((t) => (

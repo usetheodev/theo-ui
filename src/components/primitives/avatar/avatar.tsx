@@ -51,6 +51,7 @@ const AvatarRoot = forwardRef<ElementRef<typeof AvatarPrimitive.Root>, AvatarPro
       ref={ref}
       className={cn(avatarVariants({ size, tone }), className)}
       {...props}
+      data-slot="avatar-root"
     />
   ),
 );
@@ -64,6 +65,7 @@ const AvatarImage = forwardRef<
     ref={ref}
     className={cn("aspect-square size-full object-cover", className)}
     {...props}
+    data-slot="avatar-image"
   />
 ));
 AvatarImage.displayName = "Avatar.Image";
@@ -80,6 +82,7 @@ const AvatarFallback = forwardRef<
     )}
     delayMs={300}
     {...props}
+    data-slot="avatar-fallback"
   />
 ));
 AvatarFallback.displayName = "Avatar.Fallback";

@@ -56,6 +56,7 @@ const AuditLogEntry = forwardRef<HTMLElement, AuditLogEntryProps>(
           className,
         )}
         {...props}
+        data-slot="audit-log-entry"
       >
         <span
           className={cn(

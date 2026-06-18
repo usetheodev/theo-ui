@@ -56,6 +56,7 @@ const SubAgentDispatch = forwardRef<HTMLElement, SubAgentDispatchProps>(
           className,
         )}
         {...props}
+        data-slot="sub-agent-dispatch"
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2">

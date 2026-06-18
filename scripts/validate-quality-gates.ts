@@ -953,6 +953,33 @@ async function validateUseClientDirective(): Promise<void> {
   }
 }
 
+/**
+ * data-slot gate (shadcn v4 convention) — every component's root source file
+ * MUST emit at least one `data-slot=` attribute so consumers can target/override
+ * styles without depending on Tailwind class order. The root element is named
+ * after the component; compound sub-parts carry `data-slot="<name>-<part>"`.
+ * Reads source (not dist) so it runs without a build.
+ */
+async function validateDataSlot(): Promise<void> {
+  for (const layer of ["primitives", "composites"] as const) {
+    const layerSrc = join(ROOT, "src/components", layer);
+    if (!existsSync(layerSrc)) continue;
+    for (const dirent of readdirSync(layerSrc, { withFileTypes: true })) {
+      if (!dirent.isDirectory()) continue;
+      const name = dirent.name;
+      const root = join(layerSrc, name, `${name}.tsx`);
+      if (!existsSync(root)) continue;
+      const txt = readFileSync(root, "utf-8");
+      if (!txt.includes("data-slot=")) {
+        fail(
+          "design/data-slot",
+          `${layer}/${name} has no \`data-slot\` attribute on its root element (shadcn v4 convention; run \`pnpm tsx scripts/codemod-data-slot.ts\`).`,
+        );
+      }
+    }
+  }
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(ROOT, "docs/quality-gates.md"))) {
     fail("docs", "missing docs/quality-gates.md");
@@ -973,6 +1000,7 @@ async function main(): Promise<void> {
   await validateArchitectureCensus();
   await validateAxeCoverage();
   await validateUseClientDirective();
+  await validateDataSlot();
   await validateNoStrayArtifacts();
   validateDesignSystemFidelity();
   await validateNoLiteralTailwindColors();

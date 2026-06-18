@@ -57,6 +57,7 @@ const TaskNode = forwardRef<HTMLLIElement, TaskNodeProps>(
         className={cn("grid gap-1", className)}
         style={{ marginLeft: `${depth * 1.25}rem` }}
         {...props}
+        data-slot="task-node"
       >
         <div className="grid grid-cols-[auto_1fr] items-baseline gap-2">
           <Icon
@@ -108,7 +109,12 @@ const TaskPlan = forwardRef<HTMLElement, TaskPlanProps>(
     const done = nodes.filter((n) => n.status === "done").length;
     const computedSummary = summary ?? (auto > 0 ? `${done} of ${auto} done` : "no steps");
     return (
-      <section ref={ref} className={cn("rounded-xl border bg-card p-4", className)} {...props}>
+      <section
+        ref={ref}
+        className={cn("rounded-xl border bg-card p-4", className)}
+        {...props}
+        data-slot="task-plan"
+      >
         <header className="mb-3 flex items-baseline justify-between gap-3">
           {title ? (
             <h3 className="font-display text-title-md tracking-tight">{title}</h3>

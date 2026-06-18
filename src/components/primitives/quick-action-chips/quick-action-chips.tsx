@@ -29,6 +29,7 @@ const QuickActionChips = forwardRef<HTMLDivElement, QuickActionChipsProps>(
       ref={ref}
       className={cn("flex flex-wrap items-center justify-center gap-2", className)}
       {...props}
+      data-slot="quick-action-chips"
     >
       {actions.map((a) => {
         const Icon = a.icon;

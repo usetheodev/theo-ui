@@ -70,6 +70,7 @@ export const GatewayStatusIndicator = forwardRef<HTMLSpanElement, GatewayStatusI
         data-testid={dataTestId ?? "gateway-status-indicator"}
         data-status={status}
         {...rest}
+        data-slot="gateway-status-indicator"
       >
         <span
           className={cn(

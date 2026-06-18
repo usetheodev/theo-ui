@@ -79,6 +79,7 @@ export const MetricCard = forwardRef<HTMLDivElement, MetricCardProps>(
         className={cn("@container/metric-card flex w-full flex-col gap-2 p-4", className)}
         data-testid="metric-card"
         {...rest}
+        data-slot="metric-card"
       >
         <div className="flex items-start justify-between gap-3">
           <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">

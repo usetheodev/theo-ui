@@ -131,6 +131,7 @@ function ChatMessageResponseImpl({
         className,
       )}
       data-theo-chat-response=""
+      data-slot="chat-message-response-impl"
     >
       {tree}
     </div>

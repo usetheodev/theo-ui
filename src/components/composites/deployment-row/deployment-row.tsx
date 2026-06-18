@@ -85,6 +85,7 @@ const DeploymentRow = forwardRef<HTMLDivElement, DeploymentRowProps>(
           className,
         )}
         {...props}
+        data-slot="deployment-row"
       >
         <Badge variant={variant} className="min-w-[88px] justify-center">
           <Badge.Dot tone={tone} pulse={isAnimated(deployment.status)} />

@@ -81,6 +81,7 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>(
         aria-busy={indeterminate ? true : undefined}
         className={cn("relative w-full overflow-hidden rounded-full bg-muted", height, className)}
         {...props}
+        data-slot="progress"
       >
         {indeterminate ? (
           <div

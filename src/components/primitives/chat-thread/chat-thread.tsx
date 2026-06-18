@@ -22,6 +22,7 @@ const ChatThread = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
         aria-relevant="additions"
         className={cn("flex flex-col gap-6", className)}
         {...props}
+        data-slot="chat-thread"
       />
     </LiveRegionProvider>
   ),

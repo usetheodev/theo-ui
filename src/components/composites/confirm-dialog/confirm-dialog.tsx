@@ -106,7 +106,7 @@ const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(
 
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <Dialog.Content ref={ref}>
+        <Dialog.Content ref={ref} data-slot="confirm-dialog">
           <Dialog.Header>
             <Dialog.Title>{title}</Dialog.Title>
             <Dialog.Description>{description}</Dialog.Description>

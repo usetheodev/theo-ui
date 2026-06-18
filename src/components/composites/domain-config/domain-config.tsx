@@ -67,6 +67,7 @@ const DomainConfig = forwardRef<HTMLDivElement, DomainConfigProps>(
         ref={ref}
         className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
         {...props}
+        data-slot="domain-config"
       >
         <header className="mb-4 flex items-baseline justify-between gap-3">
           <div>

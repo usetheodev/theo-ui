@@ -159,6 +159,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         onKeyDown={handleKeyDown}
         className={cn("flex items-center gap-1", className)}
         {...props}
+        data-slot="pagination"
       >
         {showJumpButtons ? (
           <button

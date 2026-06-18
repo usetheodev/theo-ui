@@ -95,6 +95,7 @@ const StatusDot = forwardRef<HTMLSpanElement, StatusDotProps>(
           aria-label={effectiveAriaLabel}
           className={cn("inline-flex items-center", className)}
           {...props}
+          data-slot="status-dot"
         >
           {dot}
         </span>
@@ -111,6 +112,7 @@ const StatusDot = forwardRef<HTMLSpanElement, StatusDotProps>(
           className,
         )}
         {...props}
+        data-slot="status-dot"
       >
         {dot}
         <span>{label}</span>

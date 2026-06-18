@@ -58,6 +58,7 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
               className,
             )}
             {...props}
+            data-slot="agent-profile"
           >
             <span
               className={cn(

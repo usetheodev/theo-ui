@@ -35,6 +35,7 @@ const Skeleton = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
         aria-label={inLiveRegion ? undefined : "Loading"}
         className={cn("animate-pulse rounded-md bg-muted", className)}
         {...props}
+        data-slot="skeleton"
       />
     );
   },

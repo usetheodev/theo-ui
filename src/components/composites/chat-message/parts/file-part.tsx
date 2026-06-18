@@ -30,6 +30,7 @@ export function FilePart({ part }: FilePartProps): JSX.Element {
             "my-2 inline-flex items-center gap-2 rounded-md border border-border bg-muted/30 px-3 py-2",
             "text-body-sm text-muted-foreground",
           )}
+          data-slot="file-part"
         >
           <ImageIcon className="size-4" aria-hidden="true" />
           <span>{label}</span>

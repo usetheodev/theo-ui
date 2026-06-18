@@ -116,6 +116,7 @@ export function MentionMenu({
 
   return (
     <div
+      data-slot="mention-menu"
       role="menu"
       aria-orientation="vertical"
       aria-label={typeof resolvedTitle === "string" ? resolvedTitle : "Mention menu"}

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`data-slot` attribute on every component (shadcn v4 convention).** All 135
+  components now emit `data-slot="<name>"` on their root element (compound
+  sub-parts carry `data-slot="<name>-<part>"`), so consumers can target and
+  override styles via stable attribute selectors instead of relying on Tailwind
+  class order. New quality gate `validateDataSlot` enforces presence on every
+  component. (community-standard-componentization, T2.1)
+
 ### Fixed
 - **`@theokit/ui` now works in Next.js App Router (React Server Components).**
   The `"use client"` directive is preserved in the published build so importing

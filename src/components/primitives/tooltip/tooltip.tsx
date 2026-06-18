@@ -34,6 +34,7 @@ const Content = forwardRef<
         className,
       )}
       {...props}
+      data-slot="content"
     />
   </TooltipPrimitive.Portal>
 ));

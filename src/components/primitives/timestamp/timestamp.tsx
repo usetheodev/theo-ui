@@ -151,7 +151,15 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
     }, [format, refreshInterval, date]);
 
     if (date === null) {
-      return <time ref={ref} className={cn(className)} suppressHydrationWarning {...props} />;
+      return (
+        <time
+          ref={ref}
+          className={cn(className)}
+          suppressHydrationWarning
+          {...props}
+          data-slot="timestamp"
+        />
+      );
     }
 
     const iso = date.toISOString();
@@ -169,6 +177,7 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
         suppressHydrationWarning
         className={cn(className)}
         {...props}
+        data-slot="timestamp"
       >
         {visibleText}
       </time>

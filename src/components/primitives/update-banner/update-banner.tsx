@@ -48,6 +48,7 @@ export const UpdateBanner = forwardRef<HTMLDivElement, UpdateBannerProps>(
         data-testid={dataTestId ?? "update-banner"}
         data-severity={severity}
         {...rest}
+        data-slot="update-banner"
       >
         <div className="flex items-center gap-2">
           <ArrowUpCircle className="size-4" aria-hidden />

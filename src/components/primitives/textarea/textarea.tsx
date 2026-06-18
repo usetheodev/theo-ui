@@ -48,6 +48,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       rows={rows}
       className={cn(textareaVariants({ size }), className)}
       {...props}
+      data-slot="textarea"
     />
   ),
 );

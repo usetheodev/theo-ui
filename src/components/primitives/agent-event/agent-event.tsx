@@ -137,6 +137,7 @@ const AgentEvent = forwardRef<HTMLDivElement, AgentEventProps>(
           className,
         )}
         {...props}
+        data-slot="agent-event"
       >
         {isExpandable ? (
           <button

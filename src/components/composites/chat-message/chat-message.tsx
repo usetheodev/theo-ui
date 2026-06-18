@@ -84,6 +84,7 @@ export const ChatMessageRoot = forwardRef<HTMLDivElement, ChatMessageRootProps>(
       )}
       data-theo-chat-message={from}
       {...props}
+      data-slot="chat-message-root"
     >
       {children}
     </div>
@@ -125,6 +126,7 @@ export const ChatMessageContent = forwardRef<HTMLDivElement, ChatMessageContentP
       )}
       data-theo-chat-content=""
       {...props}
+      data-slot="chat-message-content"
     >
       {children}
     </div>
@@ -228,7 +230,13 @@ export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
 
     if (message.role === "user") {
       return (
-        <ChatMessageRoot ref={ref} from="user" className={className} {...props}>
+        <ChatMessageRoot
+          ref={ref}
+          from="user"
+          className={className}
+          {...props}
+          data-slot="chat-message"
+        >
           {inner}
           {avatar ? <div className="shrink-0">{avatar}</div> : null}
         </ChatMessageRoot>
@@ -236,7 +244,13 @@ export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
     }
 
     return (
-      <ChatMessageRoot ref={ref} from={message.role} className={className} {...props}>
+      <ChatMessageRoot
+        ref={ref}
+        from={message.role}
+        className={className}
+        {...props}
+        data-slot="chat-message"
+      >
         {avatar ? <div className="shrink-0">{avatar}</div> : null}
         {inner}
       </ChatMessageRoot>

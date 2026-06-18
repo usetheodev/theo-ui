@@ -62,6 +62,7 @@ const TaskHeader = forwardRef<HTMLElement, TaskHeaderProps>(
         className,
       )}
       {...props}
+      data-slot="task-header"
     >
       <div className="flex min-w-0 items-center gap-2">
         <h2 className="truncate font-display text-title-lg tracking-tight">{title}</h2>

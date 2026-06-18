@@ -83,6 +83,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
           className,
         )}
         {...props}
+        data-slot="alert"
       >
         <div className="flex items-start gap-3">
           <Icon aria-hidden="true" className={cn("mt-0.5 size-4 shrink-0", config.iconColor)} />

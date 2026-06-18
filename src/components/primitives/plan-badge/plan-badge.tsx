@@ -72,6 +72,7 @@ const PlanBadge = forwardRef<HTMLSpanElement, PlanBadgeProps>(
         )}
         data-plan={plan}
         {...props}
+        data-slot="plan-badge"
       >
         {displayLabel}
       </span>

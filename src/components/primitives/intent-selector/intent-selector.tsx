@@ -44,6 +44,7 @@ const IntentSelector = forwardRef<HTMLButtonElement, IntentSelectorProps>(
               className,
             )}
             {...props}
+            data-slot="intent-selector"
           >
             <Icon className="size-3.5 text-primary" aria-hidden="true" />
             {current?.label ?? "Select intent"}

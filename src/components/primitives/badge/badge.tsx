@@ -51,7 +51,12 @@ export interface BadgeProps
 
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <span ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props} />
+    <span
+      ref={ref}
+      className={cn(badgeVariants({ variant, size }), className)}
+      {...props}
+      data-slot="badge"
+    />
   ),
 );
 Badge.displayName = "Badge";
@@ -82,6 +87,7 @@ const Dot = forwardRef<HTMLSpanElement, BadgeDotProps>(
         className,
       )}
       {...props}
+      data-slot="dot"
     />
   ),
 );

@@ -90,7 +90,12 @@ const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
     };
     return (
       <FormFieldContext.Provider value={ctx}>
-        <div ref={ref} className={cn("grid", rootGapBySize[size], className)} {...props} />
+        <div
+          ref={ref}
+          className={cn("grid", rootGapBySize[size], className)}
+          {...props}
+          data-slot="form-field-root"
+        />
       </FormFieldContext.Provider>
     );
   },
@@ -131,6 +136,7 @@ const FormFieldLabel = forwardRef<ElementRef<typeof LabelPrimitive.Root>, FormFi
           className,
         )}
         {...props}
+        data-slot="form-field-label"
       >
         {children}
         {required ? (
@@ -162,7 +168,7 @@ const FormFieldControl = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
         } as Partial<typeof only.props>)
       : only;
     return (
-      <div ref={ref} {...props}>
+      <div ref={ref} {...props} data-slot="form-field-control">
         {cloned}
       </div>
     );
@@ -180,6 +186,7 @@ const FormFieldHint = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagr
         id={hintId}
         className={cn("text-muted-foreground", hintFontBySize[size], className)}
         {...props}
+        data-slot="form-field-hint"
       >
         {children}
       </p>
@@ -199,6 +206,7 @@ const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParag
         role="alert"
         className={cn("flex items-center gap-1 text-destructive", hintFontBySize[size], className)}
         {...props}
+        data-slot="form-field-error"
       >
         <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />
         {children as ReactNode}

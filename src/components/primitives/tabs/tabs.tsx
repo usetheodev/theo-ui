@@ -21,6 +21,7 @@ const List = forwardRef<
       className,
     )}
     {...props}
+    data-slot="list"
   />
 ));
 List.displayName = "Tabs.List";
@@ -44,6 +45,7 @@ const Trigger = forwardRef<
       className,
     )}
     {...props}
+    data-slot="trigger"
   />
 ));
 Trigger.displayName = "Tabs.Trigger";
@@ -59,6 +61,7 @@ const Content = forwardRef<
       className,
     )}
     {...props}
+    data-slot="content"
   />
 ));
 Content.displayName = "Tabs.Content";

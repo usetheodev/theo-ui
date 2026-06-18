@@ -57,6 +57,7 @@ const Root = forwardRef<HTMLTableElement, TableProps>(
         ref={ref}
         className={cn("w-full border-collapse font-sans text-body-sm", className)}
         {...props}
+        data-slot="root"
       >
         {children}
       </table>
@@ -74,6 +75,7 @@ const Header = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSecti
         className,
       )}
       {...props}
+      data-slot="header"
     />
   ),
 );
@@ -81,7 +83,7 @@ Header.displayName = "Table.Header";
 
 const Body = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <tbody ref={ref} className={cn("text-foreground", className)} {...props} />
+    <tbody ref={ref} className={cn("text-foreground", className)} {...props} data-slot="body" />
   ),
 );
 Body.displayName = "Table.Body";
@@ -95,6 +97,7 @@ const Row = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>
         className,
       )}
       {...props}
+      data-slot="row"
     />
   ),
 );
@@ -119,6 +122,7 @@ const Cell = forwardRef<HTMLTableCellElement, TableCellProps>(
           className,
         )}
         {...props}
+        data-slot="cell"
       >
         {children}
       </td>
@@ -172,6 +176,7 @@ const HeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellProps>(
           className,
         )}
         {...props}
+        data-slot="header-cell"
       >
         {onSort !== undefined ? (
           <button

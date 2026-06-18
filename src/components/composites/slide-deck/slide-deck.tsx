@@ -217,7 +217,7 @@ const SlideDeckBase: FC<SlideDeckProps> = ({
   );
 
   return (
-    <DeckContext.Provider value={contextValue}>
+    <DeckContext.Provider value={contextValue} data-slot="slide-deck-base">
       <div
         ref={rootRef}
         aria-roledescription="slide deck"
@@ -272,6 +272,7 @@ const SlidesView: FC<{ className?: string }> = ({ className }) => {
         minHeight: 0,
         overflow: "hidden",
       }}
+      data-slot="slides-view"
     >
       {current ? (
         <div
@@ -312,6 +313,7 @@ const PresenterButton: FC<{ className?: string }> = ({ className }) => {
       aria-pressed={state.presenterMode}
       aria-label={state.presenterMode ? "Close presenter view" : "Open presenter view"}
       className={["theo-slide-deck-presenter-button", className].filter(Boolean).join(" ")}
+      data-slot="presenter-button"
     >
       {state.presenterMode ? "Close presenter" : "Presenter"}
     </button>
@@ -327,6 +329,7 @@ const FullscreenButton: FC<{ className?: string }> = ({ className }) => {
       aria-pressed={state.fullscreen}
       aria-label={state.fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
       className={["theo-slide-deck-fullscreen-button", className].filter(Boolean).join(" ")}
+      data-slot="fullscreen-button"
     >
       {state.fullscreen ? "Exit fullscreen" : "Fullscreen"}
     </button>
@@ -341,6 +344,7 @@ const PrintButton: FC<{ className?: string }> = ({ className }) => {
       onClick={() => print()}
       aria-label="Print or save deck as PDF"
       className={["theo-slide-deck-print-button", className].filter(Boolean).join(" ")}
+      data-slot="print-button"
     >
       Print
     </button>
@@ -361,6 +365,7 @@ const PrintContainer: FC<{ slides: SlideDeckSlide[]; plugins?: SlidePlugin[] }> 
         pointerEvents: "none",
         visibility: "hidden",
       }}
+      data-slot="print-container"
     >
       {slides.map((slide, index) => (
         <div
@@ -390,6 +395,7 @@ const DefaultDeckLayout: FC = () => {
         gap: 8,
         height: "100%",
       }}
+      data-slot="default-deck-layout"
     >
       <SlidesView />
       <div

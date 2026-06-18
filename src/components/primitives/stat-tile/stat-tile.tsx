@@ -86,6 +86,7 @@ const StatTile = forwardRef<HTMLElement, StatTileProps>(
             className,
           )}
           {...props}
+          data-slot="stat-tile"
         >
           {inner}
         </button>
@@ -96,6 +97,7 @@ const StatTile = forwardRef<HTMLElement, StatTileProps>(
       <div
         ref={ref as React.Ref<HTMLDivElement>}
         className={cn("rounded-xl border border-border/40 bg-card p-5", className)}
+        data-slot="stat-tile"
       >
         {inner}
       </div>

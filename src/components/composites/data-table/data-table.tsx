@@ -193,7 +193,7 @@ function DataTable<T>(props: DataTableProps<T>): ReactNode {
   // Loading state (EC-7: loading > empty)
   if (loading) {
     return (
-      <div className={cn("w-full", className)}>
+      <div className={cn("w-full", className)} data-slot="data-table">
         <Table>
           <Table.Header className={stickyHeader ? "sticky top-0 bg-card" : undefined}>
             <Table.Row>

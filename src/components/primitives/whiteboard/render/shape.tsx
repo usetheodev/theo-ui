@@ -21,6 +21,7 @@ function Label({ cx, cy, label, stroke }: LabelProps) {
       fontFamily="ui-sans-serif, system-ui, sans-serif"
       fill={stroke ?? "currentColor"}
       style={{ pointerEvents: "none" }}
+      data-slot="label"
     >
       {label}
     </text>

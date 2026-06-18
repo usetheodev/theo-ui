@@ -102,6 +102,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={asChild ? undefined : (type ?? "button")}
         className={cn(buttonVariants({ variant, size }), className)}
         {...props}
+        data-slot="button"
       />
     );
   },

@@ -77,7 +77,7 @@ function CommandPalette({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange} data-slot="command-palette">
       <Dialog.Content className="max-w-xl p-0" hideCloseButton>
         <Dialog.Title className="sr-only">Command palette</Dialog.Title>
         <Dialog.Description className="sr-only">

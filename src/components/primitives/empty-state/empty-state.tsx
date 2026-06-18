@@ -35,6 +35,7 @@ const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         className,
       )}
       {...props}
+      data-slot="empty-state"
     >
       {Icon ? (
         <span className="grid size-12 place-items-center rounded-2xl bg-primary/10 text-primary">

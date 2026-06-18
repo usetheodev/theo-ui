@@ -141,6 +141,7 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
           className,
         )}
         {...props}
+        data-slot="chat-composer"
       >
         {contextSlot ? (
           <div className="border-border/40 border-b px-3 pt-3">{contextSlot}</div>

@@ -46,6 +46,7 @@ const ScrollAreaRoot = forwardRef<ElementRef<typeof ScrollAreaPrimitive.Root>, S
       type={type}
       className={cn("relative overflow-hidden", className)}
       {...props}
+      data-slot="scroll-area-root"
     >
       <ScrollAreaPrimitive.Viewport
         className={cn(
@@ -95,6 +96,7 @@ const ScrollBar = forwardRef<
       className,
     )}
     {...props}
+    data-slot="scroll-bar"
   >
     <ScrollAreaPrimitive.ScrollAreaThumb
       className={cn(

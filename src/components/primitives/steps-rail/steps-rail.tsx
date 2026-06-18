@@ -35,6 +35,7 @@ const StepsRail = forwardRef<HTMLElement, StepsRailProps>(
       )}
       aria-label="Task steps"
       {...props}
+      data-slot="steps-rail"
     >
       {title ? (
         <span className="font-mono text-label-caps text-muted-foreground uppercase tracking-wider">

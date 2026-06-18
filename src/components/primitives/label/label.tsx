@@ -25,6 +25,7 @@ const Label = forwardRef<ElementRef<typeof LabelPrimitive.Root>, LabelProps>(
         className,
       )}
       {...props}
+      data-slot="label"
     >
       {children}
       {required ? (

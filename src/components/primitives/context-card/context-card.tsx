@@ -27,6 +27,7 @@ const ContextCard = forwardRef<HTMLElement, ContextCardProps>(
         ref={ref}
         className={cn("grid gap-3 rounded-xl border border-border/40 bg-muted/30 p-4", className)}
         {...props}
+        data-slot="context-card"
       >
         {illustration ? (
           <div className="flex justify-center">{illustration}</div>

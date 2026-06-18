@@ -108,6 +108,7 @@ const TextPrompt = forwardRef<HTMLElement, TextPromptProps>(
           className,
         )}
         {...props}
+        data-slot="text-prompt"
       >
         <header className="flex items-start justify-between gap-3">
           <Label

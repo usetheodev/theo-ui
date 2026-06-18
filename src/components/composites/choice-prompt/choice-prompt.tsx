@@ -160,6 +160,7 @@ const ChoicePrompt = forwardRef<HTMLElement, ChoicePromptProps>(
           className,
         )}
         {...props}
+        data-slot="choice-prompt"
       >
         <header className="flex items-start justify-between gap-3">
           <h3 id={questionId} className="font-display text-foreground text-title-md tracking-tight">

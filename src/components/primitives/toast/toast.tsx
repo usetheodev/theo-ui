@@ -68,6 +68,7 @@ const ToastRoot = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>
       ref={ref}
       className={cn(toastVariants({ variant, size }), className)}
       {...props}
+      data-slot="toast-root"
     >
       <span aria-hidden="true">{iconForVariant[variant as ToastVariant]}</span>
       <div className="min-w-0 flex-1">{children}</div>
@@ -84,6 +85,7 @@ const ToastTitle = forwardRef<
     ref={ref}
     className={cn("font-medium text-body-sm text-foreground", className)}
     {...props}
+    data-slot="toast-title"
   />
 ));
 ToastTitle.displayName = "Toast.Title";
@@ -96,6 +98,7 @@ const ToastDescription = forwardRef<
     ref={ref}
     className={cn("mt-0.5 text-body-sm text-muted-foreground", className)}
     {...props}
+    data-slot="toast-description"
   />
 ));
 ToastDescription.displayName = "Toast.Description";
@@ -113,6 +116,7 @@ const ToastClose = forwardRef<
     )}
     toast-close=""
     {...props}
+    data-slot="toast-close"
   >
     <X className="size-3.5" />
     <span className="sr-only">Close</span>
@@ -132,6 +136,7 @@ const ToastAction = forwardRef<
       className,
     )}
     {...props}
+    data-slot="toast-action"
   />
 ));
 ToastAction.displayName = "Toast.Action";

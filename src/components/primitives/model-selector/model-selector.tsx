@@ -42,6 +42,7 @@ const ModelSelector = forwardRef<HTMLButtonElement, ModelSelectorProps>(
               className,
             )}
             {...props}
+            data-slot="model-selector"
           >
             <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
             {current?.label ?? "Select model"}

@@ -95,6 +95,7 @@ export function ToolCallPart({ part }: ToolCallPartProps): JSX.Element {
     <div
       className={cn("my-3 overflow-hidden rounded-lg border border-border bg-card", "shadow-sm")}
       data-theo-tool-call={part.state}
+      data-slot="tool-call-part"
     >
       <header className="flex items-center justify-between gap-3 border-border border-b bg-muted/30 px-3 py-1.5">
         <div className="flex min-w-0 items-center gap-2">

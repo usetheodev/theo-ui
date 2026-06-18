@@ -74,6 +74,7 @@ export const StatusIndicator = forwardRef<HTMLSpanElement, StatusIndicatorProps>
         className={cn("inline-flex items-center gap-2 font-medium text-xs", className)}
         data-status={status}
         {...rest}
+        data-slot="status-indicator"
       >
         <span
           className={cn(

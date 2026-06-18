@@ -36,6 +36,7 @@ const Root = forwardRef<HTMLElement, DangerZoneProps>(
       aria-label={typeof title === "string" ? title : "Danger Zone"}
       className={cn("rounded-xl border border-destructive/30 bg-destructive/[0.02]", className)}
       {...props}
+      data-slot="root"
     >
       <div className="border-destructive/20 border-b px-5 py-3 font-sans text-destructive text-label-caps uppercase tracking-wider">
         {title}
@@ -62,6 +63,7 @@ const Action = forwardRef<HTMLDivElement, DangerZoneActionProps>(
         className,
       )}
       {...props}
+      data-slot="action"
     >
       <div className="flex flex-col">
         <span className="font-medium font-sans text-body-sm text-foreground">{title}</span>

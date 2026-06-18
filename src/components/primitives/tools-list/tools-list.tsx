@@ -52,7 +52,12 @@ const cycle = (cur: ToolEnablement): ToolEnablement =>
  */
 const ToolsList = forwardRef<HTMLDivElement, ToolsListProps>(
   ({ className, tools, title = "Tools", onEnablementChange, ...props }, ref) => (
-    <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
+    <section
+      ref={ref}
+      className={cn("rounded-xl border bg-card", className)}
+      {...props}
+      data-slot="tools-list"
+    >
       {title ? (
         <header className="flex items-center justify-between border-border/40 border-b px-4 py-3">
           <h3 className="font-display text-title-md tracking-tight">{title}</h3>

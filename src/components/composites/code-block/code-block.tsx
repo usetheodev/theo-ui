@@ -42,6 +42,7 @@ const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
           className,
         )}
         {...props}
+        data-slot="code-block"
       >
         {caption !== undefined ? (
           <div className="border-border/40 border-b px-3 py-1.5 font-sans text-label text-muted-foreground">

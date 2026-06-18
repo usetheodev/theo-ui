@@ -20,6 +20,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({ className }) => {
       value={value}
       max={max}
       aria-label="Slide progress"
+      data-slot="progress-bar"
     />
   );
 };

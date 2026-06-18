@@ -35,6 +35,7 @@ const Root = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
         className,
       )}
       {...props}
+      data-slot="root"
     />
   ),
 );
@@ -46,6 +47,7 @@ const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
       ref={ref}
       className={cn("flex h-16 items-center gap-3 border-border/40 border-b px-5", className)}
       {...props}
+      data-slot="header"
     />
   ),
 );
@@ -57,7 +59,12 @@ interface SectionProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
 
 const Section = forwardRef<HTMLDivElement, SectionProps>(
   ({ className, title, children, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col gap-1 px-3 py-4", className)} {...props}>
+    <div
+      ref={ref}
+      className={cn("flex flex-col gap-1 px-3 py-4", className)}
+      {...props}
+      data-slot="section"
+    >
       {title ? (
         <p className="px-2 pb-1 font-sans text-label-caps text-muted-foreground uppercase">
           {title}
@@ -126,6 +133,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
           className={classes}
           aria-current={active ? "page" : undefined}
           {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+          data-slot="item"
         >
           {content}
         </a>
@@ -139,6 +147,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
         className={classes}
         aria-pressed={active ? "true" : undefined}
         {...props}
+        data-slot="item"
       >
         {content}
       </button>
@@ -153,6 +162,7 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
       ref={ref}
       className={cn("mt-auto border-border/40 border-t px-5 py-4", className)}
       {...props}
+      data-slot="footer"
     />
   ),
 );

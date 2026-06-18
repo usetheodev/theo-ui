@@ -39,6 +39,7 @@ const Overlay = forwardRef<
       className,
     )}
     {...props}
+    data-slot="overlay"
   />
 ));
 Overlay.displayName = "Sheet.Overlay";
@@ -78,6 +79,7 @@ const Content = forwardRef<ElementRef<typeof DialogPrimitive.Content>, ContentPr
         ref={ref}
         className={cn(sheetVariants({ side }), className)}
         {...props}
+        data-slot="content"
       >
         {children}
         {!hideCloseButton ? (
@@ -131,6 +133,7 @@ const Title = forwardRef<
     ref={ref}
     className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
     {...props}
+    data-slot="title"
   />
 ));
 Title.displayName = "Sheet.Title";
@@ -143,6 +146,7 @@ const Description = forwardRef<
     ref={ref}
     className={cn("text-body-sm text-muted-foreground", className)}
     {...props}
+    data-slot="description"
   />
 ));
 Description.displayName = "Sheet.Description";

@@ -50,6 +50,7 @@ const Root = forwardRef<HTMLDivElement, CardRootProps>(
           className,
         )}
         {...props}
+        data-slot="root"
       />
     </CardContext.Provider>
   ),
@@ -66,7 +67,12 @@ const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
     return (
-      <div ref={ref} className={cn("flex flex-col", headerPadBySize[size], className)} {...props} />
+      <div
+        ref={ref}
+        className={cn("flex flex-col", headerPadBySize[size], className)}
+        {...props}
+        data-slot="header"
+      />
     );
   },
 );
@@ -100,6 +106,7 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>(
           className,
         )}
         {...props}
+        data-slot="title"
       />
     );
   },
@@ -108,7 +115,12 @@ Title.displayName = "Card.Title";
 
 const Description = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-body-sm text-muted-foreground", className)} {...props} />
+    <p
+      ref={ref}
+      className={cn("text-body-sm text-muted-foreground", className)}
+      {...props}
+      data-slot="description"
+    />
   ),
 );
 Description.displayName = "Card.Description";
@@ -122,7 +134,9 @@ const bodyPadBySize: Record<CardSize, string> = {
 const Body = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
-    return <div ref={ref} className={cn(bodyPadBySize[size], className)} {...props} />;
+    return (
+      <div ref={ref} className={cn(bodyPadBySize[size], className)} {...props} data-slot="body" />
+    );
   },
 );
 Body.displayName = "Card.Body";
@@ -145,6 +159,7 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
           className,
         )}
         {...props}
+        data-slot="footer"
       />
     );
   },
