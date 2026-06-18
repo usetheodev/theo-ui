@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Public copy aligned to honest, ecosystem-fit framing across `README.md`,
+  `PITCH.md`, and `CLAUDE.md`: removed the unsubstantiated multi-framework
+  compatibility claims (Next.js / Vite / Remix / Astro / Tanstack "CI-verified")
+  and the false "peer-deps on React only" line. Reframed as a standard React +
+  Tailwind package that pairs with TheoKit or runs standalone, with the RSC
+  fix described as "Server-Component safe" rather than a marketed Next.js
+  target. Counts corrected to 153 components / 1,513 tests / 151 stories and the
+  stale `@theokit/ui@next` install snippets updated to `@theokit/ui` (now
+  published to `latest`).
 - README refreshed: component count corrected to 153, the v0.16.0 shadcn-v4
   features documented (`data-slot`, `"use client"`/RSC, per-subpath types), and
   the inaccurate "peer-deps on React only" line corrected (React is the only
