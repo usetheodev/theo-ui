@@ -1,3 +1,5 @@
+"use client";
+
 import { Plus, Trash2, Zap } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";

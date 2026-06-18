@@ -119,6 +119,12 @@ export default defineConfig({
   // of inlining into every per-component bundle.
   splitting: true,
   treeshake: true,
+  // RSC: `"use client"` preservation is handled POST-build by
+  // `scripts/inject-use-client.ts` (wired into onSuccess below). esbuild strips
+  // module-level directives during its own bundle pass when `splitting: true`
+  // ("Module level directives cause errors when bundled ... was ignored"), so a
+  // load-time plugin cannot win — the directive must be re-injected into the
+  // output shims + component chunks after esbuild finishes. See plan ADR D2.
   // EC-1 fix (revised) — keep esbuild's default chunk naming (`chunk-
   // <hash>.js`). The first attempt at `_chunks/[name]` collided because
   // esbuild assigns the same auto-name "chunk" to many shared chunks

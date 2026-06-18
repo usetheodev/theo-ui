@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Fragment, useMemo, useState } from "react";
 import type { ReactNode } from "react";

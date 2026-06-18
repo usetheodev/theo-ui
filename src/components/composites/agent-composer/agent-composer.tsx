@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";

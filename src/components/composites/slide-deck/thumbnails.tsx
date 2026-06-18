@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * `<SlideDeck.Thumbnails>` — sidebar with mini Slide instances.
  *

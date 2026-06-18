@@ -1,3 +1,5 @@
+"use client";
+
 import { Copy, Eye, EyeOff, Lock, Plus, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";

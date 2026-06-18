@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useRef } from "react";
 /**
  * `<Whiteboard>` — view-only primitive that turns a JSON scene into a

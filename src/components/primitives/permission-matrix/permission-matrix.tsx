@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, Lock, Plus, ShieldQuestion, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";

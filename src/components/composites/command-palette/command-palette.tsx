@@ -1,3 +1,5 @@
+"use client";
+
 import { Command as CommandPrimitive } from "cmdk";
 import { ChevronRight, Search } from "lucide-react";
 import { useMemo, useState } from "react";

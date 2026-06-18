@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`@theokit/ui` now works in Next.js App Router (React Server Components).**
+  The `"use client"` directive is preserved in the published build so importing
+  a client component (anything using hooks) no longer throws *"useState only
+  works in a Client Component"*. Previously esbuild stripped the directive under
+  code-splitting, so every npm-installed client component was broken in RSC
+  projects. Both consumption paths are fixed — subpath (`@theokit/ui/agent-event`)
+  and barrel (`@theokit/ui`). (community-standard-componentization, T1.1)
+
+### Added
+- `"use client"` directive added to the 45 client component source files
+  (anything using React hooks/context), matching shadcn/ui conventions.
+- Post-build step `scripts/inject-use-client.ts` re-injects the directive into
+  the output entry shims + component chunks (esbuild strips it during
+  `splitting`). Wired into the `build` script.
+- New quality gate `validateUseClientDirective` — fails the build if a client
+  component ships without the directive in `dist/`. (T1.2)
+
 ## [0.15.0] - 2026-06-16
 
 ### Added

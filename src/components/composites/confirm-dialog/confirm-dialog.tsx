@@ -1,3 +1,5 @@
+"use client";
+
 import { Loader2 } from "lucide-react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";

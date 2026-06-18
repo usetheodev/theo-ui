@@ -1,3 +1,5 @@
+"use client";
+
 import { Download, Loader2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 

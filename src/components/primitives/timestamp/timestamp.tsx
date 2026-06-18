@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect, useState } from "react";
 import type { TimeHTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";

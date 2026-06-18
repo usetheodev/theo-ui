@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowDownLeft, Clock, GitCommit, RotateCcw } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";

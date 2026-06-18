@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertCircle, Loader2 } from "lucide-react";
 import { forwardRef, useEffect } from "react";
 import type { ElementType, ReactNode } from "react";

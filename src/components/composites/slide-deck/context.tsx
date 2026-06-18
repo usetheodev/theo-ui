@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * DeckContext — internal Context shared between `<SlideDeck>` and its
  * dot-namespace sub-components (`<SlideDeck.Controls>`, etc.). ADR D14.

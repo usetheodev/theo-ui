@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect, useRef } from "react";
 import type { ClipboardEvent, HTMLAttributes, KeyboardEvent } from "react";
 import { cn } from "../../../lib/cn.js";

@@ -1,3 +1,5 @@
+"use client";
+
 import { Hash, type LucideIcon, Slash } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";

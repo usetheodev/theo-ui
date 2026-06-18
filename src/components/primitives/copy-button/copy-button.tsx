@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, Copy, X } from "lucide-react";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
