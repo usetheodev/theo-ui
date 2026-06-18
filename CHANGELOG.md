@@ -10,12 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- README refreshed: component count corrected to 153, the v0.16.0 shadcn-v4
+  features documented (`data-slot`, `"use client"`/RSC, per-subpath types), and
+  the inaccurate "peer-deps on React only" line corrected (React is the only
+  required peer; Radix/CVA/cmdk/lucide ship as dependencies). (#13)
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- **npm publish CI restored.** The `release.yml` (and `deploy-ladle.yml`) GitHub
+  Actions workflow failed on every tagged release since v0.14.1 because
+  `pnpm/action-setup@v4` pinned `version: 9.15.0`, conflicting with
+  `package.json`'s `packageManager: pnpm@10.32.1`
+  (`ERR_PNPM_BAD_PM_VERSION`). Removed the hardcoded version so the package
+  actually publishes to npm again. (#13)
 
 ### Security
 
