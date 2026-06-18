@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.16.0] - 2026-06-18
+
+### Added
 - **`data-slot` attribute on every component (shadcn v4 convention).** All 135
   components now emit `data-slot="<name>"` on their root element (compound
   sub-parts carry `data-slot="<name>-<part>"`), so consumers can target and
@@ -25,6 +39,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `data-slot`, so consumers can style by attribute (e.g.
   `[data-slot=button][data-variant=secondary]`). The `*Variants` helpers remain
   exported for class reuse. (community-standard-componentization, T5.1)
+
+- `"use client"` directive added to the 45 client component source files
+  (anything using React hooks/context), matching shadcn/ui conventions.
+- Post-build step `scripts/inject-use-client.ts` re-injects the directive into
+  the output entry shims + component chunks (esbuild strips it during
+  `splitting`). Wired into the `build` script.
+- New quality gate `validateUseClientDirective` — fails the build if a client
+  component ships without the directive in `dist/`. (T1.2)
+
 
 ### Changed
 - Tailwind v4 devDep alignment + v3-legacy removal (Phase 4) is deferred to a
@@ -46,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   NOTE: `components.css` size is `@source`-environment-sensitive; CI should
   confirm the full-scan value reproduces in its environment.
 
+
 ### Fixed
 - **`@theokit/ui` now works in Next.js App Router (React Server Components).**
   The `"use client"` directive is preserved in the published build so importing
@@ -54,15 +78,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   code-splitting, so every npm-installed client component was broken in RSC
   projects. Both consumption paths are fixed — subpath (`@theokit/ui/agent-event`)
   and barrel (`@theokit/ui`). (community-standard-componentization, T1.1)
-
-### Added
-- `"use client"` directive added to the 45 client component source files
-  (anything using React hooks/context), matching shadcn/ui conventions.
-- Post-build step `scripts/inject-use-client.ts` re-injects the directive into
-  the output entry shims + component chunks (esbuild strips it during
-  `splitting`). Wired into the `build` script.
-- New quality gate `validateUseClientDirective` — fails the build if a client
-  component ships without the directive in `dist/`. (T1.2)
 
 ## [0.15.0] - 2026-06-16
 
