@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   class order. New quality gate `validateDataSlot` enforces presence on every
   component. (community-standard-componentization, T2.1)
 
+### Changed
+- Bundle baseline for `dist/components.css` corrected to the full `@source`
+  scan size (the prior baseline was set in an environment where Tailwind v4's
+  `@source` glob under-scanned the library tree — a known pnpm-symlink
+  fragility documented in `scripts/build-precompiled-css.ts`). The
+  `data-slot` / `"use client"` work is bundle-neutral — verified empirically
+  (removing `data-slot` leaves `components.css` byte-identical). `dist/slide`
+  and `dist/slide-deck` grew by a few bytes from the directive + data-slot.
+  NOTE: `components.css` size is `@source`-environment-sensitive; CI should
+  confirm the full-scan value reproduces in its environment.
+
 ### Fixed
 - **`@theokit/ui` now works in Next.js App Router (React Server Components).**
   The `"use client"` directive is preserved in the published build so importing
