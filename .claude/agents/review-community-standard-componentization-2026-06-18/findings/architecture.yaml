@@ -1,0 +1,210 @@
+agent: review-community-standard-componentization-architecture
+review_target: f8710e5..HEAD for plan community-standard-componentization
+plan: .claude/knowledge-base/plans/community-standard-componentization-plan.md
+summary: >
+  The build-pipeline redesign (tsup dts:false + tsc -p tsconfig.dts.json +
+  post-build inject-use-client.ts) is architecturally sound and well-justified
+  — the divergences from ADR D2/D4 (post-build injection instead of the esbuild
+  plugin; tsc instead of expanded dts.entry) are documented, tested, and
+  defensible (the esbuild plugin genuinely cannot win against splitting-time
+  directive stripping; rollup-plugin-dts genuinely OOMs at 130+ entries). The
+  taxonomy/bundle-isolation invariant is preserved (barrel surface unchanged,
+  no new cross-imports). The MOST significant architectural defects are in the
+  data-slot codemod output, not the build pipeline: (1) data-slot/data-variant/
+  data-size are emitted AFTER {...props} in 112/135 components, inverting the
+  consumer-override precedence that ADR D1 explicitly promises and that shadcn's
+  canonical reference deliberately preserves by placing them BEFORE props; and
+  (2) the codemod names compound sub-parts by their own component name only
+  (Dot -> "dot", Content -> "content") instead of parent-namespacing them
+  (shadcn: "card-content", "select-content"), producing collision-prone generic
+  slots ("content" in 5 components) and leaking internal names ("avatar-root",
+  "chat-message-response-impl"). Plus client-detection logic is duplicated and
+  has already drifted between the injector and its regression gate.
+findings:
+  - id: F-arch-1
+    severity: HIGH
+    file: scripts/codemod-data-slot.ts
+    line: 79
+    plan_ref: ADR D1 ("habilita override por consumidor") + T2.1
+    summary: >
+      data-slot / data-variant / data-size are appended AFTER {...props} in
+      112 of 135 components, inverting consumer-override precedence vs shadcn's
+      canonical convention (which places them BEFORE props).
+    evidence: |
+      Codemod uses `opening.addAttribute(...)` which appends to the end of the
+      attribute list, after any existing `{...props}` spread:
+
+        // badge.tsx (generated)
+        <span
+          ref={ref}
+          className={cn(badgeVariants({ variant, size }), className)}
+          {...props}
+          data-slot="badge"
+          data-variant={variant}
+          data-size={size}
+        />
+
+      shadcn reference (the cited source of truth) places them BEFORE props:
+        // references/shadcn-ui/.../ui/button.tsx
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        ...
+        {...props}
+
+      Measured: 112/135 component files emit data-slot AFTER {...props};
+      only 23 emit it before. Functional impact: a consumer who passes
+      `data-slot="x"` / `data-size="x"` as a prop has it SILENTLY OVERRIDDEN by
+      the component's hardcoded value — the exact opposite of the override
+      capability ADR D1 cites as the rationale for the whole feature.
+    recommended_action: >
+      Reorder so data-slot/data-variant/data-size precede {...props} (matching
+      shadcn). In the codemod, insert the attributes immediately after `ref`
+      (or before the spread attribute) rather than appending; then re-run the
+      codemod and commit the regenerated diff. Add a gate assertion (or extend
+      validateDataSlot) that fails when data-slot appears after a {...props}
+      spread on the same element.
+  - id: F-arch-2
+    severity: HIGH
+    file: scripts/codemod-data-slot.ts
+    line: 99
+    plan_ref: ADR D1 (sub-parts = "nome-parte"; e.g. card-header)
+    summary: >
+      Compound sub-parts are named by their own component name only, not
+      parent-namespaced, producing collision-prone generic slots and leaking
+      internal names into the public attribute surface.
+    evidence: |
+      `enclosingComponentName` kebab-cases the nearest component (Dot -> "dot",
+      Content -> "content"), with no parent prefix. ADR D1 specifies sub-parts
+      follow `nome-parte`; shadcn uses "card-content", "select-content".
+
+      Collisions measured (same slot value across UNRELATED components):
+        data-slot="content"     -> 5 files
+        data-slot="description"  -> 3 files
+        data-slot="body"         -> 2 files
+        data-slot="footer"       -> 2 files
+      Plus internal-name leaks into the public surface:
+        avatar.tsx:54                 data-slot="avatar-root"
+        chat-message.tsx:87           data-slot="chat-message-root"
+        chat-message-response.tsx:134 data-slot="chat-message-response-impl"
+
+      A consumer selector `*:data-[slot=content]` now matches the content
+      region of 5 different components — defeating the stable-targeting purpose
+      that justifies data-slot (ADR D1). `-root` / `-impl` are implementation
+      details that should never appear in a public attribute.
+    recommended_action: >
+      Namespace sub-part slots with the parent component (e.g. "badge-dot",
+      "avatar-image", "card-content") and strip internal suffixes (-root, -impl)
+      to the clean parent name (avatar-root -> "avatar"). Update the affected
+      tests, re-run the codemod with a parent-prefixing rule, and commit the
+      regenerated diff. Sub-parts that are genuinely top-level components keep
+      their own name; only nested sub-parts get the prefix.
+  - id: F-arch-3
+    severity: MEDIUM
+    file: scripts/inject-use-client.ts
+    line: 22
+    plan_ref: ADR D2 / T1.2 (gate mirrors validateAxeCoverage)
+    summary: >
+      Client-detection logic (hookRe + sourceIsClient) is duplicated verbatim
+      between inject-use-client.ts and the validateUseClientDirective gate, and
+      the two have already drifted — the gate does NOT validate the engine
+      subpath entries the injector marks, leaving a regression-guard gap.
+    evidence: |
+      Identical `hookRe` regex and `sourceIsClient` walker exist in BOTH:
+        scripts/inject-use-client.ts            (lines 34-56)
+        scripts/validate-quality-gates.ts       (validateUseClientDirective)
+      DRY violation of shared knowledge (the definition of "a client component").
+
+      Drift already present: the injector handles
+        ENGINE_ENTRIES = ["whiteboard", "slide", "slide-deck"]   (line 32)
+      at dist root (dist/whiteboard/index.js, etc.), and slide.tsx +
+      whiteboard.tsx DO use hooks (confirmed). But validateUseClientDirective
+      only iterates `dist/primitives/<name>` and `dist/composites/<name>` layer
+      dirs — it never checks dist/whiteboard, dist/slide, dist/slide-deck. So if
+      the injector regresses on an engine entry, the gate stays green. The gate
+      is meant to be the fail-fast regression guard (T1.2 rationale) but is
+      blind to exactly the entries the injector special-cases.
+    recommended_action: >
+      Extract the client-detection predicate (hookRe + sourceIsClient) into one
+      shared module imported by both the injector and the gate (single source of
+      truth for "what is a client component"). Extend validateUseClientDirective
+      to also assert the directive on the engine subpath entries the injector
+      marks (whiteboard/slide/slide-deck), so injector and gate cover the same
+      set.
+  - id: F-arch-4
+    severity: LOW
+    file: tsup.config.ts
+    line: 102
+    plan_ref: T3.1 / Phase 3 (.d.ts per subpath)
+    summary: >
+      Two stale/misleading comments in tsup.config.ts: a reference to a
+      nonexistent scripts/emit-dts.ts, and a claim that inject-use-client is
+      "wired into onSuccess below" when it is actually wired into the build npm
+      script.
+    evidence: |
+      Line 102: 'emitted SEPARATELY by `tsc --emitDeclarationOnly` (see
+      `scripts/emit-dts.ts`, ...)' — scripts/emit-dts.ts does NOT exist (`ls`
+      fails). The real mechanism is `tsc -p tsconfig.dts.json` in package.json
+      build script.
+      Line 117: '`scripts/inject-use-client.ts` (wired into onSuccess below)' —
+      onSuccess does NOT call inject-use-client (verified by reading lines
+      174-230). It is wired into the npm `build` script:
+        "build": "tsup && tsc -p tsconfig.dts.json && tsx scripts/inject-use-client.ts && tsx scripts/regen-subpath-exports.ts"
+      Misleading comments mislead the next maintainer about where the pipeline
+      steps actually live.
+    recommended_action: >
+      Fix line 102 to reference `tsc -p tsconfig.dts.json` (the real command,
+      no emit-dts.ts). Fix line 117 to say inject-use-client.ts runs in the
+      `build` npm script after tsup+tsc, not in onSuccess.
+  - id: F-arch-5
+    severity: LOW
+    file: scripts/codemod-data-variant.ts
+    line: 31
+    plan_ref: T5.1 (cva/data-variant)
+    summary: >
+      Dead no-op branch in enclosingDestructuredParams — an `if` whose only body
+      is a comment, leftover from a refactor.
+    evidence: |
+        const fn = node.getFirstAncestor(...);
+        if (!fn || !Node.isArrowFunction(fn)) {
+          // forwardRef render fns are arrow functions; covers the cva components.
+        }
+        const target = fn ?? node;
+      The `if` block does nothing (empty body, comment only). It reads as if it
+      were meant to early-return or narrow, but has no effect. Clean Code: dead
+      conditional that confuses intent.
+    recommended_action: >
+      Remove the empty `if` block (it is a one-shot migration script, low risk,
+      but the dead branch should not be committed). Keep only `const target =
+      fn ?? node;`.
+  - id: F-arch-6
+    severity: INFO
+    file: scripts/validate-quality-gates.ts
+    line: 999
+    plan_ref: T1.2 / T2.1 (new gates in main chain)
+    summary: >
+      Build-pipeline divergences from ADR D2 (post-build injection vs esbuild
+      plugin) and ADR D4 (tsc vs expanded dts.entry) are sound, documented, and
+      do NOT cross the taxonomy/bundle-isolation boundary. No DIP/layering
+      violation; barrel public surface unchanged; no new cross-imports.
+    evidence: |
+      - ADR D2 chose esbuild-plugin-preserve-directives; implementation
+        correctly identified that the plugin loses to splitting-time directive
+        stripping and pivoted to deterministic post-build injection. The
+        rationale is documented in tsup.config.ts and inject-use-client.ts and
+        is technically correct (directive strip happens during esbuild's bundle
+        pass, after any load-time plugin). The injector correctly leaves shared
+        side-effect chunks (cn util) CLEAN so server consumers are not tainted —
+        a non-trivial RSC-correctness property, covered by the smoke test.
+      - ADR D4 chose expanded dts.entry; implementation correctly identified the
+        rollup-plugin-dts OOM at 130+ entries (the ADR even pre-authorized this
+        fallback) and delegated to tsc. Sound.
+      - validateUseClientDirective + validateDataSlot are added to main() in the
+        same chain as the existing structural gates (mirrors validateAxeCoverage
+        placement). No taxonomy validator weakened; validateArchitectureCensus
+        untouched. Barrel (src/index.ts) surface unchanged. No src/ -> src/
+        ascending import introduced by this diff.
+      The build pipeline itself is the strongest part of this change.
+    recommended_action: >
+      No action on the build-pipeline design. Address F-arch-1/2/3 which are the
+      consumer-facing correctness defects.
