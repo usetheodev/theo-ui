@@ -1,5 +1,7 @@
 ---
 name: implement
+version: 0.1.0
+requires: [plan-confidence]
 description: Executes an implementation plan from cycle-plan via halt-loop (ralph-loop) with TDD discipline + wiring triad (caller + integration test + runtime metric) + quality gates (SOLID, Clean Code, DRY, Design Patterns). Single entry-point for cycle-implement. Use after /to-plan chain returned verdict ≥ SHIPPABLE_WITH_CAVEATS while working on `develop`.
 user-invocable: true
 allowed-tools: Read Glob Grep Bash Write Edit Skill Agent
@@ -35,6 +37,19 @@ Refuse to start when any pre-condition fails — surface the missing piece hones
 ## Quality rules (enforced during the halt-loop)
 
 These are the rules that EVERY task in the halt-loop honors. Phase-specific enforcement:
+
+### Parsimony (GREEN phase — pre-write deliberation)
+
+Before writing GREEN-phase code, walk the parsimony ladder (`rules/parsimony-ladder.md`) top-down, stop at the first rung that resolves the need:
+
+1. Does this need to exist? → no: skip it (YAGNI)
+2. Stdlib does it? → use it
+3. Native platform feature? → use it
+4. Dependency already installed? → reuse it (no redundant dep)
+5. One line? → one line
+6. Only then: the minimum that makes the RED test pass
+
+This is the proactive counterpart to the reactive dead-code (`/code-quality`) and scope-creep (`/review`) gates. The ladder NEVER justifies skipping a test, input validation, error handling, security, or accessibility — those are necessary correctness, not avoidable complexity (`rules/parsimony-ladder.md § Never on the chopping block`).
 
 ### SOLID
 
@@ -191,7 +206,7 @@ Each iteration, ralph-loop replays the short positional prompt; Claude reads the
 Each iteration executes ONE task's complete TDD cycle:
 
 1. **RED phase:** write the failing test from the plan's TDD section, run it, confirm FAIL
-2. **GREEN phase:** write minimal production code, run test, confirm PASS
+2. **GREEN phase:** walk the parsimony ladder (`rules/parsimony-ladder.md`), then write minimal production code, run test, confirm PASS
 3. **REFACTOR phase:** review code against SOLID/Clean Code/DRY rules; clean up; tests stay green
 4. **WIRING phase:** run `python3 skills/implement/scripts/check_wiring.py {symbol-name}` — HALT if any pillar fails
 5. **COMMIT phase:** atomic commit with conventional-commit format (`feat(scope): description`, `fix(scope): description`, etc.) referencing plan task ID

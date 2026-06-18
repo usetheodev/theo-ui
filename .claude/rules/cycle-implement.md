@@ -20,11 +20,30 @@ Each task runs as a halt-loop iteration:
 
 ```
 RED      — write the failing test that captures the task's acceptance criterion
-GREEN    — minimal code to pass the test
+GREEN    — walk the parsimony ladder, then write the minimal code to pass the test
 REFACTOR — improve structure; tests stay green
 WIRING   — caller + integration test + runtime metric (the "wiring triad")
 COMMIT   — atomic commit referencing the plan slug and task ID
 ```
+
+## Parsimony gate (GREEN-phase deliberation — pre-write)
+
+Before writing any production code in the GREEN phase, the halt-loop walks the
+**parsimony ladder** (`rules/parsimony-ladder.md`) top-down and stops at the first
+rung that resolves the need:
+
+1. Does this need to exist? → no: skip it (YAGNI).
+2. Does the stdlib do it? → use it.
+3. Native platform feature? → use it.
+4. Dependency already installed? → reuse it (no redundant dep).
+5. One line? → one line.
+6. Only then: the minimum that makes the RED test pass.
+
+This is a **deliberation, not a detector** — it is the proactive counterpart to the
+reactive dead-code / scope-creep gates downstream. The ladder NEVER justifies
+skipping a test, input validation, error handling, security, or accessibility — see
+`rules/parsimony-ladder.md § Never on the chopping block`. A parsimony argument that
+weakens correctness is a Rule 3 (honesty) violation, not a win.
 
 ## Wiring triad
 
@@ -40,6 +59,7 @@ A task is **not** complete until all three are present:
 
 ## Hard gates (per iteration)
 
+- Parsimony ladder walked before GREEN-phase code is written (`rules/parsimony-ladder.md`) — guardrail items (tests/validation/error-handling/security/accessibility) never sacrificed.
 - Test suite green before commit.
 - Linter clean (project-specific — see `rules/code-quality-languages.txt`).
 - No new symbols left dangling (every new function/class has a caller or a test exercising it).
@@ -114,7 +134,7 @@ The promise `VALIDATION_GATE_PASSED` is emitted EXCLUSIVELY when `run_validation
 
 - Schema for cycle rules: `rules/cycle-rule-schema.md`
 - Skill: `skills/implement/SKILL.md`
-- Conventions: `rules/architecture.md`, `rules/testing.md`, `rules/loop-engine-convention.md`
+- Conventions: `rules/architecture.md`, `rules/testing.md`, `rules/loop-engine-convention.md`, `rules/parsimony-ladder.md`
 - Macro super-loop: `rules/cycle-roadmap.md` — one cycle-implement run per milestone in the super-loop
 - Upstream: `rules/cycle-plan.md` (plan must reach verdict ≥ SHIPPABLE_WITH_CAVEATS)
 - Downstream: `rules/cycle-code-quality.md` (runs after `IMPLEMENTATION_COMPLETE`)

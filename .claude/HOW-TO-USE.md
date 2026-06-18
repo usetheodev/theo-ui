@@ -1,21 +1,31 @@
-# How to use this planning ecosystem
+# How to use the Cycle ecosystem
 
 A stack-agnostic, domain-agnostic pipeline for taking a feature from **idea → discovery → plan → code → merge**, with Claude Code as the active agent at every cycle. Each cycle has hard gates, anti-patterns, rollback, and an audit trail documented in `rules/cycle-*.md`.
 
 ```
-DISCOVER → PLAN → IMPLEMENT → CODE-QUALITY → REVIEW → RELEASE
-   ↓         ↓        ↓             ↓            ↓        ↓
-(knowledge  (plans/) (commits +   (dead-code/  (gate    (develop→main
- -base/    →         tests)      fabrication/  tighter)  PR + semver
- discoveries/)                    wiring)               tag)
+DISCOVER → PLAN → IMPLEMENT → CODE-QUALITY → REVIEW → RELEASE → ANALYSIS (opt-in)
+   ↓         ↓        ↓             ↓            ↓        ↓           ↓
+(knowledge  (plans/) (commits +   (dead-code/  (gate    (develop→   (benchmarks,
+ -base/    →         tests)      fabrication/  tighter)  main PR +   architecture,
+ discoveries/)                    wiring)               semver tag)  scalability
+                                                                     → trajectory
+                                                                       verdict)
+                                                                         ↓
+                                              ON_TRACK → next milestone normally
+                                              WITH_RISKS → next milestone + risk tasks
+                                              CORRECTION → /to-plan corretivo primeiro
+                                              RETHINK → /discover-plan + redesign
 ```
 
-Each arrow is an **unbreakable chain** — you don't skip a cycle, you don't advance past an INVALID verdict.
+Each arrow is an **unbreakable chain** — you don't skip a cycle, you don't advance past an INVALID verdict. The ANALYSIS cycle is the post-release feedback loop: its verdict determines the shape of the next iteration.
 
 ## Which cycle, when
 
 | Question | Cycle | Entry point |
 |---|---|---|
+| "Brand new project — idea only, nothing built yet" | (one-shot bootstrap) | `/roadmap-init {project-slug}` |
+| "Add a NEW feature to an existing roadmap (becomes M<N+1>)" | (one-shot amendment) | `/roadmap-feature {feature-slug}` |
+| "ROADMAP exists; advance the next milestone end-to-end autonomously" | `cycle-roadmap` (delegates to `cycle-auto-plan`) | `/auto-plan` (no arg) or `/auto-plan M<N>` |
 | "How does <project X> handle <Y>?" | `cycle-discover` | `/discover-plan {topic-slug}` |
 | "I want to do X but haven't articulated requirements yet" | `cycle-plan` Phase 0 | `/grill-me {topic-slug}` |
 | "Let's design feature Y" | `cycle-plan` | `/to-plan` |
@@ -24,7 +34,8 @@ Each arrow is an **unbreakable chain** — you don't skip a cycle, you don't adv
 | "Review before merge" | `cycle-review` | `/review {plan-slug}` |
 | "Cut a release (develop → main + tag)" | `cycle-release` | `/release [bump-level]` |
 | "Just locate something in the code" | (no cycle) | Glob/Grep directly OR `/ast-grep` for structural queries |
-| "Confidence assessment + end-to-end autonomous chain" | `cycle-auto-plan` | `/auto-plan {topic-slug}` |
+| "Ad-hoc work outside the roadmap (hotfix, exploratory)" | `cycle-auto-plan` direct | `/auto-plan {topic-slug}` (no `M<N>`) |
+| "Post-release: o projeto está no caminho certo? (benchmarks + evidence)" | `cycle-analysis` (opt-in, after release) | `/analysis [plan-slug]` |
 
 ## Quick start
 
@@ -154,13 +165,14 @@ These commands are complementary to ralph-loop, not replacements. Skills like `/
 │   ├── architecture.md           Layering, DIP, naming
 │   ├── testing.md                TDD discipline, pyramid, pairing convention
 │   ├── public-copy.md            Voice/tone for README, marketing
+│   ├── cycle-roadmap.md          SoT for the macro super-loop (roadmap → … → release → roadmap)
 │   ├── cycle-discover.md         SoT for the discovery cycle
 │   ├── cycle-plan.md             SoT for the planning cycle
 │   ├── cycle-implement.md        SoT for the implementation cycle
 │   ├── cycle-code-quality.md     SoT for the code-quality cycle
 │   ├── cycle-review.md           SoT for the review cycle
-│   ├── cycle-release.md          SoT for the release cycle
-│   ├── cycle-auto-plan.md        SoT for the auto-orchestrator super-cycle
+│   ├── cycle-release.md          SoT for the release cycle (includes ROADMAP.md checkbox flip)
+│   ├── cycle-auto-plan.md        SoT for the per-milestone orchestrator
 │   ├── code-quality-golden-rule.md      Locked contract for /code-quality severity rubric
 │   ├── code-quality-thresholds.txt      Per-project threshold overrides for /code-quality
 │   ├── code-quality-allowlist.txt       Allowlist exemptions with mandatory sunset

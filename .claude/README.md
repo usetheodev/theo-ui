@@ -1,4 +1,4 @@
-# plan — A planning ecosystem for Claude Code
+# Cycle — A planning ecosystem for Claude Code
 
 A stack-agnostic, domain-agnostic **4+1 cycle pipeline** for taking a feature from **idea → discovery → plan → code → merge** with Claude Code as the active agent at every step. Each cycle has hard gates, anti-patterns, rollback, and an audit trail. Designed to operationalize the 95%-confidence principle so plans aren't vague and code isn't shipped on assumptions.
 
@@ -14,55 +14,73 @@ Three failure modes show up repeatedly when LLMs help build software:
 
 This project fixes each one with a dedicated cycle, an unbreakable chain between them, and runtime hooks that block the most common shortcuts (force-push, direct-to-main, dead-code commit, plan tampering).
 
-## The 4+1 cycles
+## The 6+1 cycles (macro super-loop)
 
 ```
-                            ┌─────────────────────┐
-                            │   DISCOVER (opt.)   │
-                            │   prior art study   │
-                            └──────────┬──────────┘
-                                       │ blueprint
-                                       ▼
-              ┌──────────────────────────────────────────┐
-              │                  PLAN                    │
-              │  Phase 0 (opt.): /grill-me — interview   │
-              │  /to-plan → /edge-case-plan →            │
-              │  /deps-audit → /plan-confidence          │
-              └──────────────────┬───────────────────────┘
-                                 │ verdict ≥ SHIPPABLE_WITH_CAVEATS
-                                 ▼
-              ┌──────────────────────────────────────────┐
-              │              IMPLEMENT                   │
-              │  halt-loop: RED → GREEN → REFACTOR →     │
-              │  WIRING(triad) → COMMIT                  │
-              └──────────────────┬───────────────────────┘
-                                 │ IMPLEMENTATION_COMPLETE
-                                 ▼
-              ┌──────────────────────────────────────────┐
-              │            CODE-QUALITY                  │
-              │  dead code + fabricated symbols          │
-              │  + wiring gaps                           │
-              └──────────────────┬───────────────────────┘
-                                 │ PASS or PASS_WITH_CAVEATS
-                                 ▼
-              ┌──────────────────────────────────────────┐
-              │                REVIEW                    │
-              │  5-7 specialist agents in parallel       │
-              │  → verdict: READY_TO_MERGE / NEEDS_FIXES │
-              └──────────────────┬───────────────────────┘
-                                 │ READY_TO_MERGE
-                                 ▼
-              ┌──────────────────────────────────────────┐
-              │               RELEASE                    │
-              │  auto-bump semver, rewrite CHANGELOG,    │
-              │  open develop→main PR + tag on merge     │
-              │  → verdict: RELEASED                     │
-              └──────────────────────────────────────────┘
+            ┌──────────────────────────────────────────┐
+            │       ROADMAP-INIT  (once, at start)     │
+            │  /roadmap-init — Socratic grill + SOTA   │
+            │  → ROADMAP.md (M0..M8 macro milestones)  │
+            │  → knowledge-base/references/ (peers)    │
+            └──────────────────┬───────────────────────┘
+                               │ ROADMAP.md exists
+                               ▼
+            ┌──────────────────────────────────────────┐ ◄────────────┐
+            │       ROADMAP  (macro super-loop)        │              │
+            │  select next [ ] milestone respecting    │              │
+            │  dependencies → delegate /auto-plan M<N> │              │
+            └──────────────────┬───────────────────────┘              │
+                               │ milestone_id derived                 │
+                               ▼                                      │
+              ┌─────────────────────┐                                 │
+              │   DISCOVER (opt.)   │                                 │
+              │   prior art study   │                                 │
+              └──────────┬──────────┘                                 │
+                         │ blueprint                                  │
+                         ▼                                            │
+            ┌──────────────────────────────────────────┐              │
+            │                  PLAN                    │              │
+            │  Phase 0 (opt.): /grill-me — interview   │              │
+            │  /to-plan → /edge-case-plan →            │              │
+            │  /deps-audit → /plan-confidence          │              │
+            │  plan frontmatter: milestone_id: M<N>    │              │
+            └──────────────────┬───────────────────────┘              │
+                               │ verdict ≥ SHIPPABLE_WITH_CAVEATS     │
+                               ▼                                      │
+            ┌──────────────────────────────────────────┐              │
+            │              IMPLEMENT                   │              │
+            │  halt-loop: RED → GREEN → REFACTOR →     │              │
+            │  WIRING(triad) → COMMIT                  │              │
+            └──────────────────┬───────────────────────┘              │
+                               │ IMPLEMENTATION_COMPLETE              │
+                               ▼                                      │
+            ┌──────────────────────────────────────────┐              │
+            │            CODE-QUALITY                  │              │
+            │  dead code + fabricated symbols          │              │
+            │  + wiring gaps                           │              │
+            └──────────────────┬───────────────────────┘              │
+                               │ PASS or PASS_WITH_CAVEATS            │
+                               ▼                                      │
+            ┌──────────────────────────────────────────┐              │
+            │                REVIEW                    │              │
+            │  5-7 specialist agents in parallel       │              │
+            │  → verdict: READY_TO_MERGE / NEEDS_FIXES │              │
+            └──────────────────┬───────────────────────┘              │
+                               │ READY_TO_MERGE                       │
+                               ▼                                      │
+            ┌──────────────────────────────────────────┐              │
+            │               RELEASE                    │              │
+            │  auto-bump semver, rewrite CHANGELOG,    │              │
+            │  open develop→main PR + tag on merge     │              │
+            │  post-merge: ROADMAP.md M<N> [ ]→[x]     │──────────────┘
+            │  → verdict: MILESTONE_RELEASED           │   loop back to ROADMAP
+            └──────────────────────────────────────────┘   until ROADMAP_COMPLETE
 
-  Shortcut for the whole thing:  /auto-plan {topic}
+  Shortcut per milestone:  /auto-plan M<N>   (or /auto-plan with no arg → picks next)
+  Shortcut ad-hoc:         /auto-plan {topic-slug}   (no roadmap link, hotfix mode)
 ```
 
-Each arrow is an **unbreakable chain** — you don't skip a cycle, you don't advance past an INVALID verdict, and the hooks enforce git safety (no `checkout`, no `--force`, no `main` commits) at every step.
+Each arrow is an **unbreakable chain** — you don't skip a cycle, you don't advance past an INVALID verdict, and the hooks enforce git safety (no `checkout`, no `--force`, no `main` commits) at every step. The macro loop closes only when every milestone in `ROADMAP.md` is `[x]` (verdict `ROADMAP_COMPLETE`).
 
 ## Quick start
 
@@ -195,20 +213,23 @@ The pipeline is most effective when the **right cycle is invoked for the right s
 .
 ├── README.md                      ← you are here
 ├── HOW-TO-USE.md                  ← detailed onboarding for new contributors
+├── ROADMAP.md                     ← macro milestones (M0..M8) — written by /roadmap-init, edited by cycle-release
 ├── plugin.json                    ← manifest for marketplace install
 ├── settings.json                  ← Claude Code permissions + hooks wiring
 ├── settings.local.json            ← personal overrides (gitignored)
 ├── .active_plan.example           ← pin a specific plan as active
 │
-├── skills/                        ← 25 skills, cycle entry-points + utilities
+├── skills/                        ← 27 skills, cycle entry-points + utilities
+│   ├── roadmap-init/              ← single-shot at project inception (Socratic + SOTA clone)
+│   ├── roadmap-feature/           ← add one new milestone to an existing roadmap (sister of roadmap-init)
 │   ├── grill-me/                  ← Phase 0 of cycle-plan (interview)
 │   ├── to-plan/                   ← cycle-plan main entry
 │   ├── discover-plan/             ← cycle-discover main entry
 │   ├── implement/                 ← cycle-implement halt-loop
 │   ├── code-quality/              ← cycle-code-quality audit
 │   ├── review/                    ← cycle-review parallel agents
-│   ├── release/                   ← cycle-release: develop→main PR + semver tag
-│   ├── auto-plan/                 ← super-cycle orchestrator
+│   ├── release/                   ← cycle-release: develop→main PR + semver tag + ROADMAP.md checkbox flip
+│   ├── auto-plan/                 ← cycle-auto-plan orchestrator (sub-cycle of cycle-roadmap)
 │   ├── dogfood/                   ← honesty gate for v1.0 claims
 │   ├── deck/, marp-slide/,        ← utility skills (slides/diagrams)
 │   │   excalidraw/, ast-grep/
@@ -218,13 +239,14 @@ The pipeline is most effective when the **right cycle is invoked for the right s
 │   ├── architecture.md            ← layering, DIP boundaries
 │   ├── testing.md                 ← TDD discipline, pyramid
 │   ├── public-copy.md             ← banned framings in README/marketing
+│   ├── cycle-roadmap.md           ← macro super-loop: roadmap → … → release → roadmap (loop)
 │   ├── cycle-discover.md          ← discovery cycle contract
 │   ├── cycle-plan.md              ← planning cycle contract
 │   ├── cycle-implement.md         ← implementation cycle contract
 │   ├── cycle-code-quality.md      ← code-quality cycle contract
 │   ├── cycle-review.md            ← review cycle contract
-│   ├── cycle-release.md           ← release cycle contract (develop→main + tag)
-│   ├── cycle-auto-plan.md         ← auto-orchestrator contract
+│   ├── cycle-release.md           ← release cycle contract (develop→main + tag + roadmap flip)
+│   ├── cycle-auto-plan.md         ← auto-orchestrator contract (one milestone per run)
 │   ├── code-quality-golden-rule.md  ← locked code-quality severity rubric
 │   ├── code-quality-thresholds.txt  ← per-project threshold overrides
 │   ├── code-quality-allowlist.txt   ← findings exemptions (mandatory sunset)
@@ -259,11 +281,13 @@ The pipeline is most effective when the **right cycle is invoked for the right s
 │   │   └── snapshots/             ← WebFetch snapshots (hash-verified) cited by blueprints
 │   ├── implementations/           ← /implement halt-loop logs + summaries
 │   ├── reviews/                   ← /plan-confidence, /discover-confidence, /review reports
+│   ├── releases/                  ← /release run records (per version)
+│   ├── roadmap-runs/              ← cycle-roadmap per-milestone audit trail (in_progress/completed/blocked)
 │   ├── adrs/                      ← long-term ADRs (MADR 3.0)
 │   ├── audits/                    ← /deps-audit, /code-quality reports
 │   ├── dogfood/                   ← anchor manifest + evidence files
 │   ├── backlog.md                 ← deferred/not-yet-implemented items
-│   ├── references/                ← read-only clones of reference projects
+│   ├── references/                ← read-only clones of reference projects (seeded by /roadmap-init)
 │   └── tools/                     ← read-only docs of tools the project depends on
 │
 ├── scripts/                       ← 5 shared utilities

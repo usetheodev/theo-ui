@@ -1,5 +1,6 @@
 #!/bin/bash
-# UserPromptSubmit hook — injects active plan excerpt + recent progress before each user prompt.
+# UserPromptSubmit hook — re-injects the parsimony ladder (always, every turn) plus
+# the active plan excerpt + recent progress (when a plan is active) before each user prompt.
 #
 # Emits canonical JSON with hookSpecificOutput.additionalContext per
 # https://code.claude.com/docs/en/hooks.md (Claude Code 2026).
@@ -13,25 +14,32 @@
 
 set -eu
 
-PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-cd "$PROJECT_DIR" || exit 0
-
-# Detect ecosystem layout: standalone (./) or plugin install (./.claude/)
-if [ -d ".claude/skills" ] && [ -d ".claude/rules" ] && [ -d ".claude/hooks" ]; then
-  ECO=".claude"
-elif [ -d "skills" ] && [ -d "rules" ] && [ -d "hooks" ]; then
-  ECO="."
-else
-  exit 0
-fi
+# shellcheck source=lib/detect-layout.sh
+source "$(dirname "$0")/lib/detect-layout.sh"
 
 SLUG_RE='^[A-Za-z0-9_][A-Za-z0-9._-]*$'
 
-# Emit canonical JSON and exit 0
+# Parsimony ladder — re-injected EVERY turn (always-on, plan or no plan) so the
+# minimalism deliberation does not decay across a long session. Canonical source:
+# rules/parsimony-ladder.md. Kept terse on purpose; it is a deliberation prompt.
+LADDER="PARSIMONY LADDER (rules/parsimony-ladder.md) — walk top-down BEFORE writing code; stop at the first rung that resolves the need:
+  1. Does this need to exist?      -> no: skip it (YAGNI)
+  2. Stdlib does it?               -> use it
+  3. Native platform feature?      -> use it
+  4. Dependency already installed? -> reuse it (no redundant dep)
+  5. One line?                     -> one line
+  6. Only then: the minimum that works
+Never sacrificed by the ladder: tests, input validation, error handling, security, accessibility."
+
+# Emit canonical JSON and exit 0. The parsimony ladder is always prepended.
 emit_context() {
   local ctx="$1"
+  local full="$LADDER"
+  [ -n "$ctx" ] && full="$LADDER
+
+$ctx"
   # jq -Rs reads stdin as a single string and JSON-escapes it
-  ctx_json=$(printf '%s' "$ctx" | jq -Rs .)
+  ctx_json=$(printf '%s' "$full" | jq -Rs .)
   printf '{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":%s}}\n' "$ctx_json"
   exit 0
 }
@@ -69,9 +77,9 @@ if [ -z "$RESOLVED_PLAN" ] && [ -d "$ECO/knowledge-base/plans" ]; then
   fi
 fi
 
-# Exit silently if no plan found
-[ -z "$RESOLVED_PLAN" ] && exit 0
-[ -f "$RESOLVED_PLAN" ] || exit 0
+# No active plan: still re-inject the parsimony ladder (always-on, per-turn).
+[ -z "$RESOLVED_PLAN" ] && emit_context ""
+[ -f "$RESOLVED_PLAN" ] || emit_context ""
 
 # Check attestation
 ATTEST_FILE="$ECO/.attestations/${PLAN_SLUG}.sha256"

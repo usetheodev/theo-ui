@@ -24,15 +24,8 @@
 
 set -uo pipefail
 
-PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
-cd "$PROJECT_DIR"
-
-# Detect ecosystem layout: standalone (./) or plugin install (./.claude/)
-if [ -d ".claude/rules" ]; then
-  ECO=".claude"
-else
-  ECO="."
-fi
+# shellcheck source=lib/detect-layout.sh
+source "$(dirname "$0")/lib/detect-layout.sh"
 
 # ----------------------------------------------------------------------------
 # Collect ALL modified files (unstaged + staged + last commit)

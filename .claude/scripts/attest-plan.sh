@@ -8,7 +8,7 @@
 #
 # Supports dual-mode layouts:
 #   - Standalone — CWD contains skills/+rules/+hooks/ directly.
-#   - Plugin install — CWD has .claude/ or .claude/plugins/plan/ subdir.
+#   - Plugin install — CWD has .claude/ or .claude/plugins/cycle/ subdir.
 #
 # Workflow:
 #   1. After editing a plan file, run: bash scripts/attest-plan.sh {slug}
@@ -26,9 +26,9 @@ set -eu
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 cd "$PROJECT_DIR" || exit 1
 
-# Resolve ecosystem dir: standalone (.) → user config (.claude/) → plugin (.claude/plugins/plan/)
+# Resolve ecosystem dir: standalone (.) → user config (.claude/) → plugin (.claude/plugins/cycle/)
 resolve_ecosystem_dir() {
-  for candidate in "." ".claude" ".claude/plugins/plan"; do
+  for candidate in "." ".claude" ".claude/plugins/cycle"; do
     if [ -d "$candidate/skills" ] && [ -d "$candidate/rules" ] && [ -d "$candidate/hooks" ]; then
       printf '%s' "$candidate"
       return 0

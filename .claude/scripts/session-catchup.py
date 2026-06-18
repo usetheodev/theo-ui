@@ -11,7 +11,7 @@ Adapted from planning-with-files v2.43.0's session-catchup.py pattern. Reads:
 
 Supports dual-mode layouts:
   - Standalone — the ecosystem repo itself (skills/+rules/+hooks/ direct).
-  - Plugin install — <root>/.claude/ or <root>/.claude/plugins/plan/.
+  - Plugin install — <root>/.claude/ or <root>/.claude/plugins/cycle/.
 
 Usage:
   python3 scripts/session-catchup.py [project_dir]
@@ -26,29 +26,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Ensure scripts/ is on sys.path for shared module imports
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-def _is_ecosystem_layout(d: Path) -> bool:
-    return (d / "skills").is_dir() and (d / "rules").is_dir() and (d / "hooks").is_dir()
-
-
-def _resolve_ecosystem_dir(project_dir: Path) -> Path | None:
-    """Find ecosystem directory anchored at project_dir.
-
-    Returns the directory holding knowledge-base/, ralph-loop.local.md, etc.
-    """
-    candidates = [
-        project_dir,
-        project_dir / ".claude",
-        project_dir / ".claude" / "plugins" / "plan",
-    ]
-    for c in candidates:
-        if c.is_dir() and (c / "knowledge-base").is_dir():
-            return c
-    # Fallback: any layout with skills/+rules/+hooks/
-    for c in candidates:
-        if c.is_dir() and _is_ecosystem_layout(c):
-            return c
-    return None
+from ecosystem_utils import resolve_ecosystem_dir as _resolve_ecosystem_dir  # noqa: E402
 
 
 def run(cmd: list[str], cwd: Path) -> str:
