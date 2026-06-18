@@ -10,27 +10,27 @@ Restructure 2026-05-16 (PITCH Audit): "Built for surfaces nobody else builds for
 
 # The UI your agent already needs.
 
-### 102 React components for AI agent surfaces and cloud dashboards — the ones you'd otherwise build from scratch.
+### 153 React components for AI agent surfaces and cloud dashboards — the ones you'd otherwise build from scratch.
 
 *The visual surface auxiliary of the [Theo ecosystem](https://usetheo.dev). Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
-**102 components (81 primitives + 21 composites) · 453 tests passing · 126 Ladle stories · zero a11y violations · ESM-only · Apache-2.0**
+**153 components · 1,513 tests passing · 151 Ladle stories · zero a11y violations · ESM-only · Apache-2.0**
 
 ---
 
 ## Surfaces nobody else builds for
 
-Other libraries ship `Button` and `Card`. We shipped `AgentEvent`, `ToolCall`, `DeploymentRow`, `BuildLogStream`, and 98 others.
+Other libraries ship `Button` and `Card`. We shipped `AgentEvent`, `ToolCall`, `DeploymentRow`, `BuildLogStream`, and 149 others.
 
 Generic primitives optimize for marketing pages. `@theokit/ui` is built for the surfaces agents and dashboards actually need. You write product logic. We ship the interface.
 
 ## What you get
 
-- **102 components, agent-shaped.** 81 primitives (`AgentEvent`, `ChatMessage`, `ToolCall`, `MCPServerCard`, `MemoryEditor`, `PermissionMatrix`, `TokenUsageChart`, `ContextCard`, `SkillCard`, `RunStats`, …) and 21 composites (`AgentComposer`, `ChatComposer`, `DeploymentRow`, `EnvVarEditor`, `RollbackUI`, `CommandPalette`, `PermissionModal`, …). No `Button`-shaped libraries pretending to fit agent surfaces.
+- **153 components, agent-shaped.** Primitives (`AgentEvent`, `ChatMessage`, `ToolCall`, `MCPServerCard`, `MemoryEditor`, `PermissionMatrix`, `TokenUsageChart`, `ContextCard`, `SkillCard`, `RunStats`, …) and composites (`AgentComposer`, `ChatComposer`, `DeploymentRow`, `EnvVarEditor`, `RollbackUI`, `CommandPalette`, `PermissionModal`, …). No `Button`-shaped libraries pretending to fit agent surfaces.
 - **Three themes, runtime-swappable.** Violet Forge (dark, AI workspace energy), Classic Paper (warm light, document-first), Aurora Terminal (high-contrast dev). Swap live via `<ThemeProvider />`. Or define your own — HSL-split CSS variables, no fork required.
 - **Copy-paste OR install.** `npx shadcn add` to copy a single component into your repo, or `pnpm add @theokit/ui` for the whole package. Same registry powers both paths.
-- **Framework-agnostic.** React peer-deps only. Drop into Vite, Next 14+, Remix, Astro, Tanstack Start.
-- **Quality-gated, not promised.** 453 tests passing. Zero a11y violations across 126 Ladle stories asserted by axe-core. Bundle size enforced ±5% of baseline. Structural taxonomy enforced. No PR ships otherwise.
+- **Standard React + Tailwind.** React is the only required peer; Radix, CVA, cmdk, and lucide ship as dependencies. Pairs with TheoKit, or runs standalone in any React app.
+- **Quality-gated, not promised.** 1,513 tests passing. Zero a11y violations across 151 Ladle stories asserted by axe-core. Bundle size enforced ±5% of baseline. Structural taxonomy enforced. No PR ships otherwise.
 
 ## Feel it
 
@@ -68,14 +68,14 @@ The agent UI gap is real. Most teams reach for shadcn for the primitives and the
 |---|---|---|---|---|
 | **Frame** | The UI your agent already needs | "Copy-paste components" | "Dashboard primitives" | (you) |
 | Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
-| Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
-| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
+| Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes** | None | None | Weeks |
+| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes** | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
-| a11y enforced as a quality gate | **Yes** — vitest-axe on 126 stories | Per-component, manual | Manual | Often skipped |
+| a11y enforced as a quality gate | **Yes** — vitest-axe on 151 stories | Per-component, manual | Manual | Often skipped |
 
-Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write — real components for real agent surfaces, not yet another button library.
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 153 components you were about to write — real components for real agent surfaces, not yet another button library.
 
 ## Why now
 
@@ -114,7 +114,7 @@ npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/deployment-row.json
 
 Every item in [`registry/r/`](./registry/r) is a standalone copy-paste unit with declared `registryDependencies`. The Tailwind preset (`registry/tailwind-preset.json`) ships the Violet Forge tokens and is a dependency of every UI / block item — so copy-paste consumers get the full typescale and color system, not just the markup.
 
-### SSR (Next.js / Astro / Remix)
+### SSR / Server Components
 
 Inject `<ThemeScript />` in `<head>` to prevent FOUC and hydration mismatch:
 
@@ -147,14 +147,14 @@ Define your own by extending `Theme` from `@theokit/ui`. HSL-split CSS variables
 
 Components split by a single rule:
 
-- **Primitive** — imports no other `@theokit/ui` component. 81 of these.
-- **Composite** — depends on one or more primitives via the barrel. 21 of these.
+- **Primitive** — imports no other `@theokit/ui` component. 99 of these.
+- **Composite** — depends on one or more primitives via the barrel. 36 of these.
 
 Enforced by [`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts). Cross-imports across the boundary fail the gate.
 
 ### Bundle & module format
 
-- **ESM-only.** Single `dist/index.js` (ESM) + per-component `.d.ts`. No CJS. Modern Vite / Next 14+ / Remix / Astro are ESM-first by assumption.
+- **ESM-only.** Single `dist/index.js` (ESM) + per-component `.d.ts`. No CJS. Modern ESM-first React toolchains are the target by assumption.
 - **Tree-shaking via the barrel.** `sideEffects: ["**/*.css"]` lets bundlers drop unused components from `import { Button } from "@theokit/ui"`.
 - **CSS distribution.** `dist/styles.css` is the recommended single import (tokens + fonts + Tailwind base/components/utilities). `@theokit/ui/tokens.css`, `@theokit/ui/fonts.css`, and `@theokit/ui/fonts-cdn.css` are available for finer control.
 - **Self-hosted fonts.** Geist Sans + Geist Mono ship as woff2 in `dist/fonts/` (~290 KB total). Opt into Google Fonts CDN with `@import "@theokit/ui/fonts-cdn.css"` if you prefer not to host static assets.
@@ -217,7 +217,7 @@ Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 ## Status
 
-- **Production.** 102 components, 453 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Production.** 153 components, 1,513 tests passing, zero a11y violations on 151 Ladle stories, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on push to `main`). Branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
@@ -240,7 +240,7 @@ pnpm add @theokit/ui
 npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
 ```
 
-**Next in the funnel:** Build any React surface today — install `@theokit/ui@next` and ship 102 components in minutes. TheoKit integration is on the roadmap.
+**Next in the funnel:** Build any React surface today — install `@theokit/ui` and ship 153 components in minutes. TheoKit integration is on the roadmap.
 
 **Tertiary:** [Component catalog](https://github.com/usetheodev/theo-ui#component-catalog) · Gallery (coming soon at ui.usetheo.dev) · [GitHub](https://github.com/usetheodev/theo-ui)
 

@@ -8,7 +8,7 @@ This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/
 
 ## What this project is
 
-`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [Theo](https://usetheo.dev) ecosystem. **102 components** (81 primitives + 21 composites) designed for AI agent surfaces and cloud dashboards. Framework-agnostic (peer-deps on React only). Apache-2.0. Production.
+`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [Theo](https://usetheo.dev) ecosystem. **153 components** (99 primitive + 36 composite modules) designed for AI agent surfaces and cloud dashboards. Standard React + Tailwind package: React is the only required peer; Radix, CVA, cmdk, lucide ship as dependencies. Apache-2.0. Production.
 
 Published as `@theokit/ui` on npm. Distributed two ways: install the whole package, or copy individual components via the shadcn-compatible registry.
 

@@ -38,21 +38,21 @@ Most component libraries optimize for marketing pages. `@theokit/ui` is built fo
 - **Built for PaaS.** Composites for project cards, deployment rows, build log streams, env var editors, domain config, preview environments, rollback flows, metrics panels.
 - **Themeable at runtime.** Ship three themes out of the box, swap them live via `<ThemeProvider />`, or define your own.
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
-- **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so components work in Next.js App Router (React Server Components) when installed from npm.
+- **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so client components are safe to import into a React Server Component tree when installed from npm.
 - **Per-subpath types.** `import { Button } from "@theokit/ui/button"` resolves an isolated `Button` declaration, not the whole barrel's type surface.
-- **Framework-agnostic.** React is the only required peer (18 or 19); Radix UI, CVA, cmdk, and lucide ship as dependencies. Works under Vite, Next, Remix, Astro, Tanstack Start.
+- **Standard React + Tailwind package.** React is the only required peer (18 or 19); Radix UI, CVA, cmdk, and lucide ship as dependencies. Pairs with TheoKit, or runs standalone in any React app.
 
 The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
 
 | Surface need | `@theokit/ui` | shadcn / Radix | Tremor | Build it yourself |
 |---|---|---|---|---|
 | Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
-| Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes — 81 of them** | None | None | Weeks |
-| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes — 21 of them** | None | None | Weeks |
+| Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes** | None | None | Weeks |
+| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes** | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
-| a11y enforced as a quality gate | **Yes** — vitest-axe on 126 stories | Per-component, manual | Manual | Often skipped |
+| a11y enforced as a quality gate | **Yes** — vitest-axe on 151 stories | Per-component, manual | Manual | Often skipped |
 
 Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 153 components you were about to write.
 
@@ -111,7 +111,7 @@ Every item under [`registry/r/`](./registry/r) is a standalone copy-paste unit w
 
 **Precondition.** Copy-paste install requires `@/` configured as a path alias in your `tsconfig.json` (`{ "paths": { "@/*": ["./src/*"] } }`) — the shadcn-ui 2.0 convention. Inlined source uses `@/lib/cn` and similar `@/components/ui/...` imports. If your project uses a different alias (Vite default `~/`, etc.), either add the `@/` mapping or rewrite the imports after copy-paste. The shipped `registry/index.json` declares this requirement under `metadata.requires.tsconfigPathAlias`.
 
-### SSR (Next.js / Astro / Remix)
+### SSR / Server Components
 
 Inject `<ThemeScript>` in `<head>` to prevent FOUC and hydration mismatch:
 
@@ -316,8 +316,8 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 - **ESM-only** — `@theokit/ui` ships a single `dist/index.js` (ESM) plus
   per-component `dist/components/.../index.d.ts` type declarations. No CJS
   build. Consumers running on CommonJS Node need to transpile or use a
-  bundler. This is intentional: the four-pillar audience (modern Vite,
-  Next 14+, Astro, Remix) is ESM-first.
+  bundler. This is intentional: modern ESM-first React toolchains are the
+  target.
 - **Tree-shaking via the barrel** — modern bundlers (Vite, esbuild, Rollup,
   webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and tree-shake
   unused components from the barrel import (`import { Button } from
@@ -348,7 +348,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
-- **Production.** 153 components, 1,513 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Production.** 153 components, 1,513 tests passing, zero a11y violations on 151 Ladle stories, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
