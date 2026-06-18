@@ -84,3 +84,7 @@ referencia/
 src/styles/node_modules/
 test-results/
 .npmrc
+
+# Python bytecode (skills scripts)
+__pycache__/
+*.pyc
