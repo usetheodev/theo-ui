@@ -6,14 +6,14 @@
 
 # The UI your agent already needs.
 
-A React component library built for AI agent surfaces and cloud dashboards. **102 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
+A React component library built for AI agent surfaces and cloud dashboards. **153 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
 
 *Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1506%20passing-success?style=flat-square)](#quality-gates)
+[![tests](https://img.shields.io/badge/tests-1513%20passing-success?style=flat-square)](#quality-gates)
 [![components](https://img.shields.io/badge/components-153-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
@@ -38,7 +38,9 @@ Most component libraries optimize for marketing pages. `@theokit/ui` is built fo
 - **Built for PaaS.** Composites for project cards, deployment rows, build log streams, env var editors, domain config, preview environments, rollback flows, metrics panels.
 - **Themeable at runtime.** Ship three themes out of the box, swap them live via `<ThemeProvider />`, or define your own.
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
-- **Framework-agnostic.** Peer-deps on React only. Works under Vite, Next, Remix, Astro, Tanstack Start.
+- **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so components work in Next.js App Router (React Server Components) when installed from npm.
+- **Per-subpath types.** `import { Button } from "@theokit/ui/button"` resolves an isolated `Button` declaration, not the whole barrel's type surface.
+- **Framework-agnostic.** React is the only required peer (18 or 19); Radix UI, CVA, cmdk, and lucide ship as dependencies. Works under Vite, Next, Remix, Astro, Tanstack Start.
 
 The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
 
@@ -52,7 +54,7 @@ The agent UI gap is real — most teams reach for shadcn for the primitives and 
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
 | a11y enforced as a quality gate | **Yes** — vitest-axe on 126 stories | Per-component, manual | Manual | Often skipped |
 
-Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 102 components you were about to write.
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 153 components you were about to write.
 
 ## What you'd build
 
@@ -346,7 +348,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
-- **Production.** 102 components, 453 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Production.** 153 components, 1,513 tests passing, zero a11y violations on 126 Ladle stories, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
