@@ -69,6 +69,8 @@ const ToastRoot = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>
       className={cn(toastVariants({ variant, size }), className)}
       {...props}
       data-slot="toast-root"
+      data-variant={variant}
+      data-size={size}
     >
       <span aria-hidden="true">{iconForVariant[variant as ToastVariant]}</span>
       <div className="min-w-0 flex-1">{children}</div>

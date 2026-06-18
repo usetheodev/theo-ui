@@ -72,9 +72,12 @@ for (const k of PRESERVE_KEYS) {
   if (v !== undefined) newExports[k] = v;
 }
 
-// Step 2: emit one entry per per-component dist file. Types point at
-// the barrel (per D5 escalation) because per-component .d.ts files
-// are not emitted by tsup.
+// Step 2: emit one entry per per-component dist file. NOTE: the `types`/`import`
+// values here are provisional — Step 4 below delegates to `scripts/sync-exports.ts`
+// (the SINGLE source of truth the structural validator compares against), which
+// re-derives every entry including the per-subpath `.d.ts` mapping
+// (community-standard-componentization T3.1). This loop only validates that
+// every dist component folder has a JS entry (Step 3 / 3.5 guards).
 for (const layer of ["primitives", "composites"] as const) {
   const base = `dist/${layer}`;
   try {
@@ -88,7 +91,7 @@ for (const layer of ["primitives", "composites"] as const) {
       }
       const key = `./${dirent.name}`;
       newExports[key] = {
-        types: "./dist/index.d.ts", // D5 escalation — types via barrel
+        types: `./dist/components/${layer}/${dirent.name}/index.d.ts`,
         import: `./dist/${layer}/${dirent.name}/index.js`,
       };
     }

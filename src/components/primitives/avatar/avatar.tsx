@@ -52,6 +52,7 @@ const AvatarRoot = forwardRef<ElementRef<typeof AvatarPrimitive.Root>, AvatarPro
       className={cn(avatarVariants({ size, tone }), className)}
       {...props}
       data-slot="avatar-root"
+      data-size={size}
     />
   ),
 );

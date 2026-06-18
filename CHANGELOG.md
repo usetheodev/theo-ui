@@ -14,6 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   override styles via stable attribute selectors instead of relying on Tailwind
   class order. New quality gate `validateDataSlot` enforces presence on every
   component. (community-standard-componentization, T2.1)
+- **Per-subpath TypeScript declarations.** Importing `@theokit/ui/button` now
+  resolves an isolated `Button`-only `.d.ts` instead of the entire barrel's
+  type surface, so type-checking a single subpath no longer loads all 135
+  components' types. Declarations are emitted by `tsc -p tsconfig.dts.json`
+  (tsup's bundler OOMs at 130+ entries). (community-standard-componentization, T3.1)
+- **`data-variant` / `data-size` on cva components (shadcn v4).** The 9
+  variant-driven components (Button, Badge, Avatar, Select, Switch, Input,
+  Textarea, Checkbox, Toast) now emit `data-variant`/`data-size` alongside
+  `data-slot`, so consumers can style by attribute (e.g.
+  `[data-slot=button][data-variant=secondary]`). The `*Variants` helpers remain
+  exported for class reuse. (community-standard-componentization, T5.1)
 
 ### Changed
 - Bundle baseline for `dist/components.css` corrected to the full `@source`

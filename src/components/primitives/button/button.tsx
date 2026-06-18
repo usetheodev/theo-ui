@@ -103,6 +103,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size }), className)}
         {...props}
         data-slot="button"
+        data-variant={variant}
+        data-size={size}
       />
     );
   },

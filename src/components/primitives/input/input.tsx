@@ -53,6 +53,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       className={cn(inputVariants({ size }), className)}
       {...props}
       data-slot="input"
+      data-size={size}
     />
   ),
 );

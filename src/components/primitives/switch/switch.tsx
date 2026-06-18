@@ -52,6 +52,7 @@ const Switch = forwardRef<ElementRef<typeof SwitchPrimitive.Root>, SwitchProps>(
       className={cn(switchVariants({ size }), className)}
       {...props}
       data-slot="switch"
+      data-size={size}
     >
       <SwitchPrimitive.Thumb
         className={cn(

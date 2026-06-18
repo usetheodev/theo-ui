@@ -17,10 +17,15 @@ describe("data-slot is emitted on component roots", () => {
     expect(slot).toBeTruthy();
   });
 
-  it("Button reflects variant + size via data attributes when set", () => {
-    // data-slot present regardless of variant; presence is the contract here.
-    const { container } = render(<Button variant="secondary">Go</Button>);
-    expect(container.querySelector('[data-slot="button"]')).toBeTruthy();
+  it("Button reflects variant + size via data attributes (shadcn v4)", () => {
+    const { container } = render(
+      <Button variant="secondary" size="sm">
+        Go
+      </Button>,
+    );
+    const root = container.querySelector('[data-slot="button"]');
+    expect(root?.getAttribute("data-variant")).toBe("secondary");
+    expect(root?.getAttribute("data-size")).toBe("sm");
   });
 
   it('Badge root carries data-slot="badge"', () => {

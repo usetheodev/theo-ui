@@ -67,6 +67,7 @@ const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, Sel
       className={cn(selectTriggerVariants({ size }), className)}
       {...props}
       data-slot="select-trigger"
+      data-size={size}
     >
       {children}
       <SelectPrimitive.Icon asChild>

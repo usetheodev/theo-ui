@@ -75,11 +75,11 @@ const BASE_EXPORTS: Record<string, ExportEntry | string> = {
  */
 const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
   "./whiteboard": {
-    types: "./dist/whiteboard/index.d.ts",
+    types: "./dist/components/primitives/whiteboard/index.d.ts",
     import: "./dist/whiteboard/index.js",
   },
   "./slide": {
-    types: "./dist/slide/index.d.ts",
+    types: "./dist/components/primitives/slide/index.d.ts",
     import: "./dist/slide/index.js",
   },
   // Slide rich-content plugins (Tier 2 of the rich-content plan). Each plugin
@@ -87,23 +87,23 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
   // katex / mermaid. Consumers opt-in by installing the peer-dep + importing
   // the plugin explicitly (ADRs D1 / D14 of slide-rich-content-plan).
   "./slide/plugins/shiki": {
-    types: "./dist/slide/plugins/shiki/index.d.ts",
+    types: "./dist/components/primitives/slide/plugins/shiki/index.d.ts",
     import: "./dist/slide/plugins/shiki/index.js",
   },
   "./slide/plugins/math": {
-    types: "./dist/slide/plugins/math/index.d.ts",
+    types: "./dist/components/primitives/slide/plugins/math/index.d.ts",
     import: "./dist/slide/plugins/math/index.js",
   },
   "./slide/plugins/mermaid": {
-    types: "./dist/slide/plugins/mermaid/index.d.ts",
+    types: "./dist/components/primitives/slide/plugins/mermaid/index.d.ts",
     import: "./dist/slide/plugins/mermaid/index.js",
   },
   "./slide/plugins/emoji": {
-    types: "./dist/slide/plugins/emoji/index.d.ts",
+    types: "./dist/components/primitives/slide/plugins/emoji/index.d.ts",
     import: "./dist/slide/plugins/emoji/index.js",
   },
   "./slide-deck": {
-    types: "./dist/slide-deck/index.d.ts",
+    types: "./dist/components/composites/slide-deck/index.d.ts",
     import: "./dist/slide-deck/index.js",
   },
   // RFC 0008 — TheoKit zero-config integration subpaths. `./vite-plugin`
@@ -179,11 +179,15 @@ function buildExports(componentSubpaths: string[]): Record<string, ExportEntry |
       };
       continue;
     }
-    // Per-component dist file emitted by tsup (Brief #4 / D5 escalation —
-    // types still point at the barrel because per-component .d.ts files
-    // are not generated to avoid worker OOM).
+    // Per-component subpath. JS is the isolated tsup bundle; `.d.ts` is the
+    // per-subpath declaration emitted by `tsc -p tsconfig.dts.json`, which
+    // mirrors `src/` under `dist/components/` (community-standard-
+    // componentization T3.1). tsup's rollup-plugin-dts OOMs at 130+ entries,
+    // so declaration emit is delegated to tsc (which scales). The path is
+    // deterministic from layer+name so this builder produces identical output
+    // with or without a build present — the structural validator relies on that.
     map[key] = {
-      types: "./dist/index.d.ts",
+      types: `./dist/components/${layer}/${name}/index.d.ts`,
       import: `./dist/${layer}/${name}/index.js`,
     };
   }

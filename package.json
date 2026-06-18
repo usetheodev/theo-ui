@@ -22,559 +22,559 @@
     "./slide/themes/default.css": "./dist/slide/themes/default.css",
     "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
     "./account-menu": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/account-menu/index.d.ts",
       "import": "./dist/composites/account-menu/index.js"
     },
     "./action-bar": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/action-bar/index.d.ts",
       "import": "./dist/primitives/action-bar/index.js"
     },
     "./agent-composer": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/agent-composer/index.d.ts",
       "import": "./dist/composites/agent-composer/index.js"
     },
     "./agent-editor": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/agent-editor/index.d.ts",
       "import": "./dist/composites/agent-editor/index.js"
     },
     "./agent-error-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/agent-error-card/index.d.ts",
       "import": "./dist/primitives/agent-error-card/index.js"
     },
     "./agent-event": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/agent-event/index.d.ts",
       "import": "./dist/primitives/agent-event/index.js"
     },
     "./agent-handoff": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/agent-handoff/index.d.ts",
       "import": "./dist/primitives/agent-handoff/index.js"
     },
     "./agent-profile": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/agent-profile/index.d.ts",
       "import": "./dist/primitives/agent-profile/index.js"
     },
     "./agent-starting-state": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/agent-starting-state/index.d.ts",
       "import": "./dist/primitives/agent-starting-state/index.js"
     },
     "./agent-stream": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/agent-stream/index.d.ts",
       "import": "./dist/composites/agent-stream/index.js"
     },
     "./agent-streaming": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/agent-streaming/index.d.ts",
       "import": "./dist/primitives/agent-streaming/index.js"
     },
     "./agent-timeline": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/agent-timeline/index.d.ts",
       "import": "./dist/composites/agent-timeline/index.js"
     },
     "./alert": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/alert/index.d.ts",
       "import": "./dist/primitives/alert/index.js"
     },
     "./approval-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/approval-card/index.d.ts",
       "import": "./dist/composites/approval-card/index.js"
     },
     "./artifact-preview": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/artifact-preview/index.d.ts",
       "import": "./dist/primitives/artifact-preview/index.js"
     },
     "./attachment-chip": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/attachment-chip/index.d.ts",
       "import": "./dist/primitives/attachment-chip/index.js"
     },
     "./audit-log-entry": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/audit-log-entry/index.d.ts",
       "import": "./dist/primitives/audit-log-entry/index.js"
     },
     "./auto-compact-notice": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/auto-compact-notice/index.d.ts",
       "import": "./dist/primitives/auto-compact-notice/index.js"
     },
     "./avatar": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/avatar/index.d.ts",
       "import": "./dist/primitives/avatar/index.js"
     },
     "./badge": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/badge/index.d.ts",
       "import": "./dist/primitives/badge/index.js"
     },
     "./branch-indicator": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/branch-indicator/index.d.ts",
       "import": "./dist/primitives/branch-indicator/index.js"
     },
     "./browser-controls": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/browser-controls/index.d.ts",
       "import": "./dist/primitives/browser-controls/index.js"
     },
     "./build-log-stream": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/build-log-stream/index.d.ts",
       "import": "./dist/primitives/build-log-stream/index.js"
     },
     "./button": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/button/index.d.ts",
       "import": "./dist/primitives/button/index.js"
     },
     "./capability-indicator": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/capability-indicator/index.d.ts",
       "import": "./dist/primitives/capability-indicator/index.js"
     },
     "./card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/card/index.d.ts",
       "import": "./dist/primitives/card/index.js"
     },
     "./channel-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/channel-card/index.d.ts",
       "import": "./dist/primitives/channel-card/index.js"
     },
     "./chat-composer": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/chat-composer/index.d.ts",
       "import": "./dist/composites/chat-composer/index.js"
     },
     "./chat-message": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/chat-message/index.d.ts",
       "import": "./dist/composites/chat-message/index.js"
     },
     "./chat-thread": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/chat-thread/index.d.ts",
       "import": "./dist/primitives/chat-thread/index.js"
     },
     "./checkbox": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/checkbox/index.d.ts",
       "import": "./dist/primitives/checkbox/index.js"
     },
     "./choice-prompt": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/choice-prompt/index.d.ts",
       "import": "./dist/composites/choice-prompt/index.js"
     },
     "./code-block": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/code-block/index.d.ts",
       "import": "./dist/composites/code-block/index.js"
     },
     "./command-palette": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/command-palette/index.d.ts",
       "import": "./dist/composites/command-palette/index.js"
     },
     "./confirm-dialog": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/confirm-dialog/index.d.ts",
       "import": "./dist/composites/confirm-dialog/index.js"
     },
     "./confirm-prompt": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/confirm-prompt/index.d.ts",
       "import": "./dist/composites/confirm-prompt/index.js"
     },
     "./context-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/context-card/index.d.ts",
       "import": "./dist/primitives/context-card/index.js"
     },
     "./context-window-bar": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/context-window-bar/index.d.ts",
       "import": "./dist/primitives/context-window-bar/index.js"
     },
     "./copy-button": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/copy-button/index.d.ts",
       "import": "./dist/primitives/copy-button/index.js"
     },
     "./cost-meter": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/cost-meter/index.d.ts",
       "import": "./dist/primitives/cost-meter/index.js"
     },
     "./created-files-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/created-files-card/index.d.ts",
       "import": "./dist/primitives/created-files-card/index.js"
     },
     "./cron-job-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/cron-job-card/index.d.ts",
       "import": "./dist/primitives/cron-job-card/index.js"
     },
     "./cron-jobs-list": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/cron-jobs-list/index.d.ts",
       "import": "./dist/composites/cron-jobs-list/index.js"
     },
     "./danger-zone": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/danger-zone/index.d.ts",
       "import": "./dist/primitives/danger-zone/index.js"
     },
     "./data-table": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/data-table/index.d.ts",
       "import": "./dist/composites/data-table/index.js"
     },
     "./deployment-row": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/deployment-row/index.d.ts",
       "import": "./dist/composites/deployment-row/index.js"
     },
     "./dialog": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/dialog/index.d.ts",
       "import": "./dist/primitives/dialog/index.js"
     },
     "./diff-viewer": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/diff-viewer/index.d.ts",
       "import": "./dist/primitives/diff-viewer/index.js"
     },
     "./domain-config": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/domain-config/index.d.ts",
       "import": "./dist/composites/domain-config/index.js"
     },
     "./dropdown-menu": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/dropdown-menu/index.d.ts",
       "import": "./dist/primitives/dropdown-menu/index.js"
     },
     "./empty-state": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/empty-state/index.d.ts",
       "import": "./dist/primitives/empty-state/index.js"
     },
     "./env-var-editor": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/env-var-editor/index.d.ts",
       "import": "./dist/composites/env-var-editor/index.js"
     },
     "./export-chat-dialog": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/export-chat-dialog/index.d.ts",
       "import": "./dist/primitives/export-chat-dialog/index.js"
     },
     "./folder-context-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/folder-context-card/index.d.ts",
       "import": "./dist/primitives/folder-context-card/index.js"
     },
     "./folder-selector": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/folder-selector/index.d.ts",
       "import": "./dist/primitives/folder-selector/index.js"
     },
     "./form-field": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/form-field/index.d.ts",
       "import": "./dist/primitives/form-field/index.js"
     },
     "./gateway-status-indicator": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/gateway-status-indicator/index.d.ts",
       "import": "./dist/primitives/gateway-status-indicator/index.js"
     },
     "./hook-config": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/hook-config/index.d.ts",
       "import": "./dist/primitives/hook-config/index.js"
     },
     "./hook-event-log": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/hook-event-log/index.d.ts",
       "import": "./dist/primitives/hook-event-log/index.js"
     },
     "./input": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/input/index.d.ts",
       "import": "./dist/primitives/input/index.js"
     },
     "./intent-selector": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/intent-selector/index.d.ts",
       "import": "./dist/primitives/intent-selector/index.js"
     },
     "./label": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/label/index.d.ts",
       "import": "./dist/primitives/label/index.js"
     },
     "./lane-board": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/lane-board/index.d.ts",
       "import": "./dist/primitives/lane-board/index.js"
     },
     "./login-split": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/login-split/index.d.ts",
       "import": "./dist/primitives/login-split/index.js"
     },
     "./mcp-server-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/mcp-server-card/index.d.ts",
       "import": "./dist/primitives/mcp-server-card/index.js"
     },
     "./mcp-server-list": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/mcp-server-list/index.d.ts",
       "import": "./dist/composites/mcp-server-list/index.js"
     },
     "./memory-editor": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/memory-editor/index.d.ts",
       "import": "./dist/primitives/memory-editor/index.js"
     },
     "./mention-menu": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/mention-menu/index.d.ts",
       "import": "./dist/primitives/mention-menu/index.js"
     },
     "./metric-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/metric-card/index.d.ts",
       "import": "./dist/composites/metric-card/index.js"
     },
     "./metrics-panel": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/metrics-panel/index.d.ts",
       "import": "./dist/primitives/metrics-panel/index.js"
     },
     "./model-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/model-card/index.d.ts",
       "import": "./dist/primitives/model-card/index.js"
     },
     "./model-selector": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/model-selector/index.d.ts",
       "import": "./dist/primitives/model-selector/index.js"
     },
     "./multi-select-prompt": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/multi-select-prompt/index.d.ts",
       "import": "./dist/composites/multi-select-prompt/index.js"
     },
     "./page-shell": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/page-shell/index.d.ts",
       "import": "./dist/composites/page-shell/index.js"
     },
     "./pagination": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/pagination/index.d.ts",
       "import": "./dist/primitives/pagination/index.js"
     },
     "./permission-matrix": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/permission-matrix/index.d.ts",
       "import": "./dist/primitives/permission-matrix/index.js"
     },
     "./permission-modal": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/permission-modal/index.d.ts",
       "import": "./dist/composites/permission-modal/index.js"
     },
     "./pin-input": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/pin-input/index.d.ts",
       "import": "./dist/primitives/pin-input/index.js"
     },
     "./plan-badge": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/plan-badge/index.d.ts",
       "import": "./dist/primitives/plan-badge/index.js"
     },
     "./preview-env-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/preview-env-card/index.d.ts",
       "import": "./dist/composites/preview-env-card/index.js"
     },
     "./preview-panel": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/preview-panel/index.d.ts",
       "import": "./dist/composites/preview-panel/index.js"
     },
     "./progress": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/progress/index.d.ts",
       "import": "./dist/primitives/progress/index.js"
     },
     "./progress-checklist": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/progress-checklist/index.d.ts",
       "import": "./dist/primitives/progress-checklist/index.js"
     },
     "./project-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/project-card/index.d.ts",
       "import": "./dist/composites/project-card/index.js"
     },
     "./project-switcher": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/project-switcher/index.d.ts",
       "import": "./dist/primitives/project-switcher/index.js"
     },
     "./quick-action-chips": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/quick-action-chips/index.d.ts",
       "import": "./dist/primitives/quick-action-chips/index.js"
     },
     "./radio-group": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/radio-group/index.d.ts",
       "import": "./dist/primitives/radio-group/index.js"
     },
     "./recent-folders-list": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/recent-folders-list/index.d.ts",
       "import": "./dist/primitives/recent-folders-list/index.js"
     },
     "./rollback-ui": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/rollback-ui/index.d.ts",
       "import": "./dist/composites/rollback-ui/index.js"
     },
     "./rule-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/rule-card/index.d.ts",
       "import": "./dist/primitives/rule-card/index.js"
     },
     "./rule-editor": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/rule-editor/index.d.ts",
       "import": "./dist/composites/rule-editor/index.js"
     },
     "./run-stats": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/run-stats/index.d.ts",
       "import": "./dist/primitives/run-stats/index.js"
     },
     "./run-status-pill": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/run-status-pill/index.d.ts",
       "import": "./dist/primitives/run-status-pill/index.js"
     },
     "./running-tasks-panel": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/running-tasks-panel/index.d.ts",
       "import": "./dist/primitives/running-tasks-panel/index.js"
     },
     "./scroll-area": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/scroll-area/index.d.ts",
       "import": "./dist/primitives/scroll-area/index.js"
     },
     "./select": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/select/index.d.ts",
       "import": "./dist/primitives/select/index.js"
     },
     "./session-list-item": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/session-list-item/index.d.ts",
       "import": "./dist/primitives/session-list-item/index.js"
     },
     "./session-timeline": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/session-timeline/index.d.ts",
       "import": "./dist/primitives/session-timeline/index.js"
     },
     "./sheet": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/sheet/index.d.ts",
       "import": "./dist/primitives/sheet/index.js"
     },
     "./sidebar": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/sidebar/index.d.ts",
       "import": "./dist/primitives/sidebar/index.js"
     },
     "./skeleton": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/skeleton/index.d.ts",
       "import": "./dist/primitives/skeleton/index.js"
     },
     "./skill-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/skill-card/index.d.ts",
       "import": "./dist/primitives/skill-card/index.js"
     },
     "./skill-editor": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/skill-editor/index.d.ts",
       "import": "./dist/composites/skill-editor/index.js"
     },
     "./skills-list": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/skills-list/index.d.ts",
       "import": "./dist/composites/skills-list/index.js"
     },
     "./social-auth-row": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/social-auth-row/index.d.ts",
       "import": "./dist/primitives/social-auth-row/index.js"
     },
     "./stability-bundle-viewer": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/stability-bundle-viewer/index.d.ts",
       "import": "./dist/composites/stability-bundle-viewer/index.js"
     },
     "./stat-tile": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/stat-tile/index.d.ts",
       "import": "./dist/primitives/stat-tile/index.js"
     },
     "./status-dot": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/status-dot/index.d.ts",
       "import": "./dist/primitives/status-dot/index.js"
     },
     "./status-indicator": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/status-indicator/index.d.ts",
       "import": "./dist/composites/status-indicator/index.js"
     },
     "./steps-rail": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/steps-rail/index.d.ts",
       "import": "./dist/primitives/steps-rail/index.js"
     },
     "./sub-agent-dispatch": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/sub-agent-dispatch/index.d.ts",
       "import": "./dist/primitives/sub-agent-dispatch/index.js"
     },
     "./switch": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/switch/index.d.ts",
       "import": "./dist/primitives/switch/index.js"
     },
     "./system-prompt-editor": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/system-prompt-editor/index.d.ts",
       "import": "./dist/primitives/system-prompt-editor/index.js"
     },
     "./table": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/table/index.d.ts",
       "import": "./dist/primitives/table/index.js"
     },
     "./tabs": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/tabs/index.d.ts",
       "import": "./dist/primitives/tabs/index.js"
     },
     "./task-header": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/task-header/index.d.ts",
       "import": "./dist/composites/task-header/index.js"
     },
     "./task-plan": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/task-plan/index.d.ts",
       "import": "./dist/primitives/task-plan/index.js"
     },
     "./terminal-panel": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/terminal-panel/index.d.ts",
       "import": "./dist/primitives/terminal-panel/index.js"
     },
     "./text-prompt": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/text-prompt/index.d.ts",
       "import": "./dist/composites/text-prompt/index.js"
     },
     "./textarea": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/textarea/index.d.ts",
       "import": "./dist/primitives/textarea/index.js"
     },
     "./thinking-level-selector": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/thinking-level-selector/index.d.ts",
       "import": "./dist/primitives/thinking-level-selector/index.js"
     },
     "./timestamp": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/timestamp/index.d.ts",
       "import": "./dist/primitives/timestamp/index.js"
     },
     "./toast": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/toast/index.d.ts",
       "import": "./dist/primitives/toast/index.js"
     },
     "./token-usage-chart": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/token-usage-chart/index.d.ts",
       "import": "./dist/primitives/token-usage-chart/index.js"
     },
     "./tool-call": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/tool-call/index.d.ts",
       "import": "./dist/primitives/tool-call/index.js"
     },
     "./tool-call-card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/tool-call-card/index.d.ts",
       "import": "./dist/primitives/tool-call-card/index.js"
     },
     "./tool-result": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/tool-result/index.d.ts",
       "import": "./dist/primitives/tool-result/index.js"
     },
     "./tools-list": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/tools-list/index.d.ts",
       "import": "./dist/primitives/tools-list/index.js"
     },
     "./tooltip": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/tooltip/index.d.ts",
       "import": "./dist/primitives/tooltip/index.js"
     },
     "./topnav": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/topnav/index.d.ts",
       "import": "./dist/primitives/topnav/index.js"
     },
     "./update-banner": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/primitives/update-banner/index.d.ts",
       "import": "./dist/primitives/update-banner/index.js"
     },
     "./usage-meter": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/composites/usage-meter/index.d.ts",
       "import": "./dist/composites/usage-meter/index.js"
     },
     "./whiteboard": {
-      "types": "./dist/whiteboard/index.d.ts",
+      "types": "./dist/components/primitives/whiteboard/index.d.ts",
       "import": "./dist/whiteboard/index.js"
     },
     "./slide": {
-      "types": "./dist/slide/index.d.ts",
+      "types": "./dist/components/primitives/slide/index.d.ts",
       "import": "./dist/slide/index.js"
     },
     "./slide/plugins/shiki": {
-      "types": "./dist/slide/plugins/shiki/index.d.ts",
+      "types": "./dist/components/primitives/slide/plugins/shiki/index.d.ts",
       "import": "./dist/slide/plugins/shiki/index.js"
     },
     "./slide/plugins/math": {
-      "types": "./dist/slide/plugins/math/index.d.ts",
+      "types": "./dist/components/primitives/slide/plugins/math/index.d.ts",
       "import": "./dist/slide/plugins/math/index.js"
     },
     "./slide/plugins/mermaid": {
-      "types": "./dist/slide/plugins/mermaid/index.d.ts",
+      "types": "./dist/components/primitives/slide/plugins/mermaid/index.d.ts",
       "import": "./dist/slide/plugins/mermaid/index.js"
     },
     "./slide/plugins/emoji": {
-      "types": "./dist/slide/plugins/emoji/index.d.ts",
+      "types": "./dist/components/primitives/slide/plugins/emoji/index.d.ts",
       "import": "./dist/slide/plugins/emoji/index.js"
     },
     "./slide-deck": {
-      "types": "./dist/slide-deck/index.d.ts",
+      "types": "./dist/components/composites/slide-deck/index.d.ts",
       "import": "./dist/slide-deck/index.js"
     },
     "./vite-plugin": {
@@ -597,7 +597,7 @@
     "DESIGN.md"
   ],
   "scripts": {
-    "build": "tsup && tsx scripts/inject-use-client.ts && tsx scripts/regen-subpath-exports.ts",
+    "build": "tsup && tsc -p tsconfig.dts.json && tsx scripts/inject-use-client.ts && tsx scripts/regen-subpath-exports.ts",
     "dev": "ladle serve",
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
