@@ -141,7 +141,8 @@ Garantir que os 45 componentes client emitam `"use client"` no `dist/`, destrava
 `tsup.config.ts` é consumido por `pnpm build`; alterar `esbuildPlugins` afeta TODOS os entries. Risco: interação com `splitting: true` (D2 risk). O gate novo roda em `main()` (linha 898) junto aos demais.
 
 #### TDD
-- **RED:** teste `tests/rsc-smoke/use-client-preserved.test.ts` que faz `pnpm build` (ou lê dist pré-buildado) e asserta que `dist/primitives/agent-event/index.js` (client) começa com `"use client"`. Falha hoje (0 diretivas).
+- **RED:** `test_use_client_preserved_in_dist` — em `tests/rsc-smoke/use-client-preserved.test.ts`:
+  `const head = readFileSync(...).slice(0,14);` então `expect(head).toMatch(/^"use client"/)`. Falha hoje (0 diretivas).
 - **GREEN:** plugin + diretivas → teste passa.
 - **REFACTOR:** extrair a lista de "componentes client" para o gate derivar de AST (presença de hook) em vez de lista hardcoded.
 
@@ -169,7 +170,8 @@ Falhar o build se um componente client não tem `"use client"` no dist.
 - `scripts/validate-quality-gates.ts`.
 
 #### TDD
-- **RED:** teste unitário do gate com um componente client sem diretiva → gate reporta violação.
+- **RED:** `test_gate_flags_client_without_directive` —
+  `const violations = runUseClientGate(fixtureClientNoDirective);` então `expect(violations).toHaveLength(1)`. Falha hoje (gate não existe).
 - **GREEN:** implementação detecta e reporta corretamente.
 
 #### Concurrency tests
@@ -205,7 +207,7 @@ Emitir `data-slot` em todo componente (raiz + sub-partes) e `data-variant`/`data
 Mudança aditiva (novo atributo); não altera comportamento nem superfície de tipos. Risco mecânico mitigado pelo gate.
 
 #### TDD
-- **RED:** para um lote-piloto (button, card, dialog, alert), teste que asserta `screen.getByText(...).closest('[data-slot="card"]')` presente — falha hoje.
+- **RED:** `test_card_emits_data_slot` — `const slot = container.querySelector('[data-slot="card"]');` então `expect(slot).toBeTruthy()` para o lote-piloto (button, card, dialog, alert). Falha hoje (0 data-slot).
 - **GREEN:** adicionar atributos → passa.
 - **REFACTOR:** generalizar para todos via codemod; rodar gate.
 
@@ -237,7 +239,7 @@ Cada subpath público resolve `.d.ts` próprio, não o barrel.
 - `tsup.config.ts`, `package.json` (exports), `scripts/regen-subpath-exports.ts` (já existe — estender).
 
 #### TDD
-- **RED:** teste que importa tipo de `@theokit/ui/button` e verifica que `dist/primitives/button/index.d.ts` existe e exporta `ButtonProps`. Falha hoje.
+- **RED:** `test_subpath_has_own_dts` — `const hasDts = existsSync("dist/primitives/button/index.d.ts");` então `expect(hasDts).toBe(true)`. Falha hoje (só barrel tem types).
 - **GREEN:** dts por-entry → passa.
 - **REFACTOR:** garantir no-OOM (fallback D4 se necessário).
 
@@ -269,8 +271,8 @@ Testar contra a versão anunciada (Tailwind ^4, React 19).
 - `package.json` (devDeps, scripts, exports — remover v3-legacy), `tsup.config.ts` (remover entry v3-legacy), `tailwind.config.ts`, `.github/workflows/*` (matriz React 19).
 
 #### TDD
-- **RED:** `dogfood:v4-real-build` roda contra Tailwind v4 instalado → hoje passa por acaso (preset v3); após remover legacy, garantir build v4 puro.
-- **GREEN:** devDep v4 + ajustes → dogfood verde.
+- **RED:** `test_no_v3_legacy_in_dist` — `expect(existsSync("dist/styles-v3-legacy.css")).toBe(false)` e `expect(devDeps.tailwindcss).toMatch(/^\^?4/)`. Falha hoje (legacy presente, devDep 3.x).
+- **GREEN:** devDep v4 + remover legacy → passa; `pnpm dogfood:v4-real-build` verde.
 
 #### Concurrency tests
 (none — single-threaded)
@@ -296,7 +298,7 @@ Componentes com variação real expõem `variant`/`size` via `cva` e re-exportam
 - Componentes selecionados na auditoria (lista derivada por sub-step desta task), seus testes.
 
 #### TDD
-- **RED:** para cada componente promovido, teste que `<X variant="..."/>` aplica `data-variant` e que `xVariants({variant})` é importável do barrel.
+- **RED:** `test_variant_applies_data_variant` — `const cls = buttonVariants({variant:"primary"});` então `expect(cls).toContain("bg-primary")` (import do barrel) e `const dv = container.querySelector('[data-variant="primary"]'); expect(dv).toBeTruthy()`. Falha hoje p/ componentes sem cva.
 - **GREEN:** refator cva → passa.
 
 #### Concurrency tests
@@ -326,7 +328,7 @@ Fechar as 3 violações a11y conhecidas.
 - `src/components/primitives/agent-stream/*`, `metrics-panel.tsx`, editores Agent/Skill/Rule, `src/test/ladle-axe.test.tsx`.
 
 #### TDD
-- **RED:** `vitest-axe` para cada alvo sem o skip → falha (button-name / duplicate aria-live).
+- **RED:** `test_single_live_region` — `const regions = getAllByRole("status");` então `expect(regions).toHaveLength(1)` no AgentStream; e `const results = await axe(container); expect(results).toHaveNoViolations()` nos editores. Falha hoje (2 live regions / button-name).
 - **GREEN:** correção → axe verde.
 
 #### Concurrency tests
