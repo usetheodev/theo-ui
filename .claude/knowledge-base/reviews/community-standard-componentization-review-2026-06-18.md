@@ -3,7 +3,7 @@
 **Date:** 2026-06-18
 **Reviewers (spawned agents):** 5 (architecture, tests, wiring, cross-validation, domain-frontend) + 3 re-review passes after fixes
 **Diff base:** `f8710e5..HEAD` (develop)
-**Verdict:** **READY_TO_MERGE** (with documented MEDIUM caveats)
+**Verdict:** READY_TO_MERGE (with documented MEDIUM caveats)
 
 ## Findings summary
 
