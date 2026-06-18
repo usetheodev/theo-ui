@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, Copy, X } from "lucide-react";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
@@ -121,6 +123,7 @@ const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(
 
     return (
       <button
+        data-slot="copy-button"
         ref={ref}
         type="button"
         onClick={handleClick}

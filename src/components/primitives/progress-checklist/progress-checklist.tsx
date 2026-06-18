@@ -42,7 +42,12 @@ interface ProgressChecklistProps extends Omit<HTMLAttributes<HTMLDivElement>, "t
  */
 const ProgressChecklist = forwardRef<HTMLDivElement, ProgressChecklistProps>(
   ({ className, title, steps, showProgressBars = true, ...props }, ref) => (
-    <section ref={ref} className={cn("rounded-xl border bg-card p-4", className)} {...props}>
+    <section
+      data-slot="progress-checklist"
+      ref={ref}
+      className={cn("rounded-xl border bg-card p-4", className)}
+      {...props}
+    >
       {title ? (
         <header className="mb-3 flex items-center justify-between">
           <h3 className="font-display text-title-md tracking-tight">{title}</h3>

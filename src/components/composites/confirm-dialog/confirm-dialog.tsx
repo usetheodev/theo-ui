@@ -1,3 +1,5 @@
+"use client";
+
 import { Loader2 } from "lucide-react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
@@ -104,7 +106,7 @@ const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(
 
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <Dialog.Content ref={ref}>
+        <Dialog.Content data-slot="confirm-dialog" ref={ref}>
           <Dialog.Header>
             <Dialog.Title>{title}</Dialog.Title>
             <Dialog.Description>{description}</Dialog.Description>

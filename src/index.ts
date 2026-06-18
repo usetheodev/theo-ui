@@ -525,6 +525,28 @@ export {
   type ApprovalSeverity,
 } from "./components/composites/approval-card/index.js";
 
+// Prompt composites — ask-the-user cards (one question at a time)
+export {
+  ChoicePrompt,
+  type ChoicePromptProps,
+  type ChoicePromptResult,
+  type PromptOption,
+} from "./components/composites/choice-prompt/index.js";
+export {
+  MultiSelectPrompt,
+  type MultiSelectPromptProps,
+  type MultiSelectPromptResult,
+} from "./components/composites/multi-select-prompt/index.js";
+export {
+  TextPrompt,
+  type TextPromptProps,
+  type TextPromptResult,
+} from "./components/composites/text-prompt/index.js";
+export {
+  ConfirmPrompt,
+  type ConfirmPromptProps,
+} from "./components/composites/confirm-prompt/index.js";
+
 // Chat composites
 export {
   ChatComposer,

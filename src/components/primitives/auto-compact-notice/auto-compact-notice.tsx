@@ -49,6 +49,7 @@ const AutoCompactNotice = forwardRef<HTMLElement, AutoCompactNoticeProps>(
     const inLiveRegion = useInLiveRegion();
     return (
       <aside
+        data-slot="auto-compact-notice"
         ref={ref}
         aria-live={inLiveRegion ? undefined : "polite"}
         className={cn(

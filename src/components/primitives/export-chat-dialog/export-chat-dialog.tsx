@@ -1,3 +1,5 @@
+"use client";
+
 import { Download, Loader2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 
@@ -62,6 +64,7 @@ export const ExportChatDialog = forwardRef<HTMLDivElement, ExportChatDialogProps
 
     return (
       <div
+        data-slot="export-chat-dialog"
         ref={ref}
         // biome-ignore lint/a11y/useSemanticElements: custom modal backdrop, not browser <dialog>; aria-modal preserves a11y semantics
         role="dialog"

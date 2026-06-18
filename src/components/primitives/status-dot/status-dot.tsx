@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -87,6 +89,7 @@ const StatusDot = forwardRef<HTMLSpanElement, StatusDotProps>(
     if (!hasVisibleLabel) {
       return (
         <span
+          data-slot="status-dot"
           ref={ref}
           // biome-ignore lint/a11y/useSemanticElements: StatusDot is a generic inline indicator; there is no HTML element with implicit role="status" that is an inline span. The native <output> is block-level and form-bound, which doesn't fit this use case.
           role="status"
@@ -101,6 +104,7 @@ const StatusDot = forwardRef<HTMLSpanElement, StatusDotProps>(
 
     return (
       <span
+        data-slot="status-dot"
         ref={ref}
         aria-label={effectiveAriaLabel}
         className={cn(

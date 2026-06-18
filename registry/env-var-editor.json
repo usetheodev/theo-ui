@@ -11,6 +11,7 @@
     "badge",
     "button",
     "cn",
+    "env",
     "input",
     "tailwind-preset"
   ],

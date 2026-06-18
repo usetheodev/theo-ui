@@ -132,6 +132,7 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
 
     return (
       <form
+        data-slot="chat-composer"
         ref={ref}
         onSubmit={handleSubmit}
         className={cn(

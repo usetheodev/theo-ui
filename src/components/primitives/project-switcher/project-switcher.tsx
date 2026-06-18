@@ -97,6 +97,7 @@ const ProjectSwitcher = forwardRef<HTMLButtonElement, ProjectSwitcherProps>(
 
     return (
       <button
+        data-slot="project-switcher"
         ref={ref}
         type="button"
         onClick={onClick}

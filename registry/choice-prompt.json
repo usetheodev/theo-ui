@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "choice-prompt",
+  "type": "registry:block",
+  "title": "ChoicePrompt",
+  "description": "Single-select ask-the-user card with number-key shortcuts, an Other free-text option, and a side-by-side preview pane.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "cn",
+    "input",
+    "label",
+    "prompt",
+    "radio-group",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/composites/choice-prompt/choice-prompt.tsx",
+      "type": "registry:block",
+      "target": "components/blocks/choice-prompt.tsx"
+    }
+  ]
+}

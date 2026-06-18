@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import type { JSX, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -54,7 +56,7 @@ function Toaster({ children, position = "bottom-right", className }: ToasterProp
   const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
 
   return (
-    <ToastContext.Provider value={value}>
+    <ToastContext.Provider data-slot="toaster" value={value}>
       <Toast.Provider swipeDirection="right" duration={5000}>
         {children}
         {toasts.map((t) => (

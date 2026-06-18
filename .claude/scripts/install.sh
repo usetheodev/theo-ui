@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs the plan 4+1 cycle ecosystem into a target project as a plugin install
+# Installs the Cycle 6+1 pipeline ecosystem into a target project as a plugin install
 # (target/.claude/ layout). Hooks auto-detect the layout, so target/.claude/* is
 # picked up identically to the standalone repo.
 #
@@ -59,7 +59,7 @@ if [ -d "$ECO" ] && [ "$FORCE" -ne 1 ]; then
   exit 2
 fi
 
-echo "==> Installing plan ecosystem"
+echo "==> Installing Cycle ecosystem"
 echo "    source: $SRC_DIR"
 echo "    target: $ECO"
 

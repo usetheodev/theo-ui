@@ -1,3 +1,5 @@
+"use client";
+
 import { Search } from "lucide-react";
 import { forwardRef, useMemo, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
@@ -36,6 +38,7 @@ const SkillsList = forwardRef<HTMLDivElement, SkillsListProps>(
 
     return (
       <section
+        data-slot="skills-list"
         ref={ref}
         className={cn("grid gap-3", className)}
         aria-label="Available skills"

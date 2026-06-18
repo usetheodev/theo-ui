@@ -72,6 +72,7 @@ interface PreviewEnvCardProps extends HTMLAttributes<HTMLDivElement> {
 const PreviewEnvCard = forwardRef<HTMLDivElement, PreviewEnvCardProps>(
   ({ className, env, actions, ...props }, ref) => (
     <article
+      data-slot="preview-env-card"
       ref={ref}
       className={cn(
         "rounded-xl border bg-card p-5 shadow-sm",

@@ -24,13 +24,18 @@ const ToolResult = forwardRef<HTMLDivElement, ToolResultProps>(
   ({ className, variant = "text", children, ...props }, ref) => {
     if (variant === "text") {
       return (
-        <div ref={ref} className={cn("text-body-sm text-muted-foreground", className)} {...props}>
+        <div
+          data-slot="tool-result"
+          ref={ref}
+          className={cn("text-body-sm text-muted-foreground", className)}
+          {...props}
+        >
           {children}
         </div>
       );
     }
     return (
-      <div ref={ref} className={className} {...props}>
+      <div data-slot="tool-result" ref={ref} className={className} {...props}>
         <pre
           className={cn(
             "overflow-x-auto whitespace-pre-wrap font-mono text-code-sm",

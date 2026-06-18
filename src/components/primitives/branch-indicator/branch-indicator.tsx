@@ -20,6 +20,7 @@ export const BranchIndicator = forwardRef<HTMLSpanElement, BranchIndicatorProps>
     if (!Number.isInteger(branchCount) || branchCount < 2) return null;
     return (
       <span
+        data-slot="branch-indicator"
         ref={ref}
         className={cn(
           "inline-flex items-center rounded-full border border-border bg-muted",

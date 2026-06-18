@@ -97,6 +97,7 @@ const AgentStream = forwardRef<HTMLDivElement, AgentStreamProps>(
     // own aria-live (which would cause double announcements).
     <LiveRegionProvider value={true}>
       <div
+        data-slot="agent-stream"
         ref={ref}
         role="log"
         aria-live="polite"

@@ -66,7 +66,12 @@ interface MetricsPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"
  */
 const MetricsPanel = forwardRef<HTMLDivElement, MetricsPanelProps>(
   ({ className, title, description, metrics, columns, ...props }, ref) => (
-    <div ref={ref} className={cn("rounded-xl border bg-card p-5 shadow-sm", className)} {...props}>
+    <div
+      data-slot="metrics-panel"
+      ref={ref}
+      className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
+      {...props}
+    >
       {title || description ? (
         <header className="mb-4 grid gap-0.5">
           {title ? <h3 className="font-display text-title-md tracking-tight">{title}</h3> : null}

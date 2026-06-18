@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertCircle, Loader2 } from "lucide-react";
 import { forwardRef, useEffect } from "react";
 import type { ElementType, ReactNode } from "react";
@@ -163,6 +165,7 @@ const PageShell = forwardRef<HTMLElement, PageShellProps>(
 
     return (
       <main
+        data-slot="page-shell"
         ref={ref}
         aria-busy={loading || undefined}
         className={cn("flex flex-col gap-6", className)}

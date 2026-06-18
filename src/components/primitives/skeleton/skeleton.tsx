@@ -29,6 +29,7 @@ const Skeleton = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     const inLiveRegion = useInLiveRegion();
     return (
       <div
+        data-slot="skeleton"
         ref={ref}
         role={inLiveRegion ? undefined : "status"}
         aria-live={inLiveRegion ? undefined : "polite"}

@@ -54,6 +54,8 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, CheckboxP
     const iconClass = iconClassBySize[size ?? "md"];
     return (
       <CheckboxPrimitive.Root
+        data-slot="checkbox"
+        data-size={size}
         ref={ref}
         className={cn(checkboxVariants({ size }), className)}
         {...props}

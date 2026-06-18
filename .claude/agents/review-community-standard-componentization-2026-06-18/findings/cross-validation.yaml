@@ -1,0 +1,167 @@
+agent: review-community-standard-componentization-cross-validation
+review_target: f8710e5..HEAD for plan community-standard-componentization
+plan: .claude/knowledge-base/plans/community-standard-componentization-plan.md
+implementation_summary: .claude/knowledge-base/implementations/community-standard-componentization-implementation.md
+
+plan_tasks_summary:
+  total_tasks: 7        # T1.1, T1.2, T2.1, T3.1, T4.1, T5.1, T6.1
+  fully_implemented: 6  # T1.1, T1.2, T2.1, T3.1, T5.1, T6.1
+  partial: 0
+  missing: 1            # T4.1 (Phase 4 — Tailwind v4 / React 19 matrix) — genuinely toolchain-blocked
+  diverged: 0
+
+acceptance_criteria_summary:
+  total: 21
+  satisfied: 18
+  unverified: 0
+  false_claims: 0
+  blocked: 3            # all in T4.1 (devDep tailwind@^4, CI React 19, v3-legacy removed)
+
+adr_compliance:
+  total_adrs: 4         # D1 data-slot, D2 use-client plugin, D3 keep forwardRef, D4 dts per subpath
+  respected: 4
+  diverged_without_new_adr: 0
+  notes: |
+    D1 (data-slot universal): respected — 9 cva components also emit data-variant/data-size (plan ADR D1).
+    D2 (preserve "use client"): IMPLEMENTATION DIVERGED ON MECHANISM but with a documented, justified
+      reason recorded in the implementation summary + the RSC test docstring. Plan ADR D2 specified
+      `esbuild-plugin-preserve-directives`. The shipped solution instead post-processes the build with
+      `scripts/inject-use-client.ts` because esbuild strips module-level directives under `splitting: true`.
+      This is a HOW-divergence, but: (a) the ADR's INTENT (per-module directive, never global banner) is
+      preserved; (b) the rejected alternative (global banner) was still rejected; (c) the divergence is
+      explicitly documented in the RSC test file header and the implementation summary. Per cycle-review
+      Step F this is a documented divergence, not a silent one — downgraded to LOW.
+    D3 (keep forwardRef): respected — no mass forwardRef migration; button.tsx still uses forwardRef.
+    D4 (dts per subpath): respected with documented fallback — plan D4 anticipated OOM and authorized a
+      fallback; impl used `tsc -p tsconfig.dts.json` instead of tsup dts.entry after confirming the
+      rollup-plugin-dts OOM at 130+ entries. The plan explicitly authorized "particionar"/fallback.
+
+plan_drift:
+  plan_edited_after_implement: false
+  details: |
+    Plan last modified at commit 32a5b2b 2026-06-18 08:09:56 -0300.
+    First implementation commit 5ace8bd 2026-06-18 10:10:19 -0300 (2h after plan froze).
+    Plan was FROZEN before /implement started. No drift. Review is reliable.
+
+verified_claims:
+  - claim: "Phase 4 (T4.1) is toolchain-BLOCKED, not skipped"
+    verdict: TRUE
+    evidence: |
+      - package.json devDep tailwindcss STILL `^3.4.17`; peer `^4.0.0` (the unvalidated promise stands).
+      - dist/styles-v3-legacy.css STILL present; exports['./styles-v3-legacy.css'] + exports['./preset'] present.
+      - playground/vite.config.ts:70 calls `tailwindcss({...})` as a v3 PostCSS plugin (v4 needs @tailwindcss/postcss).
+      - src/styles/tailwind-preset.ts:30,174 imports `tailwindcss-animate` as a JS plugin (v4 replacement is CSS @import).
+      - No T4.1 / tailwind-v4 / react-19 / v3-legacy-removal commit exists in f8710e5..HEAD.
+      The cascade described in the summary (PostCSS API change, tailwindcss-animate JS-plugin, v3-legacy wiring,
+      visual re-baseline) is real and verifiable. This is a genuine dedicated migration cycle, not a skip.
+  - claim: "Phase 6 (a11y) already satisfied by prior 2026-05-16 work; no change fabricated"
+    verdict: TRUE
+    evidence: |
+      - agent-streaming inLiveRegion guard + metrics-panel aria-label both landed in commit 39d0416 2026-05-16
+        (BEFORE the f8710e5 baseline of 2026-06-16). git log -S confirms.
+      - In this diff (f8710e5..HEAD) the only change to these files is an additive `data-slot=` attribute
+        (verified via git diff). NO a11y attribute was newly added and claimed as this-feature's work.
+      - `pnpm quality:a11y` re-run: 307/307 PASS. The summary did NOT fabricate any a11y fix.
+  - claim: "consumer-facing dist/components.css already built with Tailwind v4"
+    verdict: TRUE
+    evidence: devDep `@tailwindcss/cli@^4.3.0`; scripts/build-precompiled-css.ts resolves the v4 CLI binary.
+  - claim: "RSC smoke 5/5; use client preserved on subpath + barrel; button NOT client; barrel not global client"
+    verdict: TRUE
+    evidence: |
+      tests/rsc-smoke/use-client-preserved.test.ts re-run = 5/5 PASS. Test is rigorous: asserts
+      agent-event entry+chunk carry directive, button does NOT, barrel is not global-client, and no orphan
+      client chunk. 37 JS entry shims + 121 dist files carry the directive. quality:structure gate PASS.
+
+findings:
+  - id: F-xval-1
+    severity: BLOCKER
+    file: .claude/knowledge-base/plans/community-standard-componentization-plan.md
+    line: 363
+    plan_ref: Global Definition of Done — "pnpm quality:gates verde" + T4.1 DoD ("pnpm quality:gates verde; CHANGELOG § Removed/Changed")
+    summary: >
+      Phase 4 / T4.1 (Tailwind v4 devDep + React 19 matrix + remove v3-legacy) is NOT implemented.
+      The plan's Coverage Matrix rows 5 and 6 map exclusively to T4.1 and remain unresolved, so the
+      plan is NOT 100% delivered. The implementation summary is HONEST about this (labels it BLOCKED with
+      verifiable evidence), but the plan-as-contract is incomplete: 1 of 7 tasks and 2 of 11 coverage rows
+      are open.
+    evidence: |
+      - devDep tailwindcss still `^3.4.17` (T4.1 AC: `tailwindcss@^4`) — NOT met.
+      - dist/styles-v3-legacy.css + exports still present (T4.1 AC: removed) — NOT met.
+      - No React 19 CI matrix job added (T4.1 AC) — NOT met.
+      - No implementing commit in f8710e5..HEAD.
+    recommended_action: >
+      Do NOT mark the plan IMPLEMENTATION_COMPLETE. Either (a) split T4.1 into a separate
+      `/to-plan tailwind-v4-migration` cycle and re-scope this plan's DoD to 5 phases via an ADR/plan
+      amendment recording the deferral, or (b) implement T4.1. The honest BLOCKED report is acceptable
+      per Unbreakable Rule 3, but the plan's Global DoD line 363 and Coverage Matrix must be reconciled
+      (currently 9/11 rows delivered, not 11/11). This is the gate decision for the human, not a silent pass.
+
+  - id: F-xval-2
+    severity: MEDIUM
+    file: src/components/composites/agent-editor/agent-editor.tsx.uc
+    line: 1
+    plan_ref: Global DoD line 369 (file budget / no stray artifacts) + cycle-review hard gate (no stray *.bak/*.tmp)
+    summary: >
+      A stray 307-line tracked artifact `agent-editor.tsx.uc` was committed in 5ace8bd (Phase 1). It is a
+      near-duplicate of agent-editor.tsx (308 lines) — a leftover from the use-client injection process.
+      It is unreferenced (no import), undocumented, and inflates the "client component" grep to 47 (the
+      real client .tsx count is 46; plan/summary said 45). Scope-creep debris that escaped the structure
+      gate only because `.uc` is not in the `*.bak`/`*.json.tmp` denylist.
+    evidence: |
+      - git log --diff-filter=A: introduced in 5ace8bd.
+      - wc -l: 307 (.uc) vs 308 (.tsx); content head identical ("use client"; import { useState }).
+      - grep for references: none found in src/ or scripts/.
+      - git ls-files confirms it is TRACKED (committed, not just working-tree dirt).
+    recommended_action: >
+      Delete src/components/composites/agent-editor/agent-editor.tsx.uc and add `*.uc` to the structure
+      gate's stray-artifact denylist (alongside *.bak / *.json.tmp) so the inject-use-client process
+      cannot re-commit this debris. Commit as a cleanup fix referencing T1.1.
+
+  - id: F-xval-3
+    severity: LOW
+    file: scripts/inject-use-client.ts
+    line: 1
+    plan_ref: ADR D2 (Decisão — esbuild-plugin-preserve-directives)
+    summary: >
+      ADR D2 mandated `esbuild-plugin-preserve-directives` as the mechanism. The shipped solution instead
+      post-processes the build with a custom `scripts/inject-use-client.ts`. This is a HOW-divergence from
+      the named ADR decision. It is DOCUMENTED (RSC test header + implementation summary explain esbuild
+      strips directives under `splitting: true`, which is why the plugin path was abandoned), so it is not a
+      silent override — and the ADR's intent (per-module directive, reject global banner) is preserved.
+    evidence: |
+      - tsup.config.ts has no `esbuildPlugins: [preserveDirectives()]` (the plan's declared edit).
+      - scripts/inject-use-client.ts (4928 bytes) does the work post-build; RSC test header documents why.
+      - RSC test verifies the OUTCOME (directive present, no orphan, button server-safe) regardless of mechanism.
+    recommended_action: >
+      Acceptable as-is per cycle-review (documented divergence with outcome verified). For full ADR hygiene,
+      add a one-line note to the plan's ADR D2 (or an implementation ADR) recording that the plugin approach
+      was empirically abandoned because esbuild strips directives under code-splitting, and the post-build
+      inject script is the chosen replacement. Outcome is correct; only the paper trail on the ADR is thin.
+
+  - id: F-xval-4
+    severity: LOW
+    file: .claude/knowledge-base/implementations/community-standard-componentization-implementation.md
+    line: 5
+    plan_ref: Status header — "5 of 6 phases delivered"
+    summary: >
+      The summary frames the work as "5 of 6 phases" but the plan defines 7 TASKS across 6 phases (T1.1 and
+      T1.2 are both in Phase 1). The 5/6 phase framing is accurate at phase granularity; just noting that at
+      task granularity it is 6/7 tasks delivered (T1.1, T1.2, T2.1, T3.1, T5.1, T6.1 done; T4.1 blocked).
+      No false claim — purely a granularity note so downstream gates count consistently.
+    evidence: |
+      Plan tasks: T1.1, T1.2 (Phase 1), T2.1 (Phase 2), T3.1 (Phase 3), T4.1 (Phase 4), T5.1 (Phase 5),
+      T6.1 (Phase 6). 6 done, 1 blocked.
+    recommended_action: No action required; informational. Keep using task IDs (T*) for gate accounting.
+
+cross_validation_summary: >
+  7 plan tasks: 6 DONE (T1.1, T1.2, T2.1, T3.1, T5.1, T6.1), 1 BLOCKED (T4.1 — Tailwind v4 / React 19
+  matrix), 0 MISSING-without-reason, 0 DIVERGED-silently. Every claim in the implementation summary was
+  verified against reality and HELD: Phase 4 is genuinely toolchain-blocked (devDep still 3.4.17, v3-legacy
+  artifacts present, playground on v3 PostCSS API, tailwindcss-animate JS plugin) — not a skip dressed as a
+  block. Phase 6 a11y is genuinely pre-satisfied by commit 39d0416 (2026-05-16, before baseline) — no
+  fabricated fix; quality:a11y re-run is 307/307. RSC smoke 5/5, structure gate green, per-subpath dts 4/4
+  all reproduce. No plan drift (plan froze 08:09, implement started 10:10). The single integrity defect is a
+  committed stray `.tsx.uc` artifact (F-xval-2, MEDIUM). One BLOCKER is procedural (F-xval-1): the plan is
+  the contract and it is 6/7 tasks / 9/11 coverage rows delivered — the human must reconcile the Global DoD
+  (re-scope T4.1 into a separate migration cycle via ADR, or implement it) before declaring the plan COMPLETE.
+  The implementation summary is exemplary in honesty; the gap is a plan-completeness reconciliation, not a lie.

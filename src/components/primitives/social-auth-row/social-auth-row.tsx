@@ -28,6 +28,7 @@ interface SocialAuthRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSel
 const SocialAuthRow = forwardRef<HTMLDivElement, SocialAuthRowProps>(
   ({ className, providers, onSelect, vertical, ...props }, ref) => (
     <div
+      data-slot="social-auth-row"
       ref={ref}
       className={cn(
         "grid gap-2",

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "prompt",
+  "type": "registry:lib",
+  "title": "Prompt option helpers",
+  "description": "Shared option type + helpers (PromptOption, Other-value, number-key mapping) used by the prompt composites.",
+  "files": [
+    {
+      "path": "lib/prompt.ts",
+      "type": "registry:lib",
+      "target": "lib/prompt.ts"
+    }
+  ]
+}

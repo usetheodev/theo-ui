@@ -50,6 +50,7 @@ const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
     const effectiveLive = inLiveRegion ? "off" : live;
     return (
       <div
+        data-slot="terminal-panel"
         ref={ref}
         className={cn("overflow-hidden rounded-xl border bg-card", className)}
         {...props}

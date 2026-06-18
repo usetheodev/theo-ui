@@ -22,6 +22,7 @@ const Content = forwardRef<
 >(({ className, sideOffset = 6, ...props }, ref) => (
   <TooltipPrimitive.Portal>
     <TooltipPrimitive.Content
+      data-slot="tooltip-content"
       ref={ref}
       sideOffset={sideOffset}
       className={cn(

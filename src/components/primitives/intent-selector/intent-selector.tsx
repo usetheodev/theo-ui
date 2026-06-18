@@ -33,6 +33,7 @@ const IntentSelector = forwardRef<HTMLButtonElement, IntentSelectorProps>(
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <button
+            data-slot="intent-selector"
             ref={ref}
             type="button"
             className={cn(

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * `<SlideDeck.PresenterView>` — inline split-screen panel.
  *

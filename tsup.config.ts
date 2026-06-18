@@ -98,20 +98,14 @@ export default defineConfig({
   // lacking a sibling .d.ts. Trade-off: slightly larger types resolved
   // per subpath import, but build completes and the JS dist (where
   // tree-shaking actually happens) is correct.
-  dts: {
-    entry: {
-      index: "src/index.ts",
-      "whiteboard/index": "src/components/primitives/whiteboard/index.ts",
-      "slide/index": "src/components/primitives/slide/index.ts",
-      "slide/plugins/shiki/index": "src/components/primitives/slide/plugins/shiki/index.ts",
-      "slide/plugins/math/index": "src/components/primitives/slide/plugins/math/index.ts",
-      "slide/plugins/mermaid/index": "src/components/primitives/slide/plugins/mermaid/index.tsx",
-      "slide/plugins/emoji/index": "src/components/primitives/slide/plugins/emoji/index.ts",
-      "slide-deck/index": "src/components/composites/slide-deck/index.ts",
-      "vite-plugin": "src/vite-plugin.ts",
-      "preset-v3-legacy": "src/preset-v3-legacy.ts",
-    },
-  },
+  // Per-subpath `.d.ts` (community-standard-componentization T3.1) is emitted
+  // SEPARATELY by `tsc --emitDeclarationOnly` (see `scripts/emit-dts.ts`,
+  // wired into `package.json#build`). tsup's rollup-plugin-dts OOMs at 130+
+  // entries (ERR_WORKER_OUT_OF_MEMORY — the worker pool does not inherit
+  // --max-old-space; confirmed with `resolve:false` + 8 GB heap), so the
+  // declaration build is delegated to tsc which scales fine. tsup itself
+  // emits ONLY the JS here. `dts: false` keeps tsup off the type graph.
+  dts: false,
   sourcemap: true,
   clean: true,
   // Brief #4 D3 — flip splitting on so shared utilities (cn, themes,
@@ -119,6 +113,12 @@ export default defineConfig({
   // of inlining into every per-component bundle.
   splitting: true,
   treeshake: true,
+  // RSC: `"use client"` preservation is handled POST-build by
+  // `scripts/inject-use-client.ts` (wired into onSuccess below). esbuild strips
+  // module-level directives during its own bundle pass when `splitting: true`
+  // ("Module level directives cause errors when bundled ... was ignored"), so a
+  // load-time plugin cannot win — the directive must be re-injected into the
+  // output shims + component chunks after esbuild finishes. See plan ADR D2.
   // EC-1 fix (revised) — keep esbuild's default chunk naming (`chunk-
   // <hash>.js`). The first attempt at `_chunks/[name]` collided because
   // esbuild assigns the same auto-name "chunk" to many shared chunks

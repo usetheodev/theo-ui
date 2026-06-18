@@ -23,6 +23,7 @@ const AgentStartingState = forwardRef<HTMLOutputElement, AgentStartingStateProps
     const inLiveRegion = useInLiveRegion();
     return (
       <output
+        data-slot="agent-starting-state"
         ref={ref}
         aria-live={inLiveRegion ? undefined : "polite"}
         className={cn(

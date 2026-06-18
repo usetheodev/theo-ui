@@ -18,6 +18,7 @@ interface LabelProps extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root
 const Label = forwardRef<ElementRef<typeof LabelPrimitive.Root>, LabelProps>(
   ({ className, required, children, ...props }, ref) => (
     <LabelPrimitive.Root
+      data-slot="label"
       ref={ref}
       className={cn(
         "inline-flex items-center gap-1 font-medium font-sans text-body-sm text-foreground",

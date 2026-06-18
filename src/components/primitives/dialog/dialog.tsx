@@ -30,6 +30,7 @@ const Overlay = forwardRef<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
+    data-slot="dialog-overlay"
     ref={ref}
     className={cn(
       "fixed inset-0 z-50 bg-background/80",
@@ -51,6 +52,7 @@ const Content = forwardRef<ElementRef<typeof DialogPrimitive.Content>, ContentPr
     <DialogPrimitive.Portal>
       <Overlay />
       <DialogPrimitive.Content
+        data-slot="dialog-content"
         ref={ref}
         className={cn(
           "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-50 w-full max-w-lg",
@@ -105,6 +107,7 @@ type TitleProps = ComponentPropsWithoutRef<typeof DialogPrimitive.Title>;
 const Title = forwardRef<ElementRef<typeof DialogPrimitive.Title>, TitleProps>(
   ({ className, ...props }, ref) => (
     <DialogPrimitive.Title
+      data-slot="dialog-title"
       ref={ref}
       className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
       {...props}
@@ -118,6 +121,7 @@ const Description = forwardRef<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
+    data-slot="dialog-description"
     ref={ref}
     className={cn("text-body-sm text-muted-foreground", className)}
     {...props}

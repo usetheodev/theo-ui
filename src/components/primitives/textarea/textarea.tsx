@@ -44,6 +44,8 @@ export interface TextareaProps
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, rows = 3, size, ...props }, ref) => (
     <textarea
+      data-slot="textarea"
+      data-size={size}
       ref={ref}
       rows={rows}
       className={cn(textareaVariants({ size }), className)}

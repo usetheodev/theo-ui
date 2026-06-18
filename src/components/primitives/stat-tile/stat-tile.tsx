@@ -76,6 +76,7 @@ const StatTile = forwardRef<HTMLElement, StatTileProps>(
     if (isInteractive) {
       return (
         <button
+          data-slot="stat-tile"
           ref={ref as React.Ref<HTMLButtonElement>}
           type="button"
           onClick={onClick}
@@ -94,6 +95,7 @@ const StatTile = forwardRef<HTMLElement, StatTileProps>(
 
     return (
       <div
+        data-slot="stat-tile"
         ref={ref as React.Ref<HTMLDivElement>}
         className={cn("rounded-xl border border-border/40 bg-card p-5", className)}
       >

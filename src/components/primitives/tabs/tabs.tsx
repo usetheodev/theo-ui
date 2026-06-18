@@ -15,6 +15,7 @@ const List = forwardRef<
   ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
+    data-slot="tabs-list"
     ref={ref}
     className={cn(
       "inline-flex h-10 items-center border-border/40 border-b text-muted-foreground",
@@ -30,6 +31,7 @@ const Trigger = forwardRef<
   ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
+    data-slot="tabs-trigger"
     ref={ref}
     className={cn(
       "relative inline-flex h-10 items-center justify-center whitespace-nowrap px-4",
@@ -53,6 +55,7 @@ const Content = forwardRef<
   ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
+    data-slot="tabs-content"
     ref={ref}
     className={cn(
       "mt-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",

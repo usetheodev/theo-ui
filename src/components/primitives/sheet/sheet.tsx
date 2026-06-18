@@ -31,6 +31,7 @@ const Overlay = forwardRef<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
+    data-slot="sheet-overlay"
     ref={ref}
     className={cn(
       "fixed inset-0 z-50 bg-background/80",
@@ -75,6 +76,7 @@ const Content = forwardRef<ElementRef<typeof DialogPrimitive.Content>, ContentPr
     <DialogPrimitive.Portal>
       <Overlay />
       <DialogPrimitive.Content
+        data-slot="sheet-content"
         ref={ref}
         className={cn(sheetVariants({ side }), className)}
         {...props}
@@ -128,6 +130,7 @@ const Title = forwardRef<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
+    data-slot="sheet-title"
     ref={ref}
     className={cn("font-display text-foreground text-title-lg tracking-tight", className)}
     {...props}
@@ -140,6 +143,7 @@ const Description = forwardRef<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
+    data-slot="sheet-description"
     ref={ref}
     className={cn("text-body-sm text-muted-foreground", className)}
     {...props}

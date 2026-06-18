@@ -28,6 +28,7 @@ const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
     ref,
   ) => (
     <div
+      data-slot="empty-state"
       ref={ref}
       className={cn(
         "grid place-items-center gap-3 rounded-2xl border bg-card px-6 py-12 text-center",

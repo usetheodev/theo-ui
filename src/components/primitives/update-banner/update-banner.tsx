@@ -35,6 +35,7 @@ export const UpdateBanner = forwardRef<HTMLDivElement, UpdateBannerProps>(
   ) => {
     return (
       <div
+        data-slot="update-banner"
         ref={ref}
         role="alert"
         aria-live="polite"

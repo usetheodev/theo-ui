@@ -42,6 +42,7 @@ const ScrollAreaRoot = forwardRef<ElementRef<typeof ScrollAreaPrimitive.Root>, S
     ref,
   ) => (
     <ScrollAreaPrimitive.Root
+      data-slot="scroll-area"
       ref={ref}
       type={type}
       className={cn("relative overflow-hidden", className)}
@@ -78,6 +79,7 @@ const ScrollBar = forwardRef<
   ScrollBarProps
 >(({ className, orientation = "vertical", size = "thin", ...props }, ref) => (
   <ScrollAreaPrimitive.ScrollAreaScrollbar
+    data-slot="scroll-area-bar"
     ref={ref}
     orientation={orientation}
     className={cn(

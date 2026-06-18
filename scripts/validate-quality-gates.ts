@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 import { execSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { readFileSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
@@ -895,6 +895,103 @@ async function validateNoLiteralTailwindColors(): Promise<void> {
   fail("components:tokens", `\n${formatViolations(violations)}`);
 }
 
+/**
+ * RSC gate — every client component (source uses a React hook or already
+ * declares `"use client"`) MUST carry the `"use client"` directive at the top
+ * of its built subpath entry shim under `dist/`. Without it, consumers in
+ * Next.js App Router get a "useState only works in a Client Component" error
+ * when importing `@theokit/ui` via npm. The directive is injected post-build by
+ * `scripts/inject-use-client.ts` (esbuild strips it during `splitting`). This
+ * gate is the regression guard. Skips gracefully when `dist/` is absent.
+ */
+async function validateUseClientDirective(): Promise<void> {
+  const distRoot = join(ROOT, "dist");
+  if (!existsSync(distRoot)) return;
+
+  const hookRe =
+    /\b(useState|useEffect|useRef|useContext|useReducer|useImperativeHandle|useId|useLayoutEffect|useSyncExternalStore|createContext)\b/;
+
+  const sourceIsClient = (srcDir: string): boolean => {
+    if (!existsSync(srcDir)) return false;
+    const stack = [srcDir];
+    while (stack.length > 0) {
+      const dir = stack.pop() as string;
+      for (const dirent of readdirSync(dir, { withFileTypes: true })) {
+        const p = join(dir, dirent.name);
+        if (dirent.isDirectory()) {
+          stack.push(p);
+          continue;
+        }
+        if (!dirent.name.endsWith(".tsx")) continue;
+        if (dirent.name.includes(".test.") || dirent.name.includes(".stories.")) continue;
+        const txt = readFileSync(p, "utf-8");
+        const head = txt.split("\n").slice(0, 2).join("\n");
+        if (head.includes("use client") || hookRe.test(txt)) return true;
+      }
+    }
+    return false;
+  };
+
+  for (const layer of ["primitives", "composites"] as const) {
+    const layerDist = join(distRoot, layer);
+    const layerSrc = join(ROOT, "src/components", layer);
+    if (!existsSync(layerDist)) continue;
+    for (const dirent of readdirSync(layerDist, { withFileTypes: true })) {
+      if (!dirent.isDirectory()) continue;
+      const name = dirent.name;
+      if (!sourceIsClient(join(layerSrc, name))) continue;
+      const shim = join(layerDist, name, "index.js");
+      if (!existsSync(shim)) continue;
+      const headText = readFileSync(shim, "utf-8").slice(0, 14);
+      if (!headText.startsWith('"use client"')) {
+        fail(
+          "rsc/use-client",
+          `${layer}/${name} is a client component but dist/${layer}/${name}/index.js lacks the "use client" directive (run \`pnpm build\`).`,
+        );
+      }
+    }
+  }
+}
+
+/**
+ * data-slot gate (shadcn v4 convention) — every component's root source file
+ * MUST emit at least one `data-slot=` attribute so consumers can target/override
+ * styles without depending on Tailwind class order. The root element is named
+ * after the component; compound sub-parts carry `data-slot="<name>-<part>"`.
+ * Reads source (not dist) so it runs without a build.
+ */
+async function validateDataSlot(): Promise<void> {
+  for (const layer of ["primitives", "composites"] as const) {
+    const layerSrc = join(ROOT, "src/components", layer);
+    if (!existsSync(layerSrc)) continue;
+    for (const dirent of readdirSync(layerSrc, { withFileTypes: true })) {
+      if (!dirent.isDirectory()) continue;
+      const name = dirent.name;
+      const root = join(layerSrc, name, `${name}.tsx`);
+      if (!existsSync(root)) continue;
+      const txt = readFileSync(root, "utf-8");
+      if (!txt.includes("data-slot=")) {
+        fail(
+          "design/data-slot",
+          `${layer}/${name} has no \`data-slot\` attribute on its root element (shadcn v4 convention; run \`pnpm tsx scripts/codemod-data-slot.ts\`).`,
+        );
+      }
+      // Naming guard (review F-dom-3): compound sub-parts must be namespaced
+      // (`card-header`, not `header`/`root`). The original codemod derived slot
+      // names from the local const, producing bare/wrong values. `data-slot="root"`
+      // is never valid; flag it so the regression cannot return.
+      for (const m of txt.matchAll(/data-slot="([^"]+)"/g)) {
+        if (m[1] === "root") {
+          fail(
+            "design/data-slot",
+            `${layer}/${name} emits \`data-slot="root"\` — slots are named after the component's displayName (e.g. \`card\`/\`card-header\`), never "root". Run \`pnpm tsx scripts/codemod-data-slot-fix.ts\`.`,
+          );
+        }
+      }
+    }
+  }
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(ROOT, "docs/quality-gates.md"))) {
     fail("docs", "missing docs/quality-gates.md");
@@ -914,6 +1011,8 @@ async function main(): Promise<void> {
   await validateCountConsistency();
   await validateArchitectureCensus();
   await validateAxeCoverage();
+  await validateUseClientDirective();
+  await validateDataSlot();
   await validateNoStrayArtifacts();
   validateDesignSystemFidelity();
   await validateNoLiteralTailwindColors();

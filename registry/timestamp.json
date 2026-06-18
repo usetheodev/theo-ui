@@ -5,7 +5,11 @@
   "title": "Timestamp",
   "description": "Accessible <time> primitive with relative/absolute/both formats, auto-refresh interval (default 60s, 0 disables), native title tooltip with absolute time, and aria-label that always carries the full date. Built on Intl.RelativeTimeFormat (zero deps). value accepts ISO string, Date, or Unix ms (NOT seconds). Invalid date renders empty element; invalid locale falls back to default with dev warning.",
   "dependencies": [],
-  "registryDependencies": ["cn", "tailwind-preset"],
+  "registryDependencies": [
+    "cn",
+    "env",
+    "tailwind-preset"
+  ],
   "files": [
     {
       "path": "components/primitives/timestamp/timestamp.tsx",

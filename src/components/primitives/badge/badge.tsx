@@ -51,7 +51,14 @@ export interface BadgeProps
 
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <span ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props} />
+    <span
+      data-slot="badge"
+      data-variant={variant}
+      data-size={size}
+      ref={ref}
+      className={cn(badgeVariants({ variant, size }), className)}
+      {...props}
+    />
   ),
 );
 Badge.displayName = "Badge";
@@ -73,6 +80,7 @@ const toneClass: Record<NonNullable<BadgeDotProps["tone"]>, string> = {
 const Dot = forwardRef<HTMLSpanElement, BadgeDotProps>(
   ({ className, pulse = false, tone = "success", ...props }, ref) => (
     <span
+      data-slot="badge-dot"
       ref={ref}
       aria-hidden="true"
       className={cn(

@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, Globe, Plus, ShieldCheck, ShieldX, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
@@ -62,6 +64,7 @@ const DomainConfig = forwardRef<HTMLDivElement, DomainConfigProps>(
 
     return (
       <div
+        data-slot="domain-config"
         ref={ref}
         className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
         {...props}

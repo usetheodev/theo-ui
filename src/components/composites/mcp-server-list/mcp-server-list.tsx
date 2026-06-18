@@ -1,3 +1,5 @@
+"use client";
+
 import { Plus } from "lucide-react";
 import { forwardRef, useMemo, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
@@ -47,6 +49,7 @@ const MCPServerList = forwardRef<HTMLDivElement, MCPServerListProps>(
 
     return (
       <section
+        data-slot="mcp-server-list"
         ref={ref}
         className={cn("grid gap-3", className)}
         aria-label="MCP servers"

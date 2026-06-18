@@ -22,6 +22,7 @@ export function ReasoningPart({ part, defaultOpen }: ReasoningPartProps): JSX.El
   const open = defaultOpen ?? isStreaming;
   return (
     <details
+      data-slot="reasoning-part"
       className={cn(
         "my-2 rounded-md border border-border bg-muted/20 px-3 py-2",
         "[&[open]]:bg-muted/40",

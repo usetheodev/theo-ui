@@ -28,6 +28,7 @@ const AttachmentChip = forwardRef<HTMLDivElement, AttachmentChipProps>(
     const Icon: IconComponent = (attachment.type ? typeIcon[attachment.type] : undefined) ?? File;
     return (
       <div
+        data-slot="attachment-chip"
         ref={ref}
         className={cn(
           "inline-flex max-w-[18rem] items-center gap-2 rounded-md border border-border/40 bg-muted/60 px-2 py-1",

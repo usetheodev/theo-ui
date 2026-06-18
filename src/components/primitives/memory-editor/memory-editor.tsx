@@ -51,7 +51,12 @@ const MemoryEditor = forwardRef<HTMLDivElement, MemoryEditorProps>(
     const active = layers.find((l) => l.scope === activeScope);
     const ActiveIcon = active ? SCOPE_META[active.scope].icon : Brain;
     return (
-      <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
+      <section
+        data-slot="memory-editor"
+        ref={ref}
+        className={cn("rounded-xl border bg-card", className)}
+        {...props}
+      >
         <header className="flex items-center justify-between gap-3 border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">
             <Brain className="size-4 text-primary" aria-hidden="true" />

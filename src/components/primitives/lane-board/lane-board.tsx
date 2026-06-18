@@ -55,6 +55,7 @@ const LANE_META: Record<LaneState, { label: string; headerClass: string; cardCla
 const LaneBoard = forwardRef<HTMLDivElement, LaneBoardProps>(
   ({ className, lanes, title, ...props }, ref) => (
     <section
+      data-slot="lane-board"
       ref={ref}
       className={cn("grid gap-3", className)}
       aria-label="Agent lane board"

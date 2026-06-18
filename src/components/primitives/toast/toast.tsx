@@ -65,6 +65,9 @@ interface ToastProps
 const ToastRoot = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>(
   ({ className, variant = "default", size, children, ...props }, ref) => (
     <ToastPrimitive.Root
+      data-slot="toast"
+      data-variant={variant}
+      data-size={size}
       ref={ref}
       className={cn(toastVariants({ variant, size }), className)}
       {...props}
@@ -81,6 +84,7 @@ const ToastTitle = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Title
+    data-slot="toast-title"
     ref={ref}
     className={cn("font-medium text-body-sm text-foreground", className)}
     {...props}
@@ -93,6 +97,7 @@ const ToastDescription = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Description
+    data-slot="toast-description"
     ref={ref}
     className={cn("mt-0.5 text-body-sm text-muted-foreground", className)}
     {...props}
@@ -105,6 +110,7 @@ const ToastClose = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Close>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Close
+    data-slot="toast-close"
     ref={ref}
     className={cn(
       "absolute top-2 right-2 rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:opacity-100",
@@ -125,6 +131,7 @@ const ToastAction = forwardRef<
   ComponentPropsWithoutRef<typeof ToastPrimitive.Action>
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Action
+    data-slot="toast-action"
     ref={ref}
     className={cn(
       "mt-2 inline-flex h-7 items-center rounded-md border border-border/60 bg-card px-2 font-sans text-foreground text-label",

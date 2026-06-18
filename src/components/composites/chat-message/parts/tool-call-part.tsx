@@ -93,6 +93,7 @@ export function ToolCallPart({ part }: ToolCallPartProps): JSX.Element {
 
   return (
     <div
+      data-slot="tool-call-part"
       className={cn("my-3 overflow-hidden rounded-lg border border-border bg-card", "shadow-sm")}
       data-theo-tool-call={part.state}
     >

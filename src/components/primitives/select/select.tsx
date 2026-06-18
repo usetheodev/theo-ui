@@ -63,6 +63,8 @@ interface SelectTriggerProps
 const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
   ({ className, children, size, ...props }, ref) => (
     <SelectPrimitive.Trigger
+      data-slot="select-trigger"
+      data-size={size}
       ref={ref}
       className={cn(selectTriggerVariants({ size }), className)}
       {...props}
@@ -81,6 +83,7 @@ const SelectScrollUpButton = forwardRef<
   ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
+    data-slot="select-scroll-up-button"
     ref={ref}
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
@@ -95,6 +98,7 @@ const SelectScrollDownButton = forwardRef<
   ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
+    data-slot="select-scroll-down-button"
     ref={ref}
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
@@ -110,6 +114,7 @@ const SelectContent = forwardRef<
 >(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
+      data-slot="select-content"
       ref={ref}
       position={position}
       className={cn(
@@ -142,6 +147,7 @@ const SelectLabel = forwardRef<
   ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
+    data-slot="select-label"
     ref={ref}
     className={cn(
       "px-2 py-1.5 font-mono text-label-caps text-muted-foreground uppercase tracking-wider",
@@ -157,6 +163,7 @@ const SelectItem = forwardRef<
   ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
+    data-slot="select-item"
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center gap-2 rounded-md py-1.5 pr-2 pl-7",
@@ -182,6 +189,7 @@ const SelectSeparator = forwardRef<
   ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
+    data-slot="select-separator"
     ref={ref}
     className={cn("-mx-1 my-1 h-px bg-border/40", className)}
     {...props}

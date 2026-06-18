@@ -53,6 +53,7 @@ const MCPServerCard = forwardRef<HTMLElement, MCPServerCardProps>(
     const cfg = STATUS_CONFIG[server.status];
     return (
       <article
+        data-slot="mcp-server-card"
         ref={ref}
         className={cn("grid gap-3 rounded-xl border bg-card p-4", className)}
         {...props}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Plus, Trash2, Zap } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
@@ -57,7 +59,12 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
     };
 
     return (
-      <section ref={ref} className={cn("rounded-xl border bg-card", className)} {...props}>
+      <section
+        data-slot="hook-config"
+        ref={ref}
+        className={cn("rounded-xl border bg-card", className)}
+        {...props}
+      >
         <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">
           <div className="flex items-center gap-2">
             <Zap className="size-4 text-primary" aria-hidden="true" />

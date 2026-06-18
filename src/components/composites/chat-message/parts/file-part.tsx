@@ -26,6 +26,7 @@ export function FilePart({ part }: FilePartProps): JSX.Element {
     if (!safeUrl) {
       return (
         <div
+          data-slot="file-part"
           className={cn(
             "my-2 inline-flex items-center gap-2 rounded-md border border-border bg-muted/30 px-3 py-2",
             "text-body-sm text-muted-foreground",

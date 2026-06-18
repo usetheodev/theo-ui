@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import type { FormEvent, HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -107,6 +109,7 @@ export function AgentEditor({
 
   return (
     <form
+      data-slot="agent-editor"
       onSubmit={handleSubmit}
       className={cn("flex h-full flex-col gap-4", className)}
       {...formProps}

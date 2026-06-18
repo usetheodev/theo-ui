@@ -73,6 +73,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
 
     return (
       <div
+        data-slot="alert"
         ref={ref}
         role={role}
         className={cn(

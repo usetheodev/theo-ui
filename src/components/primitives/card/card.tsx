@@ -1,3 +1,5 @@
+"use client";
+
 import { Slot } from "@radix-ui/react-slot";
 import { createContext, forwardRef, useContext } from "react";
 import type { HTMLAttributes } from "react";
@@ -41,6 +43,7 @@ const Root = forwardRef<HTMLDivElement, CardRootProps>(
   ({ className, size = "md", ...props }, ref) => (
     <CardContext.Provider value={{ size }}>
       <div
+        data-slot="card"
         ref={ref}
         className={cn(
           "rounded-xl border bg-card text-card-foreground shadow-md",
@@ -64,7 +67,12 @@ const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
     return (
-      <div ref={ref} className={cn("flex flex-col", headerPadBySize[size], className)} {...props} />
+      <div
+        data-slot="card-header"
+        ref={ref}
+        className={cn("flex flex-col", headerPadBySize[size], className)}
+        {...props}
+      />
     );
   },
 );
@@ -91,6 +99,7 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>(
     const size = useCardSize();
     return (
       <Comp
+        data-slot="card-title"
         ref={ref}
         className={cn(
           "font-display text-foreground tracking-tight",
@@ -106,7 +115,12 @@ Title.displayName = "Card.Title";
 
 const Description = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-body-sm text-muted-foreground", className)} {...props} />
+    <p
+      data-slot="card-description"
+      ref={ref}
+      className={cn("text-body-sm text-muted-foreground", className)}
+      {...props}
+    />
   ),
 );
 Description.displayName = "Card.Description";
@@ -120,7 +134,14 @@ const bodyPadBySize: Record<CardSize, string> = {
 const Body = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const size = useCardSize();
-    return <div ref={ref} className={cn(bodyPadBySize[size], className)} {...props} />;
+    return (
+      <div
+        data-slot="card-body"
+        ref={ref}
+        className={cn(bodyPadBySize[size], className)}
+        {...props}
+      />
+    );
   },
 );
 Body.displayName = "Card.Body";
@@ -136,6 +157,7 @@ const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     const size = useCardSize();
     return (
       <div
+        data-slot="card-footer"
         ref={ref}
         className={cn(
           "flex items-center border-border/40 border-t",

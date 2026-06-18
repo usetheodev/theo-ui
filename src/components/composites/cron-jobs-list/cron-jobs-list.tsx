@@ -22,6 +22,7 @@ const CronJobsList = forwardRef<HTMLDivElement, CronJobsListProps>(
     ref,
   ) => (
     <section
+      data-slot="cron-jobs-list"
       ref={ref}
       className={cn("grid gap-3", className)}
       aria-label="Scheduled agent jobs"

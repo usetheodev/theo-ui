@@ -77,6 +77,7 @@ const DeploymentRow = forwardRef<HTMLDivElement, DeploymentRowProps>(
     const tone = statusToDotTone[deployment.status];
     return (
       <div
+        data-slot="deployment-row"
         ref={ref}
         className={cn(
           "grid grid-cols-[auto_1fr_auto] items-center gap-4 border-border/40 border-b px-4 py-3",

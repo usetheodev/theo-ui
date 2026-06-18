@@ -1,0 +1,134 @@
+agent: review-community-standard-componentization-wiring
+review_target: f8710e5..HEAD on develop for plan community-standard-componentization
+plan: .claude/knowledge-base/plans/community-standard-componentization-plan.md
+implementation_summary: .claude/knowledge-base/implementations/community-standard-componentization-implementation.md
+
+# This feature is build-tooling + componentization, not a service module. The
+# generic triad (caller/integration-test/runtime-metric) maps to: build-chain
+# wiring (caller), RSC-smoke + per-subpath-dts tests (integration), and the two
+# new quality gates (the "runtime" observability that catches regressions).
+
+wiring_checks:
+  a_inject_use_client_in_build:
+    status: PASS
+    evidence: |
+      package.json#build = "tsup && tsc -p tsconfig.dts.json && tsx scripts/inject-use-client.ts && tsx scripts/regen-subpath-exports.ts"
+      scripts/inject-use-client.ts exists (122 lines), runs as step 3 of build.
+  b_tsc_dts_in_build:
+    status: PASS
+    evidence: |
+      `tsc -p tsconfig.dts.json` is step 2 of package.json#build.
+      tsconfig.dts.json present (emitDeclarationOnly, rootDir src, outDir dist,
+      excludes tests/stories). Emits 140 per-subpath index.d.ts under
+      dist/components/ (verified: find dist/components -name index.d.ts | wc -l = 140).
+  c_new_gates_registered_in_main:
+    status: PASS
+    evidence: |
+      scripts/validate-quality-gates.ts:
+        - validateUseClientDirective defined L907, called L1002 in main()
+        - validateDataSlot defined L963, called L1003 in main()
+      Both called unconditionally (no flag/early-return guarding the call site).
+      quality:structure = "tsx scripts/validate-quality-gates.ts".
+      Live run of the full gate against HEAD+dist: "Quality gate structure
+      validation passed." (exit 0) — both new gates active and green.
+  d_codemods_applied:
+    status: PASS
+    evidence: |
+      data-slot: 0 of 135 root component files (src/components/{primitives,
+      composites}/<name>/<name>.tsx) are missing data-slot=. validateDataSlot
+      passes. Broad-sample spot check (skeleton, tooltip, data-table, timestamp,
+      usage-meter) all OK — applied tree-wide, not just the pilot batch.
+      data-variant/data-size: 9 cva components carry the attributes
+      (avatar, badge, button, checkbox, input, select, switch, textarea, toast),
+      matching the commit 78d50c9 claim of "9 cva components". 3 of the 9 have a
+      variant axis (data-variant: badge, button, toast); the other 6 are size-only
+      (data-size). The earlier-looking discrepancy ("3 data-variant" vs "9
+      components") is honest: not every cva component has a variant axis.
+  e_use_client_survives_to_dist:
+    status: PASS
+    evidence: |
+      Subpath path: dist/primitives/agent-event/index.js starts with "use client".
+      Barrel path: the chunk that shim re-exports (chunk-UVIDWHT6.js) ALSO starts
+      with "use client" — so `@theokit/ui` (barrel) re-export carries the boundary.
+      Server-safe correctness: dist/index.js (barrel) is NOT globally "use client";
+      button/switch (no hooks) shims stay clean. RSC-smoke test 5/5 green, covering
+      BOTH paths + server-safe negatives + a no-orphan check over every
+      barrel-referenced client chunk.
+  f_no_orphan_dead_scripts:
+    status: PASS_WITH_NOTE
+    evidence: |
+      knip (the dead-code authority) flags only 2 PRE-EXISTING items not in this
+      branch's diff: src/lib/markdown/mermaid.tsx and isProd in src/lib/env.ts.
+      All new scripts are wired: inject-use-client.ts (build + tsup comment +
+      gate), sync-exports.ts (called by regen-subpath-exports.ts + sync:exports
+      script + imported by validate-quality-gates.ts), regen-subpath-exports.ts
+      (build step 4), codemod-data-slot.ts (referenced in gate error message),
+      codemod-data-variant.ts (one-shot CLI tool, no programmatic caller by design).
+
+triad_revalidation:
+  total_new_build_artifacts: 5    # inject-use-client, sync-exports, regen-subpath-exports, 2 codemods
+  build_chain_wired: 4 / 4        # tsc-dts, inject-use-client, regen-subpath (->sync-exports) all in build
+  gates_registered_and_green: 2 / 2
+  codemods_applied_verified: 2 / 2
+
+findings:
+  - id: F-wire-1
+    severity: INFO
+    file: tsup.config.ts
+    line: 102
+    plan_ref: T3.1 (.d.ts per subpath)
+    summary: Stale comment references a non-existent script `scripts/emit-dts.ts`; the real wiring uses `tsc -p tsconfig.dts.json` in package.json#build.
+    evidence: |
+      tsup.config.ts:102 comment: "emitted SEPARATELY by `tsc --emitDeclarationOnly`
+      (see `scripts/emit-dts.ts`, wired into `package.json#build`)". No emit-dts.ts
+      exists; package.json#build actually runs `tsc -p tsconfig.dts.json`. The
+      wiring is correct and live — only the comment's filename is stale. No
+      functional impact (dts emission verified: 140 index.d.ts under dist/components).
+    recommended_action: Update the comment to reference `tsc -p tsconfig.dts.json` instead of the non-existent `scripts/emit-dts.ts`. Cosmetic, non-blocking.
+
+  - id: F-wire-2
+    severity: INFO
+    file: scripts/codemod-data-variant.ts
+    line: 1
+    plan_ref: T5.1 (cva/data-variant)
+    summary: codemod-data-variant.ts has no programmatic caller and is not referenced by any other file (codemod-data-slot.ts at least appears in a gate error string).
+    evidence: |
+      grep across package.json/scripts/tsup found zero references to
+      codemod-data-variant. This is BY DESIGN — it is an idempotent one-shot
+      codemod (documented header: "Run via: npx tsx scripts/codemod-data-variant.ts").
+      knip does not flag it (scripts/*.ts are treated as entry points). The
+      result of running it (data-variant/data-size on 9 components) is what is
+      protected going forward — via validateDataSlot's family and the data-variant
+      component tests, not the script itself.
+    recommended_action: None required. Codemods are one-shot historical tooling, correctly not in the build chain. Optionally note them as "applied; retained for reproducibility" in the audit-trail.
+
+  - id: F-wire-3
+    severity: INFO
+    file: scripts/validate-quality-gates.ts
+    line: 909
+    plan_ref: T1.2 (validateUseClientDirective gate)
+    summary: validateUseClientDirective is a no-op when dist/ is absent (`if (!existsSync(distRoot)) return;`), so a standalone `quality:structure` run with no prior build silently skips the RSC regression check.
+    evidence: |
+      L909: `if (!existsSync(distRoot)) return;`. In `quality:gates` this is safe
+      because `pnpm build` always precedes `quality:structure`. The gate's own
+      docstring acknowledges this ("Skips gracefully when dist/ is absent"). The
+      data-slot gate reads source (no build needed), so it is unaffected.
+    recommended_action: Acceptable as designed (matches the RSC-smoke test's skipIf(!hasDist) behavior). No change needed; the gate is real and fires in the full chain.
+
+verdict: WIRING_CONFIRMED
+verdict_rationale: |
+  All six requested wiring points (a-f) verified end-to-end against live
+  artifacts, not just file existence:
+    (a) inject-use-client.ts IS in package.json#build.
+    (b) tsc -p tsconfig.dts.json IS in the build chain and emits 140 per-subpath
+        .d.ts; exports[*].types point at them.
+    (c) validateUseClientDirective + validateDataSlot are registered in main()
+        and run green via quality:structure (live exit 0).
+    (d) codemods applied: 135/135 root files have data-slot; 9 cva components have
+        data-variant/data-size (claim accurate).
+    (e) "use client" survives to dist on BOTH subpath shim AND re-exported barrel
+        chunk; server-safe components correctly stay clean; RSC-smoke 5/5.
+    (f) no orphan/dead new scripts — all wired or one-shot-by-design; knip clean
+        except 2 pre-existing items outside this diff.
+  Three INFO findings (stale comment, one-shot codemod with no caller, dist-absent
+  gate no-op) — all non-blocking, none indicate dead/gamed wiring.

@@ -21,7 +21,12 @@ const RadioGroupRoot = forwardRef<
   ElementRef<typeof RadioGroupPrimitive.Root>,
   ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => (
-  <RadioGroupPrimitive.Root ref={ref} className={cn("grid gap-3", className)} {...props} />
+  <RadioGroupPrimitive.Root
+    data-slot="radio-group"
+    ref={ref}
+    className={cn("grid gap-3", className)}
+    {...props}
+  />
 ));
 RadioGroupRoot.displayName = "RadioGroup";
 
@@ -30,6 +35,7 @@ const RadioGroupItem = forwardRef<
   ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
 >(({ className, ...props }, ref) => (
   <RadioGroupPrimitive.Item
+    data-slot="radio-group-item"
     ref={ref}
     className={cn(
       "aspect-square size-4 rounded-full border border-border bg-card text-primary",

@@ -1,3 +1,5 @@
+"use client";
+
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { AlertCircle } from "lucide-react";
 import {
@@ -88,7 +90,12 @@ const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
     };
     return (
       <FormFieldContext.Provider value={ctx}>
-        <div ref={ref} className={cn("grid", rootGapBySize[size], className)} {...props} />
+        <div
+          data-slot="form-field"
+          ref={ref}
+          className={cn("grid", rootGapBySize[size], className)}
+          {...props}
+        />
       </FormFieldContext.Provider>
     );
   },
@@ -120,6 +127,7 @@ const FormFieldLabel = forwardRef<ElementRef<typeof LabelPrimitive.Root>, FormFi
     const { fieldId, size } = useFormField();
     return (
       <LabelPrimitive.Root
+        data-slot="form-field-label"
         ref={ref}
         htmlFor={fieldId}
         className={cn(
@@ -160,7 +168,7 @@ const FormFieldControl = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
         } as Partial<typeof only.props>)
       : only;
     return (
-      <div ref={ref} {...props}>
+      <div data-slot="form-field-control" ref={ref} {...props}>
         {cloned}
       </div>
     );
@@ -174,6 +182,7 @@ const FormFieldHint = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagr
     if (hasError) return null;
     return (
       <p
+        data-slot="form-field-hint"
         ref={ref}
         id={hintId}
         className={cn("text-muted-foreground", hintFontBySize[size], className)}
@@ -192,6 +201,7 @@ const FormFieldError = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParag
     if (!hasError) return null;
     return (
       <p
+        data-slot="form-field-error"
         ref={ref}
         id={errorId}
         role="alert"

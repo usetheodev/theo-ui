@@ -1,9 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
-  "name": "plan",
+  "name": "cycle",
   "version": "1.0.0",
-  "description": "Stack/domain-agnostic 4+1 cycle planning ecosystem (DISCOVER → PLAN → IMPLEMENT → CODE-QUALITY → REVIEW + AUTO-PLAN orchestrator) for Claude Code. Skills + rules + hooks + commands compose into an unbreakable chain from idea to merge, with TDD discipline, wiring triad enforcement, and honesty gates.",
-  "author": "planning-ecosystem",
+  "description": "Stack/domain-agnostic 6+1 cycle pipeline (ROADMAP → DISCOVER → PLAN → IMPLEMENT → CODE-QUALITY → REVIEW → RELEASE) for Claude Code. Skills + rules + hooks + commands compose into an unbreakable chain from idea to merge, with TDD discipline, wiring triad enforcement, and honesty gates.",
+  "author": "cycle-ecosystem",
   "license": "MIT",
   "keywords": [
     "planning",

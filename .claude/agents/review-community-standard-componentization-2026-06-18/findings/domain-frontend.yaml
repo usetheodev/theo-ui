@@ -1,0 +1,212 @@
+agent: review-community-standard-componentization-domain-frontend
+review_target: f8710e5..HEAD for plan community-standard-componentization
+domain: frontend
+domain_specific_patterns_checked:
+  - "data-slot naming convention (root = component-name kebab; sub-part = name-part) per shadcn v4 / ADR D1"
+  - '"use client" applied only to client components, not server-safe ones (Button verified clean)'
+  - "data-variant / data-size bound to variant/size props on cva components"
+  - "data-slot codemod correctness (no missed component, no wrong slot name)"
+  - "RSC correctness for Next.js App Router consumers (directive preserved in dist)"
+  - "a11y: data-slot is non-semantic, no contrast/aria regression introduced"
+findings:
+  - id: F-dom-1
+    severity: HIGH
+    file: src/components/primitives/card/card.tsx
+    line: 53
+    plan_ref: "ADR D1 — data-slot universal com naming nome/nome-parte (root = nome kebab; sub = nome-parte)"
+    domain_anchor: ".claude/knowledge-base/references/shadcn-ui/apps/v4/registry/new-york-v4/ui/card.tsx:6,21,34 (data-slot=\"card\" / \"card-header\" / \"card-title\")"
+    summary: >
+      Compound components emit BARE sub-part slot names instead of the shadcn v4
+      "<component>-<part>" convention that ADR D1 mandated. Card root is
+      data-slot="root" (never a valid shadcn slot — shadcn uses data-slot="card"),
+      and sub-parts are "header"/"title"/"description"/"body"/"footer" instead of
+      "card-header"/"card-title"/etc. The same defect spans 10 compound files:
+      card, dialog, tabs, table, sidebar, sheet, dropdown-menu, tooltip, topnav,
+      danger-zone. This breaks consumer style-targeting (e.g. shadcn-style
+      `[data-slot=card-header]` selectors won't match) and diverges from the very
+      reference the plan cited line-by-line.
+    evidence: |
+      theo-ui card.tsx (this diff):
+        <div ... data-slot="root" />        // shadcn: data-slot="card"
+        <div ... data-slot="header" />      // shadcn: data-slot="card-header"
+        <Comp ... data-slot="title" />      // shadcn: data-slot="card-title"
+      Scope (bare-name slots):
+        $ grep -rlE 'data-slot="(root|header|title|description|body|footer|content|item|trigger|overlay|list)"' src/components
+        -> card, dialog, tabs, table, sidebar, sheet, dropdown-menu, tooltip, topnav, danger-zone
+        $ grep -rl 'data-slot="root"' src/components  -> topnav, table, sidebar, danger-zone, card
+    recommended_action: >
+      Make the codemod emit qualified names. Root slot = kebab(directory/displayName
+      root) e.g. "card"; sub-part slot = "<root>-<part>" e.g. "card-header". Replace
+      every data-slot="root" with the component name and re-namespace all bare sub-parts.
+      Regenerate the registry afterward (commit d31b589 froze the wrong values into
+      registry items).
+  - id: F-dom-2
+    severity: HIGH
+    file: scripts/codemod-data-slot.ts
+    line: 91
+    plan_ref: "T2.1 — data-slot na raiz + sub-partes dos 135 componentes"
+    domain_anchor: "codemod-data-slot.ts:8-10 docstring promises CardHeader -> card-header"
+    summary: >
+      Root cause of F-dom-1. The codemod derives the slot from
+      enclosingComponentName() which returns the LOCAL const/function name of the
+      sub-component. In the dot-notation compound pattern
+      (Object.assign(Root, { Header, Title, ... })) those locals are bare
+      ("Header", "Title", "Root"), so kebab() yields "header"/"title"/"root" — NOT
+      the "card-header"/"card" the docstring (lines 8-10) explicitly promises. The
+      codemod has no access to the compound prefix because the sub-parts are never
+      named CardHeader at the declaration site (only displayName = "Card.Header"
+      carries it).
+    evidence: |
+      codemod-data-slot.ts:
+        91: const compName = enclosingComponentName(opening);  // -> "Header", "Root"
+        93: const slot = kebab(compName);                       // -> "header", "root"
+      card.tsx declarations: `const Header = forwardRef(...)` / `const Root = forwardRef(...)`
+      displayName carries the prefix the codemod ignores: `Header.displayName = "Card.Header"`.
+    recommended_action: >
+      Derive the slot from displayName when present (split "Card.Header" -> ["Card","Header"]
+      -> "card-header"), falling back to the file/dir name for the root. Add a unit test
+      asserting kebab-of-displayName for a compound fixture before re-running.
+  - id: F-dom-3
+    severity: HIGH
+    file: scripts/validate-quality-gates.ts
+    line: 973
+    plan_ref: "T2.1 / Meta 2 — validateDataSlot retorna 0 violações"
+    domain_anchor: "validateDataSlot docstring (line 957-960): root named after component; sub-parts <name>-<part>"
+    summary: >
+      The data-slot gate is too weak to catch F-dom-1: it only checks
+      `txt.includes("data-slot=")` anywhere in the root source file. It never
+      verifies the root slot equals the component name, never verifies sub-parts
+      follow "<name>-<part>", and passes as long as ANY data-slot string exists.
+      That is why dialog/select/tabs pass green despite (a) missing the root slot
+      entirely and (b) using bare sub-part names — the gate's own docstring
+      describes a contract it does not enforce. The gate gives false confidence that
+      Meta 2 ("0 violações") is met.
+    evidence: |
+      validate-quality-gates.ts:973
+        if (!txt.includes("data-slot=")) { fail(...) }
+      select.tsx has 7 data-slot= sub-part strings but NO data-slot="select" root ->
+      gate passes anyway (substring present).
+    recommended_action: >
+      Strengthen validateDataSlot: parse the root component's returned element and
+      assert data-slot === kebab(componentName); for each exported sub-part assert
+      data-slot startsWith `${root}-`. This turns the silent F-dom-1/F-dom-4 defects
+      into hard failures.
+  - id: F-dom-4
+    severity: MEDIUM
+    file: src/components/primitives/dialog/dialog.tsx
+    line: 132
+    plan_ref: "ADR D1 — data-slot na RAIZ de todo componente"
+    domain_anchor: ".claude/knowledge-base/references/shadcn-ui/.../dialog.tsx:9 (Dialog returns <DialogPrimitive.Root data-slot=\"dialog\">) ; select.tsx:9 ; tabs"
+    summary: >
+      Radix-rooted compound components built with Object.assign(<RadixPrimitive>.Root, {...})
+      have NO root data-slot at all. Dialog lacks data-slot="dialog", Select lacks
+      data-slot="select", Tabs lacks data-slot="tabs". The codemod cannot reach the
+      Radix .Root expression inside Object.assign, and there is no theo-ui wrapper
+      element to mark. shadcn wraps each in a tiny function component
+      (`function Dialog(props){ return <DialogPrimitive.Root data-slot="dialog" {...props}/> }`)
+      precisely so the root carries the slot. ADR D1 ("todo componente emite data-slot
+      na raiz") is not met for these roots.
+    evidence: |
+      $ grep -c 'data-slot="dialog"' src/components/primitives/dialog/dialog.tsx  -> 0
+      $ grep -c 'data-slot="select"' src/components/primitives/select/select.tsx  -> 0
+      $ grep -c 'data-slot="tabs"'   src/components/primitives/tabs/tabs.tsx      -> 0
+      dialog.tsx:132  const Dialog = Object.assign(DialogPrimitive.Root, { ... });  // root unmarked
+    recommended_action: >
+      Wrap each Radix root in a thin function component that forwards props and emits
+      data-slot (mirroring shadcn's Dialog/Select/Tabs root wrappers), or special-case
+      Object.assign(X.Root, ...) in the codemod to insert a wrapper.
+  - id: F-dom-5
+    severity: MEDIUM
+    file: src/components/primitives/button/button.tsx
+    line: 97
+    plan_ref: "ADR D1 — componentes com cva emitem data-variant/data-size ; Meta indireta (9 cva components)"
+    domain_anchor: ".claude/knowledge-base/references/shadcn-ui/.../button.tsx:54 (variant = \"default\", size = \"default\" defaulted in signature)"
+    summary: >
+      Button (and Badge) destructure `variant`/`size` WITHOUT signature defaults, so
+      when a consumer omits them the rendered data-variant/data-size attributes are
+      undefined (omitted from the DOM) even though cva applies the primary/md default
+      styles. shadcn defaults the props in the signature so data-variant="default"
+      ALWAYS renders, making `[data-variant=...]` targeting reliable. Result:
+      `[data-variant="primary"]` selectors silently fail to match a default Button.
+      toast.tsx does it correctly (`variant = "default"`); button.tsx and badge.tsx
+      do not. The data-slot test only asserts the explicit-prop case, so the gap is untested.
+    evidence: |
+      button.tsx:97  ({ className, variant, size, asChild = false, ... }) =>   // no defaults
+      button.tsx:106 data-variant={variant}   // undefined when caller omits prop
+      shadcn button.tsx:54  variant = "default", size = "default"
+      button-data-slot.test.tsx only tests <Button variant="secondary" size="sm"> (never the default).
+    recommended_action: >
+      Default variant/size in the destructure to match cva defaultVariants
+      (variant = "primary", size = "md") so the data-* attributes always render the
+      effective value; add a test asserting data-variant on a default <Button/>.
+  - id: F-dom-6
+    severity: MEDIUM
+    file: scripts/validate-quality-gates.ts
+    line: 911
+    plan_ref: "ADR D2 / T1.1-T1.2 — 45 componentes client recebem \"use client\"; gate validateUseClientDirective"
+    domain_anchor: ".claude/knowledge-base/references/shadcn-ui/.../dialog.tsx:1 + select.tsx:1 (both ship \"use client\")"
+    summary: >
+      The use-client gate's client-detection heuristic (`sourceIsClient`) only flags a
+      component if its source literally contains a React hook or an existing
+      "use client". It does NOT flag hook-less wrappers around Radix client
+      primitives. Dialog, Tabs, DropdownMenu, Tooltip, RadioGroup, ScrollArea (and the
+      composites model-selector / intent-selector / agent-profile) wrap
+      @radix-ui packages that THEMSELVES ship "use client", yet theo-ui's source and
+      `dist/primitives/<x>/index.js` carry no directive. shadcn marks these "use client"
+      for exactly this reason. This undercuts the plan's CRITICAL Phase 1 goal (Next.js
+      App Router) for the no-hook Radix wrappers. Honest scoping: re-exporting/rendering
+      a client primitive from a server module is legal in RSC, so this is unlikely to be
+      a hard crash for the re-exported parts — but it diverges from the cited standard
+      and is a latent footgun for the theo-defined forwardRef sub-wrappers. Flagging for
+      human judgement on severity.
+    evidence: |
+      dialog.tsx source head: no "use client"; grep hooks -> 0
+      dist/primitives/dialog/index.js head: `export { Dialog } from '../../chunk-...'`  (no directive)
+      node_modules/@radix-ui/react-dialog/dist/*.mjs head: `"use client";`
+      Affected (Radix client wrapper, no source directive): dialog, tabs, dropdown-menu,
+      tooltip, radio-group, scroll-area, sheet, switch, checkbox, select, toast,
+      model-selector, intent-selector, agent-profile.
+    recommended_action: >
+      Extend sourceIsClient() to also treat an import of a known client-only Radix
+      package (react-dialog/select/tabs/dropdown-menu/tooltip/popover/radio-group/
+      scroll-area/switch/checkbox/toast/accordion/etc.) as client, then add "use client"
+      to those wrappers and let the dist gate enforce it. Mirror shadcn's directive set.
+  - id: F-dom-7
+    severity: INFO
+    file: src/components/primitives/button/button.tsx
+    line: 3
+    plan_ref: "ADR D2 — diretiva apenas em componentes client; Button server-safe NÃO recebe"
+    domain_anchor: "shadcn button.tsx has NO \"use client\" (no hooks)"
+    summary: >
+      Verified CORRECT. Button has no hooks and correctly received NO "use client"
+      directive (source and dist/primitives/button/index.js both clean), matching
+      shadcn. The codemod / gate correctly excluded it. Card correctly DID receive
+      "use client" (uses createContext/useContext). The hook-based use-client
+      application is sound; only the hook-less Radix wrappers (F-dom-6) are missed.
+    evidence: |
+      $ grep -c "use client" src/components/primitives/button/button.tsx -> 0
+      $ head -c 30 dist/primitives/button/index.js -> `export { Button, buttonVariant`
+      $ head -c 14 dist/primitives/card/index.js  -> `"use client";`
+    recommended_action: No action — confirming correct behavior.
+  - id: F-dom-8
+    severity: INFO
+    file: src/components/primitives/card/card.tsx
+    line: 53
+    plan_ref: "a11y / accessibility regression check (check e)"
+    domain_anchor: "WCAG — data-* attributes are non-semantic"
+    summary: >
+      No accessibility regression introduced by the componentization changes.
+      data-slot/data-variant/data-size are non-semantic data attributes with zero
+      a11y impact (no role/aria/contrast change). Note (out of my domain scope but
+      observed): Phase 6 a11y fixes (nested aria-live in agent-stream, metrics-panel
+      aria-label, editor button-name STORY_SKIPS removal) do NOT appear in this diff
+      (git diff shows 0 aria-label/aria-live changes; STORY_SKIPS still present at
+      ladle-axe.test.tsx:61). That is a Coverage-Matrix completeness concern for the
+      tests/cross-validation reviewers, not a regression from the data-slot work.
+    evidence: |
+      $ git diff f8710e5..HEAD -- src/components/primitives/metrics-panel/* | grep -c aria-label -> 0
+      $ git diff f8710e5..HEAD -- src/components/primitives/agent-stream/* | grep -cE 'aria-live|role=' -> 0
+      ladle-axe.test.tsx:61 STORY_SKIPS still defined.
+    recommended_action: >
+      No a11y regression from this domain. Defer Phase 6 completeness verification to
+      the cross-validation / tests reviewers.

@@ -21,6 +21,7 @@ import { cn } from "../../../lib/cn.js";
 const Root = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   ({ className, ...props }, ref) => (
     <header
+      data-slot="top-nav"
       ref={ref}
       className={cn(
         "flex h-16 items-center justify-between gap-4 border-border/40 border-b bg-card px-6",
@@ -34,14 +35,24 @@ Root.displayName = "TopNav";
 
 const Left = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-1 items-center gap-3", className)} {...props} />
+    <div
+      data-slot="top-nav-left"
+      ref={ref}
+      className={cn("flex flex-1 items-center gap-3", className)}
+      {...props}
+    />
   ),
 );
 Left.displayName = "TopNav.Left";
 
 const Center = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("hidden flex-1 justify-center md:flex", className)} {...props} />
+    <div
+      data-slot="top-nav-center"
+      ref={ref}
+      className={cn("hidden flex-1 justify-center md:flex", className)}
+      {...props}
+    />
   ),
 );
 Center.displayName = "TopNav.Center";
@@ -49,6 +60,7 @@ Center.displayName = "TopNav.Center";
 const Right = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
+      data-slot="top-nav-right"
       ref={ref}
       className={cn("flex flex-1 items-center justify-end gap-2", className)}
       {...props}
@@ -69,6 +81,7 @@ interface BreadcrumbsProps extends HTMLAttributes<HTMLElement> {
 const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
   ({ className, items, ...props }, ref) => (
     <nav
+      data-slot="top-nav-breadcrumbs"
       ref={ref}
       aria-label="Breadcrumb"
       className={cn("flex items-center gap-1.5 text-body-sm", className)}
@@ -157,6 +170,7 @@ const ModeSwitcher = forwardRef<HTMLDivElement, ModeSwitcherProps>(
 
     return (
       <div
+        data-slot="top-nav-mode-switcher"
         ref={ref}
         role="radiogroup"
         aria-label={ariaLabel}

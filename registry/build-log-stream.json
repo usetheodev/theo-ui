@@ -6,6 +6,7 @@
   "description": "Terminal-like log viewer with timestamps + level coloring.",
   "registryDependencies": [
     "cn",
+    "env",
     "tailwind-preset"
   ],
   "files": [

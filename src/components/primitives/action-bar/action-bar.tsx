@@ -46,7 +46,12 @@ const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     const isLoading = primaryAction?.loading === true;
 
     return (
-      <div ref={ref} className={cn("flex w-full items-center gap-2", className)} {...props}>
+      <div
+        data-slot="action-bar"
+        ref={ref}
+        className={cn("flex w-full items-center gap-2", className)}
+        {...props}
+      >
         {search ? (
           <div className="relative flex-1">
             <Search

@@ -154,6 +154,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     return (
       <nav
+        data-slot="pagination"
         ref={ref}
         aria-label="Pagination"
         onKeyDown={handleKeyDown}

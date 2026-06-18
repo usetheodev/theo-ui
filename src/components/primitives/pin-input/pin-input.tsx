@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect, useRef } from "react";
 import type { ClipboardEvent, HTMLAttributes, KeyboardEvent } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -168,6 +170,7 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
 
     return (
       <div
+        data-slot="pin-input"
         ref={ref}
         // biome-ignore lint/a11y/useSemanticElements: <fieldset> would force a different visual layout (rectangular border by default) and is form-bound; we use a div with role="group" + aria-label for grouping semantics.
         role="group"

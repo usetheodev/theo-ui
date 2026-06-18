@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -154,7 +156,7 @@ export function AgentComposer({
   };
 
   return (
-    <div className={cn("relative", containerClassName)}>
+    <div data-slot="agent-composer" className={cn("relative", containerClassName)}>
       <MentionMenu
         open={!!activeTrigger && items !== null}
         trigger={(activeTrigger ?? "/") as MentionTrigger}

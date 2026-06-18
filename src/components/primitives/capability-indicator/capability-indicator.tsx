@@ -48,6 +48,7 @@ const stateClasses: Record<CapabilityState, string> = {
 const CapabilityIndicator = forwardRef<HTMLUListElement, CapabilityIndicatorProps>(
   ({ className, capabilities, ...props }, ref) => (
     <ul
+      data-slot="capability-indicator"
       ref={ref}
       aria-label="Agent capabilities"
       className={cn("flex flex-wrap items-center gap-1.5", className)}

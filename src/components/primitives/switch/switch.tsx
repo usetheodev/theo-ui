@@ -47,7 +47,13 @@ interface SwitchProps
 
 const Switch = forwardRef<ElementRef<typeof SwitchPrimitive.Root>, SwitchProps>(
   ({ className, size, ...props }, ref) => (
-    <SwitchPrimitive.Root ref={ref} className={cn(switchVariants({ size }), className)} {...props}>
+    <SwitchPrimitive.Root
+      data-slot="switch"
+      data-size={size}
+      ref={ref}
+      className={cn(switchVariants({ size }), className)}
+      {...props}
+    >
       <SwitchPrimitive.Thumb
         className={cn(
           "pointer-events-none block rounded-full bg-card shadow-sm",

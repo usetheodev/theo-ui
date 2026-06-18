@@ -19,7 +19,7 @@ describe("buildExports", () => {
     const exports = buildExports([]);
     expect(exports["./whiteboard"]).toBeDefined();
     expect(exports["./whiteboard"]).toEqual({
-      types: "./dist/whiteboard/index.d.ts",
+      types: "./dist/components/primitives/whiteboard/index.d.ts",
       import: "./dist/whiteboard/index.js",
     });
   });
@@ -31,22 +31,22 @@ describe("buildExports", () => {
     expect(entry.import).toBe("./dist/whiteboard/index.js");
   });
 
-  it("auto-scanned component subpaths point to per-component dist (Brief #4)", () => {
-    // Brief #4 / subpath tree-shaking plan: subpath imports now resolve to
-    // per-component dist files (e.g. `dist/primitives/button/index.js`)
-    // emitted by tsup auto-glob. Types still point at the barrel `.d.ts`
-    // per D5 escalation (per-component dts would OOM the worker pool).
+  it("auto-scanned component subpaths point to per-component dist + per-subpath .d.ts", () => {
+    // Subpath imports resolve to per-component dist files (JS emitted by tsup
+    // auto-glob) AND to a per-subpath `.d.ts` emitted by `tsc -p tsconfig.dts.json`
+    // under `dist/components/` (community-standard-componentization T3.1 — replaces
+    // the old D5 barrel-types escalation; tsup's bundler OOMs at 130+ entries).
     const exports = buildExports(["button"]);
     expect(exports["./button"]).toEqual({
-      types: "./dist/index.d.ts",
+      types: "./dist/components/primitives/button/index.d.ts",
       import: "./dist/primitives/button/index.js",
     });
   });
 
-  it("composite subpaths point to dist/composites/<name>/index.js", () => {
+  it("composite subpaths point to dist/composites/<name>/index.js + per-subpath .d.ts", () => {
     const exports = buildExports(["account-menu"]);
     expect(exports["./account-menu"]).toEqual({
-      types: "./dist/index.d.ts",
+      types: "./dist/components/composites/account-menu/index.d.ts",
       import: "./dist/composites/account-menu/index.js",
     });
   });
@@ -79,7 +79,7 @@ describe("buildExports", () => {
     const exports = buildExports([]);
     expect(exports["./slide"]).toBeDefined();
     expect(exports["./slide"]).toEqual({
-      types: "./dist/slide/index.d.ts",
+      types: "./dist/components/primitives/slide/index.d.ts",
       import: "./dist/slide/index.js",
     });
   });
@@ -100,7 +100,7 @@ describe("buildExports", () => {
     const exports = buildExports([]);
     expect(exports["./slide-deck"]).toBeDefined();
     expect(exports["./slide-deck"]).toEqual({
-      types: "./dist/slide-deck/index.d.ts",
+      types: "./dist/components/composites/slide-deck/index.d.ts",
       import: "./dist/slide-deck/index.js",
     });
   });

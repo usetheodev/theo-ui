@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertTriangle, FolderOpen, ShieldAlert } from "lucide-react";
 import { useRef } from "react";
 import type { ReactNode } from "react";
@@ -121,7 +123,7 @@ function PermissionModal({
   );
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog data-slot="permission-modal" open={open} onOpenChange={handleOpenChange}>
       <Dialog.Content className="max-w-xl">
         <Dialog.Header>
           <Dialog.Title>{title ?? defaultTitle}</Dialog.Title>

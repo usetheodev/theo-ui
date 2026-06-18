@@ -49,6 +49,7 @@ const RuleCard = forwardRef<HTMLElement, RuleCardProps>(
     };
     return (
       <article
+        data-slot="rule-card"
         ref={ref}
         className={cn(
           "grid gap-2 rounded-lg border border-border/40 bg-card/40 p-3",

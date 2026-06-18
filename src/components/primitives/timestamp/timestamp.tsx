@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect, useState } from "react";
 import type { TimeHTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -149,7 +151,15 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
     }, [format, refreshInterval, date]);
 
     if (date === null) {
-      return <time ref={ref} className={cn(className)} suppressHydrationWarning {...props} />;
+      return (
+        <time
+          data-slot="timestamp"
+          ref={ref}
+          className={cn(className)}
+          suppressHydrationWarning
+          {...props}
+        />
+      );
     }
 
     const iso = date.toISOString();
@@ -160,6 +170,7 @@ const Timestamp = forwardRef<HTMLTimeElement, TimestampProps>(
 
     return (
       <time
+        data-slot="timestamp"
         ref={ref}
         dateTime={iso}
         title={noTooltip ? undefined : absolute}

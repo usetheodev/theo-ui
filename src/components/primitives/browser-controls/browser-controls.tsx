@@ -23,6 +23,7 @@ interface BrowserControlsProps extends HTMLAttributes<HTMLDivElement> {
 const BrowserControls = forwardRef<HTMLDivElement, BrowserControlsProps>(
   ({ className, url, onUrlChange, onBack, onForward, onReload, readOnlyUrl, ...props }, ref) => (
     <div
+      data-slot="browser-controls"
       ref={ref}
       className={cn(
         "flex items-center gap-1 border-border/40 border-b bg-card px-3 py-2",

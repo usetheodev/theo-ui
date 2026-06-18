@@ -1,0 +1,198 @@
+agent: review-community-standard-componentization-tests
+review_target: f8710e5..HEAD for plan community-standard-componentization
+plan: .claude/knowledge-base/plans/community-standard-componentization-plan.md
+verdict: NEEDS_FIXES_MINOR
+summary: >
+  Four test files added/updated; all 26 tests pass and actually run (dist present,
+  skipIf does not silently skip). The RSC-smoke suite is genuinely strong — the
+  "no orphan client chunk" test iterates 138 real chunks and asserts a hook-using
+  chunk always carries the directive, plus negative assertions (button/barrel NOT
+  client). sync-exports.test.ts is well-structured and pins the per-subpath dts
+  mapping. The gaps are coverage-breadth, not test-quality: the 135-component
+  data-slot codemod and the 9-component data-variant/data-size codemod are
+  verified for ONE component each (Button; Badge for data-slot only), and the
+  plan's declared `name-part` sub-part naming convention has zero regression
+  coverage AND diverges from the implementation in practice (card uses
+  data-slot="root"/"header" not "card"/"card-header").
+
+test_pyramid:
+  unit_added: 3            # button-data-slot (3 its), sync-exports (updated, 18 its), per-subpath-dts (4 its)
+  integration_added: 2     # rsc-smoke (5 its) + per-subpath-dts read real dist artifacts (build-output integration)
+  e2e_added: 0
+  total_test_cases: 26
+  notes: >
+    Pyramid is healthy for this build-time/codemod feature. No DB/pgvector here
+    (the generic agent template's pgvector references do not apply to this UI lib).
+    rsc-smoke and per-subpath-dts are artifact-integration tests (read real dist),
+    correctly gated with skipIf(!hasDist).
+
+edge_cases_from_plan:
+  covered:
+    - "use client preserved on client subpath entry (T1.1) — rsc-smoke it #1"
+    - "server-safe component NOT tainted client (T1.1 AC) — rsc-smoke it #3"
+    - "barrel NOT globally client (D2 rejected-alternative) — rsc-smoke it #4"
+    - "no orphan client chunk missing directive (T1.1) — rsc-smoke it #5 (strongest)"
+    - "button data-slot present on root (T2.1 pilot) — button-data-slot it #1"
+    - "data-variant/data-size reflected (T5.1) — button-data-slot it #2"
+    - "per-subpath .d.ts exists + exports map points to it (T3.1) — per-subpath-dts + sync-exports"
+    - "every subpath types resolves to existing file (T3.1 AC) — per-subpath-dts it #4"
+  missing:
+    - "T2.1: compound sub-part data-slot naming convention `<name>-<part>` — NO test asserts it; impl diverges (card uses root/header/title, ref+plan require card/card-header/card-title)"
+    - "T2.1: pilot batch declared as button+card+dialog+alert — only button+badge tested; card/dialog/alert have no DOM data-slot assertion"
+    - "T2.1: the 29 className-assertions -> data-slot migration is unverified (no test pins that the migrated assertions now target data-slot)"
+    - "T5.1: 8 of 9 cva components (toast/badge/select/input/textarea/switch/checkbox/avatar) have NO data-variant/data-size DOM assertion — only button is tested"
+    - "T1.2: gate unit test `test_gate_flags_client_without_directive` (plan declared) NOT implemented — no fixture-driven test that validateUseClientDirective returns a violation for a client component lacking the directive"
+
+findings:
+  - id: F-tests-1
+    severity: MEDIUM
+    file: src/components/primitives/button/button-data-slot.test.tsx
+    line: 13
+    plan_ref: T2.1 (data-slot in 135 components) + ADR D1 (`nome`/`nome-parte`)
+    summary: >
+      data-slot codemod across 135 components has DOM regression coverage for only
+      2 components (Button, Badge). The plan's TDD RED declared a pilot batch of
+      button, card, dialog, alert. card/dialog/alert are untested at the DOM level.
+    evidence: |
+      grep -rl 'data-slot' src --include='*.test.tsx'  -> only button-data-slot.test.tsx
+      Plan T2.1 RED: "test_card_emits_data_slot ... para o lote-piloto (button, card, dialog, alert)"
+      Implemented: button + badge only. 133/135 components rely solely on
+      validateDataSlot's presence check (string `data-slot=` in source), which does
+      not prove the attribute reaches the rendered DOM nor that it is on the ROOT element.
+    recommended_action: >
+      Extend button-data-slot.test.tsx (or add a parametrized test) to cover the
+      declared pilot batch (card, dialog, alert) asserting data-slot on the rendered
+      root. A render-based spot-check on ~5 representative compounds is enough; the
+      gate covers breadth.
+
+  - id: F-tests-2
+    severity: MEDIUM
+    file: scripts/validate-quality-gates.ts
+    line: 963
+    plan_ref: T2.1 / ADR D1 — sub-parts carry `data-slot="<name>-<part>"`
+    summary: >
+      The plan's declared sub-part naming convention (`<name>-<part>`, e.g.
+      `card-header`) has NO regression coverage, and the implementation diverges
+      from it: card.tsx emits data-slot="root"/"header"/"title" instead of
+      card/card-header/card-title. The shadcn v4 reference cited as the target uses
+      card/card-header/card-title. No test catches this; validateDataSlot only
+      checks presence of the substring `data-slot=`, not the naming scheme.
+    evidence: |
+      src/components/primitives/card/card.tsx: data-slot="root", "header", "title", "body", "footer"
+      .claude/.../shadcn-ui/.../ui/card.tsx: data-slot="card", "card-header", "card-title", "card-content", "card-footer"
+      Plan ADR D1: 'data-slot na raiz (= nome kebab) e em cada sub-parte exportada (= nome-parte)'
+      grep 'data-slot="[a-z]*-[a-z]*"' src tests --include='*.test.tsx' -> 0 matches
+    recommended_action: >
+      Either (a) add a test asserting the sub-part naming convention on at least one
+      compound (card -> card-header/card-title), which will fail against the current
+      impl and surface the divergence, or (b) if root/header naming is intentionally
+      accepted, update ADR D1 + the data-slot gate doc to match. The divergence
+      itself is for architecture/domain reviewer; the TEST gap is that no test pins
+      the declared convention.
+
+  - id: F-tests-3
+    severity: MEDIUM
+    file: src/components/primitives/button/button-data-slot.test.tsx
+    line: 20
+    plan_ref: T5.1 — 9 cva components emit data-variant/data-size
+    summary: >
+      8 of the 9 components that received the data-variant/data-size codemod have
+      no DOM assertion. Only Button is tested. There is also NO structural gate for
+      data-variant/data-size (validateDataSlot covers data-slot only), so 8 of 9
+      rely on nothing but the codemod having run.
+    evidence: |
+      data-variant/data-size in source (9 components): button, badge, toast, select,
+        input, textarea, switch, checkbox, avatar
+      grep -rl 'data-variant|data-size' src --include='*.test.tsx' -> button-data-slot.test.tsx only
+      grep 'data-variant|data-size' scripts/validate-quality-gates.ts -> NO gate
+    recommended_action: >
+      Add data-variant/data-size DOM assertions for ~3 representative cva components
+      beyond button (e.g. badge, select), OR add a validateDataVariant gate mirroring
+      validateDataSlot so the breadth is enforced structurally and the test stays a spot-check.
+
+  - id: F-tests-4
+    severity: MEDIUM
+    file: tests/types/per-subpath-dts.test.ts
+    line: 33
+    plan_ref: T3.1 — per-subpath .d.ts isolation
+    summary: >
+      The "isolation" assertion is existence-shaped, not behavior-shaped. It checks
+      the button .d.ts `toContain("Button")`, which would also pass if the file
+      re-exported the entire 142-line barrel (the barrel also contains "Button").
+      It does not actually prove isolation (that the file is scoped to Button, not
+      all 135 components).
+    evidence: |
+      Test: expect(body).toContain("Button");  // comment claims "not the whole barrel"
+      Actual dist/components/primitives/button/index.d.ts is correctly isolated
+      (1 line: `export { Button, buttonVariants, type ButtonProps } from "./button.js";`)
+      but the assertion would not FAIL if it regressed to a barrel re-export.
+    recommended_action: >
+      Strengthen the isolation assertion: assert the .d.ts does NOT contain an
+      unrelated component name (e.g. expect(body).not.toContain("AgentEvent")) or
+      assert a line/byte-count ceiling, so a regression to barrel-typing actually trips the test.
+
+  - id: F-tests-5
+    severity: LOW
+    file: scripts/validate-quality-gates.ts
+    line: 907
+    plan_ref: T1.2 — gate `validateUseClientDirective` (declared RED test_gate_flags_client_without_directive)
+    summary: >
+      The plan declared a unit test for the gate itself ("expect(violations).toHaveLength(1)"
+      for a client fixture without the directive). The gate ships but has no
+      direct unit test; it is only exercised end-to-end against the real dist via
+      the rsc-smoke artifact tests. The gate's negative path (correctly flagging a
+      missing directive) is unverified.
+    evidence: |
+      Plan T1.2 TDD RED: "const violations = runUseClientGate(fixtureClientNoDirective); expect(violations).toHaveLength(1)"
+      No fixture-driven test exists; validateUseClientDirective is not exported/unit-tested.
+      rsc-smoke verifies the POSITIVE outcome on real dist, not the gate's flagging logic.
+    recommended_action: >
+      Acceptable as-is given the rsc-smoke "no orphan" test provides strong real-dist
+      coverage. If hardened: extract the gate's per-component check into a pure
+      function and add a fixture test for the violation path. LOW because the
+      end-to-end guard already protects the regression the plan cared about.
+
+  - id: F-tests-6
+    severity: INFO
+    file: tests/rsc-smoke/use-client-preserved.test.ts
+    line: 57
+    plan_ref: T1.1 — use client preserved in dist
+    summary: >
+      No issues — this is the strongest test in the set. The "no orphan client
+      chunk" test iterates 138 real chunks from the barrel and asserts every
+      hook-using chunk carries the directive (not a vacuous empty-set assertion).
+      Paired with the three negative tests (server-safe button, non-client barrel),
+      it covers the directive's full contract: present where needed, absent where not.
+    evidence: |
+      Barrel references 138 chunk-*.js files (grep dist/index.js).
+      slice(0,14) correctly captures `"use client";\n` (directive is 12 chars + ; + nl).
+      AAA structure clear; behavior-shaped names; no .skip/.only leaks.
+    recommended_action: none
+
+  - id: F-tests-7
+    severity: INFO
+    file: scripts/sync-exports.test.ts
+    line: 10
+    plan_ref: T3.1 — exports map per-subpath types
+    summary: >
+      No issues — well-structured Given-When-Then, behavior-named, covers the
+      collision-throw edge case, the barrel-fallback case (themes/types-only), and
+      pins both `import` and `types` for primitive + composite + isolated engines.
+      Correctly updated to the new dist/components/ dts path.
+    evidence: |
+      8+ targeted assertions including throw-on-collision and barrel-fallback edge cases.
+      No skipped/only tests. Diff cleanly migrates types path from barrel to per-subpath.
+    recommended_action: none
+
+skipped_tests_check:
+  result: PASS
+  detail: "No .skip / .only / xit / xtest / commented-out test blocks in any of the 4 files. skipIf(!hasDist) is conditional-on-environment (dist presence), not a permanent skip, and is appropriate for tests that read real build output — dist exists in the quality:gates chain so they execute."
+
+tdd_order_check:
+  result: NOT_VERIFIABLE_CLEANLY
+  detail: >
+    Commits squash implementation+test per phase (5ace8bd rsc, a261379 data-slot,
+    78d50c9 dts+data-variant), so test-before-impl order cannot be confirmed from
+    git history alone. Plan TDD sections declare RED-first; no evidence of violation,
+    but no positive proof either. Not flagged as a finding (consistent with how this
+    branch structured its phase commits).

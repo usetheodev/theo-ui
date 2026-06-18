@@ -66,6 +66,7 @@ const SessionListItem = forwardRef<HTMLButtonElement, SessionListItemProps>(
     ref,
   ) => (
     <button
+      data-slot="session-list-item"
       ref={ref}
       type="button"
       onClick={onClick}

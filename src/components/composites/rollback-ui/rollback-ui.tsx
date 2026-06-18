@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowDownLeft, Clock, GitCommit, RotateCcw } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
@@ -53,6 +55,7 @@ const RollbackUI = forwardRef<HTMLDivElement, RollbackUIProps>(
 
     return (
       <div
+        data-slot="rollback-ui"
         ref={ref}
         className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
         {...props}

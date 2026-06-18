@@ -80,6 +80,7 @@ const ChannelCard = forwardRef<HTMLElement, ChannelCardProps>(
 
     return (
       <article
+        data-slot="channel-card"
         ref={ref}
         className={cn("grid gap-3 rounded-xl border bg-card p-4", className)}
         aria-label={`Channel ${channel.name}`}

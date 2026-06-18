@@ -13,6 +13,7 @@ interface LabelProps {
 function Label({ cx, cy, label, stroke }: LabelProps) {
   return (
     <text
+      data-slot="label"
       x={cx}
       y={cy}
       textAnchor="middle"

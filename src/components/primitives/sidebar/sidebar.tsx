@@ -29,6 +29,7 @@ import { cn } from "../../../lib/cn.js";
 const Root = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   ({ className, ...props }, ref) => (
     <aside
+      data-slot="sidebar"
       ref={ref}
       className={cn(
         "flex h-full w-64 flex-col border-border/40 border-r bg-card text-card-foreground",
@@ -43,6 +44,7 @@ Root.displayName = "Sidebar";
 const Header = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
+      data-slot="sidebar-header"
       ref={ref}
       className={cn("flex h-16 items-center gap-3 border-border/40 border-b px-5", className)}
       {...props}
@@ -57,7 +59,12 @@ interface SectionProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
 
 const Section = forwardRef<HTMLDivElement, SectionProps>(
   ({ className, title, children, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col gap-1 px-3 py-4", className)} {...props}>
+    <div
+      data-slot="sidebar-section"
+      ref={ref}
+      className={cn("flex flex-col gap-1 px-3 py-4", className)}
+      {...props}
+    >
       {title ? (
         <p className="px-2 pb-1 font-sans text-label-caps text-muted-foreground uppercase">
           {title}
@@ -121,6 +128,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
     if (as === "a") {
       return (
         <a
+          data-slot="sidebar-item"
           ref={ref as Ref<HTMLAnchorElement>}
           href={href}
           className={classes}
@@ -134,6 +142,7 @@ const Item = forwardRef<HTMLElement, ItemProps>(
 
     return (
       <button
+        data-slot="sidebar-item"
         ref={ref as Ref<HTMLButtonElement>}
         type="button"
         className={classes}
@@ -150,6 +159,7 @@ Item.displayName = "Sidebar.Item";
 const Footer = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
+      data-slot="sidebar-footer"
       ref={ref}
       className={cn("mt-auto border-border/40 border-t px-5 py-4", className)}
       {...props}

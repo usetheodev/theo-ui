@@ -131,6 +131,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
 
     return (
       <Tag
+        data-slot="project-card"
         ref={ref as Ref<HTMLAnchorElement & HTMLDivElement>}
         href={sanitizedHref}
         className={cn(

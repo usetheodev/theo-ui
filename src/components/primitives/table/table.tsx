@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { createContext, forwardRef, useContext } from "react";
 import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from "react";
@@ -52,6 +54,7 @@ const Root = forwardRef<HTMLTableElement, TableProps>(
   ({ className, density = "default", children, ...props }, ref) => (
     <TableDensityContext.Provider value={density}>
       <table
+        data-slot="table"
         ref={ref}
         className={cn("w-full border-collapse font-sans text-body-sm", className)}
         {...props}
@@ -66,6 +69,7 @@ Root.displayName = "Table";
 const Header = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
     <thead
+      data-slot="table-header"
       ref={ref}
       className={cn(
         "border-border/40 border-b text-label-caps text-muted-foreground uppercase tracking-wider",
@@ -79,7 +83,12 @@ Header.displayName = "Table.Header";
 
 const Body = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <tbody ref={ref} className={cn("text-foreground", className)} {...props} />
+    <tbody
+      data-slot="table-body"
+      ref={ref}
+      className={cn("text-foreground", className)}
+      {...props}
+    />
   ),
 );
 Body.displayName = "Table.Body";
@@ -87,6 +96,7 @@ Body.displayName = "Table.Body";
 const Row = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
     <tr
+      data-slot="table-row"
       ref={ref}
       className={cn(
         "border-border/20 border-b transition-colors last:border-0 hover:bg-muted/40",
@@ -108,6 +118,7 @@ const Cell = forwardRef<HTMLTableCellElement, TableCellProps>(
     const density = useContext(TableDensityContext);
     return (
       <td
+        data-slot="table-cell"
         ref={ref}
         className={cn(
           "px-3",
@@ -160,6 +171,7 @@ const HeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellProps>(
 
     return (
       <th
+        data-slot="table-header-cell"
         ref={ref}
         scope="col"
         aria-sort={ariaSort}

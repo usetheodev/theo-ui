@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, ChevronRight, Loader2, X } from "lucide-react";
 import { useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
@@ -65,6 +67,7 @@ export function ToolCallCard({
 
   return (
     <article
+      data-slot="tool-call-card"
       className={cn(
         "overflow-hidden rounded-lg border border-border/40 bg-card/40 text-card-foreground",
         className,

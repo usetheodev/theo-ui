@@ -1,3 +1,5 @@
+"use client";
+
 import { Command as CommandPrimitive } from "cmdk";
 import { ChevronRight, Search } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -75,7 +77,7 @@ function CommandPalette({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog data-slot="command-palette" open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="max-w-xl p-0" hideCloseButton>
         <Dialog.Title className="sr-only">Command palette</Dialog.Title>
         <Dialog.Description className="sr-only">

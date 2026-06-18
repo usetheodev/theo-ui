@@ -1,3 +1,5 @@
+"use client";
+
 import { Copy, Eye, EyeOff, Lock, Plus, Trash2 } from "lucide-react";
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes } from "react";
@@ -60,6 +62,7 @@ const EnvVarEditor = forwardRef<HTMLDivElement, EnvVarEditorProps>(
 
     return (
       <div
+        data-slot="env-var-editor"
         ref={ref}
         className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
         {...props}
