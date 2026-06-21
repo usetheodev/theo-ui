@@ -70,6 +70,49 @@ describe("toAgentStreamItems (M5-6)", () => {
       target: "x",
     });
   });
+
+  it("classifyTool CANNOT corrupt the discriminant kind/id/status (runtime guard)", () => {
+    // cast past the type guard to prove the RUNTIME re-application, not just the type
+    const evil = (() => ({ kind: "x", id: "y", status: "z" })) as unknown as (
+      e: AgentEvent,
+    ) => Record<string, never>;
+    const out = toAgentStreamItems({ live: [live[0] as AgentEvent] }, { classifyTool: evil });
+    expect(out[0]).toMatchObject({ kind: "tool-call", id: "e1", status: "running" });
+  });
+
+  it("an explicit `tool: undefined` override does NOT blank the required label", () => {
+    const out = toAgentStreamItems(
+      { live: [live[0] as AgentEvent] },
+      { classifyTool: () => ({ tool: undefined }) },
+    );
+    expect(out[0]).toMatchObject({ kind: "tool-call", tool: "npm test" });
+  });
+
+  it("preserves intra-history order for multiple messages", () => {
+    const multi: UIMessage[] = [
+      { id: "m1", role: "user", parts: [{ type: "text", text: "a" }] },
+      { id: "m2", role: "assistant", parts: [{ type: "text", text: "b" }] },
+    ];
+    expect(toAgentStreamItems({ history: multi }).map((i) => i.id)).toEqual(["m1", "m2"]);
+  });
+
+  it("maps undefined path/detail to undefined target/output (no crash)", () => {
+    const items = toAgentStreamItems({ live: [live[0] as AgentEvent] }); // e1 has no path/detail
+    const item = items[0];
+    expect(item?.kind === "tool-call" && item.target).toBeUndefined();
+    expect(item?.kind === "tool-call" && item.output).toBeUndefined();
+  });
+
+  it("does not mutate the input arrays or objects (pure)", () => {
+    const h: UIMessage[] = [{ id: "m1", role: "user", parts: [{ type: "text", text: "hi" }] }];
+    const l: AgentEvent[] = [{ id: "e1", type: "command", label: "x", status: "running" }];
+    const hSnap = JSON.stringify(h);
+    const lSnap = JSON.stringify(l);
+    const out = toAgentStreamItems({ history: h, live: l });
+    expect(JSON.stringify(h)).toBe(hSnap);
+    expect(JSON.stringify(l)).toBe(lSnap);
+    expect(out).not.toBe(h); // fresh array
+  });
 });
 
 /* ─── T3.1 — barrel wiring ───────────────────────────────────────────── */

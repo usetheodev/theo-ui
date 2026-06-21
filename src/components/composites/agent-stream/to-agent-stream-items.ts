@@ -60,13 +60,16 @@ function toToolCallItem(
     output: event.detail,
     status: mapAgentEventStatus(event.status),
   };
-  // Override may set presentational fields only; kind/id/status stay authoritative.
+  const override = classifyTool?.(event);
+  // Override may set presentational fields only; kind/id/status stay authoritative,
+  // and an explicit `tool: undefined` must NOT blank the required label.
   return {
     ...base,
-    ...classifyTool?.(event),
+    ...override,
     kind: "tool-call",
     id: event.id,
     status: base.status,
+    tool: override?.tool ?? base.tool,
   };
 }
 
