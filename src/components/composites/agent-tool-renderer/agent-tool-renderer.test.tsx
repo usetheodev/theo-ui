@@ -156,6 +156,79 @@ describe("AgentToolRenderer component (M5-3)", () => {
   });
 });
 
+/* ─── structured-success paths + state gating (review fixes) ──────────── */
+
+describe("defaultToolRegistry structured-success paths (M5-3)", () => {
+  it("created-files renderer renders a CreatedFilesCard from structured {files} output", () => {
+    const part = toolPart("edit_file", { files: [{ id: "f1", name: "report.md" }] });
+    render(<div>{defaultToolRegistry["created-files"](part)}</div>);
+    expect(screen.getByText("report.md")).toBeInTheDocument();
+  });
+  it("data-table renderer renders a table from an array-of-objects output", () => {
+    const part = toolPart("list_dir", [{ path: "a.ts", size: "10kb" }]);
+    render(<div>{defaultToolRegistry["data-table"](part)}</div>);
+    expect(screen.getByText("a.ts")).toBeInTheDocument();
+    expect(screen.getByText("10kb")).toBeInTheDocument();
+  });
+});
+
+describe("classify ordering + dynamic-tool (M5-3)", () => {
+  it("first-match-wins: a dual-bucket name resolves to the earlier hint (read_diff → diff)", () => {
+    expect(defaultClassifyTool(toolPart("read_diff"))).toBe("diff");
+  });
+  it("classifies a dynamic-tool by its toolName", () => {
+    const part: ToolUIPart = {
+      type: "dynamic-tool",
+      toolCallId: "d1",
+      toolName: "git_diff",
+      state: "output-available",
+      input: {},
+      output: { path: "a.ts", hunks: [] },
+    };
+    expect(defaultClassifyTool(part)).toBe("diff");
+  });
+});
+
+describe("state gating — non-output-available routes to ToolCallPart (M5-3)", () => {
+  it("an errored classified tool surfaces the error via ToolCallPart, not an empty rich surface", () => {
+    const part: ToolUIPart = {
+      type: "tool-shell",
+      toolCallId: "e1",
+      toolName: "shell",
+      state: "output-error",
+      input: { command: "ls /nope" },
+      errorText: "No such file or directory",
+    };
+    const { container } = render(<AgentToolRenderer part={part} />);
+    expect(container.querySelector('[data-slot="tool-call-part"]')).toBeInTheDocument();
+    expect(screen.getByText(/No such file or directory/)).toBeInTheDocument();
+  });
+  it("a streaming classified tool routes to ToolCallPart (no output yet)", () => {
+    const part: ToolUIPart = {
+      type: "tool-shell",
+      toolCallId: "s1",
+      toolName: "shell",
+      state: "input-streaming",
+      input: { command: "ls" },
+    };
+    const { container } = render(<AgentToolRenderer part={part} />);
+    expect(container.querySelector('[data-slot="tool-call-part"]')).toBeInTheDocument();
+  });
+});
+
+describe("ChatMessage classifyTool prop threading (M5-3)", () => {
+  it("a custom classifyTool passed to ChatMessage overrides the default dispatch", () => {
+    // force every tool to `terminal` — a git_diff then renders as a TerminalPanel
+    render(
+      <ChatMessage
+        message={msgWithTool("git_diff", "line one")}
+        classifyTool={() => "terminal" as const}
+      />,
+    );
+    expect(screen.getByText("line one")).toBeInTheDocument();
+  });
+});
+
 /* ─── T4.1 — barrel wiring ───────────────────────────────────────────── */
 
 describe("@theokit/ui/agent-tool-renderer subpath (M5-3 wiring)", () => {
