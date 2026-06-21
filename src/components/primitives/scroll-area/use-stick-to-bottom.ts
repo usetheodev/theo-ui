@@ -8,8 +8,10 @@
  * `<ScrollArea>` (or any element) and the hook resolves the real scrollable
  * node internally.
  *
- * ResizeObserver drives the content-growth detection, with a one-shot fallback
- * for test environments that lack it (mirrors `slide/use-slide-fit.ts`).
+ * Content growth (streamed messages/tokens) is detected with a `MutationObserver`
+ * — a scroll container's own box does not resize when content grows inside it, so
+ * a ResizeObserver alone would miss it. A `ResizeObserver` is added on top (when
+ * available) to also catch box-size changes such as an image finishing load.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -82,23 +84,31 @@ export function useStickToBottom<T extends HTMLElement = HTMLElement>(
         setIsPinned(pinned);
       };
       const onScroll = (): void => updatePinned();
-      const onResize = (): void => {
+      // Auto-scroll on growth ONLY while pinned — the guard that prevents yanking
+      // the view away while the user reads history.
+      const onGrow = (): void => {
         if (pinnedRef.current) vp.scrollTop = vp.scrollHeight;
       };
 
       vp.addEventListener("scroll", onScroll, { passive: true });
       updatePinned();
-      if (pinnedRef.current) vp.scrollTop = vp.scrollHeight;
+      onGrow(); // pin to bottom on attach when already pinned
 
-      let observer: ResizeObserver | undefined;
+      // A scroll container's OWN box does not resize when content grows inside
+      // it, so streamed messages/tokens are detected as DOM mutations (the
+      // primary signal). A ResizeObserver additionally catches box-size changes
+      // (e.g. an image finishing load) when the environment provides one.
+      const mutationObserver = new MutationObserver(onGrow);
+      mutationObserver.observe(vp, { childList: true, subtree: true, characterData: true });
+      let resizeObserver: ResizeObserver | undefined;
       if (typeof ResizeObserver !== "undefined") {
-        observer = new ResizeObserver(onResize);
-        observer.observe(vp);
-        if (vp.firstElementChild) observer.observe(vp.firstElementChild);
+        resizeObserver = new ResizeObserver(onGrow);
+        resizeObserver.observe(vp);
       }
       cleanupRef.current = (): void => {
         vp.removeEventListener("scroll", onScroll);
-        observer?.disconnect();
+        mutationObserver.disconnect();
+        resizeObserver?.disconnect();
       };
     },
     [threshold],

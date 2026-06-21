@@ -17,6 +17,9 @@ describe("isNearBottom (M5-5)", () => {
   it("is true for a zero-height (empty) container", () => {
     expect(isNearBottom({ scrollTop: 0, scrollHeight: 0, clientHeight: 0 }, 32)).toBe(true);
   });
+  it("is true when over-scrolled past the bottom (negative distance)", () => {
+    expect(isNearBottom({ scrollTop: 120, scrollHeight: 200, clientHeight: 100 }, 32)).toBe(true);
+  });
 });
 
 /* ─── helpers ────────────────────────────────────────────────────────── */
@@ -26,6 +29,13 @@ function withMetrics(el: HTMLElement, m: { scrollHeight: number; clientHeight: n
   Object.defineProperty(el, "clientHeight", { value: m.clientHeight, configurable: true });
   Object.defineProperty(el, "scrollTop", { value: 0, writable: true, configurable: true });
 }
+
+function setScrollHeight(el: HTMLElement, value: number): void {
+  Object.defineProperty(el, "scrollHeight", { value, configurable: true });
+}
+
+/** Flush microtasks so MutationObserver callbacks are delivered. */
+const flush = (): Promise<void> => new Promise((r) => setTimeout(r, 0));
 
 /* ─── T2.1 — the hook ────────────────────────────────────────────────── */
 
@@ -63,6 +73,58 @@ describe("useStickToBottom (M5-5)", () => {
       vp.dispatchEvent(new Event("scroll"));
     });
     expect(result.current.isPinned).toBe(false);
+  });
+
+  it("auto-scrolls to the bottom when content grows WHILE pinned", async () => {
+    const vp = document.createElement("div");
+    withMetrics(vp, { scrollHeight: 100, clientHeight: 100 }); // scrollTop 0 → pinned
+    const { result } = renderHook(() => useStickToBottom());
+    act(() => result.current.scrollRef(vp));
+    expect(result.current.isPinned).toBe(true);
+    // content grows + a child is appended (MutationObserver trigger)
+    setScrollHeight(vp, 500);
+    await act(async () => {
+      vp.appendChild(document.createElement("div"));
+      await flush();
+    });
+    expect(vp.scrollTop).toBe(500); // followed the growth to the bottom
+  });
+
+  it("does NOT scroll on growth when the user is NOT pinned (no yank)", async () => {
+    const vp = document.createElement("div");
+    withMetrics(vp, { scrollHeight: 1000, clientHeight: 100 }); // scrollTop 0 → 900px up → not pinned
+    const { result } = renderHook(() => useStickToBottom());
+    act(() => result.current.scrollRef(vp));
+    expect(result.current.isPinned).toBe(false);
+    setScrollHeight(vp, 2000);
+    await act(async () => {
+      vp.appendChild(document.createElement("div"));
+      await flush();
+    });
+    expect(vp.scrollTop).toBe(0); // stayed where the user was reading
+  });
+
+  it("honors a custom threshold", () => {
+    const vp = document.createElement("div");
+    withMetrics(vp, { scrollHeight: 1000, clientHeight: 100 }); // 900px from bottom
+    const { result } = renderHook(() => useStickToBottom({ threshold: 1000 }));
+    act(() => result.current.scrollRef(vp));
+    expect(result.current.isPinned).toBe(true); // 900 <= 1000
+  });
+
+  it("tears down the previous node's listener on re-attach", () => {
+    const a = document.createElement("div");
+    withMetrics(a, { scrollHeight: 1000, clientHeight: 100 }); // a → not pinned
+    const b = document.createElement("div");
+    withMetrics(b, { scrollHeight: 100, clientHeight: 100 }); // b → pinned
+    const { result } = renderHook(() => useStickToBottom());
+    act(() => result.current.scrollRef(a));
+    act(() => result.current.scrollRef(b));
+    // a's scroll listener is gone — scrolling a must NOT change isPinned (now reflecting b)
+    act(() => {
+      a.dispatchEvent(new Event("scroll"));
+    });
+    expect(result.current.isPinned).toBe(true);
   });
 
   it("does not throw when detaching (scrollRef null) or without ResizeObserver", () => {

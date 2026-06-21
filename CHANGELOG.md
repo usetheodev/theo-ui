@@ -10,8 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `useStickToBottom` — auto-scrolls a scroll container to the bottom as content
   grows, but only while the user is pinned near the bottom (a `threshold` guard),
-  so it never yanks the view away while they read history. Driven by
-  `ResizeObserver` (with a one-shot fallback in test envs). Encapsulates the Radix
+  so it never yanks the view away while they read history. Streamed content is
+  detected with a `MutationObserver` (a scroll container's box does not resize as
+  content grows inside it), with a `ResizeObserver` on top for box-size changes
+  like images finishing load. Encapsulates the Radix
   `[data-radix-scroll-area-viewport]` selector: attach `scrollRef` to a
   `<ScrollArea>` and the hook resolves the real scrollable node internally.
   Ships the pure `isNearBottom` helper too. Exported from `@theokit/ui/scroll-area`
