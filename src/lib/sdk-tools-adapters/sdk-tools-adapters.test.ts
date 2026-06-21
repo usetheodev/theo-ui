@@ -1,0 +1,231 @@
+import { execSync } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import {
+  createApplyPatchTool,
+  createGitDiffTool,
+  createListDirTool,
+  createReadFileTool,
+  createShellTool,
+} from "@theokit/sdk-tools";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import {
+  adaptApplyPatchResult,
+  adaptGitDiffResult,
+  adaptListDirResult,
+  adaptReadFileResult,
+  adaptShellResult,
+  parseResult,
+  parseUnifiedDiff,
+} from "./sdk-tools-adapters.js";
+
+// biome-ignore lint/suspicious/noExplicitAny: sdk-tools CustomTool handler is loosely typed at the dev boundary
+type AnyTool = { handler: (args: any) => Promise<string> | string };
+const run = (tool: AnyTool, args: unknown) => Promise.resolve(tool.handler(args as never));
+
+let hasGit = false;
+try {
+  execSync("git --version", { stdio: "ignore" });
+  hasGit = true;
+} catch {
+  hasGit = false;
+}
+
+/* ─── T1.1 — parser + result narrowing ───────────────────────────────── */
+
+describe("parseUnifiedDiff (M5-4)", () => {
+  it("classifies added/removed/unchanged lines and tracks line numbers", () => {
+    const diff =
+      "diff --git a/a.ts b/a.ts\n@@ -1,2 +1,2 @@\n-const x = 1\n+const x = 2\n unchanged\n";
+    const r = parseUnifiedDiff(diff, "a.ts");
+    expect(r.path).toBe("a.ts");
+    expect(r.stats).toEqual({ added: 1, removed: 1 });
+    expect(r.hunks).toHaveLength(1);
+    expect(r.hunks[0]?.lines.map((l) => l.kind)).toEqual(["removed", "added", "unchanged"]);
+    expect(r.hunks[0]?.lines[2]).toMatchObject({ kind: "unchanged", oldNumber: 2, newNumber: 2 });
+  });
+  it("derives the path from the diff header when not passed", () => {
+    const diff = "diff --git a/src/b.ts b/src/b.ts\n@@ -1 +1 @@\n-a\n+b\n";
+    expect(parseUnifiedDiff(diff).path).toBe("src/b.ts");
+  });
+  it("returns zero hunks for a diff with no hunk headers", () => {
+    expect(parseUnifiedDiff("diff --git a/x b/x\n").hunks).toHaveLength(0);
+  });
+});
+
+describe("parseResult (M5-4)", () => {
+  it("parses a JSON string with ok:true", () => {
+    expect(parseResult('{"ok":true,"content":"x"}')).toEqual({ ok: true, content: "x" });
+  });
+  it("accepts an already-parsed object with ok:true", () => {
+    expect(parseResult({ ok: true, diff: "d" })).toEqual({ ok: true, diff: "d" });
+  });
+  it("returns undefined for ok:false / non-json / non-object", () => {
+    expect(parseResult({ ok: false, error: "x" })).toBeUndefined();
+    expect(parseResult("not json")).toBeUndefined();
+    expect(parseResult(42)).toBeUndefined();
+  });
+});
+
+/* ─── T2.1 — the 5 adapters ──────────────────────────────────────────── */
+
+describe("adaptReadFileResult (M5-4)", () => {
+  it("maps {content} to CodeBlock props with a language from the path", () => {
+    expect(adaptReadFileResult({ ok: true, content: "const x=1", size: 9 }, "a.ts")).toEqual({
+      code: "const x=1",
+      language: "ts",
+    });
+  });
+  it("returns undefined language when no path is known", () => {
+    expect(adaptReadFileResult({ ok: true, content: "x", size: 1 })).toEqual({
+      code: "x",
+      language: undefined,
+    });
+  });
+  it("returns null on an error result", () => {
+    expect(adaptReadFileResult({ ok: false, error: "not_found" })).toBeNull();
+  });
+});
+
+describe("adaptShellResult (M5-4)", () => {
+  it("maps stdout/stderr into terminal lines", () => {
+    const lines = adaptShellResult({ ok: true, stdout: "hello\nworld", stderr: "", exit_code: 0 });
+    expect(lines?.map((l) => l.content)).toContain("hello");
+    expect(lines?.some((l) => l.kind === "stdout")).toBe(true);
+  });
+  it("tags stderr lines and a non-zero exit", () => {
+    const lines = adaptShellResult({ ok: true, stdout: "", stderr: "boom", exit_code: 1 });
+    expect(lines?.some((l) => l.kind === "stderr" && l.content === "boom")).toBe(true);
+  });
+  it("returns null on an error result", () => {
+    expect(adaptShellResult({ ok: false, error: "timeout" })).toBeNull();
+  });
+});
+
+describe("adaptListDirResult (M5-4)", () => {
+  it("maps entries to data-table rows + columns", () => {
+    const t = adaptListDirResult({
+      ok: true,
+      entries: [{ name: "a.ts", type: "file", size: 10 }],
+      truncated: false,
+      totalCount: 1,
+    });
+    expect(t?.rows[0]).toMatchObject({ name: "a.ts", type: "file" });
+    expect(t?.columns.map((c) => c.key)).toContain("name");
+  });
+  it("returns null on an error result", () => {
+    expect(adaptListDirResult({ ok: false, error: "not_found" })).toBeNull();
+  });
+});
+
+describe("adaptApplyPatchResult (M5-4)", () => {
+  it("maps files_patched to CreatedFile rows", () => {
+    const r = adaptApplyPatchResult({ ok: true, files_patched: ["src/a.ts", "b.ts"] });
+    expect(r?.files[0]).toMatchObject({ id: "src/a.ts", name: "a.ts" });
+    expect(r?.files[1]).toMatchObject({ id: "b.ts", name: "b.ts" });
+  });
+  it("returns null on an error result", () => {
+    expect(adaptApplyPatchResult({ ok: false, error: "parse_error" })).toBeNull();
+  });
+});
+
+describe("adaptGitDiffResult (M5-4)", () => {
+  it("parses the diff string into DiffViewer props", () => {
+    const r = adaptGitDiffResult({
+      ok: true,
+      diff: "diff --git a/a.ts b/a.ts\n@@ -1 +1 @@\n-a\n+b\n",
+    });
+    expect(r?.path).toBe("a.ts");
+    expect(r?.hunks).toHaveLength(1);
+  });
+  it("returns null when the diff has no parseable hunks", () => {
+    expect(adaptGitDiffResult({ ok: true, diff: "" })).toBeNull();
+  });
+  it("returns null on an error result", () => {
+    expect(adaptGitDiffResult({ ok: false, error: "not_a_repo" })).toBeNull();
+  });
+});
+
+/* ─── T3.1 — subpath barrel wiring ───────────────────────────────────── */
+
+describe("@theokit/ui/sdk-tools-adapters subpath (M5-4 wiring)", () => {
+  it("exposes the adapters + parser through the subpath barrel", async () => {
+    const mod = await import("./index.js");
+    expect(typeof mod.adaptGitDiffResult).toBe("function");
+    expect(typeof mod.adaptReadFileResult).toBe("function");
+    expect(typeof mod.adaptShellResult).toBe("function");
+    expect(typeof mod.adaptListDirResult).toBe("function");
+    expect(typeof mod.adaptApplyPatchResult).toBe("function");
+    expect(typeof mod.parseUnifiedDiff).toBe("function");
+  });
+});
+
+/* ─── T4.1 — contract: real @theokit/sdk-tools factories ─────────────── */
+
+describe("contract: real @theokit/sdk-tools factories (M5-4)", () => {
+  let root: string;
+  beforeEach(() => {
+    root = mkdtempSync(join(tmpdir(), "theoui-sdk-tools-"));
+  });
+  afterEach(() => {
+    rmSync(root, { recursive: true, force: true });
+  });
+
+  it("read_file → CodeBlock props", async () => {
+    writeFileSync(join(root, "f.ts"), "const hello = 1\n");
+    const tool = createReadFileTool({ projectRoot: root }) as unknown as AnyTool;
+    const raw = await run(tool, { path: "f.ts" });
+    const props = adaptReadFileResult(JSON.parse(raw), "f.ts");
+    expect(props?.code).toContain("const hello = 1");
+    expect(props?.language).toBe("ts");
+  });
+
+  it("list_dir → DataTable rows", async () => {
+    writeFileSync(join(root, "a.ts"), "x");
+    writeFileSync(join(root, "b.ts"), "y");
+    const tool = createListDirTool({ projectRoot: root }) as unknown as AnyTool;
+    const raw = await run(tool, { path: "." });
+    const table = adaptListDirResult(JSON.parse(raw));
+    expect(table?.rows.map((r) => r.name).sort()).toEqual(["a.ts", "b.ts"]);
+  });
+
+  it("shell → TerminalPanel lines", async () => {
+    const tool = createShellTool({ projectRoot: root }) as unknown as AnyTool;
+    const raw = await run(tool, { command: "echo contract-ok" });
+    const lines = adaptShellResult(JSON.parse(raw));
+    expect(lines?.some((l) => l.content === "contract-ok")).toBe(true);
+  });
+
+  it.skipIf(!hasGit)("git_diff → DiffViewer props (real git repo)", async () => {
+    const sh = (cmd: string) => execSync(cmd, { cwd: root, stdio: "ignore" });
+    sh("git init -q");
+    sh("git config user.email t@t.dev");
+    sh("git config user.name t");
+    writeFileSync(join(root, "a.ts"), "const x = 1\n");
+    sh("git add -A");
+    sh("git commit -qm init");
+    writeFileSync(join(root, "a.ts"), "const x = 2\n");
+    const tool = createGitDiffTool({ projectRoot: root }) as unknown as AnyTool;
+    const raw = await run(tool, {});
+    const props = adaptGitDiffResult(JSON.parse(raw));
+    expect(props?.path).toContain("a.ts");
+    expect(props?.hunks.length).toBeGreaterThan(0);
+    expect(props?.hunks[0]?.lines.some((l) => l.kind === "added")).toBe(true);
+  });
+
+  it("apply_patch → CreatedFilesCard files", async () => {
+    writeFileSync(join(root, "a.ts"), "const x = 1\n");
+    // apply_patch expects a standard unified diff (sdk-tools apply-patch.ts:42).
+    const patch = ["--- a/a.ts", "+++ b/a.ts", "@@ -1 +1 @@", "-const x = 1", "+const x = 2"].join(
+      "\n",
+    );
+    const tool = createApplyPatchTool({ projectRoot: root }) as unknown as AnyTool;
+    const raw = await run(tool, { patch });
+    const parsed = JSON.parse(raw);
+    expect(parsed.ok).toBe(true); // the real handler applied the patch
+    const props = adaptApplyPatchResult(parsed);
+    expect(props?.files.length).toBeGreaterThan(0);
+    expect(props?.files[0]?.name).toBe("a.ts");
+  });
+});

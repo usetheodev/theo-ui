@@ -423,6 +423,19 @@ export {
   type ToolRendererKind,
   type ToolRendererRegistry,
 } from "./components/composites/agent-tool-renderer/index.js";
+export {
+  adaptApplyPatchResult,
+  adaptGitDiffResult,
+  adaptListDirResult,
+  adaptReadFileResult,
+  adaptShellResult,
+  type CodeBlockAdapterProps,
+  type CreatedFilesAdapterProps,
+  type DataTableAdapterProps,
+  type ParsedDiff,
+  parseResult,
+  parseUnifiedDiff,
+} from "./lib/sdk-tools-adapters/index.js";
 
 // StatusIndicator composite — operational state, consumes status-* tokens (ADR-0007).
 // Plan: theo-ui-community-best-practices-alignment T4.1.
