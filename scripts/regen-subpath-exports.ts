@@ -57,6 +57,7 @@ const PRESERVE_KEYS = new Set<string>([
   "./slide-deck",
   "./vite-plugin",
   "./preset-v3-legacy",
+  "./sdk-tools-adapters",
 ]);
 
 // Auto-glob exclude list — matches tsup.config.ts. These components

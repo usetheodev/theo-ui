@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `@theokit/ui/sdk-tools-adapters` — pure converters from `@theokit/sdk-tools`
+  tool results into theo-ui rich-primitive props: `adaptGitDiffResult`
+  (parses a unified diff into `DiffViewer` hunks), `adaptReadFileResult`
+  (`CodeBlock`), `adaptShellResult` (`TerminalPanel` lines), `adaptListDirResult`
+  (`DataTable` rows), `adaptApplyPatchResult` (`CreatedFilesCard` files), plus the
+  reusable `parseUnifiedDiff`. Each returns `null` on an error/unparseable result
+  so a tool card keeps its `ToolCallPart` fallback. The adapters are pure and
+  import nothing from `@theokit/sdk-tools` at runtime — consumers gain zero new
+  runtime dependency; a dev-only contract test imports the real factories and
+  runs their handlers to guard against result-shape drift. (M5-4)
 - `AgentToolRenderer` — an overridable tool-renderer registry for the chat
   surface. A tool invocation is dispatched to a rich renderer (diff, terminal,
   code, created-files, data-table) by a classification function, falling back to

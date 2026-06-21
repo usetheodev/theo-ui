@@ -119,6 +119,13 @@ const ISOLATED_SUBPATHS: Record<string, ExportEntry> = {
     types: "./dist/preset-v3-legacy.d.ts",
     import: "./dist/preset-v3-legacy.js",
   },
+  // M5-4 — pure sdk-tools result→props adapters. Lives in src/lib/ (utility,
+  // not a component), so it is an isolated subpath, not auto-scanned. Imports
+  // nothing from @theokit/sdk-tools at runtime.
+  "./sdk-tools-adapters": {
+    types: "./dist/lib/sdk-tools-adapters/index.d.ts",
+    import: "./dist/lib/sdk-tools-adapters/index.js",
+  },
 };
 
 /**
