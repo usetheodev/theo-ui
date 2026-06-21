@@ -26,6 +26,9 @@ describe("toUsageMetrics (M5-7)", () => {
       pointCount: 0,
     });
   });
+  it("peak equals the single point's total for a one-point series", () => {
+    expect(toUsageMetrics([{ label: "a", input: 3, output: 4 }]).peak).toBe(7);
+  });
 });
 
 describe("splitUsagePoints (M5-7)", () => {

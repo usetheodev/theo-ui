@@ -147,13 +147,14 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
               />
             ))}
             {series.map((p, idx) => {
-              const inputH = pct(p.input);
-              const outputH = pct(p.output);
               const x = idx * barWidth + gap / 2;
               const titleText = `${p.label} — input ${formatTokens(p.input)} · output ${formatTokens(p.output)}`;
               if (splitSeries) {
-                // Grouped: input + output as two adjacent half-width bars.
+                // Grouped: input + output as two adjacent half-width bars, each
+                // scaled independently (and clamped) to the scale.
                 const half = innerWidth / 2;
+                const inputH = pct(p.input);
+                const outputH = pct(p.output);
                 return (
                   <g key={p.label}>
                     <title>{titleText}</title>
@@ -176,8 +177,14 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
                   </g>
                 );
               }
-              // Stacked: output on top of input (clamped to the scale).
-              const totalH = pct(p.input + p.output);
+              // Stacked: output on top of input. The total is clamped to the
+              // scale, then split PROPORTIONALLY so the two segments tile to the
+              // clamped total without overlap (a bar over `maxScale` keeps its
+              // input/output ratio instead of both segments hitting 100%).
+              const periodTotal = p.input + p.output;
+              const totalH = pct(periodTotal);
+              const outputH = periodTotal > 0 ? (totalH * p.output) / periodTotal : 0;
+              const inputH = totalH - outputH;
               return (
                 <g key={p.label}>
                   <title>{titleText}</title>
