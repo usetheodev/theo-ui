@@ -412,6 +412,17 @@ export {
   type ConfirmDialogProps,
 } from "./components/composites/confirm-dialog/index.js";
 export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
+export {
+  AgentToolRenderer,
+  type AgentToolRendererProps,
+  type ClassifyTool,
+  defaultClassifyTool,
+  defaultToolRegistry,
+  resolveToolRenderer,
+  type ToolRenderer,
+  type ToolRendererKind,
+  type ToolRendererRegistry,
+} from "./components/composites/agent-tool-renderer/index.js";
 
 // StatusIndicator composite — operational state, consumes status-* tokens (ADR-0007).
 // Plan: theo-ui-community-best-practices-alignment T4.1.

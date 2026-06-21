@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `AgentToolRenderer` — an overridable tool-renderer registry for the chat
+  surface. A tool invocation is dispatched to a rich renderer (diff, terminal,
+  code, created-files, data-table) by a classification function, falling back to
+  `ToolCallPart` for anything unmapped. `<ChatMessage>` now accepts
+  `toolRenderers` (shallow-merged over the default) and `classifyTool` props
+  alongside the existing `partRenderers` / `dataRenderers`; `partRenderers.tool`
+  still takes priority. Exposed via `@theokit/ui/agent-tool-renderer` and the
+  root barrel: `AgentToolRenderer`, `defaultToolRegistry`, `defaultClassifyTool`,
+  `resolveToolRenderer`, and the `ToolRenderer` / `ToolRendererKind` /
+  `ToolRendererRegistry` / `ClassifyTool` types. `ToolCallPart` now lives in this
+  module (the fallback tool renderer) and is re-exported unchanged. (M5-3)
 
 ### Changed
 - Public copy aligned to honest, ecosystem-fit framing across `README.md`,
@@ -27,6 +38,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 ### Removed
+- `PITCH.md` (landing-page marketing copy) removed from the repo. Public copy
+  now lives in `README.md` + the docs site; the Voice/Tone scope in `CLAUDE.md`
+  and `rules/public-copy.md` and the `public-copy-lint` hook were updated to
+  drop the `PITCH.md` reference.
 
 ### Fixed
 - **Status indicators now render their colors under the v3 Tailwind preset.**
