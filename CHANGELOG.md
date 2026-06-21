@@ -18,7 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   root barrel: `AgentToolRenderer`, `defaultToolRegistry`, `defaultClassifyTool`,
   `resolveToolRenderer`, and the `ToolRenderer` / `ToolRendererKind` /
   `ToolRendererRegistry` / `ClassifyTool` types. `ToolCallPart` now lives in this
-  module (the fallback tool renderer) and is re-exported unchanged. (M5-3)
+  module (the fallback tool renderer) and is re-exported unchanged. Behavior
+  note: with the default registry, a tool whose name matches a known kind (e.g.
+  `git_diff`, `shell`, `read_file`) and whose state is `output-available` now
+  renders its rich surface instead of the generic `ToolCallPart`; unmapped tools
+  and every non-`output-available` state (streaming, awaiting-approval, error,
+  denied) are unchanged and keep using `ToolCallPart`. Pass `classifyTool` /
+  `toolRenderers` to override. (M5-3)
 
 ### Changed
 - Public copy aligned to honest, ecosystem-fit framing across `README.md`,

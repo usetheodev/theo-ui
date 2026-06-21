@@ -102,7 +102,11 @@ function isStructuredDiff(
 function isStructuredFiles(
   o: unknown,
 ): o is { title?: ReactNode; files: Array<{ id: string; name: string }> } {
-  return isRecord(o) && Array.isArray(o.files);
+  return (
+    isRecord(o) &&
+    Array.isArray(o.files) &&
+    o.files.every((f) => isRecord(f) && typeof f.id === "string" && typeof f.name === "string")
+  );
 }
 
 function isObjectRows(o: unknown): o is Array<Record<string, unknown>> {
@@ -158,13 +162,24 @@ export interface AgentToolRendererProps {
 /**
  * Render one `ToolUIPart` through the registry, falling back to `<ToolCallPart>`
  * when the tool is unmapped. Reusable outside `<ChatMessage>`.
+ *
+ * Rich renderers apply ONLY to the `output-available` state — they render
+ * `part.output`. Every other state (`input-streaming` / `input-available` /
+ * `approval-*` / `output-error` / `output-denied`) carries no output (and, for
+ * errors, only `errorText`), so it routes to `<ToolCallPart>`, which renders the
+ * state badge, the input, and the error. This prevents a classified-but-errored
+ * tool (e.g. a `shell` that failed) from rendering an empty rich surface and
+ * dropping the error message.
  */
 export function AgentToolRenderer({
   part,
   toolRenderers = defaultToolRegistry,
   classifyTool = defaultClassifyTool,
 }: AgentToolRendererProps): JSX.Element {
-  const renderer = resolveToolRenderer(toolRenderers, classifyTool, part);
+  const renderer =
+    part.state === "output-available"
+      ? resolveToolRenderer(toolRenderers, classifyTool, part)
+      : undefined;
   // `display: contents` wrapper — carries the data-slot (shadcn v4 convention)
   // without introducing a layout box around the resolved renderer.
   return (
