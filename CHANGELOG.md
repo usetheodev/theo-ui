@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `TokenUsageChart` gains `maxScale` (fix the y-axis maximum so multiple charts
+  share a scale — bars exceeding it clamp to 100% while the tooltip + a11y table
+  keep the true number) and `splitSeries` (render input vs output as adjacent
+  grouped bars instead of stacked). Plus pure `toUsageMetrics(points)` (totals +
+  peak per-period total) and `splitUsagePoints(points)` (transpose into parallel
+  `labels`/`input`/`output` series) helpers, exported from
+  `@theokit/ui/token-usage-chart` and the root barrel. (M5-7)
 - `toAgentStreamItems({ history, live }, { classifyTool? })` — a pure, order-aware
   builder that merges completed conversation `UIMessage`s with live `AgentEvent`s
   into the `AgentStreamItem[]` that `<AgentStream>` renders: history becomes
