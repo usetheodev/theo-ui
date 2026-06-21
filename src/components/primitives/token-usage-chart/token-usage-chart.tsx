@@ -1,6 +1,7 @@
 import { forwardRef, useMemo } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
+import { toUsageMetrics } from "./usage-metrics.js";
 
 export interface TokenUsagePoint {
   /** ISO date or friendly label for the x-axis tooltip. */
@@ -25,6 +26,18 @@ interface TokenUsageChartProps extends Omit<HTMLAttributes<HTMLDivElement>, "tit
    * legible and SVG node count stays bounded. Default 60.
    */
   maxBars?: number;
+  /**
+   * Fix the y-axis maximum (the token value mapped to 100% height) so multiple
+   * charts share a scale. When omitted, the scale auto-fits the data. Bars whose
+   * value exceeds `maxScale` are clamped to 100% (the tooltip + a11y table still
+   * show the true number).
+   */
+  maxScale?: number;
+  /**
+   * Render input and output as two adjacent (grouped) bars per period instead of
+   * one stacked bar. Default false (stacked).
+   */
+  splitSeries?: boolean;
 }
 
 function binPoints(points: TokenUsagePoint[], maxBars: number): TokenUsagePoint[] {
@@ -66,18 +79,22 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
       height = 160,
       showLegend = true,
       maxBars = 60,
+      maxScale,
+      splitSeries = false,
       ...props
     },
     ref,
   ) => {
     const series = useMemo(() => binPoints(points, maxBars), [points, maxBars]);
-    const max = Math.max(1, ...series.map((p) => p.input + p.output));
+    const autoMax = Math.max(1, ...series.map((p) => p.input + p.output));
+    const max = maxScale && maxScale > 0 ? maxScale : autoMax;
+    const pct = (value: number): number => Math.min(100, (value / max) * 100);
     const barCount = series.length;
     const barWidth = 100 / Math.max(1, barCount);
     const gap = Math.min(2, barWidth * 0.2);
     const innerWidth = barWidth - gap;
 
-    const total = series.reduce((acc, p) => acc + p.input + p.output, 0);
+    const total = toUsageMetrics(series).total;
 
     return (
       <section
@@ -130,13 +147,40 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
               />
             ))}
             {series.map((p, idx) => {
-              const totalH = ((p.input + p.output) / max) * 100;
-              const inputH = (p.input / max) * 100;
-              const outputH = (p.output / max) * 100;
+              const inputH = pct(p.input);
+              const outputH = pct(p.output);
               const x = idx * barWidth + gap / 2;
+              const titleText = `${p.label} — input ${formatTokens(p.input)} · output ${formatTokens(p.output)}`;
+              if (splitSeries) {
+                // Grouped: input + output as two adjacent half-width bars.
+                const half = innerWidth / 2;
+                return (
+                  <g key={p.label}>
+                    <title>{titleText}</title>
+                    <rect
+                      x={x}
+                      y={100 - inputH}
+                      width={half}
+                      height={inputH}
+                      fill="hsl(var(--accent))"
+                      opacity={0.85}
+                    />
+                    <rect
+                      x={x + half}
+                      y={100 - outputH}
+                      width={half}
+                      height={outputH}
+                      fill="hsl(var(--primary))"
+                      opacity={0.85}
+                    />
+                  </g>
+                );
+              }
+              // Stacked: output on top of input (clamped to the scale).
+              const totalH = pct(p.input + p.output);
               return (
                 <g key={p.label}>
-                  <title>{`${p.label} — input ${formatTokens(p.input)} · output ${formatTokens(p.output)}`}</title>
+                  <title>{titleText}</title>
                   {/* output (top, primary tone) */}
                   <rect
                     x={x}

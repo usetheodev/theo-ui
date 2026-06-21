@@ -51,3 +51,49 @@ describe("TokenUsageChart", () => {
     await expectNoA11yViolations(<TokenUsageChart points={points} />);
   });
 });
+
+/* ─── M5-7 — maxScale + splitSeries ──────────────────────────────────── */
+
+const one: TokenUsagePoint[] = [{ label: "a", input: 5, output: 5 }];
+const rectWidths = (c: HTMLElement): number[] =>
+  [...c.querySelectorAll("rect")].map((r) => Number(r.getAttribute("width")));
+const rectHeights = (c: HTMLElement): number[] =>
+  [...c.querySelectorAll("rect")].map((r) => Number(r.getAttribute("height")));
+
+describe("TokenUsageChart props (M5-7)", () => {
+  it("shows a fixed y-axis max with maxScale", () => {
+    render(<TokenUsageChart points={one} maxScale={1000} />);
+    expect(screen.getByText("1.0k")).toBeInTheDocument(); // formatTokens(1000)
+  });
+
+  it("derives the header total via toUsageMetrics", () => {
+    render(<TokenUsageChart points={[{ label: "x", input: 1000, output: 1000 }]} />);
+    expect(screen.getByText(/total · 2\.0k/)).toBeInTheDocument();
+  });
+
+  it("renders full-width stacked bars by default", () => {
+    const { container } = render(<TokenUsageChart points={one} />);
+    expect(rectWidths(container).every((w) => w > 50)).toBe(true); // innerWidth ~98
+  });
+
+  it("renders half-width grouped bars with splitSeries", () => {
+    const { container } = render(<TokenUsageChart points={one} splitSeries />);
+    expect(rectWidths(container).every((w) => w < 50)).toBe(true); // half ~49
+  });
+
+  it("clamps bars to the scale when a value exceeds maxScale (no overflow)", () => {
+    const { container } = render(
+      <TokenUsageChart points={[{ label: "a", input: 1000, output: 1000 }]} maxScale={1000} />,
+    );
+    const heights = rectHeights(container);
+    expect(Math.max(...heights)).toBeLessThanOrEqual(100);
+    expect(heights).toContain(100);
+  });
+
+  it("keeps the true value in the a11y table even when clamped", () => {
+    render(
+      <TokenUsageChart points={[{ label: "a", input: 1000, output: 5000 }]} maxScale={1000} />,
+    );
+    expect(screen.getByText("5000")).toBeInTheDocument();
+  });
+});

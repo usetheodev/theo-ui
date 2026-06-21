@@ -265,6 +265,10 @@ export {
 export {
   TokenUsageChart,
   type TokenUsagePoint,
+  splitUsagePoints,
+  toUsageMetrics,
+  type UsageMetrics,
+  type UsageSeries,
 } from "./components/primitives/token-usage-chart/index.js";
 export { AutoCompactNotice } from "./components/primitives/auto-compact-notice/index.js";
 export { AgentHandoff, type HandoffParty } from "./components/primitives/agent-handoff/index.js";
