@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `useStickToBottom` — auto-scrolls a scroll container to the bottom as content
+  grows, but only while the user is pinned near the bottom (a `threshold` guard),
+  so it never yanks the view away while they read history. Driven by
+  `ResizeObserver` (with a one-shot fallback in test envs). Encapsulates the Radix
+  `[data-radix-scroll-area-viewport]` selector: attach `scrollRef` to a
+  `<ScrollArea>` and the hook resolves the real scrollable node internally.
+  Ships the pure `isNearBottom` helper too. Exported from `@theokit/ui/scroll-area`
+  and the root barrel. (M5-5)
 - `@theokit/ui/sdk-tools-adapters` — pure converters from `@theokit/sdk-tools`
   tool results into theo-ui rich-primitive props: `adaptGitDiffResult`
   (parses a unified diff into `DiffViewer` hunks), `adaptReadFileResult`
