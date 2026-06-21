@@ -587,6 +587,11 @@ export { AgentComposer } from "./components/composites/agent-composer/index.js";
 export {
   AgentStream,
   type AgentStreamItem,
+  mapAgentEventStatus,
+  type ToAgentStreamItemsInput,
+  type ToAgentStreamItemsOptions,
+  type ToolCallOverride,
+  toAgentStreamItems,
 } from "./components/composites/agent-stream/index.js";
 
 // Agent composites
