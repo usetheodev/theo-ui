@@ -60,24 +60,27 @@ describe("ChatMessage — part dispatch", () => {
     expect(screen.getByText(/reasoning/i)).toBeInTheDocument();
   });
 
-  it("renders a tool-call part with tool name + state badge", () => {
+  it("renders an unmapped tool-call part with tool name + state badge (ToolCallPart fallback)", () => {
+    // `fetch_weather` is not classified by defaultClassifyTool (M5-3), so it
+    // falls back to <ToolCallPart>. Mapped tools (e.g. `bash` → terminal) are
+    // covered in agent-tool-renderer.test.tsx.
     const msg: UIMessage = {
       id: "1",
       role: "assistant",
       parts: [
         {
-          type: "tool-bash",
+          type: "tool-fetch_weather",
           toolCallId: "1",
-          toolName: "bash",
+          toolName: "fetch_weather",
           state: "output-available",
-          input: { command: "ls -la" },
-          output: "drwxr-xr-x  README.md",
+          input: { city: "SP" },
+          output: "sunny, 28C",
         },
       ],
     };
     const { container } = render(<ChatMessage message={msg} />);
     expect(container.querySelector('[data-theo-tool-call="output-available"]')).toBeInTheDocument();
-    expect(screen.getByText(/bash/i)).toBeInTheDocument();
+    expect(screen.getByText(/fetch_weather/i)).toBeInTheDocument();
     expect(screen.getByText(/completed/i)).toBeInTheDocument();
   });
 

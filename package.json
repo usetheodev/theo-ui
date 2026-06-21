@@ -69,6 +69,10 @@
       "types": "./dist/components/composites/agent-timeline/index.d.ts",
       "import": "./dist/composites/agent-timeline/index.js"
     },
+    "./agent-tool-renderer": {
+      "types": "./dist/components/composites/agent-tool-renderer/index.d.ts",
+      "import": "./dist/composites/agent-tool-renderer/index.js"
+    },
     "./alert": {
       "types": "./dist/components/primitives/alert/index.d.ts",
       "import": "./dist/primitives/alert/index.js"
