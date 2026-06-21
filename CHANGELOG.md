@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `toAgentStreamItems({ history, live }, { classifyTool? })` — a pure, order-aware
+  builder that merges completed conversation `UIMessage`s with live `AgentEvent`s
+  into the `AgentStreamItem[]` that `<AgentStream>` renders: history becomes
+  `message` items, live activity becomes `tool-call` items (status mapped from
+  `AgentEventStatus`), history-then-live. `classifyTool` customizes each
+  tool-call item per event (presentational fields only — `kind`/`id`/`status`
+  stay authoritative). Ships `mapAgentEventStatus` + the now-exported
+  `MessageStreamItem`/`ToolCallStreamItem` item types. (M5-6)
 - `useStickToBottom` — auto-scrolls a scroll container to the bottom as content
   grows, but only while the user is pinned near the bottom (a `threshold` guard),
   so it never yanks the view away while they read history. Streamed content is
