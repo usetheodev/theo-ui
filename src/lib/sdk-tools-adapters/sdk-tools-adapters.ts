@@ -76,9 +76,17 @@ export function parseUnifiedDiff(diff: string, path?: string): ParsedDiff {
   let newNo = 0;
 
   for (const line of lines) {
-    if (derivedPath === undefined) {
-      const g = GIT_HEADER_PATH.exec(line) ?? PLUS_PATH.exec(line);
-      if (g?.[1]) derivedPath = g[1];
+    // A new `diff --git` header starts a new file. `<DiffViewer>` renders a
+    // single file, so we parse the FIRST file only and stop at the second
+    // (rather than conflating multiple files' hunks under one path). The header
+    // also closes the current hunk so the file preamble (`index`/`---`/`+++`)
+    // that follows is never mis-read as content.
+    if (line.startsWith("diff --git ")) {
+      if (hunks.length > 0) break;
+      current = undefined;
+      const g = GIT_HEADER_PATH.exec(line);
+      if (g?.[1] && derivedPath === undefined) derivedPath = g[1];
+      continue;
     }
     const header = HUNK_HEADER.exec(line);
     if (header) {
@@ -88,7 +96,15 @@ export function parseUnifiedDiff(diff: string, path?: string): ParsedDiff {
       hunks.push(current);
       continue;
     }
-    if (!current) continue; // pre-hunk header/meta lines
+    if (!current) {
+      // Pre-hunk preamble (`index`/`--- a/`/`+++ b/`): never content. Derive the
+      // path from `+++ b/<path>` when the git header was absent or path-less.
+      if (derivedPath === undefined) {
+        const g = PLUS_PATH.exec(line);
+        if (g?.[1]) derivedPath = g[1];
+      }
+      continue;
+    }
     const kind = lineKind(line);
     if (kind === undefined) continue; // "\ No newline at end of file", etc.
     const content = line.slice(1);
@@ -164,8 +180,17 @@ export function adaptListDirResult(result: unknown): DataTableAdapterProps | nul
   const rows = r.entries.filter(
     (e): e is Record<string, unknown> => typeof e === "object" && e !== null,
   );
-  const keys = rows.length > 0 ? Object.keys(rows[0] ?? {}) : ["name", "type"];
-  return { columns: keys.map((key) => ({ key, label: key })), rows };
+  // Union keys across ALL rows so heterogeneous entries (e.g. files with `size`,
+  // dirs without) never drop a column present only in a later row.
+  const keys = new Set<string>();
+  for (const row of rows) {
+    for (const key of Object.keys(row)) keys.add(key);
+  }
+  if (keys.size === 0) {
+    keys.add("name");
+    keys.add("type");
+  }
+  return { columns: [...keys].map((key) => ({ key, label: key })), rows };
 }
 
 export interface CreatedFilesAdapterProps {

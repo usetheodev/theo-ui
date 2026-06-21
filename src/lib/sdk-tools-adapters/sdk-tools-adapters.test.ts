@@ -147,6 +147,86 @@ describe("adaptGitDiffResult (M5-4)", () => {
   });
 });
 
+/* ─── review fixes — multi-hunk/multi-file parser + edge cases ───────── */
+
+describe("parseUnifiedDiff multi-hunk / multi-file (review)", () => {
+  it("parses multiple hunks of one file with independent line numbers", () => {
+    const diff = [
+      "diff --git a/a.ts b/a.ts",
+      "@@ -1,2 +1,2 @@",
+      "-const x = 1",
+      "+const x = 2",
+      " keep",
+      "@@ -10,1 +10,1 @@",
+      "-const y = 1",
+      "+const y = 2",
+      "",
+    ].join("\n");
+    const r = parseUnifiedDiff(diff);
+    expect(r.hunks).toHaveLength(2);
+    expect(r.stats).toEqual({ added: 2, removed: 2 });
+    // second hunk's numbering starts at the @@ -10 +10 header, not continuing from hunk 1
+    expect(r.hunks[1]?.lines[0]).toMatchObject({ kind: "removed", oldNumber: 10 });
+    expect(r.hunks[1]?.lines[1]).toMatchObject({ kind: "added", newNumber: 10 });
+  });
+
+  it("parses the FIRST file only of a multi-file diff and never reads the preamble as content", () => {
+    const diff = [
+      "diff --git a/one.ts b/one.ts",
+      "--- a/one.ts",
+      "+++ b/one.ts",
+      "@@ -1 +1 @@",
+      "-a",
+      "+A",
+      "diff --git a/two.ts b/two.ts",
+      "--- a/two.ts",
+      "+++ b/two.ts",
+      "@@ -1 +1 @@",
+      "-c",
+      "+C",
+      "",
+    ].join("\n");
+    const r = parseUnifiedDiff(diff);
+    expect(r.path).toBe("one.ts");
+    expect(r.hunks).toHaveLength(1); // second file dropped (DiffViewer is single-file)
+    // stats reflect ONLY real content lines — the +++/--- preamble of file 2 is not counted
+    expect(r.stats).toEqual({ added: 1, removed: 1 });
+    // no diff line content begins with the +++/--- file markers
+    const contents = r.hunks.flatMap((h) => h.lines.map((l) => l.content));
+    expect(contents.some((c) => c.startsWith("++ ") || c.startsWith("-- "))).toBe(false);
+  });
+});
+
+describe("adapter edge cases (review)", () => {
+  it("adaptReadFileResult returns undefined language for a dotfile or extension-less path", () => {
+    expect(
+      adaptReadFileResult({ ok: true, content: "x", size: 1 }, ".gitignore")?.language,
+    ).toBeUndefined();
+    expect(
+      adaptReadFileResult({ ok: true, content: "x", size: 1 }, "Makefile")?.language,
+    ).toBeUndefined();
+  });
+
+  it("adaptGitDiffResult honors an explicit path override", () => {
+    const r = adaptGitDiffResult({ ok: true, diff: "@@ -1 +1 @@\n-a\n+b\n" }, "given/path.ts");
+    expect(r?.path).toBe("given/path.ts");
+  });
+
+  it("adaptListDirResult unions columns across heterogeneous rows", () => {
+    const t = adaptListDirResult({
+      ok: true,
+      entries: [
+        { name: "dir", type: "directory" },
+        { name: "f.ts", type: "file", size: 10 },
+      ],
+      truncated: false,
+      totalCount: 2,
+    });
+    // `size` appears only on the 2nd row but must still be a column
+    expect(t?.columns.map((c) => c.key)).toContain("size");
+  });
+});
+
 /* ─── T3.1 — subpath barrel wiring ───────────────────────────────────── */
 
 describe("@theokit/ui/sdk-tools-adapters subpath (M5-4 wiring)", () => {
