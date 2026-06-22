@@ -99,6 +99,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drop the `PITCH.md` reference.
 
 ### Fixed
+- **Visual-regression gate tolerates cross-environment antialiasing.** The
+  Playwright `toHaveScreenshot` config used `threshold: 0.001` + `maxDiffPixels: 0`
+  (zero tolerance), so the 101 snapshots only ever matched the exact machine that
+  generated them — they failed in CI with 488-1882 antialiased pixels differing
+  (ratio ≤0.2%, no real regression). Raised to Playwright's antialiasing-robust
+  default `threshold: 0.2` with a `maxDiffPixels: 200` safety net that still
+  fails on a genuine visual regression (thousands+ of pixels). (Internal CI
+  hygiene.) (#15)
 - **Bundle-size gate scoped to deterministic artifacts.** `dist/components.css`
   is a Tailwind v4 `@source`-scanned generated file whose exact byte size is
   environment-sensitive (~470KB locally vs ~104KB on CI runners — both valid

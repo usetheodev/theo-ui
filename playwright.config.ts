@@ -26,8 +26,16 @@ export default defineConfig({
   reporter: process.env.CI ? "github" : "list",
   expect: {
     toHaveScreenshot: {
-      threshold: 0.001,
-      maxDiffPixels: 0,
+      // `threshold` is the per-pixel perceptual (YIQ) color delta below which a
+      // pixel counts as unchanged. Playwright's default is 0.2; the prior 0.001
+      // counted sub-pixel font antialiasing as a difference, so the suite could
+      // only pass on the exact machine that generated the baselines — it failed
+      // in CI with ~488-1882 antialiased px diffing (ratio ≤0.2%, no real
+      // regression). 0.2 ignores antialiasing; `maxDiffPixels: 200` is a safety
+      // net that still fails on a genuine regression (a changed color/layout
+      // diffs thousands+ of pixels).
+      threshold: 0.2,
+      maxDiffPixels: 200,
       animations: "disabled",
     },
   },

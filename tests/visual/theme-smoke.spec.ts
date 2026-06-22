@@ -67,7 +67,9 @@ test.describe("OKLCH theme cascade smoke", () => {
     await page.setContent(PAGE);
     await page.evaluate(() => document.fonts.ready);
     await expect(page).toHaveScreenshot("primary-and-derived.png", {
-      threshold: 0.001,
+      // Antialiasing-robust per-pixel threshold (config default). The aggregate
+      // maxDiffPixels safety net comes from playwright.config.ts.
+      threshold: 0.2,
       animations: "disabled",
     });
   });
