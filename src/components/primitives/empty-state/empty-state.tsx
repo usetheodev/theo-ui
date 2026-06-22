@@ -31,7 +31,7 @@ const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
       data-slot="empty-state"
       ref={ref}
       className={cn(
-        "grid place-items-center gap-3 rounded-2xl border bg-card px-6 py-12 text-center",
+        "grid place-items-center gap-3 rounded-2xl border border-border bg-card px-6 py-12 text-center",
         dashed ? "border-border/60 border-dashed" : "border-border/40",
         className,
       )}

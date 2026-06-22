@@ -156,7 +156,7 @@ const ChoicePrompt = forwardRef<HTMLElement, ChoicePromptProps>(
         aria-labelledby={questionId}
         onKeyDown={handleKeyDown}
         className={cn(
-          "grid w-full gap-4 rounded-xl border bg-card p-5 text-card-foreground shadow-md",
+          "grid w-full gap-4 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-md",
           "transition-shadow duration-base ease-out-soft",
           className,
         )}

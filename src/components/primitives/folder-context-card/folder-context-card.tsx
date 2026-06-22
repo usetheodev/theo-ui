@@ -47,7 +47,7 @@ const FolderContextCard = forwardRef<HTMLElement, FolderContextCardProps>(
     <section
       data-slot="folder-context-card"
       ref={ref}
-      className={cn("rounded-xl border bg-card p-4", className)}
+      className={cn("rounded-xl border border-border bg-card p-4", className)}
       {...props}
     >
       {title ? (

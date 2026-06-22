@@ -10,7 +10,8 @@ export type DeploymentStatus =
   | "deploying"
   | "live"
   | "failed"
-  | "cancelled";
+  | "cancelled"
+  | "idle";
 
 const statusToVariant: Record<
   DeploymentStatus,
@@ -22,6 +23,7 @@ const statusToVariant: Record<
   live: "success",
   failed: "destructive",
   cancelled: "default",
+  idle: "default",
 };
 
 const statusToDotTone: Record<
@@ -34,6 +36,7 @@ const statusToDotTone: Record<
   live: "success",
   failed: "destructive",
   cancelled: "muted",
+  idle: "muted",
 };
 
 const statusLabels: Record<DeploymentStatus, string> = {
@@ -43,6 +46,7 @@ const statusLabels: Record<DeploymentStatus, string> = {
   live: "Live",
   failed: "Failed",
   cancelled: "Cancelled",
+  idle: "Idle",
 };
 
 const isAnimated = (status: DeploymentStatus) =>

@@ -69,7 +69,7 @@ const MetricsPanel = forwardRef<HTMLDivElement, MetricsPanelProps>(
     <div
       data-slot="metrics-panel"
       ref={ref}
-      className={cn("rounded-xl border bg-card p-5 shadow-sm", className)}
+      className={cn("rounded-xl border border-border bg-card p-5 shadow-sm", className)}
       {...props}
     >
       {title || description ? (

@@ -112,7 +112,7 @@ const TaskPlan = forwardRef<HTMLElement, TaskPlanProps>(
       <section
         data-slot="task-plan"
         ref={ref}
-        className={cn("rounded-xl border bg-card p-4", className)}
+        className={cn("rounded-xl border border-border bg-card p-4", className)}
         {...props}
       >
         <header className="mb-3 flex items-baseline justify-between gap-3">

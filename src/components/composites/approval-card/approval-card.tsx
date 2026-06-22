@@ -16,7 +16,7 @@ import { Button } from "../../primitives/button/index.js";
  */
 
 const cardVariants = cva(
-  "grid w-full gap-3 rounded-xl border p-4 transition-colors duration-base ease-out-soft",
+  "grid w-full gap-3 rounded-xl border border-border p-4 transition-colors duration-base ease-out-soft",
   {
     variants: {
       severity: {

@@ -100,7 +100,7 @@ const TokenUsageChart = forwardRef<HTMLDivElement, TokenUsageChartProps>(
       <section
         data-slot="token-usage-chart"
         ref={ref}
-        className={cn("rounded-xl border bg-card p-4", className)}
+        className={cn("rounded-xl border border-border bg-card p-4", className)}
         aria-label="Token usage over time"
         {...props}
       >
