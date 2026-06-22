@@ -104,7 +104,7 @@ const TextPrompt = forwardRef<HTMLElement, TextPromptProps>(
         ref={ref}
         aria-labelledby={questionId}
         className={cn(
-          "grid w-full gap-4 rounded-xl border bg-card p-5 text-card-foreground shadow-md",
+          "grid w-full gap-4 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-md",
           "transition-shadow duration-base ease-out-soft",
           className,
         )}

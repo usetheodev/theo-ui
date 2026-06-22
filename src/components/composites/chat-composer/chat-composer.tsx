@@ -136,7 +136,7 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
         ref={ref}
         onSubmit={handleSubmit}
         className={cn(
-          "rounded-2xl border bg-card text-card-foreground transition-shadow",
+          "rounded-2xl border border-border bg-card text-card-foreground transition-shadow",
           "focus-within:border-primary/60 focus-within:shadow-glow",
           isCode && "rounded-xl shadow-sm",
           className,
