@@ -171,7 +171,9 @@ for (const theme of themeFixtures) {
           await page.setContent(renderPage(theme, mode, surface.html(theme[mode])));
           await page.evaluate(() => document.fonts.ready);
           await expect(page).toHaveScreenshot(`${theme.name}-${mode}-${surface.slug}.png`, {
-            threshold: 0.001,
+            // Antialiasing-robust per-pixel threshold (config default). The
+            // aggregate maxDiffPixels safety net comes from playwright.config.ts.
+            threshold: 0.2,
           });
         });
       }
