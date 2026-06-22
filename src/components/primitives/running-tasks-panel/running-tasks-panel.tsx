@@ -42,7 +42,7 @@ const RunningTasksPanel = forwardRef<HTMLElement, RunningTasksPanelProps>(
       <section
         data-slot="running-tasks-panel"
         ref={ref}
-        className={cn("rounded-xl border bg-card p-4", className)}
+        className={cn("rounded-xl border border-border bg-card p-4", className)}
         {...props}
       >
         <Group title="Running" empty="Nothing running" items={running} />

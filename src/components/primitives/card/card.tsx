@@ -46,7 +46,7 @@ const Root = forwardRef<HTMLDivElement, CardRootProps>(
         data-slot="card"
         ref={ref}
         className={cn(
-          "rounded-xl border bg-card text-card-foreground shadow-md",
+          "rounded-xl border border-border bg-card text-card-foreground shadow-md",
           "transition-shadow duration-base ease-out-soft",
           className,
         )}

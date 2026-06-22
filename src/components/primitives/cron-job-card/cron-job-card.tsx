@@ -55,7 +55,7 @@ const CronJobCard = forwardRef<HTMLElement, CronJobCardProps>(
         data-slot="cron-job-card"
         ref={ref}
         className={cn(
-          "grid gap-3 rounded-xl border bg-card p-4",
+          "grid gap-3 rounded-xl border border-border bg-card p-4",
           job.status === "disabled" && "opacity-70",
           className,
         )}

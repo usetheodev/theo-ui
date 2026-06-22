@@ -54,7 +54,7 @@ const MemoryEditor = forwardRef<HTMLDivElement, MemoryEditorProps>(
       <section
         data-slot="memory-editor"
         ref={ref}
-        className={cn("rounded-xl border bg-card", className)}
+        className={cn("rounded-xl border border-border bg-card", className)}
         {...props}
       >
         <header className="flex items-center justify-between gap-3 border-border/40 border-b px-4 py-3">

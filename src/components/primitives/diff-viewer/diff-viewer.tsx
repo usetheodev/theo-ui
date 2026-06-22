@@ -64,7 +64,7 @@ const DiffViewer = forwardRef<HTMLDivElement, DiffViewerProps>(
     <div
       data-slot="diff-viewer"
       ref={ref}
-      className={cn("overflow-hidden rounded-xl border bg-card font-mono", className)}
+      className={cn("overflow-hidden rounded-xl border border-border bg-card font-mono", className)}
       {...props}
     >
       <header className="flex items-center justify-between gap-3 border-border/40 border-b bg-muted/30 px-3 py-2">
