@@ -34,19 +34,27 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
 function resolveTailwindCliBinary(): string {
-  // The pnpm hoist places the v3 CLI at the root `.bin/` (legacy devDep,
-  // still used by Ladle). We need the v4 CLI shipped by `@tailwindcss/cli`,
-  // which lives at a deep path under `.pnpm/@tailwindcss+cli@…/`. Resolve
-  // via Node's module algorithm so this works regardless of where the
-  // tarball gets hoisted to.
+  // We need the v4 CLI shipped by `@tailwindcss/cli` (the root `.bin/tailwindcss`
+  // may be the legacy v3 CLI pulled in by `tailwindcss-animate`). Resolve the
+  // package's OWN declared `bin` entry (its `dist/index.mjs`) via Node's module
+  // algorithm — the only package-manager-agnostic contract. Do NOT look for a
+  // nested `@tailwindcss/cli/node_modules/.bin/tailwindcss` shim: pnpm only
+  // materializes that in some hoist layouts, so it is absent under CI's
+  // `--frozen-lockfile` install and broke the v0.17.0 release build.
   const req = createRequire(import.meta.url);
   const pkgPath = req.resolve("@tailwindcss/cli/package.json");
   const pkgDir = dirname(pkgPath);
-  // The binary lives in this package's local `.bin/` (pnpm shadow).
-  const binPath = join(pkgDir, "node_modules", ".bin", "tailwindcss");
+  const pkg = req("@tailwindcss/cli/package.json") as { bin?: string | Record<string, string> };
+  const binField = typeof pkg.bin === "string" ? pkg.bin : pkg.bin?.tailwindcss;
+  if (binField === undefined) {
+    throw new Error(
+      "[build-precompiled-css] @tailwindcss/cli package.json declares no `tailwindcss` bin entry.",
+    );
+  }
+  const binPath = resolve(pkgDir, binField);
   if (!existsSync(binPath)) {
     throw new Error(
-      `[build-precompiled-css] @tailwindcss/cli binary not found at ${binPath}. Run \`pnpm install\` and retry.`,
+      `[build-precompiled-css] @tailwindcss/cli entry not found at ${binPath}. Run \`pnpm install\` and retry.`,
     );
   }
   return binPath;
@@ -89,11 +97,17 @@ async function compileUtilities(): Promise<void> {
   process.stdout.write(`  input:  ${inputPath}\n`);
   process.stdout.write(`  output: ${outputPath}\n`);
 
-  const result = spawnSync(cli, ["--input", inputPath, "--output", outputPath, "--minify"], {
-    cwd: ROOT,
-    stdio: "inherit",
-    encoding: "utf-8",
-  });
+  // Run the resolved ESM entry via the current Node binary — independent of any
+  // executable `.bin` shim the package manager may or may not have created.
+  const result = spawnSync(
+    process.execPath,
+    [cli, "--input", inputPath, "--output", outputPath, "--minify"],
+    {
+      cwd: ROOT,
+      stdio: "inherit",
+      encoding: "utf-8",
+    },
+  );
 
   if (result.status !== 0) {
     throw new Error(
@@ -143,7 +157,13 @@ async function main(): Promise<void> {
   process.stdout.write("[build-precompiled-css] done\n");
 }
 
-main().catch((err: unknown) => {
-  process.stderr.write(`${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`);
-  process.exit(1);
-});
+export { resolveTailwindCliBinary };
+
+// Only run main when invoked as the entrypoint (CLI). Importers (the regression
+// test) get the pure resolver without side effects.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((err: unknown) => {
+    process.stderr.write(`${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`);
+    process.exit(1);
+  });
+}
