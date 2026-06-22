@@ -3,7 +3,6 @@
 #
 # Scope (per rules/public-copy.md):
 #   - README.md (any directory)
-#   - PITCH.md
 #   - docs/marketing/**/*.md
 #   - docs/guides/**/*.md
 #
@@ -49,7 +48,6 @@ fi
 IS_PUBLIC_COPY=false
 case "$FILE_PATH" in
   */README.md|README.md) IS_PUBLIC_COPY=true ;;
-  */PITCH.md|PITCH.md) IS_PUBLIC_COPY=true ;;
   *docs/marketing/*.md) IS_PUBLIC_COPY=true ;;
   *docs/guides/*.md) IS_PUBLIC_COPY=true ;;
   *) IS_PUBLIC_COPY=false ;;

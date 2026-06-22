@@ -6,7 +6,6 @@ Source of Truth for voice/tone in README, marketing, and external-facing docs. E
 
 Applies to:
 - `README.md` (any directory)
-- `PITCH.md`
 - `docs/marketing/**/*.md`
 - `docs/guides/**/*.md`
 

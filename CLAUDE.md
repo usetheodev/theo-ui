@@ -36,7 +36,6 @@ Positioned as the **UI pillar** of Theo and a **community auxiliary** of the eco
 
 **Applies to:**
 
-- `PITCH.md` — landing-page copy at project root
 - `README.md` HERO + "Why `@theokit/ui`" sections (everything above the `## Component catalog` section)
 - Future TheoUI launch material, blog posts, site sections referencing Violet Forge or the design system as a brand
 
@@ -87,7 +86,7 @@ Four future engines / composites are explicitly in scope but **not implemented**
 - **Bundle isolation**: every engine likely blows the current `quality:bundle` ±5% baseline. Plan a subpath import (`@theokit/ui/whiteboard`) with peer-dep opt-in; **do not include in the main barrel**. Update `quality:bundle` baseline only after subpath isolation is confirmed.
 - **YAGNI gate**: no engine moves out of "Explorer" without a documented agent-surface or PaaS-dashboard consumer asking for it.
 - **License compatibility**: Apache-2.0 compatible deps only (no GPL transitive).
-- **Honesty**: until shipped, every public surface (README, PITCH, site) must label these as Roadmap, not Available.
+- **Honesty**: until shipped, every public surface (README, site) must label these as Roadmap, not Available.
 
 No version commitment yet. These are not on the 0.1 / 1.0 line.
 
