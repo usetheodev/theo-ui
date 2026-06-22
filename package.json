@@ -69,6 +69,10 @@
       "types": "./dist/components/composites/agent-timeline/index.d.ts",
       "import": "./dist/composites/agent-timeline/index.js"
     },
+    "./agent-tool-renderer": {
+      "types": "./dist/components/composites/agent-tool-renderer/index.d.ts",
+      "import": "./dist/composites/agent-tool-renderer/index.js"
+    },
     "./alert": {
       "types": "./dist/components/primitives/alert/index.d.ts",
       "import": "./dist/primitives/alert/index.js"
@@ -584,6 +588,10 @@
     "./preset-v3-legacy": {
       "types": "./dist/preset-v3-legacy.d.ts",
       "import": "./dist/preset-v3-legacy.js"
+    },
+    "./sdk-tools-adapters": {
+      "types": "./dist/lib/sdk-tools-adapters/index.d.ts",
+      "import": "./dist/lib/sdk-tools-adapters/index.js"
     }
   },
   "files": [
@@ -768,6 +776,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
+    "@theokit/sdk-tools": "file:../theokit-sdk/packages/sdk-tools",
     "@types/culori": "^4.0.1",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",

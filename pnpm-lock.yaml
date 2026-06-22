@@ -52,7 +52,7 @@ importers:
         version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tailwindcss/vite':
         specifier: ^4.0.0
-        version: 4.3.0(vite@5.4.21(@types/node@22.19.19)(lightningcss@1.32.0))
+        version: 4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -120,6 +120,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.5.2
         version: 14.6.1(@testing-library/dom@10.4.1)
+      '@theokit/sdk-tools':
+        specifier: file:../theokit-sdk/packages/sdk-tools
+        version: file:../theokit-sdk/packages/sdk-tools(@theokit/sdk@2.3.0(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(vitest@4.1.8)(zod@4.4.3)
       '@types/culori':
         specifier: ^4.0.1
         version: 4.0.1
@@ -2423,6 +2426,48 @@ packages:
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
 
+  '@theokit/sdk-tools@file:../theokit-sdk/packages/sdk-tools':
+    resolution: {directory: ../theokit-sdk/packages/sdk-tools, type: directory}
+    engines: {node: '>=22.12.0'}
+    peerDependencies:
+      '@theokit/sdk': '>=1.7.0'
+      simple-git: ^3.0.0
+      vitest: '>=2.0.0'
+      zod: ^4.0.0
+    peerDependenciesMeta:
+      simple-git:
+        optional: true
+      vitest:
+        optional: true
+
+  '@theokit/sdk@2.3.0':
+    resolution: {integrity: sha512-DjJVkDNpr4HSe/NdpoDw1z5FLZeib7hLi5N1U61DAbwgn88bBsiG+wM171Q1RRHc0se9dO/kxAj415vIzCP0iw==}
+    engines: {node: '>=22.12.0'}
+    hasBin: true
+    peerDependencies:
+      '@lancedb/lancedb': ^0.30.0
+      '@types/ws': '>=8.0.0'
+      better-sqlite3: ^12.0.0
+      proper-lockfile: ^4.1.2
+      sqlite-vec: ^0.1.0
+      ws: '>=8.0.0'
+      zod: ^4.0.0
+    peerDependenciesMeta:
+      '@lancedb/lancedb':
+        optional: true
+      '@types/ws':
+        optional: true
+      better-sqlite3:
+        optional: true
+      proper-lockfile:
+        optional: true
+      sqlite-vec:
+        optional: true
+      ws:
+        optional: true
+      zod:
+        optional: true
+
   '@ts-morph/common@0.29.0':
     resolution: {integrity: sha512-35oUmphHbJvQ/+UTwFNme/t2p3FoKiGJ5auTjjpNTop2dyREspirjMy82PLSC1pnDJ8ah1GU98hwpVt64YXQsg==}
 
@@ -2993,6 +3038,10 @@ packages:
 
   cose-base@2.2.0:
     resolution: {integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==}
+
+  croner@9.1.0:
+    resolution: {integrity: sha512-p9nwwR4qyT5W996vBZhdvBCnMhicY5ytZkR4D1Xj0wuTDEiMnjwR57Q3RXYY/s0EpX6Ay3vgIcfaR+ewGHsi+g==}
+    engines: {node: '>=18.0'}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -6918,12 +6967,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.3.0
       '@tailwindcss/oxide-win32-x64-msvc': 4.3.0
 
-  '@tailwindcss/vite@4.3.0(vite@5.4.21(@types/node@22.19.19)(lightningcss@1.32.0))':
+  '@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))':
     dependencies:
       '@tailwindcss/node': 4.3.0
       '@tailwindcss/oxide': 4.3.0
       tailwindcss: 4.3.0
-      vite: 5.4.21(@types/node@22.19.19)(lightningcss@1.32.0)
+      vite: 7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -6958,6 +7007,21 @@ snapshots:
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1)':
     dependencies:
       '@testing-library/dom': 10.4.1
+
+  '@theokit/sdk-tools@file:../theokit-sdk/packages/sdk-tools(@theokit/sdk@2.3.0(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(vitest@4.1.8)(zod@4.4.3)':
+    dependencies:
+      '@theokit/sdk': 2.3.0(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
+      zod: 4.4.3
+    optionalDependencies:
+      vitest: 4.1.8(@types/node@22.19.19)(@vitest/coverage-v8@4.1.8)(happy-dom@20.9.0)(msw@2.14.6(@types/node@22.19.19)(typescript@5.9.3))(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))
+
+  '@theokit/sdk@2.3.0(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)':
+    dependencies:
+      croner: 9.1.0
+    optionalDependencies:
+      '@types/ws': 8.18.1
+      ws: 8.20.1
+      zod: 4.4.3
 
   '@ts-morph/common@0.29.0':
     dependencies:
@@ -7566,6 +7630,8 @@ snapshots:
   cose-base@2.2.0:
     dependencies:
       layout-base: 2.0.1
+
+  croner@9.1.0: {}
 
   cross-spawn@7.0.6:
     dependencies:

@@ -22,7 +22,7 @@ import { ChatMessage } from "../chat-message/index.js";
  * AgentStream is a pure presentational composite over its child primitives.
  */
 
-interface ToolCallStreamItem {
+export interface ToolCallStreamItem {
   kind: "tool-call";
   id: string;
   tool: ReactNode;
@@ -64,7 +64,7 @@ interface StreamingStreamItem {
   partial?: ReactNode;
 }
 
-interface MessageStreamItem {
+export interface MessageStreamItem {
   kind: "message";
   id: string;
   message: UIMessage;

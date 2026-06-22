@@ -136,7 +136,14 @@ export { Input, type InputProps } from "./components/primitives/input/index.js";
 export { Dialog } from "./components/primitives/dialog/index.js";
 export { Tabs } from "./components/primitives/tabs/index.js";
 export { Tooltip } from "./components/primitives/tooltip/index.js";
-export { ScrollArea } from "./components/primitives/scroll-area/index.js";
+export {
+  ScrollArea,
+  isNearBottom,
+  type StickToBottomMetrics,
+  useStickToBottom,
+  type UseStickToBottomOptions,
+  type UseStickToBottomReturn,
+} from "./components/primitives/scroll-area/index.js";
 export {
   Toast,
   type ToastVariant,
@@ -258,6 +265,10 @@ export {
 export {
   TokenUsageChart,
   type TokenUsagePoint,
+  splitUsagePoints,
+  toUsageMetrics,
+  type UsageMetrics,
+  type UsageSeries,
 } from "./components/primitives/token-usage-chart/index.js";
 export { AutoCompactNotice } from "./components/primitives/auto-compact-notice/index.js";
 export { AgentHandoff, type HandoffParty } from "./components/primitives/agent-handoff/index.js";
@@ -412,6 +423,30 @@ export {
   type ConfirmDialogProps,
 } from "./components/composites/confirm-dialog/index.js";
 export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
+export {
+  AgentToolRenderer,
+  type AgentToolRendererProps,
+  type ClassifyTool,
+  defaultClassifyTool,
+  defaultToolRegistry,
+  resolveToolRenderer,
+  type ToolRenderer,
+  type ToolRendererKind,
+  type ToolRendererRegistry,
+} from "./components/composites/agent-tool-renderer/index.js";
+export {
+  adaptApplyPatchResult,
+  adaptGitDiffResult,
+  adaptListDirResult,
+  adaptReadFileResult,
+  adaptShellResult,
+  type CodeBlockAdapterProps,
+  type CreatedFilesAdapterProps,
+  type DataTableAdapterProps,
+  type ParsedDiff,
+  parseResult,
+  parseUnifiedDiff,
+} from "./lib/sdk-tools-adapters/index.js";
 
 // StatusIndicator composite — operational state, consumes status-* tokens (ADR-0007).
 // Plan: theo-ui-community-best-practices-alignment T4.1.
@@ -556,6 +591,11 @@ export { AgentComposer } from "./components/composites/agent-composer/index.js";
 export {
   AgentStream,
   type AgentStreamItem,
+  mapAgentEventStatus,
+  type ToAgentStreamItemsInput,
+  type ToAgentStreamItemsOptions,
+  type ToolCallOverride,
+  toAgentStreamItems,
 } from "./components/composites/agent-stream/index.js";
 
 // Agent composites
