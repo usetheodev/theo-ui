@@ -199,7 +199,7 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
               onPaste={(e) => handlePaste(i, e)}
               aria-label={`Digit ${i + 1} of ${length}`}
               className={cn(
-                "rounded-md border bg-card text-center font-medium font-mono",
+                "rounded-md border border-border bg-card text-center font-medium font-mono",
                 "transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 "disabled:cursor-not-allowed disabled:opacity-50",

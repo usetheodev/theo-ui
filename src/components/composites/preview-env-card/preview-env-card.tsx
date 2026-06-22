@@ -78,7 +78,7 @@ const PreviewEnvCard = forwardRef<HTMLDivElement, PreviewEnvCardProps>(
       data-slot="preview-env-card"
       ref={ref}
       className={cn(
-        "rounded-xl border bg-card p-5 shadow-sm",
+        "rounded-xl border border-border bg-card p-5 shadow-sm",
         "transition-[border-color,box-shadow] duration-base ease-out-soft",
         "hover:border-primary/40",
         className,

@@ -168,7 +168,7 @@ const BuildLogStream = forwardRef<HTMLDivElement, BuildLogStreamProps>(
           </div>
         ) : null}
         <div
-          className={cn("overflow-y-auto rounded-lg border bg-card", "font-mono text-code-sm")}
+          className={cn("overflow-y-auto rounded-lg border border-border bg-card", "font-mono text-code-sm")}
           style={{ height }}
         >
           {truncated ? (

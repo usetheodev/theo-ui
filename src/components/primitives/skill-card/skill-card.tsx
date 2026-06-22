@@ -50,7 +50,7 @@ const SkillCard = forwardRef<HTMLDivElement, SkillCardProps>(
         data-slot="skill-card"
         ref={ref}
         className={cn(
-          "grid gap-3 rounded-xl border bg-card p-4",
+          "grid gap-3 rounded-xl border border-border bg-card p-4",
           !enabled && "opacity-60",
           className,
         )}

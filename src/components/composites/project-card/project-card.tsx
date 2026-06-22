@@ -139,7 +139,7 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
         ref={ref as Ref<HTMLAnchorElement & HTMLDivElement>}
         href={sanitizedHref}
         className={cn(
-          "group relative flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm",
+          "group relative flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-sm",
           "transition-[box-shadow,transform,border-color] duration-base ease-out-soft",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isLink && "hover:-translate-y-px cursor-pointer hover:border-primary/50 hover:shadow-md",

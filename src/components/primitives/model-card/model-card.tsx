@@ -66,7 +66,7 @@ const ModelCard = forwardRef<HTMLElement, ModelCardProps>(
         type={onSelect ? "button" : undefined}
         onClick={onSelect ? () => onSelect(model.id) : undefined}
         className={cn(
-          "grid gap-3 rounded-xl border bg-card p-4 text-left",
+          "grid gap-3 rounded-xl border border-border bg-card p-4 text-left",
           "transition-[border-color,box-shadow] duration-base ease-out-soft",
           selected
             ? "border-primary shadow-glow"

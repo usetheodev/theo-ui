@@ -53,7 +53,7 @@ const CostMeter = forwardRef<HTMLDivElement, CostMeterProps>(
       <div
         data-slot="cost-meter"
         ref={ref}
-        className={cn("grid gap-2 rounded-xl border bg-card p-4", className)}
+        className={cn("grid gap-2 rounded-xl border border-border bg-card p-4", className)}
         {...props}
       >
         <header className="flex items-baseline justify-between">

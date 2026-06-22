@@ -56,7 +56,7 @@ const Content = forwardRef<ElementRef<typeof DialogPrimitive.Content>, ContentPr
         ref={ref}
         className={cn(
           "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-50 w-full max-w-lg",
-          "rounded-2xl border bg-card text-card-foreground shadow-lg",
+          "rounded-2xl border border-border bg-card text-card-foreground shadow-lg",
           "data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in",
           "data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out",
           "duration-base",
