@@ -102,6 +102,103 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.17.0] - 2026-06-22
+
+### Added
+- `TokenUsageChart` gains `maxScale` (fix the y-axis maximum so multiple charts
+  share a scale — bars exceeding it clamp to 100% while the tooltip + a11y table
+  keep the true number) and `splitSeries` (render input vs output as adjacent
+  grouped bars instead of stacked). Plus pure `toUsageMetrics(points)` (totals +
+  peak per-period total) and `splitUsagePoints(points)` (transpose into parallel
+  `labels`/`input`/`output` series) helpers, exported from
+  `@theokit/ui/token-usage-chart` and the root barrel. (M5-7)
+- `toAgentStreamItems({ history, live }, { classifyTool? })` — a pure, order-aware
+  builder that merges completed conversation `UIMessage`s with live `AgentEvent`s
+  into the `AgentStreamItem[]` that `<AgentStream>` renders: history becomes
+  `message` items, live activity becomes `tool-call` items (status mapped from
+  `AgentEventStatus`), history-then-live. `classifyTool` customizes each
+  tool-call item per event (presentational fields only — `kind`/`id`/`status`
+  stay authoritative). Ships `mapAgentEventStatus` + the now-exported
+  `MessageStreamItem`/`ToolCallStreamItem` item types. (M5-6)
+- `useStickToBottom` — auto-scrolls a scroll container to the bottom as content
+  grows, but only while the user is pinned near the bottom (a `threshold` guard),
+  so it never yanks the view away while they read history. Streamed content is
+  detected with a `MutationObserver` (a scroll container's box does not resize as
+  content grows inside it), with a `ResizeObserver` on top for box-size changes
+  like images finishing load. Encapsulates the Radix
+  `[data-radix-scroll-area-viewport]` selector: attach `scrollRef` to a
+  `<ScrollArea>` and the hook resolves the real scrollable node internally.
+  Ships the pure `isNearBottom` helper too. Exported from `@theokit/ui/scroll-area`
+  and the root barrel. (M5-5)
+- `@theokit/ui/sdk-tools-adapters` — pure converters from `@theokit/sdk-tools`
+  tool results into theo-ui rich-primitive props: `adaptGitDiffResult`
+  (parses a unified diff into `DiffViewer` hunks), `adaptReadFileResult`
+  (`CodeBlock`), `adaptShellResult` (`TerminalPanel` lines), `adaptListDirResult`
+  (`DataTable` rows), `adaptApplyPatchResult` (`CreatedFilesCard` files), plus the
+  reusable `parseUnifiedDiff`. Each returns `null` on an error/unparseable result
+  so a tool card keeps its `ToolCallPart` fallback. The adapters are pure and
+  import nothing from `@theokit/sdk-tools` at runtime — consumers gain zero new
+  runtime dependency; a dev-only contract test imports the real factories and
+  runs their handlers to guard against result-shape drift. (M5-4)
+- `AgentToolRenderer` — an overridable tool-renderer registry for the chat
+  surface. A tool invocation is dispatched to a rich renderer (diff, terminal,
+  code, created-files, data-table) by a classification function, falling back to
+  `ToolCallPart` for anything unmapped. `<ChatMessage>` now accepts
+  `toolRenderers` (shallow-merged over the default) and `classifyTool` props
+  alongside the existing `partRenderers` / `dataRenderers`; `partRenderers.tool`
+  still takes priority. Exposed via `@theokit/ui/agent-tool-renderer` and the
+  root barrel: `AgentToolRenderer`, `defaultToolRegistry`, `defaultClassifyTool`,
+  `resolveToolRenderer`, and the `ToolRenderer` / `ToolRendererKind` /
+  `ToolRendererRegistry` / `ClassifyTool` types. `ToolCallPart` now lives in this
+  module (the fallback tool renderer) and is re-exported unchanged. Behavior
+  note: with the default registry, a tool whose name matches a known kind (e.g.
+  `git_diff`, `shell`, `read_file`) and whose state is `output-available` now
+  renders its rich surface instead of the generic `ToolCallPart`; unmapped tools
+  and every non-`output-available` state (streaming, awaiting-approval, error,
+  denied) are unchanged and keep using `ToolCallPart`. Pass `classifyTool` /
+  `toolRenderers` to override. (M5-3)
+
+### Changed
+- Public copy aligned to honest, ecosystem-fit framing across `README.md`,
+  `PITCH.md`, and `CLAUDE.md`: removed the unsubstantiated multi-framework
+  compatibility claims (Next.js / Vite / Remix / Astro / Tanstack "CI-verified")
+  and the false "peer-deps on React only" line. Reframed as a standard React +
+  Tailwind package that pairs with TheoKit or runs standalone, with the RSC
+  fix described as "Server-Component safe" rather than a marketed Next.js
+  target. Counts corrected to 153 components / 1,513 tests / 151 stories and the
+  stale `@theokit/ui@next` install snippets updated to `@theokit/ui` (now
+  published to `latest`).
+- README refreshed: component count corrected to 153, the v0.16.0 shadcn-v4
+  features documented (`data-slot`, `"use client"`/RSC, per-subpath types), and
+  the inaccurate "peer-deps on React only" line corrected (React is the only
+  required peer; Radix/CVA/cmdk/lucide ship as dependencies). (#13)
+
+### Deprecated
+
+### Removed
+- `PITCH.md` (landing-page marketing copy) removed from the repo. Public copy
+  now lives in `README.md` + the docs site; the Voice/Tone scope in `CLAUDE.md`
+  and `rules/public-copy.md` and the `public-copy-lint` hook were updated to
+  drop the `PITCH.md` reference.
+
+### Fixed
+- **Status indicators now render their colors under the v3 Tailwind preset.**
+  `StatusIndicator` uses `bg-status-online` / `-offline` / `-degraded` / `-info`,
+  but the `status` color palette was never added to `tailwind-preset.ts` (only
+  the v4 `@theme` declared `--color-status-*`), so those utilities resolved to
+  transparent in the v3 build path (e.g. the Ladle dev server) — the dots were
+  invisible. Added the `status` palette to the preset, mapped to the existing
+  `--status-*` tokens. The npm/v4 build was already correct. Registry
+  `tailwind-preset.json` regenerated.
+- **npm publish CI restored.** The `release.yml` (and `deploy-ladle.yml`) GitHub
+  Actions workflow failed on every tagged release since v0.14.1 because
+  `pnpm/action-setup@v4` pinned `version: 9.15.0`, conflicting with
+  `package.json`'s `packageManager: pnpm@10.32.1`
+  (`ERR_PNPM_BAD_PM_VERSION`). Removed the hardcoded version so the package
+  actually publishes to npm again. (#13)
+
+### Security
+
 ## [0.16.0] - 2026-06-18
 
 ### Added
