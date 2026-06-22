@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `DeploymentStatus` gains an `idle` state (rendered with the `default` badge
+  variant, `muted` color, label "Idle"), recognized by `DeploymentRow`,
+  `PreviewEnvCard`, and `ProjectCard`. (#119)
 
 ### Changed
 
@@ -16,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+- Card surfaces now declare the canonical `border-border` token explicitly
+  (`Card` plus 13 primitive/composite cards) instead of relying on the bare
+  `border` utility's default color, so the border renders consistently across
+  the v3 preset and v4 build paths.
 
 ### Security
 
