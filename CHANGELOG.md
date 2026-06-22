@@ -99,6 +99,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drop the `PITCH.md` reference.
 
 ### Fixed
+- **`quality:gates` typecheck no longer blocks on dev-only playground demos.**
+  `playground/**` self-imports the package's own built subpaths
+  (`@theokit/ui/slide`, `/slide-deck`, `/slide/plugins/*`), which resolve to
+  `dist/*.d.ts` — absent when `pnpm typecheck` runs before `pnpm build`, so the
+  gate had failed (TS2307) on every release since 0.14.0. Playground is
+  non-shipped demo code exercised via Ladle, so it is excluded from the gate
+  typecheck instead of blocking releases. (Internal CI hygiene.) (#15)
 - **Release build no longer depends on a pnpm-specific `.bin` shim.**
   `scripts/build-precompiled-css.ts` resolved the Tailwind v4 CLI at a nested
   `@tailwindcss/cli/node_modules/.bin/tailwindcss` path that pnpm only
