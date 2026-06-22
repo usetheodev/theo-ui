@@ -90,7 +90,7 @@ function SceneCard({ scene, index, surfaceMode }: SceneCardProps) {
           transition={scene.transition}
           initialIndex={scene.initialIndex}
           enableHashRouting={false}
-          onIndexChange={(i) => setCurrentIndex(i)}
+          onIndexChange={(i: number) => setCurrentIndex(i)}
           aria-label={scene.title}
         >
           {deckChildren}

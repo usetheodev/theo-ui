@@ -85,6 +85,12 @@
       "description": "Vertical list of agent events."
     },
     {
+      "name": "agent-tool-renderer",
+      "type": "registry:ui",
+      "title": "AgentToolRenderer",
+      "description": "Overridable tool-renderer registry for agent chat surfaces — dispatches a UIMessage tool part to a rich renderer (diff, terminal, code, created-files, data-table) by classification kind, falling back to the generic ToolCallPart for anything unmapped."
+    },
+    {
       "name": "agent-types",
       "type": "registry:lib",
       "title": "Theo UI agent types",
