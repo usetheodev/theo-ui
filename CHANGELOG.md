@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.17.0] - 2026-06-22
+
+### Added
 - `TokenUsageChart` gains `maxScale` (fix the y-axis maximum so multiple charts
   share a scale — bars exceeding it clamp to 100% while the tooltip + a11y table
   keep the true number) and `splitSeries` (render input vs output as adjacent
