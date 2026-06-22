@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.17.0] - 2026-06-22
+
+### Added
 - `TokenUsageChart` gains `maxScale` (fix the y-axis maximum so multiple charts
   share a scale — bars exceeding it clamp to 100% while the tooltip + a11y table
   keep the true number) and `splitSeries` (render input vs output as adjacent
@@ -85,6 +99,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drop the `PITCH.md` reference.
 
 ### Fixed
+- **Visual-regression gate tolerates cross-environment antialiasing.** The
+  Playwright `toHaveScreenshot` config used `threshold: 0.001` + `maxDiffPixels: 0`
+  (zero tolerance), so the 101 snapshots only ever matched the exact machine that
+  generated them — they failed in CI with 488-1882 antialiased pixels differing
+  (ratio ≤0.2%, no real regression). Raised to Playwright's antialiasing-robust
+  default `threshold: 0.2` with a `maxDiffPixels: 200` safety net that still
+  fails on a genuine visual regression (thousands+ of pixels). (Internal CI
+  hygiene.) (#15)
+- **Bundle-size gate scoped to deterministic artifacts.** `dist/components.css`
+  is a Tailwind v4 `@source`-scanned generated file whose exact byte size is
+  environment-sensitive (~470KB locally vs ~104KB on CI runners — both valid
+  output, differing by Tailwind's v3/v4 `@import` resolution across pnpm
+  layouts). It is removed from the byte-exact ±5% bundle gate (which now stays
+  focused on the deterministic shipped JS/dts bundles) and remains bounded by
+  the environment-robust `dogfood:precompiled-utilities` gate. (Internal CI
+  hygiene.) (#15)
+- **`shadcn add chat-message` no longer references a moved file.** M5-3 moved
+  `ToolCallPart` out of `chat-message/parts/` into the new `agent-tool-renderer`
+  component, but the `chat-message` registry descriptor still listed the old
+  `parts/tool-call-part.tsx` path — so the shadcn-compatible copy-paste path
+  was broken. `agent-tool-renderer` is now its own first-class registry item
+  (with story + test) and `chat-message` declares it as a `registryDependency`.
+  (#15)
+- **Agent-stream barrel-wiring test no longer flakes under suite load.** The
+  `await import("./index.js")` smoke test occasionally exceeded vitest's 5s
+  default (observed 5078ms) under worker-pool contention on cold runners. The
+  global `testTimeout` is raised to 20s — a hard ceiling that still fails a
+  genuinely hung test. (#15)
+- **`quality:gates` typecheck no longer blocks on dev-only playground demos.**
+  `playground/**` self-imports the package's own built subpaths
+  (`@theokit/ui/slide`, `/slide-deck`, `/slide/plugins/*`), which resolve to
+  `dist/*.d.ts` — absent when `pnpm typecheck` runs before `pnpm build`, so the
+  gate had failed (TS2307) on every release since 0.14.0. Playground is
+  non-shipped demo code exercised via Ladle, so it is excluded from the gate
+  typecheck instead of blocking releases. (Internal CI hygiene.) (#15)
+- **Release build no longer depends on a pnpm-specific `.bin` shim.**
+  `scripts/build-precompiled-css.ts` resolved the Tailwind v4 CLI at a nested
+  `@tailwindcss/cli/node_modules/.bin/tailwindcss` path that pnpm only
+  materializes in some hoist layouts — absent under CI's `--frozen-lockfile`
+  install, so `pnpm build` failed and the tagged release never published. Now
+  resolves the package's own declared `bin` entry from its `package.json` and
+  runs it via `node`, independent of any `.bin` shim. (#14)
+- **`@theokit/sdk-tools` file-link devDependency removed.** The M5-4 contract
+  test had pulled in `@theokit/sdk-tools: file:../theokit-sdk/...`, which does
+  not resolve under `pnpm install --frozen-lockfile` in CI (no sibling repo) and
+  blocked the publish. The 25 adapter unit tests validate against the documented
+  `{ ok: true, ... }` result shapes; the factory result contract is owned by the
+  SDK repo. (#14)
 - **Status indicators now render their colors under the v3 Tailwind preset.**
   `StatusIndicator` uses `bg-status-online` / `-offline` / `-degraded` / `-info`,
   but the `status` color palette was never added to `tailwind-preset.ts` (only

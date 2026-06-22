@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-tool-renderer",
+  "type": "registry:ui",
+  "title": "AgentToolRenderer",
+  "description": "Overridable tool-renderer registry for agent chat surfaces — dispatches a UIMessage tool part to a rich renderer (diff, terminal, code, created-files, data-table) by classification kind, falling back to the generic ToolCallPart for anything unmapped.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": [
+    "chat-types",
+    "cn",
+    "code-block",
+    "data-table",
+    "created-files-card",
+    "diff-viewer",
+    "terminal-panel",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/composites/agent-tool-renderer/agent-tool-renderer.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-tool-renderer/agent-tool-renderer.tsx"
+    },
+    {
+      "path": "components/composites/agent-tool-renderer/tool-call-part.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-tool-renderer/tool-call-part.tsx"
+    },
+    {
+      "path": "components/composites/agent-tool-renderer/index.ts",
+      "type": "registry:ui",
+      "target": "components/ui/agent-tool-renderer/index.ts"
+    }
+  ]
+}
