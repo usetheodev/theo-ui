@@ -16,6 +16,7 @@ const statusToVariant: Record<
   live: "success",
   failed: "destructive",
   cancelled: "default",
+  idle: "default",
 };
 const statusToDot: Record<
   DeploymentStatus,
@@ -27,6 +28,7 @@ const statusToDot: Record<
   live: "success",
   failed: "destructive",
   cancelled: "muted",
+  idle: "muted",
 };
 const statusLabels: Record<DeploymentStatus, string> = {
   queued: "Queued",
@@ -35,6 +37,7 @@ const statusLabels: Record<DeploymentStatus, string> = {
   live: "Live",
   failed: "Failed",
   cancelled: "Cancelled",
+  idle: "Idle",
 };
 
 export interface PreviewService {

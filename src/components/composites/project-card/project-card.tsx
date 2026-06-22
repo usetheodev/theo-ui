@@ -16,6 +16,7 @@ const statusToVariant: Record<
   live: "success",
   failed: "destructive",
   cancelled: "default",
+  idle: "default",
 };
 const statusToDotTone: Record<
   DeploymentStatus,
@@ -27,6 +28,7 @@ const statusToDotTone: Record<
   live: "success",
   failed: "destructive",
   cancelled: "muted",
+  idle: "muted",
 };
 
 export interface Project {
@@ -95,7 +97,9 @@ const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                     ? "Queued"
                     : project.status === "failed"
                       ? "Failed"
-                      : "Cancelled"}
+                      : project.status === "idle"
+                        ? "Idle"
+                        : "Cancelled"}
           </Badge>
         </div>
 
