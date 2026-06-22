@@ -99,6 +99,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drop the `PITCH.md` reference.
 
 ### Fixed
+- **Bundle-size gate scoped to deterministic artifacts.** `dist/components.css`
+  is a Tailwind v4 `@source`-scanned generated file whose exact byte size is
+  environment-sensitive (~470KB locally vs ~104KB on CI runners — both valid
+  output, differing by Tailwind's v3/v4 `@import` resolution across pnpm
+  layouts). It is removed from the byte-exact ±5% bundle gate (which now stays
+  focused on the deterministic shipped JS/dts bundles) and remains bounded by
+  the environment-robust `dogfood:precompiled-utilities` gate. (Internal CI
+  hygiene.) (#15)
 - **`shadcn add chat-message` no longer references a moved file.** M5-3 moved
   `ToolCallPart` out of `chat-message/parts/` into the new `agent-tool-renderer`
   component, but the `chat-message` registry descriptor still listed the old
