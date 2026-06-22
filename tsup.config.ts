@@ -79,6 +79,10 @@ export default defineConfig({
     // JS presets). The legacy v3 JS preset stays available under
     // `./preset-v3-legacy` for any tailwindcss@^3 consumer.
     "preset-v3-legacy": "src/preset-v3-legacy.ts",
+    // M5-4 — pure sdk-tools result→props adapters. Lives in src/lib/ (utility,
+    // not a component), so it needs a manual entry (the auto-glob only scans
+    // src/components/). Imports nothing from @theokit/sdk-tools at runtime.
+    "lib/sdk-tools-adapters/index": "src/lib/sdk-tools-adapters/index.ts",
     // Per-component entries (auto-discovered) — Brief #4 subpath
     // tree-shaking plan. The map is built from src/components/{primitives,
     // composites}/<name>/index.ts at config-load time so new components

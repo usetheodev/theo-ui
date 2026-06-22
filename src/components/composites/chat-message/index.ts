@@ -52,7 +52,7 @@ export {
 } from "./chat-message-branch.js";
 export { TextPart, type TextPartProps } from "./parts/text-part.js";
 export { ReasoningPart, type ReasoningPartProps } from "./parts/reasoning-part.js";
-export { ToolCallPart, type ToolCallPartProps } from "./parts/tool-call-part.js";
+export { ToolCallPart, type ToolCallPartProps } from "../agent-tool-renderer/tool-call-part.js";
 export { FilePart, type FilePartProps } from "./parts/file-part.js";
 export {
   SourceUrlPart,

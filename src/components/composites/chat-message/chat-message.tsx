@@ -55,12 +55,16 @@ import {
   isTextUIPart,
   isToolUIPart,
 } from "../../../types/chat.js";
+import {
+  AgentToolRenderer,
+  type ClassifyTool,
+  type ToolRendererRegistry,
+} from "../agent-tool-renderer/agent-tool-renderer.js";
 import { DataPart, type DataRendererMap } from "./parts/data-part.js";
 import { FilePart } from "./parts/file-part.js";
 import { ReasoningPart } from "./parts/reasoning-part.js";
 import { SourceDocumentPart, SourceUrlPart } from "./parts/source-part.js";
 import { TextPart } from "./parts/text-part.js";
-import { ToolCallPart } from "./parts/tool-call-part.js";
 
 /* ─── <ChatMessage.Root> ─────────────────────────────────────────────── */
 
@@ -141,6 +145,10 @@ export interface RenderPartOptions {
   dataRenderers?: DataRendererMap;
   /** Override built-in renderers per part `type`. */
   partRenderers?: PartRendererMap;
+  /** Registry of rich tool renderers keyed by classification kind (M5-3). */
+  toolRenderers?: ToolRendererRegistry;
+  /** Override the default tool classifier (M5-3). */
+  classifyTool?: ClassifyTool;
 }
 
 export type PartRendererMap = Partial<{
@@ -177,7 +185,14 @@ export function renderPart(part: UIMessagePart, opts: RenderPartOptions = {}): R
     return overrides["source-document"]?.(part) ?? <SourceDocumentPart part={part} />;
   }
   if (isToolUIPart(part)) {
-    return overrides.tool?.(part) ?? <ToolCallPart part={part} />;
+    if (overrides.tool) return overrides.tool(part);
+    return (
+      <AgentToolRenderer
+        part={part}
+        toolRenderers={opts.toolRenderers}
+        classifyTool={opts.classifyTool}
+      />
+    );
   }
   if (isDataUIPart(part)) {
     return overrides.data?.(part) ?? <DataPart part={part} renderers={opts.dataRenderers} />;
@@ -208,11 +223,26 @@ export interface ChatMessageProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   partRenderers?: PartRendererMap;
   /** Renderers for `data-${name}` parts. */
   dataRenderers?: DataRendererMap;
+  /** Registry of rich tool renderers keyed by classification kind (M5-3). */
+  toolRenderers?: ToolRendererRegistry;
+  /** Override the default tool classifier (M5-3). */
+  classifyTool?: ClassifyTool;
 }
 
 export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
   (
-    { message, avatar, actions, variant, partRenderers, dataRenderers, className, ...props },
+    {
+      message,
+      avatar,
+      actions,
+      variant,
+      partRenderers,
+      dataRenderers,
+      toolRenderers,
+      classifyTool,
+      className,
+      ...props
+    },
     ref,
   ) => {
     const inner = (
@@ -221,7 +251,7 @@ export const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
       >
         {message.parts.map((part, idx) => (
           <div key={`${part.type}-${idx}`}>
-            {renderPart(part, { dataRenderers, partRenderers })}
+            {renderPart(part, { dataRenderers, partRenderers, toolRenderers, classifyTool })}
           </div>
         ))}
         {actions}

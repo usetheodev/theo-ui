@@ -34,7 +34,7 @@ const ENGINE_ENTRIES = ["whiteboard", "slide", "slide-deck"];
 const hookRe =
   /\b(useState|useEffect|useRef|useContext|useReducer|useImperativeHandle|useId|useLayoutEffect|useSyncExternalStore|createContext)\b/;
 
-/** A component dir is "client" if any of its source .tsx files declares the directive OR uses a hook. */
+/** A component dir is "client" if any of its source .ts/.tsx files declares the directive OR uses a hook. */
 function sourceIsClient(srcDir: string): boolean {
   if (!existsSync(srcDir)) return false;
   const stack = [srcDir];
@@ -47,7 +47,10 @@ function sourceIsClient(srcDir: string): boolean {
         stack.push(p);
         continue;
       }
-      if (!dirent.name.endsWith(".tsx")) continue;
+      // Scan .tsx components AND .ts modules — a client hook in a `.ts` file
+      // (e.g. scroll-area/use-stick-to-bottom.ts) is just as client as a .tsx
+      // component, and its code lands in the same emitted chunk.
+      if (!dirent.name.endsWith(".tsx") && !dirent.name.endsWith(".ts")) continue;
       if (dirent.name.includes(".test.") || dirent.name.includes(".stories.")) continue;
       const txt = readFileSync(p, "utf8");
       const head = txt.split("\n").slice(0, 2).join("\n");
