@@ -1,6 +1,6 @@
 {
   "name": "@theokit/ui",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
@@ -776,7 +776,6 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
-    "@theokit/sdk-tools": "file:../theokit-sdk/packages/sdk-tools",
     "@types/culori": "^4.0.1",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",
