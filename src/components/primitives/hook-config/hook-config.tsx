@@ -62,7 +62,7 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
       <section
         data-slot="hook-config"
         ref={ref}
-        className={cn("rounded-xl border bg-card", className)}
+        className={cn("rounded-xl border border-border bg-card", className)}
         {...props}
       >
         <header className="flex items-baseline justify-between border-border/40 border-b px-4 py-3">

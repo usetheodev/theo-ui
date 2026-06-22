@@ -55,7 +55,7 @@ const MCPServerCard = forwardRef<HTMLElement, MCPServerCardProps>(
       <article
         data-slot="mcp-server-card"
         ref={ref}
-        className={cn("grid gap-3 rounded-xl border bg-card p-4", className)}
+        className={cn("grid gap-3 rounded-xl border border-border bg-card p-4", className)}
         {...props}
       >
         <header className="flex items-start justify-between gap-3">

@@ -29,7 +29,7 @@ const RecentFoldersList = forwardRef<HTMLDivElement, RecentFoldersListProps>(
     <div
       data-slot="recent-folders-list"
       ref={ref}
-      className={cn("rounded-xl border bg-card", className)}
+      className={cn("rounded-xl border border-border bg-card", className)}
       {...props}
     >
       {title ? (

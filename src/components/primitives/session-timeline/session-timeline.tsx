@@ -54,7 +54,7 @@ const SessionTimeline = forwardRef<HTMLDivElement, SessionTimelineProps>(
     <section
       data-slot="session-timeline"
       ref={ref}
-      className={cn("rounded-xl border bg-card", className)}
+      className={cn("rounded-xl border border-border bg-card", className)}
       aria-label="Session history"
       {...props}
     >
