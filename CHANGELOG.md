@@ -99,6 +99,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drop the `PITCH.md` reference.
 
 ### Fixed
+- **`shadcn add chat-message` no longer references a moved file.** M5-3 moved
+  `ToolCallPart` out of `chat-message/parts/` into the new `agent-tool-renderer`
+  component, but the `chat-message` registry descriptor still listed the old
+  `parts/tool-call-part.tsx` path — so the shadcn-compatible copy-paste path
+  was broken. `agent-tool-renderer` is now its own first-class registry item
+  (with story + test) and `chat-message` declares it as a `registryDependency`.
+  (#15)
+- **Agent-stream barrel-wiring test no longer flakes under suite load.** The
+  `await import("./index.js")` smoke test occasionally exceeded vitest's 5s
+  default (observed 5078ms) under worker-pool contention on cold runners. The
+  global `testTimeout` is raised to 20s — a hard ceiling that still fails a
+  genuinely hung test. (#15)
 - **`quality:gates` typecheck no longer blocks on dev-only playground demos.**
   `playground/**` self-imports the package's own built subpaths
   (`@theokit/ui/slide`, `/slide-deck`, `/slide/plugins/*`), which resolve to

@@ -5,7 +5,14 @@
   "title": "ChatMessage",
   "description": "Composable chat-turn surface with Vercel AI SDK UIMessage parts API — markdown, code blocks, math, tool calls, reasoning, file attachments, source citations, branching navigation.",
   "dependencies": ["lucide-react", "hast", "mdast"],
-  "registryDependencies": ["chat-types", "cn", "safe-href", "button", "tailwind-preset"],
+  "registryDependencies": [
+    "chat-types",
+    "cn",
+    "safe-href",
+    "button",
+    "agent-tool-renderer",
+    "tailwind-preset"
+  ],
   "files": [
     {
       "path": "components/composites/chat-message/chat-message.tsx",
@@ -41,11 +48,6 @@
       "path": "components/composites/chat-message/parts/reasoning-part.tsx",
       "type": "registry:ui",
       "target": "components/ui/chat-message/parts/reasoning-part.tsx"
-    },
-    {
-      "path": "components/composites/chat-message/parts/tool-call-part.tsx",
-      "type": "registry:ui",
-      "target": "components/ui/chat-message/parts/tool-call-part.tsx"
     },
     {
       "path": "components/composites/chat-message/parts/file-part.tsx",

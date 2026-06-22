@@ -8,6 +8,12 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     css: false,
+    // Barrel-wiring smoke tests use `await import("./index.js")`. Under the
+    // worker-pool contention of the full suite (and on cold CI runners) a cold
+    // dynamic import of a heavy barrel can momentarily exceed vitest's 5s
+    // default and flake (observed: 5078ms). 20s is a generous ceiling that
+    // still hard-fails a genuinely hung test without masking logic slowness.
+    testTimeout: 20000,
     include: [
       "src/**/*.{test,spec}.{ts,tsx}",
       "scripts/**/*.{test,spec}.ts",
