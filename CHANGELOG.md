@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the v3 preset and v4 build paths.
 
 ### Security
+- Bumped `valibot` from `^0.42.1` to `^1.4.1`, clearing the HIGH-severity ReDoS
+  advisory GHSA-vqpr-j7v3-hqw9 (`EMOJI_REGEX`, affected `>=0.31.0 <1.2.0`) that
+  the theme schema validator transitively carried. The theme schema API surface
+  (`v.pipe/object/string/optional/array/safeParse`) is unchanged across the major
+  bump — `src/themes/schema.test.ts` (9 cases) passes unmodified. (V3-2)
 
 ## [0.17.0] - 2026-06-22
 
