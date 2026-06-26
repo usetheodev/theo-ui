@@ -1,6 +1,7 @@
 {
   "pkg": "@theokit/ui",
   "globalName": "TheoUI",
+  "projectId": "94920585-de70-4796-9ea4-c2215c81d65e",
   "shape": "package",
   "buildCmd": "pnpm build",
   "cssEntry": "dist/components.css",
