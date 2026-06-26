@@ -1,0 +1,14 @@
+{
+  "pkg": "@theokit/ui",
+  "globalName": "TheoUI",
+  "shape": "package",
+  "buildCmd": "pnpm build",
+  "cssEntry": "dist/components.css",
+  "tokensPkg": "..",
+  "tokensGlob": "dist/tokens*.css",
+  "extraFonts": ["dist/fonts.css"],
+  "readmeHeader": ".design-sync/conventions.md",
+  "libOverrides": {
+    "bundle.mjs": "externalize shiki/@shikijs (~9.4MB optional peer-dep) — CodeBlock degrades to plain <pre><code>; keeps _ds_bundle.js under the 5MB upload cap"
+  }
+}
