@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- The `--font-serif` token (and the `.font-serif` utility) now resolves to the
+  brand font (`var(--font-body)`, Geist) instead of Tailwind's default serif
+  fallback chain (`ui-serif, Georgia, Cambria, …`). Violet Forge has no separate
+  serif face, so serif-flagged text now renders in the brand font consistently
+  across platforms — and no longer references the Windows-only Cambria font.
 
 ### Deprecated
 
