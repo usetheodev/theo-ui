@@ -79,6 +79,10 @@
   /* Fonts ------------------------------------------------------------- */
   --font-display: var(--font-display);
   --font-sans: var(--font-body);
+  /* Override Tailwind's default serif chain (which names Windows-only
+   * system fonts) with the brand font — Violet Forge has no separate serif
+   * face, so `.font-serif` uses Geist like the rest of the UI. */
+  --font-serif: var(--font-body);
   --font-mono: var(--font-mono);
 
   /* Violet Forge typescale -------------------------------------------- *
