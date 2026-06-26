@@ -103,6 +103,28 @@ preview with realistic props makes a nicer card), not failures:
   CodeBlock loses its try/catch fallback, externalizing would break CodeBlock
   rendering. Re-verify the fallback in `src/lib/markdown/code-block.tsx`.
 
+## Dark-mode previews (cfg.provider)
+
+Violet Forge is dark-first (`ThemeProvider` `defaultMode: "dark"`), so all
+preview cards render in the dark theme. `cfg.provider` wraps every preview in:
+
+```json
+"provider": { "component": "ThemeProvider", "props": {
+  "themes": { "$ref": "builtinThemes" }, "defaultMode": "dark",
+  "respectSystemMode": false, "storageKey": null } }
+```
+
+- `respectSystemMode: false` is REQUIRED — without it, ThemeProvider reads the
+  renderer's `prefers-color-scheme` (light in headless chromium) and renders
+  light. `false` forces `defaultMode: "dark"`.
+- `themes` is a required prop; `{ "$ref": "builtinThemes" }` resolves to the
+  bundle export. `storageKey: null` disables localStorage (deterministic).
+- ThemeProvider sets `.dark` / `data-mode="dark"` on the card's `<html>` via an
+  effect; dark tokens (the `.dark {}` block in `_ds_bundle.css`) then cascade.
+- Changing `cfg.provider` requires a FULL `package-build` (a scoped
+  preview-rebuild errors `[CONFIG_STALE]`), and re-uploads every `<Name>.html`
+  + `_preview/*.js` (the wrapper is baked into each preview).
+
 ## Campaign outcome (first sync)
 
 - **158 components total**: 147 with rich authored previews, **11 on honest floor cards**.

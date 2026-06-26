@@ -9,6 +9,15 @@
   "tokensGlob": "dist/tokens*.css",
   "extraFonts": ["dist/fonts.css"],
   "readmeHeader": ".design-sync/conventions.md",
+  "provider": {
+    "component": "ThemeProvider",
+    "props": {
+      "themes": { "$ref": "builtinThemes" },
+      "defaultMode": "dark",
+      "respectSystemMode": false,
+      "storageKey": null
+    }
+  },
   "libOverrides": {
     "bundle.mjs": "externalize shiki/@shikijs (~9.4MB optional peer-dep) — CodeBlock degrades to plain <pre><code>; keeps _ds_bundle.js under the 5MB upload cap"
   }
