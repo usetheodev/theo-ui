@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+- Added a top-level `"types"` field (`./dist/index.d.ts`) so TypeScript
+  consumers on classic `moduleResolution` (`node`/`node10`) resolve the
+  package's types. Previously types were exposed only through the `exports`
+  map, leaving non-`bundler`/`node16` consumers without type information.
 
 ### Security
 

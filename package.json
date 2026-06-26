@@ -4,6 +4,7 @@
   "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
   "license": "Apache-2.0",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
