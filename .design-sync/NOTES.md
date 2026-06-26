@@ -77,10 +77,14 @@ preview with realistic props makes a nicer card), not failures:
 - `[TOKENS_MISSING]` (42 vars: `--radix-*-height`, `--accordion-panel-height`,
   `--positioner-height`, `--ratio`, `--fd-*`, …) — these are RUNTIME vars Radix
   and components inject via inline styles/JS. Expected absent from static CSS.
-- `[FONT_MISSING] "Cambria"` — a system serif fallback inside the stack
-  `ui-serif, Georgia, Cambria, "Times New Roman", serif`. NOT a brand font; the
-  brand font Geist (Sans + Mono) ships self-hosted via `dist/fonts/`. Accepted —
-  prose serif falls back to the system serif.
+- `[FONT_MISSING] "Cambria"` — was Tailwind v4's DEFAULT `--font-serif` chain
+  (`ui-serif, Georgia, Cambria, …`), not a brand font. The claude.ai/design pane
+  flagged Cambria (Windows-only) as a missing brand font. **Fixed at source**:
+  `src/styles/tokens-v4.css` now sets `--font-serif: var(--font-body)` (Geist) in
+  the `@theme`, so serif-flagged text uses the brand font and no Cambria string
+  ships. `runtimeFontPrefixes` does NOT help here — it only lands in the
+  local-only `.ds-build-meta.json`, never uploaded. The brand fonts Geist
+  (Sans + Mono) ship self-hosted via `dist/fonts/`.
 
 ## Re-sync risks (watch-list)
 
