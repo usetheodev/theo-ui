@@ -241,7 +241,13 @@ def _scan_blueprint_refs(
     prose: str, line_index: list[int], project_root: Path
 ) -> list[tuple[Citation, bool]]:
     out: list[tuple[Citation, bool]] = []
-    blueprints_dir = project_root / "knowledge-base" / "discoveries" / "blueprints"
+    # This project may nest knowledge-base under `.claude/` (mirrors _find_plans_dir
+    # in run_structural.py). Try the `.claude/` location first, then the repo-root one.
+    _bp_candidates = (
+        project_root / ".claude" / "knowledge-base" / "discoveries" / "blueprints",
+        project_root / "knowledge-base" / "discoveries" / "blueprints",
+    )
+    blueprints_dir = next((d for d in _bp_candidates if d.exists()), _bp_candidates[-1])
     available = []
     if blueprints_dir.exists():
         try:

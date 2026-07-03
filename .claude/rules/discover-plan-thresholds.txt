@@ -2,8 +2,12 @@
 #
 # Authoritative source: rules/discover-plan-golden-rule.md
 #
-# Format (one entry per line):
-#   KEY = VALUE
+# Format:
+#   - Verdict bands (read by run_discover_plan_score.py): pipe-delimited
+#       NAME|SCORE|SUNSET|ADR_REF   (only NAME|SCORE are parsed; extra columns are metadata)
+#     This matches the canonical format of discover-blueprint-thresholds.txt.
+#   - Cap notes below (KEY = VALUE): informational only — the caps are enforced in
+#     the checker scripts, NOT parsed from this file.
 #
 # Lines starting with `#` and blank lines are skipped.
 # Defaults shipped with the skill at:
@@ -20,8 +24,8 @@ hard_cap.question_count_max = 15
 hard_cap.fabricated_citation = 49
 hard_cap.empty_corner = 49
 
-# Verdict bands
-band.shippable = 90
-band.shippable_with_caveats = 70
-band.needs_revision = 50
-band.invalid = 0
+# Verdict bands (pipe-delimited — NAME|SCORE parsed by run_discover_plan_score.py)
+SHIPPABLE|90
+SHIPPABLE_WITH_CAVEATS|70
+NON_SHIPPABLE|50
+INVALID|0
