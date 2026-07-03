@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `examples/full-stack-demo/` — a single browser app that proves ALL nine ecosystem
+  milestones (M0–M8) live against real OpenRouter: secret redaction (M0), cooperative
+  abort (M1), typed-error resilience (M2), non-lossy session resume + metrics (M3),
+  provider routing (M4), live token streaming (M5), a published `@theokit/plugin-canvas`
+  artifact tool (M6), the cloud `cloudPayload` contract + `bc-` id + pre-release guard
+  (M7), and the north-star time-to-first-working-agent (M8). A 9-milestone dashboard
+  lights up as each is exercised. Run: `OPENROUTER_API_KEY=… node --experimental-strip-types examples/full-stack-demo/server.ts`.
 - `examples/live-chat-demo/` — a real, viewable browser chat that exercises the open
   stack end-to-end (Harness `@theokit/sdk` local runtime + Skills tool-use + the
   `useAgentStream` reducer rendered live via SSE) against a real OpenRouter LLM. Run
