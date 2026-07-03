@@ -7,17 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
 ### Changed
+- `@usetheo/ui` dependency swapped from the local `file:../usetheo-ui` path to the published
+  `^0.14.0` range now that `@usetheo/ui@0.14.0` (the AI-exclusive-split line) is on npm. Makes
+  `@theokit/ui` installable from the registry. Validated: typecheck 0, build, 1401 tests green
+  against the published package.
 
-### Deprecated
-
-### Removed
+### Added
+- `examples/full-stack-demo/` — a single browser app that proves ALL nine ecosystem
+  milestones (M0–M8) live against real OpenRouter: secret redaction (M0), cooperative
+  abort (M1), typed-error resilience (M2), non-lossy session resume + metrics (M3),
+  provider routing (M4), live token streaming (M5), a published `@theokit/plugin-canvas`
+  artifact tool (M6), the cloud `cloudPayload` contract + `bc-` id + pre-release guard
+  (M7), and the north-star time-to-first-working-agent (M8). Ships a registered Skills
+  tool (`roll_dice`) so tool-use is exercised on demand, and a 9-milestone dashboard that
+  lights up as each is exercised. Run: `OPENROUTER_API_KEY=… node --experimental-strip-types examples/full-stack-demo/server.ts`.
+- `examples/live-chat-demo/` — a real, viewable browser chat that exercises the open
+  stack end-to-end (Harness `@theokit/sdk` local runtime + Skills tool-use + the
+  `useAgentStream` reducer rendered live via SSE) against a real OpenRouter LLM. Run
+  with `OPENROUTER_API_KEY=… node --experimental-strip-types examples/live-chat-demo/server.ts`
+  → `http://localhost:8787`. Shows token-by-token streaming text (live `onDelta`), live
+  tool cards, and the north-star `time-to-first-working-agent` measured per run.
 
 ### Fixed
-
-### Security
+- `examples/full-stack-demo/` — canvas artifacts now use unique, monotonic ids and reset to a
+  fresh canvas on each prompt, so same-millisecond artifacts no longer collide and successive
+  turns no longer stack onto stale artifact state.
+- `useAgentStream` / `agentStreamReducer` now renders a tool result correctly when the
+  Harness wraps a handler's return in a shell-style `{ stdout, stderr, exitCode }`
+  envelope — previously `String(result)` rendered `[object Object]`. It now extracts
+  `stdout` (appending `stderr` when present), an `output`/`text` field, or a compact
+  JSON fallback. Covered by a new reducer test.
 
 ## [1.0.0] - 2026-07-03
 

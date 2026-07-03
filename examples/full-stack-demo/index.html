@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Theo — full-stack demo (all 9 milestones)</title>
+    <style>
+      :root {
+        --bg:#0b0d12; --panel:#131722; --panel2:#1a2030; --border:#232a3b; --text:#e6e9ef;
+        --muted:#8b93a7; --accent:#7c9cff; --ok:#22c58b; --warn:#f0b429; --err:#ef5b6b; --user:#2b3550;
+      }
+      *{box-sizing:border-box} html,body{height:100%;margin:0}
+      body{background:radial-gradient(1200px 600px at 75% -10%,#1a2138 0,var(--bg) 55%);color:var(--text);
+        font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}
+      .wrap{display:grid;grid-template-columns:1fr 360px;gap:14px;height:100vh;padding:14px;max-width:1360px;margin:0 auto}
+      .col{display:flex;flex-direction:column;gap:12px;min-height:0}
+      header{display:flex;align-items:center;gap:10px}
+      header h1{font-size:16px;margin:0;font-weight:650}
+      .tag{font-size:11px;color:var(--muted);border:1px solid var(--border);background:var(--panel);border-radius:999px;padding:3px 9px}
+      .card{background:var(--panel);border:1px solid var(--border);border-radius:14px}
+      .thread{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:11px;min-height:0}
+      .row{display:flex;gap:9px;align-items:flex-start}.row.user{justify-content:flex-end}
+      .av{width:26px;height:26px;border-radius:7px;flex:0 0 26px;display:grid;place-items:center;font-size:12px;background:var(--panel2);border:1px solid var(--border)}
+      .bubble{max-width:78%;padding:9px 12px;border-radius:11px;background:var(--panel2);border:1px solid var(--border);white-space:pre-wrap;word-wrap:break-word}
+      .row.user .bubble{background:var(--user);border-color:#38456a}
+      .bubble.streaming::after{content:"▋";color:var(--accent);animation:blink 1s steps(2) infinite;margin-left:1px}
+      @keyframes blink{50%{opacity:0}}
+      .tool{max-width:78%;border:1px solid var(--border);border-radius:11px;background:#0f1420;overflow:hidden}
+      .tool .h{display:flex;align-items:center;gap:8px;padding:7px 11px}
+      .tool .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+      .tool.running .dot{background:var(--accent);animation:pulse 1s infinite}.tool.success .dot{background:var(--ok)}.tool.failed .dot{background:var(--err)}
+      @keyframes pulse{50%{opacity:.35}}
+      .tool .nm{font-weight:600}.tool .st{margin-left:auto;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+      .tool .out{padding:0 11px 8px 29px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
+      .err{color:var(--err);border:1px solid #4a2530;background:#1f1417;padding:9px 12px;border-radius:11px;max-width:78%}
+      form{display:flex;gap:9px;padding:0}
+      input[type=text]{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:11px 13px;color:var(--text);font-size:14px;outline:none}
+      input[type=text]:focus{border-color:var(--accent)}
+      button{background:var(--accent);color:#0b0d12;border:0;border-radius:11px;padding:0 16px;font-weight:650;cursor:pointer;font-size:14px}
+      button.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:6px 10px;font-size:12px;font-weight:500}
+      button:disabled{opacity:.5;cursor:default}
+      .meta{font-size:11.5px;color:var(--muted);padding:2px 2px}.meta b{color:var(--ok)}
+      /* milestone panel */
+      .panel{overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+      .panel h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:2px 2px 4px}
+      .ms{border:1px solid var(--border);border-radius:10px;padding:9px 11px;background:var(--panel2)}
+      .ms .top{display:flex;align-items:center;gap:8px}
+      .ms .id{font-weight:700;font-size:12px;color:var(--accent);min-width:22px}
+      .ms .ttl{font-weight:600;font-size:12.5px}
+      .ms .badge{margin-left:auto;font-size:10px;padding:2px 7px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+      .ms.on .badge{color:var(--ok);border-color:#1f5a44;background:#0f2018}
+      .ms.pre .badge{color:var(--warn);border-color:#3a3320}
+      .ms .desc{font-size:11.5px;color:var(--muted);margin-top:3px}
+      .ms .act{margin-top:7px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+      .ms .res{margin-top:6px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--text);background:#0d1119;border:1px solid var(--border);border-radius:7px;padding:6px 8px;max-height:120px;overflow:auto;white-space:pre-wrap;display:none}
+      .ms .res.show{display:block}
+      .canvas{max-height:34vh;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+      .canvas h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 2px 4px}
+      .art{border:1px solid var(--border);border-radius:9px;overflow:hidden}
+      .art .h{padding:6px 10px;font-size:12px;font-weight:600;background:#0f1420;display:flex;gap:6px;align-items:center}
+      .art .h .k{font-size:9.5px;color:var(--accent);text-transform:uppercase;border:1px solid var(--border);border-radius:5px;padding:0 5px}
+      .art pre{margin:0;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:11px;white-space:pre-wrap;color:var(--text);max-height:160px;overflow:auto}
+      .hint{font-size:11px;color:var(--muted)}
+      code{background:var(--panel);padding:1px 5px;border-radius:5px;border:1px solid var(--border)}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <!-- LEFT: chat + canvas -->
+      <div class="col">
+        <header>
+          <div class="av">◆</div>
+          <h1>Theo — full-stack demo</h1>
+          <span class="tag">open stack · your key · real OpenRouter</span>
+        </header>
+        <div class="card thread" id="thread">
+          <div class="row"><div class="av">◆</div><div class="bubble">Real agent on the open stack. Try: <em>"What time is it?"</em> · <em>"Write a Python function to reverse a string as a code artifact"</em> · <em>"Tell me a joke"</em>. Then use the milestone panel → to prove M0/M2/M3/M7 live.</div></div>
+        </div>
+        <div class="card canvas" id="canvas" style="display:none"><h2>Canvas — artifacts (M6 · @theokit/plugin-canvas)</h2><div id="artifacts"></div></div>
+        <div class="meta" id="meta"></div>
+        <form id="form"><input id="input" type="text" placeholder="Ask the agent…" autocomplete="off" autofocus /><button id="send" type="submit">Send</button><button id="stop" class="ghost" type="button" disabled>Stop</button></form>
+        <div class="hint">Streaming live via SSE · every token through theo-ui's real <code>agentStreamReducer</code></div>
+      </div>
+
+      <!-- RIGHT: milestone dashboard -->
+      <div class="col card panel" id="panel">
+        <h2>9 milestones — proven live</h2>
+
+        <div class="ms" id="ms-M0"><div class="top"><span class="id">M0</span><span class="ttl">Security floor</span><span class="badge">idle</span></div>
+          <div class="desc">Secret redaction — <code>Security.redact()</code> scrubs keys/tokens from any output.</div>
+          <div class="act"><button class="ghost" onclick="proveRedact()">Redact a secret</button></div><div class="res" id="res-M0"></div></div>
+
+        <div class="ms" id="ms-M1"><div class="top"><span class="id">M1</span><span class="ttl">Correctness · abort</span><span class="badge">idle</span></div>
+          <div class="desc">Cooperative cancel — click <b>Stop</b> mid-response and the run aborts (AbortSignal threaded into the loop).</div></div>
+
+        <div class="ms" id="ms-M2"><div class="top"><span class="id">M2</span><span class="ttl">Resilience</span><span class="badge">idle</span></div>
+          <div class="desc">Fail-fast, typed errors — a bad request surfaces a typed error, no hang / no crash.</div>
+          <div class="act"><button class="ghost" onclick="proveFail()">Trigger a failure</button></div><div class="res" id="res-M2"></div></div>
+
+        <div class="ms" id="ms-M3"><div class="top"><span class="id">M3</span><span class="ttl">State + observability</span><span class="badge">idle</span></div>
+          <div class="desc">Non-lossy session resume + live token/usage metrics. Chat a few turns, then:</div>
+          <div class="act"><button class="ghost" onclick="proveHistory()">Show persisted session</button></div><div class="res" id="res-M3"></div></div>
+
+        <div class="ms" id="ms-M4"><div class="top"><span class="id">M4</span><span class="ttl">Skills ↔ Harness</span><span class="badge">idle</span></div>
+          <div class="desc">The explicit <code>sk-or-</code> key routes to OpenRouter (the M4 fix). Set on first chat reply.</div></div>
+
+        <div class="ms" id="ms-M5"><div class="top"><span class="id">M5</span><span class="ttl">UI ↔ Harness</span><span class="badge">idle</span></div>
+          <div class="desc">Live token streaming through <code>useAgentStream</code>. Lights up while a reply types out.</div></div>
+
+        <div class="ms" id="ms-M6"><div class="top"><span class="id">M6</span><span class="ttl">Cluster · real plugin</span><span class="badge">idle</span></div>
+          <div class="desc">A published <code>@theokit/plugin-canvas</code> (npm 0.3.1) validates + renders artifacts. Ask for a code artifact.</div></div>
+
+        <div class="ms pre" id="ms-M7"><div class="top"><span class="id">M7</span><span class="ttl">Runtime · cloud</span><span class="badge">pre-release</span></div>
+          <div class="desc">Contract-only: inspect the <code>cloudPayload</code> contract, the <code>bc-</code> id, and the pre-release guard.</div>
+          <div class="act"><button class="ghost" onclick="proveCloud()">Inspect cloud contract</button></div><div class="res" id="res-M7"></div></div>
+
+        <div class="ms" id="ms-M8"><div class="top"><span class="id">M8</span><span class="ttl">GA readiness</span><span class="badge">idle</span></div>
+          <div class="desc">North-star <b>time-to-first-working-agent</b> — measured on every chat reply.</div><div class="res" id="res-M8"></div></div>
+      </div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const thread = $("thread"), form = $("form"), input = $("input"), sendBtn = $("send"), stopBtn = $("stop");
+      const metaEl = $("meta"), canvas = $("canvas"), artifactsEl = $("artifacts");
+      let es = null;
+      const esc = (s) => String(s ?? "").replace(/[&<>]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" }[c]));
+      function on(ms, txt) { const el = $("ms-"+ms); if (el && !el.classList.contains("pre")) el.classList.add("on"); const b = el?.querySelector(".badge"); if (b && txt) b.textContent = txt; }
+      function res(ms, txt) { const r = $("res-"+ms); if (r) { r.textContent = txt; r.classList.add("show"); } }
+
+      function renderAgent(c, items, streamingText) {
+        c.innerHTML = "";
+        let streamed = false;
+        for (const it of items) {
+          if (it.kind === "message") { const b = document.createElement("div"); b.className="bubble"; b.innerHTML=esc(it.message?.parts?.[0]?.text ?? ""); c.appendChild(b); }
+          else if (it.kind === "tool-call") { const k=document.createElement("div"); k.className="tool "+(it.status||"running"); const out=it.output!=null?`<div class="out">→ ${esc(it.output)}</div>`:""; k.innerHTML=`<div class="h"><span class="dot"></span><span class="nm">${esc(it.tool||"tool")}</span><span class="st">${esc(it.status||"running")}</span></div>${out}`; c.appendChild(k); if((it.tool||"").includes("artifact")) on("M6","exercised"); }
+          else if (it.kind === "streaming") { const b=document.createElement("div"); b.className="bubble streaming"; b.innerHTML=esc(it.partial??streamingText??""); c.appendChild(b); streamed=true; }
+          else if (it.kind === "error") { const e=document.createElement("div"); e.className="err"; e.innerHTML="⚠ "+esc(it.title??"error"); c.appendChild(e); }
+        }
+        if (streamed) on("M5","streaming");
+        thread.scrollTop = thread.scrollHeight;
+      }
+      function renderArtifacts(list) {
+        if (!list || !list.length) return;
+        canvas.style.display = "flex"; artifactsEl.innerHTML = "";
+        for (const a of list) {
+          const el = document.createElement("div"); el.className = "art";
+          el.innerHTML = `<div class="h"><span class="k">${esc(a.kind)}</span>${esc(a.title)}${a.language?` · ${esc(a.language)}`:""}</div><pre>${esc(a.content)}</pre>`;
+          artifactsEl.appendChild(el);
+        }
+        on("M6","exercised");
+      }
+
+      function ask(message) {
+        const ur = document.createElement("div"); ur.className="row user"; ur.innerHTML=`<div class="bubble">${esc(message)}</div><div class="av">🧑</div>`; thread.appendChild(ur);
+        const row = document.createElement("div"); row.className="row"; row.innerHTML=`<div class="av">◆</div>`;
+        const c = document.createElement("div"); c.style.cssText="display:flex;flex-direction:column;gap:7px;max-width:80%";
+        const t = document.createElement("div"); t.className="bubble streaming"; c.appendChild(t); row.appendChild(c); thread.appendChild(row); thread.scrollTop=thread.scrollHeight;
+        sendBtn.disabled=true; input.disabled=true; stopBtn.disabled=false;
+        es = new EventSource("/api/chat?q="+encodeURIComponent(message));
+        es.addEventListener("state",(e)=>{ const s=JSON.parse(e.data); renderAgent(c,s.items,s.streamingText); });
+        es.addEventListener("meta",(e)=>{
+          const m=JSON.parse(e.data);
+          on("M4", m.provider); on("M8","measured"); on("M3", m.session_turns+" turns");
+          const u=m.usage?` · ${m.usage.totalTokens ?? "?"} tok`:"";
+          metaEl.innerHTML=`<b>${m.status}</b> · ${esc(m.model)} · first token <b>${m.time_to_first_token_ms}ms</b> · ${m.total_ms}ms${u} · session ${m.session_turns} turns · provider ${esc(m.provider)}`;
+          res("M8", "time_to_first_working_agent = "+m.time_to_first_token_ms+" ms\nusage: "+JSON.stringify(m.usage));
+          renderArtifacts(m.artifacts);
+        });
+        const done=()=>{ es&&es.close(); es=null; sendBtn.disabled=false; input.disabled=false; stopBtn.disabled=true; input.focus(); };
+        es.addEventListener("error",(e)=>{ try{const d=JSON.parse(e.data); renderAgent(c,[{kind:"error",title:d.message}]);}catch{} done(); });
+        es.onerror=done;
+      }
+      form.addEventListener("submit",(e)=>{ e.preventDefault(); const m=input.value.trim(); if(!m)return; input.value=""; ask(m); });
+      stopBtn.addEventListener("click",()=>{ if(es){ es.close(); es=null; on("M1","aborted"); metaEl.innerHTML="<b>cancelled</b> — run aborted by the client (M1)"; sendBtn.disabled=false; input.disabled=false; stopBtn.disabled=true; } });
+
+      async function proveRedact() {
+        const secret = "My OpenAI key is sk-proj-ABCDEF1234567890TOPSECRET and my token is ghp_ABCDEFYY99887766";
+        const r = await (await fetch("/api/redact?text="+encodeURIComponent(secret))).json();
+        res("M0", "input:    "+r.input+"\nredacted: "+r.redacted); on("M0","scrubbed");
+      }
+      async function proveFail() {
+        res("M2","running…"); const r = await (await fetch("/api/fail")).json();
+        res("M2", "status: "+r.status+"\nerror: "+(r.error?.message ?? JSON.stringify(r.error))+"\n("+r.note+")"); on("M2","fail-fast");
+      }
+      async function proveCloud() {
+        res("M7","running…"); const r = await (await fetch("/api/cloud")).json();
+        res("M7", "agentId: "+r.agentId+"  (bc- cloud id: "+r.isCloudId+")\nprerelease guard: "+r.prereleaseGuard+"\ncloudPayload contract:\n"+JSON.stringify(r.cloudPayload,null,1).slice(0,800));
+      }
+      async function proveHistory() {
+        const r = await (await fetch("/api/history")).json();
+        res("M3", "persisted session '"+r.agentId+"' — "+r.turns+" turns survive across requests (non-lossy resume):\n"+r.messages.map((m)=>`  ${m.role}: ${String(m.content).slice(0,60)}`).join("\n")); on("M3", r.turns+" turns");
+      }
+    </script>
+  </body>
+</html>

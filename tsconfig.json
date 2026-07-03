@@ -41,6 +41,7 @@
     "dist",
     "playground",
     "playground/dist",
-    "scripts/m5-real-llm-demo.ts"
+    "scripts/m5-real-llm-demo.ts",
+    "scripts/m8-openstack-anchor.ts"
   ]
 }
