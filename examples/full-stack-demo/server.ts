@@ -90,8 +90,21 @@ const clockTool = {
   inputSchema: { type: "object", properties: {}, required: [] },
   handler: () => new Date().toISOString(),
 };
+const diceTool = {
+  name: "roll_dice",
+  description: "Rolls an N-sided dice (default 6) and returns the result as a number.",
+  inputSchema: {
+    type: "object",
+    properties: { sides: { type: "number", description: "number of sides (default 6)" } },
+    required: [],
+  },
+  handler: (input: { sides?: number }) => {
+    const sides = typeof input?.sides === "number" && input.sides > 1 ? Math.floor(input.sides) : 6;
+    return String(1 + Math.floor(Math.random() * sides));
+  },
+};
 // biome-ignore lint/suspicious/noExplicitAny: raw JSON-schema tools.
-const tools: any[] = [clockTool, createArtifactTool];
+const tools: any[] = [clockTool, diceTool, createArtifactTool];
 
 const html = readFileSync(join(HERE, "index.html"), "utf8");
 const sendEvent = (res: ServerResponse, event: string, data: unknown) =>
