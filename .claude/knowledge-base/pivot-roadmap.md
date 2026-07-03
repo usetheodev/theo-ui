@@ -43,7 +43,7 @@ Source of truth: `theo-ui/registry/component-classification.json`, enforced by `
 | --- | --- | --- | --- | --- |
 | **M-A** | theo-ui | Component classification manifest + drift gate | `[x]` done — on `develop`, unreleased | — |
 | **M-B** | usetheo-ui | Bootstrap repo + seed 54 non-AI + foundation + full toolchain (publishable) | `[x]` DONE — READY_TO_MERGE, 664 tests, 0 AI leakage | M-A |
-| **M-C** | theo-ui | Depend on `@usetheo/ui`; remove 59; re-point AI imports; breaking major + codemod | `[ ]` not started | M-B |
+| **M-C** | theo-ui | Depend on `@usetheo/ui`; remove 54; re-point; breaking major + codemod | `[x]` DONE — READY_TO_MERGE, 1400 tests, bundle -40%%; publint red = documented file:-dep deferral | M-B |
 | **M-D** | both | Registry split — `@theokit/ui` entries cross-reference `@usetheo/ui` via `registryDependencies` URLs | `[ ]` not started | M-C |
 | **M-E** | theo-ui | Narrative / README AI-native repositioning (`docs/`, HERO, CLAUDE.md voice) | `[ ]` not started | M-C |
 
