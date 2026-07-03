@@ -77,6 +77,33 @@ function finalizeText(
   return { items: [...base, item], seq: seq + 1 };
 }
 
+/**
+ * Render a tool `result` for display. The Harness wraps a tool handler's return
+ * in a shell-style `{ stdout, stderr, exitCode }` envelope, so a naive
+ * `String(result)` yields "[object Object]". Extract the human-readable output:
+ * a string as-is; `{ stdout }` (with `stderr` appended when present); an
+ * `{ output }` / `{ text }` field; else a compact JSON fallback.
+ */
+function renderToolResult(result: unknown): string {
+  if (typeof result === "string") return result;
+  if (result !== null && typeof result === "object") {
+    const r = result as { stdout?: unknown; stderr?: unknown; output?: unknown; text?: unknown };
+    if (typeof r.stdout === "string" && r.stdout.length > 0) {
+      return typeof r.stderr === "string" && r.stderr.length > 0
+        ? `${r.stdout}\n${r.stderr}`
+        : r.stdout;
+    }
+    if (typeof r.output === "string") return r.output;
+    if (typeof r.text === "string") return r.text;
+    try {
+      return JSON.stringify(result);
+    } catch {
+      return String(result);
+    }
+  }
+  return String(result);
+}
+
 /** Upsert a tool-call item by `call_id` (running → success/failed same slot). */
 function upsertToolCall(items: AgentStreamItem[], msg: SdkStreamMessage): AgentStreamItem[] {
   const id = msg.call_id ?? "tool";
@@ -85,7 +112,7 @@ function upsertToolCall(items: AgentStreamItem[], msg: SdkStreamMessage): AgentS
     id,
     tool: msg.name ?? "tool",
     status: mapToolStatus(msg.status),
-    ...(msg.result !== undefined ? { output: String(msg.result) } : {}),
+    ...(msg.result !== undefined ? { output: renderToolResult(msg.result) } : {}),
   };
   const idx = items.findIndex((i) => i.kind === "tool-call" && i.id === id);
   if (idx === -1) return [...items, item];

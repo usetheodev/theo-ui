@@ -45,6 +45,18 @@ describe("agentStreamReducer (M5 — SDK stream → AgentStreamItem[])", () => {
     expect(tools[0]?.status).toBe("success");
   });
 
+  it("renders a shell-style { stdout } tool result as readable output (not [object Object])", () => {
+    const s = fold({
+      type: "tool_call",
+      call_id: "c9",
+      name: "get_current_time",
+      status: "completed",
+      result: { stdout: "2026-07-03T16:45:31.905Z", stderr: "", exitCode: 0 },
+    });
+    const tool = s.items.find((i) => i.kind === "tool-call") as ToolCallStreamItem | undefined;
+    expect(tool?.output).toBe("2026-07-03T16:45:31.905Z");
+  });
+
   it("maps a tool_call error status to failed", () => {
     const s = fold({ type: "tool_call", call_id: "c2", name: "deploy", status: "error" });
     const tool = s.items.find((i) => i.kind === "tool-call") as ToolCallStreamItem | undefined;
