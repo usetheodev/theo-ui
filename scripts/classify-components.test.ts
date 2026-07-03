@@ -16,6 +16,7 @@ import {
   type ClassificationEntry,
   checkClassification,
   loadAndCheck,
+  report,
 } from "./classify-components.js";
 
 const validEntry = {
@@ -145,6 +146,31 @@ describe("loadAndCheck (I/O input guards)", () => {
     const r = await loadAndCheck(p);
     expect(r.ok).toBe(false);
     expect(r.offenders.some((o) => o.includes("malformed"))).toBe(true);
+  });
+
+  it("passes_against_the_real_authored_manifest", async () => {
+    const r = await loadAndCheck();
+    expect(r.ok).toBe(true);
+    expect(r.classifiedCount).toBe(136);
+  });
+});
+
+describe("report (exit code + message)", () => {
+  it("returns code 0 and a drift-free message on ok", () => {
+    const { code, message } = report({ ok: true, classifiedCount: 136, offenders: [] });
+    expect(code).toBe(0);
+    expect(message).toContain("136 components, 0 drift");
+  });
+
+  it("returns code 1 and lists offenders on failure", () => {
+    const { code, message } = report({
+      ok: false,
+      classifiedCount: 0,
+      offenders: ["unclassified: tool-call"],
+    });
+    expect(code).toBe(1);
+    expect(message).toContain("FAILED");
+    expect(message).toContain("tool-call");
   });
 });
 
