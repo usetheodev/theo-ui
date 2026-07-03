@@ -210,7 +210,14 @@ describe("component-classification.json (authored manifest — T1.2)", () => {
     }
   });
 
-  it("disputed_flag_present_on_envvareditor", () => {
-    expect(byName.get("env-var-editor")?.disputed).toBe(true);
+  it("boundary_fully_resolved_no_disputed_entries", () => {
+    // The 3 originally-disputed entries were resolved with component evidence
+    // (2026-07-03 scope decision: coding-agent + chat surfaces are both `ai`).
+    const disputed = manifest.filter((e) => e.disputed);
+    expect(disputed).toEqual([]);
+    // Resolved placements (evidence-based):
+    expect(byName.get("build-log-stream")?.target).toBe("@theokit/ui"); // coding-agent run output
+    expect(byName.get("env-var-editor")?.target).toBe("@usetheo/ui"); // deployment env, not sandbox
+    expect(byName.get("metrics-panel")?.target).toBe("@usetheo/ui"); // service-ops metrics
   });
 });
