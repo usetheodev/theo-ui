@@ -116,8 +116,7 @@
     "layer": "primitive",
     "tier": "ai",
     "target": "@theokit/ui",
-    "rationale": "Coding-agent run output (agent-surface) vs generic PaaS build log — kept ai, revisit at M-C",
-    "disputed": true
+    "rationale": "Log-line stream with levels/tail — coding-agent run output; ai per the broad AI scope (coding-agent + chat surfaces)"
   },
   {
     "name": "button",
@@ -348,8 +347,7 @@
     "layer": "primitive",
     "tier": "cloud-ops",
     "target": "@usetheo/ui",
-    "rationale": "Generic recharts dashboard viz; no agent-surface precedent — @usetheo/ui unless it renders agent-run metrics",
-    "disputed": true
+    "rationale": "Service-ops metrics grid (Requests/s, p95 latency, error rate) — dashboard viz, not agent metrics — @usetheo/ui"
   },
   {
     "name": "model-card",
@@ -825,8 +823,7 @@
     "layer": "composite",
     "tier": "cloud-ops",
     "target": "@usetheo/ui",
-    "rationale": "Agent-sandbox env (Vercel keeps env in AI pkg) vs deployment env — defaulted @usetheo/ui, the one true both-sides case",
-    "disputed": true
+    "rationale": "Deployment env editor (EnvScope production/staging/preview, THEO_DEPLOY_ID, PaaS set) — not an agent sandbox — @usetheo/ui"
   },
   {
     "name": "mcp-server-list",
