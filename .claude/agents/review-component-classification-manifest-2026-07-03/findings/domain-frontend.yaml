@@ -1,0 +1,209 @@
+agent: review-component-classification-manifest-domain-frontend
+review_target: main..HEAD for plan component-classification-manifest
+domain: frontend (build-tooling + classification correctness)
+domain_specific_patterns_checked:
+  - "Boundary rule = AI-agent surface vocabulary (Blueprint §Q2 / plan D3), coding-agent + chat surfaces per 2026-07-03 scope"
+  - "cloud-ops = cloud-platform ops (deploy/domain/rollback/cron/preview/project), NOT agent-scoped surfaces"
+  - "tier→target consistency (ai→@theokit/ui, generic|cloud-ops→@usetheo/ui)"
+  - "per-entry human-authored rationale (plan D3)"
+  - "disputed flag surfaces borderline placements to M-C (plan v1.1 AC + Unresolved Q1)"
+  - "TypeScript strictness / ESM correctness / Node stdlib usage on scripts/classify-components.ts"
+
+summary_verdict: >
+  The gate script (scripts/classify-components.ts) is clean, correctly-typed ESM tooling — no material
+  tooling defects. The high-value risk is in the DATA: the cloud-ops bucket (12 entries) contains
+  several components whose own source docstrings describe them as AI-agent surfaces, tagged cloud-ops
+  with a boilerplate rationale that CONTRADICTS the source. Because these tags drive a physical MOVE to
+  the non-AI @usetheo/ui package in a breaking-major release, a wrong tag mis-routes a genuine agent
+  component out of the AI-exclusive product. The evidence bundle's "0 reverse-dep violations" proves
+  import-acyclicity only — NOT semantic placement — and "0 disputed" over-claims confidence on ≥4
+  genuinely borderline components.
+
+findings:
+  - id: F-dom-1
+    severity: MEDIUM
+    file: registry/component-classification.json
+    component: audit-log-entry
+    plan_ref: "Blueprint §Q2 (boundary = AI-agent surface vocabulary); plan glossary 'cloud-ops = PaaS/cloud dashboard'"
+    domain_anchor: "src/components/primitives/audit-log-entry/audit-log-entry.tsx:43 + :7"
+    summary: >
+      audit-log-entry is tagged cloud-ops with rationale "Cloud/PaaS dashboard component", but its own
+      docstring says "one row in the AGENT audit log" and its type is
+      AuditActorKind = "user" | "agent" | "system" (agent rendered with a Bot icon). This is an
+      agent-activity log — AI-agent surface vocabulary — not a cloud-platform ops component
+      (deploy/domain/rollback/cron/preview/project). The boilerplate rationale directly contradicts the source.
+    evidence: |
+      manifest entry: { name: "audit-log-entry", tier: "cloud-ops", target: "@usetheo/ui",
+                        rationale: "Cloud/PaaS dashboard component — @usetheo/ui" }
+      source:
+        audit-log-entry.tsx:7   export type AuditActorKind = "user" | "agent" | "system";
+        audit-log-entry.tsx:32  agent: Bot,
+        audit-log-entry.tsx:43  * AuditLogEntry — one row in the agent audit log. Tells the user exactly
+    recommended_action: >
+      Re-tier to ai (→ @theokit/ui) OR, if kept cloud-ops, replace the boilerplate rationale with a
+      component-specific justification and set disputed: true so M-C adjudicates. Do not ship a tag whose
+      rationale contradicts the component's stated purpose.
+
+  - id: F-dom-2
+    severity: MEDIUM
+    file: registry/component-classification.json
+    component: project-switcher
+    plan_ref: "Blueprint §Q2; Coverage Matrix #4 (Q2 placement encoded)"
+    domain_anchor: "src/components/primitives/project-switcher/project-switcher.tsx:7"
+    summary: >
+      project-switcher is tagged cloud-ops, but its docstring says "sidebar header for a code agent app...
+      anchor the current project context for the session list below. Used in Sidebar.Header". It is the
+      coding-agent app chrome, the SAME surface as session-list-item / folder-context-card /
+      recent-folders-list — all tagged ai. Tagging it cloud-ops appears keyword-driven ("project" →
+      PaaS-project bucket) rather than surface-driven, and would FRACTURE the coding-agent sidebar across
+      two packages: an app rendering the agent sidebar would need both @theokit/ui and @usetheo/ui,
+      undermining the AI-exclusive value prop.
+    evidence: |
+      tiers of the shared sidebar surface:
+        session-list-item   -> ai
+        folder-context-card -> ai
+        recent-folders-list -> ai
+        project-switcher     -> cloud-ops   <-- outlier
+      source project-switcher.tsx:7  * ProjectSwitcher — sidebar header for a code agent app.
+                             :  "Used in Sidebar.Header to anchor the current project context for the session list below."
+      (Distinct from project-card, which IS a PaaS project dashboard tile — that cloud-ops tag is correct.)
+    recommended_action: >
+      Re-tier to ai (→ @theokit/ui) to keep the coding-agent sidebar cohesive, OR set disputed: true with a
+      surface-specific rationale. Flagged as a contestable judgment call for human adjudication — but the
+      keyword-vs-surface mismatch is the objective defect.
+
+  - id: F-dom-3
+    severity: MEDIUM
+    file: registry/component-classification.json
+    component: channel-card
+    plan_ref: "Blueprint §Q2; 2026-07-03 scope widening ai to 'chat surfaces' (evidence bundle §6)"
+    domain_anchor: "src/components/primitives/channel-card/channel-card.tsx:15 + docstring"
+    summary: >
+      channel-card is tagged cloud-ops, but it is an inbound messaging-channel connector for
+      Telegram/Discord/Slack/WhatsApp/Webhook/MCP ("inbound gateway connection ... showing its connection
+      status"). Under the 2026-07-03 scope that explicitly widened ai to include chat surfaces — and given
+      the mcp platform is squarely AI-agent — this is a chat/agent-integration surface, not cloud-platform
+      ops. Genuinely dual (could be an ops "connections dashboard"), which is exactly why it should not be a
+      silent cloud-ops with a boilerplate rationale.
+    evidence: |
+      channel-card.tsx:15  export type ChannelPlatform = "telegram" | "discord" | "slack" | "whatsapp" | "webhook" | "mcp";
+      docstring: "ChannelCard — inbound gateway connection (Telegram, Discord, Slack, …) showing its connection status"
+      manifest rationale: "Cloud/PaaS dashboard component — @usetheo/ui" (generic template; no mention of chat/mcp)
+    recommended_action: >
+      Set disputed: true and record the chat-surface-vs-ops tension explicitly; resolve to ai if the widened
+      "chat surfaces" scope governs (the mcp platform argues for ai). At minimum do not carry the generic
+      cloud-ops boilerplate on a genuinely dual component.
+
+  - id: F-dom-4
+    severity: LOW
+    file: registry/component-classification.json
+    component: cron-job-card, cron-jobs-list
+    plan_ref: "Blueprint §Q2 placement table (CronJobCard/CronJobsList → @usetheo/ui, 'PaaS scheduling ops')"
+    domain_anchor: "src/components/primitives/cron-job-card/cron-job-card.tsx:15,46"
+    summary: >
+      cron-job-card is tagged cloud-ops and this FOLLOWS the blueprint placement table, so it is defensible.
+      But the component is "one scheduled AGENT job. Shows cron expression, PROMPT, status" — CronJob.prompt =
+      "What gets run (prompt or command)". Scheduling an agent to run a prompt is agent-surface vocabulary, not
+      generic PaaS cron. This is the blueprint's own EC-4 interpretive risk materializing: the placement was
+      name-derived; the component evidence leans ai. Flagged as tension, not a hard defect.
+    evidence: |
+      cron-job-card.tsx:15  /** What gets run (prompt or command). */  prompt: string;
+      cron-job-card.tsx:46  * CronJobCard — one scheduled agent job. Shows cron expression, prompt, status, last/next run.
+      manifest rationale: "Cloud/PaaS dashboard component — @usetheo/ui"
+    recommended_action: >
+      Keep cloud-ops per the blueprint OR set disputed: true given the agent-prompt evidence; either way,
+      replace the boilerplate rationale with the actual prompt-scheduling reasoning so M-C can re-adjudicate.
+
+  - id: F-dom-5
+    severity: LOW
+    file: registry/component-classification.json
+    component: gateway-status-indicator
+    plan_ref: "Blueprint §Q2; parsimony of rationale (plan D3 human-authored rationale)"
+    domain_anchor: "src/components/primitives/gateway-status-indicator/gateway-status-indicator.tsx (docstring)"
+    summary: >
+      gateway-status-indicator is tagged ai with the generic boilerplate rationale, but structurally it is a
+      status dot ("live connection-status dot for a gateway/server", variants compact/labeled) — the same
+      shape as status-dot and status-indicator, both tagged generic. "gateway" is ambiguous (AI/LLM gateway
+      vs generic server). The ai tag is under-justified relative to its near-identical generic siblings.
+    evidence: |
+      gateway-status-indicator: tier=ai   docstring "live connection-status dot for a gateway/server"
+      status-dot:               tier=generic  "semantic status indicator (colored circle + optional label)"
+      status-indicator:         tier=generic
+      rationale: boilerplate "AI-agent surface vocabulary (Blueprint §Q2)" — no gateway-specific justification
+    recommended_action: >
+      Add a component-specific rationale naming WHICH gateway (e.g. MCP/LLM gateway) makes this ai; if it is a
+      generic server status, re-tier to generic to match status-dot/status-indicator. Flag for human confirm.
+
+  - id: F-dom-6
+    severity: MEDIUM
+    file: registry/component-classification.json
+    component: "(systemic) 132 of 136 entries"
+    plan_ref: "ADR D3 — 'each entry needs a human-authored rationale ... a judgment encoded once'"
+    domain_anchor: "manifest rationale-frequency analysis"
+    summary: >
+      132/136 entries carry one of three verbatim template strings (75× ai, 47× generic, 10× cloud-ops); only
+      4 entries have a bespoke rationale. For clear cases (button, card) boilerplate is fine. But on the
+      BORDERLINE components (F-dom-1..5) the boilerplate defeats D3's auditability intent — and in F-dom-1/2
+      the template rationale actively CONTRADICTS the source docstring. The drift gate cannot catch this: it
+      validates tier/target consistency only, never rationale quality. The manifest thus asserts placements
+      its own rationale does not defend.
+    evidence: |
+      distinct rationales: 75x "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+                           47x "Generic shadcn-like primitive — foundation for @usetheo/ui"
+                           10x "Cloud/PaaS dashboard component — @usetheo/ui"
+                            4x bespoke (build-log-stream, metrics-panel, env-var-editor, preview-panel)
+    recommended_action: >
+      Require a component-specific rationale on every cloud-ops entry and on every entry that is not an
+      obvious shadcn primitive or an obvious agent primitive. Boilerplate is acceptable only where the tag is
+      objectively uncontestable.
+
+  - id: F-dom-7
+    severity: MEDIUM
+    file: registry/component-classification.json
+    component: "(systemic) disputed flag"
+    plan_ref: "plan v1.1 T1.2 AC 'EnvVarEditor entry has disputed: true' + TDD test disputed_flag_present_on_envvareditor + Unresolved Q1/Q2"
+    domain_anchor: "evidence bundle §6 'Boundary rule ... 0 disputed'"
+    summary: >
+      The manifest ships with ZERO disputed entries; the plan v1.1 explicitly required disputed: true on
+      EnvVarEditor (acceptance criterion + a named TDD test) and Unresolved Q1/Q2 designated EnvVarEditor,
+      BuildLogStream, MetricsPanel as disputed pending M-C. Eliminating the flag removed the ONLY mechanism
+      the plan had to carry borderline placements forward to M-C. Given ≥4 genuinely borderline components
+      surfaced above, "0 disputed" over-claims confidence and erases the audit signal the extraction needs.
+      (Primarily a cross-validation concern; raised here because it directly harms classification correctness.)
+    evidence: |
+      python: disputed entries: []
+      plan T1.2 AC: "EnvVarEditor entry has disputed: true"
+      plan TDD:     "disputed_flag_present_on_envvareditor() — asserts EnvVarEditor.disputed === true"
+      evidence bundle §6: "0 disputed (3 originally-disputed resolved from component evidence)"
+    recommended_action: >
+      Either (a) restore disputed: true on the genuinely-borderline set (env-var-editor, channel-card,
+      audit-log-entry, project-switcher, cron-job-card, build-log-stream, gateway-status-indicator) so M-C
+      adjudicates, or (b) formally amend the plan via ADR documenting why every dispute is resolved — do not
+      silently diverge from a stated acceptance criterion + its TDD test.
+
+  - id: F-dom-8
+    severity: LOW
+    file: scripts/classify-components.ts
+    line: 107-137, 156
+    plan_ref: "rules/error-handling.md (fail-clear); plan T1.1 input-guard cluster"
+    domain_anchor: "scripts/classify-components.ts"
+    summary: >
+      Two minor robustness gaps in otherwise-clean ESM tooling. (1) listTopLevelDirs' readdir() is not
+      wrapped; a filesystem error (permissions, race) rejects loadAndCheck, and the CLI dispatch at :156 uses
+      .then() with no .catch(), so a rejection surfaces as an unhandled-rejection rather than the typed
+      fail-clear message the plan's error-handling contract promises. (2) After Array.isArray, entries are cast
+      `as ClassificationEntry[]` without per-entry shape validation; a malformed entry {} degrades to an
+      offender message reading "stale entry (no such dir): undefined" rather than a typed "malformed entry".
+      Neither is a crash-in-the-happy-path; both are edge/negative-case polish.
+    evidence: |
+      :107 const listTopLevelDirs = async (path) => ... (await readdir(path, ...)) — no try/catch
+      :156 loadAndCheck().then((r) => { ... process.exit(code); });  — no .catch()
+      :58  const entries = manifest as ClassificationEntry[];        — no per-entry type guard
+    recommended_action: >
+      Wrap the CLI in .catch(err => { console.error(...); process.exit(1); }) (or top-level await + try/catch),
+      and either validate entry shape or make the stale/offender message tolerate a missing name. Low priority.
+
+notes_for_consolidation:
+  - "No BLOCKER/HIGH from the domain lens: the gate tooling is sound and the CLEAR-cut classifications (button/card/dialog → generic, tool-call/agent-event/chat-message → ai) are correct."
+  - "The MEDIUM cluster (F-dom-1,2,3,6,7) is one theme: the smallest, highest-risk bucket (cloud-ops, 12 entries) contains agent-surface components mis-routed to the non-AI package, masked by boilerplate rationales and a wiped disputed flag. These are judgment calls flagged for HUMAN adjudication, but the rationale-contradicts-source defect (F-dom-1, F-dom-2) is objective."
+  - "Reviewer honesty: I did NOT confirm the intended consumer of audit-log-entry/project-switcher/channel-card with the maintainer; the correct tier is genuinely contestable. What is NOT contestable is that shipping a cloud-ops tag whose rationale says 'Cloud/PaaS dashboard' on a component whose source says 'agent audit log' / 'code agent app sidebar' is an auditability defect."

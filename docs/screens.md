@@ -1,6 +1,8 @@
 # Example Screens
 
-> Ladle screen compositions assembled from `@theokit/ui` primitives + composites.
+> Ladle screen compositions assembled from `@theokit/ui` primitives + composites,
+> plus generic/auth primitives from `@usetheo/ui` (e.g. `Sidebar`, `TopNav`, `LoginSplit`,
+> `SocialAuthRow`) where a full-page shell needs them.
 > These stories are **not exported** from the library barrel — they are illustrative compositions consumers can copy or use as reference.
 
 Browse them in Ladle (`pnpm dev`) under the `Screens / *` group:

@@ -1,11 +1,11 @@
 import type { Story } from "@ladle/react";
+import { Button } from "@usetheo/ui";
+import { Input } from "@usetheo/ui";
+import { LoginSplit } from "@usetheo/ui";
+import { SocialAuthRow } from "@usetheo/ui";
 import { Github, Mail } from "lucide-react";
 import { useState } from "react";
 import type { SVGProps } from "react";
-import { Button } from "../components/primitives/button/button.js";
-import { Input } from "../components/primitives/input/input.js";
-import { LoginSplit } from "../components/primitives/login-split/login-split.js";
-import { SocialAuthRow } from "../components/primitives/social-auth-row/social-auth-row.js";
 
 export default { title: "Screens / Login Split" };
 

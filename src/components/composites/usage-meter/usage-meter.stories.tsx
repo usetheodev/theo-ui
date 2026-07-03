@@ -1,5 +1,5 @@
 import type { Story } from "@ladle/react";
-import { Badge } from "../../primitives/badge/badge.js";
+import { Badge } from "@usetheo/ui";
 import { UsageMeter } from "./usage-meter.js";
 
 export default { title: "Composites / Feedback / UsageMeter" };

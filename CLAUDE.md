@@ -8,7 +8,7 @@ This file complements `/home/paulo/Projetos/usetheo/CLAUDE.md` and `/home/paulo/
 
 ## What this project is
 
-`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [Theo](https://usetheo.dev) ecosystem. **153 components** (99 primitive + 36 composite modules) designed for AI agent surfaces and cloud dashboards. Standard React + Tailwind package: React is the only required peer; Radix, CVA, cmdk, lucide ship as dependencies. Apache-2.0. Production.
+`@theokit/ui` — codenamed **Violet Forge** — is the React component library of the [Theo](https://usetheo.dev) ecosystem. **99 components** (59 primitive + 40 composite modules) built for AI-agent surfaces — coding agents and chat. Standard React + Tailwind package: React is the only required peer; Radix, CVA, cmdk, lucide ship as dependencies. Apache-2.0. Production. The generic primitives, auth surfaces, and cloud-ops layer moved to `@usetheo/ui` (AI-exclusive pivot M-A..M-E, 2026-07-03), which `@theokit/ui` depends on.
 
 Published as `@theokit/ui` on npm. Distributed two ways: install the whole package, or copy individual components via the shadcn-compatible registry.
 
@@ -50,7 +50,7 @@ Positioned as the **UI pillar** of Theo and a **community auxiliary** of the eco
 
 - **UI pillar of Theo** — one of four pillars (UI, Harness, Skills, Runtime). Not the framework (TheoKit), not the SDK (TheoKit-SDK), not the runtime (Theo PaaS).
 - **Community auxiliary** — Apache-2.0, not part of the paid funnel. Usable standalone, no commitment to the rest of the stack.
-- **Built for AI agents + cloud dashboards** — the categorical wedge against generic component libraries (shadcn, MUI, Mantine, Tremor).
+- **Built for AI-agent surfaces (coding agents + chat)** — the categorical wedge against generic component libraries (shadcn, MUI, Mantine, Tremor). *(Changed 2026-07-03, M-E of the AI-exclusive pivot — strategic review authorized by the project owner's pivot decision. The former co-equal "cloud dashboards" wedge is retired: the generic + cloud-ops layer moved to `@usetheo/ui`, which `@theokit/ui` now depends on. Rationale + provenance in `.claude/knowledge-base/pivot-roadmap.md` and the M-E plan ADR D1.)*
 - **shadcn-compatible registry** — copy-paste path is first-class, not a side feature.
 - **Same Radix underneath as shadcn** — no foundational fork. The wedge is what we built on top.
 - **Quality gates are hard requirements** — format → lint → typecheck → test → build → registry → structure → bundle → a11y → ladle. No PR ships otherwise.
@@ -63,7 +63,7 @@ If a piece of TheoUI copy contradicts the locked narrative in [`../CLAUDE.md`](.
 | --- | --- | --- |
 | Harness | `@theokit/sdk` | None as of 2026-05-15. `SDKAgent` events (`SDKMessage`, `tool_call`, `assistant`) are natural data sources for `AgentEvent`, `ToolCall`, `ChatMessage` primitives, but no import exists. |
 | Skills | `theokit` | None as of 2026-05-15. TheoKit apps can consume `@theokit/ui` like any other React lib; no specific wiring. |
-| Runtime | Theo PaaS | None (PaaS pre-release). `DeploymentRow`, `BuildLogStream`, `RollbackUI`, `EnvVarEditor`, `DomainConfig`, `PreviewEnvCard`, `ProjectCard`, `MetricsPanel` are PaaS-shaped primitives waiting for the PaaS surface to consume them. |
+| Runtime | Theo PaaS | None (PaaS pre-release). `BuildLogStream` is the one PaaS-shaped primitive that stayed in `@theokit/ui`; the rest of the cloud-ops layer (`DeploymentRow`, `RollbackUI`, `EnvVarEditor`, `DomainConfig`, `PreviewEnvCard`, `ProjectCard`, `MetricsPanel`) moved to `@usetheo/ui` in the pivot. A PaaS surface consumes both packages. |
 | Coding assistant | `theo-code` | TheoCode Desktop is a likely first-party consumer (Tauri + web view); no explicit dependency declared yet. |
 
 > "Do not invent integration that does not exist yet." (Root `CLAUDE.md` rule 2.) Verify the actual import / dependency before claiming wiring exists in copy or examples. `grep` first, claim second.

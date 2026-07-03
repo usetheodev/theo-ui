@@ -5,12 +5,12 @@
   "title": "MultiSelectPrompt",
   "description": "Multi-select ask-the-user card with number-key toggles, an Other free-text option, and a side-by-side preview pane.",
   "registryDependencies": [
-    "badge",
-    "button",
-    "checkbox",
+    "https://usetheodev.github.io/usetheo-ui/r/badge.json",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
+    "https://usetheodev.github.io/usetheo-ui/r/checkbox.json",
     "cn",
-    "input",
-    "label",
+    "https://usetheodev.github.io/usetheo-ui/r/input.json",
+    "https://usetheodev.github.io/usetheo-ui/r/label.json",
     "prompt",
     "tailwind-preset"
   ],
@@ -20,5 +20,8 @@
       "type": "registry:block",
       "target": "components/blocks/multi-select-prompt.tsx"
     }
+  ],
+  "dependencies": [
+    "@usetheo/ui"
   ]
 }

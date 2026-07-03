@@ -108,7 +108,10 @@ async function copyBuiltItemIntoFixture(
 
 async function main(): Promise<void> {
   const descriptorFiles = (await readdir(REGISTRY_DIR))
-    .filter((file) => file.endsWith(".json") && file !== "index.json")
+    .filter(
+      (file) =>
+        file.endsWith(".json") && file !== "index.json" && file !== "component-classification.json",
+    )
     .sort();
 
   const descriptors = new Map<string, RegistryDescriptor>();
@@ -267,7 +270,7 @@ async function main(): Promise<void> {
 
     for (const descriptor of descriptors.values()) {
       for (const dependency of descriptor.registryDependencies ?? []) {
-        if (!descriptors.has(dependency)) {
+        if (!descriptors.has(dependency) && !dependency.startsWith("http")) {
           addFailure(`${descriptor.name}.json`, `unknown registryDependency "${dependency}"`);
         }
       }

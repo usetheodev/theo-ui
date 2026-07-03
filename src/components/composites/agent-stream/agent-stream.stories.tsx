@@ -1,6 +1,6 @@
 import type { Story } from "@ladle/react";
+import { Button } from "@usetheo/ui";
 import { FileEdit, Search, Terminal } from "lucide-react";
-import { Button } from "../../primitives/button/index.js";
 import { AgentStream, type AgentStreamItem } from "./agent-stream.js";
 
 export default { title: "Composites / Agent / AgentStream" };

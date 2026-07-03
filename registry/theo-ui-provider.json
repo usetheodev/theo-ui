@@ -3,11 +3,13 @@
   "name": "theo-ui-provider",
   "type": "registry:lib",
   "title": "TheoUIProvider",
-  "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps.",
-  "dependencies": [],
+  "description": "Primary entry-point provider \u2014 composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps.",
+  "dependencies": [
+    "@usetheo/ui"
+  ],
   "registryDependencies": [
     "theme-provider",
-    "toast"
+    "https://usetheodev.github.io/usetheo-ui/r/toast.json"
   ],
   "files": [
     {

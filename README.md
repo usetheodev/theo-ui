@@ -6,15 +6,15 @@
 
 # The UI your agent already needs.
 
-A React component library built for AI agent surfaces and cloud dashboards. **153 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
+A React component library built for AI-agent surfaces — coding agents and chat. **99 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
 
 *Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1605%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-154-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-1131%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-99-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -28,41 +28,42 @@ A React component library built for AI agent surfaces and cloud dashboards. **15
 
 There is a version of your product where the agent UI is half-built before you start.
 
-The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the deployment status, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
+The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
 
 ## Why `@theokit/ui`
 
-Most component libraries optimize for marketing pages. `@theokit/ui` is built for the surfaces that AI agents and cloud dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
+Most component libraries optimize for marketing pages. `@theokit/ui` is built for the surfaces that AI agents actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
 
 - **Built for AI agents.** Primitives for skills, cron jobs, permission matrices, MCP servers, memory editing, hook config, audit logs, model cards, token usage charts, sub-agent dispatch — the components a transparent agent UI actually needs.
-- **Built for PaaS.** Composites for project cards, deployment rows, build log streams, env var editors, domain config, preview environments, rollback flows, metrics panels.
+- **Built on `@usetheo/ui`.** Generic primitives, auth surfaces, and cloud-ops composites (project cards, deployment rows, env var editors, domain config, preview environments, rollback flows, metrics panels) live in [`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui) — the community-standard layer `@theokit/ui` builds on. Need those too? Install `@usetheo/ui` alongside.
 - **Themeable at runtime.** Ship three themes out of the box, swap them live via `<ThemeProvider />`, or define your own.
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
 - **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so client components are safe to import into a React Server Component tree when installed from npm.
-- **Per-subpath types.** `import { Button } from "@theokit/ui/button"` resolves an isolated `Button` declaration, not the whole barrel's type surface.
+- **Per-subpath types.** `import { AgentEvent } from "@theokit/ui/agent-event"` resolves an isolated `AgentEvent` declaration, not the whole barrel's type surface.
 - **Standard React + Tailwind package.** React is the only required peer (18 or 19); Radix UI, CVA, cmdk, and lucide ship as dependencies. Pairs with TheoKit, or runs standalone in any React app.
 
 The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
 
 | Surface need | `@theokit/ui` | shadcn / Radix | Tremor | Build it yourself |
 |---|---|---|---|---|
-| Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
+| Generic primitives (buttons, tables, dialogs) | **Via `@usetheo/ui`** (same Radix foundation) | Yes | Limited | Slow |
 | Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes** | None | None | Weeks |
-| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes** | None | None | Weeks |
+| cloud-ops composites (deploy, rollback, env vars) | **Via `@usetheo/ui`** (`BuildLogStream` ships here) | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
-| a11y enforced as a quality gate | **Yes** — vitest-axe on 151 stories | Per-component, manual | Manual | Often skipped |
+| a11y enforced as a quality gate | **Yes** — 171 vitest-axe checks | Per-component, manual | Manual | Often skipped |
 
-Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 153 components you were about to write.
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 99 components you were about to write.
 
 ## What you'd build
 
 - **Coding assistant interface.** Chat thread, streaming assistant, tool-call timeline, file diff viewer, permission matrix, sub-agent dispatch.
 - **Agent dashboard.** Run stats, session timeline, MCP server admin, cron job scheduler, memory editor, audit log, model card, cost meter.
-- **cloud dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
 - **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
-- **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
+- **Coding-agent onboarding.** Folder selector, recent folders list, project switcher, build log stream.
+
+> Need generic primitives, auth surfaces, or the full cloud-ops dashboard (deployment rows, env var editors, domain config, preview environments, rollback flows, metrics panels)? Those moved to [`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui) — `@theokit/ui` builds on it.
 
 ---
 
@@ -85,14 +86,13 @@ pnpm add @theokit/ui
 ```
 
 ```tsx
-import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@theokit/ui";
+import { ThemeProvider, AgentEvent, ToolCall } from "@theokit/ui";
 
 export default function App() {
   return (
     <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
       <AgentEvent kind="thinking" text="Reading repository structure..." />
       <ToolCall name="readFile" status="completed" />
-      <DeploymentRow status="ready" env="production" branch="main" />
     </ThemeProvider>
   );
 }
@@ -101,8 +101,8 @@ export default function App() {
 ### Option B — copy individual components (shadcn-style)
 
 ```bash
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/deployment-row.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/agent-event.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/tool-call.json
 ```
 
 > Branded `https://ui.usetheo.dev/r/*` URL will follow once the DNS CNAME is configured (single record at the registrar). Both URLs serve identical content.
@@ -145,34 +145,27 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**154 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
+**99 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (99) — building blocks
+**Primitives** (59) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
 <!-- BEGIN:primitives -->
-`ActionBar` · `AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState`
-`AgentStreaming` · `Alert` · `ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice`
-`Avatar` · `Badge` · `BranchIndicator` · `BrowserControls` · `BuildLogStream` · `Button`
-`CapabilityIndicator` · `Card` · `ChannelCard` · `ChatThread` · `Checkbox` · `ContextCard`
-`ContextWindowBar` · `CopyButton` · `CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DangerZone`
-`Dialog` · `DiffViewer` · `DropdownMenu` · `EmptyState` · `ExportChatDialog` · `FolderContextCard`
-`FolderSelector` · `FormField` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog` · `Input`
-`IntentSelector` · `Label` · `LaneBoard` · `LoginSplit` · `MCPServerCard` · `MemoryEditor`
-`MentionMenu` · `MetricsPanel` · `ModelCard` · `ModelSelector` · `Pagination` · `PermissionMatrix`
-`PinInput` · `PlanBadge` · `Progress` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
-`RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunStatusPill` · `RunningTasksPanel`
-`ScrollArea` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
-`Skeleton` · `SkillCard` · `SocialAuthRow` · `StatTile` · `StatusDot` · `StepsRail`
-`SubAgentDispatch` · `Switch` · `SystemPromptEditor` · `Table` · `Tabs` · `TaskNode`
-`TaskPlan` · `TerminalPanel` · `Textarea` · `ThinkingLevelSelector` · `Timestamp` · `Toast`
-`Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
-`Tooltip` · `TopNav` · `UpdateBanner`
+`AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState` · `AgentStreaming`
+`ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice` · `BranchIndicator` · `BrowserControls`
+`BuildLogStream` · `CapabilityIndicator` · `ChannelCard` · `ChatThread` · `ContextCard` · `ContextWindowBar`
+`CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DiffViewer` · `ExportChatDialog` · `FolderContextCard`
+`FolderSelector` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog` · `IntentSelector` · `LaneBoard`
+`MCPServerCard` · `MemoryEditor` · `MentionMenu` · `ModelCard` · `ModelSelector` · `PermissionMatrix`
+`ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips` · `RecentFoldersList` · `RuleCard` · `RunStats`
+`RunStatusPill` · `RunningTasksPanel` · `SessionListItem` · `SessionTimeline` · `SkillCard` · `StepsRail`
+`SubAgentDispatch` · `SystemPromptEditor` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `ThinkingLevelSelector`
+`TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
 <!-- END:primitives -->
 
 </details>
@@ -180,12 +173,12 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 <details>
 <summary>
 <!-- BEGIN:composites-count -->
-**Composites** (55) — assembled flows
+**Composites** (40) — assembled flows
 <!-- END:composites-count -->
 </summary>
 
 <!-- BEGIN:composites -->
-`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `AgentToolRenderer` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `ChoicePrompt` · `CodeBlock` · `CommandPalette` · `ConfirmDialog` · `ConfirmPrompt` · `CronJobsList` · `DataPart` · `DataTable` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `MetricCard` · `MultiSelectPrompt` · `PageShell` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `StatusIndicator` · `TaskHeader` · `TextPart` · `TextPrompt` · `ToolCallPart` · `UsageMeter`
+`AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `AgentToolRenderer` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `ChoicePrompt` · `ConfirmPrompt` · `CronJobsList` · `DataPart` · `FilePart` · `MCPServerList` · `MultiSelectPrompt` · `PermissionModal` · `PreviewPanel` · `ReasoningPart` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `TextPart` · `TextPrompt` · `ToolCallPart` · `UsageMeter`
 <!-- END:composites -->
 
 </details>
@@ -320,17 +313,17 @@ tests/             fixture-shadcn-app/ (registry install integration test)
   target.
 - **Tree-shaking via the barrel** — modern bundlers (Vite, esbuild, Rollup,
   webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and tree-shake
-  unused components from the barrel import (`import { Button } from
+  unused components from the barrel import (`import { AgentEvent } from
   "@theokit/ui"` drops every other component from the final bundle). No
   per-component subpath exports are needed for this to work.
 - **Subpath imports are aliases (not separate bundles).** `package.json#exports`
-  publishes 99 component subpaths (`@theokit/ui/button`, `@theokit/ui/agent-event`,
+  publishes 99 component subpaths (`@theokit/ui/agent-event`, `@theokit/ui/tool-call`,
   …). Every subpath resolves to the same `dist/index.js`. tsup is configured with
   `splitting: false` deliberately — a 99-entry split would duplicate shared code
   (cn, types, Radix runtime) into every chunk and inflate the tarball. Subpath
   imports exist for IDE intellisense and import organization. Modern bundlers
-  tree-shake the same way whether you write `import { Button } from "@theokit/ui"`
-  or `import { Button } from "@theokit/ui/button"`. Runtimes that don't tree-shake
+  tree-shake the same way whether you write `import { AgentEvent } from "@theokit/ui"`
+  or `import { AgentEvent } from "@theokit/ui/agent-event"`. Runtimes that don't tree-shake
   (Jest classic, Node REPL, raw browser ESM) will load the full barrel either way
   — accept that cost or pre-bundle with the consumer's tooling.
 - **CSS distribution** — `dist/styles.css` is the recommended single import
@@ -348,10 +341,10 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
-- **Production.** 153 components, 1,513 tests passing, zero a11y violations on 151 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Production.** 99 components, 1,131 tests passing, zero a11y violations across 171 vitest-axe checks, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
-- **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
+- **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.
 
 ## Engines (isolated subpaths)
 

@@ -1,0 +1,579 @@
+[
+  {
+    "name": "agent-error-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-event",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-handoff",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-profile",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-starting-state",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-streaming",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "artifact-preview",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "attachment-chip",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "audit-log-entry",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Agent audit log row (docstring \"one row in the agent audit log\"; AuditActorKind includes \"agent\" with a Bot icon) — agent surface"
+  },
+  {
+    "name": "auto-compact-notice",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "branch-indicator",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "browser-controls",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "build-log-stream",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Log-line stream with levels/tail — coding-agent run output; ai per the broad AI scope (coding-agent + chat surfaces)"
+  },
+  {
+    "name": "capability-indicator",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "channel-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Chat-channel connector (Telegram/Discord/Slack/mcp) — chat surface under the coding+chat AI scope; disputed: also readable as a platform-integration card, revisit at M-C",
+    "disputed": true
+  },
+  {
+    "name": "chat-thread",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "context-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "context-window-bar",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "cost-meter",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "created-files-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "cron-job-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Scheduled agent job (docstring \"one scheduled agent job... prompt, status\") — agent surface; disputed: cron scheduling is also an ops concern, revisit at M-C",
+    "disputed": true
+  },
+  {
+    "name": "diff-viewer",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "export-chat-dialog",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "folder-context-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "folder-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "gateway-status-indicator",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "hook-config",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "hook-event-log",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "intent-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "lane-board",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "mcp-server-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "memory-editor",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "mention-menu",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "model-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "model-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "permission-matrix",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "progress-checklist",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "project-switcher",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Sidebar.Header for a code-agent app (docstring \"sidebar header for a code agent app\"); siblings session-list-item/folder-context-card are ai"
+  },
+  {
+    "name": "quick-action-chips",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "recent-folders-list",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "rule-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "run-stats",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "run-status-pill",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "running-tasks-panel",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "session-list-item",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "session-timeline",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "skill-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "slide",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "steps-rail",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "sub-agent-dispatch",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "system-prompt-editor",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "task-plan",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "terminal-panel",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "thinking-level-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "token-usage-chart",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tool-call",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tool-call-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tool-result",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tools-list",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "whiteboard",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-composer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-editor",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-stream",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-timeline",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-tool-renderer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "approval-card",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "chat-composer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "chat-message",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "choice-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "confirm-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "cron-jobs-list",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Grid of CronJobCards (composes cron-job-card, which is ai) — must stay ai to keep the split acyclic; disputed follows cron-job-card",
+    "disputed": true
+  },
+  {
+    "name": "mcp-server-list",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "multi-select-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "permission-modal",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "preview-panel",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Coding-agent preview surface — composes browser-controls + build-log-stream (both ai); ai to keep the dependency acyclic"
+  },
+  {
+    "name": "rule-editor",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "skill-editor",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "skills-list",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "slide-deck",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "stability-bundle-viewer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "text-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "usage-meter",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  }
+]

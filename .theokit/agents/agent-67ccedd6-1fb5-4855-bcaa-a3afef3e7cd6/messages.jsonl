@@ -1,0 +1,2 @@
+{"role":"user","text":"What is the current time? You MUST call the get_current_time tool.","at":1783083180313}
+{"role":"assistant","text":"The current time is 2026-07-03T12:53:01.230Z.","at":1783083182256}

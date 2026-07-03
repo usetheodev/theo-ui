@@ -1,0 +1,20 @@
+{
+  "slug": "theokit-ui-ai-exclusive-pivot",
+  "blueprint": ".claude/knowledge-base/discoveries/blueprints/theokit-ui-ai-exclusive-pivot-blueprint.md",
+  "generated": "2026-07-02",
+  "mode": "inline (5 questions over local clones; no ralph-loop; no active loop per pre-flight)",
+  "questions": [
+    {"id": "Q1", "corner": "techniques", "status": "done", "summary": "AI pkg depends one-directionally on primitives pkg via workspace import (45/48 components)"},
+    {"id": "Q2", "corner": "techniques", "status": "done", "summary": "Boundary = AI-agent surface vocabulary; placement table for our 10 ambiguous components"},
+    {"id": "Q3", "corner": "deps", "status": "done", "summary": "Clean dep split: AI-domain deps (ai/streamdown/shiki/xyflow) vs generic UI (radix/cmdk/recharts)"},
+    {"id": "Q4", "corner": "tools", "status": "done", "summary": "registryDependencies URL cross-reference; already our pattern (agent-composer.json)"},
+    {"id": "Q5", "corner": "tests", "status": "done", "summary": "Tests render real primitives (not mocked); @usetheo/ui must be resolvable at test time"}
+  ],
+  "coverage_corners": {"tests": "populated", "deps": "populated", "tools": "populated", "techniques": "populated"},
+  "citations_verified": 14,
+  "citations_fabricated": 0,
+  "adrs": 3,
+  "blocked": [],
+  "promise": "BLUEPRINT_COMPLETE",
+  "post_promise_sanity_check": "PASS (14 unique reference citations, 0 fabricated)"
+}

@@ -1,9 +1,10 @@
 {
   "name": "@theokit/ui",
-  "version": "0.18.1",
-  "description": "Theo UI — framework-agnostic React component library with the Violet Forge design system. Focused on AI-agent interfaces, cloud dashboards, and developer-tooling surfaces.",
+  "version": "1.0.0",
+  "description": "Theo UI \u2014 React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
   "license": "Apache-2.0",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
@@ -21,14 +22,6 @@
     "./fonts-cdn.css": "./dist/fonts-cdn.css",
     "./slide/themes/default.css": "./dist/slide/themes/default.css",
     "./slide/themes/violet-forge.css": "./dist/slide/themes/violet-forge.css",
-    "./account-menu": {
-      "types": "./dist/components/composites/account-menu/index.d.ts",
-      "import": "./dist/composites/account-menu/index.js"
-    },
-    "./action-bar": {
-      "types": "./dist/components/primitives/action-bar/index.d.ts",
-      "import": "./dist/primitives/action-bar/index.js"
-    },
     "./agent-composer": {
       "types": "./dist/components/composites/agent-composer/index.d.ts",
       "import": "./dist/composites/agent-composer/index.js"
@@ -73,10 +66,6 @@
       "types": "./dist/components/composites/agent-tool-renderer/index.d.ts",
       "import": "./dist/composites/agent-tool-renderer/index.js"
     },
-    "./alert": {
-      "types": "./dist/components/primitives/alert/index.d.ts",
-      "import": "./dist/primitives/alert/index.js"
-    },
     "./approval-card": {
       "types": "./dist/components/composites/approval-card/index.d.ts",
       "import": "./dist/composites/approval-card/index.js"
@@ -97,14 +86,6 @@
       "types": "./dist/components/primitives/auto-compact-notice/index.d.ts",
       "import": "./dist/primitives/auto-compact-notice/index.js"
     },
-    "./avatar": {
-      "types": "./dist/components/primitives/avatar/index.d.ts",
-      "import": "./dist/primitives/avatar/index.js"
-    },
-    "./badge": {
-      "types": "./dist/components/primitives/badge/index.d.ts",
-      "import": "./dist/primitives/badge/index.js"
-    },
     "./branch-indicator": {
       "types": "./dist/components/primitives/branch-indicator/index.d.ts",
       "import": "./dist/primitives/branch-indicator/index.js"
@@ -117,17 +98,9 @@
       "types": "./dist/components/primitives/build-log-stream/index.d.ts",
       "import": "./dist/primitives/build-log-stream/index.js"
     },
-    "./button": {
-      "types": "./dist/components/primitives/button/index.d.ts",
-      "import": "./dist/primitives/button/index.js"
-    },
     "./capability-indicator": {
       "types": "./dist/components/primitives/capability-indicator/index.d.ts",
       "import": "./dist/primitives/capability-indicator/index.js"
-    },
-    "./card": {
-      "types": "./dist/components/primitives/card/index.d.ts",
-      "import": "./dist/primitives/card/index.js"
     },
     "./channel-card": {
       "types": "./dist/components/primitives/channel-card/index.d.ts",
@@ -145,25 +118,9 @@
       "types": "./dist/components/primitives/chat-thread/index.d.ts",
       "import": "./dist/primitives/chat-thread/index.js"
     },
-    "./checkbox": {
-      "types": "./dist/components/primitives/checkbox/index.d.ts",
-      "import": "./dist/primitives/checkbox/index.js"
-    },
     "./choice-prompt": {
       "types": "./dist/components/composites/choice-prompt/index.d.ts",
       "import": "./dist/composites/choice-prompt/index.js"
-    },
-    "./code-block": {
-      "types": "./dist/components/composites/code-block/index.d.ts",
-      "import": "./dist/composites/code-block/index.js"
-    },
-    "./command-palette": {
-      "types": "./dist/components/composites/command-palette/index.d.ts",
-      "import": "./dist/composites/command-palette/index.js"
-    },
-    "./confirm-dialog": {
-      "types": "./dist/components/composites/confirm-dialog/index.d.ts",
-      "import": "./dist/composites/confirm-dialog/index.js"
     },
     "./confirm-prompt": {
       "types": "./dist/components/composites/confirm-prompt/index.d.ts",
@@ -176,10 +133,6 @@
     "./context-window-bar": {
       "types": "./dist/components/primitives/context-window-bar/index.d.ts",
       "import": "./dist/primitives/context-window-bar/index.js"
-    },
-    "./copy-button": {
-      "types": "./dist/components/primitives/copy-button/index.d.ts",
-      "import": "./dist/primitives/copy-button/index.js"
     },
     "./cost-meter": {
       "types": "./dist/components/primitives/cost-meter/index.d.ts",
@@ -197,41 +150,9 @@
       "types": "./dist/components/composites/cron-jobs-list/index.d.ts",
       "import": "./dist/composites/cron-jobs-list/index.js"
     },
-    "./danger-zone": {
-      "types": "./dist/components/primitives/danger-zone/index.d.ts",
-      "import": "./dist/primitives/danger-zone/index.js"
-    },
-    "./data-table": {
-      "types": "./dist/components/composites/data-table/index.d.ts",
-      "import": "./dist/composites/data-table/index.js"
-    },
-    "./deployment-row": {
-      "types": "./dist/components/composites/deployment-row/index.d.ts",
-      "import": "./dist/composites/deployment-row/index.js"
-    },
-    "./dialog": {
-      "types": "./dist/components/primitives/dialog/index.d.ts",
-      "import": "./dist/primitives/dialog/index.js"
-    },
     "./diff-viewer": {
       "types": "./dist/components/primitives/diff-viewer/index.d.ts",
       "import": "./dist/primitives/diff-viewer/index.js"
-    },
-    "./domain-config": {
-      "types": "./dist/components/composites/domain-config/index.d.ts",
-      "import": "./dist/composites/domain-config/index.js"
-    },
-    "./dropdown-menu": {
-      "types": "./dist/components/primitives/dropdown-menu/index.d.ts",
-      "import": "./dist/primitives/dropdown-menu/index.js"
-    },
-    "./empty-state": {
-      "types": "./dist/components/primitives/empty-state/index.d.ts",
-      "import": "./dist/primitives/empty-state/index.js"
-    },
-    "./env-var-editor": {
-      "types": "./dist/components/composites/env-var-editor/index.d.ts",
-      "import": "./dist/composites/env-var-editor/index.js"
     },
     "./export-chat-dialog": {
       "types": "./dist/components/primitives/export-chat-dialog/index.d.ts",
@@ -245,10 +166,6 @@
       "types": "./dist/components/primitives/folder-selector/index.d.ts",
       "import": "./dist/primitives/folder-selector/index.js"
     },
-    "./form-field": {
-      "types": "./dist/components/primitives/form-field/index.d.ts",
-      "import": "./dist/primitives/form-field/index.js"
-    },
     "./gateway-status-indicator": {
       "types": "./dist/components/primitives/gateway-status-indicator/index.d.ts",
       "import": "./dist/primitives/gateway-status-indicator/index.js"
@@ -261,25 +178,13 @@
       "types": "./dist/components/primitives/hook-event-log/index.d.ts",
       "import": "./dist/primitives/hook-event-log/index.js"
     },
-    "./input": {
-      "types": "./dist/components/primitives/input/index.d.ts",
-      "import": "./dist/primitives/input/index.js"
-    },
     "./intent-selector": {
       "types": "./dist/components/primitives/intent-selector/index.d.ts",
       "import": "./dist/primitives/intent-selector/index.js"
     },
-    "./label": {
-      "types": "./dist/components/primitives/label/index.d.ts",
-      "import": "./dist/primitives/label/index.js"
-    },
     "./lane-board": {
       "types": "./dist/components/primitives/lane-board/index.d.ts",
       "import": "./dist/primitives/lane-board/index.js"
-    },
-    "./login-split": {
-      "types": "./dist/components/primitives/login-split/index.d.ts",
-      "import": "./dist/primitives/login-split/index.js"
     },
     "./mcp-server-card": {
       "types": "./dist/components/primitives/mcp-server-card/index.d.ts",
@@ -297,14 +202,6 @@
       "types": "./dist/components/primitives/mention-menu/index.d.ts",
       "import": "./dist/primitives/mention-menu/index.js"
     },
-    "./metric-card": {
-      "types": "./dist/components/composites/metric-card/index.d.ts",
-      "import": "./dist/composites/metric-card/index.js"
-    },
-    "./metrics-panel": {
-      "types": "./dist/components/primitives/metrics-panel/index.d.ts",
-      "import": "./dist/primitives/metrics-panel/index.js"
-    },
     "./model-card": {
       "types": "./dist/components/primitives/model-card/index.d.ts",
       "import": "./dist/primitives/model-card/index.js"
@@ -317,14 +214,6 @@
       "types": "./dist/components/composites/multi-select-prompt/index.d.ts",
       "import": "./dist/composites/multi-select-prompt/index.js"
     },
-    "./page-shell": {
-      "types": "./dist/components/composites/page-shell/index.d.ts",
-      "import": "./dist/composites/page-shell/index.js"
-    },
-    "./pagination": {
-      "types": "./dist/components/primitives/pagination/index.d.ts",
-      "import": "./dist/primitives/pagination/index.js"
-    },
     "./permission-matrix": {
       "types": "./dist/components/primitives/permission-matrix/index.d.ts",
       "import": "./dist/primitives/permission-matrix/index.js"
@@ -333,33 +222,13 @@
       "types": "./dist/components/composites/permission-modal/index.d.ts",
       "import": "./dist/composites/permission-modal/index.js"
     },
-    "./pin-input": {
-      "types": "./dist/components/primitives/pin-input/index.d.ts",
-      "import": "./dist/primitives/pin-input/index.js"
-    },
-    "./plan-badge": {
-      "types": "./dist/components/primitives/plan-badge/index.d.ts",
-      "import": "./dist/primitives/plan-badge/index.js"
-    },
-    "./preview-env-card": {
-      "types": "./dist/components/composites/preview-env-card/index.d.ts",
-      "import": "./dist/composites/preview-env-card/index.js"
-    },
     "./preview-panel": {
       "types": "./dist/components/composites/preview-panel/index.d.ts",
       "import": "./dist/composites/preview-panel/index.js"
     },
-    "./progress": {
-      "types": "./dist/components/primitives/progress/index.d.ts",
-      "import": "./dist/primitives/progress/index.js"
-    },
     "./progress-checklist": {
       "types": "./dist/components/primitives/progress-checklist/index.d.ts",
       "import": "./dist/primitives/progress-checklist/index.js"
-    },
-    "./project-card": {
-      "types": "./dist/components/composites/project-card/index.d.ts",
-      "import": "./dist/composites/project-card/index.js"
     },
     "./project-switcher": {
       "types": "./dist/components/primitives/project-switcher/index.d.ts",
@@ -369,17 +238,9 @@
       "types": "./dist/components/primitives/quick-action-chips/index.d.ts",
       "import": "./dist/primitives/quick-action-chips/index.js"
     },
-    "./radio-group": {
-      "types": "./dist/components/primitives/radio-group/index.d.ts",
-      "import": "./dist/primitives/radio-group/index.js"
-    },
     "./recent-folders-list": {
       "types": "./dist/components/primitives/recent-folders-list/index.d.ts",
       "import": "./dist/primitives/recent-folders-list/index.js"
-    },
-    "./rollback-ui": {
-      "types": "./dist/components/composites/rollback-ui/index.d.ts",
-      "import": "./dist/composites/rollback-ui/index.js"
     },
     "./rule-card": {
       "types": "./dist/components/primitives/rule-card/index.d.ts",
@@ -401,14 +262,6 @@
       "types": "./dist/components/primitives/running-tasks-panel/index.d.ts",
       "import": "./dist/primitives/running-tasks-panel/index.js"
     },
-    "./scroll-area": {
-      "types": "./dist/components/primitives/scroll-area/index.d.ts",
-      "import": "./dist/primitives/scroll-area/index.js"
-    },
-    "./select": {
-      "types": "./dist/components/primitives/select/index.d.ts",
-      "import": "./dist/primitives/select/index.js"
-    },
     "./session-list-item": {
       "types": "./dist/components/primitives/session-list-item/index.d.ts",
       "import": "./dist/primitives/session-list-item/index.js"
@@ -416,18 +269,6 @@
     "./session-timeline": {
       "types": "./dist/components/primitives/session-timeline/index.d.ts",
       "import": "./dist/primitives/session-timeline/index.js"
-    },
-    "./sheet": {
-      "types": "./dist/components/primitives/sheet/index.d.ts",
-      "import": "./dist/primitives/sheet/index.js"
-    },
-    "./sidebar": {
-      "types": "./dist/components/primitives/sidebar/index.d.ts",
-      "import": "./dist/primitives/sidebar/index.js"
-    },
-    "./skeleton": {
-      "types": "./dist/components/primitives/skeleton/index.d.ts",
-      "import": "./dist/primitives/skeleton/index.js"
     },
     "./skill-card": {
       "types": "./dist/components/primitives/skill-card/index.d.ts",
@@ -441,25 +282,9 @@
       "types": "./dist/components/composites/skills-list/index.d.ts",
       "import": "./dist/composites/skills-list/index.js"
     },
-    "./social-auth-row": {
-      "types": "./dist/components/primitives/social-auth-row/index.d.ts",
-      "import": "./dist/primitives/social-auth-row/index.js"
-    },
     "./stability-bundle-viewer": {
       "types": "./dist/components/composites/stability-bundle-viewer/index.d.ts",
       "import": "./dist/composites/stability-bundle-viewer/index.js"
-    },
-    "./stat-tile": {
-      "types": "./dist/components/primitives/stat-tile/index.d.ts",
-      "import": "./dist/primitives/stat-tile/index.js"
-    },
-    "./status-dot": {
-      "types": "./dist/components/primitives/status-dot/index.d.ts",
-      "import": "./dist/primitives/status-dot/index.js"
-    },
-    "./status-indicator": {
-      "types": "./dist/components/composites/status-indicator/index.d.ts",
-      "import": "./dist/composites/status-indicator/index.js"
     },
     "./steps-rail": {
       "types": "./dist/components/primitives/steps-rail/index.d.ts",
@@ -469,25 +294,9 @@
       "types": "./dist/components/primitives/sub-agent-dispatch/index.d.ts",
       "import": "./dist/primitives/sub-agent-dispatch/index.js"
     },
-    "./switch": {
-      "types": "./dist/components/primitives/switch/index.d.ts",
-      "import": "./dist/primitives/switch/index.js"
-    },
     "./system-prompt-editor": {
       "types": "./dist/components/primitives/system-prompt-editor/index.d.ts",
       "import": "./dist/primitives/system-prompt-editor/index.js"
-    },
-    "./table": {
-      "types": "./dist/components/primitives/table/index.d.ts",
-      "import": "./dist/primitives/table/index.js"
-    },
-    "./tabs": {
-      "types": "./dist/components/primitives/tabs/index.d.ts",
-      "import": "./dist/primitives/tabs/index.js"
-    },
-    "./task-header": {
-      "types": "./dist/components/composites/task-header/index.d.ts",
-      "import": "./dist/composites/task-header/index.js"
     },
     "./task-plan": {
       "types": "./dist/components/primitives/task-plan/index.d.ts",
@@ -501,21 +310,9 @@
       "types": "./dist/components/composites/text-prompt/index.d.ts",
       "import": "./dist/composites/text-prompt/index.js"
     },
-    "./textarea": {
-      "types": "./dist/components/primitives/textarea/index.d.ts",
-      "import": "./dist/primitives/textarea/index.js"
-    },
     "./thinking-level-selector": {
       "types": "./dist/components/primitives/thinking-level-selector/index.d.ts",
       "import": "./dist/primitives/thinking-level-selector/index.js"
-    },
-    "./timestamp": {
-      "types": "./dist/components/primitives/timestamp/index.d.ts",
-      "import": "./dist/primitives/timestamp/index.js"
-    },
-    "./toast": {
-      "types": "./dist/components/primitives/toast/index.d.ts",
-      "import": "./dist/primitives/toast/index.js"
     },
     "./token-usage-chart": {
       "types": "./dist/components/primitives/token-usage-chart/index.d.ts",
@@ -536,18 +333,6 @@
     "./tools-list": {
       "types": "./dist/components/primitives/tools-list/index.d.ts",
       "import": "./dist/primitives/tools-list/index.js"
-    },
-    "./tooltip": {
-      "types": "./dist/components/primitives/tooltip/index.d.ts",
-      "import": "./dist/primitives/tooltip/index.js"
-    },
-    "./topnav": {
-      "types": "./dist/components/primitives/topnav/index.d.ts",
-      "import": "./dist/primitives/topnav/index.js"
-    },
-    "./update-banner": {
-      "types": "./dist/components/primitives/update-banner/index.d.ts",
-      "import": "./dist/primitives/update-banner/index.js"
     },
     "./usage-meter": {
       "types": "./dist/components/composites/usage-meter/index.d.ts",
@@ -602,7 +387,8 @@
     "NOTICE",
     "CHANGELOG.md",
     "llms.txt",
-    "DESIGN.md"
+    "DESIGN.md",
+    "codemod"
   ],
   "scripts": {
     "build": "tsup && tsc -p tsconfig.dts.json && tsx scripts/inject-use-client.ts && tsx scripts/regen-subpath-exports.ts",
@@ -636,6 +422,7 @@
     "test:registry": "tsx scripts/test-registry-install.ts",
     "test:coverage": "vitest run --coverage",
     "quality:structure": "tsx scripts/validate-quality-gates.ts",
+    "classify:check": "tsx scripts/classify-components.ts",
     "quality:bundle": "tsx scripts/validate-bundle-size.ts",
     "quality:bundle:update": "tsx scripts/validate-bundle-size.ts --update",
     "quality:a11y": "vitest run src/test/ladle-axe.test.tsx",
@@ -650,7 +437,7 @@
     "dogfood:v4-zero-config": "tsx scripts/dogfood-v4-zero-config.ts",
     "dogfood:v4-real-build": "bash scripts/dogfood-v4-real-build.sh",
     "dogfood:precompiled-utilities": "tsx scripts/dogfood-precompiled-utilities.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm quality:publint && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm quality:bundle && pnpm quality:a11y && pnpm quality:visual && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm quality:publint && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm classify:check && pnpm quality:bundle && pnpm quality:a11y && pnpm quality:visual && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
     "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm registry:build && pnpm registry:validate && pnpm quality:structure",
     "quality:knip": "knip",
     "quality:knip:fix": "knip --fix",
@@ -744,26 +531,14 @@
     }
   },
   "dependencies": {
-    "@radix-ui/react-avatar": "^1.1.11",
-    "@radix-ui/react-checkbox": "^1.3.3",
-    "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
-    "@radix-ui/react-label": "^2.1.8",
-    "@radix-ui/react-radio-group": "^1.3.8",
-    "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-select": "^2.2.6",
-    "@radix-ui/react-slot": "^1.1.2",
-    "@radix-ui/react-switch": "^1.2.6",
-    "@radix-ui/react-tabs": "^1.1.3",
-    "@radix-ui/react-toast": "^1.2.15",
-    "@radix-ui/react-tooltip": "^1.1.8",
+    "@usetheo/ui": "file:../usetheo-ui",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "cmdk": "^1.1.1",
     "lucide-react": "^0.471.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "valibot": "^0.42.1",
+    "valibot": "^1.4.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -776,6 +551,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
+    "@theokit/sdk": "file:../theokit-sdk/packages/sdk",
     "@types/culori": "^4.0.1",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",

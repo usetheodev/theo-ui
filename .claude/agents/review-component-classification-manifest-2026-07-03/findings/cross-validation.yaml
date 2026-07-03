@@ -1,0 +1,200 @@
+agent: review-component-classification-manifest-cross-validation
+review_target: main..develop for plan component-classification-manifest (Milestone A)
+plan: .claude/knowledge-base/plans/component-classification-manifest-plan.md
+plan_version_reviewed: v1.1 (revised 2026-07-03, single commit e205cd5)
+date: 2026-07-03
+
+plan_tasks_summary:
+  total_tasks: 2            # T1.1 (gate) + T1.2 (manifest)
+  fully_implemented: 2      # both functionally delivered, gate green
+  partial: 0
+  missing: 0
+  diverged: 1               # T1.2 disputed-flag requirement inverted (F-xval-1)
+
+acceptance_criteria_summary:
+  total: 18                 # T1.1: 8 + T1.2: 5 + Final Phase: 5
+  satisfied: 16
+  unverified: 0
+  false_claims: 0
+  diverged: 2               # T1.2 "EnvVarEditor disputed:true" inverted; T1.1 "10 passed" literal exceeded (16)
+
+adr_compliance:
+  total_adrs: 3
+  respected: 3              # D1, D2, D3 all honored
+  diverged_without_new_adr: 0
+  notes: >
+    D1 respected — new standalone scripts/classify-components.ts + own classify:check npm script;
+    validate-quality-gates.ts was NOT edited by any M-A commit (fb92ba4..0b6c5c2 empty for that path).
+    D2 respected — JSON manifest at registry/component-classification.json, gate-enforced, no TS module in src/.
+    D3 respected — surface-vocabulary tagging; every one of the 136 entries carries a non-empty rationale;
+    structurally-generic wrappers (terminal-panel, build-log-stream) tagged ai per Blueprint §Q2.
+    NOTE: the disputed-resolution scope change (F-xval-1) arguably WARRANTED a 4th ADR but none was written.
+
+plan_drift:
+  plan_edited_after_implement: false
+  details: >
+    Plan committed once (e205cd5) and never re-edited; `git log --follow` shows a single commit.
+    The "Revised 2026-07-03 (v1.1)" note refers to the pre-implementation /edge-case-plan absorption,
+    not a mid-flight edit. Plan contract was frozen through implementation — review is reliable.
+
+process_divergences_flagged_by_reviewer:
+  - inline_execution_not_ralph_loop: true   # see F-xval-4
+  - manifest_machine_generated: true        # documented in prior review F3 + evidence bundle
+  - scope_creep_import_direction_in_gate: false  # correctly NOT added — deferred follow-up (verified)
+
+per_task_table:
+  - task: T1.1 — Drift gate over the classification manifest
+    commit: fb92ba4 (feat) + b67a76b (coverage/report extraction) + 0b6c5c2 (O(n) perf fix)
+    files_declared: [scripts/classify-components.ts, scripts/classify-components.test.ts, package.json]
+    files_changed_match: true
+    scope_creep: none (import-direction enforcement correctly deferred, not added to the gate)
+    ac_met: PARTIAL
+    ac_notes: >
+      8/8 AC functionally satisfied EXCEPT literal wording of AC#1 ("reports 10 passed"): the file now
+      reports 16 passed. All 10 plan-named RED tests are present and pass; 6 extras added (report×2,
+      real-manifest×1, T1.2×3). Intent exceeded, literal count diverged — see F-xval-3.
+      Verified live: classify:check exit 0 "classified 136 components, 0 drift"; grep -c classify:check
+      package.json = 2; cyclomatic complexity low; biome 0 warnings; size 162 lines (<=500).
+    dod_met: true
+    diverged: false (literal AC count only — LOW)
+
+  - task: T1.2 — Author the classification manifest for 136 dirs
+    commit: b967fbe (feat) + f14766a (resolve disputes) + 90393f0 (changelog) + 045608f (preview-panel→ai)
+    files_declared: [registry/component-classification.json, CHANGELOG.md]
+    files_changed_match: true
+    scope_creep: none
+    ac_met: DIVERGED
+    ac_notes: >
+      manifest_has_136_entries ✓ (jq length = 136, matches 99 primitives + 37 composites).
+      placement_matches_blueprint_q2 ✓ (all 11 named Q2 components match plan targets).
+      DIVERGENCE: plan AC "EnvVarEditor entry has disputed: true" is NOT met — the manifest carries
+      ZERO disputed entries (the `disputed` key is absent on all 136). The plan-mandated test
+      `disputed_flag_present_on_envvareditor` was authored (present in b967fbe) then REMOVED and
+      replaced with its inverse `boundary_fully_resolved_no_disputed_entries`. See F-xval-1.
+    dod_met: true (classify:check green, tests green, CHANGELOG updated — but CHANGELOG number stale, F-xval-2)
+    diverged: true
+
+  - task: Final Phase — Integration Validation
+    commit: covered by evidence bundle + live re-run in this review
+    ac_met: true
+    ac_notes: >
+      Re-ran live: 16/16 tests pass; classify:check exit 0; biome clean on 3 changed files;
+      git status --porcelain shows NO source residue (EC-6 satisfied — only untracked review artifacts).
+      Coverage 93.4% (evidence bundle §1, >=90 AC).
+    dod_met: true
+    diverged: false
+
+coverage_matrix_crosscheck:
+  total_gaps: 7
+  resolved: 6
+  diverged: 1
+  detail:
+    - gap: 1 (machine-readable boundary) -> T1.2 -> RESOLVED (136-entry JSON)
+    - gap: 2 (100% classified) -> T1.2 -> RESOLVED (0 unclassified, gate exit 0)
+    - gap: 3 (anti-regression on new components) -> T1.1 -> RESOLVED (drift gate)
+    - gap: 4 (Blueprint Q2 placement encoded) -> T1.2 -> RESOLVED (11 components match)
+    - gap: 5 (EnvVarEditor dispute surfaced, NOT silently forced) -> T1.2+Q1 -> DIVERGED
+             (row required `disputed: true`; implementation silently resolved+removed the flag — F-xval-1)
+    - gap: 6 (gate wired into quality chain) -> T1.1 -> RESOLVED (classify:check in quality:gates)
+    - gap: 7 (fail-clear on malformed/absent/non-array/duplicate/mislayered, EC-1..4) -> T1.1 -> RESOLVED (10 gate tests)
+
+findings:
+  - id: F-xval-1
+    severity: HIGH
+    file: registry/component-classification.json
+    line: n/a (whole-file — no `disputed` key on any of 136 entries)
+    plan_ref: >
+      T1.2 Acceptance Criteria "`EnvVarEditor` entry has `disputed: true`";
+      Objective bullet 3; Coverage Matrix row 5; Unresolved Q1/Q2; planned test
+      `disputed_flag_present_on_envvareditor`.
+    summary: >
+      Plan v1.1 mandates disputed:true on EnvVarEditor (and treats BuildLogStream/MetricsPanel as
+      disputed borderline). The implementation instead RESOLVED all disputes to 0 and stripped the
+      `disputed` key entirely, then replaced the plan-mandated test with its logical inverse
+      (`boundary_fully_resolved_no_disputed_entries`). A direct contradiction of an explicit AC + a
+      Coverage-Matrix commitment, changed mid-implementation, with NO ADR amending the plan contract.
+    evidence: |
+      jq '[.[] | select(has("disputed"))] | length' -> 0   (plan requires >=1 disputed:true)
+      env-var-editor: {tier: cloud-ops, target: @usetheo/ui, disputed: null}
+      git -S 'disputed_flag_present_on_envvareditor' shows the plan test was committed (b967fbe) then
+      removed (f14766a "resolve the 3 disputed classifications with component evidence").
+      Rationale is documented in the evidence bundle §5/§6, CHANGELOG, and commits — divergence is
+      TRANSPARENT, not silent — but it was never formalized as an ADR or a plan v1.2 revision.
+    recommended_action: >
+      Formalize the 2026-07-03 scope decision as ADR D4 (in the plan or an implementation summary doc)
+      that supersedes the disputed-flag requirement, and note in the plan that Coverage-Matrix row 5 /
+      Objective bullet 3 were satisfied by full resolution rather than by flagging. Do NOT revert —
+      resolution is defensible and evidence-backed; the gap is the missing contract amendment.
+
+  - id: F-xval-2
+    severity: MEDIUM
+    file: CHANGELOG.md
+    line: 14
+    plan_ref: T1.2 DoD "CHANGELOG updated under [Unreleased]"; Unbreakable Rule 6 (public contract accuracy)
+    summary: >
+      CHANGELOG states the split as "76 `ai` ... 60 (generic + cloud-ops)" but the shipped manifest is
+      77 ai / 59 non-AI (47 generic + 12 cloud-ops). The number went stale after commit 045608f
+      reclassified preview-panel to `ai` (76->77), which landed AFTER the CHANGELOG line was written (8fd6e84).
+    evidence: |
+      CHANGELOG.md:14 "Current split: 76 `ai` stay in `@theokit/ui`; 60 ... `@usetheo/ui`"
+      jq tier split -> ai:77, generic:47, cloud-ops:12  => 77/59
+      Evidence bundle §6 correctly says "77 ai / 59 non-AI"; the review report (a49749b) and CHANGELOG
+      both still say 76/60. The public contract carries the wrong number.
+    recommended_action: Update CHANGELOG.md:14 to "77 `ai` ... 59 (47 generic + 12 cloud-ops)".
+
+  - id: F-xval-3
+    severity: LOW
+    file: scripts/classify-components.test.ts
+    line: n/a (file reports 16 passed)
+    plan_ref: T1.1 Acceptance Criteria "pnpm test scripts/classify-components.test.ts reports `10 passed`"
+    summary: >
+      Literal AC wording ("10 passed") is not met — the suite reports 16 passed. All 10 plan-named RED
+      tests exist and pass; 6 extra tests were added (report×2, passes_against_the_real_authored_manifest,
+      and the three T1.2 manifest tests). Intent (all RED green) is exceeded, not violated.
+    evidence: |
+      vitest run -> "Tests  16 passed (16)". The 10 named RED tests all present:
+      fails_when_ondisk_dir_missing_from_manifest, ..._references_nonexistent_dir, ..._tier_invalid,
+      ..._target_inconsistent_with_tier, fails_clear_when_malformed_json (plan: fails_clear_on_malformed_json),
+      fails_clear_when_manifest_absent, fails_clear_when_manifest_not_array, fails_when_duplicate_entry,
+      fails_when_declared_layer_mismatches_location, passes_when_every_dir_classified_and_consistent.
+    recommended_action: >
+      No code change needed. Optionally reword the AC to ">=10 passed" for accuracy; note the
+      minor rename fails_clear_on_malformed_json -> fails_clear_when_malformed_json.
+
+  - id: F-xval-4
+    severity: LOW
+    file: .claude/knowledge-base/implementations/
+    line: n/a
+    plan_ref: cycle-implement.md (halt-loop contract, progress checkpoint, {slug}-implementation.md summary)
+    summary: >
+      Milestone A was implemented INLINE, not through the cycle-implement ralph-loop halt-loop. There is
+      no `.progress-component-classification-manifest.json` checkpoint and no
+      `component-classification-manifest-implementation.md` summary. The per-iteration checkpoint /
+      checkpoint-vs-git / self-reported-wiring gates ran as SKIP (evidence bundle §3: "5 SKIP ... inline
+      execution"). Correctness is unaffected — all quality gates are green and run_validation.py exited 0 —
+      but the standard audit trail is thinner than the cycle mandates.
+    evidence: |
+      ls .claude/knowledge-base/implementations/ -> no classif progress file, no implementation summary.
+      Evidence bundle §3 documents inline execution. Prior /review already recorded this as F3
+      (machine-generated manifest / inline). Transparent, not hidden.
+    recommended_action: >
+      Produce the `{slug}-implementation.md` summary (with the wiring-triad/AC checklist) before archiving
+      the plan, so the audit trail matches cycle-implement's Output contract. Acceptable as-is for a
+      data+gate slice with no runtime behavior, given all gates passed.
+
+positive_confirmations:
+  - "D1/D2/D3 all honored; validate-quality-gates.ts untouched by M-A commits (SRP preserved)."
+  - "136 manifest entries == 99 primitives + 37 composites on disk; classify:check exit 0 live."
+  - "16/16 tests pass live; biome 0 warnings on the 3 changed files; script 162 LoC (<=500)."
+  - "EC-1..6 all covered: absent/malformed/non-array/duplicate/layer-mismatch guards tested; EC-6 no residue (git tree clean)."
+  - "NO scope creep: import-direction enforcement was correctly DEFERRED (not added to the gate) — verified by grep; matches evidence bundle 'Open follow-up'."
+  - "O(n) duplicate detection (Set-based) confirmed in source (lines 63-72) — the benchmark-driven perf fix is real, not a workaround."
+  - "Every manifest entry carries a non-empty rationale (D3 surface-vocabulary judgment encoded), 0 malformed entries."
+
+verdict_contribution: >
+  Implementation faithfully delivers the T1.1 gate and T1.2 manifest with all quality gates green and no
+  scope creep. ONE HIGH cross-validation divergence (F-xval-1): the plan's explicit disputed-flag
+  requirement was inverted mid-implementation without an ADR amending the contract — transparent and
+  defensible, but the plan-as-contract was not formally updated. Recommend NEEDS_FIXES-lite: land ADR D4
+  (or plan v1.2) formalizing the disputed-resolution scope decision + fix the stale CHANGELOG split
+  number (F-xval-2) before merge; F-xval-3/F-xval-4 are advisory.

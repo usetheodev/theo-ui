@@ -6,10 +6,11 @@
   "description": "Inline pause-and-ask card for an agent stream.",
   "dependencies": [
     "class-variance-authority",
-    "lucide-react"
+    "lucide-react",
+    "@usetheo/ui"
   ],
   "registryDependencies": [
-    "button",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "cn",
     "tailwind-preset",
     "types"

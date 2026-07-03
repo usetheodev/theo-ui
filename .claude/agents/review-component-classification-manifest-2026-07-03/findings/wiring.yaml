@@ -1,0 +1,107 @@
+agent: review-component-classification-manifest-wiring
+review_target: main..HEAD for plan component-classification-manifest
+plan: .claude/knowledge-base/plans/component-classification-manifest-plan.md
+verdict: READY_TO_MERGE
+summary_line: >-
+  Wiring triad HONEST across all three pillars. Gate is genuinely reachable (npm
+  script -> quality:gates chain -> CI), integration-tested against the REAL manifest
+  + REAL dirs (not just the pure fn), and the runtime-metric pillar is correctly N/A
+  for a build-tooling gate. Live EC-6 drift injection reproduced (exit 1 on drop,
+  clean revert). No dead/orphan exports per knip. Zero BLOCKER/HIGH/MEDIUM.
+
+triad_revalidation:
+  total_new_symbols: 9        # 3 fns + 6 types exported from scripts/classify-components.ts
+  pillar_a_honest_pass: 1 / 1 # the gate script (caller = classify:check in quality:gates, run by CI)
+  pillar_b_honest_pass: 1 / 1 # real-manifest integration test + live EC-6 drift injection
+  pillar_c_observed: N/A      # plan declared none — build-tooling gate has no runtime surface (honest)
+
+evidence_verified:
+  pillar_a_caller:
+    grep_c_classify_check: 2            # PASS — plan Acceptance Criterion T1.1 met exactly
+    occurrences:
+      - 'package.json scripts."classify:check": "tsx scripts/classify-components.ts"  (definition)'
+      - 'package.json scripts."quality:gates": "... && pnpm quality:structure && pnpm classify:check && pnpm quality:bundle && ..."  (invocation)'
+    chain_position: 'index 10 of 21 — after quality:structure, before quality:bundle'
+    chain_ordering_valid: true          # additive; existing gate order preserved (D1 / Baseline invariant)
+    ci_reachable: true                  # .github/workflows/quality-gates.yml:45 runs `pnpm quality:gates`
+    is_no_op: false                     # real `&&`-sequenced invocation, not a dead branch / commented call
+  pillar_b_integration_test:
+    real_manifest_test: 'scripts/classify-components.test.ts:151 passes_against_the_real_authored_manifest'
+    depth: >-
+      Calls loadAndCheck() with NO args -> exercises real I/O: readdir over the real
+      src/components/{primitives,composites} roots + JSON.parse of the real
+      registry/component-classification.json. Asserts ok===true AND classifiedCount===136.
+      This is a genuine boundary test, not import-and-ignore, and not the pure fn only.
+    authored_manifest_block: 'scripts/classify-components.test.ts:177 reads real manifest, asserts 136 entries + Q2 placement'
+    live_ec6_drift_proof:
+      method: 'temp-manifest path (real dirs), dropped first entry (action-bar)'
+      result: 'ok=false, offenders[0]="unclassified: action-bar" — fail-closed path confirmed'
+      residue: 'git status --porcelain identical before/after — temp path left ZERO residue in registry/ or scripts/ (EC-6 satisfied)'
+      evidence_bundle_ref: '.../component-classification-manifest-evidence-2026-07-03.md:52 (EC-6 row) + :14 (gate exit 0)'
+    test_run: '16 passed (16) — vitest run scripts/classify-components.test.ts'
+    standalone_gate: 'pnpm classify:check -> "classified 136 components, 0 drift", exit 0'
+  pillar_c_runtime_metric:
+    declared: none
+    assessment: >-
+      Correctly N/A. A filesystem drift gate emits a stdout summary + exit code; it has
+      no production runtime surface to instrument. The exit-code + offender-list IS the
+      observable signal, exercised by report() (tested) and consumed by CI. Honest.
+  integration_not_orphan:
+    module_wiring: >-
+      classify-components.ts is wired through npm (classify:check) — the correct pattern
+      for a build gate (mirrors validate-quality-gates.ts). It is intentionally NOT
+      imported by src/ (D2: keep classification data out of the shipped lib bundle).
+    manifest_consumed_by: 'loadAndCheck() (production gate path) + T1.2 test block — not orphan'
+  dead_exports:
+    knip_exit: 0                        # quality:knip clean; flags NONE of classify-components.ts exports
+    knip_preexisting_only: 'isProd (src/lib/env.ts), mermaid.tsx — both OUTSIDE this branch diff (pre-existing)'
+    intra_module_only_types: ['CheckResult', 'OnDisk']  # see F-wire-1 (INFO, not a defect)
+
+findings:
+  - id: F-wire-1
+    severity: INFO
+    file: scripts/classify-components.ts
+    line: 33
+    plan_ref: T1.1 — exported public surface of the gate module
+    summary: >-
+      Types `CheckResult` (l.33) and `OnDisk` (l.39) are exported but have no
+      cross-file importer — they are only the declared signature types of the exported
+      functions checkClassification/loadAndCheck/report.
+    evidence: |
+      grep across scripts/ + src/: CheckResult=0 external refs, OnDisk=0 external refs.
+      However: exporting the return/param types of an exported function is idiomatic
+      (lets consumers annotate), and knip — the project's own dead-export gate wired
+      into quality:gates — exits 0 and flags NEITHER. This is NOT dead code by the
+      project's own contract.
+    recommended_action: >-
+      No action required. Keeping them exported is consistent with the module's public
+      function signatures. Only worth revisiting if a future knip config tightens
+      script-level export checks.
+
+  - id: F-wire-2
+    severity: INFO
+    file: scripts/classify-components.test.ts
+    line: 213
+    plan_ref: T1.2 Acceptance Criteria — "EnvVarEditor entry has disputed: true" / Unresolved Q1
+    summary: >-
+      Implementation DIVERGED from the plan on the `disputed` flag: plan required
+      EnvVarEditor.disputed===true (+ TDD disputed_flag_present_on_envvareditor); the
+      shipped manifest resolves all disputes (test boundary_fully_resolved_no_disputed_entries
+      asserts zero disputed entries).
+    evidence: |
+      Commit f14766a "resolve the 3 disputed classifications with component evidence"
+      + 045608f + CHANGELOG (90393f0 "AI boundary is fully resolved, 0 disputed")
+      document this as an intentional 2026-07-03 scope decision, not a silent drift.
+      Placement targets still match Blueprint §Q2 (test placement_matches_blueprint_q2 PASS).
+    recommended_action: >-
+      Out of the wiring lane — flagged for the cross-validation reviewer to confirm the
+      plan-vs-impl delta is sanctioned (it appears to be, via commit + CHANGELOG). No
+      wiring impact: the boundary is still gate-enforced and drift-proof.
+
+no_findings_above_info: true
+anti_patterns_avoided:
+  - Re-ran the gate + tests + knip live rather than trusting /implement's self-report
+  - Verified pillar (a) caller is a real &&-sequenced invocation reachable from CI, not a checkbox
+  - Confirmed pillar (b) exercises real I/O (loadAndCheck over real dirs), reproduced EC-6 drift injection independently
+  - Sanity-checked EC-6 residue claim myself (git status clean before/after)
+  - Did not rubber-stamp exported types as dead — deferred to the project's own knip gate (0 exit)

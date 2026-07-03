@@ -33,7 +33,10 @@ const PreviewPanel = forwardRef<HTMLElement, PreviewPanelProps>(
     <section
       data-slot="preview-panel"
       ref={ref}
-      className={cn("flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card", className)}
+      className={cn(
+        "flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card",
+        className,
+      )}
       {...props}
     >
       <BrowserControls

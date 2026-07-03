@@ -44,8 +44,8 @@ describe.skipIf(!hasDist)("RSC: use client preserved in dist", () => {
   });
 
   it("server-safe primitive (no hooks) does NOT carry the directive", () => {
-    // Button has no hooks; tainting it client would force the whole barrel client.
-    const buttonHead = head("primitives/button/index.js");
+    // CostMeter has no hooks; tainting it client would force the whole barrel client.
+    const buttonHead = head("primitives/cost-meter/index.js");
     expect(buttonHead.startsWith('"use client"')).toBe(false);
   });
 

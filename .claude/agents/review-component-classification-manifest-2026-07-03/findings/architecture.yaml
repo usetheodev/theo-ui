@@ -1,0 +1,185 @@
+agent: review-component-classification-manifest-architecture
+review_target: main..HEAD for plan component-classification-manifest
+plan: .claude/knowledge-base/plans/component-classification-manifest-plan.md
+summary_verdict: >
+  Clean, small, well-factored gate. The pure/I-O/render SRP split is textbook and the
+  error handling is fail-clear per rules/error-handling.md. No BLOCKER/HIGH architectural
+  defects. One latent identity-key inconsistency (LOW, guarded by a currently-true global
+  name-uniqueness invariant) and a set of LOW/INFO hardening + plan-divergence notes.
+findings:
+  - id: F-arch-1
+    severity: LOW
+    file: scripts/classify-components.ts
+    line: 78-98
+    plan_ref: T1.1 Deep Dives — "build lookup keyed by (layer, name)"; EC-2/EC-3
+    summary: >
+      Component identity key is used inconsistently — duplicate detection keys on
+      `(layer, name)` but the unclassified/stale cross-check keys on `name` only. A
+      composite dir sharing a name with a classified primitive would silently escape
+      the "0 unclassified" guarantee.
+    evidence: |
+      Duplicate detection uses (layer,name):
+      ```ts
+      const key = `${e.layer}/${e.name}`;   // line 66
+      ```
+      But the completeness check uses name-only:
+      ```ts
+      const named = new Set(entries.map((e) => e.name));   // line 78
+      for (const dir of onDiskAll) {
+        if (!named.has(dir)) offenders.push(`unclassified: ${dir}`);  // line 81-82
+      }
+      ```
+      If `primitives/foo/` is classified and `composites/foo/` is later added,
+      `named.has("foo")` is true, so the new composite dir is NOT flagged unclassified
+      — a blind spot in a gate whose entire job is completeness. `onDiskAll` also
+      double-counts the homonym, inflating `classifiedCount`.
+    mitigation_present: >
+      Currently no cross-layer name collisions exist (verified:
+      `comm -12` over both roots is empty) and the project already enforces global
+      name uniqueness via subpath exports keyed by name. So this is LATENT, not a live
+      bug — which is why this is LOW, not MEDIUM.
+    recommended_action: >
+      Key the on-disk cross-check by `(layer, name)` to match the duplicate key (build
+      `named` as a Set of `${layer}/${name}` and compare against per-root dirs), OR add
+      an explicit assertion/comment that component names are globally unique across
+      layers. Consistency of the identity model removes the blind spot for free.
+  - id: F-arch-2
+    severity: LOW
+    file: registry/component-classification.json
+    line: 1-954
+    plan_ref: Objective bullet 3; Coverage Matrix row 5; Drawbacks row 2; Unresolved Q1/Q2
+    summary: >
+      Plan divergence — the plan mandates `disputed: true` on EnvVarEditor,
+      BuildLogStream, MetricsPanel (dispute "surfaced, not silently forced"), but the
+      shipped manifest has ZERO disputed entries. The `disputed?: boolean` field
+      (interface line 30) therefore has no producer and is vestigial in this milestone.
+    evidence: |
+      `grep -c '"disputed"' registry/component-classification.json` => 0.
+      The test inverts the plan and asserts absence:
+      ```ts
+      // classify-components.test.ts:213-217
+      it("boundary_fully_resolved_no_disputed_entries", () => {
+        const disputed = manifest.filter((e) => e.disputed);
+        expect(disputed).toEqual([]);
+      ```
+      Comment cites a "2026-07-03 scope decision" resolving the 3 disputes.
+    recommended_action: >
+      This appears to be a legitimate scope decision (resolve rather than flag), but it
+      contradicts the plan-of-record and leaves `disputed?` producer-less. Either (a)
+      record the decision as an ADR / plan amendment so the divergence is traceable
+      (cross-validation owns this), and (b) decide whether to keep the optional field
+      for downstream M-C use (document why, per YAGNI) or drop it. Flagging so the
+      divergence is not silently absorbed.
+  - id: F-arch-3
+    severity: LOW
+    file: scripts/classify-components.ts
+    line: 58
+    plan_ref: T1.1 Deep Dives — data structure / input guards
+    summary: >
+      `manifest as ClassificationEntry[]` is an unchecked type assertion after only an
+      `Array.isArray` guard — entry shape (name/layer/tier/target as valid strings) is
+      never validated, only implied by the downstream drift checks.
+    evidence: |
+      ```ts
+      if (!Array.isArray(manifest)) { ... }
+      const entries = manifest as ClassificationEntry[];   // no per-entry validation
+      ```
+      An entry `{}` yields `e.layer === undefined` → `byRoot[undefined]?.has(...)`
+      short-circuits to a "layer mismatch" offender rather than a crash, so it is safe;
+      but the cast asserts a shape the code has not proven.
+    mitigation_present: >
+      The structural checks (tier ∈ TIERS, target-vs-tier, layer-vs-location) coincidentally
+      reject malformed entries as offenders, so no runtime crash — acceptable for a
+      build gate (KISS / parsimony rung: reuse the checks already present).
+    recommended_action: >
+      Acceptable as-is for a gate. If stricter fail-clear is wanted, `valibot` (already a
+      prod dep) could parse-validate each entry and emit a precise "entry N malformed:
+      missing `layer`" offender instead of an indirect "layer mismatch: undefined".
+  - id: F-arch-4
+    severity: INFO
+    file: scripts/classify-components.ts
+    line: 123-131
+    plan_ref: T1.1 — "malformed manifest JSON (not a raw stack)"
+    summary: >
+      Fail-clear on malformed JSON is correct, but the bindingless `catch {}` discards
+      the underlying parse error (position/reason), so the offender message cannot say
+      *where* the JSON is broken.
+    evidence: |
+      ```ts
+      try { manifest = JSON.parse(await readFile(manifestPath, "utf-8")); }
+      catch { return { ok: false, ..., offenders: [`malformed manifest JSON at ${manifestPath}`] }; }
+      ```
+    recommended_action: >
+      Optional: include `(err as Error).message` in the offender for faster diagnosis.
+      Not required — the current message satisfies the plan's fail-clear requirement and
+      does not swallow control flow.
+  - id: F-arch-5
+    severity: INFO
+    file: scripts/classify-components.ts
+    line: 154-161
+    plan_ref: rules/error-handling.md § fail-loud
+    summary: >
+      The CLI dispatch (`loadAndCheck().then(...)`) has no `.catch`. An unexpected
+      rejection from `readdir` (e.g. EACCES on a component root) surfaces as an
+      unhandled promise rejection rather than a typed offender + clean exit.
+    evidence: |
+      ```ts
+      if (isMain) {
+        loadAndCheck().then((r) => { ... process.exit(code); });   // no .catch
+      }
+      ```
+    mitigation_present: >
+      Unhandled rejection still exits non-zero (fail-loud), so the gate does not falsely
+      pass. Absent/malformed manifest and missing roots are already handled inside
+      loadAndCheck; only a genuine FS error on an existing root reaches here.
+    recommended_action: >
+      Optional: append `.catch((e) => { console.error(e); process.exit(1); })` for a
+      tidy typed exit. Low priority.
+  - id: F-arch-6
+    severity: INFO
+    file: scripts/classify-components.ts
+    line: 47-152
+    plan_ref: D1 (SRP + file-size budget); rules/architecture.md § 3
+    summary: >
+      "INFO: clean" — the SRP split is exemplary. `checkClassification` is a pure
+      total function (manifest + onDisk → CheckResult, no I/O), `loadAndCheck` is the
+      thin I/O shell with input guards, `report` is a pure renderer, and the `isMain`
+      block is a 3-line dispatch. 162 LoC — far under the 500 budget. Zero cross-module
+      imports (node stdlib only), no circular deps, no `any` (`unknown` + narrowing),
+      correct kebab/camel/Pascal/UPPER naming, ESM-only. DIP satisfied via the
+      injectable `manifestPath` param used by tests.
+    recommended_action: >
+      None. This split is the reference shape for the downstream M-B/M-C gate scripts.
+  - id: F-arch-7
+    severity: INFO
+    file: scripts/classify-components.test.ts
+    line: 1-223
+    plan_ref: T1.1/T1.2 TDD blocks
+    summary: >
+      "INFO: no architectural issues." Tests mirror the SRP split — pure fn tested in
+      isolation with injected onDisk, I/O guards tested against a temp dir, real-manifest
+      integration test, and a data-integrity suite for the authored manifest. Correct
+      ESM `.js` import specifier. One benign note: the manifest is `JSON.parse`d at
+      module top-level (line 184), so a malformed manifest fails test *collection* rather
+      than an assertion — acceptable for a data-integrity guard.
+    recommended_action: None.
+  - id: F-arch-8
+    severity: INFO
+    file: package.json
+    line: 640,655
+    plan_ref: T1.1 Task 3; D1; Coverage Matrix row 6
+    summary: >
+      "INFO: clean." `classify:check` added as an isolated npm script and appended to
+      the `quality:gates` chain without reordering existing gates (positioned right
+      after `quality:structure`, consistent with the additive contract in Baseline).
+      No coupling to `validate-quality-gates.ts` — honors D1.
+    recommended_action: None.
+  - id: F-arch-9
+    severity: INFO
+    file: CHANGELOG.md
+    line: 11-14
+    plan_ref: Unbreakable Rule 6; T1.2 Task 4
+    summary: >
+      "INFO: clean." Single `[Unreleased] § Added` entry describing the manifest + gate
+      in consumer terms with the 76-ai split. No released section edited.
+    recommended_action: None.

@@ -134,7 +134,9 @@ async function main(): Promise<void> {
   await mkdir(OUT_DIR, { recursive: true });
 
   const descriptorFiles = (await readdir(REGISTRY_DIR))
-    .filter((f) => f.endsWith(".json") && f !== "index.json")
+    .filter(
+      (f) => f.endsWith(".json") && f !== "index.json" && f !== "component-classification.json",
+    )
     .sort();
 
   if (descriptorFiles.length === 0) {

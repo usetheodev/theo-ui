@@ -13,18 +13,6 @@
   },
   "items": [
     {
-      "name": "account-menu",
-      "type": "registry:ui",
-      "title": "AccountMenu",
-      "description": "Sidebar header for PaaS surfaces. Avatar + name + (optional) PlanBadge + (optional) secondary line, with dual mode: with onClick renders as a `button` with trailing chevron (account picker affordance); without, renders as a static `div`. PaaS-shape sibling of ProjectSwitcher."
-    },
-    {
-      "name": "action-bar",
-      "type": "registry:ui",
-      "title": "ActionBar",
-      "description": "Page-top action strip primitive. Three optional slots: search input (flex-1, grows to fill), filter icon button, and primary action button (right-aligned). Returns null when no slots are provided. Used standalone or composed inside <PageShell>. Primary action supports loading state with spinner."
-    },
-    {
       "name": "agent-composer",
       "type": "registry:ui",
       "title": "AgentComposer",
@@ -97,12 +85,6 @@
       "description": "Shared TypeScript types for the agent timeline, events, and statuses."
     },
     {
-      "name": "alert",
-      "type": "registry:ui",
-      "title": "Alert",
-      "description": "Persistent inline notice primitive. Four intents (info / success / warning / destructive) with mapped lucide icons (Info / CheckCircle2 / TriangleAlert / AlertCircle) and design tokens. Optional title, description, action slot, and onDismiss handler. destructive intent renders role=alert (assertive); other intents render role=status (polite). Distinct from Toast (transient, auto-dismiss) and EmptyState (centered card)."
-    },
-    {
       "name": "approval-card",
       "type": "registry:block",
       "title": "ApprovalCard",
@@ -133,18 +115,6 @@
       "description": "Inline banner warning the user that the agent is"
     },
     {
-      "name": "avatar",
-      "type": "registry:ui",
-      "title": "Avatar",
-      "description": "User/team avatar with safe fallback to initials."
-    },
-    {
-      "name": "badge",
-      "type": "registry:ui",
-      "title": "Badge",
-      "description": "Small status / tag indicator with semantic variants (default, primary, success, warning, destructive, info)."
-    },
-    {
       "name": "browser-controls",
       "type": "registry:ui",
       "title": "BrowserControls",
@@ -157,22 +127,10 @@
       "description": "Terminal-like log viewer with timestamps + level coloring."
     },
     {
-      "name": "button",
-      "type": "registry:ui",
-      "title": "Button",
-      "description": "Primitive action element in the Violet Forge design system."
-    },
-    {
       "name": "capability-indicator",
       "type": "registry:ui",
       "title": "CapabilityIndicator",
       "description": "Row of chips showing what the agent can currently do."
-    },
-    {
-      "name": "card",
-      "type": "registry:ui",
-      "title": "Card",
-      "description": "Surface container for grouping related content."
     },
     {
       "name": "chat-composer",
@@ -199,12 +157,6 @@
       "description": "Shared TypeScript types for chat messages, roles, and attachments."
     },
     {
-      "name": "checkbox",
-      "type": "registry:ui",
-      "title": "Checkbox",
-      "description": "Built on Radix Checkbox — accessible binary control with focus ring and indeterminate state support."
-    },
-    {
       "name": "choice-prompt",
       "type": "registry:block",
       "title": "ChoicePrompt",
@@ -215,24 +167,6 @@
       "type": "registry:lib",
       "title": "cn (Tailwind class merger)",
       "description": "Merge Tailwind classes with conflict resolution."
-    },
-    {
-      "name": "code-block",
-      "type": "registry:ui",
-      "title": "CodeBlock",
-      "description": "Terminal / code-snippet surface. Renders code inside a <pre> with optional 'terminal' prefix per line ('$ '), optional caption (file name), and optional inline CopyButton in top-right. Copy uses the raw code (without the visual prefix). language prop is forward-compat for future syntax highlighting."
-    },
-    {
-      "name": "command-palette",
-      "type": "registry:ui",
-      "title": "CommandPalette",
-      "description": "Cmd+K-style global launcher with arrow-key navigation, fuzzy ranking, and Enter/Escape behavior — built on cmdk + Theo Dialog."
-    },
-    {
-      "name": "confirm-dialog",
-      "type": "registry:ui",
-      "title": "ConfirmDialog",
-      "description": "Controlled confirmation modal built on Dialog. Auto-focuses Cancel on open (deliberate — NOT the destructive button). Optional intent=destructive switches the confirm button to destructive variant. Optional confirmationPhrase enables typed-confirmation guard (case-sensitive, empty string = no phrase). Async onConfirm shows Loader2 spinner; resolve closes the dialog; reject keeps it open so consumers can surface their own error. Enter in the phrase input triggers confirm when matched."
     },
     {
       "name": "confirm-prompt",
@@ -251,12 +185,6 @@
       "type": "registry:ui",
       "title": "ContextWindowBar",
       "description": "Shows how much of the model's context window has been"
-    },
-    {
-      "name": "copy-button",
-      "type": "registry:ui",
-      "title": "CopyButton",
-      "description": "Click-to-copy button primitive. Wraps navigator.clipboard.writeText with icon swap (Copy → Check on success, Copy → X on failure), aria-live announcement for screen readers, optional label, ghost/outline variants, and SSR-safe rendering. Auto-cleans the revert timer on unmount and debounces double-clicks."
     },
     {
       "name": "cost-meter",
@@ -283,58 +211,10 @@
       "description": "Grid of CronJobCards with a sticky \"new job\" action."
     },
     {
-      "name": "danger-zone",
-      "type": "registry:ui",
-      "title": "DangerZone",
-      "description": "Destructive-actions section primitive with sub-component DangerZone.Action. Red-bordered container with title bar (default 'Danger Zone') and action rows. Each row carries title + description + consumer-provided action slot (typically a destructive Button). Rows separated by hairline dividers; last row drops the bottom border via last:border-b-0."
-    },
-    {
-      "name": "data-table",
-      "type": "registry:ui",
-      "title": "DataTable",
-      "description": "Generic, sortable, expandable composite over <Table>. Operator-grade entity-list patterns: sortable headers (controlled OR uncontrolled), sticky header, expandable rows (multi default + expandMode='single' opt-in), row action menus via DropdownMenu, client-side pagination, loading skeleton, empty state. Generic over T (e.g. DataTable<Domain>)."
-    },
-    {
-      "name": "deployment-row",
-      "type": "registry:block",
-      "title": "DeploymentRow",
-      "description": "One row in a deployment list (table-ish layout)."
-    },
-    {
-      "name": "dialog",
-      "type": "registry:ui",
-      "title": "Dialog",
-      "description": "Modal overlay built on Radix Dialog."
-    },
-    {
       "name": "diff-viewer",
       "type": "registry:ui",
       "title": "DiffViewer",
       "description": "Unified diff rendering, no external dep."
-    },
-    {
-      "name": "domain-config",
-      "type": "registry:block",
-      "title": "DomainConfig",
-      "description": "Manage custom domains for a project."
-    },
-    {
-      "name": "dropdown-menu",
-      "type": "registry:ui",
-      "title": "DropdownMenu",
-      "description": "Accessible dropdown menu primitive built on @radix-ui/react-dropdown-menu. Sub-components attached via Object.assign (Trigger, Content, Item, CheckboxItem, RadioItem, Label, Separator, Shortcut, Group, Sub, SubTrigger, SubContent, RadioGroup). Styled with @theokit/ui design tokens. Consolidates the 5 prior direct-Radix usages under a single wrapper."
-    },
-    {
-      "name": "empty-state",
-      "type": "registry:ui",
-      "title": "EmptyState",
-      "description": "Visual placeholder for empty lists / first-run screens."
-    },
-    {
-      "name": "env-var-editor",
-      "type": "registry:block",
-      "title": "EnvVarEditor",
-      "description": "Table-like editor for environment variables."
     },
     {
       "name": "env",
@@ -355,12 +235,6 @@
       "description": "Chip showing the active working directory."
     },
     {
-      "name": "form-field",
-      "type": "registry:ui",
-      "title": "FormField",
-      "description": "Composition wrapper for accessible form rows."
-    },
-    {
       "name": "hook-config",
       "type": "registry:ui",
       "title": "HookConfig",
@@ -373,22 +247,10 @@
       "description": "Chronological list of hook firings, with result tone, the"
     },
     {
-      "name": "input",
-      "type": "registry:ui",
-      "title": "Input",
-      "description": "Text input primitive with focus ring, error state, and form-field composition support."
-    },
-    {
       "name": "intent-selector",
       "type": "registry:ui",
       "title": "IntentSelector",
       "description": "Chip dropdown for picking the agent's intent for the next"
-    },
-    {
-      "name": "label",
-      "type": "registry:ui",
-      "title": "Label",
-      "description": "Form field label built on Radix Label."
     },
     {
       "name": "lane-board",
@@ -401,12 +263,6 @@
       "type": "registry:lib",
       "title": "LiveRegionContext",
       "description": "React context that coordinates aria-live declarations across nested components to prevent screen-reader double-announcement (T4.1)."
-    },
-    {
-      "name": "login-split",
-      "type": "registry:ui",
-      "title": "LoginSplit",
-      "description": "50/50 split shell for authentication screens — form pane on the left, illustration on the right."
     },
     {
       "name": "mcp-server-card",
@@ -433,18 +289,6 @@
       "description": "Keyboard-navigable popover for slash-command / @file / #memory"
     },
     {
-      "name": "metric-card",
-      "type": "registry:ui",
-      "title": "MetricCard",
-      "description": "Dashboard metric tile composite — title + value + delta with trend semantics. Supports invertTrend for cost/churn metrics (EC-17)."
-    },
-    {
-      "name": "metrics-panel",
-      "type": "registry:block",
-      "title": "MetricsPanel",
-      "description": "Grid of metric tiles for observability dashboards."
-    },
-    {
       "name": "mode-types",
       "type": "registry:lib",
       "title": "Theo UI mode types",
@@ -469,18 +313,6 @@
       "description": "Multi-select ask-the-user card with number-key toggles, an Other free-text option, and a side-by-side preview pane."
     },
     {
-      "name": "page-shell",
-      "type": "registry:ui",
-      "title": "PageShell",
-      "description": "Page-level scaffold composite. Renders title + optional description + optional ActionBar (when search/primaryAction/onFilterClick provided), then one of four mutually-exclusive content states (loading > error > empty > children). Loading defaults to a centered spinner Card; loadingNode escape hatch lets consumers pass custom skeleton. Error state renders Card with message + optional retry button + optional docsHref. Empty state delegates to <EmptyState>. PageShell does NOT manage document.title — pass onTitleChange callback to wire your own hook."
-    },
-    {
-      "name": "pagination",
-      "type": "registry:ui",
-      "title": "Pagination",
-      "description": "Accessible page-number navigation primitive. Renders <nav aria-label=Pagination> with first/prev/numbers/next/last buttons and visual ellipses when totalPages exceeds the visible range. Active page carries aria-current=page. Keyboard nav: ArrowLeft / ArrowRight / Home / End. Configurable siblingCount + optional jump buttons. Returns null when totalPages <= 1. Exports a pure computePageRange helper for unit testing the range logic in isolation."
-    },
-    {
       "name": "permission-matrix",
       "type": "registry:ui",
       "title": "PermissionMatrix",
@@ -499,24 +331,6 @@
       "description": "Shared TypeScript types for permission requests, scopes, and decisions."
     },
     {
-      "name": "pin-input",
-      "type": "registry:ui",
-      "title": "PinInput",
-      "description": "Multi-slot OTP / code input primitive. N separate boxes (default 6) that auto-advance focus on input. Paste fills all slots from clipboard with whitespace stripped. Arrow keys navigate; backspace clears current slot then moves focus back when empty. numeric / alphanumeric inputMode (default numeric, triggers mobile numeric keyboard via pattern=[0-9]*). Optional mask renders bullets. Optional error state applies destructive border. onComplete fires once when value reaches length — NOT on mount with pre-filled value."
-    },
-    {
-      "name": "plan-badge",
-      "type": "registry:ui",
-      "title": "PlanBadge",
-      "description": "Semantic pricing-tier badge. Five canonical tiers (free, hobby, pro, team, enterprise) with distinct color tokens. Consumers self-document intent (plan=\"hobby\") instead of mapping generic Badge variants per app — future rebrand / dark-mode tweaks propagate automatically."
-    },
-    {
-      "name": "preview-env-card",
-      "type": "registry:block",
-      "title": "PreviewEnvCard",
-      "description": "Preview environment card surfacing all services from one PR."
-    },
-    {
       "name": "preview-panel",
       "type": "registry:ui",
       "title": "PreviewPanel",
@@ -527,18 +341,6 @@
       "type": "registry:ui",
       "title": "ProgressChecklist",
       "description": "Right-inspector checklist tracking subtask completion with success / running / pending tones."
-    },
-    {
-      "name": "progress",
-      "type": "registry:ui",
-      "title": "Progress",
-      "description": "Accessible progress bar primitive with intent variants (default, success, warning, destructive), 4 heights (h-1 / h-1.5 / h-2 / h-3), and an indeterminate animated state. Built on role=\"progressbar\" + ARIA semantics."
-    },
-    {
-      "name": "project-card",
-      "type": "registry:block",
-      "title": "ProjectCard",
-      "description": "Surface for a project in a project listing."
     },
     {
       "name": "project-switcher",
@@ -559,22 +361,10 @@
       "description": "Row of intent chips below a hero composer."
     },
     {
-      "name": "radio-group",
-      "type": "registry:ui",
-      "title": "RadioGroup",
-      "description": "Built on Radix RadioGroup — accessible radio group with roving focus and orientation control."
-    },
-    {
       "name": "recent-folders-list",
       "type": "registry:ui",
       "title": "RecentFoldersList",
       "description": "Recently-used folders for the Files picker."
-    },
-    {
-      "name": "rollback-ui",
-      "type": "registry:block",
-      "title": "RollbackUI",
-      "description": "Instant rollback selector showing recent versions."
     },
     {
       "name": "rule-card",
@@ -613,18 +403,6 @@
       "description": "Defang javascript:/vbscript:/data:text/html URIs before rendering as <a href>. Returns undefined for dangerous protocols so the caller can render a non-link fallback."
     },
     {
-      "name": "scroll-area",
-      "type": "registry:ui",
-      "title": "ScrollArea",
-      "description": "Custom scroller with Violet Forge styling."
-    },
-    {
-      "name": "select",
-      "type": "registry:ui",
-      "title": "Select",
-      "description": "Styled wrapper around Radix Select."
-    },
-    {
       "name": "session-list-item",
       "type": "registry:ui",
       "title": "SessionListItem",
@@ -635,24 +413,6 @@
       "type": "registry:ui",
       "title": "SessionTimeline",
       "description": "Historical view of past agent sessions with per-row"
-    },
-    {
-      "name": "sheet",
-      "type": "registry:ui",
-      "title": "Sheet",
-      "description": "Slide-in side panel built on Radix Dialog."
-    },
-    {
-      "name": "sidebar",
-      "type": "registry:ui",
-      "title": "Sidebar",
-      "description": "Vertical navigation shell with header, sections, items (active / count), and footer slots."
-    },
-    {
-      "name": "skeleton",
-      "type": "registry:ui",
-      "title": "Skeleton",
-      "description": "Placeholder block shown while content is loading."
     },
     {
       "name": "skill-card",
@@ -709,30 +469,6 @@
       "description": "View-only primitive that renders Markdown + YAML frontmatter as a themed slide surface (Marp-inspired). Sanitized hast pipeline, two built-in themes, opt-in plugin system. Subpath-isolated bundle in @theokit/ui."
     },
     {
-      "name": "social-auth-row",
-      "type": "registry:ui",
-      "title": "SocialAuthRow",
-      "description": "Row of OAuth provider buttons."
-    },
-    {
-      "name": "stat-tile",
-      "type": "registry:ui",
-      "title": "StatTile",
-      "description": "Big-number stat tile primitive for dashboard summaries. Renders value + label + optional icon + optional delta (trend up/down/flat with TrendingUp/TrendingDown/Minus icons and success/destructive/muted color). Dual mode: with onClick renders as button with hover state + trailing ArrowUpRight chevron; without, renders as static div. Value uses font-display tabular-nums whitespace-nowrap."
-    },
-    {
-      "name": "status-dot",
-      "type": "registry:ui",
-      "title": "StatusDot",
-      "description": "Semantic status indicator (small colored circle + optional label). Five status kinds: live (success), building (warning, auto-pulses), failed (destructive), idle (muted), warning (warning, static). Three sizes (xs 6px / sm 8px default / md 10px). When neither label nor aria-label is provided, auto-applies aria-label=status and emits a dev warning."
-    },
-    {
-      "name": "status-indicator",
-      "type": "registry:ui",
-      "title": "StatusIndicator",
-      "description": "Operational state indicator (online/offline/degraded/info) consuming status-* semantic tokens (ADR-0007)."
-    },
-    {
       "name": "steps-rail",
       "type": "registry:ui",
       "title": "StepsRail",
@@ -745,40 +481,16 @@
       "description": "Visualization for a Task() / sub-agent invocation."
     },
     {
-      "name": "switch",
-      "type": "registry:ui",
-      "title": "Switch",
-      "description": "Built on Radix Switch — accessible binary toggle with on / off states and disabled support."
-    },
-    {
       "name": "system-prompt-editor",
       "type": "registry:ui",
       "title": "SystemPromptEditor",
       "description": "Surface the agent's system prompt with a clear"
     },
     {
-      "name": "table",
-      "type": "registry:ui",
-      "title": "Table",
-      "description": "Semantic data-table primitive with sub-components (Table.Header, Table.Body, Table.Row, Table.Cell, Table.HeaderCell). Supports density (default | compact via Context), per-cell align (left | center | right), numeric cells (font-mono tabular-nums), and sortable header cells (onSort + sortDirection with ChevronUp/ChevronDown affordance + aria-sort)."
-    },
-    {
-      "name": "tabs",
-      "type": "registry:ui",
-      "title": "Tabs",
-      "description": "Built on Radix Tabs with active-underline styling and focus-visible ring."
-    },
-    {
       "name": "tailwind-preset",
       "type": "registry:lib",
       "title": "Theo UI Tailwind preset",
       "description": "Type scale, fontFamily, colors and motion tokens consumed by every Theo UI component. Add to tailwind.config.ts#presets before installing any other component."
-    },
-    {
-      "name": "task-header",
-      "type": "registry:ui",
-      "title": "TaskHeader",
-      "description": "Title bar for a task pane — composite combining heading, status badge, and chevron menu."
     },
     {
       "name": "task-plan",
@@ -805,12 +517,6 @@
       "description": "Free-text ask-the-user card with single-line or multi-line input and an optional required gate."
     },
     {
-      "name": "textarea",
-      "type": "registry:ui",
-      "title": "Textarea",
-      "description": "Multi-line input mirror of Input."
-    },
-    {
       "name": "theme-provider",
       "type": "registry:lib",
       "title": "ThemeProvider",
@@ -827,18 +533,6 @@
       "type": "registry:lib",
       "title": "TheoUIProvider",
       "description": "Primary entry-point provider — composes ThemeProvider + Toaster with sensible defaults. Use as the single root wrapper in consumer apps."
-    },
-    {
-      "name": "timestamp",
-      "type": "registry:ui",
-      "title": "Timestamp",
-      "description": "Accessible <time> primitive with relative/absolute/both formats, auto-refresh interval (default 60s, 0 disables), native title tooltip with absolute time, and aria-label that always carries the full date. Built on Intl.RelativeTimeFormat (zero deps). value accepts ISO string, Date, or Unix ms (NOT seconds). Invalid date renders empty element; invalid locale falls back to default with dev warning."
-    },
-    {
-      "name": "toast",
-      "type": "registry:ui",
-      "title": "Toast",
-      "description": "Transient notification built on Radix Toast."
     },
     {
       "name": "token-usage-chart",
@@ -875,18 +569,6 @@
       "type": "registry:ui",
       "title": "ToolsList",
       "description": "Surface every tool the agent could call, with its enablement"
-    },
-    {
-      "name": "tooltip",
-      "type": "registry:ui",
-      "title": "Tooltip",
-      "description": "Built on Radix Tooltip — accessible hover / focus tooltip with delay and side / align controls."
-    },
-    {
-      "name": "topnav",
-      "type": "registry:ui",
-      "title": "TopNav",
-      "description": "Horizontal app bar (64px) with breadcrumbs, mode switcher (radiogroup), and action slots."
     },
     {
       "name": "types",

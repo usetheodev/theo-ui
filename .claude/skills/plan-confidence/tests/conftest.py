@@ -16,11 +16,17 @@ detect which layout is in use and route to the correct directory.
 """
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
 
 SKILL_ROOT = Path(__file__).parent.parent
+SCRIPTS_DIR = SKILL_ROOT / "scripts"
+
+# Make scripts/ importable (e.g. `from check_adr_completeness import ...`)
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 
 
 def _find_project_root(start: Path) -> Path:

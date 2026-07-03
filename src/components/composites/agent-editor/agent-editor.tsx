@@ -1,15 +1,15 @@
 "use client";
 
+import { Button } from "@usetheo/ui";
+import { FormField } from "@usetheo/ui";
+import { Input } from "@usetheo/ui";
+import { Select } from "@usetheo/ui";
+import { Textarea } from "@usetheo/ui";
 import { useState } from "react";
 import type { FormEvent, HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
 import type { AgentProfileDescriptor } from "../../primitives/agent-profile/index.js";
-import { Button } from "../../primitives/button/index.js";
-import { FormField } from "../../primitives/form-field/index.js";
-import { Input } from "../../primitives/input/index.js";
-import { Select } from "../../primitives/select/index.js";
-import { Textarea } from "../../primitives/textarea/index.js";
 
 /**
  * AgentEditor — form for creating or editing an Agent persona.

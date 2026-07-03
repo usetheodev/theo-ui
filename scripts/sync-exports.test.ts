@@ -36,18 +36,18 @@ describe("buildExports", () => {
     // auto-glob) AND to a per-subpath `.d.ts` emitted by `tsc -p tsconfig.dts.json`
     // under `dist/components/` (community-standard-componentization T3.1 — replaces
     // the old D5 barrel-types escalation; tsup's bundler OOMs at 130+ entries).
-    const exports = buildExports(["button"]);
-    expect(exports["./button"]).toEqual({
-      types: "./dist/components/primitives/button/index.d.ts",
-      import: "./dist/primitives/button/index.js",
+    const exports = buildExports(["cost-meter"]);
+    expect(exports["./cost-meter"]).toEqual({
+      types: "./dist/components/primitives/cost-meter/index.d.ts",
+      import: "./dist/primitives/cost-meter/index.js",
     });
   });
 
   it("composite subpaths point to dist/composites/<name>/index.js + per-subpath .d.ts", () => {
-    const exports = buildExports(["account-menu"]);
-    expect(exports["./account-menu"]).toEqual({
-      types: "./dist/components/composites/account-menu/index.d.ts",
-      import: "./dist/composites/account-menu/index.js",
+    const exports = buildExports(["agent-timeline"]);
+    expect(exports["./agent-timeline"]).toEqual({
+      types: "./dist/components/composites/agent-timeline/index.d.ts",
+      import: "./dist/composites/agent-timeline/index.js",
     });
   });
 

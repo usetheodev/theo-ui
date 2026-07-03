@@ -1,0 +1,24 @@
+{
+  "pkg": "@theokit/ui",
+  "globalName": "TheoUI",
+  "projectId": "9f093479-38b2-4f58-b28f-a9e540559465",
+  "shape": "package",
+  "buildCmd": "pnpm build",
+  "cssEntry": "dist/components.css",
+  "tokensPkg": "..",
+  "tokensGlob": "dist/tokens*.css",
+  "extraFonts": ["dist/fonts.css"],
+  "readmeHeader": ".design-sync/conventions.md",
+  "provider": {
+    "component": "ThemeProvider",
+    "props": {
+      "themes": { "$ref": "builtinThemes" },
+      "defaultMode": "dark",
+      "respectSystemMode": false,
+      "storageKey": null
+    }
+  },
+  "libOverrides": {
+    "bundle.mjs": "externalize shiki/@shikijs (~9.4MB optional peer-dep) — CodeBlock degrades to plain <pre><code>; keeps _ds_bundle.js under the 5MB upload cap"
+  }
+}
