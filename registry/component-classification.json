@@ -870,9 +870,9 @@
   {
     "name": "preview-panel",
     "layer": "composite",
-    "tier": "cloud-ops",
-    "target": "@usetheo/ui",
-    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Coding-agent preview surface — composes browser-controls + build-log-stream (both ai); ai to keep the dependency acyclic"
   },
   {
     "name": "project-card",
