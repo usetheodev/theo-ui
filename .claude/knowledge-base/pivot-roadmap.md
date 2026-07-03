@@ -42,7 +42,7 @@ Source of truth: `theo-ui/registry/component-classification.json`, enforced by `
 | ID | Repo | Milestone | Status | Depends on |
 | --- | --- | --- | --- | --- |
 | **M-A** | theo-ui | Component classification manifest + drift gate | `[x]` done — on `develop`, unreleased | — |
-| **M-B** | usetheo-ui | Bootstrap repo + seed 59 non-AI + foundation + full toolchain + publish v0.1.0 | `[ ]` planned (grill done) | M-A |
+| **M-B** | usetheo-ui | Bootstrap repo + seed 54 non-AI + foundation + full toolchain (publishable) | `[x]` DONE — READY_TO_MERGE, 664 tests, 0 AI leakage | M-A |
 | **M-C** | theo-ui | Depend on `@usetheo/ui`; remove 59; re-point AI imports; breaking major + codemod | `[ ]` not started | M-B |
 | **M-D** | both | Registry split — `@theokit/ui` entries cross-reference `@usetheo/ui` via `registryDependencies` URLs | `[ ]` not started | M-C |
 | **M-E** | theo-ui | Narrative / README AI-native repositioning (`docs/`, HERO, CLAUDE.md voice) | `[ ]` not started | M-C |
@@ -55,7 +55,7 @@ Dependency chain: `M-A → M-B → M-C → { M-D, M-E }`.
 
 **Objective:** tag all 136 component dirs `ai`/`generic`/`cloud-ops` + target package, enforced by `pnpm classify:check` (0 drift).
 
-- **Outcome:** delivered. 77 ai / 59 non-AI, 0 disputed (resolved from component evidence). Gate wired into `quality:gates`. Reviewed `READY_TO_MERGE` (1 HIGH mitigated). Held on `develop` — not released solo (internal groundwork; release with M-C or when consumer-facing).
+- **Outcome:** delivered. 82 ai / 54 non-AI, 3 disputed (channel/cron) (resolved from component evidence). Gate wired into `quality:gates`. Reviewed `READY_TO_MERGE` (1 HIGH mitigated). Held on `develop` — not released solo (internal groundwork; release with M-C or when consumer-facing).
 - **Artifacts:**
   - Plan: `knowledge-base/plans/component-classification-manifest-plan.md` (v1.1, plan-confidence SHIPPABLE 90.4)
   - Edge-cases: `knowledge-base/reviews/component-classification-manifest-edge-cases-2026-07-03.md`
@@ -66,7 +66,7 @@ Dependency chain: `M-A → M-B → M-C → { M-D, M-E }`.
   - F1 (review): a human pass over the full manifest before M-C (borderline non-flagged tags). Scope decision (coding-agent + chat = ai) already validated the broad set.
   - Gate enhancement candidate: `classify:check` could also enforce import direction (no `@usetheo/ui` component imports a `@theokit/ui` one) — would have caught the preview-panel reverse-dep. → M-B task.
 
-### M-B — Bootstrap `@usetheo/ui`  ·  usetheo-ui  ·  PLANNED
+### M-B — Bootstrap `@usetheo/ui`  ·  usetheo-ui  ·  DONE (READY_TO_MERGE, unpublished)
 
 **Objective:** stand up the `@usetheo/ui` package: seed the 59 non-AI components + Violet Forge foundation, mirror the quality toolchain, build+test green, publish v0.1.0 with a hosted registry.
 
@@ -74,7 +74,8 @@ Dependency chain: `M-A → M-B → M-C → { M-D, M-E }`.
 - **Foundation to carry (beyond the 59 components):** `lib/cn.ts`, `styles/tailwind-preset.ts`, `themes/`, `ThemeProvider` (`theo-ui-provider.tsx`), and shared libs the primitives use (`safe-href`, `live-region-context`, `env`).
 - **Artifacts:** grill `knowledge-base/grills/m-b-usetheo-ui-bootstrap-grill.md` (READY_FOR_PLAN). Blueprint `knowledge-base/discoveries/blueprints/theokit-ui-ai-exclusive-pivot-blueprint.md`.
 - **Cross-repo caveat:** execution is IN usetheo-ui; the theo-ui `/implement` halt-loop won't drive it. The `/to-plan` output is a spec for work done there.
-- **Next:** `/to-plan m-b-usetheo-ui-bootstrap`.
+- **Outcome:** `@usetheo/ui` on usetheo-ui `develop` (2 commits): 39 primitives + 15 composites + Violet Forge foundation, mirrored toolchain, 664 tests, build 170KB ESM, npm pack OK, 0 AI leakage. 2-agent review READY_TO_MERGE (evidence + review reports 2026-07-03). Publish deferred to end-of-roadmap release.
+- **Next:** M-C (theo-ui depends on @usetheo/ui; breaking major + codemod).
 
 ### M-C — theo-ui consumes `@usetheo/ui`  ·  theo-ui  ·  NOT STARTED
 
