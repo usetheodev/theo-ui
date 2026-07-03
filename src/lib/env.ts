@@ -68,6 +68,3 @@ export function isDev(): boolean {
  * `false`. Use this when you specifically need to confirm a production
  * build (e.g. enabling minified-only optimizations).
  */
-export function isProd(): boolean {
-  return readNodeEnv() === "production";
-}

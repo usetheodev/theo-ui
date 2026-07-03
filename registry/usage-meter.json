@@ -3,9 +3,15 @@
   "name": "usage-meter",
   "type": "registry:ui",
   "title": "UsageMeter",
-  "description": "Multi-metric stacked usage card for PaaS dashboards. Renders N metrics (data transfer, requests, build minutes, seats, …) each with label + value/max + Progress bar. Supports custom per-metric formatter, over-quota warning, and a compact bars-only mode. PaaS-shape sibling of CostMeter.",
-  "dependencies": [],
-  "registryDependencies": ["cn", "progress", "tailwind-preset"],
+  "description": "Multi-metric stacked usage card for PaaS dashboards. Renders N metrics (data transfer, requests, build minutes, seats, \u2026) each with label + value/max + Progress bar. Supports custom per-metric formatter, over-quota warning, and a compact bars-only mode. PaaS-shape sibling of CostMeter.",
+  "dependencies": [
+    "@usetheo/ui"
+  ],
+  "registryDependencies": [
+    "cn",
+    "https://usetheodev.github.io/usetheo-ui/r/progress.json",
+    "tailwind-preset"
+  ],
   "files": [
     {
       "path": "components/composites/usage-meter/usage-meter.tsx",

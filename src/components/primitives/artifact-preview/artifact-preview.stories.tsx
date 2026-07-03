@@ -1,5 +1,5 @@
 import type { Story } from "@ladle/react";
-import { Button } from "../button/button.js";
+import { Button } from "@usetheo/ui";
 import { ArtifactPreview } from "./artifact-preview.js";
 
 export default { title: "Primitives / Files / ArtifactPreview" };

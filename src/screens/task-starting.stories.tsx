@@ -1,17 +1,17 @@
 import type { Story } from "@ladle/react";
+import { TaskHeader } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
+import { Sidebar } from "@usetheo/ui";
+import { TopNav } from "@usetheo/ui";
 import { Folder, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
 import { ChatMessage } from "../components/composites/chat-message/chat-message.js";
-import { TaskHeader } from "../components/composites/task-header/task-header.js";
 import { AgentStartingState } from "../components/primitives/agent-starting-state/agent-starting-state.js";
-import { Button } from "../components/primitives/button/button.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { ContextCard } from "../components/primitives/context-card/context-card.js";
 import { FolderContextCard } from "../components/primitives/folder-context-card/folder-context-card.js";
 import { ProgressChecklist } from "../components/primitives/progress-checklist/progress-checklist.js";
-import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
-import { TopNav } from "../components/primitives/topnav/topnav.js";
 
 export default { title: "Screens / Task Starting" };
 

@@ -1,9 +1,9 @@
 import type { Story } from "@ladle/react";
+import { Badge } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
+import { Card } from "@usetheo/ui";
+import { Input } from "@usetheo/ui";
 import { Rocket } from "lucide-react";
-import { Badge } from "../components/primitives/badge/badge.js";
-import { Button } from "../components/primitives/button/button.js";
-import { Card } from "../components/primitives/card/card.js";
-import { Input } from "../components/primitives/input/input.js";
 import { builtinThemes } from "./index.js";
 import { ThemeProvider } from "./theme-provider.js";
 import { ThemeSwitcher } from "./theme-switcher.js";

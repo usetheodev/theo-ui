@@ -726,27 +726,6 @@ async function validateAxeCoverage(): Promise<void> {
   // hardcoded so adding a new interactive primitive is a conscious decision —
   // missing coverage fails the gate before merge.
   const INTERACTIVE_PRIMITIVES = [
-    "avatar",
-    "badge",
-    "button",
-    "card",
-    "checkbox",
-    "dialog",
-    "empty-state",
-    "form-field",
-    "input",
-    "label",
-    "radio-group",
-    "scroll-area",
-    "select",
-    "sheet",
-    "sidebar",
-    "switch",
-    "tabs",
-    "textarea",
-    "toast",
-    "tooltip",
-    "topnav",
     "agent-event",
     "agent-streaming",
     "approval-card",
@@ -763,7 +742,10 @@ async function validateAxeCoverage(): Promise<void> {
     "skill-card",
     "token-usage-chart",
   ];
-  const MIN_COVERAGE = 30;
+  // M-C (pivot): the 21 generic interactive primitives (avatar/button/input/…) moved to
+  // @usetheo/ui, where a11y is tested (664 tests incl. an axe story-sweep). theo-ui keeps its
+  // AI interactive primitives; threshold re-calibrated to the post-split surface.
+  const MIN_COVERAGE = 12;
   const coveragePattern = /toHaveNoViolations|expectNoA11yViolations|from\s+["']vitest-axe["']/;
   let covered = 0;
   const uncovered: string[] = [];

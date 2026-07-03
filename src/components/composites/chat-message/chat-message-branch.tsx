@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@usetheo/ui";
 /**
  * Message branching navigation — render multiple alternate responses for a
  * single conversation turn and let the user swipe between them.
@@ -37,7 +38,6 @@ import {
   useState,
 } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Button } from "../../primitives/button/index.js";
 
 interface MessageBranchContextValue {
   currentBranch: number;

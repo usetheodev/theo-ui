@@ -7,7 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **BREAKING (pivot M-C):** `@theokit/ui` is now an **AI-exclusive** component library
+  and **depends on `@usetheo/ui`**. The 54 non-AI components (generic primitives +
+  cloud/PaaS composites) + the shared Violet Forge foundation moved to the new
+  `@usetheo/ui` package; `@theokit/ui` now exports only the 82 AI components. AI
+  components re-point their generic-primitive imports to `@usetheo/ui`. Migrate with the
+  codemod at `codemod/split-usetheo.mjs` — see `docs/migration/v1-usetheo-ui-split.md`.
+
+### Removed
+- **BREAKING:** 54 non-AI components removed from `@theokit/ui` (moved to `@usetheo/ui`):
+  the generic shadcn-like primitives (`Button`, `Card`, `Dialog`, `Input`, `Table`, …)
+  and cloud/PaaS composites (`DeploymentRow`, `DomainConfig`, `RollbackUI`,
+  `EnvVarEditor`, …). Import them from `@usetheo/ui` instead. Full list + codemod in
+  `docs/migration/v1-usetheo-ui-split.md`.
+
 ### Added
+- `useAgentStream` hook — the UI ↔ Harness streaming bridge (M5). Consumes an SDK
+  `Run.stream()` / `subscribe()` async stream and drives the existing `<AgentStream>`:
+  accumulates live `text_delta` into a streaming item, finalizes complete assistant
+  turns into message items, and upserts `tool_call` lifecycle events (running →
+  success/failed) by `call_id`. The mapping core is a pure, exhaustively-tested
+  reducer (`agentStreamReducer`); the hook wires it into a React lifecycle with
+  AbortController cleanup on unmount. theo-ui keeps ZERO runtime coupling to
+  `@theokit/sdk` — the input is a structural `SdkStreamMessage` the SDK's real
+  output satisfies; `@theokit/sdk` is a devDependency (the real-LLM demo) only.
+  Reconnect/resume across a dropped connection is delegated to the SDK's
+  `subscribe()` (opaque `lastEventId`); the hook renders continuously across a
+  drop+resume (covered by a reconnect test). Validated end-to-end against a real
+  OpenRouter LLM via `scripts/m5-real-llm-demo.ts` (live text + tool events).
 - Component classification manifest (`registry/component-classification.json`)
   tagging all 136 component directories as `ai` / `generic` / `cloud-ops`, plus a
   `classify:check` quality gate (wired into the `quality:gates` CI chain) that fails

@@ -179,7 +179,7 @@ describe("loadAndCheck (I/O input guards)", () => {
   it("passes_against_the_real_authored_manifest", async () => {
     const r = await loadAndCheck();
     expect(r.ok).toBe(true);
-    expect(r.classifiedCount).toBe(136);
+    expect(r.classifiedCount).toBe(82);
   });
 });
 
@@ -212,32 +212,24 @@ describe("component-classification.json (authored manifest — T1.2)", () => {
   const manifest = JSON.parse(readFileSync(manifestPath, "utf-8")) as ClassificationEntry[];
   const byName = new Map(manifest.map((e) => [e.name, e]));
 
-  it("manifest_has_136_entries", () => {
-    expect(manifest.length).toBe(136);
+  it("manifest_has_82_entries_all_ai", () => {
+    // Post-M-C: theo-ui is AI-exclusive — the 54 non-AI moved to @usetheo/ui.
+    expect(manifest.length).toBe(82);
+    for (const e of manifest) {
+      expect(e.tier).toBe("ai");
+      expect(e.target).toBe("@theokit/ui");
+    }
   });
 
-  // Blueprint §Q2 placement table: 2 stay in @theokit/ui, 9 go to @usetheo/ui.
-  const Q2_PLACEMENT: Record<string, ClassificationEntry["target"]> = {
-    "terminal-panel": "@theokit/ui",
-    "build-log-stream": "@theokit/ui",
-    "env-var-editor": "@usetheo/ui",
-    "metrics-panel": "@usetheo/ui",
-    "deployment-row": "@usetheo/ui",
-    "domain-config": "@usetheo/ui",
-    "rollback-ui": "@usetheo/ui",
-    "cron-job-card": "@theokit/ui",
-    "cron-jobs-list": "@theokit/ui",
-    "preview-env-card": "@usetheo/ui",
-    "project-card": "@usetheo/ui",
-    "audit-log-entry": "@theokit/ui",
-    "project-switcher": "@theokit/ui",
-    "channel-card": "@theokit/ui",
-  };
-
-  it("placement_matches_blueprint_q2", () => {
-    for (const [name, target] of Object.entries(Q2_PLACEMENT)) {
-      expect(byName.get(name), `missing entry: ${name}`).toBeDefined();
-      expect(byName.get(name)?.target, `wrong target for ${name}`).toBe(target);
+  // Post-M-C, the non-AI components moved to @usetheo/ui; the boundary components that
+  // STAY in theo-ui are all ai. Assert the ones that were near the boundary remain ai.
+  it("boundary_components_that_stay_are_ai", () => {
+    for (const name of ["terminal-panel", "build-log-stream", "cron-job-card", "cron-jobs-list"]) {
+      expect(byName.get(name)?.target, `${name} should stay in @theokit/ui`).toBe("@theokit/ui");
+    }
+    // moved components must be ABSENT from theo-ui's manifest
+    for (const name of ["button", "env-var-editor", "deployment-row", "metrics-panel"]) {
+      expect(byName.get(name), `${name} should have moved to @usetheo/ui`).toBeUndefined();
     }
   });
 

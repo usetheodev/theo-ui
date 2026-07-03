@@ -1,3 +1,4 @@
+import { Button } from "@usetheo/ui";
 import { Mic, Paperclip, Send, Square } from "lucide-react";
 import { forwardRef } from "react";
 import type {
@@ -8,7 +9,6 @@ import type {
   TextareaHTMLAttributes,
 } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Button } from "../../primitives/button/index.js";
 
 export type ComposerMode = "chat" | "code" | "infra";
 

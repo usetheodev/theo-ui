@@ -3,13 +3,18 @@
   "name": "chat-message",
   "type": "registry:ui",
   "title": "ChatMessage",
-  "description": "Composable chat-turn surface with Vercel AI SDK UIMessage parts API — markdown, code blocks, math, tool calls, reasoning, file attachments, source citations, branching navigation.",
-  "dependencies": ["lucide-react", "hast", "mdast"],
+  "description": "Composable chat-turn surface with Vercel AI SDK UIMessage parts API \u2014 markdown, code blocks, math, tool calls, reasoning, file attachments, source citations, branching navigation.",
+  "dependencies": [
+    "lucide-react",
+    "hast",
+    "mdast",
+    "@usetheo/ui"
+  ],
   "registryDependencies": [
     "chat-types",
     "cn",
     "safe-href",
-    "button",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "agent-tool-renderer",
     "tailwind-preset"
   ],

@@ -1,6 +1,6 @@
 import type { Story } from "@ladle/react";
+import { Button } from "@usetheo/ui";
 import { FileSpreadsheet, FileText } from "lucide-react";
-import { Button } from "../button/button.js";
 import { CreatedFilesCard } from "./created-files-card.js";
 
 export default { title: "Primitives / Files / CreatedFilesCard" };

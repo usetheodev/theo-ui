@@ -4,18 +4,20 @@
   "type": "registry:block",
   "title": "RuleEditor",
   "description": "Form for creating or editing a Rule (behavior instruction",
-  "dependencies": [],
+  "dependencies": [
+    "@usetheo/ui"
+  ],
   "registryDependencies": [
-    "button",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "cn",
-    "form-field",
-    "input",
+    "https://usetheodev.github.io/usetheo-ui/r/form-field.json",
+    "https://usetheodev.github.io/usetheo-ui/r/input.json",
     "mode-types",
     "rule-types",
-    "select",
-    "switch",
+    "https://usetheodev.github.io/usetheo-ui/r/select.json",
+    "https://usetheodev.github.io/usetheo-ui/r/switch.json",
     "tailwind-preset",
-    "textarea"
+    "https://usetheodev.github.io/usetheo-ui/r/textarea.json"
   ],
   "files": [
     {

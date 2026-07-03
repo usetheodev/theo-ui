@@ -1,0 +1,41 @@
+{
+  "_schemaVersion": 1,
+  "data": {
+    "agent-81c68dcd-8cae-407b-b228-7a12fa2088a0": {
+      "agentId": "agent-81c68dcd-8cae-407b-b228-7a12fa2088a0",
+      "runtime": "local",
+      "createdAt": 1783083179387,
+      "lastModified": 1783083179387,
+      "archived": false,
+      "options": {
+        "model": {
+          "id": "openai/gpt-4o-mini"
+        }
+      },
+      "summary": "Local contract fixture",
+      "model": {
+        "id": "openai/gpt-4o-mini"
+      },
+      "cwd": "/home/paulo/Projetos/usetheo/theokit-tools/theo-ui",
+      "status": "finished"
+    },
+    "agent-67ccedd6-1fb5-4855-bcaa-a3afef3e7cd6": {
+      "agentId": "agent-67ccedd6-1fb5-4855-bcaa-a3afef3e7cd6",
+      "runtime": "local",
+      "createdAt": 1783083180313,
+      "lastModified": 1783083180313,
+      "archived": false,
+      "options": {
+        "model": {
+          "id": "openai/gpt-4o-mini"
+        }
+      },
+      "summary": "Local contract fixture",
+      "model": {
+        "id": "openai/gpt-4o-mini"
+      },
+      "cwd": "/home/paulo/Projetos/usetheo/theokit-tools/theo-ui",
+      "status": "finished"
+    }
+  }
+}

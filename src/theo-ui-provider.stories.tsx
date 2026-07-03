@@ -1,5 +1,5 @@
 import type { Story } from "@ladle/react";
-import { Button } from "./components/primitives/button/button.js";
+import { Button } from "@usetheo/ui";
 import { TheoUIProvider } from "./theo-ui-provider.js";
 
 /**

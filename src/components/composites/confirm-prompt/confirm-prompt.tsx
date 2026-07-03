@@ -1,10 +1,10 @@
 "use client";
 
+import { Badge } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
 import { forwardRef, useId } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/index.js";
-import { Button } from "../../primitives/button/index.js";
 
 /**
  * ConfirmPrompt — binary yes/no "ask the user" card for agent surfaces.

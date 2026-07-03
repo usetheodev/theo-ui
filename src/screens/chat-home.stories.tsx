@@ -1,11 +1,11 @@
 import type { Story } from "@ladle/react";
+import { Sidebar } from "@usetheo/ui";
+import { TopNav } from "@usetheo/ui";
 import { BookOpen, Code2, Palette, Sparkles, User } from "lucide-react";
 import { useState } from "react";
 import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
 import { ModelSelector } from "../components/primitives/model-selector/model-selector.js";
 import { QuickActionChips } from "../components/primitives/quick-action-chips/quick-action-chips.js";
-import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
-import { TopNav } from "../components/primitives/topnav/topnav.js";
 
 /**
  * Chat Home — composição matching referencia/stitch/chat_home_theo_style.
