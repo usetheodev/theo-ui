@@ -1,5 +1,7 @@
 # Plan: Component Classification Manifest (AI-exclusive pivot — Milestone A)
 
+> **Version 1.2** — Revised 2026-07-03 after `/review` (5-agent pipeline). Added ADR D4 (boundary scope resolution + disputed policy) resolving cross-validation F-xval-1 and domain F-dom-1/2/3/6/7: 6 components reclassified `cloud-ops`→`ai` from source evidence, final split 82 ai / 54 non-AI, 3 disputed. F-arch-1 (identity-key) fixed in the gate; +3 tests (empty manifest, layer-homonym, top-level enumeration). Review report: `knowledge-base/reviews/component-classification-manifest-review-2026-07-03.md`.
+>
 > **Version 1.1** — Revised 2026-07-03 after `/edge-case-plan` (report: `knowledge-base/reviews/component-classification-manifest-edge-cases-2026-07-03.md`). Absorbed the T1.1 input-guard cluster: EC-1 (missing-file fail-clear), EC-2 (duplicate-entry detection), EC-3 (declared-layer vs actual-location), EC-4 (manifest-not-an-array), EC-5 (top-level enumeration note), EC-6 (integration drift injection reverts cleanly).
 >
 > **Version 1.0** — First milestone of the `@theokit/ui` AI-exclusive pivot. Produces the authoritative, machine-readable manifest that tags every component directory as `ai` / `generic` / `cloud-ops` (→ target package `@theokit/ui` or `@usetheo/ui`), plus a quality gate that fails on any unclassified or drifted component. This manifest is the contract the downstream extraction milestones (create `@usetheo/ui`, re-point imports, split registry) consume — nothing physically moves in this plan. Lives entirely in `theo-ui`; has zero dependency on the not-yet-created `@usetheo/ui` repo.
@@ -105,6 +107,12 @@ This plan introduces **no new dependency** — it walks the parsimony ladder to 
 - **Rationale:** the pivot question is "AI vs non-AI," which the primitive/composite taxonomy does not answer. Vercel's precedent places structurally-generic wrappers (terminal/env/sandbox) in the AI package by surface vocabulary.
 - **Alternatives considered:** map primitive→generic, composite→ai (rejected — false; many primitives are AI-shaped like `AgentEvent`, `ToolCall`; some composites are generic like `DataTable`).
 - **Consequences:** each entry needs a human-authored `rationale`; the manifest cannot be fully auto-derived (accepted — it is a judgment encoded once).
+
+### D4 — Boundary scope resolution + disputed policy (amendment 2026-07-03, plan v1.2)
+- **Decision:** the AI-agent surface scope covers BOTH coding-agent surfaces (terminal, files, browser, sandbox, build-log, agent env/logs) AND chat/agent surfaces. Every entry is verified against its component source; the `disputed` flag is retained ONLY for components that remain genuinely dual after source verification (currently `channel-card`, `cron-job-card`, `cron-jobs-list`), carried forward to M-C. Supersedes the plan v1.1 requirement that `EnvVarEditor` be `disputed`.
+- **Rationale:** `/review` (cross-validation F-xval-1, domain F-dom-1/2/3) found the plan's original `disputed`-on-3 requirement and several `cloud-ops` tags contradicted the component source (e.g. `audit-log-entry` = "agent audit log", `project-switcher` = "code agent app sidebar"). Source evidence resolves each objectively; forcing a stale `disputed` requirement would be dishonest. 6 components reclassified from `cloud-ops`→`ai` (`preview-panel`, `audit-log-entry`, `project-switcher`, `channel-card`, `cron-job-card`, `cron-jobs-list`) with source-cited rationales. Final split: **82 `ai` / 54 non-AI** (47 `generic` + 7 `cloud-ops`), 3 `disputed`.
+- **Alternatives considered:** keep `EnvVarEditor` `disputed` per plan v1.1 (rejected — source shows it is a deployment env editor, `EnvScope` prod/staging/preview + `THEO_DEPLOY_ID`, not an agent sandbox — not dual); ship 0 disputed (rejected — removes the mechanism to carry genuinely-dual components to M-C, per F-dom-7).
+- **Consequences:** the plan's Objective/Acceptance references to "EnvVarEditor flagged disputed" are superseded by this ADR; the manifest is now source-verified end-to-end.
 
 ## Drawbacks & Risks
 

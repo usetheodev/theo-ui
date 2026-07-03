@@ -7,7 +7,7 @@
  * I/O wrapper; its input-guard cases (absent file, malformed JSON) are tested against
  * a temp directory.
  */
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,6 +15,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   type ClassificationEntry,
   checkClassification,
+  listTopLevelDirs,
   loadAndCheck,
   report,
 } from "./classify-components.js";
@@ -123,6 +124,25 @@ describe("checkClassification (pure drift + consistency)", () => {
     expect(r.ok).toBe(false);
     expect(r.offenders.some((o) => o.includes("array"))).toBe(true);
   });
+
+  it("fails_when_manifest_empty", () => {
+    // Plan T1.1 Deep Dives edge case: empty manifest -> every dir unclassified.
+    const r = checkClassification([], { primitive: ["button"], composite: ["chat-message"] });
+    expect(r.ok).toBe(false);
+    expect(r.offenders.some((o) => o.includes("button"))).toBe(true);
+    expect(r.offenders.some((o) => o.includes("chat-message"))).toBe(true);
+  });
+
+  it("fails_when_layer_keyed_homonym_unclassified", () => {
+    // F-arch-1: identity is (layer, name). A composite entry named "x" must NOT
+    // satisfy an on-disk primitive dir "x" — name-only keying would miss this.
+    const r = checkClassification(
+      [{ name: "x", layer: "composite", tier: "generic", target: "@usetheo/ui", rationale: "y" }],
+      { primitive: ["x"], composite: [] },
+    );
+    expect(r.ok).toBe(false);
+    expect(r.offenders.some((o) => o.includes("primitive/x"))).toBe(true);
+  });
 });
 
 describe("loadAndCheck (I/O input guards)", () => {
@@ -146,6 +166,14 @@ describe("loadAndCheck (I/O input guards)", () => {
     const r = await loadAndCheck(p);
     expect(r.ok).toBe(false);
     expect(r.offenders.some((o) => o.includes("malformed"))).toBe(true);
+  });
+
+  it("lists_only_top_level_dirs_not_nested", async () => {
+    // EC-5: nested dirs (e.g. slide/plugins) must not become phantom components.
+    mkdirSync(join(dir, "foo", "nested"), { recursive: true });
+    mkdirSync(join(dir, "bar"));
+    const dirs = await listTopLevelDirs(dir);
+    expect(dirs.sort()).toEqual(["bar", "foo"]);
   });
 
   it("passes_against_the_real_authored_manifest", async () => {
@@ -197,10 +225,13 @@ describe("component-classification.json (authored manifest — T1.2)", () => {
     "deployment-row": "@usetheo/ui",
     "domain-config": "@usetheo/ui",
     "rollback-ui": "@usetheo/ui",
-    "cron-job-card": "@usetheo/ui",
-    "cron-jobs-list": "@usetheo/ui",
+    "cron-job-card": "@theokit/ui",
+    "cron-jobs-list": "@theokit/ui",
     "preview-env-card": "@usetheo/ui",
     "project-card": "@usetheo/ui",
+    "audit-log-entry": "@theokit/ui",
+    "project-switcher": "@theokit/ui",
+    "channel-card": "@theokit/ui",
   };
 
   it("placement_matches_blueprint_q2", () => {
@@ -210,14 +241,16 @@ describe("component-classification.json (authored manifest — T1.2)", () => {
     }
   });
 
-  it("boundary_fully_resolved_no_disputed_entries", () => {
-    // The 3 originally-disputed entries were resolved with component evidence
-    // (2026-07-03 scope decision: coding-agent + chat surfaces are both `ai`).
-    const disputed = manifest.filter((e) => e.disputed);
-    expect(disputed).toEqual([]);
-    // Resolved placements (evidence-based):
-    expect(byName.get("build-log-stream")?.target).toBe("@theokit/ui"); // coding-agent run output
-    expect(byName.get("env-var-editor")?.target).toBe("@usetheo/ui"); // deployment env, not sandbox
-    expect(byName.get("metrics-panel")?.target).toBe("@usetheo/ui"); // service-ops metrics
+  it("disputed_set_is_the_genuinely_dual_components", () => {
+    // disputed = the components that are genuinely dual (ai-but-arguably-ops), carried
+    // forward to M-C for re-examination. Evidence-clear ones are NOT disputed.
+    const disputed = manifest
+      .filter((e) => e.disputed)
+      .map((e) => e.name)
+      .sort();
+    expect(disputed).toEqual(["channel-card", "cron-job-card", "cron-jobs-list"]);
+    for (const n of ["build-log-stream", "env-var-editor", "metrics-panel"]) {
+      expect(byName.get(n)?.disputed).toBeUndefined();
+    }
   });
 });

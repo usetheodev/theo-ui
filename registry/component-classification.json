@@ -72,9 +72,9 @@
   {
     "name": "audit-log-entry",
     "layer": "primitive",
-    "tier": "cloud-ops",
-    "target": "@usetheo/ui",
-    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Agent audit log row (docstring \"one row in the agent audit log\"; AuditActorKind includes \"agent\" with a Bot icon) — agent surface"
   },
   {
     "name": "auto-compact-notice",
@@ -142,9 +142,10 @@
   {
     "name": "channel-card",
     "layer": "primitive",
-    "tier": "cloud-ops",
-    "target": "@usetheo/ui",
-    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Chat-channel connector (Telegram/Discord/Slack/mcp) — chat surface under the coding+chat AI scope; disputed: also readable as a platform-integration card, revisit at M-C",
+    "disputed": true
   },
   {
     "name": "chat-thread",
@@ -198,9 +199,10 @@
   {
     "name": "cron-job-card",
     "layer": "primitive",
-    "tier": "cloud-ops",
-    "target": "@usetheo/ui",
-    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Scheduled agent job (docstring \"one scheduled agent job... prompt, status\") — agent surface; disputed: cron scheduling is also an ops concern, revisit at M-C",
+    "disputed": true
   },
   {
     "name": "danger-zone",
@@ -408,9 +410,9 @@
   {
     "name": "project-switcher",
     "layer": "primitive",
-    "tier": "cloud-ops",
-    "target": "@usetheo/ui",
-    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Sidebar.Header for a code-agent app (docstring \"sidebar header for a code agent app\"); siblings session-list-item/folder-context-card are ai"
   },
   {
     "name": "quick-action-chips",
@@ -793,9 +795,10 @@
   {
     "name": "cron-jobs-list",
     "layer": "composite",
-    "tier": "cloud-ops",
-    "target": "@usetheo/ui",
-    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Grid of CronJobCards (composes cron-job-card, which is ai) — must stay ai to keep the split acyclic; disputed follows cron-job-card",
+    "disputed": true
   },
   {
     "name": "data-table",

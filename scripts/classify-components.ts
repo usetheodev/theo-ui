@@ -75,11 +75,16 @@ export function checkClassification(manifest: unknown, onDisk: OnDisk): CheckRes
     primitive: new Set(onDisk.primitive),
     composite: new Set(onDisk.composite),
   };
-  const named = new Set(entries.map((e) => e.name));
-  const onDiskAll = [...onDisk.primitive, ...onDisk.composite];
+  // Key on-disk + manifest by (layer, name) — consistent with the duplicate key —
+  // so a homonym across the two roots cannot silently satisfy the classified check.
+  const named = new Set(entries.map((e) => `${e.layer}/${e.name}`));
+  const onDiskKeyed: Array<[Layer, string]> = [
+    ...onDisk.primitive.map((n): [Layer, string] => ["primitive", n]),
+    ...onDisk.composite.map((n): [Layer, string] => ["composite", n]),
+  ];
 
-  for (const dir of onDiskAll) {
-    if (!named.has(dir)) offenders.push(`unclassified: ${dir}`);
+  for (const [layer, dir] of onDiskKeyed) {
+    if (!named.has(`${layer}/${dir}`)) offenders.push(`unclassified: ${layer}/${dir}`);
   }
 
   for (const e of entries) {
@@ -98,13 +103,13 @@ export function checkClassification(manifest: unknown, onDisk: OnDisk): CheckRes
       offenders.push(`layer mismatch: ${e.name} (declared ${e.layer})`);
   }
 
-  return { ok: offenders.length === 0, classifiedCount: onDiskAll.length, offenders };
+  return { ok: offenders.length === 0, classifiedCount: onDiskKeyed.length, offenders };
 }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_PATH = join(ROOT, "registry", "component-classification.json");
 
-const listTopLevelDirs = async (path: string): Promise<string[]> =>
+export const listTopLevelDirs = async (path: string): Promise<string[]> =>
   existsSync(path)
     ? (await readdir(path, { withFileTypes: true }))
         .filter((e) => e.isDirectory())
