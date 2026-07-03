@@ -15,6 +15,10 @@ Narrow `@theokit/ui` to an **AI-exclusive** component library; extract the non-A
 components) into a **separate published `@usetheo/ui` repo**. `@theokit/ui` then depends on
 `@usetheo/ui`. Migration is a **breaking major + codemod** for consumers.
 
+### Release policy (locked 2026-07-03)
+
+**Commit locally per milestone; cut a `/release` (develop→main PR + semver tag) ONLY when the entire roadmap (M-A..M-E) is complete.** No per-milestone release. Milestones accumulate on `develop`; the whole pivot ships as one release at the end. Rationale: M-A..M-D are internal groundwork with no standalone consumer value; the breaking major (M-C) + repositioning (M-E) are the consumer-facing event and should ship together.
+
 ### Locked decisions
 
 | Decision | Value | Source |
