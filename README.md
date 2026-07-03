@@ -13,8 +13,8 @@ A React component library built for AI agent surfaces and cloud dashboards. **15
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1605%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-154-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-1131%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-99-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -39,16 +39,16 @@ Most component libraries optimize for marketing pages. `@theokit/ui` is built fo
 - **Themeable at runtime.** Ship three themes out of the box, swap them live via `<ThemeProvider />`, or define your own.
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
 - **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so client components are safe to import into a React Server Component tree when installed from npm.
-- **Per-subpath types.** `import { Button } from "@theokit/ui/button"` resolves an isolated `Button` declaration, not the whole barrel's type surface.
+- **Per-subpath types.** `import { AgentEvent } from "@theokit/ui/agent-event"` resolves an isolated `AgentEvent` declaration, not the whole barrel's type surface.
 - **Standard React + Tailwind package.** React is the only required peer (18 or 19); Radix UI, CVA, cmdk, and lucide ship as dependencies. Pairs with TheoKit, or runs standalone in any React app.
 
 The agent UI gap is real — most teams reach for shadcn for the primitives and build the agent-specific parts from scratch, losing weeks before shipping a real surface.
 
 | Surface need | `@theokit/ui` | shadcn / Radix | Tremor | Build it yourself |
 |---|---|---|---|---|
-| Generic primitives (Button, Card, Dialog) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
+| Generic primitives (now in @usetheo/ui) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
 | Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes** | None | None | Weeks |
-| cloud-specific composites (`DeploymentRow`, `BuildLogStream`, `RollbackUI`) | **Yes** | None | None | Weeks |
+| cloud-ops composites (`BuildLogStream`; deploy/rollback now in @usetheo/ui) | **Yes** | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
@@ -85,14 +85,13 @@ pnpm add @theokit/ui
 ```
 
 ```tsx
-import { ThemeProvider, AgentEvent, ToolCall, DeploymentRow } from "@theokit/ui";
+import { ThemeProvider, AgentEvent, ToolCall } from "@theokit/ui";
 
 export default function App() {
   return (
     <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
       <AgentEvent kind="thinking" text="Reading repository structure..." />
       <ToolCall name="readFile" status="completed" />
-      <DeploymentRow status="ready" env="production" branch="main" />
     </ThemeProvider>
   );
 }
@@ -145,34 +144,27 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**154 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
+**99 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (99) — building blocks
+**Primitives** (59) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
 <!-- BEGIN:primitives -->
-`ActionBar` · `AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState`
-`AgentStreaming` · `Alert` · `ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice`
-`Avatar` · `Badge` · `BranchIndicator` · `BrowserControls` · `BuildLogStream` · `Button`
-`CapabilityIndicator` · `Card` · `ChannelCard` · `ChatThread` · `Checkbox` · `ContextCard`
-`ContextWindowBar` · `CopyButton` · `CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DangerZone`
-`Dialog` · `DiffViewer` · `DropdownMenu` · `EmptyState` · `ExportChatDialog` · `FolderContextCard`
-`FolderSelector` · `FormField` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog` · `Input`
-`IntentSelector` · `Label` · `LaneBoard` · `LoginSplit` · `MCPServerCard` · `MemoryEditor`
-`MentionMenu` · `MetricsPanel` · `ModelCard` · `ModelSelector` · `Pagination` · `PermissionMatrix`
-`PinInput` · `PlanBadge` · `Progress` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
-`RadioGroup` · `RecentFoldersList` · `RuleCard` · `RunStats` · `RunStatusPill` · `RunningTasksPanel`
-`ScrollArea` · `Select` · `SessionListItem` · `SessionTimeline` · `Sheet` · `Sidebar`
-`Skeleton` · `SkillCard` · `SocialAuthRow` · `StatTile` · `StatusDot` · `StepsRail`
-`SubAgentDispatch` · `Switch` · `SystemPromptEditor` · `Table` · `Tabs` · `TaskNode`
-`TaskPlan` · `TerminalPanel` · `Textarea` · `ThinkingLevelSelector` · `Timestamp` · `Toast`
-`Toaster` · `TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
-`Tooltip` · `TopNav` · `UpdateBanner`
+`AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState` · `AgentStreaming`
+`ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice` · `BranchIndicator` · `BrowserControls`
+`BuildLogStream` · `CapabilityIndicator` · `ChannelCard` · `ChatThread` · `ContextCard` · `ContextWindowBar`
+`CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DiffViewer` · `ExportChatDialog` · `FolderContextCard`
+`FolderSelector` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog` · `IntentSelector` · `LaneBoard`
+`MCPServerCard` · `MemoryEditor` · `MentionMenu` · `ModelCard` · `ModelSelector` · `PermissionMatrix`
+`ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips` · `RecentFoldersList` · `RuleCard` · `RunStats`
+`RunStatusPill` · `RunningTasksPanel` · `SessionListItem` · `SessionTimeline` · `SkillCard` · `StepsRail`
+`SubAgentDispatch` · `SystemPromptEditor` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `ThinkingLevelSelector`
+`TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
 <!-- END:primitives -->
 
 </details>
@@ -180,12 +172,12 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 <details>
 <summary>
 <!-- BEGIN:composites-count -->
-**Composites** (55) — assembled flows
+**Composites** (40) — assembled flows
 <!-- END:composites-count -->
 </summary>
 
 <!-- BEGIN:composites -->
-`AccountMenu` · `AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `AgentToolRenderer` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `ChoicePrompt` · `CodeBlock` · `CommandPalette` · `ConfirmDialog` · `ConfirmPrompt` · `CronJobsList` · `DataPart` · `DataTable` · `DeploymentRow` · `DomainConfig` · `EnvVarEditor` · `FilePart` · `MCPServerList` · `MetricCard` · `MultiSelectPrompt` · `PageShell` · `PermissionModal` · `PreviewEnvCard` · `PreviewPanel` · `ProjectCard` · `ReasoningPart` · `RollbackUI` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `StatusIndicator` · `TaskHeader` · `TextPart` · `TextPrompt` · `ToolCallPart` · `UsageMeter`
+`AgentComposer` · `AgentEditor` · `AgentStream` · `AgentTimeline` · `AgentToolRenderer` · `ApprovalCard` · `ChatComposer` · `ChatMessage` · `ChatMessageAction` · `ChatMessageActions` · `ChatMessageBranch` · `ChatMessageBranchContent` · `ChatMessageBranchNext` · `ChatMessageBranchPage` · `ChatMessageBranchPrevious` · `ChatMessageBranchSelector` · `ChatMessageContent` · `ChatMessageResponse` · `ChatMessageRoot` · `ChatMessageToolbar` · `ChoicePrompt` · `ConfirmPrompt` · `CronJobsList` · `DataPart` · `FilePart` · `MCPServerList` · `MultiSelectPrompt` · `PermissionModal` · `PreviewPanel` · `ReasoningPart` · `RuleEditor` · `SkillEditor` · `SkillsList` · `SourceDocumentPart` · `SourceUrlPart` · `StabilityBundleViewer` · `TextPart` · `TextPrompt` · `ToolCallPart` · `UsageMeter`
 <!-- END:composites -->
 
 </details>
@@ -320,7 +312,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
   target.
 - **Tree-shaking via the barrel** — modern bundlers (Vite, esbuild, Rollup,
   webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and tree-shake
-  unused components from the barrel import (`import { Button } from
+  unused components from the barrel import (`import { AgentEvent } from
   "@theokit/ui"` drops every other component from the final bundle). No
   per-component subpath exports are needed for this to work.
 - **Subpath imports are aliases (not separate bundles).** `package.json#exports`
@@ -329,8 +321,8 @@ tests/             fixture-shadcn-app/ (registry install integration test)
   `splitting: false` deliberately — a 99-entry split would duplicate shared code
   (cn, types, Radix runtime) into every chunk and inflate the tarball. Subpath
   imports exist for IDE intellisense and import organization. Modern bundlers
-  tree-shake the same way whether you write `import { Button } from "@theokit/ui"`
-  or `import { Button } from "@theokit/ui/button"`. Runtimes that don't tree-shake
+  tree-shake the same way whether you write `import { AgentEvent } from "@theokit/ui"`
+  or `import { AgentEvent } from "@theokit/ui/agent-event"`. Runtimes that don't tree-shake
   (Jest classic, Node REPL, raw browser ESM) will load the full barrel either way
   — accept that cost or pre-bundle with the consumer's tooling.
 - **CSS distribution** — `dist/styles.css` is the recommended single import

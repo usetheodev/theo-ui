@@ -1,7 +1,7 @@
 "use client";
 
+import { Toaster } from "@usetheo/ui";
 import type { ComponentProps, JSX, ReactNode } from "react";
-import { Toaster } from "./components/primitives/toast/toaster.js";
 import { builtinThemes } from "./themes/index.js";
 import { ThemeProvider } from "./themes/theme-provider.js";
 

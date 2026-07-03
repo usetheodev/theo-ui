@@ -1,5 +1,10 @@
 "use client";
 
+import { Badge } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
+import { Input } from "@usetheo/ui";
+import { Label } from "@usetheo/ui";
+import { RadioGroup } from "@usetheo/ui";
 import { forwardRef, useId, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -9,11 +14,6 @@ import {
   digitKeyToIndex,
   isOtherValue,
 } from "../../../lib/prompt.js";
-import { Badge } from "../../primitives/badge/index.js";
-import { Button } from "../../primitives/button/index.js";
-import { Input } from "../../primitives/input/index.js";
-import { Label } from "../../primitives/label/index.js";
-import { RadioGroup } from "../../primitives/radio-group/index.js";
 
 /**
  * ChoicePrompt — single-select "ask the user" card for agent surfaces.

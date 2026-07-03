@@ -1,7 +1,7 @@
+import { Progress } from "@usetheo/ui";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Progress } from "../../primitives/progress/index.js";
 
 /**
  * UsageMeter — multi-metric stacked usage card.

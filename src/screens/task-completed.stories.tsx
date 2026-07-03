@@ -1,4 +1,9 @@
 import type { Story } from "@ladle/react";
+import { TaskHeader } from "@usetheo/ui";
+import { Badge } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
+import { Sidebar } from "@usetheo/ui";
+import { TopNav } from "@usetheo/ui";
 import { ExternalLink, FileSpreadsheet, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { ChatComposer } from "../components/composites/chat-composer/chat-composer.js";
@@ -6,15 +11,10 @@ import {
   ChatMessageContent,
   ChatMessageRoot,
 } from "../components/composites/chat-message/chat-message.js";
-import { TaskHeader } from "../components/composites/task-header/task-header.js";
 import { ArtifactPreview } from "../components/primitives/artifact-preview/artifact-preview.js";
-import { Badge } from "../components/primitives/badge/badge.js";
-import { Button } from "../components/primitives/button/button.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { CreatedFilesCard } from "../components/primitives/created-files-card/created-files-card.js";
 import { ProgressChecklist } from "../components/primitives/progress-checklist/progress-checklist.js";
-import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
-import { TopNav } from "../components/primitives/topnav/topnav.js";
 
 export default { title: "Screens / Task Completed" };
 

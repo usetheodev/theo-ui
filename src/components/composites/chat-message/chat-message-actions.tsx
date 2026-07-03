@@ -1,3 +1,4 @@
+import { Button } from "@usetheo/ui";
 /**
  * `<ChatMessageActions>` + `<ChatMessageAction>` — footer toolbar for a chat
  * message (copy, regenerate, thumbs up/down, share, edit, …).
@@ -10,7 +11,6 @@
  */
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Button } from "../../primitives/button/index.js";
 
 export type ChatMessageActionsProps = HTMLAttributes<HTMLDivElement>;
 

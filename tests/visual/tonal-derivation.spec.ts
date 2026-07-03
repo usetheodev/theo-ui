@@ -79,12 +79,14 @@ for (const themeName of DARK_PRIMARY_THEMES) {
     expect(deep.l, `${themeName}: primary-deep L must be > 0.05 (clamp floor)`).toBeGreaterThan(
       0.05,
     );
-    expect(deep.c, `${themeName}: primary-deep chroma must be > 0.02 (matiz preserved)`).toBeGreaterThan(
-      0.02,
-    );
+    expect(
+      deep.c,
+      `${themeName}: primary-deep chroma must be > 0.02 (matiz preserved)`,
+    ).toBeGreaterThan(0.02);
     // Ceiling is inclusive — themes with very-light primaries clamp exactly to 0.95.
-    expect(glow.l, `${themeName}: primary-glow L must be ≤ 0.95 (clamp ceiling)`).toBeLessThanOrEqual(
-      0.95,
-    );
+    expect(
+      glow.l,
+      `${themeName}: primary-glow L must be ≤ 0.95 (clamp ceiling)`,
+    ).toBeLessThanOrEqual(0.95);
   });
 }

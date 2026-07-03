@@ -1,3 +1,5 @@
+import { CodeBlock } from "@usetheo/ui";
+import { DataTable } from "@usetheo/ui";
 /**
  * `<AgentToolRenderer>` + the tool-renderer **registry** (M5-3).
  *
@@ -19,8 +21,6 @@ import type { ToolUIPart } from "../../../types/chat.js";
 import { CreatedFilesCard } from "../../primitives/created-files-card/index.js";
 import { type DiffHunk, DiffViewer } from "../../primitives/diff-viewer/index.js";
 import { type TerminalLine, TerminalPanel } from "../../primitives/terminal-panel/index.js";
-import { CodeBlock } from "../code-block/index.js";
-import { DataTable } from "../data-table/index.js";
 import { ToolCallPart } from "./tool-call-part.js";
 
 /** The rich surfaces a tool invocation can be dispatched to. */
