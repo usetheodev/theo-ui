@@ -9,8 +9,8 @@
 |---|---|---|
 | Types | `pnpm typecheck` (`tsc --noEmit`) | 0 errors |
 | Lint | `pnpm exec biome check scripts/classify-components.{ts,test.ts} registry/*.json` | 0 warnings |
-| Tests | `pnpm exec vitest run scripts/classify-components.test.ts` | 16/16 passed |
-| Coverage | vitest v8 on `classify-components.ts` | 93.4% stmts / 92.5% lines (critical path 100%) |
+| Tests | `pnpm exec vitest run scripts/classify-components.test.ts` | 19/19 passed |
+| Coverage | vitest v8 on `classify-components.ts` | 93.8% stmts / 93.2% lines (critical path 100%) |
 | Gate | `pnpm classify:check` | exit 0 — "classified 136 components, 0 drift" |
 | Existing taxonomy | `pnpm quality:structure` | PASS (unaffected) |
 | Dead code (repo) | `pnpm quality:knip` | 0 findings in M-A files (2 pre-existing elsewhere: `src/lib/markdown/mermaid.tsx`, `isProd` in `src/lib/env.ts`) |
@@ -52,22 +52,22 @@ The benchmark surfaced an **O(n^2)** duplicate-detection (`keys.filter(indexOf)`
 | Drift fails-closed (EC-6) | inject throwaway dir under `primitives/` | gate exit 1; after removal exit 0; `git status` clean |
 | Input guards (EC-1..4) | unit tests | absent-file / malformed-JSON / non-array / duplicate / layer-mismatch all → exit 1 with typed message |
 | Classification completeness | `classify:check` | 136/136 classified, 0 unclassified, 0 stale |
-| Boundary resolved | manifest scan | 0 disputed (3 originally-disputed resolved from component evidence) |
+| Boundary source-verified | manifest scan + /review domain agent | every entry checked vs component source; 6 mis-tags reclassified; 3 genuinely-dual kept `disputed` |
 | **Dependency-direction consistency (F1)** | bidirectional import scan across all 136 production `.tsx` | **0 non-AI→AI reverse deps; 0 AI→cloud-ops smells** (re-verified after the /review reclassification of 6 mis-tags) — split is fully acyclic (`@theokit/ui → @usetheo/ui`) |
 
 ## 6. Classification result
 
 **136 components → 82 `ai` (@theokit/ui) · 54 non-AI (@usetheo/ui): 47 `generic` + 7 `cloud-ops`.** 3 disputed (channel-card, cron-job-card, cron-jobs-list — genuinely dual, verified against source in /review). Boundary rule: AI-agent surface vocabulary (coding-agent + chat), per the 2026-07-03 scope decision.
 
-## 7. DoD / Acceptance-criteria checklist (plan v1.1)
+## 7. DoD / Acceptance-criteria checklist (plan v1.2)
 
 - [x] Manifest at `registry/component-classification.json`, one entry per dir — **136 entries**
 - [x] 100% classified, 0 unclassified — `classify:check` exit 0
-- [x] Blueprint §Q2 placement + disputed resolution — asserted by `placement_matches_blueprint_q2` + `boundary_fully_resolved_no_disputed_entries`
+- [x] Blueprint §Q2 placement + disputed policy (ADR D4) — asserted by `placement_matches_blueprint_q2` + `disputed_set_is_the_genuinely_dual_components`
 - [x] Drift gate fails on unclassified/stale/invalid/duplicate/layer-mismatch/absent/malformed/non-array — 10 gate tests + live EC-6
 - [x] Wired into `quality:gates` — `grep -c classify:check package.json` = 2
 - [x] Coverage ≥ 90% — 93.4%
-- [x] tsc 0 / biome 0 / 16 tests green
+- [x] tsc 0 / biome 0 / 19 tests green
 - [x] CHANGELOG `[Unreleased]` updated
 - [x] Backward compat — additive tooling only, no public API touched
 - [x] F1 (review HIGH) — resolved with dependency-direction evidence (§5)
