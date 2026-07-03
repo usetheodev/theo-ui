@@ -6,7 +6,7 @@
 
 # The UI your agent already needs.
 
-A React component library built for AI agent surfaces and cloud dashboards. **153 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
+A React component library built for AI-agent surfaces — coding agents and chat. **99 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
 
 *Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
@@ -28,14 +28,14 @@ A React component library built for AI agent surfaces and cloud dashboards. **15
 
 There is a version of your product where the agent UI is half-built before you start.
 
-The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the deployment status, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
+The chat thread, the tool calls, the streaming assistant message, the model selector, the cost meter, the context window indicator, the audit log row, the permission modal, the build log stream — all rendered. All themed. All accessible. You write product logic. The interface ships with you.
 
 ## Why `@theokit/ui`
 
-Most component libraries optimize for marketing pages. `@theokit/ui` is built for the surfaces that AI agents and cloud dashboards actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
+Most component libraries optimize for marketing pages. `@theokit/ui` is built for the surfaces that AI agents actually need — surfaces where transparency, density of information, and developer trust matter more than hero sections.
 
 - **Built for AI agents.** Primitives for skills, cron jobs, permission matrices, MCP servers, memory editing, hook config, audit logs, model cards, token usage charts, sub-agent dispatch — the components a transparent agent UI actually needs.
-- **Built for PaaS.** Composites for project cards, deployment rows, build log streams, env var editors, domain config, preview environments, rollback flows, metrics panels.
+- **Built on `@usetheo/ui`.** Generic primitives, auth surfaces, and cloud-ops composites (project cards, deployment rows, env var editors, domain config, preview environments, rollback flows, metrics panels) live in [`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui) — the community-standard layer `@theokit/ui` builds on. Need those too? Install `@usetheo/ui` alongside.
 - **Themeable at runtime.** Ship three themes out of the box, swap them live via `<ThemeProvider />`, or define your own.
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
 - **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so client components are safe to import into a React Server Component tree when installed from npm.
@@ -46,23 +46,24 @@ The agent UI gap is real — most teams reach for shadcn for the primitives and 
 
 | Surface need | `@theokit/ui` | shadcn / Radix | Tremor | Build it yourself |
 |---|---|---|---|---|
-| Generic primitives (now in @usetheo/ui) | **Yes** (same Radix foundation) | Yes | Limited | Slow |
+| Generic primitives (buttons, tables, dialogs) | **Via `@usetheo/ui`** (same Radix foundation) | Yes | Limited | Slow |
 | Agent-specific primitives (`AgentEvent`, `ToolCall`, `MCPServerCard`) | **Yes** | None | None | Weeks |
-| cloud-ops composites (`BuildLogStream`; deploy/rollback now in @usetheo/ui) | **Yes** | None | None | Weeks |
+| cloud-ops composites (deploy, rollback, env vars) | **Via `@usetheo/ui`** (`BuildLogStream` ships here) | None | None | Weeks |
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
-| a11y enforced as a quality gate | **Yes** — vitest-axe on 151 stories | Per-component, manual | Manual | Often skipped |
+| a11y enforced as a quality gate | **Yes** — 171 vitest-axe checks | Per-component, manual | Manual | Often skipped |
 
-Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 153 components you were about to write.
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 99 components you were about to write.
 
 ## What you'd build
 
 - **Coding assistant interface.** Chat thread, streaming assistant, tool-call timeline, file diff viewer, permission matrix, sub-agent dispatch.
 - **Agent dashboard.** Run stats, session timeline, MCP server admin, cron job scheduler, memory editor, audit log, model card, cost meter.
-- **cloud dashboard.** Project switcher, deployment row, build log stream, env var editor, domain config, preview environments, rollback flows, metrics panels.
 - **Internal AI tools.** Quick-action chips, intent selector, system-prompt editor, skill manager, rule editor, lane board.
-- **Onboarding & auth surfaces.** Login split, social auth row, folder selector, recent folders list, project card.
+- **Coding-agent onboarding.** Folder selector, recent folders list, project switcher, build log stream.
+
+> Need generic primitives, auth surfaces, or the full cloud-ops dashboard (deployment rows, env var editors, domain config, preview environments, rollback flows, metrics panels)? Those moved to [`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui) — `@theokit/ui` builds on it.
 
 ---
 
@@ -100,8 +101,8 @@ export default function App() {
 ### Option B — copy individual components (shadcn-style)
 
 ```bash
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/deployment-row.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/agent-event.json
+npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/tool-call.json
 ```
 
 > Branded `https://ui.usetheo.dev/r/*` URL will follow once the DNS CNAME is configured (single record at the registrar). Both URLs serve identical content.
@@ -316,7 +317,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
   "@theokit/ui"` drops every other component from the final bundle). No
   per-component subpath exports are needed for this to work.
 - **Subpath imports are aliases (not separate bundles).** `package.json#exports`
-  publishes 99 component subpaths (`@theokit/ui/button`, `@theokit/ui/agent-event`,
+  publishes 99 component subpaths (`@theokit/ui/agent-event`, `@theokit/ui/tool-call`,
   …). Every subpath resolves to the same `dist/index.js`. tsup is configured with
   `splitting: false` deliberately — a 99-entry split would duplicate shared code
   (cn, types, Radix runtime) into every chunk and inflate the tarball. Subpath
@@ -340,10 +341,10 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
-- **Production.** 153 components, 1,513 tests passing, zero a11y violations on 151 Ladle stories, bundle size enforced. Quality gates run on every PR.
+- **Production.** 99 components, 1,131 tests passing, zero a11y violations across 171 vitest-axe checks, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
-- **Component count is the floor, not the ceiling.** New agent and PaaS surfaces ship through PRs; every addition runs the same quality gates.
+- **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.
 
 ## Engines (isolated subpaths)
 

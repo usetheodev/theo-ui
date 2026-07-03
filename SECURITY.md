@@ -74,9 +74,10 @@ are in scope:
   reducing accidental information disclosure and untyped surface.
 - `validateNpmTarball` gate ensures `.env`, `.git`, test files, and
   internal screens never enter the published tarball.
-- **`safeHref()`** (`src/lib/safe-href.ts`, T3.3): every composite that
-  renders consumer-supplied URLs as `<a href>` (currently `ProjectCard`,
-  `PreviewEnvCard`) defangs `javascript:`, `vbscript:`, and
+- **`safeHref()`** (`src/lib/safe-href.ts`, T3.3): every component that
+  renders consumer-supplied URLs as `<a href>` (currently the chat-message
+  parts `SourceUrlPart` and `FilePart`, which render URLs from AI/tool
+  responses) defangs `javascript:`, `vbscript:`, and
   `data:text/html` payloads via `safeHref()`. Case-insensitive,
   whitespace-tolerant. Returns `undefined` for dangerous protocols, so
   the consumer renders a non-link fallback automatically. Test coverage
