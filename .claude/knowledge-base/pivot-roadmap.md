@@ -45,7 +45,7 @@ Source of truth: `theo-ui/registry/component-classification.json`, enforced by `
 | **M-B** | usetheo-ui | Bootstrap repo + seed 54 non-AI + foundation + full toolchain (publishable) | `[x]` DONE — READY_TO_MERGE, 664 tests, 0 AI leakage | M-A |
 | **M-C** | theo-ui | Depend on `@usetheo/ui`; remove 54; re-point; breaking major + codemod | `[x]` DONE — READY_TO_MERGE, 1400 tests, bundle -40%%; publint red = documented file:-dep deferral | M-B |
 | **M-D** | both | Registry split — @usetheo/ui registry (60 items) + cross-reference | `[x]` DONE — READY_TO_MERGE, 15/15 refs resolve, drift-guard | M-C |
-| **M-E** | theo-ui | Narrative / README AI-native repositioning (`docs/`, HERO, CLAUDE.md voice) | `[ ]` not started | M-C |
+| **M-E** | theo-ui | Narrative / README AI-native repositioning (`docs/`, HERO, CLAUDE.md voice) | `[x]` DONE — READY_TO_MERGE, quality:structure + public-copy exit 0, 0 moved-as-export refs (grep-proof) | M-C |
 
 Dependency chain: `M-A → M-B → M-C → { M-D, M-E }`.
 
@@ -88,9 +88,11 @@ Dependency chain: `M-A → M-B → M-C → { M-D, M-E }`.
 
 **Objective:** `@theokit/ui` registry entries reference `@usetheo/ui` primitives via `registryDependencies` URLs (already our pattern — a host/URL change). Two registries, cross-referenced.
 
-### M-E — AI-native repositioning  ·  theo-ui  ·  NOT STARTED
+### M-E — AI-native repositioning  ·  theo-ui  ·  DONE (2026-07-03)
 
 **Objective:** narrative/positioning — README HERO, `docs/`, CLAUDE.md voice — reframe `@theokit/ui` as AI-native. Requires monorepo-level strategic review to weaken the locked "built for AI agents + cloud dashboards" narrative (per CLAUDE.md).
+
+**Outcome:** the locked wedge changed to "Built for AI-agent surfaces (coding agents + chat)" — strategic review authorized by the owner's pivot decision, documented in `CLAUDE.md` § narrative anchors + the M-E plan ADR D1. Reframed README HERO/body, `package.json` description (dropped "framework-agnostic … cloud dashboards"), `CLAUDE.md` §"What this project is" + anchor, `docs/architecture.md` + `docs/quality-gates.md` (dropped the dual "two product surfaces" framing). Component count corrected 153→**99** (gate-authoritative; badge/`quality:structure`). Moved components now appear only as pointers to `@usetheo/ui`; `package.json` exports 0 moved slugs (programmatic proof). Plan: `knowledge-base/plans/m-e-ai-native-repositioning-plan.md` (plan-confidence SHIPPABLE_WITH_CAVEATS 70). Evidence: `knowledge-base/reviews/m-e-ai-native-repositioning-evidence-2026-07-03.md`. **The pivot roadmap M-A..M-E is now complete — eligible for the end-of-roadmap `/release`.**
 
 ---
 

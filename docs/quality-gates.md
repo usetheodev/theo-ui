@@ -4,16 +4,19 @@
 > Reference model: `referencia/ui` for organization, registry rigor, documentation
 > and release discipline. We do not copy its visual identity.
 
-Theo UI serves two product surfaces:
+Theo UI serves AI-agent surfaces — coding agents and chat:
 
 1. **AI coworker local-first**: chat, cowork tasks, permissions, local files,
    agent timeline, code workspace, artifacts.
-2. **PaaS components**: deployments, preview environments, domains, env vars,
-   metrics, rollback, project cards.
+2. **Agent operations**: MCP servers, skills, hooks, cron jobs, model cards,
+   token usage, audit logs, sub-agent dispatch.
 
-Both surfaces share the same component library, tokens, registry and quality
-bar. Domain-specific value gates are separate because a useful local agent UI is
-not judged by the same criteria as a deployment dashboard.
+The generic primitives, auth surfaces, and PaaS/cloud-ops components (deployments,
+preview environments, domains, env vars, metrics, rollback, project cards) moved to
+[`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui), which `@theokit/ui` builds
+on. All surfaces share the same tokens, registry and quality bar. Domain-specific
+value gates are separate because a useful agent UI is not judged by the same criteria
+as a chat transcript.
 
 ---
 
@@ -137,7 +140,7 @@ generic shadcn clone.
 - Does not include decorative controls without behavior.
 
 Design system drift is a blocking issue because the UI library is the product
-surface for both AI coworker and PaaS workflows.
+surface for AI-agent workflows.
 
 ---
 
@@ -156,7 +159,7 @@ A component passes only if:
   handling.
 - Color is not the only status indicator.
 
-For command surfaces such as `CommandPalette`, substring filtering plus click
+For command surfaces such as `MentionMenu`, substring filtering plus click
 selection is not enough. Expected behavior includes active item, arrow keys,
 Enter selection, Escape close and useful ranking.
 
@@ -178,7 +181,7 @@ Broaden tests when the component is:
 
 - A shared primitive.
 - In the registry.
-- Used by both AI coworker and PaaS surfaces.
+- Used across AI-agent surfaces.
 - Responsible for permission, destructive action, deployment, rollback or code
   execution workflows.
 
@@ -238,28 +241,18 @@ Examples:
 
 ---
 
-## Gate 8 — PaaS Component Value
+## Gate 8 — Cloud-ops Component Value (now in `@usetheo/ui`)
 
-PaaS components pass only if they help a user operate software in production.
+The cloud-ops / PaaS components (`DeploymentRow`, `RollbackUI`, `DomainConfig`,
+`PreviewEnvCard`, `EnvVarEditor`, `MetricsPanel`, `ProjectCard`) moved to
+[`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui) in the AI-exclusive
+pivot. Their operational-value gates (precise status queued→live→failed, obvious
+next action, confirmation on risky operations, degraded-state handling, copyable
+operational metadata) live with them there.
 
-Required product qualities:
-
-- Status is precise: queued, building, deploying, live, failed, cancelled.
-- The next action is obvious: view logs, open preview, retry, rollback, set
-  primary, copy DNS, edit env var.
-- Risky operations require confirmation or clear state transition.
-- Operational metadata is visible: branch, commit, author, region, duration,
-  service, URL, TLS/DNS state.
-- Components handle degraded states: no logs, pending DNS, failed deploy, empty
-  project list, missing metric data.
-- Copyable values use monospace and preserve long content with wrapping or
-  truncation plus accessible labels.
-
-Examples:
-
-- `RollbackUI` must communicate target version and consequence before callback.
-- `DomainConfig` must surface DNS verification records and TLS state.
-- `PreviewEnvCard` must make service URLs and statuses scannable.
+`BuildLogStream` is the one cloud-ops-shaped primitive that stayed in
+`@theokit/ui` (it renders agent/build output); it is judged by the AI-coworker
+value gates above, not a separate PaaS gate.
 
 ---
 
@@ -315,7 +308,7 @@ Use this checklist in PR review:
 - Keyboard and focus behavior are correct.
 - Empty/loading/error/running states exist where needed.
 - AI coworker trust gates are met, if applicable.
-- PaaS operational gates are met, if applicable.
+- Cloud-ops operational gates (in `@usetheo/ui`) are met, if applicable.
 - Registry install path is valid, if applicable.
 - Tests cover behavior, not only rendering.
 - Story demonstrates a realistic workflow.

@@ -36,20 +36,20 @@ The split between `primitives/` and `composites/` is determined by a **mechanica
 - Icon libraries (`lucide-react`).
 - `class-variance-authority`, `clsx`, `tailwind-merge`.
 - `../../../lib/cn.js` and `../../../types/*.js` (utilities & shared types).
-- Internal subparts of the same component (e.g. `Card.Header`, `Sidebar.Item`).
+- Internal subparts that live in the same component folder (e.g. `ChatMessage`'s `parts/`).
 
 **Forbidden in primitives:**
-- Importing `Button`, `Badge`, `Card`, `Dialog`, etc., from another primitive folder.
+- Importing `CostMeter`, `ModelCard`, `AgentEvent`, etc., from another primitive folder.
 
 **Composites freely import primitives** and may also import other composites,
 but **must not import their own consumers** (no circular deps).
 
 ### Why this rule?
 
-1. **Predictable bundle sizes**. A consumer who installs only `Badge` from the
-   registry gets just `cn` + Radix + Badge code — no surprise transitive deps.
+1. **Predictable bundle sizes**. A consumer who installs only `AgentEvent` from
+   the registry gets just `cn` + Radix + AgentEvent code — no surprise transitive deps.
 2. **Registry hygiene**. The shadcn registry declares `registryDependencies`;
-   if `Button` depended on `Card` depended on `Button`, that graph would cycle.
+   if `ChatThread` depended on `ChatMessage` depended on `ChatThread`, that graph would cycle.
 3. **Refactor safety**. Moving a primitive's internals never breaks composites —
    only their public API matters. Composites are explicitly the place where
    coupling between components happens.
@@ -82,13 +82,13 @@ but **must not import their own consumers** (no circular deps).
 <!-- END:composites-list -->
 
 ### Notes
-- `Sidebar`, `TopNav`, `LoginSplit`, `Card`, `Badge`, `Dialog`, `Tabs`,
-  `Tooltip`, `ScrollArea` have **internal subparts** (`Sidebar.Item`,
-  `Card.Header`, etc.). These are private — they don't count as cross-component
-  imports because they live in the same source file.
-- The `DeploymentStatus` *type* import in `project-card` / `preview-env-card`
-  is structural data, not a component dependency. We tolerate type imports
-  across primitives/composites because they don't add code at runtime.
+- Composite families like `ChatMessage` export their subparts as **flat named
+  exports** (`ChatMessageRoot`, `ChatMessageContent`, `ChatMessageToolbar`, …)
+  from a single source file. They don't count as cross-component imports because
+  they live together.
+- **Type-only imports across the primitive/composite boundary are tolerated** —
+  a shared structural type (an event or status shape) adds no code at runtime,
+  so it doesn't create a component dependency.
 
 ---
 
@@ -98,8 +98,8 @@ but **must not import their own consumers** (no circular deps).
    example in plain JSX before opening an editor.
 2. **Implement as a primitive** by default. If you can do the job with Radix +
    `cn` + lucide, do it there.
-3. If you find yourself reaching for `Button` or `Badge`, **stop**: the
-   component belongs in `composites/`. Move it.
+3. If you find yourself reaching for another primitive like `CostMeter` or
+   `ModelCard`, **stop**: the component belongs in `composites/`. Move it.
 4. Create the folder under the right layer:
    `src/components/<layer>/<kebab-name>/`
 5. Required files:
@@ -107,7 +107,7 @@ but **must not import their own consumers** (no circular deps).
    - `index.ts` — barrel re-export.
    - `<name>.test.tsx` — at minimum: smoke render, props matrix, key behaviors.
    - `<name>.stories.tsx` — Ladle story under title `<Layer> / <Name>`
-     (e.g. `Primitives / Badge`, `Composites / DeploymentRow`).
+     (e.g. `Primitives / AgentEvent`, `Composites / ChatMessage`).
 6. Add the export to `src/index.ts` in the right section.
 7. Add a `registry/<name>.json` descriptor with the correct `path`
    (`components/<layer>/<name>/<name>.tsx`).
@@ -139,16 +139,16 @@ but **must not import their own consumers** (no circular deps).
 exact same `dist/index.js`:
 
 ```json
-"./button":        { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
 "./agent-event":   { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
-"./deployment-row": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+"./tool-call":     { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+"./chat-message":  { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
 ```
 
 This is **deliberate** and documented in `scripts/sync-exports.ts`. The
 trade-off:
 
 - **What subpath imports give you.** A clean per-component import surface
-  (`import { Button } from "@theokit/ui/button"`), better IDE autocomplete,
+  (`import { AgentEvent } from "@theokit/ui/agent-event"`), better IDE autocomplete,
   and an editorial signal that consumers can pin to a specific component.
 - **What subpath imports do NOT give you.** Separate bundles per component.
   tsup is configured with `splitting: false`. A 99-entry split would
@@ -158,8 +158,8 @@ trade-off:
 **Tree-shaking is what shrinks the bundle.** Modern bundlers (Vite, esbuild,
 Rollup, webpack 5, Bun) read the `sideEffects: ["**/*.css"]` hint and drop
 unused components from the barrel regardless of which import form the
-consumer wrote. `import { Button } from "@theokit/ui"` and
-`import { Button } from "@theokit/ui/button"` produce the same final
+consumer wrote. `import { AgentEvent } from "@theokit/ui"` and
+`import { AgentEvent } from "@theokit/ui/agent-event"` produce the same final
 bundle.
 
 **Runtimes that don't tree-shake** (Jest classic, Node REPL, raw browser
@@ -187,7 +187,7 @@ Allowed exceptions (closed set, edit requires RFC):
 
 | Name | Location | Why |
 |---|---|---|
-| `Toaster` | `src/components/primitives/toast/toaster.tsx` | Toast viewport + provider. Consumer mounts once at the app root; descendants use `useToast()`. Same pattern as shadcn, Sonner, react-hot-toast. |
+| `Toaster` | imported from `@usetheo/ui` | Toast viewport + provider, composed by `TheoUIProvider`. Moved to `@usetheo/ui` in the pivot; still mounted once at the app root, descendants use `useToast()`. Same pattern as shadcn, Sonner, react-hot-toast. |
 | `ThemeProvider` | `src/themes/theme-provider.tsx` | Theme registry + runtime switcher. Mounted once; descendants use `useTheme()`. |
 
 Rules for global provider primitives:

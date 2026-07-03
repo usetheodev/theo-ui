@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **Repositioning (pivot M-E):** public narrative reframed to **AI-native**. Dropped the
+  co-equal "cloud dashboards" categorical wedge (the generic + cloud-ops layer moved to
+  `@usetheo/ui` in M-B/M-C); README HERO, `package.json` description, `CLAUDE.md` narrative
+  anchor, and `docs/` now position `@theokit/ui` for AI-agent surfaces (coding agents +
+  chat) and point generic/cloud consumers to `@usetheo/ui`. Component count corrected to
+  the gate-authoritative **99** (was a stale 153); moved components no longer appear as
+  `@theokit/ui` exports/examples (grep-proof: 0). Docs-only; no code change.
 - **BREAKING (pivot M-C):** `@theokit/ui` is now an **AI-exclusive** component library
   and **depends on `@usetheo/ui`**. The 54 non-AI components (generic primitives +
   cloud/PaaS composites) + the shared Violet Forge foundation moved to the new
