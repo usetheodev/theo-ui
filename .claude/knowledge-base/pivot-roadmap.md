@@ -34,7 +34,7 @@ components) into a **separate published `@usetheo/ui` repo**. `@theokit/ui` then
 
 ### Current classification split (M-A manifest)
 
-**136 components → 77 `ai` (`@theokit/ui`) · 59 non-AI (`@usetheo/ui`): 47 `generic` + 12 `cloud-ops`.**
+**136 components → 82 `ai` (`@theokit/ui`) · 54 non-AI (`@usetheo/ui`): 47 `generic` + 12 `cloud-ops`.**
 Source of truth: `theo-ui/registry/component-classification.json`, enforced by `pnpm classify:check`.
 
 ## Milestones
