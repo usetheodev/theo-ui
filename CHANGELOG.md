@@ -13,8 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `classify:check` quality gate (wired into the `quality:gates` CI chain) that fails
   on any unclassified or drifted component. Current split: 76 `ai` stay in
   `@theokit/ui`; 60 (`generic` + `cloud-ops`) are earmarked for a separate
-  `@usetheo/ui` package. Groundwork for the planned AI-exclusive split of
-  `@theokit/ui`; no public API change yet.
+  `@usetheo/ui` package. The AI boundary follows a scope decision covering both
+  coding-agent and chat/agent surfaces; all previously-ambiguous entries were
+  resolved from component evidence (0 disputed). Groundwork for the planned
+  AI-exclusive split of `@theokit/ui`; no public API change yet.
 
 ### Changed
 - The `--font-serif` token (and the `.font-serif` utility) now resolves to the
