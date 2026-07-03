@@ -8,7 +8,7 @@
 
 ## Context
 
-Milestone D of the pivot. Blueprint §Q4: "@theokit/ui registry entries reference @usetheo/ui primitives via `registryDependencies` URLs — a host/URL change; two registries cross-referenced." M-C did the theo-ui side (15 URL rewrites, validator accepts URLs, registry:build+validate green). Baseline (2026-07-03): `@usetheo/ui` has 0 registry descriptors + no `registry:build` script (deferred in M-B); theo-ui references 15 `usetheodev.github.io/usetheo-ui/r/*.json` URLs, all matching real @usetheo/ui component dirs.
+Milestone D of the pivot. Blueprint §"D3": "@theokit/ui registry entries reference @usetheo/ui primitives via `registryDependencies` URLs — a host/URL change; two registries cross-referenced." M-C did the theo-ui side (15 URL rewrites, validator accepts URLs, registry:build+validate green). Baseline (2026-07-03): `@usetheo/ui` has 0 registry descriptors + no `registry:build` script (deferred in M-B); theo-ui references 15 `usetheodev.github.io/usetheo-ui/r/*.json` URLs, all matching real @usetheo/ui component dirs.
 
 ## Baseline Context
 
@@ -39,7 +39,7 @@ Milestone D of the pivot. Blueprint §Q4: "@theokit/ui registry entries referenc
 
 ## Prior Art & Related Work
 
-- **Blueprint §Q4** — the cross-registry `registryDependencies` URL pattern; theo-ui's own `registry/r/*.json` already used full URLs (`registry/r/agent-composer.json`).
+- **Blueprint §"D3"** — the cross-registry `registryDependencies` URL pattern; theo-ui's own `registry/r/*.json` already used full URLs (`registry/r/agent-composer.json`).
 - **Reference:** `.claude/knowledge-base/references/ai-elements/packages/cli/` — the shadcn-registry distribution model (remote registry + CLI).
 - **theo-ui `scripts/build-registry.ts`** — the exact registry builder mirrored (with the M-C fixes: external-URL acceptance + component-classification skip).
 
@@ -153,7 +153,7 @@ VERIFY: cd usetheo-ui && pnpm registry:build && pnpm registry:validate; then the
 | 3 | 54 registry/r items built | T1.1 | registry:build |
 | 4 | registry:validate green | T1.1 | validate exit 0 |
 | 5 | 15 cross-refs resolve | T1.1 | consistency check |
-| 6 | theo-ui side stays green | (M-C, unchanged) | registry:validate PASS |
+| 6 | theo-ui side stays green | T1.1 | Final-phase regression: theo-ui registry:validate re-run |
 | 7 | benchmark | T1.1 | item count + build time |
 
 **Coverage: 7/7 (100%)**
