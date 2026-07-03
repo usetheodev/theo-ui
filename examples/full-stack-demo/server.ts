@@ -45,6 +45,7 @@ const AGENT_ID = "full-stack-demo-agent";
 // ── M6: a REAL published @theokit/plugin-canvas artifact tool. The plugin
 // (from npm, 0.3.1) validates + security-sanitizes every artifact. ──────────
 const artifacts = new Map<string, unknown>();
+let artifactSeq = 0;
 const canvasTool = defineArtifactTool({
   allowedKinds: ["markdown", "code"],
   // The plugin reads `stored.id` / `stored.version` off this return, so onPublish
@@ -74,7 +75,9 @@ const createArtifactTool = {
   },
   handler: async (input: { kind: string; title: string; content: string; language?: string }) => {
     const artifact = {
-      id: `art-${Date.now()}`,
+      // Monotonic id — two artifacts created in the same millisecond must NOT collide
+      // (a shared `Date.now()` would overwrite the first in the Map, losing it).
+      id: `art-${Date.now()}-${++artifactSeq}`,
       title: input.title,
       version: 1,
       createdAt: Date.now(),
