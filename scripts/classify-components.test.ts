@@ -7,11 +7,16 @@
  * I/O wrapper; its input-guard cases (absent file, malformed JSON) are tested against
  * a temp directory.
  */
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { checkClassification, loadAndCheck } from "./classify-components.js";
+import {
+  type ClassificationEntry,
+  checkClassification,
+  loadAndCheck,
+} from "./classify-components.js";
 
 const validEntry = {
   name: "button",
@@ -140,5 +145,46 @@ describe("loadAndCheck (I/O input guards)", () => {
     const r = await loadAndCheck(p);
     expect(r.ok).toBe(false);
     expect(r.offenders.some((o) => o.includes("malformed"))).toBe(true);
+  });
+});
+
+describe("component-classification.json (authored manifest — T1.2)", () => {
+  const manifestPath = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "registry",
+    "component-classification.json",
+  );
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf-8")) as ClassificationEntry[];
+  const byName = new Map(manifest.map((e) => [e.name, e]));
+
+  it("manifest_has_136_entries", () => {
+    expect(manifest.length).toBe(136);
+  });
+
+  // Blueprint §Q2 placement table: 2 stay in @theokit/ui, 9 go to @usetheo/ui.
+  const Q2_PLACEMENT: Record<string, ClassificationEntry["target"]> = {
+    "terminal-panel": "@theokit/ui",
+    "build-log-stream": "@theokit/ui",
+    "env-var-editor": "@usetheo/ui",
+    "metrics-panel": "@usetheo/ui",
+    "deployment-row": "@usetheo/ui",
+    "domain-config": "@usetheo/ui",
+    "rollback-ui": "@usetheo/ui",
+    "cron-job-card": "@usetheo/ui",
+    "cron-jobs-list": "@usetheo/ui",
+    "preview-env-card": "@usetheo/ui",
+    "project-card": "@usetheo/ui",
+  };
+
+  it("placement_matches_blueprint_q2", () => {
+    for (const [name, target] of Object.entries(Q2_PLACEMENT)) {
+      expect(byName.get(name), `missing entry: ${name}`).toBeDefined();
+      expect(byName.get(name)?.target, `wrong target for ${name}`).toBe(target);
+    }
+  });
+
+  it("disputed_flag_present_on_envvareditor", () => {
+    expect(byName.get("env-var-editor")?.disputed).toBe(true);
   });
 });

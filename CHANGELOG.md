@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Component classification manifest (`registry/component-classification.json`)
+  tagging all 136 component directories as `ai` / `generic` / `cloud-ops`, plus a
+  `classify:check` quality gate that fails on any unclassified or drifted
+  component. Groundwork for the planned AI-exclusive split of `@theokit/ui` (non-AI
+  components move to a separate `@usetheo/ui` package). No public API change yet.
 
 ### Changed
 - The `--font-serif` token (and the `.font-serif` utility) now resolves to the

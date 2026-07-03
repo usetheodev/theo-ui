@@ -1,0 +1,957 @@
+[
+  {
+    "name": "action-bar",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "agent-error-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-event",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-handoff",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-profile",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-starting-state",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-streaming",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "alert",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "artifact-preview",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "attachment-chip",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "audit-log-entry",
+    "layer": "primitive",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "auto-compact-notice",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "avatar",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "badge",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "branch-indicator",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "browser-controls",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "build-log-stream",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Coding-agent run output (agent-surface) vs generic PaaS build log — kept ai, revisit at M-C",
+    "disputed": true
+  },
+  {
+    "name": "button",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "capability-indicator",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "card",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "channel-card",
+    "layer": "primitive",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "chat-thread",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "checkbox",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "context-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "context-window-bar",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "copy-button",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "cost-meter",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "created-files-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "cron-job-card",
+    "layer": "primitive",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "danger-zone",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "dialog",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "diff-viewer",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "dropdown-menu",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "empty-state",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "export-chat-dialog",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "folder-context-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "folder-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "form-field",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "gateway-status-indicator",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "hook-config",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "hook-event-log",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "input",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "intent-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "label",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "lane-board",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "login-split",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "mcp-server-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "memory-editor",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "mention-menu",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "metrics-panel",
+    "layer": "primitive",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Generic recharts dashboard viz; no agent-surface precedent — @usetheo/ui unless it renders agent-run metrics",
+    "disputed": true
+  },
+  {
+    "name": "model-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "model-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "pagination",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "permission-matrix",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "pin-input",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "plan-badge",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "progress",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "progress-checklist",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "project-switcher",
+    "layer": "primitive",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "quick-action-chips",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "radio-group",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "recent-folders-list",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "rule-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "run-stats",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "run-status-pill",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "running-tasks-panel",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "scroll-area",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "select",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "session-list-item",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "session-timeline",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "sheet",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "sidebar",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "skeleton",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "skill-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "slide",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "social-auth-row",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "stat-tile",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "status-dot",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "steps-rail",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "sub-agent-dispatch",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "switch",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "system-prompt-editor",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "table",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "tabs",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "task-plan",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "terminal-panel",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "textarea",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "thinking-level-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "timestamp",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "toast",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "token-usage-chart",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tool-call",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tool-call-card",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tool-result",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tools-list",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "tooltip",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "topnav",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "update-banner",
+    "layer": "primitive",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "whiteboard",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "account-menu",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "agent-composer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-editor",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-stream",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-timeline",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "agent-tool-renderer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "approval-card",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "chat-composer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "chat-message",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "choice-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "code-block",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "command-palette",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "confirm-dialog",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "confirm-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "cron-jobs-list",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "data-table",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "deployment-row",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "domain-config",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "env-var-editor",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Agent-sandbox env (Vercel keeps env in AI pkg) vs deployment env — defaulted @usetheo/ui, the one true both-sides case",
+    "disputed": true
+  },
+  {
+    "name": "mcp-server-list",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "metric-card",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "multi-select-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "page-shell",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "permission-modal",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "preview-env-card",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "preview-panel",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "project-card",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "rollback-ui",
+    "layer": "composite",
+    "tier": "cloud-ops",
+    "target": "@usetheo/ui",
+    "rationale": "Cloud/PaaS dashboard component — @usetheo/ui"
+  },
+  {
+    "name": "rule-editor",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "skill-editor",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "skills-list",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "slide-deck",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "stability-bundle-viewer",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "status-indicator",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "task-header",
+    "layer": "composite",
+    "tier": "generic",
+    "target": "@usetheo/ui",
+    "rationale": "Generic shadcn-like primitive — foundation for @usetheo/ui"
+  },
+  {
+    "name": "text-prompt",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "usage-meter",
+    "layer": "composite",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  }
+]
