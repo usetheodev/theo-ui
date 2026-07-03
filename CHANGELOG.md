@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `examples/live-chat-demo/` — a real, viewable browser chat that exercises the open
+  stack end-to-end (Harness `@theokit/sdk` local runtime + Skills tool-use + the
+  `useAgentStream` reducer rendered live via SSE) against a real OpenRouter LLM. Run
+  with `OPENROUTER_API_KEY=… node --experimental-strip-types examples/live-chat-demo/server.ts`
+  → `http://localhost:8787`. Shows streaming text, live tool cards, and the north-star
+  `time-to-first-working-agent` measured per run.
+
+### Fixed
+- `useAgentStream` / `agentStreamReducer` now renders a tool result correctly when the
+  Harness wraps a handler's return in a shell-style `{ stdout, stderr, exitCode }`
+  envelope — previously `String(result)` rendered `[object Object]`. It now extracts
+  `stdout` (appending `stderr` when present), an `output`/`text` field, or a compact
+  JSON fallback. Covered by a new reducer test.
 
 ### Changed
 

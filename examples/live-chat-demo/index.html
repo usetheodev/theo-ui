@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Theo — live open-stack chat demo</title>
+    <style>
+      :root {
+        --bg: #0b0d12; --panel: #131722; --panel-2: #1a2030; --border: #232a3b;
+        --text: #e6e9ef; --muted: #8b93a7; --accent: #7c9cff; --accent-2: #22c58b;
+        --warn: #f0b429; --err: #ef5b6b; --user: #2b3550;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        background: radial-gradient(1200px 600px at 70% -10%, #1a2138 0%, var(--bg) 55%);
+        color: var(--text); font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        display: flex; justify-content: center;
+      }
+      .app { width: min(880px, 100%); height: 100vh; display: flex; flex-direction: column; padding: 18px; gap: 14px; }
+      header { display: flex; align-items: center; gap: 12px; }
+      header h1 { font-size: 17px; margin: 0; font-weight: 650; letter-spacing: .2px; }
+      .pillars { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+      .pill { font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--panel); color: var(--muted); }
+      .pill b { color: var(--text); font-weight: 600; }
+      .pill.pre { border-color: #3a3320; color: var(--warn); }
+      .thread { flex: 1; overflow-y: auto; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+      .row { display: flex; gap: 10px; align-items: flex-start; }
+      .row.user { justify-content: flex-end; }
+      .avatar { width: 28px; height: 28px; border-radius: 8px; flex: 0 0 28px; display: grid; place-items: center; font-size: 13px; background: var(--panel-2); border: 1px solid var(--border); }
+      .bubble { max-width: 76%; padding: 10px 13px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--border); white-space: pre-wrap; word-wrap: break-word; }
+      .row.user .bubble { background: var(--user); border-color: #38456a; }
+      .bubble.streaming { color: var(--text); }
+      .bubble.streaming::after { content: "▋"; color: var(--accent); animation: blink 1s steps(2) infinite; margin-left: 1px; }
+      @keyframes blink { 50% { opacity: 0; } }
+      .tool { max-width: 76%; border: 1px solid var(--border); border-radius: 12px; background: #0f1420; overflow: hidden; }
+      .tool .head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 13px; }
+      .tool .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+      .tool.running .dot { background: var(--accent); animation: pulse 1s ease-in-out infinite; }
+      .tool.success .dot { background: var(--accent-2); }
+      .tool.failed .dot { background: var(--err); }
+      @keyframes pulse { 50% { opacity: .35; } }
+      .tool .name { font-weight: 600; }
+      .tool .status { margin-left: auto; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+      .tool .out { padding: 0 12px 10px 30px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--muted); }
+      .err { color: var(--err); border: 1px solid #4a2530; background: #1f1417; padding: 10px 13px; border-radius: 12px; max-width: 76%; }
+      .meta { font-size: 12px; color: var(--muted); padding: 2px 4px; }
+      .meta b { color: var(--accent-2); font-weight: 600; }
+      form { display: flex; gap: 10px; }
+      input[type="text"] { flex: 1; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; color: var(--text); font-size: 15px; outline: none; }
+      input[type="text"]:focus { border-color: var(--accent); }
+      button { background: var(--accent); color: #0b0d12; border: 0; border-radius: 12px; padding: 0 20px; font-weight: 650; cursor: pointer; font-size: 15px; }
+      button:disabled { opacity: .5; cursor: default; }
+      .hint { font-size: 12px; color: var(--muted); }
+      .hint code { background: var(--panel); padding: 1px 6px; border-radius: 6px; border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="avatar">◆</div>
+        <h1>Theo — live open-stack chat</h1>
+        <div class="pillars">
+          <span class="pill"><b>Harness</b> @theokit/sdk</span>
+          <span class="pill"><b>Skills</b> tools</span>
+          <span class="pill"><b>UI</b> useAgentStream</span>
+          <span class="pill pre"><b>Runtime</b> pre-release</span>
+        </div>
+      </header>
+
+      <div id="thread" class="thread">
+        <div class="row">
+          <div class="avatar">◆</div>
+          <div class="bubble">Hi! I'm a real agent running on the open stack — SDK local runtime, real OpenRouter LLM, with tools. Try: <em>"What time is it?"</em> or <em>"Roll a 20-sided dice twice and add them."</em></div>
+        </div>
+      </div>
+      <div id="meta" class="meta"></div>
+
+      <form id="form">
+        <input id="input" type="text" placeholder="Ask the agent…" autocomplete="off" autofocus />
+        <button id="send" type="submit">Send</button>
+      </form>
+      <div class="hint">Streaming live via SSE · every token rendered through theo-ui's real <code>agentStreamReducer</code></div>
+    </div>
+
+    <script>
+      const thread = document.getElementById("thread");
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const sendBtn = document.getElementById("send");
+      const metaEl = document.getElementById("meta");
+
+      function esc(s) { return String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
+
+      function renderUser(text) {
+        const row = document.createElement("div");
+        row.className = "row user";
+        row.innerHTML = `<div class="bubble">${esc(text)}</div><div class="avatar">🧑</div>`;
+        thread.appendChild(row);
+      }
+
+      // Render the reducer's AgentStreamItem[] into the agent response area.
+      function renderAgent(container, items, streamingText) {
+        container.innerHTML = "";
+        for (const it of items) {
+          if (it.kind === "message") {
+            const text = it.message?.parts?.[0]?.text ?? "";
+            const b = document.createElement("div");
+            b.className = "bubble";
+            b.innerHTML = esc(text);
+            container.appendChild(b);
+          } else if (it.kind === "tool-call") {
+            const card = document.createElement("div");
+            card.className = "tool " + (it.status || "running");
+            const out = it.output != null ? `<div class="out">→ ${esc(it.output)}</div>` : "";
+            card.innerHTML = `<div class="head"><span class="dot"></span><span class="name">${esc(it.tool || "tool")}</span><span class="status">${esc(it.status || "running")}</span></div>${out}`;
+            container.appendChild(card);
+          } else if (it.kind === "streaming") {
+            const b = document.createElement("div");
+            b.className = "bubble streaming";
+            b.innerHTML = esc(it.partial ?? streamingText ?? "");
+            container.appendChild(b);
+          } else if (it.kind === "error") {
+            const e = document.createElement("div");
+            e.className = "err";
+            e.innerHTML = "⚠ " + esc(it.title ?? "error");
+            container.appendChild(e);
+          }
+        }
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function ask(message) {
+        renderUser(message);
+        metaEl.textContent = "";
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<div class="avatar">◆</div>`;
+        const container = document.createElement("div");
+        container.style.display = "flex";
+        container.style.flexDirection = "column";
+        container.style.gap = "8px";
+        container.style.maxWidth = "78%";
+        const think = document.createElement("div");
+        think.className = "bubble streaming";
+        think.textContent = "";
+        container.appendChild(think);
+        row.appendChild(container);
+        thread.appendChild(row);
+        thread.scrollTop = thread.scrollHeight;
+
+        sendBtn.disabled = true; input.disabled = true;
+        const es = new EventSource("/api/chat?q=" + encodeURIComponent(message));
+        es.addEventListener("state", (e) => {
+          const s = JSON.parse(e.data);
+          renderAgent(container, s.items, s.streamingText);
+        });
+        es.addEventListener("meta", (e) => {
+          const m = JSON.parse(e.data);
+          const u = m.usage ? ` · ${m.usage.totalTokens ?? "?"} tokens` : "";
+          metaEl.innerHTML = `<b>${m.status}</b> · model ${esc(m.model)} · first token <b>${m.time_to_first_token_ms}ms</b> · total ${m.total_ms}ms${u}`;
+        });
+        es.addEventListener("error", (e) => {
+          try { const d = JSON.parse(e.data); renderAgent(container, [{ kind: "error", title: d.message }]); } catch {}
+          es.close(); sendBtn.disabled = false; input.disabled = false; input.focus();
+        });
+        es.onerror = () => { es.close(); sendBtn.disabled = false; input.disabled = false; input.focus(); };
+        // The server ends the stream after the terminal state+meta; EventSource
+        // fires onerror on close — we re-enable input there.
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (!message) return;
+        input.value = "";
+        ask(message);
+      });
+    </script>
+  </body>
+</html>
