@@ -87,15 +87,33 @@ const server = createServer(async (req, res) => {
     // biome-ignore lint/suspicious/noExplicitAny: raw JSON-schema tools.
     const agent = await Agent.create({ apiKey, model: { id: MODEL }, tools: tools as any });
     try {
-      const run = await agent.send(message);
       let state = initialAgentStreamState;
+      const push = () =>
+        send("state", { items: state.items, streamingText: state.streamingText, status: state.status });
+
+      // LIVE token streaming: the SDK's `onDelta` fires a `text-delta` per token as
+      // the LLM produces it — fold each into the reducer (as `text_delta`) so the
+      // browser renders the answer typing out in real time. `run.stream()` below
+      // supplies the structural events (tool cards) + the finalized message.
+      const onDelta = ({ update }: { update: { type: string; text?: string } }) => {
+        if (update.type === "text-delta" && typeof update.text === "string") {
+          if (firstTokenMs === 0) firstTokenMs = Date.now() - t0;
+          state = agentStreamReducer(state, { type: "text_delta", text: update.text });
+          push();
+        }
+      };
+
+      // biome-ignore lint/suspicious/noExplicitAny: onDelta option shape.
+      const run = await agent.send(message, { onDelta } as any);
       for await (const ev of run.stream()) {
         const msg = ev as unknown as SdkStreamMessage;
         if (firstTokenMs === 0 && (msg.type === "assistant" || msg.type === "text_delta")) {
           firstTokenMs = Date.now() - t0;
         }
+        // Tool lifecycle + the finalized assistant message (which folds the streamed
+        // text into a message bubble). Plain text_delta from stream (if any) also folds.
         state = agentStreamReducer(state, msg);
-        send("state", { items: state.items, streamingText: state.streamingText, status: state.status });
+        push();
       }
       state = agentStreamReducer(state, { type: "done" });
       const final = await run.wait();
