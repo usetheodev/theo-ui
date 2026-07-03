@@ -24,8 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   tool cards, and the north-star `time-to-first-working-agent` measured per run.
 
 ### Fixed
-- `examples/full-stack-demo/` — the canvas artifact now uses a stable id and resets to a
-  fresh canvas on each prompt, so successive turns no longer stack onto stale artifact state.
+- `examples/full-stack-demo/` — canvas artifacts now use unique, monotonic ids and reset to a
+  fresh canvas on each prompt, so same-millisecond artifacts no longer collide and successive
+  turns no longer stack onto stale artifact state.
 - `useAgentStream` / `agentStreamReducer` now renders a tool result correctly when the
   Harness wraps a handler's return in a shell-style `{ stdout, stderr, exitCode }`
   envelope — previously `String(result)` rendered `[object Object]`. It now extracts
