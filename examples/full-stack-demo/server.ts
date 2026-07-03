@@ -47,11 +47,15 @@ const AGENT_ID = "full-stack-demo-agent";
 const artifacts = new Map<string, unknown>();
 const canvasTool = defineArtifactTool({
   allowedKinds: ["markdown", "code"],
+  // The plugin reads `stored.id` / `stored.version` off this return, so onPublish
+  // returns the persisted ARTIFACT (not a wrapper). This is what makes the plugin
+  // do the real work (schema validation + CSP-safe sanitization) before we store it.
   onPublish: async (a) => {
-    const id = (a as { id?: string }).id ?? `art-${artifacts.size + 1}`;
-    const stored = { ...(a as object), id };
+    const artifact = a as { id?: string; version?: number };
+    const id = artifact.id ?? `art-${Date.now()}`;
+    const stored = { ...(a as object), id, version: artifact.version ?? 1 };
     artifacts.set(id, stored);
-    return { ok: true as const, artifactId: id, version: (a as { version?: number }).version ?? 1, artifact: stored as never };
+    return stored as never;
   },
 });
 const createArtifactTool = {
@@ -79,7 +83,7 @@ const createArtifactTool = {
       ...(input.kind === "code" ? { language: input.language ?? "text" } : {}),
     };
     const res = await canvasTool.handler({ artifact }); // published plugin validates + sanitizes
-    return `Artifact published via @theokit/plugin-canvas: ${res.artifactId} (${(res.artifact as { kind: string }).kind}, v${res.version}).`;
+    return `Artifact published via @theokit/plugin-canvas: ${res.artifactId} (${input.kind}, v${res.version}).`;
   },
 };
 
@@ -194,6 +198,7 @@ const server = createServer(async (req, res) => {
     }
     res.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-cache", connection: "keep-alive" });
 
+    artifacts.clear(); // canvas shows only THIS prompt's artifacts (not stale ones from prior runs)
     const t0 = Date.now();
     let firstTokenMs = 0;
     // M3: getOrCreate + shared store → this turn sees prior turns; history grows.
