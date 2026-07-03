@@ -7,27 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
 ### Changed
-- **Repositioning (pivot M-E):** public narrative reframed to **AI-native**. Dropped the
-  co-equal "cloud dashboards" categorical wedge (the generic + cloud-ops layer moved to
-  `@usetheo/ui` in M-B/M-C); README HERO, `package.json` description, `CLAUDE.md` narrative
-  anchor, and `docs/` now position `@theokit/ui` for AI-agent surfaces (coding agents +
-  chat) and point generic/cloud consumers to `@usetheo/ui`. Component count corrected to
-  the gate-authoritative **99** (was a stale 153); moved components no longer appear as
-  `@theokit/ui` exports/examples (grep-proof: 0). Docs-only; no code change.
-- **BREAKING (pivot M-C):** `@theokit/ui` is now an **AI-exclusive** component library
-  and **depends on `@usetheo/ui`**. The 54 non-AI components (generic primitives +
-  cloud/PaaS composites) + the shared Violet Forge foundation moved to the new
-  `@usetheo/ui` package; `@theokit/ui` now exports only the 82 AI components. AI
-  components re-point their generic-primitive imports to `@usetheo/ui`. Migrate with the
-  codemod at `codemod/split-usetheo.mjs` — see `docs/migration/v1-usetheo-ui-split.md`.
+
+### Deprecated
 
 ### Removed
-- **BREAKING:** 54 non-AI components removed from `@theokit/ui` (moved to `@usetheo/ui`):
-  the generic shadcn-like primitives (`Button`, `Card`, `Dialog`, `Input`, `Table`, …)
-  and cloud/PaaS composites (`DeploymentRow`, `DomainConfig`, `RollbackUI`,
-  `EnvVarEditor`, …). Import them from `@usetheo/ui` instead. Full list + codemod in
-  `docs/migration/v1-usetheo-ui-split.md`.
+
+### Fixed
+
+### Security
+
+## [1.0.0] - 2026-07-03
 
 ### Added
 - `useAgentStream` hook — the UI ↔ Harness streaming bridge (M5). Consumes an SDK
@@ -54,24 +46,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Groundwork for the planned AI-exclusive split of `@theokit/ui`; no public API
   change yet.
 
+
 ### Changed
+- **Repositioning (pivot M-E):** public narrative reframed to **AI-native**. Dropped the
+  co-equal "cloud dashboards" categorical wedge (the generic + cloud-ops layer moved to
+  `@usetheo/ui` in M-B/M-C); README HERO, `package.json` description, `CLAUDE.md` narrative
+  anchor, and `docs/` now position `@theokit/ui` for AI-agent surfaces (coding agents +
+  chat) and point generic/cloud consumers to `@usetheo/ui`. Component count corrected to
+  the gate-authoritative **99** (was a stale 153); moved components no longer appear as
+  `@theokit/ui` exports/examples (grep-proof: 0). Docs-only; no code change.
+- **BREAKING (pivot M-C):** `@theokit/ui` is now an **AI-exclusive** component library
+  and **depends on `@usetheo/ui`**. The 54 non-AI components (generic primitives +
+  cloud/PaaS composites) + the shared Violet Forge foundation moved to the new
+  `@usetheo/ui` package; `@theokit/ui` now exports only the 82 AI components. AI
+  components re-point their generic-primitive imports to `@usetheo/ui`. Migrate with the
+  codemod at `codemod/split-usetheo.mjs` — see `docs/migration/v1-usetheo-ui-split.md`.
+
 - The `--font-serif` token (and the `.font-serif` utility) now resolves to the
   brand font (`var(--font-body)`, Geist) instead of Tailwind's default serif
   fallback chain (`ui-serif, Georgia, Cambria, …`). Violet Forge has no separate
   serif face, so serif-flagged text now renders in the brand font consistently
   across platforms — and no longer references the Windows-only Cambria font.
 
-### Deprecated
 
 ### Removed
+- **BREAKING:** 54 non-AI components removed from `@theokit/ui` (moved to `@usetheo/ui`):
+  the generic shadcn-like primitives (`Button`, `Card`, `Dialog`, `Input`, `Table`, …)
+  and cloud/PaaS composites (`DeploymentRow`, `DomainConfig`, `RollbackUI`,
+  `EnvVarEditor`, …). Import them from `@usetheo/ui` instead. Full list + codemod in
+  `docs/migration/v1-usetheo-ui-split.md`.
+
+
 
 ### Fixed
 - Added a top-level `"types"` field (`./dist/index.d.ts`) so TypeScript
   consumers on classic `moduleResolution` (`node`/`node10`) resolve the
   package's types. Previously types were exposed only through the `exports`
   map, leaving non-`bundler`/`node16` consumers without type information.
-
-### Security
 
 ## [0.19.0] - 2026-06-24
 
