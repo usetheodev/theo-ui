@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `@usetheo/ui` dependency swapped from the local `file:../usetheo-ui` path to the published
+  `^0.14.0` range now that `@usetheo/ui@0.14.0` (the AI-exclusive-split line) is on npm. Makes
+  `@theokit/ui` installable from the registry. Validated: typecheck 0, build, 1401 tests green
+  against the published package.
+
 ### Added
 - `examples/full-stack-demo/` — a single browser app that proves ALL nine ecosystem
   milestones (M0–M8) live against real OpenRouter: secret redaction (M0), cooperative
