@@ -1,13 +1,13 @@
 "use client";
 
+import { Badge } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
+import { Input } from "@usetheo/ui";
+import { Label } from "@usetheo/ui";
+import { Textarea } from "@usetheo/ui";
 import { forwardRef, useId, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
-import { Badge } from "../../primitives/badge/index.js";
-import { Button } from "../../primitives/button/index.js";
-import { Input } from "../../primitives/input/index.js";
-import { Label } from "../../primitives/label/index.js";
-import { Textarea } from "../../primitives/textarea/index.js";
 
 /**
  * TextPrompt — free-text "ask the user" card for agent surfaces.

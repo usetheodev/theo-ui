@@ -4,7 +4,7 @@
  * Each component subpath ships its OWN isolated `.d.ts` (emitted by
  * `tsc -p tsconfig.dts.json` under `dist/components/`) instead of pointing
  * `types` at the whole barrel. This keeps the type surface a consumer loads
- * for `@theokit/ui/button` scoped to Button, not all 135 components.
+ * for `@theokit/ui/cost-meter` scoped to Button, not all 135 components.
  *
  * Reads the real `dist/` + `package.json#exports`. Skips gracefully pre-build.
  */
@@ -26,18 +26,18 @@ function exportsMap(): Record<string, string | ExportObj> {
 }
 
 describe.skipIf(!hasDist)("per-subpath .d.ts isolation", () => {
-  it("button subpath has its own isolated declaration file", () => {
-    const dts = join(ROOT, "dist/components/primitives/button/index.d.ts");
+  it("cost-meter subpath has its own isolated declaration file", () => {
+    const dts = join(ROOT, "dist/components/primitives/cost-meter/index.d.ts");
     expect(existsSync(dts)).toBe(true);
-    // Isolated = re-exports only Button surface, not the whole barrel.
+    // Isolated = re-exports only CostMeter surface, not the whole barrel.
     const body = readFileSync(dts, "utf8");
-    expect(body).toContain("Button");
+    expect(body).toContain("CostMeter");
   });
 
-  it('package.json maps `./button` types to the per-subpath .d.ts, not the barrel', () => {
-    const entry = exportsMap()["./button"] as ExportObj;
-    expect(entry.types).toBe("./dist/components/primitives/button/index.d.ts");
-    expect(entry.import).toBe("./dist/primitives/button/index.js");
+  it("package.json maps `./cost-meter` types to the per-subpath .d.ts, not the barrel", () => {
+    const entry = exportsMap()["./cost-meter"] as ExportObj;
+    expect(entry.types).toBe("./dist/components/primitives/cost-meter/index.d.ts");
+    expect(entry.import).toBe("./dist/primitives/cost-meter/index.js");
   });
 
   it("the barrel keeps its own root declaration", () => {

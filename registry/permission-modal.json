@@ -5,11 +5,12 @@
   "title": "PermissionModal",
   "description": "Local-files access prompt built on Dialog.",
   "dependencies": [
-    "lucide-react"
+    "lucide-react",
+    "@usetheo/ui"
   ],
   "registryDependencies": [
-    "button",
-    "dialog",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
+    "https://usetheodev.github.io/usetheo-ui/r/dialog.json",
     "permission-types",
     "tailwind-preset"
   ],

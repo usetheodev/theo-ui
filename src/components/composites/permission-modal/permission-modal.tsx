@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@usetheo/ui";
+import { Dialog } from "@usetheo/ui";
 import { AlertTriangle, FolderOpen, ShieldAlert } from "lucide-react";
 import { useRef } from "react";
 import type { ReactNode } from "react";
@@ -8,8 +10,6 @@ import type {
   PermissionOperation,
   PermissionRequest,
 } from "../../../types/permission.js";
-import { Button } from "../../primitives/button/index.js";
-import { Dialog } from "../../primitives/dialog/index.js";
 
 /**
  * Friendly operation labels used by the default copy. Override with the

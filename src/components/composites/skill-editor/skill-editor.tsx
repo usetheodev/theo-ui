@@ -1,16 +1,16 @@
 "use client";
 
+import { Button } from "@usetheo/ui";
+import { FormField } from "@usetheo/ui";
+import { Input } from "@usetheo/ui";
+import { Select } from "@usetheo/ui";
+import { Switch } from "@usetheo/ui";
+import { Textarea } from "@usetheo/ui";
 import { useState } from "react";
 import type { FormEvent, HTMLAttributes } from "react";
 import { cn } from "../../../lib/cn.js";
 import { ALL_MODES, MODE_LABEL, type Mode } from "../../../types/mode.js";
-import { Button } from "../../primitives/button/index.js";
-import { FormField } from "../../primitives/form-field/index.js";
-import { Input } from "../../primitives/input/index.js";
-import { Select } from "../../primitives/select/index.js";
 import type { Skill, SkillSource, SkillState } from "../../primitives/skill-card/index.js";
-import { Switch } from "../../primitives/switch/index.js";
-import { Textarea } from "../../primitives/textarea/index.js";
 
 /**
  * SkillEditor — form for creating or editing a Skill.

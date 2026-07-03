@@ -5,10 +5,11 @@
   "title": "ChatComposer",
   "description": "Message input area, shared by Chat / Code / Infra modes.",
   "dependencies": [
-    "lucide-react"
+    "lucide-react",
+    "@usetheo/ui"
   ],
   "registryDependencies": [
-    "button",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "cn",
     "tailwind-preset"
   ],

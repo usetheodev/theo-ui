@@ -93,8 +93,7 @@ export type { TaskStatus, TaskStep, TaskStepStatus } from "./types/task.js";
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Foundations
-export { Button, buttonVariants, type ButtonProps } from "./components/primitives/button/index.js";
-export { Badge, badgeVariants, type BadgeProps } from "./components/primitives/badge/index.js";
+
 // theokit-ui-parity Phase 1 — 7 new components
 export {
   ThinkingLevelSelector,
@@ -116,10 +115,7 @@ export {
   type GatewayStatus,
   type GatewayStatusIndicatorProps,
 } from "./components/primitives/gateway-status-indicator/index.js";
-export {
-  UpdateBanner,
-  type UpdateBannerProps,
-} from "./components/primitives/update-banner/index.js";
+
 export {
   ExportChatDialog,
   type ExportChatDialogProps,
@@ -131,35 +127,6 @@ export {
   type StabilityBundleViewerProps,
   type StabilitySeverity,
 } from "./components/composites/stability-bundle-viewer/index.js";
-export { Card } from "./components/primitives/card/index.js";
-export { Input, type InputProps } from "./components/primitives/input/index.js";
-export { Dialog } from "./components/primitives/dialog/index.js";
-export { Tabs } from "./components/primitives/tabs/index.js";
-export { Tooltip } from "./components/primitives/tooltip/index.js";
-export {
-  ScrollArea,
-  isNearBottom,
-  type StickToBottomMetrics,
-  useStickToBottom,
-  type UseStickToBottomOptions,
-  type UseStickToBottomReturn,
-} from "./components/primitives/scroll-area/index.js";
-export {
-  Toast,
-  type ToastVariant,
-  Toaster,
-  useToast,
-} from "./components/primitives/toast/index.js";
-export { Skeleton } from "./components/primitives/skeleton/index.js";
-export { Avatar, avatarVariants } from "./components/primitives/avatar/index.js";
-export { Label } from "./components/primitives/label/index.js";
-export { FormField } from "./components/primitives/form-field/index.js";
-export { EmptyState } from "./components/primitives/empty-state/index.js";
-export { Select } from "./components/primitives/select/index.js";
-export { Checkbox } from "./components/primitives/checkbox/index.js";
-export { RadioGroup } from "./components/primitives/radio-group/index.js";
-export { Switch } from "./components/primitives/switch/index.js";
-export { Textarea, type TextareaProps } from "./components/primitives/textarea/index.js";
 
 // Agent transparency & configuration primitives
 export { ContextWindowBar } from "./components/primitives/context-window-bar/index.js";
@@ -283,9 +250,7 @@ export {
 } from "./components/primitives/tool-call-card/index.js";
 
 // Layout shells (atomic — internal subparts only)
-export { Sidebar } from "./components/primitives/sidebar/index.js";
-export { TopNav } from "./components/primitives/topnav/index.js";
-export { Sheet, sheetVariants } from "./components/primitives/sheet/index.js";
+
 export {
   ProjectSwitcher,
   type ProjectStatus,
@@ -376,53 +341,18 @@ export { ToolResult } from "./components/primitives/tool-result/index.js";
 // shapes can coexist without API widening. UsageMeter + AccountMenu are
 // composites (depend on sibling primitives — Progress / Avatar+PlanBadge);
 // Progress + PlanBadge are standalone primitives.
-export { Progress, type ProgressProps } from "./components/primitives/progress/index.js";
-export {
-  PlanBadge,
-  type PlanBadgeProps,
-  type PlanTier,
-} from "./components/primitives/plan-badge/index.js";
+
 export {
   UsageMeter,
   type UsageMeterProps,
   type UsageMetric,
 } from "./components/composites/usage-meter/index.js";
-export {
-  AccountMenu,
-  type AccountMenuProps,
-} from "./components/composites/account-menu/index.js";
 
 // Cross-cutting PaaS primitives (RFC dashboard-paas-primitives-2, 0.8.0-next.0)
 // Brief #2 — 8 components closing the cross-cutting gaps surfaced by the
 // TheoCloud dashboard migration. 6 primitives + 2 composites (ConfirmDialog
 // depends on Dialog/Input/Button; CodeBlock depends on CopyButton).
-export {
-  Table,
-  type TableProps,
-  type TableCellProps,
-  type TableHeaderCellProps,
-} from "./components/primitives/table/index.js";
-export {
-  StatusDot,
-  type StatusDotProps,
-  type StatusKind,
-} from "./components/primitives/status-dot/index.js";
-export {
-  CopyButton,
-  type CopyButtonProps,
-} from "./components/primitives/copy-button/index.js";
-export { Timestamp, type TimestampProps } from "./components/primitives/timestamp/index.js";
-export { StatTile, type StatTileProps } from "./components/primitives/stat-tile/index.js";
-export {
-  DangerZone,
-  type DangerZoneProps,
-  type DangerZoneActionProps,
-} from "./components/primitives/danger-zone/index.js";
-export {
-  ConfirmDialog,
-  type ConfirmDialogProps,
-} from "./components/composites/confirm-dialog/index.js";
-export { CodeBlock, type CodeBlockProps } from "./components/composites/code-block/index.js";
+
 export {
   AgentToolRenderer,
   type AgentToolRendererProps,
@@ -450,44 +380,16 @@ export {
 
 // StatusIndicator composite — operational state, consumes status-* tokens (ADR-0007).
 // Plan: theo-ui-community-best-practices-alignment T4.1.
-export {
-  StatusIndicator,
-  type StatusIndicatorKind,
-  type StatusIndicatorProps,
-  type StatusIndicatorSize,
-} from "./components/composites/status-indicator/index.js";
 
 // MetricCard composite — dashboard metric tile with trend semantics + invertTrend (EC-17).
 // Plan: theo-ui-community-best-practices-alignment T4.2.
-export {
-  MetricCard,
-  type MetricCardDelta,
-  type MetricCardProps,
-  type MetricCardTrend,
-} from "./components/composites/metric-card/index.js";
 
 // Brief #3 deferred primitives (0.9.0-next.0)
-export { Alert, type AlertProps, type AlertIntent } from "./components/primitives/alert/index.js";
-export {
-  Pagination,
-  computePageRange,
-  type PaginationProps,
-} from "./components/primitives/pagination/index.js";
 
 // Brief #5 — 3 dashboard primitives + 2 pre-reqs (0.11.0-next.0)
 // Closes 3 TheoCloud Deep Review findings (§ 2.12 P2, § 2.2 + § 2.4 P1
 // Top-5 fix #2, CC-3 boilerplate dedup). DropdownMenu + ActionBar
 // added as explicit pre-reqs (Brief #5 assumed they existed).
-export { DropdownMenu } from "./components/primitives/dropdown-menu/index.js";
-export { ActionBar, type ActionBarProps } from "./components/primitives/action-bar/index.js";
-export { PinInput, type PinInputProps } from "./components/primitives/pin-input/index.js";
-export {
-  DataTable,
-  type DataTableColumn,
-  type DataTableProps,
-  type DataTableSort,
-} from "./components/composites/data-table/index.js";
-export { PageShell, type PageShellProps } from "./components/composites/page-shell/index.js";
 
 // Files & folder context atoms
 export { ProgressChecklist } from "./components/primitives/progress-checklist/index.js";
@@ -530,14 +432,8 @@ export {
   type LogLevel,
   type LogLine,
 } from "./components/primitives/build-log-stream/index.js";
-export { MetricsPanel, type Metric } from "./components/primitives/metrics-panel/index.js";
 
 // Auth atoms
-export {
-  SocialAuthRow,
-  type SocialProvider,
-} from "./components/primitives/social-auth-row/index.js";
-export { LoginSplit } from "./components/primitives/login-split/index.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // COMPOSITES — depend on one or more primitives above.
@@ -600,7 +496,17 @@ export {
 
 // Agent composites
 export { AgentTimeline } from "./components/composites/agent-timeline/index.js";
-export { TaskHeader } from "./components/composites/task-header/index.js";
+
+// Hooks — SDK ↔ UI streaming bridge (M5). `useAgentStream` consumes an SDK
+// `Run.stream()` / `subscribe()` async stream and drives `<AgentStream>`.
+export {
+  useAgentStream,
+  agentStreamReducer,
+  initialAgentStreamState,
+  type AgentStreamState,
+  type AgentStreamStatus,
+  type SdkStreamMessage,
+} from "./hooks/use-agent-stream/index.js";
 
 // Permission & approval composites
 export { PermissionModal } from "./components/composites/permission-modal/index.js";
@@ -609,34 +515,5 @@ export { PermissionModal } from "./components/composites/permission-modal/index.
 export { PreviewPanel } from "./components/composites/preview-panel/index.js";
 
 // PaaS composites
-export {
-  DeploymentRow,
-  type Deployment,
-  type DeploymentStatus,
-} from "./components/composites/deployment-row/index.js";
-export { ProjectCard, type Project } from "./components/composites/project-card/index.js";
-export {
-  EnvVarEditor,
-  type EnvScope,
-  type EnvVar,
-} from "./components/composites/env-var-editor/index.js";
-export {
-  PreviewEnvCard,
-  type PreviewEnv,
-  type PreviewService,
-} from "./components/composites/preview-env-card/index.js";
-export {
-  DomainConfig,
-  type Domain,
-  type DomainStatus,
-} from "./components/composites/domain-config/index.js";
-export {
-  RollbackUI,
-  type RollbackTarget,
-} from "./components/composites/rollback-ui/index.js";
 
 // Globals
-export {
-  CommandPalette,
-  type CommandItem,
-} from "./components/composites/command-palette/index.js";

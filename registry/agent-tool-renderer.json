@@ -3,13 +3,16 @@
   "name": "agent-tool-renderer",
   "type": "registry:ui",
   "title": "AgentToolRenderer",
-  "description": "Overridable tool-renderer registry for agent chat surfaces — dispatches a UIMessage tool part to a rich renderer (diff, terminal, code, created-files, data-table) by classification kind, falling back to the generic ToolCallPart for anything unmapped.",
-  "dependencies": ["lucide-react"],
+  "description": "Overridable tool-renderer registry for agent chat surfaces \u2014 dispatches a UIMessage tool part to a rich renderer (diff, terminal, code, created-files, data-table) by classification kind, falling back to the generic ToolCallPart for anything unmapped.",
+  "dependencies": [
+    "lucide-react",
+    "@usetheo/ui"
+  ],
   "registryDependencies": [
     "chat-types",
     "cn",
-    "code-block",
-    "data-table",
+    "https://usetheodev.github.io/usetheo-ui/r/code-block.json",
+    "https://usetheodev.github.io/usetheo-ui/r/data-table.json",
     "created-files-card",
     "diff-viewer",
     "terminal-panel",

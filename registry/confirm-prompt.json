@@ -5,8 +5,8 @@
   "title": "ConfirmPrompt",
   "description": "Binary yes/no ask-the-user card with an optional destructive variant exposed as an alertdialog.",
   "registryDependencies": [
-    "badge",
-    "button",
+    "https://usetheodev.github.io/usetheo-ui/r/badge.json",
+    "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "cn",
     "tailwind-preset"
   ],
@@ -16,5 +16,8 @@
       "type": "registry:block",
       "target": "components/blocks/confirm-prompt.tsx"
     }
+  ],
+  "dependencies": [
+    "@usetheo/ui"
   ]
 }

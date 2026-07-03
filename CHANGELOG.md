@@ -8,6 +8,85 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [1.0.0] - 2026-07-03
+
+### Added
+- `useAgentStream` hook — the UI ↔ Harness streaming bridge (M5). Consumes an SDK
+  `Run.stream()` / `subscribe()` async stream and drives the existing `<AgentStream>`:
+  accumulates live `text_delta` into a streaming item, finalizes complete assistant
+  turns into message items, and upserts `tool_call` lifecycle events (running →
+  success/failed) by `call_id`. The mapping core is a pure, exhaustively-tested
+  reducer (`agentStreamReducer`); the hook wires it into a React lifecycle with
+  AbortController cleanup on unmount. theo-ui keeps ZERO runtime coupling to
+  `@theokit/sdk` — the input is a structural `SdkStreamMessage` the SDK's real
+  output satisfies; `@theokit/sdk` is a devDependency (the real-LLM demo) only.
+  Reconnect/resume across a dropped connection is delegated to the SDK's
+  `subscribe()` (opaque `lastEventId`); the hook renders continuously across a
+  drop+resume (covered by a reconnect test). Validated end-to-end against a real
+  OpenRouter LLM via `scripts/m5-real-llm-demo.ts` (live text + tool events).
+- Component classification manifest (`registry/component-classification.json`)
+  tagging all 136 component directories as `ai` / `generic` / `cloud-ops`, plus a
+  `classify:check` quality gate (wired into the `quality:gates` CI chain) that fails
+  on any unclassified or drifted component. Current split: 82 `ai` stay in
+  `@theokit/ui`; 54 (47 `generic` + 7 `cloud-ops`) are earmarked for a separate
+  `@usetheo/ui` package. The AI boundary follows a scope decision covering both
+  coding-agent and chat/agent surfaces; every entry was verified against component
+  source, with 3 genuinely-dual components carried forward as `disputed`.
+  Groundwork for the planned AI-exclusive split of `@theokit/ui`; no public API
+  change yet.
+
+
+### Changed
+- **Repositioning (pivot M-E):** public narrative reframed to **AI-native**. Dropped the
+  co-equal "cloud dashboards" categorical wedge (the generic + cloud-ops layer moved to
+  `@usetheo/ui` in M-B/M-C); README HERO, `package.json` description, `CLAUDE.md` narrative
+  anchor, and `docs/` now position `@theokit/ui` for AI-agent surfaces (coding agents +
+  chat) and point generic/cloud consumers to `@usetheo/ui`. Component count corrected to
+  the gate-authoritative **99** (was a stale 153); moved components no longer appear as
+  `@theokit/ui` exports/examples (grep-proof: 0). Docs-only; no code change.
+- **BREAKING (pivot M-C):** `@theokit/ui` is now an **AI-exclusive** component library
+  and **depends on `@usetheo/ui`**. The 54 non-AI components (generic primitives +
+  cloud/PaaS composites) + the shared Violet Forge foundation moved to the new
+  `@usetheo/ui` package; `@theokit/ui` now exports only the 82 AI components. AI
+  components re-point their generic-primitive imports to `@usetheo/ui`. Migrate with the
+  codemod at `codemod/split-usetheo.mjs` — see `docs/migration/v1-usetheo-ui-split.md`.
+
+- The `--font-serif` token (and the `.font-serif` utility) now resolves to the
+  brand font (`var(--font-body)`, Geist) instead of Tailwind's default serif
+  fallback chain (`ui-serif, Georgia, Cambria, …`). Violet Forge has no separate
+  serif face, so serif-flagged text now renders in the brand font consistently
+  across platforms — and no longer references the Windows-only Cambria font.
+
+
+### Removed
+- **BREAKING:** 54 non-AI components removed from `@theokit/ui` (moved to `@usetheo/ui`):
+  the generic shadcn-like primitives (`Button`, `Card`, `Dialog`, `Input`, `Table`, …)
+  and cloud/PaaS composites (`DeploymentRow`, `DomainConfig`, `RollbackUI`,
+  `EnvVarEditor`, …). Import them from `@usetheo/ui` instead. Full list + codemod in
+  `docs/migration/v1-usetheo-ui-split.md`.
+
+
+
+### Fixed
+- Added a top-level `"types"` field (`./dist/index.d.ts`) so TypeScript
+  consumers on classic `moduleResolution` (`node`/`node10`) resolve the
+  package's types. Previously types were exposed only through the `exports`
+  map, leaving non-`bundler`/`node16` consumers without type information.
+
+## [0.19.0] - 2026-06-24
+
+### Added
 - `DeploymentStatus` gains an `idle` state (rendered with the `default` badge
   variant, `muted` color, label "Idle"), recognized by `DeploymentRow`,
   `PreviewEnvCard`, and `ProjectCard`. (#119)
@@ -25,6 +104,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the v3 preset and v4 build paths.
 
 ### Security
+- Bumped `valibot` from `^0.42.1` to `^1.4.1`, clearing the HIGH-severity ReDoS
+  advisory GHSA-vqpr-j7v3-hqw9 (`EMOJI_REGEX`, affected `>=0.31.0 <1.2.0`) that
+  the theme schema validator transitively carried. The theme schema API surface
+  (`v.pipe/object/string/optional/array/safeParse`) is unchanged across the major
+  bump — `src/themes/schema.test.ts` (9 cases) passes unmodified. (V3-2)
 
 ## [0.17.0] - 2026-06-22
 

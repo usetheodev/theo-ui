@@ -1,4 +1,13 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { DeploymentRow } from "@usetheo/ui";
+import { DomainConfig } from "@usetheo/ui";
+import { EnvVarEditor } from "@usetheo/ui";
+import { RollbackUI } from "@usetheo/ui";
+import { Button } from "@usetheo/ui";
+import { MetricsPanel } from "@usetheo/ui";
+import { Sheet } from "@usetheo/ui";
+import { Sidebar } from "@usetheo/ui";
+import { TopNav } from "@usetheo/ui";
 import {
   Bot,
   Check,
@@ -26,33 +35,24 @@ import {
 } from "../components/composites/agent-editor/agent-editor.js";
 import { AgentStream } from "../components/composites/agent-stream/agent-stream.js";
 import { ChatMessage } from "../components/composites/chat-message/chat-message.js";
-import { DeploymentRow } from "../components/composites/deployment-row/deployment-row.js";
-import { DomainConfig } from "../components/composites/domain-config/domain-config.js";
-import { EnvVarEditor } from "../components/composites/env-var-editor/env-var-editor.js";
-import { RollbackUI } from "../components/composites/rollback-ui/rollback-ui.js";
 import { RuleEditor } from "../components/composites/rule-editor/rule-editor.js";
 import { SkillEditor } from "../components/composites/skill-editor/skill-editor.js";
 import { AgentProfile } from "../components/primitives/agent-profile/agent-profile.js";
 import { AuditLogEntry } from "../components/primitives/audit-log-entry/audit-log-entry.js";
 import { BuildLogStream } from "../components/primitives/build-log-stream/build-log-stream.js";
-import { Button } from "../components/primitives/button/button.js";
 import { ChatThread } from "../components/primitives/chat-thread/chat-thread.js";
 import { ContextWindowBar } from "../components/primitives/context-window-bar/context-window-bar.js";
 import { DiffViewer } from "../components/primitives/diff-viewer/diff-viewer.js";
 import { IntentSelector } from "../components/primitives/intent-selector/intent-selector.js";
 import { LaneBoard } from "../components/primitives/lane-board/lane-board.js";
-import { MetricsPanel } from "../components/primitives/metrics-panel/metrics-panel.js";
 import { ModelSelector } from "../components/primitives/model-selector/model-selector.js";
 import { ProjectSwitcher } from "../components/primitives/project-switcher/project-switcher.js";
 import { RuleCard } from "../components/primitives/rule-card/rule-card.js";
 import { RunStats } from "../components/primitives/run-stats/run-stats.js";
 import { SessionListItem } from "../components/primitives/session-list-item/session-list-item.js";
-import { Sheet } from "../components/primitives/sheet/sheet.js";
-import { Sidebar } from "../components/primitives/sidebar/sidebar.js";
 import { type Skill, SkillCard } from "../components/primitives/skill-card/skill-card.js";
 import { SystemPromptEditor } from "../components/primitives/system-prompt-editor/system-prompt-editor.js";
 import { TokenUsageChart } from "../components/primitives/token-usage-chart/token-usage-chart.js";
-import { TopNav } from "../components/primitives/topnav/topnav.js";
 import { cn } from "../lib/cn.js";
 import { useTheme } from "../themes/theme-provider.js";
 import { MODE_LABEL, type Mode } from "../types/mode.js";
