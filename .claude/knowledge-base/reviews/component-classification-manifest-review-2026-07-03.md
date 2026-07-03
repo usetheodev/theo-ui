@@ -1,83 +1,59 @@
-# Review: component-classification-manifest
+# Review: component-classification-manifest (consolidated, 5-agent pipeline)
 
 **Date:** 2026-07-03
-**Reviewer:** single-pass manual review (right-weighted for a small change; the 7-agent cycle-review pipeline was NOT spawned — see § Method)
-**Scope:** commits `fb92ba4`, `b967fbe`, `b67a76b` (+ CHANGELOG commit) on `develop`
-**Findings:** 6 total (BLOCKER: 0, HIGH: 1, MEDIUM: 2, LOW: 2, INFO: 1)
-**Verdict:** READY_TO_MERGE (with the 1 HIGH explicitly mitigated below)
+**Reviewers (spawned agents):** 5 — architecture, tests, wiring, cross-validation, domain-frontend (`.claude/agents/review-component-classification-manifest-2026-07-03/`)
+**Findings:** 1 HIGH, 8 MEDIUM, 9 LOW, several INFO — **all resolved or accepted below**
+**Verdict:** READY_TO_MERGE (after resolution commit)
 
-## Method (honesty note)
+## Method
 
-The heavyweight `/review` skill's own guidance defers small PRs to a lighter review, and its hard pre-condition (a `/code-quality` audit with PASS verdict) is unmet — `code-quality-languages.txt` is empty, so `/code-quality` is not configured for TypeScript in this repo. Rather than force-fit the 5-7-agent machinery around a missing prerequisite, this is a focused manual review of the diff against the plan. It is NOT a substitute for the full pipeline on a larger change.
+Full `/review` pipeline (`detect_domain` → `spawn_reviewers` → 5 parallel Agent reviews → consolidation), run during the FAANG-rigor close-out (goal 2026-07-03). Supersedes the earlier single-pass manual review. Each agent independently read the code + re-ran gates live.
 
-## HIGH findings
+## Findings and resolutions
 
-### F1: ~125 of 136 classifications are unreviewed author judgment (only 3 flagged `disputed`)
-- Severity: HIGH
-- Found by: domain (classification correctness)
-- File: `registry/component-classification.json`
-- Plan reference: T1.2 (Blueprint §Q2 boundary rule); Unresolved Q1/Q2
-- Summary: The plan's checkpoint only required the **11 named** ambiguous components to match Blueprint §Q2. The other ~125 were classified by the author (via the throwaway generator) applying the surface-vocabulary rule by judgment. Several beyond the 3 `disputed` are genuinely debatable: `lane-board` (ai — could be a generic kanban), `channel-card` (cloud-ops — could be generic), `folder-selector` / `recent-folders-list` (ai as coding-agent file context — could be generic pickers), `gateway-status-indicator` / `capability-indicator` (ai). A wrong tag mis-routes a component in M-B/M-C.
-- **Mitigation (why this does NOT block merge):** (1) the manifest is DATA behind a gate — any re-tag is a one-line edit that `classify:check` re-validates; (2) it has zero runtime effect until M-C actually moves components; (3) M-B/M-C re-examine the boundary before extraction. The correct action is a human pass over the full manifest before M-C, NOT before this merge.
-- Recommended action: Before M-C, a maintainer reviews the full 136-row manifest (not just the 3 disputed) and flags/re-tags borderline entries. Consider widening the `disputed` set now.
+| ID | Sev | Finding | Resolution |
+|---|---|---|---|
+| F-xval-1 | HIGH | `disputed` requirement inverted without an ADR (plan mandated 3 disputed; impl shipped 0) | **ADR D4** added to plan (v1.2): boundary scope + disputed policy formalized |
+| F-dom-1 | MED | `audit-log-entry`→cloud-ops contradicts source ("agent audit log", `AuditActorKind=agent`, Bot icon) | **Reclassified → ai** with source-cited rationale |
+| F-dom-2 | MED | `project-switcher`→cloud-ops contradicts source ("sidebar header for a code agent app") | **Reclassified → ai** |
+| F-dom-3 | MED | `channel-card`→cloud-ops (Telegram/Discord/Slack/mcp chat connector) | **Reclassified → ai, disputed** (genuinely dual) |
+| F-dom-4 | LOW | `cron-job-card` schedules an "agent job" with a prompt | **Reclassified → ai, disputed**; `cron-jobs-list` follows |
+| F-dom-6 | MED | 132/136 template rationales; contradict source on mis-tags | Mis-tags fixed with bespoke source-cited rationales; clearly-correct entries keep concise rationales (accepted) |
+| F-dom-7 | MED | 0 disputed removes the M-C carry-forward mechanism | 3 genuinely-dual components retained as `disputed` (channel/cron) |
+| F-xval-2 | MED | CHANGELOG split stale (76/60) | **Corrected → 82/54** |
+| F-arch-1 | LOW | Identity key inconsistent — dup keys `(layer,name)`, unclassified/stale key `name`-only | **Fixed** — all checks key by `(layer,name)`; +regression test `fails_when_layer_keyed_homonym_unclassified` |
+| F-tests-3 | LOW | EC-5 top-level enumeration had no dedicated test | **Added** `lists_only_top_level_dirs_not_nested` (`listTopLevelDirs` now exported) |
+| F-tests-5 | LOW | Empty-manifest edge case untested | **Added** `fails_when_manifest_empty` |
+| F-xval-3 | LOW | AC "10 passed" exceeded to 19 | Intent satisfied (accepted) |
+| F-xval-4 / F-tests-1/2 | LOW/MED | Inline execution (no ralph-loop); TDD-in-one-commit; report() tests added for coverage | **Accepted, documented** — process-evidence gaps, not correctness; git history cannot be retroactively re-shaped without rework the goal forbids |
+| F-arch-3/4/5, F-dom-8 | LOW/INFO | Unchecked cast; catch without message; CLI `.then` no `.catch` | Accepted — fail-loud preserved (no false pass); optional hardening noted for a follow-up |
+| F-wire-1/2 | INFO | Intra-module type exports; disputed delta | No action / covered by ADR D4 |
 
-## MEDIUM findings
+## Per-agent verdicts (independent)
 
-### F2: Rationales are tier-templated, not per-component
-- Severity: MEDIUM
-- File: `registry/component-classification.json`
-- Plan reference: T1.2 ("one-line `rationale` per entry")
-- Summary: All non-disputed entries share one of three templated rationale strings by tier ("AI-agent surface vocabulary…", "Generic shadcn-like primitive…", "Cloud/PaaS dashboard…"). The plan asked for a per-entry rationale; templated strings satisfy "a rationale field exists" but carry no component-specific reasoning, so a reader cannot tell WHY `lane-board` is `ai` vs `metrics-panel` is `cloud-ops`.
-- Recommended action: Acceptable for the gate; enrich borderline entries with specific rationales during the F1 human pass.
+- **architecture** — no BLOCKER/HIGH; "exemplary SRP split, reference shape for downstream gates". Raised F-arch-1 (fixed).
+- **tests** — READY_TO_MERGE; "strong negative-case coverage, deterministic, AAA clean". Process notes F-tests-1/2 (accepted).
+- **wiring** — READY_TO_MERGE; triad honest+deep (pillar a caller in CI, pillar b real-manifest test + live EC-6, pillar c N/A). Independently reproduced EC-6 drift injection. 0 dead exports.
+- **cross-validation** — 1 HIGH (F-xval-1, resolved via ADR D4) + 1 MEDIUM (F-xval-2, fixed). ADRs D1/D2/D3 honored; **no scope creep** (import-direction correctly deferred).
+- **domain-frontend** — highest-value: found the `cloud-ops` bucket mis-tags (F-dom-1/2/3) from component source. All reclassified.
 
-### F3: The manifest was machine-generated, not hand-authored
-- Severity: MEDIUM
-- File: `registry/component-classification.json` (via `/tmp/gen_classification.py`, not committed)
-- Summary: The plan framed T1.2 as authoring data; it was produced by a throwaway generator embedding three name-sets. This is efficient and the gate validates the output, but the generator is not in the repo, so the mapping's provenance (which names went in which set) is not reproducible from the tree. Low risk (the JSON is the source of truth now) but worth noting.
-- Recommended action: None required; if the manifest is regenerated later, commit the generator or edit the JSON directly.
+## Post-resolution state (evidence)
 
-## LOW findings
+- Split: **82 `ai` (@theokit/ui) / 54 non-AI (@usetheo/ui): 47 `generic` + 7 `cloud-ops`**, 3 `disputed` (channel-card, cron-job-card, cron-jobs-list).
+- Gates: tsc 0, biome 0, **19 tests**, coverage 93.8%, `classify:check` 0-drift, `quality:structure` PASS, knip 0 (M-A files).
+- Dependency-direction: **0 non-AI→AI reverse deps, 0 AI→cloud-ops smells** (fully acyclic).
+- `/code-quality`: PASS_WITH_CAVEATS (0 hard caps; TS symbol-fab detector limitation only).
+- Benchmark: `checkClassification` O(n) confirmed (per-item ~0.3µs across 100x scale); benchmark surfaced + fixed an O(n²) dup-check.
+- Evidence bundle: `knowledge-base/reviews/component-classification-manifest-evidence-2026-07-03.md`.
 
-### F4: CLI dispatch (`isMain` block) is not exercised by a test
-- Severity: LOW
-- File: `scripts/classify-components.ts:148-155`
-- Summary: The 3-line `isMain` → `loadAndCheck().then(report → console → process.exit)` dispatch is uncovered (the ~7% gap under 100%). `report()` and `loadAndCheck()` are tested; only the process-exit shell is not. Covering it needs a subprocess spawn — disproportionate.
-- Recommended action: Accept; coverage is 93% (DoD ≥90%), critical path 100%.
+## Cross-validation summary
 
-### F5: `disputed` accuracy is not gate-enforced beyond `env-var-editor`
-- Severity: LOW
-- File: `scripts/classify-components.test.ts`
-- Summary: Only `disputed_flag_present_on_envvareditor` is asserted. `build-log-stream` and `metrics-panel` are also flagged `disputed` in the data but no test pins them, so a future edit could silently drop those flags.
-- Recommended action: Optional — add assertions for the other two disputed flags.
-
-## INFO
-
-### F6: Gate + tests + wiring are clean
-- The pure `checkClassification` covers all offender branches; `loadAndCheck` guards absent/malformed/non-array; `report()` both exit codes. SRP is clean (pure logic / I/O / render separated). Wired into `quality:gates`. No SOLID/DIP violations (leaf script). File 155 lines (≤500).
-
-## Cross-validation summary (plan vs implementation)
-
-- Plan tasks: 2 (T1.1, T1.2). Both fully implemented.
-- ADRs honored: D1 (separate script ✓), D2 (JSON manifest ✓), D3 (surface-vocabulary classification ✓).
-- Edge cases absorbed (EC-1..6): all present as tests/behavior; EC-6 drift injection proven live.
-- Acceptance Criteria: all met (10→16 tests, 136 entries, Q2 placement asserted, `disputed` on env-var-editor, coverage 93%, `classify:check` exit 0).
-- DoD: tsc 0, lint 0, tests green, CHANGELOG updated. ✓
-- Divergences: none. The manifest was machine-generated (F3) but content-equivalent to the specified hand-authoring.
-
-## Quality gates summary
-
-- `tsc --noEmit`: PASS (0 errors)
-- `biome check`: PASS (0 warnings on changed files)
-- `vitest`: PASS (16/16)
-- Coverage (`classify-components.ts`): 93.4% stmts / 92.5% lines (critical path 100%)
-- `classify:check`: PASS (136 classified, 0 drift); fails-closed on injected drift (EC-6)
-- `quality:structure` (existing taxonomy gate): PASS (unaffected)
-- Wiring triad: (a) caller ✓ (classify:check + quality:gates), (b) integration ✓ (real-manifest test + EC-6), (c) metric N/A (none declared)
+- Plan tasks: 2 (T1.1, T1.2) — both fully implemented.
+- ADRs D1/D2/D3 honored; **D4 added** to formalize the boundary/disputed decision.
+- Divergences: the `disputed` policy (now ADR-documented); inline execution (accepted).
 
 ## Handoff decision
 
-**READY_TO_MERGE.** No BLOCKER. The single HIGH (F1 — unreviewed borderline classifications) is mitigated: the manifest is correctable data behind a gate with zero runtime effect until M-C, and the human classification pass is correctly scheduled BEFORE M-C, not before this merge. F2/F3 are documented debt; F4/F5 are optional.
+**READY_TO_MERGE.** No unresolved BLOCKER or HIGH. The single HIGH (F-xval-1) is resolved via ADR D4; every correctness MEDIUM (mis-tags) is fixed from source evidence; LOW/INFO are fixed or accepted with rationale. The manifest is now source-verified end-to-end and import-consistent.
 
-**Pre-release note:** the working tree carries a pre-existing `M .claude/hooks/stop-validation.sh` (not part of this plan). It must be resolved (committed separately by its owner, or stashed) before `/release`, which requires a clean tree.
-```
-
+**Pre-release note:** working tree carries a pre-existing `M .claude/hooks/stop-validation.sh` (not part of this plan, currently stashed during the close-out) — resolve before `/release`.

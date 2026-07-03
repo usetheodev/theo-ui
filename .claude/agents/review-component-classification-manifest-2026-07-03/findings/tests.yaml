@@ -1,0 +1,173 @@
+agent: review-component-classification-manifest-tests
+review_target: main..HEAD for plan component-classification-manifest
+plan: .claude/knowledge-base/plans/component-classification-manifest-plan.md
+verdict: READY_TO_MERGE  # solid suite; no BLOCKER/HIGH. 2 MEDIUM are TDD-process-evidence gaps, not correctness gaps.
+
+# NOTE: the role template (tests.md) references a memory-store/pgvector integration
+# suite — that is a stale generic template. The actual unit under review is a
+# build-tooling script (scripts/classify-components.ts), a pure-fn + thin-I/O gate.
+# Pyramid/pgvector/DB-reset sections are N/A and evaluated accordingly.
+
+test_pyramid:
+  unit_added: 13          # checkClassification (8) + report (2) + loadAndCheck guards (2 temp-dir) + 1 non-real
+  integration_added: 3    # loadAndCheck real-manifest + manifest-data assertions (read real registry/*.json)
+  e2e_added: 0
+  total: 16
+  balance: healthy        # pure-fn heavy, thin real-tree anchor. Not inverted. Correct shape for a filesystem gate.
+
+declared_tdd_coverage:
+  t1_1_red_tests_declared: 10
+  t1_1_red_tests_present: 10   # all present, named verbatim per plan lines 203-212
+  t1_2_red_tests_declared: 3   # manifest_has_136_entries, placement_matches_blueprint_q2, disputed_flag_present_on_envvareditor
+  t1_2_red_tests_present: 2    # first two present; the 3rd (disputed_flag) REPLACED by its inverse — see F-tests-4
+
+edge_cases_from_plan:
+  covered:
+    - EC-1 absent manifest file (fails_clear_when_manifest_absent)
+    - EC-2 duplicate (layer,name) entry (fails_when_duplicate_entry)
+    - EC-3 declared-layer vs actual-location mismatch (fails_when_declared_layer_mismatches_location)
+    - EC-4 manifest not an array (fails_clear_when_manifest_not_array)
+    - malformed JSON (fails_clear_when_malformed_json)
+    - invalid tier (fails_when_tier_invalid)
+    - target inconsistent with tier (fails_when_target_inconsistent_with_tier)
+    - unclassified on-disk dir (fails_when_ondisk_dir_missing_from_manifest)
+    - stale entry -> nonexistent dir (fails_when_manifest_entry_references_nonexistent_dir)
+  missing_or_weak:
+    - "EC-5 top-level-only enumeration — no DEDICATED test (F-tests-3); real nested dir slide/plugins on disk"
+    - "empty manifest [] (plan T1.1 Deep Dives) — not directly asserted (F-tests-5)"
+
+findings:
+  - id: F-tests-1
+    severity: MEDIUM
+    file: scripts/classify-components.test.ts
+    line: 1
+    plan_ref: "Unbreakable Rule 5 / testing.md §3 (RED before GREEN); plan T1.1 #### TDD"
+    summary: >
+      TDD RED-first is unverifiable — the entire T1.1 test file AND implementation
+      landed in one atomic commit (fb92ba4 "feat(quality): add ... drift gate"), so
+      there is no RED-failing-first evidence in git history.
+    evidence: |
+      git log --diff-filter=A main..HEAD -- scripts/classify-components.test.ts
+        -> fb92ba4  (same commit adds classify-components.ts + .test.ts + package.json)
+      git show --stat fb92ba4 -> both files added together (146 insertions), commit type "feat" not "test".
+      Per tests.md §2 the RED test must be demonstrably committed before the implementation.
+    recommended_action: >
+      Process finding, not correctness. Accept for this slice (tests DO exercise behavior and
+      pass); going forward, land the failing RED test in its own commit before the GREEN impl
+      so the RED phase is auditable.
+
+  - id: F-tests-2
+    severity: MEDIUM
+    file: scripts/classify-components.test.ts
+    line: 151
+    plan_ref: "testing.md §1 (coverage protects behavior, is not the goal); plan T1.1 Acceptance Criteria (coverage ≥ 90%)"
+    summary: >
+      report() tests and passes_against_the_real_authored_manifest were added test-AFTER,
+      explicitly to hit a coverage number ("lift classify gate coverage to 93% via report()
+      extraction", b67a76b) — coverage-chasing rather than behavior-first TDD.
+    evidence: |
+      git show --stat b67a76b -> commit "test(quality): lift classify gate coverage to 93% via report() extraction"
+      Added AFTER the two feat commits (fb92ba4 impl, b967fbe manifest):
+        + describe("report (exit code + message)") + 2 it()
+        + it("passes_against_the_real_authored_manifest")
+      report() was extracted from the CLI shell and its tests written post-hoc to lift the %.
+    recommended_action: >
+      Low remediation cost — the report() tests themselves are good (both code paths asserted).
+      Note the pattern: extract-then-test-for-coverage is a smell. No change required for merge;
+      flag so it is not repeated as a habit.
+
+  - id: F-tests-3
+    severity: LOW
+    file: scripts/classify-components.ts
+    line: 107
+    plan_ref: "plan T1.1 EC-5 (top-level enumeration, lines 11/164/166); classify-components.ts header lines 11-14"
+    summary: >
+      EC-5 (top-level-only directory enumeration — the reason slide/plugins and
+      whiteboard/themes are not phantom components) has NO dedicated test. listTopLevelDirs
+      is only exercised incidentally by passes_against_the_real_authored_manifest, which
+      couples the guarantee to current real-tree state.
+    evidence: |
+      ls -d src/components/primitives/slide/plugins -> exists (real nested dir on disk).
+      grep for a temp-tree test asserting nested subdirs are excluded -> none.
+      checkClassification takes onDisk pre-computed, so the enumeration logic is untested in isolation.
+      Backstop: a recursion regression would flip passes_against_the_real_authored_manifest
+      (count 136 + ok) to red — but that is incidental, not an intentional EC-5 assertion.
+    recommended_action: >
+      Add a focused test: mkdtemp a primitives root containing foo/ and foo/nested/, assert
+      listTopLevelDirs (or loadAndCheck over that root) returns ["foo"] only — locks EC-5 directly.
+
+  - id: F-tests-4
+    severity: LOW
+    file: scripts/classify-components.test.ts
+    line: 213
+    plan_ref: "plan T1.2 #### TDD line 279 (disputed_flag_present_on_envvareditor); Objective line 84; Unresolved Q1"
+    summary: >
+      The plan-declared RED test disputed_flag_present_on_envvareditor() (assert
+      EnvVarEditor.disputed === true) does NOT exist. It was replaced by its logical inverse
+      boundary_fully_resolved_no_disputed_entries() (assert 0 disputed). Honest and
+      evidence-backed (2026-07-03 scope decision resolved all disputes) but plan v1.1 was
+      never updated, so the test contradicts the plan's stated TDD contract.
+    evidence: |
+      jq '[.[]|select(.disputed)]|length' registry/component-classification.json -> 0
+      env-var-editor entry has NO disputed field (tier cloud-ops, @usetheo/ui).
+      Plan Objective still reads "EnvVarEditor explicitly flagged disputed"; TDD block still
+      lists disputed_flag_present_on_envvareditor as a RED test.
+    recommended_action: >
+      Cross-validation reviewer owns the plan-vs-impl sync. For tests: the inverted test is
+      correct and well-commented; update plan v1.1 (or add a supersede note) so the declared
+      TDD matches the shipped scope decision.
+
+  - id: F-tests-5
+    severity: LOW
+    file: scripts/classify-components.test.ts
+    line: 51
+    plan_ref: "plan T1.1 Deep Dives (edge cases: 'empty manifest [] (fail — all dirs unclassified)')"
+    summary: >
+      The empty-manifest [] edge case listed in the plan is not directly asserted. Nearest is
+      fails_when_ondisk_dir_missing_from_manifest which uses [validEntry], not [].
+    evidence: |
+      grep 'checkClassification(\[\]' scripts/classify-components.test.ts -> no match.
+      Same failure class (unclassified) but the boundary input [] is uncovered.
+    recommended_action: >
+      Cheap add: it("fails_when_manifest_empty", () => expect(checkClassification([], onDisk).ok).toBe(false))
+      and assert offenders name the on-disk dirs.
+
+  - id: F-tests-6
+    severity: LOW
+    file: scripts/classify-components.test.ts
+    line: 137
+    plan_ref: "testing.md §4.1 (negative case asserts the SPECIFIC typed error and message)"
+    summary: >
+      Negative-case assertions verify a keyword substring only (o.includes("not found"),
+      "malformed", "duplicate", "array") rather than the full typed message. For absent-file
+      and duplicate the offending path/key is present in the real message but not asserted,
+      so a regression that dropped the path/key from the message would still pass.
+    evidence: |
+      loadAndCheck absent-file message is `manifest not found at ${path}` but test only asserts includes("not found").
+      duplicate message is `duplicate entries: primitive/button` but test only asserts includes("duplicate").
+      Contrast fails_when_ondisk_dir_missing_from_manifest which DOES name the dir ("tool-call") — the stronger pattern.
+    recommended_action: >
+      Tighten the two guard tests to also assert the offending path/key is echoed
+      (includes(manifestPath) / includes("button")) so the "fail clear" contract is locked to the message content.
+
+  - id: F-tests-7
+    severity: INFO
+    file: scripts/classify-components.ts
+    line: 108
+    plan_ref: "listTopLevelDirs existsSync-false branch"
+    summary: >
+      The existsSync-false branch of listTopLevelDirs (returns [] when a component root is
+      absent) is never exercised — both roots always exist in the real tree and no temp test
+      points at a missing root. Explains part of the 93.4% (not 100%) statement coverage.
+    evidence: |
+      Coverage 93.4% stmts / 92.5% lines (evidence bundle §1). Defensive branch, low risk.
+    recommended_action: "Optional: covered for free if the F-tests-3 temp-tree test also points at a non-existent root."
+
+positive_notes:
+  - "All 10 declared T1.1 RED tests present and named verbatim per plan (lines 203-212)."
+  - "Strong negative-case coverage per testing.md §4.1: absent / malformed / non-array / duplicate / layer-mismatch / invalid-tier / target-mismatch each isolated to a single offender and asserting a typed keyword — not merely 'it fails'."
+  - "Clean testability design: pure checkClassification separated from I/O loadAndCheck; report() (exit-code render) both branches asserted."
+  - "passes_against_the_real_authored_manifest is a genuine end-to-end anchor over the real 136-entry manifest + real component roots (classifiedCount === 136, ok === true)."
+  - "AAA structure clear; behavior-named snake_case tests; no 'and' in names; zero .only / .skip / xit / commented-out tests (Unbreakable Rule 7 clean)."
+  - "Suite is deterministic and fast: 16/16 green, 8ms test time; temp-dir I/O tests clean up in afterAll."
+  - "Benchmark-driven O(n^2)->O(n) duplicate-detection fix (0b6c5c2) is backed by the Set-based path the duplicate test guards."
