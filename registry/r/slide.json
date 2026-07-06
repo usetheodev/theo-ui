@@ -20,7 +20,7 @@
     "zod"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

@@ -11,8 +11,8 @@
   "registryDependencies": [
     "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "https://usetheodev.github.io/usetheo-ui/r/dialog.json",
-    "https://usetheodev.github.io/theo-ui/r/permission-types.json",
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
+    "https://usetheodev.github.io/theokit-ui/r/permission-types.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

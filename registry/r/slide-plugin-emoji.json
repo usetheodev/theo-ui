@@ -8,8 +8,8 @@
     "hast"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theo-ui/r/slide.json",
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
+    "https://usetheodev.github.io/theokit-ui/r/slide.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

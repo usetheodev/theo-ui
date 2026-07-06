@@ -8,11 +8,11 @@
     "https://usetheodev.github.io/usetheo-ui/r/badge.json",
     "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "https://usetheodev.github.io/usetheo-ui/r/checkbox.json",
-    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theokit-ui/r/cn.json",
     "https://usetheodev.github.io/usetheo-ui/r/input.json",
     "https://usetheodev.github.io/usetheo-ui/r/label.json",
-    "https://usetheodev.github.io/theo-ui/r/prompt.json",
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
+    "https://usetheodev.github.io/theokit-ui/r/prompt.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {
