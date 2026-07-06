@@ -60,7 +60,7 @@ The skill respects file safety:
 npx skills add usetheodev/theo-ui
 ```
 
-That's it. The [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI auto-detects this skill at `skills/theo-ui/` inside the [`usetheodev/theo-ui`](https://github.com/usetheodev/theo-ui) repo and installs it into your AI assistant.
+That's it. The [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI auto-detects this skill at `skills/theo-ui/` inside the [`usetheodev/theo-ui`](https://github.com/usetheodev/theokit-ui) repo and installs it into your AI assistant.
 
 #### Choose your AI assistant explicitly
 
@@ -108,7 +108,7 @@ If you don't want the CLI, copy the files directly:
 
 ```bash
 # Claude Code (user-level)
-git clone https://github.com/usetheodev/theo-ui.git /tmp/theo-ui
+git clone https://github.com/usetheodev/theokit-ui.git /tmp/theo-ui
 cp -r /tmp/theo-ui/skills/theo-ui ~/.claude/skills/theo-ui
 
 # Cursor

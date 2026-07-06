@@ -19,10 +19,10 @@
     "violet-forge"
   ],
   "author": "Theo",
-  "homepage": "https://github.com/usetheodev/theo-ui/tree/main/skills/theo-ui",
+  "homepage": "https://github.com/usetheodev/theokit-ui/tree/main/skills/theo-ui",
   "repository": {
     "type": "git",
-    "url": "https://github.com/usetheodev/theo-ui.git",
+    "url": "https://github.com/usetheodev/theokit-ui.git",
     "directory": "skills/theo-ui"
   },
   "files": [

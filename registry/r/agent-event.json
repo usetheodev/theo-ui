@@ -8,10 +8,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theo-ui/r/agent-types.json",
-    "https://usetheodev.github.io/theo-ui/r/cn.json",
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
-    "https://usetheodev.github.io/theo-ui/r/types.json"
+    "https://usetheodev.github.io/theokit-ui/r/agent-types.json",
+    "https://usetheodev.github.io/theokit-ui/r/cn.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theokit-ui/r/types.json"
   ],
   "files": [
     {
