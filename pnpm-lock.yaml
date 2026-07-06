@@ -86,10 +86,10 @@ importers:
         version: 14.6.1(@testing-library/dom@10.4.1)
       '@theokit/plugin-canvas':
         specifier: 0.3.1
-        version: 0.3.1(@theokit/sdk@file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(@theokit/ui@0.14.4(@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(hast-util-from-html@2.0.3)(hast-util-sanitize@5.0.2)(hast-util-to-jsx-runtime@2.3.6)(katex@0.16.47)(mdast-util-from-markdown@2.0.3)(mdast-util-gfm@3.1.0)(mdast-util-math@3.0.0)(mdast-util-to-hast@13.2.1)(mermaid@11.15.0)(micromark-extension-gfm@3.0.0)(micromark-extension-math@3.1.0)(perfect-freehand@1.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(roughjs@4.6.6)(shiki@1.29.2)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)(unist-util-visit-parents@6.0.2)(unist-util-visit@5.1.0)(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))(yaml@2.9.0))(mermaid@11.15.0)(react@18.3.1)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))
+        version: 0.3.1(@theokit/sdk@2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(@theokit/ui@0.14.4(@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(hast-util-from-html@2.0.3)(hast-util-sanitize@5.0.2)(hast-util-to-jsx-runtime@2.3.6)(katex@0.16.47)(mdast-util-from-markdown@2.0.3)(mdast-util-gfm@3.1.0)(mdast-util-math@3.0.0)(mdast-util-to-hast@13.2.1)(mermaid@11.15.0)(micromark-extension-gfm@3.0.0)(micromark-extension-math@3.1.0)(perfect-freehand@1.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(roughjs@4.6.6)(shiki@1.29.2)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)(unist-util-visit-parents@6.0.2)(unist-util-visit@5.1.0)(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))(yaml@2.9.0))(mermaid@11.15.0)(react@18.3.1)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))
       '@theokit/sdk':
-        specifier: file:../theokit-sdk/packages/sdk
-        version: file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
+        specifier: ^2.18.1
+        version: 2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
       '@types/culori':
         specifier: ^4.0.1
         version: 4.0.1
@@ -2771,7 +2771,6 @@ packages:
 
   '@theokit/agents@0.26.0':
     resolution: {integrity: sha512-XqyguRH25GUCWQqOQ09krr8S2b9CIM+wA01LsQ7f1fVtcwxBywpHI9zR2cNIlm27YElGVyxq9E5ehHtzXlfjHw==}
-    version: 0.26.0
     engines: {node: '>=22.12.0'}
     peerDependencies:
       '@theokit/http': '>=0.1.0-alpha.0'
@@ -2802,7 +2801,6 @@ packages:
 
   '@theokit/plugin-canvas@0.3.1':
     resolution: {integrity: sha512-4La5o9OMU+o1b+bpb7Y7uKG890Ax9UONI+FG1QdM+8NchNsRo0VtGWMb3AKGSnvdgwcoVhiF+x6/rkqXGt+/VA==}
-    version: 0.3.1
     peerDependencies:
       '@theokit/sdk': '>=2.18.0'
       '@theokit/ui': ^0.14.2
@@ -2815,8 +2813,8 @@ packages:
       react:
         optional: true
 
-  '@theokit/sdk@file:../theokit-sdk/packages/sdk':
-    resolution: {directory: ../theokit-sdk/packages/sdk, type: directory}
+  '@theokit/sdk@2.18.1':
+    resolution: {integrity: sha512-PXv0QWhdBWgtqiA1jnGCkQ+tCOCac2UWqe9nDPyBhZGo2Z9nNkFVR9yIlEEv1YoNwaI73M2URcp+MJRDA8bqvQ==}
     engines: {node: '>=22.12.0'}
     hasBin: true
     peerDependencies:
@@ -7913,29 +7911,29 @@ snapshots:
     dependencies:
       '@testing-library/dom': 10.4.1
 
-  '@theokit/agents@0.26.0(@theokit/http@0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))(zod@4.4.3))(@theokit/sdk@file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(reflect-metadata@0.2.2)(zod@4.4.3)':
+  '@theokit/agents@0.26.0(@theokit/http@0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))(zod@4.4.3))(@theokit/sdk@2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(reflect-metadata@0.2.2)(zod@4.4.3)':
     dependencies:
-      '@theokit/http': 0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))(zod@4.4.3)
-      '@theokit/sdk': file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
+      '@theokit/http': 0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))(zod@4.4.3)
+      '@theokit/sdk': 2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
       reflect-metadata: 0.2.2
       zod: 4.4.3
 
-  '@theokit/http@0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))(zod@4.4.3)':
+  '@theokit/http@0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))(zod@4.4.3)':
     dependencies:
       reflect-metadata: 0.2.2
-      theokit: 0.11.7(f553c2daee476560e251e938e648fd8c)
+      theokit: 0.11.7(32b6de36fb11bca3b9461a954405db00)
       zod: 4.4.3
     optionalDependencies:
       '@swc/core': 1.15.33
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@theokit/plugin-canvas@0.3.1(@theokit/sdk@file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(@theokit/ui@0.14.4(@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(hast-util-from-html@2.0.3)(hast-util-sanitize@5.0.2)(hast-util-to-jsx-runtime@2.3.6)(katex@0.16.47)(mdast-util-from-markdown@2.0.3)(mdast-util-gfm@3.1.0)(mdast-util-math@3.0.0)(mdast-util-to-hast@13.2.1)(mermaid@11.15.0)(micromark-extension-gfm@3.0.0)(micromark-extension-math@3.1.0)(perfect-freehand@1.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(roughjs@4.6.6)(shiki@1.29.2)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)(unist-util-visit-parents@6.0.2)(unist-util-visit@5.1.0)(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))(yaml@2.9.0))(mermaid@11.15.0)(react@18.3.1)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))':
+  '@theokit/plugin-canvas@0.3.1(@theokit/sdk@2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(@theokit/ui@0.14.4(@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(hast-util-from-html@2.0.3)(hast-util-sanitize@5.0.2)(hast-util-to-jsx-runtime@2.3.6)(katex@0.16.47)(mdast-util-from-markdown@2.0.3)(mdast-util-gfm@3.1.0)(mdast-util-math@3.0.0)(mdast-util-to-hast@13.2.1)(mermaid@11.15.0)(micromark-extension-gfm@3.0.0)(micromark-extension-math@3.1.0)(perfect-freehand@1.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(roughjs@4.6.6)(shiki@1.29.2)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)(unist-util-visit-parents@6.0.2)(unist-util-visit@5.1.0)(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))(yaml@2.9.0))(mermaid@11.15.0)(react@18.3.1)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))':
     dependencies:
-      '@theokit/sdk': file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
+      '@theokit/sdk': 2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
       '@theokit/ui': 0.14.4(@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(hast-util-from-html@2.0.3)(hast-util-sanitize@5.0.2)(hast-util-to-jsx-runtime@2.3.6)(katex@0.16.47)(mdast-util-from-markdown@2.0.3)(mdast-util-gfm@3.1.0)(mdast-util-math@3.0.0)(mdast-util-to-hast@13.2.1)(mermaid@11.15.0)(micromark-extension-gfm@3.0.0)(micromark-extension-math@3.1.0)(perfect-freehand@1.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(roughjs@4.6.6)(shiki@1.29.2)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)(unist-util-visit-parents@6.0.2)(unist-util-visit@5.1.0)(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))(yaml@2.9.0)
       isomorphic-dompurify: 3.18.0
-      theokit: 0.11.7(f553c2daee476560e251e938e648fd8c)
+      theokit: 0.11.7(32b6de36fb11bca3b9461a954405db00)
       zod: 3.25.76
     optionalDependencies:
       mermaid: 11.15.0
@@ -7944,7 +7942,7 @@ snapshots:
       - '@noble/hashes'
       - canvas
 
-  '@theokit/sdk@file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)':
+  '@theokit/sdk@2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)':
     dependencies:
       croner: 9.1.0
       jsonrepair: 3.14.1
@@ -11181,10 +11179,10 @@ snapshots:
     dependencies:
       any-promise: 1.3.0
 
-  theokit@0.11.7(f553c2daee476560e251e938e648fd8c):
+  theokit@0.11.7(32b6de36fb11bca3b9461a954405db00):
     dependencies:
-      '@theokit/agents': 0.26.0(@theokit/http@0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))(zod@4.4.3))(@theokit/sdk@file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(reflect-metadata@0.2.2)(zod@4.4.3)
-      '@theokit/http': 0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(f553c2daee476560e251e938e648fd8c))(zod@4.4.3)
+      '@theokit/agents': 0.26.0(@theokit/http@0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))(zod@4.4.3))(@theokit/sdk@2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3))(reflect-metadata@0.2.2)(zod@4.4.3)
+      '@theokit/http': 0.5.4(@swc/core@1.15.33)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(reflect-metadata@0.2.2)(theokit@0.11.7(32b6de36fb11bca3b9461a954405db00))(zod@4.4.3)
       '@vitejs/plugin-react': 4.7.0(vite@6.4.3(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.23.0)(yaml@2.9.0))
       busboy: 1.6.0
       cac: 6.7.14
@@ -11204,7 +11202,7 @@ snapshots:
       vite: 6.4.3(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.23.0)(yaml@2.9.0)
       zod: 4.4.3
     optionalDependencies:
-      '@theokit/sdk': file:../theokit-sdk/packages/sdk(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
+      '@theokit/sdk': 2.18.1(@types/ws@8.18.1)(ws@8.20.1)(zod@4.4.3)
       '@theokit/ui': 0.14.4(@tailwindcss/vite@4.3.0(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0)))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(hast-util-from-html@2.0.3)(hast-util-sanitize@5.0.2)(hast-util-to-jsx-runtime@2.3.6)(katex@0.16.47)(mdast-util-from-markdown@2.0.3)(mdast-util-gfm@3.1.0)(mdast-util-math@3.0.0)(mdast-util-to-hast@13.2.1)(mermaid@11.15.0)(micromark-extension-gfm@3.0.0)(micromark-extension-math@3.1.0)(perfect-freehand@1.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(roughjs@4.6.6)(shiki@1.29.2)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)(unist-util-visit-parents@6.0.2)(unist-util-visit@5.1.0)(vite@7.3.5(@types/node@22.19.19)(jiti@1.21.7)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.0))(yaml@2.9.0)
       ws: 8.20.1
     transitivePeerDependencies:
