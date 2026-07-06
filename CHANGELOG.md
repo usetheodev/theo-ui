@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet. The next change lands here._
+### Changed
+- Repo renamed `theo-ui` → `theokit-ui` (aligns the repo/folder name with the npm scope
+  `@theokit/ui`). The shadcn registry now serves at `https://usetheodev.github.io/theokit-ui/r/*.json`
+  (the old `.../theo-ui/r/` URL 404s — GitHub Pages does not redirect on rename). Registry
+  descriptors, README, and CONTRIBUTING updated to the new URL. The **npm package name is
+  unchanged** (`@theokit/ui`).
+- `@theokit/sdk` devDependency swapped from the local `file:../theokit-sdk/packages/sdk` path to the
+  published `^2.18.1` (unblocks the GitHub Pages registry-deploy CI, which checks out a single repo).
+  devDependency only (the real-LLM demo); not in the tarball. typecheck 0.
 
 ## [1.0.0] - 2026-07-03
 
