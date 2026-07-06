@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **Naming decision (documented, no code change):** `@usetheo/ui` stays a **second npm scope** (the
+  neutral/community generic layer), deliberately NOT folded into `@theokit/*` (the AI product). Recorded
+  as a Locked name in `CLAUDE.md`. Rationale: the two-scope split signals neutrality; renaming a published
+  package is costly churn with no consumer benefit at current adoption.
 - Repo renamed `theo-ui` → `theokit-ui` (aligns the repo/folder name with the npm scope
   `@theokit/ui`). The shadcn registry now serves at `https://usetheodev.github.io/theokit-ui/r/*.json`
   (the old `.../theo-ui/r/` URL 404s — GitHub Pages does not redirect on rename). Registry

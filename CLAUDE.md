@@ -21,6 +21,8 @@ Positioned as the **UI pillar** of Theo and a **community auxiliary** of the eco
 | Item | Value |
 | --- | --- |
 | npm package | `@theokit/ui` |
+| GitHub repo / folder | `usetheodev/theokit-ui` (renamed from `theo-ui` 2026-07-06 to align repo/folder with the npm scope; npm name unchanged) |
+| Generic-layer dependency | `@usetheo/ui` — **intentional second scope**. `@theokit/*` is the AI-native product; `@usetheo/*` (from `usetheo.dev`) is the neutral/community generic layer `@theokit/ui` builds on (Apache-2.0, standalone-usable, not part of the paid funnel). Decision (2026-07-06, FAANG review): **NOT folded into `@theokit`** — the two-scope split is deliberate (signals neutrality), and renaming a published package is costly churn with no consumer benefit at current adoption. Revisit only if the strategy becomes "single `@theokit` brand for everything." |
 | Design system codename | **Violet Forge** |
 | Default theme | `violet-forge` |
 | Built-in themes | `violet-forge`, `classic-paper`, `aurora-terminal` |
