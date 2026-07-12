@@ -24,8 +24,8 @@ import { spawnSync } from "node:child_process";
  * uncompressed) — only the utilities the library actually uses. Consumer
  * `@theme` overrides still win via the runtime CSS-var cascade.
  */
-import { existsSync, statSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { existsSync, realpathSync, statSync } from "node:fs";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -87,10 +87,54 @@ async function ensureTailwindV4Resolvable(): Promise<void> {
   }
 }
 
+function resolveUsetheoUiDist(): string {
+  // The precompiled sheet MUST scan @usetheo/ui's compiled primitives too:
+  // @theokit/ui re-exports them (e.g. ChatComposer renders @usetheo/ui's icon
+  // Button), so a utility used ONLY by a @usetheo/ui primitive — like the icon
+  // Button's `w-[var(--theo-control-h,2.25rem)]` — never materializes if we
+  // scan only this repo's `src/`, and consumers get a squished (content-width)
+  // icon button (the `h-[…]` twin ships because this repo's own inputs use it).
+  //
+  // Resolve @usetheo/ui's OWN entry, then realpath it so the path is REAL (not a
+  // pnpm symlink): Tailwind v4 `@source` refuses to follow symlinks — the same
+  // constraint this whole precompile exists to dodge. `@usetheo/ui`'s `exports`
+  // map exposes only the ESM `import` condition (no `require`, no
+  // `./package.json`), so CJS `require.resolve` cannot reach it — use the ESM
+  // resolver, which honors `import` and lands on `…/dist/index.js`.
+  const entryPath = fileURLToPath(import.meta.resolve("@usetheo/ui"));
+  const dist = dirname(realpathSync(entryPath));
+  if (!existsSync(dist) || !dist.endsWith("dist")) {
+    throw new Error(
+      `[build-precompiled-css] @usetheo/ui dist not resolvable (got ${dist}). Run \`pnpm install\` (and build @usetheo/ui) and retry.`,
+    );
+  }
+  return dist;
+}
+
+async function writeGeneratedEntry(): Promise<string> {
+  // Build a throwaway entry = the checked-in `components-entry.css` (relative
+  // `@source` globs stay valid because the generated file lives in the SAME
+  // `src/styles/` dir) + an ABSOLUTE `@source` for @usetheo/ui's real dist.
+  const base = await readFile(join(ROOT, "src/styles/components-entry.css"), "utf-8");
+  const usetheoDist = resolveUsetheoUiDist();
+  const extra = [
+    "",
+    "/* Scan @usetheo/ui's compiled primitives so utilities used ONLY there",
+    " * (e.g. the icon Button's width) materialize in the precompiled sheet.",
+    " * Absolute realpath — Tailwind v4 @source does not follow pnpm symlinks. */",
+    `@source "${usetheoDist}/**/*.{js,mjs,cjs}";`,
+    `@source not "${usetheoDist}/**/*.test.{js,mjs,cjs}";`,
+    "",
+  ].join("\n");
+  const genPath = join(ROOT, "src/styles/components-entry.generated.css");
+  await writeFile(genPath, `${base.trimEnd()}\n${extra}`);
+  return genPath;
+}
+
 async function compileUtilities(): Promise<void> {
   const cli = resolveTailwindCliBinary();
   await ensureTailwindV4Resolvable();
-  const inputPath = join(ROOT, "src/styles/components-entry.css");
+  const inputPath = await writeGeneratedEntry();
   const outputPath = join(ROOT, "dist/components.css");
 
   process.stdout.write(`[build-precompiled-css] running ${cli}\n`);
@@ -108,6 +152,10 @@ async function compileUtilities(): Promise<void> {
       encoding: "utf-8",
     },
   );
+
+  // Remove the generated entry regardless of outcome — it is a build artifact,
+  // never committed (a stale copy would drift from `components-entry.css`).
+  await rm(inputPath, { force: true });
 
   if (result.status !== 0) {
     throw new Error(
@@ -157,7 +205,7 @@ async function main(): Promise<void> {
   process.stdout.write("[build-precompiled-css] done\n");
 }
 
-export { resolveTailwindCliBinary };
+export { resolveTailwindCliBinary, resolveUsetheoUiDist };
 
 // Only run main when invoked as the entrypoint (CLI). Importers (the regression
 // test) get the pure resolver without side effects.

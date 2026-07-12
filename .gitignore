@@ -93,3 +93,6 @@ ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
 .design-sync/node_modules
+
+# Generated at CSS precompile time (build-precompiled-css.ts) — never committed
+src/styles/components-entry.generated.css
