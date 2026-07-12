@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   published `^2.18.1` (unblocks the GitHub Pages registry-deploy CI, which checks out a single repo).
   devDependency only (the real-LLM demo); not in the tarball. typecheck 0.
 
+## [1.0.1] - 2026-07-12
+
 ### Fixed
 - Icon buttons (`<Button size="icon">`, including the Send button inside `ChatComposer`) rendered
   squished — full height but collapsed to the icon's content width — for any consumer loading the
