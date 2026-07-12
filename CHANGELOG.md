@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Roadmap created (`ROADMAP.md` at repo root — M0 records the shipped AI-exclusive pivot) and
+  amended: added M1 Voice-agent surface cluster (`/roadmap-feature voice-agent-surface`)
+
 ### Changed
 - **Naming decision (documented, no code change):** `@usetheo/ui` stays a **second npm scope** (the
   neutral/community generic layer), deliberately NOT folded into `@theokit/*` (the AI product). Recorded
@@ -20,6 +24,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `@theokit/sdk` devDependency swapped from the local `file:../theokit-sdk/packages/sdk` path to the
   published `^2.18.1` (unblocks the GitHub Pages registry-deploy CI, which checks out a single repo).
   devDependency only (the real-LLM demo); not in the tarball. typecheck 0.
+
+### Fixed
+- Icon buttons (`<Button size="icon">`, including the Send button inside `ChatComposer`) rendered
+  squished — full height but collapsed to the icon's content width — for any consumer loading the
+  precompiled `@theokit/ui/styles.css`. The precompile only `@source`-scanned this repo's own `src/`,
+  so `w-[var(--theo-control-h,2.25rem)]` — which lives ONLY in `@usetheo/ui`'s icon Button — was never
+  materialized (the `h-[…]` twin shipped because this repo's inputs use it). The precompile now also
+  scans `@usetheo/ui`'s real (realpath-resolved) dist, so every utility used by the re-exported
+  `@usetheo/ui` primitives ships in the sheet. Regression test pins the scan target contains the class
+  literal (`scripts/build-precompiled-css.test.ts`).
 
 ## [1.0.0] - 2026-07-03
 
