@@ -25,6 +25,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   published `^2.18.1` (unblocks the GitHub Pages registry-deploy CI, which checks out a single repo).
   devDependency only (the real-LLM demo); not in the tarball. typecheck 0.
 
+## [1.0.2] - 2026-07-12
+
+### Fixed
+- `@theokit/ui/styles.css` chained `@import "./components.css"` at the END of the file (after `@layer base`),
+  which is invalid CSS — `@import` must precede all other statements. A spec-correct PostCSS pipeline (a
+  vanilla `vite` build, e.g. the `create-theokit --surface desktop` webview) hard-errored with
+  "@import must precede all other statements", breaking the desktop scaffold's stylesheet. The precompile
+  now inserts the import among the leading `@import`s (right after `@import "tailwindcss"`). Layer
+  precedence is unchanged (`utilities` still outranks `base` by layer order, not source order). The web
+  surface was unaffected (it loads the sheet through TheoKit's own Vite CSS pipeline, not vanilla PostCSS).
+
 ## [1.0.1] - 2026-07-12
 
 ### Fixed

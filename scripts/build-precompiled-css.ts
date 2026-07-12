@@ -188,13 +188,24 @@ async function chainComponentsCssFromStylesCss(): Promise<void> {
     return;
   }
 
-  // Append at the END so consumer-side `@theme` overrides (which run via
-  // the CSS-var cascade at runtime) and earlier `@layer base` rules
-  // (declared above in styles.css) keep their precedence.
-  const next = `${current.trimEnd()}\n\n/* RFC 0008 follow-up #2 — pre-compiled utility rules. The bytes here\n * are emitted at build time by \`scripts/build-precompiled-css.ts\` so\n * consumers do not depend on Tailwind v4 \`@source\` scanning the\n * library's node_modules tree (which breaks under pnpm symlinks).\n */\n@import "./components.css";\n`;
+  // Insert among the LEADING `@import`s (right after `@import "tailwindcss";`), NOT at the end:
+  // CSS forbids `@import` after any other statement (`@layer base { … }` sits below), so an
+  // end-appended import is invalid and a spec-correct PostCSS pipeline (a vanilla `vite` frontend, e.g.
+  // the `--surface desktop` webview) hard-errors: "@import must precede all other statements". Placing it
+  // among the other imports is valid everywhere; layer precedence is unaffected (Tailwind's `utilities`
+  // layer still outranks `base` by layer order, not source order) and consumer `@theme` overrides cascade
+  // at runtime via the `--*` CSS vars regardless of import position.
+  const anchor = '@import "tailwindcss";';
+  if (!current.includes(anchor)) {
+    throw new Error(
+      `[build-precompiled-css] dist/styles.css missing the '${anchor}' anchor — cannot place the components.css import at a valid position.`,
+    );
+  }
+  const chained = `/* RFC 0008 follow-up #2 — pre-compiled utility rules, emitted at build time by\n   scripts/build-precompiled-css.ts so consumers do not depend on Tailwind v4 @source\n   scanning node_modules (breaks under pnpm symlinks). Kept among the leading @imports —\n   CSS forbids @import after other statements. */\n@import "./components.css";`;
+  const next = current.replace(anchor, `${anchor}\n${chained}`);
   await writeFile(stylesPath, next);
   process.stdout.write(
-    `[build-precompiled-css] appended @import "./components.css" to dist/styles.css\n`,
+    `[build-precompiled-css] chained @import "./components.css" after the tailwindcss import\n`,
   );
 }
 
