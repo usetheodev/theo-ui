@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Text selection is visible again in every v4 theme.** The `::selection` rule wrapped the theme's `oklch()` tokens in `hsl(var(--primary) / 0.25)` — invalid CSS with oklch tokens, so the selection background computed to `transparent` and the selection text kept its normal color: text was still selectable/copyable, but the highlight was invisible, making it *look* like you couldn't select anything. Fixed to use `color-mix(in oklch, var(--primary) 25%, transparent)` / the tokens directly. The same latent bug (and fix) also restored the native scrollbar thumb, the focus-visible ring, and the base `body`/`border` colors, which were likewise transparent under oklch themes.
+
 ### Added
 - Roadmap created (`ROADMAP.md` at repo root — M0 records the shipped AI-exclusive pivot) and
   amended: added M1 Voice-agent surface cluster (`/roadmap-feature voice-agent-surface`)
