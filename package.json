@@ -1,13 +1,11 @@
 {
   "name": "@theokit/ui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Theo UI — React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
   "license": "Apache-2.0",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -448,6 +446,7 @@
   },
   "peerDependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "@usetheo/ui": ">=0.22.0 <1",
     "hast-util-from-html": "^2.0.0",
     "hast-util-sanitize": "^5.0.0",
     "hast-util-to-jsx-runtime": "^2.0.0",
@@ -534,7 +533,6 @@
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.6",
-    "@usetheo/ui": "^0.14.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.471.0",
@@ -597,11 +595,7 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "esbuild"
-    ],
+    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"],
     "overrides": {
       "postcss": ">=8.5.10"
     }
