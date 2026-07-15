@@ -80,6 +80,19 @@ describe("AgentComposer", () => {
     expect(ta.value).toBe("/help ");
   });
 
+  it("returns focus to the textarea after selecting an item via click", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    const ta = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(ta, { target: { value: "/he" } });
+    await user.click(screen.getByRole("menuitem", { name: /\/help/i }));
+    // Clicking the menu item moves focus to the button; the composer must hand
+    // it back so the user keeps typing without reaching for the mouse again.
+    expect(ta).toHaveFocus();
+    // …and the caret sits after the inserted token, ready for the next keystroke.
+    expect(ta.selectionStart).toBe(ta.value.length);
+  });
+
   it("closes the menu on Escape and lets the user keep typing", () => {
     render(<Harness />);
     const ta = screen.getByRole("textbox");
