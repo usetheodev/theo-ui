@@ -25,6 +25,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   published `^2.18.1` (unblocks the GitHub Pages registry-deploy CI, which checks out a single repo).
   devDependency only (the real-LLM demo); not in the tarball. typecheck 0.
 
+### Fixed
+- **`AgentComposer` now returns focus to the textarea after a slash-command / @file / #memory pick.**
+  Selecting an item with the mouse moved focus to the menu button and never handed it back, so the user
+  had to click the input again before typing. The composer now refocuses the textarea and drops the caret
+  at the end of the inserted token once the value is applied. Regression test:
+  `agent-composer.test.tsx` "returns focus to the textarea after selecting an item via click".
+
 ## [1.0.3] - 2026-07-14
 
 ### Fixed

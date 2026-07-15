@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
 import {
@@ -114,6 +114,11 @@ export function AgentComposer({
   // a trigger char without the menu re-appearing.
   const [dismissedAt, setDismissedAt] = useState<number | null>(null);
 
+  // Anchor for re-focusing the textarea after a mouse selection, and a flag that
+  // marks the next value change as "caused by a pick" so the effect only fires then.
+  const containerRef = useRef<HTMLDivElement>(null);
+  const refocusPending = useRef(false);
+
   const detected = useMemo(() => detectTrigger(value), [value]);
   const isDismissed = detected !== null && dismissedAt === detected.start;
   const activeTrigger = isDismissed ? null : (detected?.trigger ?? null);
@@ -131,9 +136,23 @@ export function AgentComposer({
     if (!detected) return;
     const before = value.slice(0, detected.start);
     const insert = resolveInsertText(item, detected.trigger);
+    refocusPending.current = true;
     onValueChange(`${before}${insert} `);
     setDismissedAt(null);
   };
+
+  // A click on a menu item steals focus from the textarea. Once the picked value
+  // has been applied, hand focus back and drop the caret at the end so the user
+  // keeps typing without touching the mouse again.
+  useEffect(() => {
+    if (!refocusPending.current) return;
+    refocusPending.current = false;
+    const ta = containerRef.current?.querySelector("textarea");
+    if (!ta) return;
+    ta.focus();
+    const end = ta.value.length;
+    ta.setSelectionRange(end, end);
+  }, [value]);
 
   const handleClose = () => {
     if (detected) setDismissedAt(detected.start);
@@ -156,7 +175,11 @@ export function AgentComposer({
   };
 
   return (
-    <div data-slot="agent-composer" className={cn("relative", containerClassName)}>
+    <div
+      ref={containerRef}
+      data-slot="agent-composer"
+      className={cn("relative", containerClassName)}
+    >
       <MentionMenu
         open={!!activeTrigger && items !== null}
         trigger={(activeTrigger ?? "/") as MentionTrigger}
