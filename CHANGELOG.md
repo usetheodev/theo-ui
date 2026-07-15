@@ -5,6 +5,14 @@ All notable changes to `@theokit/ui` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-07-15
+
+### Fixed
+- `@usetheo/ui` movida de `dependencies` (`^0.14.0`) para `peerDependencies`
+  (`>=0.22.0 <1`) — consumidores deduplicam para UMA cópia do design system
+  (antes: duas cópias no lockfile, com Toaster/useToast em runtimes distintos e
+  bundle dobrado). Descoberto pela review do M7 do usetheo-ui. (#21)
+
 ## [Unreleased]
 
 ### Added
