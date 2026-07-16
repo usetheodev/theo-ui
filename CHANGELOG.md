@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **M2 — Code-agent Builder gap components (4 new primitives)**: `WorkLog` (collapsible "Worked for {duration}" + steps), `ApprovalModeSelector` (ask / auto-approve edits / read-only), `ModelEffortPicker` (single dropdown for model + reasoning effort), `CodeReviewPanel` (aggregate change counters + Commit + per-file unified diffs + All-files tree). Each is sourced 1:1 from the studio Builder's hand-rolled UI (the fidelity spec from the `theokit-studio/builder` × `@theokit/ui` cross-validation) so the studio can adopt the library with no UX change. TDD (24 tests), Ladle stories, registry entries, `data-slot` on each, diff coloring via the canonical `success`/`destructive` tokens (ADR-0004). `pnpm quality:gates` green.
+- Roadmap amended: added M2 Code-agent Builder gap components + M3 parity extensions (`/roadmap-feature code-agent-builder-parity`) — from the cross-validation `theokit-studio/builder` × `@theokit/ui`
 - Roadmap created (`ROADMAP.md` at repo root — M0 records the shipped AI-exclusive pivot) and
   amended: added M1 Voice-agent surface cluster (`/roadmap-feature voice-agent-surface`)
 

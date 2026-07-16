@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "approval-mode-selector",
+  "type": "registry:ui",
+  "title": "ApprovalModeSelector",
+  "description": "Inline composer control toggling a coding agent between ask, auto-approve edits, and read-only.",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/approval-mode-selector/approval-mode-selector.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/approval-mode-selector.tsx"
+    }
+  ]
+}

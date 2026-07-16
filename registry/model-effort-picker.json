@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-effort-picker",
+  "type": "registry:ui",
+  "title": "ModelEffortPicker",
+  "description": "Single combined dropdown to pick a coding agent's model (name + blurb + id) and reasoning effort.",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/model-effort-picker/model-effort-picker.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/model-effort-picker.tsx"
+    }
+  ]
+}
