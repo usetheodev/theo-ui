@@ -9,6 +9,7 @@ import "@theokit/ui/styles.css";
 // via relative path because it deliberately lives outside the published
 // barrel; the playground composes it on top of the public components below.
 import { TheoCodeShell } from "../src/screens/theo-code-shell.js";
+import { BuilderParityDemo } from "./builder-parity-demo.js";
 import { Catalog } from "./catalog.js";
 import { DensityDemo } from "./density-demo.js";
 import { SlideDeckDemo } from "./slide-deck-demo.js";
@@ -16,10 +17,19 @@ import { SlideDemo } from "./slide-demo.js";
 import { SlideRichDemo } from "./slide-rich-demo.js";
 import { WhiteboardDemo } from "./whiteboard-demo.js";
 
-type View = "shell" | "catalog" | "whiteboard" | "slide" | "slide-deck" | "slide-rich" | "density";
+type View =
+  | "builder"
+  | "shell"
+  | "catalog"
+  | "whiteboard"
+  | "slide"
+  | "slide-deck"
+  | "slide-rich"
+  | "density";
 
 function isView(v: string): v is View {
   return (
+    v === "builder" ||
     v === "shell" ||
     v === "catalog" ||
     v === "whiteboard" ||
@@ -44,6 +54,13 @@ function PlaygroundRoot() {
       <header className="flex h-12 items-center justify-between border-border/40 border-b bg-card px-4">
         <span className="font-display text-title-md tracking-tight">@theokit/ui playground</span>
         <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-muted p-1">
+          <Button
+            size="sm"
+            variant={view === "builder" ? "primary" : "ghost"}
+            onClick={() => switchTo("builder")}
+          >
+            Builder
+          </Button>
           <Button
             size="sm"
             variant={view === "shell" ? "primary" : "ghost"}
@@ -96,7 +113,9 @@ function PlaygroundRoot() {
         </div>
       </header>
       <div className="min-h-0 overflow-auto">
-        {view === "shell" ? (
+        {view === "builder" ? (
+          <BuilderParityDemo />
+        ) : view === "shell" ? (
           <TheoCodeShell />
         ) : view === "catalog" ? (
           <Catalog />
