@@ -70,6 +70,10 @@
       "types": "./dist/components/composites/approval-card/index.d.ts",
       "import": "./dist/composites/approval-card/index.js"
     },
+    "./approval-mode-selector": {
+      "types": "./dist/components/primitives/approval-mode-selector/index.d.ts",
+      "import": "./dist/primitives/approval-mode-selector/index.js"
+    },
     "./artifact-preview": {
       "types": "./dist/components/primitives/artifact-preview/index.d.ts",
       "import": "./dist/primitives/artifact-preview/index.js"
@@ -121,6 +125,10 @@
     "./choice-prompt": {
       "types": "./dist/components/composites/choice-prompt/index.d.ts",
       "import": "./dist/composites/choice-prompt/index.js"
+    },
+    "./code-review-panel": {
+      "types": "./dist/components/primitives/code-review-panel/index.d.ts",
+      "import": "./dist/primitives/code-review-panel/index.js"
     },
     "./confirm-prompt": {
       "types": "./dist/components/composites/confirm-prompt/index.d.ts",
@@ -205,6 +213,10 @@
     "./model-card": {
       "types": "./dist/components/primitives/model-card/index.d.ts",
       "import": "./dist/primitives/model-card/index.js"
+    },
+    "./model-effort-picker": {
+      "types": "./dist/components/primitives/model-effort-picker/index.d.ts",
+      "import": "./dist/primitives/model-effort-picker/index.js"
     },
     "./model-selector": {
       "types": "./dist/components/primitives/model-selector/index.d.ts",
@@ -337,6 +349,10 @@
     "./usage-meter": {
       "types": "./dist/components/composites/usage-meter/index.d.ts",
       "import": "./dist/composites/usage-meter/index.js"
+    },
+    "./work-log": {
+      "types": "./dist/components/primitives/work-log/index.d.ts",
+      "import": "./dist/primitives/work-log/index.js"
     },
     "./whiteboard": {
       "types": "./dist/components/primitives/whiteboard/index.d.ts",
