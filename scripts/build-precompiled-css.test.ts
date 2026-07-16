@@ -9,7 +9,7 @@
  * package-manager-agnostic contract) and runs it via `node`. This test pins
  * that the resolver returns an existing JS entry, never the brittle `.bin` shim.
  */
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { resolveTailwindCliBinary, resolveUsetheoUiDist } from "./build-precompiled-css.js";
@@ -50,7 +50,9 @@ describe("resolveUsetheoUiDist (icon Button width regression)", () => {
     // compiled JS entry for the icon Button's width class.
     const found = readdirSync(dist)
       .filter((f) => f.endsWith(".js"))
-      .some((f) => readFileSync(join(dist, f), "utf-8").includes("w-[var(--theo-control-h,2.25rem)]"));
+      .some((f) =>
+        readFileSync(join(dist, f), "utf-8").includes("w-[var(--theo-control-h,2.25rem)]"),
+      );
     expect(found).toBe(true);
   });
 });

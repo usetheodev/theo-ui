@@ -20,7 +20,8 @@
     "_site/**",
     "src/components/primitives/whiteboard/schema.ts",
     "src/components/primitives/slide/schema.ts",
-    "src/components/primitives/whiteboard/render/rough-paths.ts"
+    "src/components/primitives/whiteboard/render/rough-paths.ts",
+    "src/lib/markdown/mermaid.tsx"
   ],
   "ignoreDependencies": [
     "@parcel/watcher",
@@ -28,7 +29,8 @@
     "mermaid",
     "shiki",
     "geist",
-    "@tailwindcss/cli"
+    "@tailwindcss/cli",
+    "@theokit/plugin-canvas"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
