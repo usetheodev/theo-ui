@@ -38,4 +38,28 @@ describe("IntentSelector", () => {
     render(<IntentSelector value="unknown" options={OPTIONS} />);
     expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument();
   });
+
+  // M3: tiles layout (build-intent grid).
+  it("tiles layout renders a button per option (no dropdown)", () => {
+    render(<IntentSelector layout="tiles" value="edit" options={OPTIONS} />);
+    expect(screen.getByRole("button", { name: /Edit/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Plan/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Review/ })).toBeInTheDocument();
+    // all three visible at once (grid), unlike the menu which needs opening
+    expect(screen.getAllByRole("button")).toHaveLength(3);
+  });
+
+  it("tiles layout emits onChange on tile click", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<IntentSelector layout="tiles" value="edit" options={OPTIONS} onChange={onChange} />);
+    await user.click(screen.getByRole("button", { name: /Plan/ }));
+    expect(onChange).toHaveBeenCalledWith("plan");
+  });
+
+  it("menu layout is unchanged (regression)", () => {
+    render(<IntentSelector value="edit" options={OPTIONS} />);
+    // menu renders a single trigger button
+    expect(screen.getAllByRole("button")).toHaveLength(1);
+  });
 });

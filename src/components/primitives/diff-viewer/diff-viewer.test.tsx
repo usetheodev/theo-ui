@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { type DiffHunk, DiffViewer } from "./diff-viewer.js";
+import { type DiffHunk, DiffViewer, parseUnifiedDiffToHunks } from "./diff-viewer.js";
 
 const hunks: DiffHunk[] = [
   {
@@ -40,5 +40,34 @@ describe("DiffViewer", () => {
   it("collapses placeholder hunks", () => {
     render(<DiffViewer path="x" hunks={hunks} />);
     expect(screen.getByText(/2 unmodified lines/)).toBeInTheDocument();
+  });
+
+  // M3: accept a unified diff string in addition to structured hunks.
+  it("renders added/removed lines from a unified diff string", () => {
+    render(
+      <DiffViewer
+        path="x.ts"
+        diff={"--- a/x.ts\n+++ b/x.ts\n const a = 1;\n-const b = 2;\n+const b = 3;"}
+      />,
+    );
+    expect(screen.getByText("const b = 3;")).toBeInTheDocument();
+    expect(screen.getByText("const b = 2;")).toBeInTheDocument();
+  });
+});
+
+describe("parseUnifiedDiffToHunks", () => {
+  it("maps +/- /context lines to added/removed/unchanged", () => {
+    const kinds = parseUnifiedDiffToHunks(" ctx\n+added\n-removed").flatMap((h) =>
+      h.lines.map((l) => l.kind),
+    );
+    expect(kinds).toContain("added");
+    expect(kinds).toContain("removed");
+    expect(kinds).toContain("unchanged");
+  });
+
+  it("starts a new hunk on an @@ header", () => {
+    const out = parseUnifiedDiffToHunks("@@ -1,2 +1,2 @@\n ctx\n@@ -5,1 +5,1 @@\n+x");
+    expect(out.length).toBe(2);
+    expect(out[0]?.header).toContain("@@");
   });
 });
