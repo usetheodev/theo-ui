@@ -1,3 +1,4 @@
+import { Pin } from "lucide-react";
 import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "../../../lib/cn.js";
@@ -48,8 +49,10 @@ interface SessionListItemProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type" | "children" | "title"> {
   /** Session title (truncated). */
   title: ReactNode;
-  /** Agent run state. Drives the status dot. */
-  status: SessionRunStatus;
+  /** Agent run state. Drives the status dot. Omit for sessions with no run-state model. */
+  status?: SessionRunStatus;
+  /** Whether this session is pinned — shows a pin indicator in the leading column. */
+  pinned?: boolean;
   /** Last mode the user was viewing this session in. Optional pill. */
   mode?: SessionMode;
   /** Relative timestamp string ("2m ago", "yesterday"). */
@@ -62,7 +65,19 @@ interface SessionListItemProps
 
 const SessionListItem = forwardRef<HTMLButtonElement, SessionListItemProps>(
   (
-    { className, title, status, mode, timestamp, unread, active, onClick, disabled, ...props },
+    {
+      className,
+      title,
+      status,
+      pinned,
+      mode,
+      timestamp,
+      unread,
+      active,
+      onClick,
+      disabled,
+      ...props
+    },
     ref,
   ) => (
     <button
@@ -84,11 +99,17 @@ const SessionListItem = forwardRef<HTMLButtonElement, SessionListItemProps>(
       )}
       {...props}
     >
-      <span
-        className={cn("size-2 shrink-0 rounded-full", STATUS_CLASS[status])}
-        aria-label={STATUS_LABEL[status]}
-        role="img"
-      />
+      {pinned ? (
+        <Pin className="size-3.5 shrink-0 text-muted-foreground" aria-label="Pinned" role="img" />
+      ) : status ? (
+        <span
+          className={cn("size-2 shrink-0 rounded-full", STATUS_CLASS[status])}
+          aria-label={STATUS_LABEL[status]}
+          role="img"
+        />
+      ) : (
+        <span aria-hidden="true" />
+      )}
       <span className="grid min-w-0">
         <span className="truncate font-medium text-body-sm">{title}</span>
         {(mode || timestamp) && (

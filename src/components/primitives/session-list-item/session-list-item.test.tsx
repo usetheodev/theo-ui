@@ -42,4 +42,21 @@ describe("SessionListItem", () => {
     await user.click(screen.getByRole("button"));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  // 1.2.0: sidebar sessions without a run-state model (pinned + timestamp only).
+  it("renders a pin indicator when pinned", () => {
+    render(<SessionListItem title="Refine Support Agent tone" pinned timestamp="2m" />);
+    expect(screen.getByLabelText("Pinned")).toBeInTheDocument();
+  });
+
+  it("omits the status dot when status is not provided", () => {
+    render(<SessionListItem title="x" timestamp="2m" />);
+    expect(screen.queryByLabelText("Running")).toBeNull();
+    expect(screen.queryByLabelText("Completed")).toBeNull();
+  });
+
+  it("still renders the status dot when status is provided (regression)", () => {
+    render(<SessionListItem title="x" status="running" />);
+    expect(screen.getByLabelText("Running")).toBeInTheDocument();
+  });
 });

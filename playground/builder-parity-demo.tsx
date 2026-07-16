@@ -189,11 +189,11 @@ export function BuilderParityDemo() {
         <div className="grid min-h-0 grid-cols-2 gap-4">
           {/* chat pane */}
           <div className="flex flex-col gap-3 rounded-xl border border-border/40 bg-card/40 p-4">
-            <ChatMessageRoot role="user">
+            <ChatMessageRoot from="user">
               <ChatMessageContent>Add a refund tool to the Support Agent.</ChatMessageContent>
             </ChatMessageRoot>
             <WorkLog workedFor="2m 30s" steps={WORK_STEPS} defaultOpen />
-            <ChatMessageRoot role="assistant">
+            <ChatMessageRoot from="assistant">
               <ChatMessageContent variant="flat">
                 Done — I added a `refund` tool with a typed schema and wired it into the Support
                 Agent. The review panel on the right shows the change.

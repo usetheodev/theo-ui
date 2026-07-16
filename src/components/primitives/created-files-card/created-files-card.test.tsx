@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { type CreatedFile, CreatedFilesCard } from "./created-files-card.js";
 
@@ -49,5 +49,49 @@ describe("CreatedFilesCard", () => {
   it("created variant is unchanged (regression)", () => {
     render(<CreatedFilesCard files={files} />);
     expect(screen.getByRole("heading", { name: /Files created/i })).toBeInTheDocument();
+  });
+
+  // 1.2.0: aggregate +/- in the header + inline CTA (coding-agent edited-files card).
+  const plain: CreatedFile[] = [
+    { id: "1", name: "prompts/support-tone.md" },
+    { id: "2", name: "agents/support-agent.ts" },
+  ];
+
+  it("shows aggregate +/- in the header when headerAggregate is provided (edited)", () => {
+    render(
+      <CreatedFilesCard
+        variant="edited"
+        files={plain}
+        headerAggregate={{ additions: 6, deletions: 3 }}
+      />,
+    );
+    // plain files carry no per-file counts → the only +6/-3 is the header aggregate
+    expect(screen.getByText("+6")).toBeInTheDocument();
+    expect(screen.getByText("-3")).toBeInTheDocument();
+  });
+
+  it("places the cta in the header row when ctaPlacement='header'", () => {
+    const { container } = render(
+      <CreatedFilesCard
+        variant="edited"
+        files={plain}
+        ctaPlacement="header"
+        cta={<button type="button">Review</button>}
+      />,
+    );
+    const header = container.querySelector("header");
+    expect(header).not.toBeNull();
+    expect(
+      within(header as HTMLElement).getByRole("button", { name: "Review" }),
+    ).toBeInTheDocument();
+  });
+
+  it("defaults the cta to the footer, not the header (regression)", () => {
+    const { container } = render(
+      <CreatedFilesCard files={files} cta={<button type="button">Move</button>} />,
+    );
+    const header = container.querySelector("header");
+    expect(within(header as HTMLElement).queryByRole("button", { name: "Move" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Move" })).toBeInTheDocument();
   });
 });
