@@ -414,6 +414,7 @@
     "playground": "vite --config playground/vite.config.ts",
     "playground:build": "vite build --config playground/vite.config.ts",
     "playground:preview": "vite preview --config playground/vite.config.ts",
+    "playground:builder": "vite --config playground/builder-parity.vite.config.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome check src",
     "lint:ci": "biome ci src scripts .ladle playground",

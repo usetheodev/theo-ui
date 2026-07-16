@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Builder parity playground demo** (`playground/builder-parity-demo.tsx` + `builder-parity.html` + `builder-parity-main.tsx`) — a standalone reconstruction of the theokit-studio Agent Builder built almost entirely from `@theokit/ui` public components (`AgentComposer`, `ModelEffortPicker`, `ApprovalModeSelector`, `IntentSelector` tiles, `WorkLog`, `CreatedFilesCard` edited, `CodeReviewPanel`, `SessionListItem`, `ChatMessage`), for side-by-side comparison against the studio's hand-rolled original. Runs via a dedicated Vite config + script (`pnpm playground:builder`) that scopes the dep scan to `builder-parity.html` only, so it is isolated from the pre-pivot `playground/catalog.tsx` (which still imports components moved to `@usetheo/ui` and breaks the main playground entry). Dev-only — the `playground/` directory is excluded from the published package; no change to the shipped component surface.
+
 ## [1.1.0] - 2026-07-16
 
 ### Added
