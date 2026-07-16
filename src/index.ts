@@ -404,6 +404,22 @@ export {
 } from "./components/primitives/created-files-card/index.js";
 export { ArtifactPreview } from "./components/primitives/artifact-preview/index.js";
 export { StepsRail, type RailStep } from "./components/primitives/steps-rail/index.js";
+export { WorkLog, type WorkLogProps } from "./components/primitives/work-log/index.js";
+export {
+  ApprovalModeSelector,
+  type ApprovalMode,
+  type ApprovalModeSelectorProps,
+} from "./components/primitives/approval-mode-selector/index.js";
+export {
+  ModelEffortPicker,
+  type ModelEffortOption,
+  type ModelEffortPickerProps,
+} from "./components/primitives/model-effort-picker/index.js";
+export {
+  CodeReviewPanel,
+  type CodeReviewPanelProps,
+  type ReviewFile,
+} from "./components/primitives/code-review-panel/index.js";
 export {
   RecentFoldersList,
   type RecentFolder,

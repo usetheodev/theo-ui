@@ -9,14 +9,14 @@
   ],
   "registryDependencies": [
     "https://usetheodev.github.io/usetheo-ui/r/button.json",
-    "https://usetheodev.github.io/theo-ui/r/cn.json",
+    "https://usetheodev.github.io/theokit-ui/r/cn.json",
     "https://usetheodev.github.io/usetheo-ui/r/form-field.json",
     "https://usetheodev.github.io/usetheo-ui/r/input.json",
-    "https://usetheodev.github.io/theo-ui/r/mode-types.json",
+    "https://usetheodev.github.io/theokit-ui/r/mode-types.json",
     "https://usetheodev.github.io/usetheo-ui/r/select.json",
-    "https://usetheodev.github.io/theo-ui/r/skill-card.json",
+    "https://usetheodev.github.io/theokit-ui/r/skill-card.json",
     "https://usetheodev.github.io/usetheo-ui/r/switch.json",
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json",
     "https://usetheodev.github.io/usetheo-ui/r/textarea.json"
   ],
   "files": [

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "work-log",
+  "type": "registry:ui",
+  "title": "WorkLog",
+  "description": "Collapsible \"Worked for {duration}\" summary revealing the ordered steps an agent took.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/work-log/work-log.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/work-log.tsx"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "theo-ui",
+  "name": "theokit-ui",
   "homepage": "https://usetheo.dev",
   "metadata": {
     "requires": {
@@ -91,6 +91,12 @@
       "description": "Inline pause-and-ask card for an agent stream."
     },
     {
+      "name": "approval-mode-selector",
+      "type": "registry:ui",
+      "title": "ApprovalModeSelector",
+      "description": "Inline composer control toggling a coding agent between ask, auto-approve edits, and read-only."
+    },
+    {
       "name": "artifact-preview",
       "type": "registry:ui",
       "title": "ArtifactPreview",
@@ -167,6 +173,12 @@
       "type": "registry:lib",
       "title": "cn (Tailwind class merger)",
       "description": "Merge Tailwind classes with conflict resolution."
+    },
+    {
+      "name": "code-review-panel",
+      "type": "registry:ui",
+      "title": "CodeReviewPanel",
+      "description": "Code-agent review surface: aggregate change counters, a Commit action, per-file unified diffs, and an All-files tree."
     },
     {
       "name": "confirm-prompt",
@@ -299,6 +311,12 @@
       "type": "registry:ui",
       "title": "ModelCard",
       "description": "Full info on a model: vendor, context, output cap, pricing,"
+    },
+    {
+      "name": "model-effort-picker",
+      "type": "registry:ui",
+      "title": "ModelEffortPicker",
+      "description": "Single combined dropdown to pick a coding agent's model (name + blurb + id) and reasoning effort."
     },
     {
       "name": "model-selector",
@@ -587,6 +605,12 @@
       "type": "registry:ui",
       "title": "Whiteboard",
       "description": "View-only primitive that renders a declarative JSON scene as SVG with a hand-drawn aesthetic. Pan + zoom built-in; no editor surface. Subpath-isolated bundle in @theokit/ui."
+    },
+    {
+      "name": "work-log",
+      "type": "registry:ui",
+      "title": "WorkLog",
+      "description": "Collapsible \"Worked for {duration}\" summary revealing the ordered steps an agent took."
     }
   ]
 }

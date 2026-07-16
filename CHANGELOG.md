@@ -5,41 +5,88 @@ All notable changes to `@theokit/ui` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Changed
-- `@usetheo/ui` dependency swapped from the local `file:../usetheo-ui` path to the published
-  `^0.14.0` range now that `@usetheo/ui@0.14.0` (the AI-exclusive-split line) is on npm. Makes
-  `@theokit/ui` installable from the registry. Validated: typecheck 0, build, 1401 tests green
-  against the published package.
-
-### Added
-- `examples/full-stack-demo/` — a single browser app that proves ALL nine ecosystem
-  milestones (M0–M8) live against real OpenRouter: secret redaction (M0), cooperative
-  abort (M1), typed-error resilience (M2), non-lossy session resume + metrics (M3),
-  provider routing (M4), live token streaming (M5), a published `@theokit/plugin-canvas`
-  artifact tool (M6), the cloud `cloudPayload` contract + `bc-` id + pre-release guard
-  (M7), and the north-star time-to-first-working-agent (M8). Ships a registered Skills
-  tool (`roll_dice`) so tool-use is exercised on demand, and a 9-milestone dashboard that
-  lights up as each is exercised. Run: `OPENROUTER_API_KEY=… node --experimental-strip-types examples/full-stack-demo/server.ts`.
-- `examples/live-chat-demo/` — a real, viewable browser chat that exercises the open
-  stack end-to-end (Harness `@theokit/sdk` local runtime + Skills tool-use + the
-  `useAgentStream` reducer rendered live via SSE) against a real OpenRouter LLM. Run
-  with `OPENROUTER_API_KEY=… node --experimental-strip-types examples/live-chat-demo/server.ts`
-  → `http://localhost:8787`. Shows token-by-token streaming text (live `onDelta`), live
-  tool cards, and the north-star `time-to-first-working-agent` measured per run.
+## [1.0.4] - 2026-07-15
 
 ### Fixed
-- `examples/full-stack-demo/` — canvas artifacts now use unique, monotonic ids and reset to a
-  fresh canvas on each prompt, so same-millisecond artifacts no longer collide and successive
-  turns no longer stack onto stale artifact state.
-- `useAgentStream` / `agentStreamReducer` now renders a tool result correctly when the
-  Harness wraps a handler's return in a shell-style `{ stdout, stderr, exitCode }`
-  envelope — previously `String(result)` rendered `[object Object]`. It now extracts
-  `stdout` (appending `stderr` when present), an `output`/`text` field, or a compact
-  JSON fallback. Covered by a new reducer test.
+- `@usetheo/ui` movida de `dependencies` (`^0.14.0`) para `peerDependencies`
+  (`>=0.22.0 <1`) — consumidores deduplicam para UMA cópia do design system
+  (antes: duas cópias no lockfile, com Toaster/useToast em runtimes distintos e
+  bundle dobrado). Descoberto pela review do M7 do usetheo-ui. (#21)
+
+## [Unreleased]
+
+### Added
+- **M2 — Code-agent Builder gap components (4 new primitives)**: `WorkLog` (collapsible "Worked for {duration}" + steps), `ApprovalModeSelector` (ask / auto-approve edits / read-only), `ModelEffortPicker` (single dropdown for model + reasoning effort), `CodeReviewPanel` (aggregate change counters + Commit + per-file unified diffs + All-files tree). Each is sourced 1:1 from the studio Builder's hand-rolled UI (the fidelity spec from the `theokit-studio/builder` × `@theokit/ui` cross-validation) so the studio can adopt the library with no UX change. TDD (24 tests), Ladle stories, registry entries, `data-slot` on each, diff coloring via the canonical `success`/`destructive` tokens (ADR-0004). `pnpm quality:gates` green.
+- Roadmap amended: added M2 Code-agent Builder gap components + M3 parity extensions (`/roadmap-feature code-agent-builder-parity`) — from the cross-validation `theokit-studio/builder` × `@theokit/ui`
+- Roadmap created (`ROADMAP.md` at repo root — M0 records the shipped AI-exclusive pivot) and
+  amended: added M1 Voice-agent surface cluster (`/roadmap-feature voice-agent-surface`)
+
+### Changed
+- **Naming decision (documented, no code change):** `@usetheo/ui` stays a **second npm scope** (the
+  neutral/community generic layer), deliberately NOT folded into `@theokit/*` (the AI product). Recorded
+  as a Locked name in `CLAUDE.md`. Rationale: the two-scope split signals neutrality; renaming a published
+  package is costly churn with no consumer benefit at current adoption.
+- Repo renamed `theo-ui` → `theokit-ui` (aligns the repo/folder name with the npm scope
+  `@theokit/ui`). The shadcn registry now serves at `https://usetheodev.github.io/theokit-ui/r/*.json`
+  (the old `.../theo-ui/r/` URL 404s — GitHub Pages does not redirect on rename). Registry
+  descriptors, README, and CONTRIBUTING updated to the new URL. The **npm package name is
+  unchanged** (`@theokit/ui`).
+- `@theokit/sdk` devDependency swapped from the local `file:../theokit-sdk/packages/sdk` path to the
+  published `^2.18.1` (unblocks the GitHub Pages registry-deploy CI, which checks out a single repo).
+  devDependency only (the real-LLM demo); not in the tarball. typecheck 0.
+
+### Fixed
+- **`AgentComposer` now returns focus to the textarea after a slash-command / @file / #memory pick.**
+  Selecting an item with the mouse moved focus to the menu button and never handed it back, so the user
+  had to click the input again before typing. The composer now refocuses the textarea and drops the caret
+  at the end of the inserted token once the value is applied. Regression test:
+  `agent-composer.test.tsx` "returns focus to the textarea after selecting an item via click".
+
+## [1.0.3] - 2026-07-14
+
+### Fixed
+- **Text selection is visible again in every v4 theme.** The `::selection` rule wrapped the theme's `oklch()` tokens in `hsl(var(--primary) / 0.25)` — invalid CSS with oklch tokens, so the selection background computed to `transparent` and the selection text kept its normal color: text was still selectable/copyable, but the highlight was invisible, making it *look* like you couldn't select anything. Fixed to use `color-mix(in oklch, var(--primary) 25%, transparent)` / the tokens directly. The same latent bug (and fix) also restored the native scrollbar thumb, the focus-visible ring, and the base `body`/`border` colors, which were likewise transparent under oklch themes.
+
+## [1.0.2] - 2026-07-12
+
+### Fixed
+- `@theokit/ui/styles.css` chained `@import "./components.css"` at the END of the file (after `@layer base`),
+  which is invalid CSS — `@import` must precede all other statements. A spec-correct PostCSS pipeline (a
+  vanilla `vite` build, e.g. the `create-theokit --surface desktop` webview) hard-errored with
+  "@import must precede all other statements", breaking the desktop scaffold's stylesheet. The precompile
+  now inserts the import among the leading `@import`s (right after `@import "tailwindcss"`). Layer
+  precedence is unchanged (`utilities` still outranks `base` by layer order, not source order). The web
+  surface was unaffected (it loads the sheet through TheoKit's own Vite CSS pipeline, not vanilla PostCSS).
+
+## [1.0.1] - 2026-07-12
+
+### Fixed
+- Icon buttons (`<Button size="icon">`, including the Send button inside `ChatComposer`) rendered
+  squished — full height but collapsed to the icon's content width — for any consumer loading the
+  precompiled `@theokit/ui/styles.css`. The precompile only `@source`-scanned this repo's own `src/`,
+  so `w-[var(--theo-control-h,2.25rem)]` — which lives ONLY in `@usetheo/ui`'s icon Button — was never
+  materialized (the `h-[…]` twin shipped because this repo's inputs use it). The precompile now also
+  scans `@usetheo/ui`'s real (realpath-resolved) dist, so every utility used by the re-exported
+  `@usetheo/ui` primitives ships in the sheet. Regression test pins the scan target contains the class
+  literal (`scripts/build-precompiled-css.test.ts`).
 
 ## [1.0.0] - 2026-07-03
+
+> **Record note (2026-07-03):** the published npm tarball `@theokit/ui@1.0.0` was cut from
+> `develop` HEAD, so it also includes the items below — briefly staged under `[Unreleased]`
+> but actually part of what shipped. The git tag `v1.0.0` predates these commits; `main` was
+> later reconciled to match npm. Folded here so the record matches the published package.
+> (`examples/*` are not in the npm tarball; the `files` field ships `dist` + `registry` only.)
+>
+> - **Changed:** `@usetheo/ui` dependency swapped from `file:../usetheo-ui` to the published
+>   `^0.14.0` range (makes `@theokit/ui` installable from the registry). Validated: typecheck 0,
+>   build, 1401 tests green against the published `@usetheo/ui@0.14.0`.
+> - **Fixed:** `useAgentStream` / `agentStreamReducer` now renders a tool result correctly when
+>   the Harness wraps a handler's return in a shell-style `{ stdout, stderr, exitCode }` envelope
+>   (previously `String(result)` rendered `[object Object]`). Covered by a new reducer test.
+> - **Added (examples, not shipped in the tarball):** `examples/full-stack-demo/` (proves M0–M8
+>   live against real OpenRouter, with a registered `roll_dice` Skills tool + 9-milestone
+>   dashboard) and `examples/live-chat-demo/` (token-by-token streaming chat over the open stack).
 
 ### Added
 - `useAgentStream` hook — the UI ↔ Harness streaming bridge (M5). Consumes an SDK

@@ -13,8 +13,8 @@ A React component library built for AI-agent surfaces — coding agents and chat
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1131%20passing-success?style=flat-square)](#quality-gates)
-[![components](https://img.shields.io/badge/components-99-7C3AED?style=flat-square)](#component-catalog)
+[![tests](https://img.shields.io/badge/tests-1157%20passing-success?style=flat-square)](#quality-gates)
+[![components](https://img.shields.io/badge/components-103-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
@@ -101,8 +101,8 @@ export default function App() {
 ### Option B — copy individual components (shadcn-style)
 
 ```bash
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/agent-event.json
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/tool-call.json
+npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/agent-event.json
+npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/tool-call.json
 ```
 
 > Branded `https://ui.usetheo.dev/r/*` URL will follow once the DNS CNAME is configured (single record at the registrar). Both URLs serve identical content.
@@ -145,27 +145,28 @@ The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via
 ## Component catalog
 
 <!-- BEGIN:component-catalog-intro -->
-**99 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
+**103 components**, organized by mechanical rule: a *primitive* imports no other `@theokit/ui` component; a *composite* does.
 <!-- END:component-catalog-intro -->
 
 <details>
 <summary>
 <!-- BEGIN:primitives-count -->
-**Primitives** (59) — building blocks
+**Primitives** (63) — building blocks
 <!-- END:primitives-count -->
 </summary>
 
 <!-- BEGIN:primitives -->
 `AgentErrorCard` · `AgentEvent` · `AgentHandoff` · `AgentProfile` · `AgentStartingState` · `AgentStreaming`
-`ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice` · `BranchIndicator` · `BrowserControls`
-`BuildLogStream` · `CapabilityIndicator` · `ChannelCard` · `ChatThread` · `ContextCard` · `ContextWindowBar`
-`CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DiffViewer` · `ExportChatDialog` · `FolderContextCard`
-`FolderSelector` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog` · `IntentSelector` · `LaneBoard`
-`MCPServerCard` · `MemoryEditor` · `MentionMenu` · `ModelCard` · `ModelSelector` · `PermissionMatrix`
-`ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips` · `RecentFoldersList` · `RuleCard` · `RunStats`
-`RunStatusPill` · `RunningTasksPanel` · `SessionListItem` · `SessionTimeline` · `SkillCard` · `StepsRail`
-`SubAgentDispatch` · `SystemPromptEditor` · `TaskNode` · `TaskPlan` · `TerminalPanel` · `ThinkingLevelSelector`
-`TokenUsageChart` · `ToolCall` · `ToolCallCard` · `ToolResult` · `ToolsList`
+`ApprovalModeSelector` · `ArtifactPreview` · `AttachmentChip` · `AuditLogEntry` · `AutoCompactNotice` · `BranchIndicator`
+`BrowserControls` · `BuildLogStream` · `CapabilityIndicator` · `ChannelCard` · `ChatThread` · `CodeReviewPanel`
+`ContextCard` · `ContextWindowBar` · `CostMeter` · `CreatedFilesCard` · `CronJobCard` · `DiffViewer`
+`ExportChatDialog` · `FolderContextCard` · `FolderSelector` · `GatewayStatusIndicator` · `HookConfig` · `HookEventLog`
+`IntentSelector` · `LaneBoard` · `MCPServerCard` · `MemoryEditor` · `MentionMenu` · `ModelCard`
+`ModelEffortPicker` · `ModelSelector` · `PermissionMatrix` · `ProgressChecklist` · `ProjectSwitcher` · `QuickActionChips`
+`RecentFoldersList` · `RuleCard` · `RunStats` · `RunStatusPill` · `RunningTasksPanel` · `SessionListItem`
+`SessionTimeline` · `SkillCard` · `StepsRail` · `SubAgentDispatch` · `SystemPromptEditor` · `TaskNode`
+`TaskPlan` · `TerminalPanel` · `ThinkingLevelSelector` · `TokenUsageChart` · `ToolCall` · `ToolCallCard`
+`ToolResult` · `ToolsList` · `WorkLog`
 <!-- END:primitives -->
 
 </details>
@@ -342,7 +343,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 Honest claims only.
 
 - **Production.** 99 components, 1,131 tests passing, zero a11y violations across 171 vitest-axe checks, bundle size enforced. Quality gates run on every PR.
-- **Registry distribution.** Served at [`https://usetheodev.github.io/theo-ui/r/`](https://usetheodev.github.io/theo-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
+- **Registry distribution.** Served at [`https://usetheodev.github.io/theokit-ui/r/`](https://usetheodev.github.io/theokit-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.
 
