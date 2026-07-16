@@ -1,6 +1,6 @@
 {
   "name": "@theokit/ui",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Theo UI — React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
   "license": "Apache-2.0",
   "type": "module",
@@ -414,6 +414,7 @@
     "playground": "vite --config playground/vite.config.ts",
     "playground:build": "vite build --config playground/vite.config.ts",
     "playground:preview": "vite preview --config playground/vite.config.ts",
+    "playground:builder": "vite --config playground/builder-parity.vite.config.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome check src",
     "lint:ci": "biome ci src scripts .ladle playground",

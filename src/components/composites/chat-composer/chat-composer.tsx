@@ -9,6 +9,7 @@ import type {
   TextareaHTMLAttributes,
 } from "react";
 import { cn } from "../../../lib/cn.js";
+import type { IconComponent } from "../../../lib/types.js";
 
 export type ComposerMode = "chat" | "code" | "infra";
 
@@ -62,6 +63,16 @@ interface ChatComposerProps extends Omit<HTMLAttributes<HTMLFormElement>, "onSub
    * Extra textarea props (rows, maxLength…).
    */
   textareaProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "onChange">;
+  /**
+   * Override the submit button's icon. Defaults to a paper-plane (`Send`).
+   * Host apps with their own send affordance (e.g. an arrow) pass it here.
+   */
+  submitIcon?: IconComponent;
+  /**
+   * Override the submit button's accessible name. Defaults to "Send message".
+   * Host apps with a domain verb (e.g. "Start build session") pass it here.
+   */
+  submitLabel?: string;
 }
 
 const defaultPlaceholder: Record<ComposerMode, string> = {
@@ -108,10 +119,13 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
       textareaLabel,
       placeholder,
       textareaProps,
+      submitIcon,
+      submitLabel,
       ...props
     },
     ref,
   ) => {
+    const SubmitIcon = submitIcon ?? Send;
     const handleSubmit = (e: FormEvent) => {
       e.preventDefault();
       if (running) return;
@@ -212,8 +226,13 @@ const ChatComposer = forwardRef<HTMLFormElement, ChatComposerProps>(
                 <Square />
               </Button>
             ) : (
-              <Button type="submit" size="icon" disabled={!value.trim()} aria-label="Send message">
-                <Send />
+              <Button
+                type="submit"
+                size="icon"
+                disabled={!value.trim()}
+                aria-label={submitLabel ?? "Send message"}
+              >
+                <SubmitIcon />
               </Button>
             )}
           </div>

@@ -108,4 +108,26 @@ describe("ChatComposer", () => {
     const { container } = render(<ChatComposer value="" onValueChange={() => undefined} />);
     expect(await axe(container)).toHaveNoViolations();
   });
+
+  // 1.2.0: submit affordance overrides (host apps with their own send verb/icon).
+  it("overrides the submit button's accessible name with submitLabel", () => {
+    render(
+      <ChatComposer value="go" onValueChange={() => undefined} submitLabel="Start build session" />,
+    );
+    expect(screen.getByRole("button", { name: "Start build session" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Send message" })).not.toBeInTheDocument();
+  });
+
+  it("renders a custom submit icon when submitIcon is provided", () => {
+    const CustomIcon = (props: { className?: string }) => (
+      <svg {...props} data-testid="custom-submit-icon" aria-hidden="true" />
+    );
+    render(<ChatComposer value="go" onValueChange={() => undefined} submitIcon={CustomIcon} />);
+    expect(screen.getByTestId("custom-submit-icon")).toBeInTheDocument();
+  });
+
+  it("defaults the submit button to 'Send message' when no submitLabel", () => {
+    render(<ChatComposer value="go" onValueChange={() => undefined} />);
+    expect(screen.getByRole("button", { name: "Send message" })).toBeInTheDocument();
+  });
 });

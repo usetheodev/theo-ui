@@ -12,6 +12,11 @@ export interface IntentOption {
   description?: string;
   /** Optional icon — defaults to a pencil for the trigger if none. */
   icon?: IconComponent;
+  /**
+   * Optional class override for the icon chip in `tiles` layout (e.g. a distinct
+   * hue per build-intent). Defaults to `bg-primary/15 text-primary`.
+   */
+  tileClassName?: string;
 }
 
 interface IntentSelectorProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
@@ -58,7 +63,12 @@ const IntentSelector = forwardRef<HTMLButtonElement, IntentSelectorProps>(
                   opt.id === value && "border-primary/50",
                 )}
               >
-                <span className="flex size-7 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                <span
+                  className={cn(
+                    "flex size-7 items-center justify-center rounded-lg",
+                    opt.tileClassName ?? "bg-primary/15 text-primary",
+                  )}
+                >
                   <OptIcon className="size-4" aria-hidden="true" />
                 </span>
                 <span className="mt-3 font-medium text-foreground text-xs leading-snug">
