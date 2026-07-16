@@ -34,6 +34,16 @@ interface CreatedFilesCardProps extends Omit<HTMLAttributes<HTMLElement>, "title
    * for the `edited` variant).
    */
   cta?: ReactNode;
+  /**
+   * Where to render the `cta`. `footer` (default) — a bottom row; `header` — inline on the
+   * title row (right-aligned), for a compact coding-agent edited-files card.
+   */
+  ctaPlacement?: "header" | "footer";
+  /**
+   * Optional aggregate line/removed counts shown next to the title (edited variant), e.g.
+   * `+6 -3` summing every changed file.
+   */
+  headerAggregate?: { additions: number; deletions: number };
 }
 
 /**
@@ -43,7 +53,19 @@ interface CreatedFilesCardProps extends Omit<HTMLAttributes<HTMLElement>, "title
  * Used as social proof of delivery in Task Completed views.
  */
 const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
-  ({ className, title, variant = "created", files, cta, ...props }, ref) => {
+  (
+    {
+      className,
+      title,
+      variant = "created",
+      files,
+      cta,
+      ctaPlacement = "footer",
+      headerAggregate,
+      ...props
+    },
+    ref,
+  ) => {
     const edited = variant === "edited";
     const HeaderIcon = edited ? SquarePen : Cloud;
     const resolvedTitle =
@@ -64,6 +86,13 @@ const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
         <header className="mb-3 flex items-center gap-2">
           <HeaderIcon className="size-4 text-primary" aria-hidden="true" />
           <h3 className="font-display text-title-md tracking-tight">{resolvedTitle}</h3>
+          {headerAggregate ? (
+            <span className="font-mono text-code-sm">
+              <span className="text-success">+{headerAggregate.additions}</span>{" "}
+              <span className="text-destructive">-{headerAggregate.deletions}</span>
+            </span>
+          ) : null}
+          {cta && ctaPlacement === "header" ? <span className="ml-auto">{cta}</span> : null}
         </header>
         <ul className="grid gap-2">
           {files.map((file) => {
@@ -110,7 +139,9 @@ const CreatedFilesCard = forwardRef<HTMLElement, CreatedFilesCardProps>(
             );
           })}
         </ul>
-        {cta ? <div className="mt-3 flex justify-end">{cta}</div> : null}
+        {cta && ctaPlacement !== "header" ? (
+          <div className="mt-3 flex justify-end">{cta}</div>
+        ) : null}
       </section>
     );
   },

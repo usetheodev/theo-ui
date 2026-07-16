@@ -11,7 +11,8 @@
   "registryDependencies": [
     "https://usetheodev.github.io/usetheo-ui/r/button.json",
     "cn",
-    "tailwind-preset"
+    "tailwind-preset",
+    "types"
   ],
   "files": [
     {

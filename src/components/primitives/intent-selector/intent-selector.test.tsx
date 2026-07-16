@@ -62,4 +62,28 @@ describe("IntentSelector", () => {
     // menu renders a single trigger button
     expect(screen.getAllByRole("button")).toHaveLength(1);
   });
+
+  // 1.2.0: per-tile icon-chip color override (build-intent tiles with distinct hues).
+  it("tiles layout applies per-option tileClassName to the icon chip", () => {
+    const withColor = [
+      { id: "edit", label: "Edit", icon: Pencil, tileClassName: "bg-sky-500/15 text-sky-400" },
+      { id: "plan", label: "Plan", icon: ListChecks },
+    ];
+    const { container } = render(
+      <IntentSelector layout="tiles" value="edit" options={withColor} />,
+    );
+    // the overridden option's chip uses the custom classes
+    const chip = container.querySelector(".bg-sky-500\\/15");
+    expect(chip).not.toBeNull();
+    expect(chip).toHaveClass("text-sky-400");
+    // an option without an override keeps the default primary chip
+    expect(container.querySelector(".bg-primary\\/15")).not.toBeNull();
+  });
+
+  it("tiles layout defaults the chip to primary when no tileClassName is set", () => {
+    const { container } = render(<IntentSelector layout="tiles" value="edit" options={OPTIONS} />);
+    // no overrides → every chip is the default primary tint
+    expect(container.querySelectorAll(".bg-primary\\/15")).toHaveLength(OPTIONS.length);
+    expect(container.querySelector(".bg-sky-500\\/15")).toBeNull();
+  });
 });
