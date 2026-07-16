@@ -91,7 +91,7 @@ the first post-pivot milestone rather than a someday item.
 
 ---
 
-## M3 — [ ] Code-agent Builder parity extensions + publish
+## M3 — [x] Code-agent Builder parity extensions + publish
 
 > Added 2026-07-16 by `/roadmap-feature` (slug: `code-agent-builder-parity`). See CHANGELOG `[Unreleased] § Added`. Same grill as M2.
 
@@ -99,11 +99,11 @@ the first post-pivot milestone rather than a someday item.
 
 **Definition of done:**
 
-- [ ] 4 extensions shipped — `diff-viewer` (accept a unified `diff: string` via a `parseUnifiedDiff → hunks` helper, in addition to structured hunks), `created-files-card` ("edited" semantics: per-file +/- , Review + Undo actions), `chat-message` (bubble user / plain assistant variants for the Builder thread), `intent-selector` (2×2 tiles with a colored icon for build intents) — each with test + story + updated registry, **no breaking change** to the 82.
-- [ ] Fidelity validated against the Builder (`session-view.tsx`, `review.tsx`, `index.tsx`).
-- [ ] `pnpm quality:gates` green.
-- [ ] `@theokit/ui` published to npm (minor) carrying M2 + M3; CHANGELOG released entry.
-- [ ] README/registry updated.
+- [x] 4 extensions shipped — `diff-viewer` (accept a unified `diff: string` via a `parseUnifiedDiff → hunks` helper, in addition to structured hunks), `created-files-card` ("edited" semantics: per-file +/- , Review + Undo actions), `chat-message` (bubble user / plain assistant variants for the Builder thread), `intent-selector` (2×2 tiles with a colored icon for build intents) — each with test + story + updated registry, **no breaking change** to the 82.
+- [x] Fidelity validated against the Builder (`session-view.tsx`, `review.tsx`, `index.tsx`).
+- [x] `pnpm quality:gates` green.
+- [x] `@theokit/ui` published to npm (minor) carrying M2 + M3; CHANGELOG released entry.
+- [x] README/registry updated.
 
 **Dependencies:** M2.
 
