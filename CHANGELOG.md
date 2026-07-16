@@ -5,15 +5,9 @@ All notable changes to `@theokit/ui` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.4] - 2026-07-15
-
-### Fixed
-- `@usetheo/ui` movida de `dependencies` (`^0.14.0`) para `peerDependencies`
-  (`>=0.22.0 <1`) — consumidores deduplicam para UMA cópia do design system
-  (antes: duas cópias no lockfile, com Toaster/useToast em runtimes distintos e
-  bundle dobrado). Descoberto pela review do M7 do usetheo-ui. (#21)
-
 ## [Unreleased]
+
+## [1.1.0] - 2026-07-16
 
 ### Added
 - **M3 — Code-agent Builder parity extensions (additive, no breaking change to the 82)**: `diff-viewer` now accepts a unified `diff: string` (via the new exported `parseUnifiedDiffToHunks` helper) in addition to structured `hunks`; `created-files-card` gains a `variant="edited"` ("Edited N files", SquarePen icon, per-file `+/-` from optional `additions`/`deletions`); `intent-selector` gains `layout="tiles"` (a responsive build-intent grid) alongside the default `menu`; `chat-message` already covers the Builder thread (user `contained` bubble + assistant `flat`) — demonstrated via a story, no code change (YAGNI). These complete 1:1 parity with the studio Builder so its hand-rolled UI can be replaced (Fase B). All extensions are additive with regression tests; suite 1444 green.
@@ -42,6 +36,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   had to click the input again before typing. The composer now refocuses the textarea and drops the caret
   at the end of the inserted token once the value is applied. Regression test:
   `agent-composer.test.tsx` "returns focus to the textarea after selecting an item via click".
+
+## [1.0.4] - 2026-07-15
+
+### Fixed
+- `@usetheo/ui` movida de `dependencies` (`^0.14.0`) para `peerDependencies`
+  (`>=0.22.0 <1`) — consumidores deduplicam para UMA cópia do design system
+  (antes: duas cópias no lockfile, com Toaster/useToast em runtimes distintos e
+  bundle dobrado). Descoberto pela review do M7 do usetheo-ui. (#21)
 
 ## [1.0.3] - 2026-07-14
 
