@@ -67,7 +67,7 @@ the first post-pivot milestone rather than a someday item.
 
 ---
 
-## M2 — [ ] Code-agent Builder gap components
+## M2 — [x] Code-agent Builder gap components
 
 > Added 2026-07-16 by `/roadmap-feature` (slug: `code-agent-builder-parity`). See CHANGELOG `[Unreleased] § Added`. Source: cross-validation `theokit-studio/builder` × `@theokit/ui` (grill: `.claude/knowledge-base/grills/code-agent-builder-parity-feature-grill.md`).
 
@@ -75,10 +75,10 @@ the first post-pivot milestone rather than a someday item.
 
 **Definition of done:**
 
-- [ ] 4 new components shipped — `code-review-panel` (composite: file tree + multi-file diff + toolbar with aggregate counters + Commit), `approval-mode-selector` (3-state ask / auto-edits / read-only), `work-log` ("Worked for X" collapsible + steps), and a `model` + `effort` picker (compose `model-selector` + `thinking-level-selector` into the Builder's single dropdown) — each with test + story + registry entry.
-- [ ] Fidelity: each reproduces the Builder's DOM / design tokens / behavior (`review.tsx`, `session-view.tsx`, `model-picker.tsx`); validated by a Ladle story + preserved `data-testid` semantics.
-- [ ] `pnpm quality:gates` green (incl. a11y + bundle — heavy composites go to a subpath if the baseline blows); the 82 existing components untouched.
-- [ ] README/registry updated; CHANGELOG `[Unreleased]` entries present.
+- [x] 4 new components shipped — `code-review-panel` (composite: file tree + multi-file diff + toolbar with aggregate counters + Commit), `approval-mode-selector` (3-state ask / auto-edits / read-only), `work-log` ("Worked for X" collapsible + steps), and a `model` + `effort` picker (compose `model-selector` + `thinking-level-selector` into the Builder's single dropdown) — each with test + story + registry entry.
+- [x] Fidelity: each reproduces the Builder's DOM / design tokens / behavior (`review.tsx`, `session-view.tsx`, `model-picker.tsx`); validated by a Ladle story + preserved `data-testid` semantics.
+- [x] `pnpm quality:gates` green (incl. a11y + bundle — heavy composites go to a subpath if the baseline blows); the 82 existing components untouched.
+- [x] README/registry updated; CHANGELOG `[Unreleased]` entries present.
 
 **Dependencies:** M0 (satisfied).
 
