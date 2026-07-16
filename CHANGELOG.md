@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-07-16
+
+### Changed
+- Menus/popovers agora usam o tom escuro do card: no dark, `--popover` passa de `#171717` (oklch 0.204) para **`#121212` (oklch 0.182 — igual ao `--card`)**. Todo popover/dropdown (approval, model, intent, tooltip, etc.) fica no mesmo tom escuro dos menus do `@usetheo/ui`, como pedido para o Builder do studio. `--popover-foreground` inalterado (já igual ao `--card-foreground`); contraste do texto do menu **melhora** (fundo mais escuro). `pnpm quality:visual` verde (105), 1457 testes. (#ui-scope-parity)
+
 ## [1.2.0] - 2026-07-16
 
 ### Added
