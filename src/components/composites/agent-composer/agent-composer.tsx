@@ -144,6 +144,7 @@ export function AgentComposer({
   // A click on a menu item steals focus from the textarea. Once the picked value
   // has been applied, hand focus back and drop the caret at the end so the user
   // keeps typing without touching the mouse again.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `value` is the intentional re-run trigger (body reads refocusPending, not value); dropping it stops the refocus firing.
   useEffect(() => {
     if (!refocusPending.current) return;
     refocusPending.current = false;
