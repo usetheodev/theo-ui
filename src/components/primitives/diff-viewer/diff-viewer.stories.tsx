@@ -36,3 +36,19 @@ export const Default: Story = () => (
     ]}
   />
 );
+
+export const FromUnifiedString: Story = () => (
+  <div className="max-w-xl">
+    <DiffViewer
+      path="agents/support-agent.ts"
+      stats={{ added: 2, removed: 1 }}
+      diff={`--- a/agents/support-agent.ts
++++ b/agents/support-agent.ts
+ export default defineAgent({
+-  model: "openai/gpt-4o-mini",
++  model: "anthropic/claude-sonnet-4-6",
++  tools: [lookupTool],
+ });`}
+    />
+  </div>
+);
