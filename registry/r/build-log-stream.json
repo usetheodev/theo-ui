@@ -5,9 +5,9 @@
   "title": "BuildLogStream",
   "description": "Terminal-like log viewer with timestamps + level coloring.",
   "registryDependencies": [
-    "https://usetheodev.github.io/theo-ui/r/cn.json",
-    "https://usetheodev.github.io/theo-ui/r/env.json",
-    "https://usetheodev.github.io/theo-ui/r/tailwind-preset.json"
+    "https://usetheodev.github.io/theokit-ui/r/cn.json",
+    "https://usetheodev.github.io/theokit-ui/r/env.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

@@ -66,11 +66,11 @@ but **must not import their own consumers** (no circular deps).
 > `validateArchitectureCensus` quality gate fails the build if they drift.
 
 <!-- BEGIN:primitives-census -->
-### Primitives (59)
+### Primitives (63)
 <!-- END:primitives-census -->
 
 <!-- BEGIN:primitives-list -->
-`AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `BranchIndicator`, `BrowserControls`, `BuildLogStream`, `CapabilityIndicator`, `ChannelCard`, `ChatThread`, `ContextCard`, `ContextWindowBar`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `DiffViewer`, `ExportChatDialog`, `FolderContextCard`, `FolderSelector`, `GatewayStatusIndicator`, `HookConfig`, `HookEventLog`, `IntentSelector`, `LaneBoard`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `ModelCard`, `ModelSelector`, `PermissionMatrix`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunStatusPill`, `RunningTasksPanel`, `SessionListItem`, `SessionTimeline`, `SkillCard`, `StepsRail`, `SubAgentDispatch`, `SystemPromptEditor`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `ThinkingLevelSelector`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`
+`AgentErrorCard`, `AgentEvent`, `AgentHandoff`, `AgentProfile`, `AgentStartingState`, `AgentStreaming`, `ApprovalModeSelector`, `ArtifactPreview`, `AttachmentChip`, `AuditLogEntry`, `AutoCompactNotice`, `BranchIndicator`, `BrowserControls`, `BuildLogStream`, `CapabilityIndicator`, `ChannelCard`, `ChatThread`, `CodeReviewPanel`, `ContextCard`, `ContextWindowBar`, `CostMeter`, `CreatedFilesCard`, `CronJobCard`, `DiffViewer`, `ExportChatDialog`, `FolderContextCard`, `FolderSelector`, `GatewayStatusIndicator`, `HookConfig`, `HookEventLog`, `IntentSelector`, `LaneBoard`, `MCPServerCard`, `MemoryEditor`, `MentionMenu`, `ModelCard`, `ModelEffortPicker`, `ModelSelector`, `PermissionMatrix`, `ProgressChecklist`, `ProjectSwitcher`, `QuickActionChips`, `RecentFoldersList`, `RuleCard`, `RunStats`, `RunStatusPill`, `RunningTasksPanel`, `SessionListItem`, `SessionTimeline`, `SkillCard`, `StepsRail`, `SubAgentDispatch`, `SystemPromptEditor`, `TaskNode`, `TaskPlan`, `TerminalPanel`, `ThinkingLevelSelector`, `TokenUsageChart`, `ToolCall`, `ToolCallCard`, `ToolResult`, `ToolsList`, `WorkLog`
 <!-- END:primitives-list -->
 
 <!-- BEGIN:composites-census -->

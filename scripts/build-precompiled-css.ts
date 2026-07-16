@@ -24,8 +24,8 @@ import { spawnSync } from "node:child_process";
  * uncompressed) — only the utilities the library actually uses. Consumer
  * `@theme` overrides still win via the runtime CSS-var cascade.
  */
-import { existsSync, statSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { existsSync, realpathSync, statSync } from "node:fs";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -87,10 +87,54 @@ async function ensureTailwindV4Resolvable(): Promise<void> {
   }
 }
 
+function resolveUsetheoUiDist(): string {
+  // The precompiled sheet MUST scan @usetheo/ui's compiled primitives too:
+  // @theokit/ui re-exports them (e.g. ChatComposer renders @usetheo/ui's icon
+  // Button), so a utility used ONLY by a @usetheo/ui primitive — like the icon
+  // Button's `w-[var(--theo-control-h,2.25rem)]` — never materializes if we
+  // scan only this repo's `src/`, and consumers get a squished (content-width)
+  // icon button (the `h-[…]` twin ships because this repo's own inputs use it).
+  //
+  // Resolve @usetheo/ui's OWN entry, then realpath it so the path is REAL (not a
+  // pnpm symlink): Tailwind v4 `@source` refuses to follow symlinks — the same
+  // constraint this whole precompile exists to dodge. `@usetheo/ui`'s `exports`
+  // map exposes only the ESM `import` condition (no `require`, no
+  // `./package.json`), so CJS `require.resolve` cannot reach it — use the ESM
+  // resolver, which honors `import` and lands on `…/dist/index.js`.
+  const entryPath = fileURLToPath(import.meta.resolve("@usetheo/ui"));
+  const dist = dirname(realpathSync(entryPath));
+  if (!existsSync(dist) || !dist.endsWith("dist")) {
+    throw new Error(
+      `[build-precompiled-css] @usetheo/ui dist not resolvable (got ${dist}). Run \`pnpm install\` (and build @usetheo/ui) and retry.`,
+    );
+  }
+  return dist;
+}
+
+async function writeGeneratedEntry(): Promise<string> {
+  // Build a throwaway entry = the checked-in `components-entry.css` (relative
+  // `@source` globs stay valid because the generated file lives in the SAME
+  // `src/styles/` dir) + an ABSOLUTE `@source` for @usetheo/ui's real dist.
+  const base = await readFile(join(ROOT, "src/styles/components-entry.css"), "utf-8");
+  const usetheoDist = resolveUsetheoUiDist();
+  const extra = [
+    "",
+    "/* Scan @usetheo/ui's compiled primitives so utilities used ONLY there",
+    " * (e.g. the icon Button's width) materialize in the precompiled sheet.",
+    " * Absolute realpath — Tailwind v4 @source does not follow pnpm symlinks. */",
+    `@source "${usetheoDist}/**/*.{js,mjs,cjs}";`,
+    `@source not "${usetheoDist}/**/*.test.{js,mjs,cjs}";`,
+    "",
+  ].join("\n");
+  const genPath = join(ROOT, "src/styles/components-entry.generated.css");
+  await writeFile(genPath, `${base.trimEnd()}\n${extra}`);
+  return genPath;
+}
+
 async function compileUtilities(): Promise<void> {
   const cli = resolveTailwindCliBinary();
   await ensureTailwindV4Resolvable();
-  const inputPath = join(ROOT, "src/styles/components-entry.css");
+  const inputPath = await writeGeneratedEntry();
   const outputPath = join(ROOT, "dist/components.css");
 
   process.stdout.write(`[build-precompiled-css] running ${cli}\n`);
@@ -108,6 +152,10 @@ async function compileUtilities(): Promise<void> {
       encoding: "utf-8",
     },
   );
+
+  // Remove the generated entry regardless of outcome — it is a build artifact,
+  // never committed (a stale copy would drift from `components-entry.css`).
+  await rm(inputPath, { force: true });
 
   if (result.status !== 0) {
     throw new Error(
@@ -140,13 +188,24 @@ async function chainComponentsCssFromStylesCss(): Promise<void> {
     return;
   }
 
-  // Append at the END so consumer-side `@theme` overrides (which run via
-  // the CSS-var cascade at runtime) and earlier `@layer base` rules
-  // (declared above in styles.css) keep their precedence.
-  const next = `${current.trimEnd()}\n\n/* RFC 0008 follow-up #2 — pre-compiled utility rules. The bytes here\n * are emitted at build time by \`scripts/build-precompiled-css.ts\` so\n * consumers do not depend on Tailwind v4 \`@source\` scanning the\n * library's node_modules tree (which breaks under pnpm symlinks).\n */\n@import "./components.css";\n`;
+  // Insert among the LEADING `@import`s (right after `@import "tailwindcss";`), NOT at the end:
+  // CSS forbids `@import` after any other statement (`@layer base { … }` sits below), so an
+  // end-appended import is invalid and a spec-correct PostCSS pipeline (a vanilla `vite` frontend, e.g.
+  // the `--surface desktop` webview) hard-errors: "@import must precede all other statements". Placing it
+  // among the other imports is valid everywhere; layer precedence is unaffected (Tailwind's `utilities`
+  // layer still outranks `base` by layer order, not source order) and consumer `@theme` overrides cascade
+  // at runtime via the `--*` CSS vars regardless of import position.
+  const anchor = '@import "tailwindcss";';
+  if (!current.includes(anchor)) {
+    throw new Error(
+      `[build-precompiled-css] dist/styles.css missing the '${anchor}' anchor — cannot place the components.css import at a valid position.`,
+    );
+  }
+  const chained = `/* RFC 0008 follow-up #2 — pre-compiled utility rules, emitted at build time by\n   scripts/build-precompiled-css.ts so consumers do not depend on Tailwind v4 @source\n   scanning node_modules (breaks under pnpm symlinks). Kept among the leading @imports —\n   CSS forbids @import after other statements. */\n@import "./components.css";`;
+  const next = current.replace(anchor, `${anchor}\n${chained}`);
   await writeFile(stylesPath, next);
   process.stdout.write(
-    `[build-precompiled-css] appended @import "./components.css" to dist/styles.css\n`,
+    `[build-precompiled-css] chained @import "./components.css" after the tailwindcss import\n`,
   );
 }
 
@@ -157,7 +216,7 @@ async function main(): Promise<void> {
   process.stdout.write("[build-precompiled-css] done\n");
 }
 
-export { resolveTailwindCliBinary };
+export { resolveTailwindCliBinary, resolveUsetheoUiDist };
 
 // Only run main when invoked as the entrypoint (CLI). Importers (the regression
 // test) get the pure resolver without side effects.

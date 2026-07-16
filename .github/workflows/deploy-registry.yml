@@ -3,7 +3,7 @@ name: Deploy Registry to GitHub Pages
 # T1.2 (agent-team-audit-fixes plan): publish registry/r/*.json to GitHub
 # Pages so the shadcn copy-paste path (`npx shadcn@latest add
 # <url>/r/<name>.json`) actually resolves. Functional URL is
-# https://usetheodev.github.io/theo-ui/r/<name>.json — the brand URL
+# https://usetheodev.github.io/theokit-ui/r/<name>.json — the brand URL
 # https://ui.usetheo.dev/r/<name>.json is a DNS CNAME away (config'd
 # separately at the registrar/CDN level).
 
@@ -79,7 +79,7 @@ jobs:
             <h1>@theokit/ui — registry</h1>
             <p>shadcn-compatible component registry for <a href="https://github.com/usetheodev/theo-ui">@theokit/ui</a>.</p>
             <p>Install any component:</p>
-            <pre><code>npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json</code></pre>
+            <pre><code>npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/button.json</code></pre>
             <p>See the <a href="index.json">catalog index</a> for all 114 items.</p>
             <hr />
             <p>npm: <a href="https://www.npmjs.com/package/@theokit/ui"><code>pnpm add @theokit/ui@next</code></a></p>

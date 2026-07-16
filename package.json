@@ -1,6 +1,6 @@
 {
   "name": "@theokit/ui",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Theo UI — React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
   "license": "Apache-2.0",
   "type": "module",
@@ -70,6 +70,10 @@
       "types": "./dist/components/composites/approval-card/index.d.ts",
       "import": "./dist/composites/approval-card/index.js"
     },
+    "./approval-mode-selector": {
+      "types": "./dist/components/primitives/approval-mode-selector/index.d.ts",
+      "import": "./dist/primitives/approval-mode-selector/index.js"
+    },
     "./artifact-preview": {
       "types": "./dist/components/primitives/artifact-preview/index.d.ts",
       "import": "./dist/primitives/artifact-preview/index.js"
@@ -121,6 +125,10 @@
     "./choice-prompt": {
       "types": "./dist/components/composites/choice-prompt/index.d.ts",
       "import": "./dist/composites/choice-prompt/index.js"
+    },
+    "./code-review-panel": {
+      "types": "./dist/components/primitives/code-review-panel/index.d.ts",
+      "import": "./dist/primitives/code-review-panel/index.js"
     },
     "./confirm-prompt": {
       "types": "./dist/components/composites/confirm-prompt/index.d.ts",
@@ -205,6 +213,10 @@
     "./model-card": {
       "types": "./dist/components/primitives/model-card/index.d.ts",
       "import": "./dist/primitives/model-card/index.js"
+    },
+    "./model-effort-picker": {
+      "types": "./dist/components/primitives/model-effort-picker/index.d.ts",
+      "import": "./dist/primitives/model-effort-picker/index.js"
     },
     "./model-selector": {
       "types": "./dist/components/primitives/model-selector/index.d.ts",
@@ -338,6 +350,10 @@
       "types": "./dist/components/composites/usage-meter/index.d.ts",
       "import": "./dist/composites/usage-meter/index.js"
     },
+    "./work-log": {
+      "types": "./dist/components/primitives/work-log/index.d.ts",
+      "import": "./dist/primitives/work-log/index.js"
+    },
     "./whiteboard": {
       "types": "./dist/components/primitives/whiteboard/index.d.ts",
       "import": "./dist/whiteboard/index.js"
@@ -446,6 +462,7 @@
   },
   "peerDependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "@usetheo/ui": ">=0.22.0 <1",
     "hast-util-from-html": "^2.0.0",
     "hast-util-sanitize": "^5.0.0",
     "hast-util-to-jsx-runtime": "^2.0.0",
@@ -532,7 +549,6 @@
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.6",
-    "@usetheo/ui": "^0.14.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.471.0",
@@ -552,7 +568,7 @@
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
     "@theokit/plugin-canvas": "0.3.1",
-    "@theokit/sdk": "file:../theokit-sdk/packages/sdk",
+    "@theokit/sdk": "^2.18.1",
     "@types/culori": "^4.0.1",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",

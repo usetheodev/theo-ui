@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-review-panel",
+  "type": "registry:ui",
+  "title": "CodeReviewPanel",
+  "description": "Code-agent review surface: aggregate change counters, a Commit action, per-file unified diffs, and an All-files tree.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "cn",
+    "tailwind-preset"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/code-review-panel/code-review-panel.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/code-review-panel.tsx"
+    }
+  ]
+}

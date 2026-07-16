@@ -575,5 +575,33 @@
     "tier": "ai",
     "target": "@theokit/ui",
     "rationale": "AI-agent surface vocabulary (Blueprint §Q2) — stays in @theokit/ui"
+  },
+  {
+    "name": "work-log",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Code-agent work-log surface (M2 Builder-parity gap) — AI-agent vocabulary, stays in @theokit/ui"
+  },
+  {
+    "name": "approval-mode-selector",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Code-agent composer approval-mode control (M2 Builder-parity gap) — AI-agent vocabulary, stays in @theokit/ui"
+  },
+  {
+    "name": "model-effort-picker",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Code-agent composer model+effort picker (M2 Builder-parity gap) — AI-agent vocabulary, stays in @theokit/ui"
+  },
+  {
+    "name": "code-review-panel",
+    "layer": "primitive",
+    "tier": "ai",
+    "target": "@theokit/ui",
+    "rationale": "Code-agent multi-file review surface with diffs (M2 Builder-parity gap) — AI-agent vocabulary, stays in @theokit/ui"
   }
 ]

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "work-log",
+  "type": "registry:ui",
+  "title": "WorkLog",
+  "description": "Collapsible \"Worked for {duration}\" summary revealing the ordered steps an agent took.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://usetheodev.github.io/theokit-ui/r/cn.json",
+    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/work-log/work-log.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/work-log.tsx",
+      "content": "\"use client\";\n\nimport { ChevronDown, ChevronRight, Clock } from \"lucide-react\";\nimport { forwardRef, useState } from \"react\";\nimport type { HTMLAttributes } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\ninterface WorkLogProps extends HTMLAttributes<HTMLDivElement> {\n  /** Human-formatted elapsed label, e.g. \"2m 30s\". Display-only. */\n  workedFor: string;\n  /** Ordered work steps revealed when expanded. */\n  steps: string[];\n  /** Start expanded. Defaults to collapsed. */\n  defaultOpen?: boolean;\n}\n\n/**\n * WorkLog — a collapsible \"Worked for {duration}\" summary that reveals the ordered\n * steps an agent took. Mirrors the code-assistant work-log row: a dim toggle with a\n * clock + elapsed label + chevron, expanding to a left-ruled list of steps.\n *\n * Presentational: it holds only open/closed state; `workedFor` is formatted by the caller.\n */\nconst WorkLog = forwardRef<HTMLDivElement, WorkLogProps>(\n  ({ className, workedFor, steps, defaultOpen = false, ...props }, ref) => {\n    const [open, setOpen] = useState(defaultOpen);\n    return (\n      <div data-slot=\"work-log\" ref={ref} className={className} {...props}>\n        <button\n          type=\"button\"\n          onClick={() => setOpen((v) => !v)}\n          aria-expanded={open}\n          className=\"flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground\"\n        >\n          <Clock className=\"size-3.5\" aria-hidden />\n          Worked for {workedFor}\n          {open ? (\n            <ChevronDown className=\"size-3.5\" aria-hidden />\n          ) : (\n            <ChevronRight className=\"size-3.5\" aria-hidden />\n          )}\n        </button>\n        {open ? (\n          <ul className={cn(\"mt-2 space-y-1 border-border/40 border-l pl-3\")}>\n            {steps.map((step) => (\n              <li key={step} className=\"text-muted-foreground text-xs\">\n                {step}\n              </li>\n            ))}\n          </ul>\n        ) : null}\n      </div>\n    );\n  },\n);\nWorkLog.displayName = \"WorkLog\";\n\nexport { WorkLog };\nexport type { WorkLogProps };\n"
+    }
+  ]
+}

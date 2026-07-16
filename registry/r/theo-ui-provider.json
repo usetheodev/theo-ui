@@ -8,7 +8,7 @@
     "@usetheo/ui"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theo-ui/r/theme-provider.json",
+    "https://usetheodev.github.io/theokit-ui/r/theme-provider.json",
     "https://usetheodev.github.io/usetheo-ui/r/toast.json"
   ],
   "files": [

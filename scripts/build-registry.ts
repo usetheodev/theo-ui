@@ -8,7 +8,7 @@
  *
  * The CLI consumer points shadcn at a URL serving registry/r/<name>.json.
  * Functional URL (live on every push to main via deploy-registry.yml):
- *   npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/button.json
+ *   npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/button.json
  * Branded URL pending DNS CNAME:
  *   npx shadcn@latest add https://ui.usetheo.dev/r/button.json
  *
@@ -160,7 +160,7 @@ async function main(): Promise<void> {
   // "The item at https://ui.shadcn.com/r/styles/default/cn.json was not found"
   // because our items declared `"registryDependencies": ["cn"]` and shadcn
   // resolves bare names against its own registry first.
-  const REGISTRY_BASE_URL = "https://usetheodev.github.io/theo-ui/r";
+  const REGISTRY_BASE_URL = "https://usetheodev.github.io/theokit-ui/r";
   const ownRegistryNames = new Set(descriptors.map(({ descriptor }) => descriptor.name));
   function rewriteRegistryDeps(deps: string[] | undefined): string[] | undefined {
     if (!deps) return undefined;
@@ -212,7 +212,7 @@ async function main(): Promise<void> {
   // tooling check for it before attempting an install.
   const index = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
-    name: "theo-ui",
+    name: "theokit-ui",
     homepage: "https://usetheo.dev",
     metadata: {
       requires: {

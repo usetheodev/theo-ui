@@ -48,10 +48,12 @@ let firstTokenAt = 0;
 let state = initialAgentStreamState;
 const events: string[] = [];
 try {
-  const run = await agent.send("What is the current UTC time? Call get_current_time, then tell me.");
+  const run = await agent.send(
+    "What is the current UTC time? Call get_current_time, then tell me.",
+  );
   for await (const ev of run.stream()) {
     events.push((ev as { type: string }).type);
-    if (firstTokenAt === 0 && ((ev as { type: string }).type === "assistant")) {
+    if (firstTokenAt === 0 && (ev as { type: string }).type === "assistant") {
       firstTokenAt = Date.now();
     }
     state = agentStreamReducer(state, ev as unknown as SdkStreamMessage);
@@ -65,21 +67,30 @@ try {
     | undefined;
   const toolItems = state.items.filter((i) => i.kind === "tool-call");
 
-  console.log(JSON.stringify({
-    north_star_time_to_first_working_agent_ms: ttfwa,
-    total_wall_clock_ms: Date.now() - t0,
-    pillars: {
-      harness_status: final.status,
-      skills_tool_calls: toolItems.length,
-      skills_tool_status: toolItems.map((t) => (t as { status: string }).status),
-      ui_rendered_items: state.items.length,
-      ui_rendered_text: msg?.message.parts[0]?.text ?? "",
-      runtime_cloud: "pre-release (contract-only, M7) — not exercised live",
-    },
-    events,
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        north_star_time_to_first_working_agent_ms: ttfwa,
+        total_wall_clock_ms: Date.now() - t0,
+        pillars: {
+          harness_status: final.status,
+          skills_tool_calls: toolItems.length,
+          skills_tool_status: toolItems.map((t) => (t as { status: string }).status),
+          ui_rendered_items: state.items.length,
+          ui_rendered_text: msg?.message.parts[0]?.text ?? "",
+          runtime_cloud: "pre-release (contract-only, M7) — not exercised live",
+        },
+        events,
+      },
+      null,
+      2,
+    ),
+  );
 
-  const ok = final.status === "finished" && (msg?.message.parts[0]?.text ?? "").length > 0 && toolItems.length >= 1;
+  const ok =
+    final.status === "finished" &&
+    (msg?.message.parts[0]?.text ?? "").length > 0 &&
+    toolItems.length >= 1;
   console.log(ok ? "\nANCHOR_OK" : "\nANCHOR_INCOMPLETE");
   await agent.dispose();
   process.exit(ok ? 0 : 1);
