@@ -28,4 +28,26 @@ describe("CreatedFilesCard", () => {
     render(<CreatedFilesCard files={files} cta={<button type="button">Move to drive</button>} />);
     expect(screen.getByRole("button", { name: /Move to drive/ })).toBeInTheDocument();
   });
+
+  // M3: the "edited" variant (coding-agent changed files).
+  const edited: CreatedFile[] = [
+    { id: "1", name: "agents/support-agent.ts", additions: 12, deletions: 3 },
+    { id: "2", name: "agents/tools/lookup.ts", additions: 22, deletions: 0 },
+  ];
+
+  it("edited variant flips the default title to 'Edited N files'", () => {
+    render(<CreatedFilesCard variant="edited" files={edited} />);
+    expect(screen.getByRole("heading", { name: /Edited 2 files/i })).toBeInTheDocument();
+  });
+
+  it("renders per-file additions/deletions when present", () => {
+    render(<CreatedFilesCard variant="edited" files={edited} />);
+    expect(screen.getByText("+12")).toBeInTheDocument();
+    expect(screen.getByText("-3")).toBeInTheDocument();
+  });
+
+  it("created variant is unchanged (regression)", () => {
+    render(<CreatedFilesCard files={files} />);
+    expect(screen.getByRole("heading", { name: /Files created/i })).toBeInTheDocument();
+  });
 });

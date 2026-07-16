@@ -428,6 +428,7 @@ export {
 // Code workspace atoms
 export {
   DiffViewer,
+  parseUnifiedDiffToHunks,
   type DiffHunk,
   type DiffLine,
   type DiffLineKind,
