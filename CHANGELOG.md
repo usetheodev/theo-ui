@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Tema `violet-forge` — borda de input perceptível.** O `--input` do modo dark passa de `oklch(0.227 0 0)` para **`oklch(0.34 0 0)`** (#3a3a3a). O valor antigo ficava a só 0.045 de luminosidade do `bg-card` (`oklch(0.182 0 0)`), deixando a borda dos inputs quase invisível; 0.34 dá um contorno cinza sutil mas legível. Aplicado nos dois sources (`themes/violet-forge.ts` + `styles/tokens.css`). Demais themes já tinham dark input ≥ 0.28 (não alterados). (#brand-standardization)
+
 ## [1.3.0] - 2026-07-17
 
 ### Changed

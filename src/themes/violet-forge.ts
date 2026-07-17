@@ -73,7 +73,7 @@ export const violetForge: Theme = {
     muted: "oklch(0.227 0 0)",
     "muted-foreground": "oklch(0.683 0 0)",
     border: "oklch(0.28 0 0)",
-    input: "oklch(0.227 0 0)",
+    input: "oklch(0.34 0 0)",
     ring: "oklch(0.628 0.225 296)",
     success: "oklch(0.814 0.192 155.7)",
     "success-foreground": "oklch(0.146 0 0)",

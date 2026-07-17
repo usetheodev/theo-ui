@@ -179,7 +179,7 @@
   --muted-foreground: oklch(0.683 0 0); /* #999 — Vercel gray-500 */
 
   --border: oklch(0.28 0 0); /* #292929 */
-  --input: oklch(0.227 0 0);
+  --input: oklch(0.34 0 0); /* #3a3a3a — borda de input perceptível (0.227 ficava a só 0.045 de luz do bg-card 0.182) */
   --ring: oklch(0.50 0.16 296.97);
 
   --success: oklch(0.814 0.192 155.7); /* #22E58C */
