@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-07-17
+
 ### Fixed
 - **Tema JS `violetForge` dessincronizado do `tokens.css`.** O objeto `themes/violet-forge.ts` (consumido via `TheoUIProvider`) ainda carregava valores antigos que o `tokens.css` (CSS) já havia padronizado: `primary`/`ring` no hue antigo `oklch(0.628 0.225 296)` (#A855F7) e `dark.popover` em `oklch(0.204)`. Sincronizados para `primary`/`ring` = **`oklch(0.50 0.16 296.97)`** (#6F49B1, hue 296.97) e `dark.popover` = **`oklch(0.182)`** (tom do card). Consumidores que usam `violetForge` sem override de primary agora recebem a identidade padronizada. Diff completo JS↔CSS agora zerado. (#brand-standardization)
 
