@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Identidade — `--primary` padronizado** para `oklch(0.50 0.16 296.97)` (#6F49B1, violeta deep-anchored, hue 296.97), substituindo o electric-violet `oklch(0.628 0.225 296)` (#A855F7). O ramp derivado (ADR-0006) faz `--primary-deep` emergir como **#431A7A — a cor da marca/logo** (variação-1). `--ring` acompanha. Alinha `@theokit/ui` à padronização de identidade do ecossistema Theo (dashboard, docs, blog, website). Contraste validado: branco-sobre-primary 6.43:1 (AA), primary-sobre-escuro 3.09:1 (objetos gráficos ≥3). `--primary-glow`/`-deep` derivam algoritmicamente, sem edição manual. (#brand-standardization)
+
 ## [1.2.1] - 2026-07-16
 
 ### Changed
