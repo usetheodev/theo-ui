@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+### Changed
+
+- Os ADRs 0001–0003 passam a linkar os ADRs espelho do `theokit` em `.claude/knowledge-base/adrs/`, e marcam como ausentes o spike e o plano que não existem mais. (docs-reorg-2026-08)
+- `CLAUDE.md` e `CONTRIBUTING.md` deixam de apontar para o `CLAUDE.md` de monorepo (que não existe no layout atual) e passam a citar a Locked Narrative sobrevivente em `theo-business/theo-website/CLAUDE.md`; instruções de dev cross-repo usam `../theokit-ui` no lugar do antigo `../theo-ui`. (docs-reorg-2026-08)
+
 ## [1.3.2] - 2026-07-17
 
 ### Fixed

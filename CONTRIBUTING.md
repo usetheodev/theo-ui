@@ -1,8 +1,9 @@
 # Contributing to `@theokit/ui`
 
 Welcome — this document is the operational handbook for the library. The
-strategic context (mission, narrative, four pillars) lives in the root
-`README.md` and `../CLAUDE.md`. This file is about the day-to-day mechanics
+strategic context (mission, narrative, four pillars) lives in this repo's
+`README.md` and `CLAUDE.md` — there is no group-level `../CLAUDE.md` in the
+current layout (verified 2026-08-06). This file is about the day-to-day mechanics
 of shipping code to `@theokit/ui`.
 
 ---
@@ -259,29 +260,30 @@ When developing a project that consumes `@theokit/ui` locally (e.g., TheoCode, T
 
 ### Why not `npm link`?
 
-`npm link` (or `npm install ../theo-ui`) creates a symlink that exposes
-theo-ui's own `node_modules/react` (devDependency), causing dual-React errors
+`npm link` (or `npm install ../theokit-ui`) creates a symlink that exposes
+theokit-ui's own `node_modules/react` (devDependency), causing dual-React errors
 in the consumer project. This is a known Node.js limitation with symlinks +
 pnpm strict hoisting. Symptoms: `"useState null"`, `"Element from older version"`.
 
 ### Workflow (2 commands)
 
 ```bash
-# 1. In theo-ui — build + generate tarball
+# 1. In theokit-ui — build + generate tarball
 pnpm dev:pack
 
 # 2. In the consumer project — install the tarball
-npm install file:../theo-ui/dist/theokit-ui-0.14.3.tgz
+npm install file:../theokit-ui/dist/theokit-ui-0.14.3.tgz
 ```
 
 The tarball installs exactly like the npm registry version: no symlinks, no
 nested `node_modules`, peerDependencies resolve to the consumer's copies.
 
-After changing theo-ui components, re-run both commands.
+After changing theokit-ui components, re-run both commands.
 
 ### Prerequisites
 
-Both repos must be under the same parent directory (e.g., `theokit-tools/`).
+Both repos must be under the same parent directory — today that is the
+`theokit-framework/` repo group (`/home/paulo/Projetos/theo/theokit-framework/`).
 
 ## Security
 
