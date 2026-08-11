@@ -172,7 +172,7 @@ These ship under their own subpath because they require heavy peer-deps. **Do NO
 | Slide plugin — Emoji | `@theokit/ui/slide/plugins/emoji` | `hast-util-from-html` |
 | Vite plugin | `@theokit/ui/vite-plugin` | `vite ^6 || ^7`, `@tailwindcss/vite` |
 
-All engines documented under RFC 0001 / 0002 / 0003 / 0004 in `docs/rfcs/`. View-only (no editing) by design.
+All engines documented under RFC 0001 / 0002 / 0003 / 0004 in `wiki/rfcs/`. View-only (no editing) by design.
 
 ## Quality gates (run via `pnpm quality:gates`)
 
@@ -235,9 +235,9 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
 3. `/CHANGELOG.md` — every release entry, including [Unreleased] section
 4. `/package.json#exports` — the authoritative list of subpath imports (auto-synced by `pnpm sync:exports`)
 5. `/src/index.ts` — the barrel; every public component appears here
-6. `/docs/architecture.md` — folder layout + module boundaries
-7. `/docs/design-system.md` — tokens, fonts, type scale (Geist + Vercel scale, locked)
-8. `/docs/rfcs/*.md` — engine RFCs (whiteboard 0001, slide 0002, slide-deck 0003, slide-rich-content 0004, themes 0007, integration 0008, chat-message 0009)
+6. `/wiki/architecture/index.md` — folder layout + module boundaries
+7. `/wiki/design-system/index.md` — tokens, fonts, type scale (Geist + Vercel scale, locked)
+8. `/wiki/rfcs/*.md` — engine RFCs (whiteboard 0001, slide 0002, slide-deck 0003, slide-rich-content 0004, themes 0007, integration 0008, chat-message 0009)
 9. `/scripts/validate-quality-gates.ts` — the taxonomy + structure gate
 10. `/.claude/knowledge-base/plans/*.md` — every change of ≥3 phases has a written plan; the most recent is `dashboard-paas-primitives-2-plan.md` (Brief #2)
 

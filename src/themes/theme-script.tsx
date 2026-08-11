@@ -17,7 +17,7 @@
  * the inline `<script>` tag even though it stays inside a JS string literal.
  * (The browser tokenizes `</script>` at the HTML layer before JS parses.)
  *
- * Example (Next.js App Router): see docs/design-system.md → SSR section.
+ * Example (Next.js App Router): see wiki/design-system/themes.md → SSR section.
  * Pass `defaultTheme` and `defaultMode` to align with the consumer's
  * preferred initial state. Always wrap the root in `<html
  * suppressHydrationWarning>` to silence the expected one-render diff.

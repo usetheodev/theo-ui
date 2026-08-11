@@ -14,7 +14,7 @@ import {
  * into a themed, fixed-aspect surface. Lives in the isolated subpath
  * `@theokit/ui/slide`.
  *
- * See RFC 0002 (`docs/rfcs/0002-slide.md`) and the plan in
+ * See RFC 0002 (`wiki/rfcs/0002-slide.md`) and the plan in
  * `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.
  *
  * SSR note: initial render returns the section wrapper; the parsed React tree

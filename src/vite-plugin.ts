@@ -13,7 +13,7 @@
  *      CSS-only mode via the pre-built `@theokit/ui/styles.css` subpath.
  *
  * This is the cross-repo contract TheoKit's `integrateUseTheoUI()` probes
- * for. See `docs/rfcs/0008-vite-plugin-and-preset.md`.
+ * for. See `wiki/rfcs/0008-vite-plugin-and-preset.md`.
  */
 import type { Plugin, UserConfig } from "vite";
 

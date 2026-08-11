@@ -1,6 +1,6 @@
 // @theokit/ui — barrel entry.
 //
-// Architecture (see docs/architecture.md):
+// Architecture (see wiki/architecture/taxonomy-rule.md):
 //   - lib/         pure utilities (cn) — no React state
 //   - themes/      theme registry + ThemeProvider + ThemeSwitcher
 //   - components/

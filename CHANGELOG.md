@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Wiki `wiki/` — bundle Open Knowledge Format v0.2 com 56 conceitos em 9 seções (arquitetura, design system, quality gates, decisões, RFCs, engines, migrações, registry, histórico). Conformante em `okf-validate --strict`: zero links quebrados, zero órfãos. Cada conceito cita a origem via `sources[].resource` no formato `git:94d9b11:<caminho>`. (docs-reorg-2026-08)
+
+### Removed
+
+- Pastas `docs/` e `.claude/knowledge-base/` — o conhecimento normativo migrou para `wiki/`; os artefatos de processo já executados (planos, edge-case reviews, baselines, announcements) permanecem legíveis no histórico do git em `94d9b11`. A fronteira exata do que foi absorvido e do que ficou para trás está em `wiki/log.md`. (docs-reorg-2026-08)
 
 ### Changed
 
+- Quality gates passam a ler a wiki no lugar de `docs/`: `validateArchitectureCensus` → `wiki/registry/component-census.md`, `validateDocsTypography` → `wiki/design-system/typography.md`, checagem de existência → `wiki/quality-gates/index.md`. `pnpm sync:readme` escreve o censo em `wiki/registry/component-census.md`. (docs-reorg-2026-08)
+- `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `ROADMAP.md` e `llms.txt` reapontam para os caminhos da wiki. (docs-reorg-2026-08)
 - Os ADRs 0001–0003 passam a linkar os ADRs espelho do `theokit` em `.claude/knowledge-base/adrs/`, e marcam como ausentes o spike e o plano que não existem mais. (docs-reorg-2026-08)
 - `CLAUDE.md` e `CONTRIBUTING.md` deixam de apontar para o `CLAUDE.md` de monorepo (que não existe no layout atual) e passam a citar a Locked Narrative sobrevivente em `theo-business/theo-website/CLAUDE.md`; instruções de dev cross-repo usam `../theokit-ui` no lugar do antigo `../theo-ui`. (docs-reorg-2026-08)
 

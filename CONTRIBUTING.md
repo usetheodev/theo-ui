@@ -41,7 +41,7 @@ A component goes under `primitives/` **if and only if** it does not value-import
 another `@theokit/ui` component. Otherwise it goes under `composites/`.
 
 This is enforced mechanically by `pnpm quality:structure` — there's no
-discretionary call. The full spec lives in [`docs/architecture.md`](./docs/architecture.md).
+discretionary call. The full spec lives in [`wiki/architecture/index.md`](./wiki/architecture/index.md).
 
 **Allowed imports for primitives:**
 - React (`react`, hooks)
@@ -62,7 +62,7 @@ discretionary call. The full spec lives in [`docs/architecture.md`](./docs/archi
   so theme switching propagates. The build-gate scanner
   (`scripts/lib/literal-color-scanner.ts`) fires on `pnpm quality:structure`
   and prints suggested replacements. See
-  [`docs/adr/0004-no-literal-tailwind-colors-in-source.md`](./docs/adr/0004-no-literal-tailwind-colors-in-source.md).
+  [`wiki/decisions/adr-0004-no-literal-tailwind-colors.md`](./wiki/decisions/adr-0004-no-literal-tailwind-colors.md).
 - Whitelisted paths: `*.test.tsx`, `*.stories.tsx`, `tests/fixture-*/` (allowed
   to demonstrate raw colors).
 
@@ -71,7 +71,7 @@ discretionary call. The full spec lives in [`docs/architecture.md`](./docs/archi
   classified as primitives across shadcn-aligned design systems. They live in
   `src/components/primitives/toast/` and `src/themes/`. The taxonomy gate has
   an explicit allowlist for these names. Adding a new global provider
-  primitive requires an RFC. See `docs/architecture.md` §"Global Provider
+  primitive requires an RFC. See `wiki/architecture/index.md` §"Global Provider
   Primitives".
 
 ---
@@ -137,7 +137,7 @@ pnpm ladle:build         # Ladle SSR build (story smoke)
 | `validateNpmTarball` | `npm pack --dry-run` excludes tests/stories/screens, ≤5 MB |
 | `validatePublicExports` | every component exported from `src/index.ts` exists on disk |
 | `validateCountConsistency` | README badge ↔ catalog ↔ welcome.stats counts agree |
-| `validateArchitectureCensus` | `docs/architecture.md` lists every exported component |
+| `validateArchitectureCensus` | `wiki/architecture/index.md` lists every exported component |
 | `validateAxeCoverage` | ≥30 interactive primitives run vitest-axe |
 | `validateNoStrayArtifacts` | no `.bak`, `.tmp`, `.orig`, `.rej` files in the tree |
 | `validateDesignSystemFidelity` | Geist tokens in tokens.css + preset; type scale |
@@ -154,13 +154,13 @@ Additional gates wired into `quality:gates` post-T5.3 / T5.4:
 
 Relevant ADRs to read before changing visual/theme behavior:
 
-- [ADR-0004 — No literal Tailwind colors in source](./docs/adr/0004-no-literal-tailwind-colors-in-source.md)
-- [ADR-0005 — OKLCH as the canonical color format](./docs/adr/0005-oklch-as-canonical-color-format.md)
-- [ADR-0006 — Algorithmic tonal derivations via `oklch(from ...)`](./docs/adr/0006-algorithmic-tonal-derivations.md)
-- [ADR-0007 — Status semantic tokens (operational state group)](./docs/adr/0007-status-semantic-tokens.md)
-- [ADR-0008 — Forced colors (Windows High Contrast Mode) support](./docs/adr/0008-forced-colors-whcm-support.md)
-- [ADR-0009 — `prefers-color-scheme` respected by default](./docs/adr/0009-prefers-color-scheme-default.md)
-- [Migration guide HSL → OKLCH](./docs/migration/hsl-to-oklch.md)
+- [ADR-0004 — No literal Tailwind colors in source](./wiki/decisions/adr-0004-no-literal-tailwind-colors.md)
+- [ADR-0005 — OKLCH as the canonical color format](./wiki/decisions/adr-0005-oklch-as-canonical-color-format.md)
+- [ADR-0006 — Algorithmic tonal derivations via `oklch(from ...)`](./wiki/decisions/adr-0006-algorithmic-tonal-derivations.md)
+- [ADR-0007 — Status semantic tokens (operational state group)](./wiki/decisions/adr-0007-status-semantic-tokens.md)
+- [ADR-0008 — Forced colors (Windows High Contrast Mode) support](./wiki/decisions/adr-0008-forced-colors-whcm-support.md)
+- [ADR-0009 — `prefers-color-scheme` respected by default](./wiki/decisions/adr-0009-prefers-color-scheme-default.md)
+- [Migration guide HSL → OKLCH](./wiki/migrations/hsl-to-oklch.md)
 
 A failing gate ≠ broken code — it usually means a doc / count / registry
 file is out of sync. The error message tells you exactly how to fix it
@@ -209,7 +209,7 @@ When you add a component:
 - A PR that touches a component must update that component's `.test.tsx`
   (regression test for bug fixes, behavior test for new features).
 - A PR that touches design tokens or the type scale must update
-  `docs/design-system.md` and run `pnpm sync:readme`.
+  `wiki/design-system/index.md` and run `pnpm sync:readme`.
 - Visual diffs: paste before/after screenshots from Ladle if the visual
   output changes.
 
@@ -250,7 +250,7 @@ The library is pre-1.0 (`0.0.0`). Until 1.0:
 - Public Quickstart Option B (`npx shadcn add ...`) verified end-to-end
   in Next 14, Vite 5, and Astro 4 vanilla scaffolds.
 
-See `docs/quality-gates.md` Gate 9 for the full Release Readiness checklist.
+See `wiki/quality-gates/index.md` Gate 9 for the full Release Readiness checklist.
 
 ---
 

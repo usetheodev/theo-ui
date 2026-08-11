@@ -13,12 +13,12 @@ A React component library built for AI-agent surfaces — coding agents and chat
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1166%20passing-success?style=flat-square)](#quality-gates)
+[![tests](https://img.shields.io/badge/tests-1177%20passing-success?style=flat-square)](#quality-gates)
 [![components](https://img.shields.io/badge/components-103-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
 
-[Quickstart](#quickstart) · [Components](#component-catalog) · [Themes](#themes) · [Design System](./docs/design-system.md) · [Quality Gates](./docs/quality-gates.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
+[Quickstart](#quickstart) · [Components](#component-catalog) · [Themes](#themes) · [Design System](./wiki/design-system/index.md) · [Quality Gates](./wiki/quality-gates/index.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
 
 </div>
 
@@ -217,7 +217,7 @@ import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@theokit/ui";
 </ThemeProvider>
 ```
 
-Define your own theme by extending `Theme` from `@theokit/ui` — see [`docs/design-system.md`](./docs/design-system.md).
+Define your own theme by extending `Theme` from `@theokit/ui` — see [`wiki/design-system/index.md`](./wiki/design-system/index.md).
 
 ---
 
@@ -234,7 +234,7 @@ Define your own theme by extending `Theme` from `@theokit/ui` — see [`docs/des
 
 **Type scale (Vercel-inspired):** `64 / 48 / 40 / 32 / 28 / 24 / 20 / 18 / 15 / 14 / 12` px.
 
-Full spec: [`docs/design-system.md`](./docs/design-system.md). Visual audit of competitors (Vercel, Railway, Render, Fly.io, Netlify, Coolify): [`docs/design-audit.md`](./docs/design-audit.md).
+Full spec: [`wiki/design-system/index.md`](./wiki/design-system/index.md). Visual audit of competitors (Vercel, Railway, Render, Fly.io, Netlify, Coolify): [`wiki/history/competitor-design-audit-2026-05.md`](./wiki/history/competitor-design-audit-2026-05.md).
 
 ### Self-hosting fonts
 
@@ -258,7 +258,7 @@ pnpm quality:gates
 
 Runs in order: `format:check` → `lint:ci` → `typecheck` → `test` → `build` → `registry:build` → `registry:validate` → `quality:structure` → `quality:bundle` → `quality:a11y` → `ladle:build`.
 
-The structural validator ([`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts)) enforces taxonomy (primitive vs composite by import graph), registry/test/story presence per item (test gate is **hard-fail**), public-export surface, design-system fidelity (Geist fonts + Vercel type scale), governance files (LICENSE + CHANGELOG), README ↔ exports drift, docs typography drift, composite-via-barrel imports, compound-pattern uniformity (`Object.assign /*#__PURE__*/`), README/architecture census consistency, vitest-axe coverage on ≥30 interactive primitives, and zero stray `*.bak` / `*.json.tmp` artifacts in the working tree. Full spec: [`docs/quality-gates.md`](./docs/quality-gates.md).
+The structural validator ([`scripts/validate-quality-gates.ts`](./scripts/validate-quality-gates.ts)) enforces taxonomy (primitive vs composite by import graph), registry/test/story presence per item (test gate is **hard-fail**), public-export surface, design-system fidelity (Geist fonts + Vercel type scale), governance files (LICENSE + CHANGELOG), README ↔ exports drift, docs typography drift, composite-via-barrel imports, compound-pattern uniformity (`Object.assign /*#__PURE__*/`), README/architecture census consistency, vitest-axe coverage on ≥30 interactive primitives, and zero stray `*.bak` / `*.json.tmp` artifacts in the working tree. Full spec: [`wiki/quality-gates/index.md`](./wiki/quality-gates/index.md).
 
 ---
 
@@ -299,7 +299,8 @@ src/
 registry/          shadcn-compatible registry descriptors (input)
   r/               built registry items (output of registry:build)
 scripts/           build-registry, validate-registry, sync-readme, validate-quality-gates
-docs/              design-system, quality-gates, architecture, design-audit
+wiki/              OKF knowledge bundle: architecture, design-system, quality-gates,
+                   decisions, rfcs, engines, migrations, registry, history
 tests/             fixture-shadcn-app/ (registry install integration test)
 ```
 
@@ -433,9 +434,9 @@ Use ← / → / Space, swipe on mobile, or click thumbnails.
 
 | Engine | Subpath | Status | RFC |
 |---|---|---|---|
-| Whiteboard (view-only, JSON → SVG, Excalidraw aesthetic) | `@theokit/ui/whiteboard` | Available | [RFC 0001](./docs/rfcs/0001-whiteboard.md) |
-| Slide (view-only, markdown → themed surface, Marp-inspired) | `@theokit/ui/slide` | Available | [RFC 0002](./docs/rfcs/0002-slide.md) |
-| SlideDeck (multi-slide deck w/ navigation + presenter + fullscreen + PDF) | `@theokit/ui/slide-deck` | Available | [RFC 0003](./docs/rfcs/0003-slide-deck.md) |
+| Whiteboard (view-only, JSON → SVG, Excalidraw aesthetic) | `@theokit/ui/whiteboard` | Available | [RFC 0001](./wiki/rfcs/0001-whiteboard.md) |
+| Slide (view-only, markdown → themed surface, Marp-inspired) | `@theokit/ui/slide` | Available | [RFC 0002](./wiki/rfcs/0002-slide.md) |
+| SlideDeck (multi-slide deck w/ navigation + presenter + fullscreen + PDF) | `@theokit/ui/slide-deck` | Available | [RFC 0003](./wiki/rfcs/0003-slide-deck.md) |
 | Diagram | TBD | Roadmap | TBD |
 
 Each engine ships behind the same gate chain (test + story + a11y + registry + bundle isolation). No version commitment for the Roadmap items — these are not on the 0.1 / 1.0 line.

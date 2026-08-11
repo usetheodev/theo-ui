@@ -27,7 +27,7 @@
  * The output matches Zod's behaviour exactly — anything that passes the JSON
  * Schema validator passes Zod, and vice-versa.
  *
- * Companion guide: `docs/slide-llm-guide.md` — copy-paste system prompt that
+ * Companion guide: `wiki/engines/slide-authoring-guide.md` — copy-paste system prompt that
  * documents every Tier 1 + Tier 2 feature with examples.
  */
 import { z } from "zod";
