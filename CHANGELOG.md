@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `.gitignore` passa a ignorar a saída das ferramentas de auditoria (`clear-project-output/`, `code-review-output/`). Bancos de análise e relatórios de auditoria são artefatos locais reprodutíveis: rastreá-los sujaria o `git status` e arriscaria commitar evidência de execução como se fosse fonte do projeto. (docs-reorg-2026-08)
 - Quality gates passam a ler a wiki no lugar de `docs/`: `validateArchitectureCensus` → `wiki/registry/component-census.md`, `validateDocsTypography` → `wiki/design-system/typography.md`, checagem de existência → `wiki/quality-gates/index.md`. `pnpm sync:readme` escreve o censo em `wiki/registry/component-census.md`. (docs-reorg-2026-08)
 - `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `ROADMAP.md` e `llms.txt` reapontam para os caminhos da wiki. (docs-reorg-2026-08)
 - Os ADRs 0001–0003 passam a linkar os ADRs espelho do `theokit` em `.claude/knowledge-base/adrs/`, e marcam como ausentes o spike e o plano que não existem mais. (docs-reorg-2026-08)

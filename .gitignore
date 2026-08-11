@@ -18,6 +18,10 @@ coverage
 .nyc_output
 *.lcov
 
+# Audit tooling output (analysis databases, reports, evidence)
+clear-project-output
+code-review-output
+
 # Caches
 .turbo
 .vite
