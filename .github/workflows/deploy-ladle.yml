@@ -19,6 +19,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # Hoisted so the deploy step can be gated on their presence — `secrets` is
+      # not available in a step-level `if`, but `env` is.
+      CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,7 +51,12 @@ jobs:
         # Without this, pages would deploy stale ./build/ from git history.
         run: pnpm ladle:build
 
+      # `projectName` must match the project on the Cloudflare side. This deploy
+      # has never run successfully — the repository has no `CLOUDFLARE_*` secrets
+      # — so the name below is unverified against any real project. Confirm it
+      # (or the renamed `theokit-ui`) when wiring the credentials.
       - name: Deploy to Cloudflare Pages
+        if: env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != ''
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -54,3 +64,12 @@ jobs:
           projectName: theo-ui
           directory: build
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      # Without this the job failed on every single run (16/16) for a missing
+      # secret, which trains everyone to ignore a red catalog build. The story
+      # coverage gate and the Ladle build above are the parts that catch real
+      # regressions; they now report honestly on their own.
+      - name: Report skipped deploy
+        if: env.CF_API_TOKEN == '' || env.CF_ACCOUNT_ID == ''
+        run: |
+          echo "::notice title=Cloudflare deploy skipped::CLOUDFLARE_API_TOKEN and/or CLOUDFLARE_ACCOUNT_ID are not configured on this repository. The catalog was built and the story-coverage gate passed; only the upload was skipped."
