@@ -1,7 +1,7 @@
 {
   "name": "@theokit/ui",
   "version": "1.4.1",
-  "description": "Theo UI \u2014 React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
+  "description": "Theo UI — React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
