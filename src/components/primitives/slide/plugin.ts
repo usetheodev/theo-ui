@@ -8,7 +8,7 @@
  * so custom tags (e.g. Shiki spans, KaTeX MathML, Mermaid SVG) survive the
  * security barrier.
  *
- * Design rules (ADRs in `.claude/knowledge-base/plans/slide-rich-content-plan.md`):
+ * Design rules (ADRs in `wiki/rfcs/0004-slide-rich-content.md`):
  *   D1  — explicit `plugins` prop (no auto-detect).
  *   D2  — plugin shape: { name, mdastTransform?, hastTransform?, components? }.
  *   D13 — execution order: mdast → hast → sanitize (with merged extensions) → components.

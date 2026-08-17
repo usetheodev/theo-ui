@@ -7,7 +7,7 @@ import type { Theme } from "./types.js";
  * (#5E6AD2) on near-black canvas in dark, pure white in light. Subtle
  * glassmorphic surface temperature.
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T8.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const linearGlass: Theme = {
   name: "linear-glass",

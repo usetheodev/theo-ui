@@ -5,7 +5,7 @@ description: Gate 0 through Gate 10 — what each blocks, stated as the pass con
 tags: [quality-gates, review, checklist, normative]
 sources:
   - id: gates-doc
-    resource: "git:94d9b11:docs/quality-gates.md"
+    resource: "archive:94d9b11:docs/quality-gates.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

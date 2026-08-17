@@ -5,7 +5,7 @@ description: Why a tail-end phase was re-scoped out of its cycle rather than rus
 tags: [adr, tailwind, deferral, scope, honesty]
 sources:
   - id: adr
-    resource: "git:94d9b11:.claude/knowledge-base/adrs/0001-defer-tailwind-v4-migration.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/adrs/0001-defer-tailwind-v4-migration.md"
     last_modified: "2026-06-18"
 generated:
   by: "claude-code/opus-5"
@@ -54,7 +54,7 @@ The follow-up cycle must:
 
 - [ ] Migrate the preset from JS-config to CSS-config.
 - [ ] Swap `tailwindcss-animate` → `tw-animate-css`.
-- [ ] Bump the devDep and fix `playground/vite.config.ts` to `@tailwindcss/postcss`.
+- [ ] Bump the devDep and move the PostCSS config (`postcss.config.mjs`) to `@tailwindcss/postcss`. The `playground/` app named in blocker 1 was removed in 2026-08, so it is no longer part of this task.
 - [ ] Remove the v3-legacy artifacts plus their exports, tsup entries, and baselines.
 - [ ] Re-baseline visual regression and bundle size.
 

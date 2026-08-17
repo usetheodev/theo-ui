@@ -5,8 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
  * `<Whiteboard>` — view-only primitive that turns a JSON scene into a
  * hand-drawn SVG. Lives in the isolated subpath `@theokit/ui/whiteboard`.
  *
- * See RFC 0001 (`wiki/rfcs/0001-whiteboard.md`) and the plan in
- * `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md`.
+ * See RFC 0001 (`wiki/rfcs/0001-whiteboard.md`).
  */
 import rough from "roughjs";
 import type { RoughGenerator } from "roughjs/bin/generator.js";

@@ -5,11 +5,11 @@ description: The pattern that lets Whiteboard, Slide and SlideDeck ship without 
 tags: [architecture, bundling, engines, peer-deps, invariant]
 sources:
   - id: rfc-0001
-    resource: "git:94d9b11:docs/rfcs/0001-whiteboard.md"
+    resource: "archive:94d9b11:docs/rfcs/0001-whiteboard.md"
   - id: rfc-0002
-    resource: "git:94d9b11:docs/rfcs/0002-slide.md"
+    resource: "archive:94d9b11:docs/rfcs/0002-slide.md"
   - id: rfc-0004
-    resource: "git:94d9b11:docs/rfcs/0004-slide-rich-content.md"
+    resource: "archive:94d9b11:docs/rfcs/0004-slide-rich-content.md"
   - id: bundle-gate
     resource: "scripts/validate-bundle-size.ts"
 generated:

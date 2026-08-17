@@ -1,17 +1,13 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": true },
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "dist",
-      "node_modules",
-      "referencia",
-      "docs/audit",
-      ".ladle/dist",
-      "tests/fixture-shadcn-app/src",
-      "playground/dist"
-    ]
+    "ignore": ["dist", "node_modules", ".ladle/dist", "tests/fixture-shadcn-app/src"]
   },
   "formatter": {
     "enabled": true,
@@ -20,7 +16,9 @@
     "lineWidth": 100,
     "lineEnding": "lf"
   },
-  "organizeImports": { "enabled": true },
+  "organizeImports": {
+    "enabled": true
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -39,7 +37,12 @@
       },
       "suspicious": {
         "noExplicitAny": "error",
-        "noConsole": { "level": "error", "options": { "allow": [] } }
+        "noConsole": {
+          "level": "error",
+          "options": {
+            "allow": []
+          }
+        }
       },
       "nursery": {
         "useSortedClasses": {

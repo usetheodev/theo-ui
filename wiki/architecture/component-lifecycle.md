@@ -5,9 +5,9 @@ description: The procedure for introducing a component and the deprecation windo
 tags: [architecture, runbook, lifecycle, deprecation, semver]
 sources:
   - id: arch-doc
-    resource: "git:94d9b11:docs/architecture.md"
+    resource: "archive:94d9b11:docs/architecture.md"
   - id: gates-doc
-    resource: "git:94d9b11:docs/quality-gates.md"
+    resource: "archive:94d9b11:docs/quality-gates.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

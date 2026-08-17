@@ -7,7 +7,7 @@ import type { Theme } from "./types.js";
  * (https://github.com/primer/primitives, MIT). Light fallback uses GitHub's
  * "light-default" Primer scale.
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T3.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const githubDark: Theme = {
   name: "github-dark",

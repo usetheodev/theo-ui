@@ -5,7 +5,7 @@ description: Rewriting ChatMessage as a Vercel AI SDK UIMessage consumer forked 
 tags: [rfc, chat, markdown, streaming, fork, breaking-change, apache-2.0]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0009-chat-message-parts-api.md"
+    resource: "archive:94d9b11:docs/rfcs/0009-chat-message-parts-api.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-23"
   - id: upstream-elements

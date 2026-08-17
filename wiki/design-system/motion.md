@@ -5,7 +5,7 @@ description: The motion tokens, the four named motion patterns, and how prefers-
 tags: [design-system, tokens, motion, accessibility, reduced-motion]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: tokens-css
     resource: "src/styles/tokens.css"
 generated:

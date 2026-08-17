@@ -6,7 +6,7 @@
  *     `thematicBreak`, see ADR D3 / D12 of Slide).
  *   - `SlideDeckSlide[]` — pre-parsed array (CMS/DB consumers).
  *
- * See `.claude/knowledge-base/plans/slide-deck-composite-plan.md` §16.3.
+ * See `wiki/rfcs/0003-slide-deck.md`.
  */
 import { z } from "zod";
 

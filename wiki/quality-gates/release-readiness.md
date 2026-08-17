@@ -5,7 +5,7 @@ description: Gate 9 conditions, the additive sub-gates, and the two tools delibe
 tags: [quality-gates, release, ci, publish]
 sources:
   - id: gates-doc
-    resource: "git:94d9b11:docs/quality-gates.md"
+    resource: "archive:94d9b11:docs/quality-gates.md"
   - id: pkg
     resource: "package.json"
 generated:

@@ -3,8 +3,8 @@
  * fields `useAgentStream` reads. Declared locally so theo-ui keeps ZERO runtime
  * coupling to `@theokit/sdk` (M5 ADR-1): the SDK's real `Run.stream()` /
  * `subscribe()` output is structurally assignable to this permissive shape, and
- * so is a plain mock or any non-SDK source. `@theokit/sdk` is a devDep (types +
- * the real-LLM test) only — never a runtime import.
+ * so is a plain mock or any non-SDK source. `@theokit/sdk` is not a dependency
+ * of this package at all — neither runtime nor dev.
  *
  * Covers both granularities the Harness emits:
  * - coarse `assistant` turns from `Run.stream()` (complete `content`),

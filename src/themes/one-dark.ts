@@ -7,7 +7,7 @@ import type { Theme } from "./types.js";
  *   - atom/one-dark-syntax (MIT) — dark mode canonical
  *   - atom/one-light-syntax (MIT) — light mode canonical
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T5.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const oneDark: Theme = {
   name: "one-dark",

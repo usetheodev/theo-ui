@@ -8,7 +8,7 @@ import { ModelSelector } from "../components/primitives/model-selector/model-sel
 import { QuickActionChips } from "../components/primitives/quick-action-chips/quick-action-chips.js";
 
 /**
- * Chat Home — composição matching referencia/stitch/chat_home_theo_style.
+ * Chat Home — composição.
  *
  * Layout: TopNav (ModeSwitcher) + Sidebar (conversations) + Hero (greeting +
  * large composer + QuickActionChips).

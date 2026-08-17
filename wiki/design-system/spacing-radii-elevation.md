@@ -5,7 +5,7 @@ description: The 4px spacing scale, the seven radius steps with their intended s
 tags: [design-system, tokens, spacing, radius, shadow]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: tokens-css
     resource: "src/styles/tokens.css"
 generated:

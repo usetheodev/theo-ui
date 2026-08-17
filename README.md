@@ -130,15 +130,9 @@ import { ThemeProvider, ThemeScript } from "@theokit/ui";
 </html>
 ```
 
-### Option C — install the agent skill
+### Option C — point your AI assistant at `llms.txt`
 
-For AI coding assistants (Claude Code, Cursor, Codex), `@theokit/ui` ships a companion **skill** that teaches the assistant how to use the library correctly — pick the right composite, respect the design tokens, run the slop test before shipping.
-
-```bash
-npx skills add usetheodev/theo-ui
-```
-
-The skill lives at [`skills/theo-ui/`](./skills/theo-ui/) and is installable via the [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI. Four verbs: default (build), `audit`, `migrate`, `catalog`. See [`skills/theo-ui/README.md`](./skills/theo-ui/README.md) for details.
+For AI coding assistants (Claude Code, Cursor, Codex), [`llms.txt`](./llms.txt) is the factual ground truth of the library — package name, import paths, component inventory, the taxonomy rule, locked conventions and anti-patterns. It ships inside the npm tarball, so an assistant working in a consumer project can read it from `node_modules/@theokit/ui/llms.txt`. Deeper normative knowledge (design system, ADRs, RFCs, quality gates) lives in [`wiki/`](./wiki/index.md).
 
 ---
 

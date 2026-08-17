@@ -5,7 +5,7 @@ description: The 54 components that moved to a separate package, the import rewr
 tags: [migration, breaking-change, v1, usetheo-ui, codemod]
 sources:
   - id: guide
-    resource: "git:94d9b11:docs/migration/v1-usetheo-ui-split.md"
+    resource: "archive:94d9b11:docs/migration/v1-usetheo-ui-split.md"
   - id: codemod
     resource: "codemod/split-usetheo.mjs"
 generated:

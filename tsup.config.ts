@@ -55,10 +55,10 @@ export default defineConfig({
   entry: {
     index: "src/index.ts",
     // Engine bundle: must NOT vendor roughjs / perfect-freehand into the main
-    // barrel. See ADR D3 in `.claude/knowledge-base/plans/whiteboard-view-primitive-plan.md`.
+    // barrel. See ADR D3 in `wiki/rfcs/0001-whiteboard.md`.
     "whiteboard/index": "src/components/primitives/whiteboard/index.ts",
     // Slide engine: must NOT vendor markdown/mdast/hast stack into the main
-    // barrel. See ADR D3 in `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.
+    // barrel. See ADR D3 in `wiki/rfcs/0002-slide.md`.
     "slide/index": "src/components/primitives/slide/index.ts",
     // Slide rich-content plugins (Tier 2): each plugin owns its own bundle.
     // peer-deps for each plugin stay external — see external[] below.
@@ -68,7 +68,7 @@ export default defineConfig({
     "slide/plugins/emoji/index": "src/components/primitives/slide/plugins/emoji/index.ts",
     // SlideDeck composite engine: orchestrates Slide primitives with deck-level
     // chrome. Subpath isolated per ADR D1 in
-    // `.claude/knowledge-base/plans/slide-deck-composite-plan.md`.
+    // `wiki/rfcs/0003-slide-deck.md`.
     "slide-deck/index": "src/components/composites/slide-deck/index.ts",
     // RFC 0008 — TheoKit zero-config integration. Both entries must keep
     // `vite`, `@tailwindcss/vite`, `tailwindcss`, and `tailwindcss-animate`

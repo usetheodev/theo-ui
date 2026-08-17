@@ -5,7 +5,7 @@ description: Why the HSL split format was replaced, what still validates, the br
 tags: [adr, color, oklch, tokens, migration, browser-support]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0005-oklch-as-canonical-color-format.md"
+    resource: "archive:94d9b11:docs/adr/0005-oklch-as-canonical-color-format.md"
     last_modified: "2026-06-03"
 generated:
   by: "claude-code/opus-5"

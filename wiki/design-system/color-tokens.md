@@ -5,13 +5,13 @@ description: Every color token @theokit/ui defines, grouped by intent, in the ca
 tags: [design-system, tokens, color, oklch, semantic]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: adr-0005
-    resource: "git:94d9b11:docs/adr/0005-oklch-as-canonical-color-format.md"
+    resource: "archive:94d9b11:docs/adr/0005-oklch-as-canonical-color-format.md"
   - id: adr-0007
-    resource: "git:94d9b11:docs/adr/0007-status-semantic-tokens.md"
+    resource: "archive:94d9b11:docs/adr/0007-status-semantic-tokens.md"
   - id: oklch-migration
-    resource: "git:94d9b11:docs/migration/hsl-to-oklch.md"
+    resource: "archive:94d9b11:docs/migration/hsl-to-oklch.md"
   - id: tokens-css
     resource: "src/styles/tokens.css"
 generated:

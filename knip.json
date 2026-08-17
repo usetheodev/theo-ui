@@ -5,26 +5,19 @@
     "src/components/composites/*/index.ts",
     "src/components/primitives/slide/plugins/*/index.ts",
     "scripts/**/*.ts",
-    "scripts/**/*.sh",
-    "playground/**/*.{ts,tsx}",
     ".ladle/**/*.{ts,tsx}",
     "src/test/**/*.{ts,tsx}",
     "src/**/*.test.{ts,tsx}",
     "src/**/*.stories.{ts,tsx}"
   ],
-  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts", "playground/**/*.{ts,tsx}", ".ladle/**/*.{ts,tsx}"],
+  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts", ".ladle/**/*.{ts,tsx}"],
   "ignore": [
-    "tests/fixture-shadcn-app/**",
-    "referencia/**",
-    "skills/**",
-    "_site/**",
     "src/components/primitives/whiteboard/schema.ts",
     "src/components/primitives/slide/schema.ts",
     "src/components/primitives/whiteboard/render/rough-paths.ts",
     "src/lib/markdown/mermaid.tsx"
   ],
   "ignoreDependencies": [
-    "@parcel/watcher",
     "katex",
     "mermaid",
     "shiki",

@@ -10,7 +10,7 @@ import type { Theme } from "./types.js";
  * spec is dark-only. We darken the signature pink/purple to pass WCAG AA
  * against light backgrounds, sacrificing palette purity for accessibility.
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T4.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const dracula: Theme = {
   name: "dracula",

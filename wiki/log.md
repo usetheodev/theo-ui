@@ -2,6 +2,40 @@
 
 Newest first.
 
+## 2026-08-17
+
+**The cited commit no longer exists. Read this before following any `sources[].resource`.**
+
+The repository history was rewritten on this date. Every path that had been deleted from the
+working tree was purged from every tree in history, and 68 commits that existed only to
+perform those deletions were pruned. `main`, `develop` and `workspace` were recreated from
+the rewritten line.
+
+Consequences for this bundle, stated plainly:
+
+- Commit `94d9b118b4696882e414689677ac12234513730e` (`94d9b11`) **does not exist** in this
+  repository any more. Neither does its rewritten equivalent hold the cited paths, because
+  `docs/` and `.claude/knowledge-base/` were purged from every tree.
+- The 84 `sources[].resource` entries across 58 concepts were relabelled from
+  `git:94d9b11:<path>` to `archive:94d9b11:<path>`. The `git:` prefix promised a
+  `git show` that now fails; `archive:` states what these are — a record of which file and
+  which commit a concept was transcribed from, which OKF permits as a scope descriptor
+  rather than a followable artifact.
+- The **recovery instruction in the 2026-08-11 entry below is void.** `git show 94d9b11:<path>`
+  cannot work. The material deliberately not absorbed (~28 plans, 11 edge-case reviews,
+  the audit/grill/implementation/discovery work products, 8 baseline dumps, 2 announcements
+  — 139 files) survives only in an offline archive taken before the rewrite:
+  `local-all.bundle`, a full `git bundle` of every pre-rewrite ref, held outside this
+  repository. Retrieval requires that bundle; it is not reachable from any remote ref.
+- What this does **not** change: the absorbed knowledge. The concepts in this bundle are
+  self-contained transcriptions — they do not read their sources at runtime, and no gate
+  resolves a `sources[].resource`. `okf-validate --strict` stays conformant (56 concepts,
+  0 errors, 0 warnings, 0 broken links, 0 orphans), because those citations were never
+  markdown links.
+
+The honest summary: the provenance trail still tells you where each concept came from, but
+it is now a citation you must trust rather than one you can verify against this repository.
+
 ## 2026-08-11
 
 **Creation.**
@@ -11,8 +45,12 @@ tree, then removed both. 56 concepts across 9 sections, plus 10 navigation index
 
 **Bundle fingerprint at creation:** `94d9b118b4696882e414689677ac12234513730e`
 (`94d9b11`, branch `workspace`). Every `sources[].resource` of the form
-`git:94d9b11:<path>` names a file that exists at that commit and no longer exists in the
-working tree.
+`archive:94d9b11:<path>` named a file that existed at that commit and no longer existed in
+the working tree.
+
+> **Superseded 2026-08-17.** That commit no longer exists — the history was rewritten and the
+> cited trees were purged. The citations are now scope descriptors only. See the
+> 2026-08-17 entry above before relying on anything in this section.
 
 ### Crawl boundary — what was absorbed and what was not
 
@@ -37,7 +75,8 @@ made deliberately.
 | `.claude/knowledge-base/pivot-roadmap.md`, `releases/` | [`/history/*`](/history/index.md) |
 | `.claude/knowledge-base/architecture/` baselines | Measured figures cited inside the relevant concepts |
 
-**Deliberately not absorbed** (spent process artifacts, still readable at `94d9b11`):
+**Deliberately not absorbed** (spent process artifacts; readable at `94d9b11` when this entry
+was written, and since 2026-08-17 only in the offline pre-rewrite bundle):
 
 | Source | Volume | Why not |
 | --- | --- | --- |
@@ -50,8 +89,8 @@ made deliberately.
 
 **Not absorbed and worth knowing:** none of the omitted material was found to contain a rule
 or invariant absent from the concepts. That is a judgment made while reading, not a guarantee
-— anything the omitted files uniquely held is recoverable with
-`git show 94d9b11:<path>`.
+— anything the omitted files uniquely held is recoverable only from the offline pre-rewrite
+bundle described in the 2026-08-17 entry. `git show 94d9b11:<path>` no longer works.
 
 ### Load-bearing wiring
 

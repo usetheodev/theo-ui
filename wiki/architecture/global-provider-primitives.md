@@ -5,7 +5,7 @@ description: The closed allowlist of primitives permitted to require a root-leve
 tags: [architecture, exception, providers, allowlist]
 sources:
   - id: arch-doc
-    resource: "git:94d9b11:docs/architecture.md"
+    resource: "archive:94d9b11:docs/architecture.md"
   - id: import-graph
     resource: "scripts/lib/import-graph.ts"
 generated:

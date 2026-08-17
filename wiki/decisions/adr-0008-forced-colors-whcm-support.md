@@ -5,7 +5,7 @@ description: Mapping semantic tokens to CSS system colors under forced-colors, o
 tags: [adr, accessibility, wcag, forced-colors, whcm, enterprise]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0008-forced-colors-whcm-support.md"
+    resource: "archive:94d9b11:docs/adr/0008-forced-colors-whcm-support.md"
     last_modified: "2026-06-03"
 generated:
   by: "claude-code/opus-5"

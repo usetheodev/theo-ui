@@ -5,7 +5,7 @@ description: The declarative scene schema, sanity limits, public API, and peer-d
 tags: [engine, whiteboard, svg, schema, api, llm-output]
 sources:
   - id: rfc-0001
-    resource: "git:94d9b11:docs/rfcs/0001-whiteboard.md"
+    resource: "archive:94d9b11:docs/rfcs/0001-whiteboard.md"
   - id: schema
     resource: "src/components/primitives/whiteboard/schema.ts"
 generated:

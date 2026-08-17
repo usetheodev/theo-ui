@@ -77,15 +77,22 @@ jobs:
           </head>
           <body>
             <h1>@theokit/ui — registry</h1>
-            <p>shadcn-compatible component registry for <a href="https://github.com/usetheodev/theo-ui">@theokit/ui</a>.</p>
+            <p>shadcn-compatible component registry for <a href="https://github.com/usetheodev/theokit-ui">@theokit/ui</a>.</p>
             <p>Install any component:</p>
-            <pre><code>npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/button.json</code></pre>
-            <p>See the <a href="index.json">catalog index</a> for all 114 items.</p>
+            <pre><code>npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/chat-message.json</code></pre>
+            <p>See the <a href="index.json">catalog index</a> for all __ITEM_COUNT__ items.</p>
             <hr />
-            <p>npm: <a href="https://www.npmjs.com/package/@theokit/ui"><code>pnpm add @theokit/ui@next</code></a></p>
+            <p>npm: <a href="https://www.npmjs.com/package/@theokit/ui"><code>pnpm add @theokit/ui</code></a></p>
           </body>
           </html>
           HTML
+          # The item count is derived from the published index so the landing
+          # page cannot drift from the catalog it links to.
+          COUNT=$(node -e "const i=require('./registry/index.json');console.log(Array.isArray(i)?i.length:i.items.length)")
+          sed -i "s/__ITEM_COUNT__/${COUNT}/" _site/index.html
+          # Fail loudly if the advertised install example is not in the catalog.
+          test -f _site/r/chat-message.json
+          echo "landing page: ${COUNT} items"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

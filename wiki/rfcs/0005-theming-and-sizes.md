@@ -5,7 +5,7 @@ description: defineTheme with hex/rgb helpers, and a size prop on nine more prim
 tags: [rfc, theming, api, sizes, cva]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0005-theming-and-sizes.md"
+    resource: "archive:94d9b11:docs/rfcs/0005-theming-and-sizes.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-20"
 generated:

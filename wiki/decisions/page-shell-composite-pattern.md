@@ -5,7 +5,7 @@ description: PageShell owns the visible header and the state precedence, but del
 tags: [adr, composite, scope, layering, api-design]
 sources:
   - id: adr
-    resource: "git:94d9b11:.claude/knowledge-base/decisions/page-shell-composite-pattern.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/decisions/page-shell-composite-pattern.md"
     author: "human:theoui-maintainers"
     last_modified: "2026-05-25"
 generated:

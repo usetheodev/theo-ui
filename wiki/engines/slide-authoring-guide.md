@@ -5,7 +5,7 @@ description: The complete markdown grammar a model should emit for Slide and Sli
 tags: [engine, slide, prompt, llm, markdown, grammar]
 sources:
   - id: guide
-    resource: "git:94d9b11:docs/slide-llm-guide.md"
+    resource: "archive:94d9b11:docs/slide-llm-guide.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

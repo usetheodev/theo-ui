@@ -1,17 +1,17 @@
 # @theokit/ui — Theo UI (Violet Forge)
 
-> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 121 components (92 primitives + 29 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
+> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 103 components (63 primitives + 40 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
 
 This file follows the [llms.txt convention](https://llmstxt.org/) and gives an LLM the **factual ground truth** of the project: package name, import paths, component inventory, locked conventions, anti-patterns, and links to the canonical documentation. Treat the bullets below as non-negotiable contracts unless the source files contradict them — in which case the source files win and this file is stale.
 
 ## Project metadata
 
 - **npm package:** `@theokit/ui`
-- **Current version:** `0.12.0-next.0` (npm dist-tag `next`; latest release line)
+- **Current version:** `1.3.2` (npm dist-tag `latest`)
 - **License:** Apache-2.0
-- **Repository:** `https://github.com/usetheodev/theo-ui`
+- **Repository:** `https://github.com/usetheodev/theokit-ui`
 - **Docs site:** `https://docs.usetheo.dev/theoui`
-- **Registry (shadcn CLI):** `https://usetheodev.github.io/theo-ui/r/{slug}.json`
+- **Registry (shadcn CLI):** `https://usetheodev.github.io/theokit-ui/r/{slug}.json`
 - **Design-system codename:** Violet Forge
 - **Module format:** ESM only (no CJS). `"type": "module"`. Side-effects on `**/*.css`.
 - **React peer range:** `>=18.2.0 <20` (works with 18.x and 19.x)
@@ -24,7 +24,7 @@ This file follows the [llms.txt convention](https://llmstxt.org/) and gives an L
 pnpm add @theokit/ui@next
 
 # Per-component copy (shadcn-style)
-npx shadcn@latest add https://usetheodev.github.io/theo-ui/r/copy-button.json
+npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/chat-message.json
 ```
 
 ## Import path canonical form
@@ -51,7 +51,7 @@ import { theoUIVitePlugin } from "@theokit/ui/vite-plugin";
 import "@theokit/ui/preset";       // Tailwind v4 preset (zero-config)
 ```
 
-There are **134 subpath exports** in `package.json#exports` — one per component plus engine entry points. **As of 0.10.0-next.0** (Brief #4), per-component subpath imports (`@theokit/ui/button`) point at real per-component dist files (`dist/primitives/button/index.js`) instead of the barrel — switching to subpath form measurably shrinks the consumer's `@theokit/ui` chunk by dropping unused components. Before 0.10, subpath imports were cosmetic (all aliased the barrel). The barrel form keeps working, additive migration shape (same as `@mui/material`).
+There are **105 subpath exports** in `package.json#exports` — one per component plus engine entry points. **As of 0.10.0-next.0** (Brief #4), per-component subpath imports (`@theokit/ui/button`) point at real per-component dist files (`dist/primitives/button/index.js`) instead of the barrel — switching to subpath form measurably shrinks the consumer's `@theokit/ui` chunk by dropping unused components. Before 0.10, subpath imports were cosmetic (all aliased the barrel). The barrel form keeps working, additive migration shape (same as `@mui/material`).
 
 ## Peer dependencies (required vs optional)
 
@@ -89,23 +89,31 @@ There are **134 subpath exports** in `package.json#exports` — one per componen
 - **Fonts (locked):** Geist Sans (display + body) + Geist Mono (mono). Loaded via CDN by default (`dist/fonts-cdn.css`) or locally (`dist/fonts.css`).
 - **Tailwind v4:** CSS-first config via `@theokit/ui/preset` (zero JS config). v3 legacy preset available at `@theokit/ui/preset-v3-legacy`.
 
-## Component catalog — primitives (89)
+## Component catalog
 
-Located in `src/components/primitives/{slug}/`. Each ships `.tsx` + `.test.tsx` + `.stories.tsx` + `index.ts` + a `registry/{slug}.json` descriptor.
+Primitives live in `src/components/primitives/{slug}/`, composites in
+`src/components/composites/{slug}/`. Each ships `.tsx` + `.test.tsx` +
+`.stories.tsx` + `index.ts`, and every registry-published component also has a
+`registry/r/{slug}.json` descriptor.
 
-`agent-error-card`, `agent-event`, `agent-handoff`, `agent-profile`, `agent-starting-state`, `agent-streaming`, **`alert`** (NEW 0.9), `artifact-preview`, `attachment-chip`, `audit-log-entry`, `auto-compact-notice`, `avatar`, `badge`, `browser-controls`, `build-log-stream`, `button`, `capability-indicator`, `card`, `chat-thread`, `checkbox`, `context-card`, `context-window-bar`, **`copy-button`** (0.8), `cost-meter`, `created-files-card`, `cron-job-card`, **`danger-zone`** (0.8), `dialog`, `diff-viewer`, `empty-state`, `folder-context-card`, `folder-selector`, `form-field`, `hook-config`, `hook-event-log`, `input`, `intent-selector`, `label`, `lane-board`, `login-split`, `mcp-server-card`, `memory-editor`, `mention-menu`, `metrics-panel`, `model-card`, `model-selector`, **`pagination`** (NEW 0.9), `permission-matrix`, **`plan-badge`** (0.7), **`progress`** (0.7), `progress-checklist`, `project-switcher`, `quick-action-chips`, `radio-group`, `recent-folders-list`, `rule-card`, `running-tasks-panel`, `run-stats`, `scroll-area`, `select`, `session-list-item`, `session-timeline`, `sheet`, `sidebar`, `skeleton`, `skill-card`, `slide`, `social-auth-row`, **`stat-tile`** (0.8), **`status-dot`** (0.8), `steps-rail`, `sub-agent-dispatch`, `switch`, `system-prompt-editor`, **`table`** (0.8), `tabs`, `task-plan`, `terminal-panel`, `textarea`, **`timestamp`** (0.8), `toast`, `token-usage-chart`, `tool-call`, `tool-call-card`, `tool-result`, `tools-list`, `tooltip`, `topnav`, `whiteboard`.
+The component list is **not duplicated here** — it drifts the moment a component
+lands. Read it from the generated census instead, which `pnpm sync:readme`
+rewrites from the filesystem on every change:
 
-## Component catalog — composites (27)
+- `/README.md` — catalog section, grouped by primitive/composite
+- `/wiki/registry/component-census.md` — the same census with per-component detail
+- `/package.json#exports` — the authoritative subpath list
+- `/src/index.ts` — the barrel; every public component appears here
+- `/registry/index.json` — the 100 registry-published items
 
-Located in `src/components/composites/{slug}/`.
-
-**`account-menu`** (0.7), `agent-composer`, `agent-editor`, `agent-stream`, `agent-timeline`, `approval-card`, `chat-composer`, `chat-message`, **`code-block`** (NEW 0.8), `command-palette`, **`confirm-dialog`** (NEW 0.8), `cron-jobs-list`, `deployment-row`, `domain-config`, `env-var-editor`, `mcp-server-list`, `permission-modal`, `preview-env-card`, `preview-panel`, `project-card`, `rollback-ui`, `rule-editor`, `skill-editor`, `skills-list`, `slide-deck`, `task-header`, **`usage-meter`** (0.7).
+Current census: **103 components (63 primitives + 40 composites)**, 100 registry
+items, 7 screens.
 
 ## Recent deliveries (PaaS shape)
 
-- **0.12.0-next.0 (DESIGN.md + companion agent skill, 2026-05-25):** Two LLM-facing artifacts that complement `llms.txt`. **`DESIGN.md`** at repo root — 9-section visual spec following the awesome-design-md canonical structure (Visual Theme · Color Palette · Typography · Layout · Depth & Elevation · Components · Responsive · Do's and Don'ts · Agent Prompt Guide). Tokens mirror `src/styles/tokens.css` + `src/themes/violet-forge.ts`. Shipped via `package.json > files`. **`skills/theo-ui/`** companion skill installable via `npx skills add usetheodev/theo-ui` (vercel-labs/skills CLI): 4 verbs (default build / `audit` / `migrate` / `catalog`), 32 universal slop-test gates + surface-specific extensions, pre-emit critique on 6 axes (Library-fit · Token-fidelity · Composition · A11y · Restraint · Voice), 12 page archetypes, 5 surfaces (agent-chat · cloud-dashboard · settings-form · marketing · auth). Distributed via GitHub (not npm). Zero new peer-deps; zero source-code changes; pure docs/skill addition.
+- **0.12.0-next.0 (design guide + companion agent skill, 2026-05-25):** Two LLM-facing artifacts that complemented `llms.txt` — a root-level 9-section visual spec and a companion agent skill installable via the vercel-labs/skills CLI. **Both were retired since.** The normative design-system knowledge they carried (visual theme, color palette, typography, layout, elevation, responsive rules, do's and don'ts) now lives in `wiki/design-system/` — `color-tokens.md`, `themes.md`, `spacing-radii-elevation.md`, `density.md`, `motion.md`, `accessibility.md`, `anti-glass.md` — which is the single source of truth. Neither artifact ships in the npm tarball.
 - **0.11.0-next.0 (Brief #5 — 3 dashboard primitives + 2 pre-reqs, 2026-05-25):** Closes 3 measured TheoCloud Deep Review findings. `PinInput` (6-box OTP input with auto-advance, paste handling, mask, error — closes § 2.12 P2). `DataTable` composite (sortable + sticky + expandable rows with `expandMode="single"|"multiple"` + row actions via DropdownMenu + client-side pagination + loading skeleton + empty state — closes Top-5 #2 / § 2.2 + § 2.4 P1). `PageShell` composite (page-level scaffold with state precedence loading > error > empty > children; does NOT manage document.title — exposes `onTitleChange` callback for consumer-scope hook — closes CC-3 indirect; D3 scope decision). Plus 2 explicit pre-requisites the brief assumed existed: `DropdownMenu` primitive (Radix wrapper consolidating 5 prior direct usages) and `ActionBar` primitive (search + filter + primary action; composed by PageShell). Zero new peer-deps. ADR `page-shell-composite-pattern.md` documents the scope-narrowing decision.
-- **0.10.0-next.0 (Brief #4 — subpath tree-shaking, build pipeline fix):** ~100 cosmetic subpath exports (every entry pointed at the same 417 KB barrel) replaced with real per-component dist files via tsup auto-glob + `splitting: true`. `dist/index.js` shrank from 417 KB → 49 KB (−88%) because all component code now lives in 119 shared chunks. Per-component dist files (~150-200 bytes each) are tiny re-export wrappers. Per-component `.d.ts` not emitted (would OOM tsup worker pool) — types resolve via barrel `dist/index.d.ts`. `scripts/regen-subpath-exports.ts` runs after every build to keep `package.json#exports` honest (refuses to write if any straggler points at the barrel). Zero breaking change; consumer migration is opt-in file-by-file. ADR at `.claude/knowledge-base/decisions/subpath-exports-per-component.md`.
+- **0.10.0-next.0 (Brief #4 — subpath tree-shaking, build pipeline fix):** ~100 cosmetic subpath exports (every entry pointed at the same 417 KB barrel) replaced with real per-component dist files via tsup auto-glob + `splitting: true`. `dist/index.js` shrank from 417 KB → 49 KB (−88%) because all component code now lives in 119 shared chunks. Per-component dist files (~150-200 bytes each) are tiny re-export wrappers. Per-component `.d.ts` not emitted (would OOM tsup worker pool) — types resolve via barrel `dist/index.d.ts`. `scripts/regen-subpath-exports.ts` runs after every build to keep `package.json#exports` honest (refuses to write if any straggler points at the barrel). Zero breaking change; consumer migration is opt-in file-by-file. ADR at `wiki/decisions/subpath-exports-per-component.md`.
 - **0.9.0-next.0 (Brief #3 — deferred follow-ups, 2 components):** `Alert` (persistent inline notice; 4 intents — info/success/warning/destructive — with mapped lucide icons and role=alert for destructive vs role=status for others; optional title/description/action/onDismiss), `Pagination` (accessible nav landmark with first/prev/numbers/next/last + visual ellipses + aria-current=page; keyboard nav ArrowLeft/Right/Home/End; configurable siblingCount + jump buttons + size; returns null when totalPages <= 1; exports a pure `computePageRange` helper for unit-testing the range logic in isolation). Zero new peer-deps. Brief #3 consumer: TheoCloud `<VerificationBanner>` → 3-line `<Alert>`.
 - **0.8.0-next.0 (Brief #2 — cross-cutting, 8 components):** `Table` (sub-components + sortable headers), `StatusDot` (5 kinds + auto-pulse), `CopyButton` (clipboard + `aria-live` + SSR-safe), `Timestamp` (`Intl.RelativeTimeFormat`, native `title` tooltip, Unix ms only), `StatTile` (dual button/div mode), `DangerZone` (`.Action` sub-component), `ConfirmDialog` (typed-phrase guard + async loading + Enter-to-confirm), `CodeBlock` (terminal prefix + caption + raw-code copy). Consumer: TheoCloud dashboard. Zero new peer-deps; bundle +5.4% (rebaselined).
 - **0.7.0-next.0 (Brief #1 — PaaS-shape, 4 components):** `UsageMeter` (multi-metric, over-quota warning + clamping), `Progress` (4 intents + indeterminate + motion-reduce aware), `PlanBadge` (5 canonical tiers), `AccountMenu` (avatar + name + plan + secondary, dual button/div).
@@ -226,11 +234,11 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
     - `https://docs.usetheo.dev/theoui/primitives/confirm-dialog`
 - **Theming guide:** `https://docs.usetheo.dev/theoui/theming`
 - **Engines:** `https://docs.usetheo.dev/theoui/engines/{whiteboard,slide,slide-deck}`
-- **CHANGELOG:** `https://github.com/usetheodev/theo-ui/blob/main/CHANGELOG.md`
+- **CHANGELOG:** `https://github.com/usetheodev/theokit-ui/blob/main/CHANGELOG.md`
 
 ## Source-of-truth files (read these before claiming anything)
 
-1. `/CLAUDE.md` — project contract (locked names, taxonomy gate, voice/tone scope, inviolable rules)
+1. `/CONTRIBUTING.md` — operational handbook (taxonomy gate, quality gates, PR flow, inviolable rules)
 2. `/README.md` — public catalog + quality gates + dev scripts (auto-synced from filesystem by `pnpm sync:readme`)
 3. `/CHANGELOG.md` — every release entry, including [Unreleased] section
 4. `/package.json#exports` — the authoritative list of subpath imports (auto-synced by `pnpm sync:exports`)
@@ -239,7 +247,7 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
 7. `/wiki/design-system/index.md` — tokens, fonts, type scale (Geist + Vercel scale, locked)
 8. `/wiki/rfcs/*.md` — engine RFCs (whiteboard 0001, slide 0002, slide-deck 0003, slide-rich-content 0004, themes 0007, integration 0008, chat-message 0009)
 9. `/scripts/validate-quality-gates.ts` — the taxonomy + structure gate
-10. `/.claude/knowledge-base/plans/*.md` — every change of ≥3 phases has a written plan; the most recent is `dashboard-paas-primitives-2-plan.md` (Brief #2)
+10. `/wiki/index.md` — the OKF knowledge bundle root: architecture, design system, quality gates, decisions, RFCs, engines, migrations, registry and history
 
 ## How to add a new component (the rote checklist)
 
@@ -270,4 +278,4 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
 
 The code, the README, and the `package.json#exports` map are **authoritative**. If `llms.txt` disagrees with them, the code wins — update this file via PR with a one-line rationale. Locked names (Section "Locked names") and voice/narrative rules require a strategic review at the monorepo level before being weakened or repealed.
 
-— Generated 2026-05-23 (last updated 2026-05-25 for 0.12.0-next.0 / DESIGN.md + companion agent skill) from filesystem inventory + `CLAUDE.md` + `README.md`. Regenerate by inspecting `src/components/{primitives,composites}/*/` directories and updating the catalog sections above.
+— Generated 2026-05-23 (last updated 2026-08-17 for the tooling and docs consolidation) from filesystem inventory + `README.md` + `wiki/`. Regenerate by inspecting `src/components/{primitives,composites}/*/` directories and updating the catalog sections above.

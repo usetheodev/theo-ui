@@ -20,6 +20,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { describe, expect, it } from "vitest";
+import { assertDistPresent } from "../support/dist-gate.js";
 
 // EC-1: PKG_ROOT é a raiz do package (theo-ui/), não o dir do teste.
 // Este arquivo: theo-ui/tests/contract/theokit-consumer.test.ts → 2 níveis acima.
@@ -41,12 +42,13 @@ function normalizePluginReturn(value: unknown): unknown[] | null {
 }
 
 // This suite validates the BUILT dist/, so it only runs once a build exists.
-// `prepublishOnly` (`pnpm build && pnpm test:contract`) guarantees dist is
-// present at the publish gate, so the contract is always enforced there. The
-// general `pnpm test` sweep (vitest `tests/**`) runs BEFORE `pnpm build` in
-// `quality:gates`, so without this guard the suite failed on a fresh checkout
-// for a reason that is not a real defect — it skips cleanly instead.
+// The general `pnpm test` sweep runs BEFORE `pnpm build` in `quality:gates`, so
+// without this guard the suite would be red on a fresh checkout for a reason
+// that is not a real defect — it skips cleanly instead. At the publish gate
+// (`pnpm test:contract`, always after a build) `THEOKIT_REQUIRE_DIST=1` turns
+// that skip into a hard failure, so the gate can never pass vacuously.
 const distBuilt = existsSync(DIST("vite-plugin.js"));
+assertDistPresent(distBuilt, "dist/vite-plugin.js");
 
 describe.skipIf(!distBuilt)(
   "Contract: @theokit/ui/vite-plugin honors theokit consumer expectations (ADR 0001)",

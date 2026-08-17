@@ -3,7 +3,7 @@
  * composed `SlideInput` (frontmatter + body).
  *
  * Design (see RFC 0002 and the plan in
- * `.claude/knowledge-base/plans/slide-view-primitive-plan.md` §16.3 and ADRs D4 / D14):
+ * `wiki/rfcs/0002-slide.md`, ADRs D4 / D14):
  *
  * - **`.strict()`** on frontmatter — unknown keys produce `INVALID_FRONTMATTER`
  *   with a precise path, so an LLM can self-correct.
