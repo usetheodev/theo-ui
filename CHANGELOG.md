@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Secret scanning em duas camadas: um hook `pre-commit` que varre com o TruffleHog o conteúdo que está staged e recusa o commit, e `.github/workflows/secret-scan.yml`, que revarre no CI o intervalo empurrado. O hook é o que impede a credencial de entrar no histórico; o workflow é o que `git commit --no-verify` não consegue pular. Falsos positivos confirmados são silenciados linha a linha com um comentário `trufflehog:ignore`, nunca excluindo o caminho — excluir o caminho esconderia também um segredo real acrescentado depois àquele mesmo fixture. (secret-scanning-2026-08)
+
 - Wiki `wiki/` — bundle Open Knowledge Format v0.2 com 56 conceitos em 9 seções (arquitetura, design system, quality gates, decisões, RFCs, engines, migrações, registry, histórico). Conformante em `okf-validate --strict`: zero links quebrados, zero órfãos. Cada conceito cita a origem via `sources[].resource` no formato `archive:94d9b11:<caminho>`. (docs-reorg-2026-08)
 - Campos `repository`, `homepage` e `bugs` no `package.json`. Sem `repository` o `npm publish --provenance` do workflow de release nunca poderia ter sucesso — as últimas quatro execuções de Release falharam por isso. (tooling-restore-2026-08)
 - `tests/support/dist-gate.ts` e a variável `THEOKIT_REQUIRE_DIST`: o gate de publicação falha alto quando `dist/` está ausente, em vez de passar sem asserir nada. (tooling-restore-2026-08)

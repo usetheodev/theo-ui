@@ -13,7 +13,9 @@
   },
   "type": "module",
   "types": "./dist/index.d.ts",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -461,7 +463,8 @@
     "quality:knip": "knip",
     "quality:knip:fix": "knip --fix",
     "quality:publint": "publint --strict",
-    "quality:attw": "attw --pack . --profile esm-only"
+    "quality:attw": "attw --pack . --profile esm-only",
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "peerDependencies": {
     "@tailwindcss/vite": "^4.0.0",
@@ -612,7 +615,11 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"],
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "@swc/core",
+      "esbuild"
+    ],
     "overrides": {
       "postcss": ">=8.5.10"
     }
