@@ -113,7 +113,9 @@ Every item under [`registry/r/`](./registry/r) is a standalone copy-paste unit w
 
 ### SSR / Server Components
 
-Inject `<ThemeScript>` in `<head>` to prevent FOUC and hydration mismatch:
+Inject `<ThemeScript>` in `<head>` to prevent FOUC and hydration mismatch. Give it the same
+props as the provider — the two resolve the mode separately, and a disagreement repaints the
+page at hydration, which is the flash you were preventing:
 
 ```tsx
 import { ThemeProvider, ThemeScript } from "@theokit/ui";

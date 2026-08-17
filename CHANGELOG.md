@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`<ThemeScript>` agora aceita `respectSystemMode` e `nonce`.** O primeiro espelha o prop de mesmo nome do `ThemeProvider`, para que desligar o sinal do sistema em um desligue nos dois — sem ele, o script e o provider resolviam o modo por regras diferentes. O segundo carimba o `nonce` no `<script>` inline: uma `script-src` baseada em nonce bloqueia script inline sem carimbo, e este é inútil se não rodar antes do primeiro paint. (usetheokit/theokit-ui#42)
+
+### Fixed
+
+- **`<ThemeScript>` provocava FOUC na primeira visita — o oposto do que existe para fazer.** O script aplicava `defaultMode` quando não havia nada persistido, enquanto o `ThemeProvider`, com `respectSystemMode` ligado por padrão, alinha com o `prefers-color-scheme` do sistema ao montar. Com o default `"dark"` e um sistema em claro, a página pintava escura e repintava clara no instante da hidratação — em toda primeira visita, que é justamente quando não há nada persistido. A ADR-0009 e a documentação já descreviam o comportamento correto ("reads `matchMedia` plus `localStorage`"); a implementação é que nunca leu `matchMedia`. O script passa a resolver o modo com os mesmos três ramos do provider, na mesma ordem, incluindo o caso sem `matchMedia`, e passa a validar os valores lidos do storage em vez de confiar neles. `theme-boot-agreement.test.tsx` executa o script real contra o DOM e compara com o que o provider real assenta, na matriz completa (persistido ou não × sistema claro ou escuro) — as duas implementações não podem compartilhar código, então o teste é o que as mantém de acordo. (usetheokit/theokit-ui#42)
+
+## [1.4.1] - 2026-08-17
+
+### Fixed
+
+- **`falconRed` não era exportado pela raiz do pacote.** O tema entrou em `builtinThemes` e no barrel de `themes/`, mas ficou de fora de `src/index.ts`, então `import { falconRed } from "@theokit/ui"` — a forma documentada — não compilava na 1.4.0. `barrel-exports.test.ts` passa a exigir que todo tema nomeado alcance a raiz, que é onde a omissão passou. (brand-theme-2026-08)
+
+## [1.4.0] - 2026-08-17
+
+### Added
+
 - Tema `falcon-red` — a identidade de marca do TheoKit como tema de primeira classe, exportado como `falconRed` e incluído em `builtinThemes` (agora 11). O `primary` do modo claro é a cor medida do falcão do logo, `#DE2329` → `oklch(0.579 0.218 26.4)`, usada sem modificação; a mesma cor que os badges do README do SDK já traziam. Três decisões ficam registradas no próprio arquivo porque são trade-offs, não preferências: (1) o `primary` do modo escuro clareia para `oklch(0.62 …)` e recebe tinta carvão, já que as duas restrições — vermelho legível sobre o fundo escuro e texto branco legível sobre esse vermelho — não têm interseção, e `0.62` é o menor clareamento que satisfaz a primeira; (2) `destructive` é carmim a 8° de matiz, porque com marca vermelha "confirmar" e "apagar para sempre" não podem renderizar igual — a separação é por matiz, não por luminância, então cor sozinha não basta e a ação destrutiva continua exigindo verbo e ícone (WCAG 1.4.1); (3) o `accent` é um vinho da mesma família em vez de uma cor complementar, que colidiria com `info` (azul) ou `warning` (âmbar), já ocupados. `violet-forge` segue em primeiro na lista e portanto segue sendo o default — promover a marca a padrão é decisão de produto, com raio de regressão visual em todo consumidor, não efeito colateral de adicionar um tema. (brand-theme-2026-08)
 
 - Secret scanning em duas camadas: um hook `pre-commit` que varre com o TruffleHog o conteúdo que está staged e recusa o commit, e `.github/workflows/secret-scan.yml`, que revarre no CI o intervalo empurrado. O hook é o que impede a credencial de entrar no histórico; o workflow é o que `git commit --no-verify` não consegue pular. Falsos positivos confirmados são silenciados linha a linha com um comentário `trufflehog:ignore`, nunca excluindo o caminho — excluir o caminho esconderia também um segredo real acrescentado depois àquele mesmo fixture. (secret-scanning-2026-08)
@@ -229,7 +245,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and cloud/PaaS composites (`DeploymentRow`, `DomainConfig`, `RollbackUI`,
   `EnvVarEditor`, …). Import them from `@usetheo/ui` instead. Full list + codemod in
   `docs/migration/v1-usetheo-ui-split.md`.
-
 
 
 ### Fixed
