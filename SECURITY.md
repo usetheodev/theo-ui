@@ -60,9 +60,12 @@ are in scope:
 - Misuse of the components by consumers (e.g. passing unsanitized HTML
   into a `<TerminalPanel>` `content` prop). These are documentation
   issues, not vulnerabilities in the library.
-- Issues in `referencia/` (internal exploration archive, not shipped).
-- Issues only reproducible in `playground/` or `tests/fixture-shadcn-app/`
-  with synthetic inputs — those are gate fixtures, not user surfaces.
+- Issues only reproducible in `tests/fixture-shadcn-app/` or the other
+  fixtures under `tests/` with synthetic inputs — those are gate fixtures,
+  not user surfaces.
+- Issues in Ladle stories (`*.stories.tsx`) or the demo screens under
+  `src/screens/`. Neither ships in the npm tarball; their data is fictional
+  placeholder content.
 
 ## Hardening already in place
 

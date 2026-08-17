@@ -70,7 +70,7 @@ export const Default: Story = () => {
               AA
             </span>
             <div className="grid">
-              <span className="font-medium text-body-sm">Alfredo Araujo</span>
+              <span className="font-medium text-body-sm">Jane Doe</span>
               <span className="font-mono text-label text-muted-foreground">Plano Pro</span>
             </div>
           </div>
@@ -99,7 +99,7 @@ export const Default: Story = () => {
               @theokit · welcome back
             </span>
             <h1 className="text-balance font-display text-display-xl tracking-tight">
-              De volta ao trabalho, <span className="text-accent">Alfredo</span>?
+              De volta ao trabalho, <span className="text-accent">Jane</span>?
             </h1>
           </header>
           <ChatComposer

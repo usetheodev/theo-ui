@@ -14,7 +14,7 @@ export const Default: Story = () => {
         open={open}
         onOpenChange={setOpen}
         request={{
-          path: "C:\\Users\\AlfredoAraujo\\Downloads\\capturas",
+          path: "C:\\Users\\dev\\Downloads\\screenshots",
           operations: ["read", "write", "delete"],
         }}
         onDecide={(d) => {
