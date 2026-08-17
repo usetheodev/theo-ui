@@ -10,7 +10,8 @@ day-to-day mechanics of shipping code to `@theokit/ui`.
 
 ## TL;DR
 
-1. Branch off `main` (never commit directly to `main`).
+1. Work on `workspace` — never commit directly to `develop` or `main`, and don't
+   create feature branches. See "Branch topology" below.
 2. Add or modify components under `src/components/primitives/` or `src/components/composites/`.
 3. Run `pnpm quality:gates` locally — it has to be green before you open a PR.
 4. Update `CHANGELOG.md` under `## [Unreleased]` for every visible change.
@@ -229,20 +230,67 @@ referenced by any build step.
 
 ---
 
+## Branch topology
+
+The repository has **exactly three branches**, all permanent, and they are kept
+**at the same commit**:
+
+```
+workspace ──PR──> develop ──PR + tag semver──> main
+ (todo o trabalho)  (integração)                (release)
+```
+
+- **`workspace`** is where every change is born — feature, fix, refactor, docs,
+  chore. It is never deleted and never recreated per task. There are **no feature
+  branches**; that is why `delete_branch_on_merge` is off on this repository, so
+  merging a promotion PR can never delete `workspace`.
+- **`develop`** only ever advances through the `workspace → develop` PR. No
+  direct commit, rebase, reset or cherry-pick, and nothing other than
+  `workspace` gets merged into it.
+- **`main`** is the release branch. It only receives the `develop → main`
+  promotion PR plus a semver tag. Pushing a `v*` tag triggers
+  `npm publish --provenance`, so a tag **is** a release.
+
+### Keeping the three at the same commit
+
+A PR merge always leaves the source branch behind the target, so convergence is a
+**two-step** promotion. Both steps matter:
+
+1. **Merge the promotion PR with "Create a merge commit"** (`gh pr merge --merge`).
+2. **Fast-forward the source branch(es) to the target**, e.g. after the
+   `develop → main` merge:
+   ```bash
+   git push origin origin/main:refs/heads/develop
+   git push origin origin/main:refs/heads/workspace
+   ```
+   No `--force` — the source is an ancestor, so this is a plain fast-forward.
+
+**Do not use "Rebase and merge" or "Squash and merge" on a promotion PR.** Both
+*rewrite* the commits, so the target ends up with a different SHA for the same
+tree and the source branch stops being an ancestor of it. The branches then
+genuinely diverge, and because force-pushing `workspace`, `develop` and `main` is
+forbidden, the only way back is an extra merge commit to reconverge. Verified the
+hard way: PR #37 was rebase-merged and left `develop` at `721ac07` against
+`workspace` at `eaceeac` with an identical tree.
+
+A merge commit keeps the source as an ancestor, which is exactly what makes
+step 2 possible. Repairing drift is always a fast-forward — never a back-merge
+into `develop`, never a force-push.
+
+---
+
 ## Release process
 
-The library is pre-1.0 (`0.0.0`). Until 1.0:
-- Every release is `0.x.y` under `--tag next` on npm.
-- Breaking changes are allowed; document under `### Breaking` in CHANGELOG.
-- A minimum 60-90 day window of `--tag next` usage is required before
-  promoting to `latest` and tagging `1.0.0`.
+The library is at `1.3.2`, published on the npm `latest` dist-tag.
 
-`1.0.0` requires:
-- ≥3 months of external usage with no regressions (sourced from real
-  consumer feedback, not vibes).
-- Zero `BLOCKER`/`HIGH` issues open in the most recent deep review.
-- Public Quickstart Option B (`npx shadcn add ...`) verified end-to-end
-  in Next 14, Vite 5, and Astro 4 vanilla scaffolds.
+- Semantic versioning, no exceptions. Breaking changes get a major and a
+  `### Breaking` section in the CHANGELOG.
+- Every visible change lands in `## [Unreleased]` first. A release moves that
+  section under a versioned heading with a date; entries of already-released
+  versions are never edited.
+- A release is cut by the `develop → main` PR plus the semver tag. The tag is
+  what publishes, so cut it only when the CHANGELOG and the version in
+  `package.json` already say what you mean.
 
 See `wiki/quality-gates/index.md` Gate 9 for the full Release Readiness checklist.
 
