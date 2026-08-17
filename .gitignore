@@ -76,7 +76,7 @@ desktop.ini
 .theokit/
 .aider*
 
-# External reference repos kept locally for inspiration (open-design, ui, stitch)
+# Local-only scratch clones and scratch tooling — never committed
 referencia/
 .gstack/
 

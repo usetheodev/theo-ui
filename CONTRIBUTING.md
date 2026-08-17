@@ -215,23 +215,17 @@ When you add a component:
 
 ---
 
-## Internal exploration archive: `referencia/`
+## Design influences
 
-`referencia/` contains design system references collected during the
-exploration phases (Vercel, Linear, Tremor, Radix Themes, etc.). It is
-NOT maintained, NOT shipped to npm, NOT used at runtime. It exists as a
-historical artifact for design decisions. Feel free to add to it, feel
-free to ignore it. Future cleanup may move it to a separate read-only
-repository.
+The design system was shaped by reading widely — Vercel, Linear, Tremor and
+Radix Themes are the clearest influences on the neutral surfaces, the density
+scale and the token model. Feature-level influences are credited inline: see the
+Roadmap table in `README.md` for the engines, and the component doc comments for
+the agent surfaces.
 
-**Note on the name (NIT-003):** the folder is in pt-BR (`referencia/`)
-because the early design phase happened in Portuguese. It is intentionally
-not renamed to `references/`: (a) the directory is `.gitignore`d so it
-never appears in the published package or in tooling output, (b) all
-CHANGELOG and audit cross-references already point at the existing name,
-(c) the audit consensus (see deep-review report) is to relocate the
-content to a separate repo rather than rename in-place. The name stays
-until that move happens.
+Any local scratch clones used during that reading live outside the repository and
+are `.gitignore`d. They are not part of the project, not maintained, and not
+referenced by any build step.
 
 ---
 
@@ -282,8 +276,9 @@ After changing theokit-ui components, re-run both commands.
 
 ### Prerequisites
 
-Both repos must be under the same parent directory — today that is the
-`theokit-framework/` repo group (`/home/paulo/Projetos/theo/theokit-framework/`).
+Both repos must be under the same parent directory — the `theokit-framework/`
+repo group. The absolute location is up to you; the tarball dev flow only needs
+them to be siblings.
 
 ## Security
 

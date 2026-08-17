@@ -39,7 +39,7 @@ export const Default: Story = () => {
             <span className="grid size-8 place-items-center rounded-full bg-accent font-bold text-accent-foreground text-label-caps">
               AA
             </span>
-            <span className="font-medium text-body-sm">Alfredo Araujo</span>
+            <span className="font-medium text-body-sm">Jane Doe</span>
           </div>
         </Sidebar.Footer>
       </Sidebar>

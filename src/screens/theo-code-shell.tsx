@@ -207,7 +207,7 @@ export function TheoCodeShell({ className, initialMode = "code" }: TheoCodeShell
               AA
             </span>
             <div className="grid">
-              <span className="font-medium text-body-sm">Alfredo Araujo</span>
+              <span className="font-medium text-body-sm">Jane Doe</span>
               <span className="font-mono text-label text-muted-foreground">Plano Pro</span>
             </div>
           </div>
