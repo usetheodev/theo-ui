@@ -100,3 +100,6 @@ ds-bundle/
 
 # Generated at CSS precompile time (build-precompiled-css.ts) — never committed
 src/styles/components-entry.generated.css
+
+
+.claude
