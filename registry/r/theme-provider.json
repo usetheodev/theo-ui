@@ -9,9 +9,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/cn.json",
-    "https://usetheodev.github.io/theokit-ui/r/env.json",
-    "https://usetheodev.github.io/theokit-ui/r/tokens.json"
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/env.json",
+    "https://usetheokit.github.io/theokit-ui/r/tokens.json"
   ],
   "files": [
     {

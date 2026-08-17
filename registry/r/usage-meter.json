@@ -8,9 +8,9 @@
     "@usetheo/ui"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
     "https://usetheodev.github.io/usetheo-ui/r/progress.json",
-    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

@@ -101,8 +101,8 @@ export default function App() {
 ### Option B — copy individual components (shadcn-style)
 
 ```bash
-npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/agent-event.json
-npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/tool-call.json
+npx shadcn@latest add https://usetheokit.github.io/theokit-ui/r/agent-event.json
+npx shadcn@latest add https://usetheokit.github.io/theokit-ui/r/tool-call.json
 ```
 
 > Branded `https://ui.usetheo.dev/r/*` URL will follow once the DNS CNAME is configured (single record at the registrar). Both URLs serve identical content.
@@ -338,7 +338,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 Honest claims only.
 
 - **Production.** 99 components, 1,131 tests passing, zero a11y violations across 171 vitest-axe checks, bundle size enforced. Quality gates run on every PR.
-- **Registry distribution.** Served at [`https://usetheodev.github.io/theokit-ui/r/`](https://usetheodev.github.io/theokit-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
+- **Registry distribution.** Served at [`https://usetheokit.github.io/theokit-ui/r/`](https://usetheokit.github.io/theokit-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.
 

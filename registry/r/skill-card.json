@@ -8,10 +8,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/cn.json",
-    "https://usetheodev.github.io/theokit-ui/r/mode-types.json",
-    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json",
-    "https://usetheodev.github.io/theokit-ui/r/types.json"
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/mode-types.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json",
+    "https://usetheokit.github.io/theokit-ui/r/types.json"
   ],
   "files": [
     {

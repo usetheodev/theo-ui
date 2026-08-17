@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **O repositório passou para a organização oficial `usetheokit`, e o registry shadcn passa a servir em `https://usetheokit.github.io/theokit-ui/r/*.json`.** Clones do git continuam funcionando pelo redirect permanente do GitHub, mas **o GitHub Pages não redireciona entre organizações** — as 239 URLs de descritor que apontavam para `usetheodev.github.io` deixariam de resolver. `REGISTRY_BASE_URL` em `scripts/build-registry.ts`, o `homepage` do pacote e todos os descritores foram reapontados. Quem já instalou componentes não é afetado (o shadcn copia o código para o projeto); quem instalar a partir de uma URL antiga precisa da nova. (usetheokit/theokit#316)
+
+  As `registryDependencies` que apontam para `usetheodev.github.io/usetheo-ui/r/*` foram **mantidas de propósito**: são os primitivos que vivem no repositório `usetheo-ui`, que não faz parte desta migração e continua resolvendo.
+
+- **O texto da licença Apache-2.0 foi substituído pelo oficial.** O texto distribuído até aqui tinha o parágrafo 4(d) truncado, omitindo "reasonable and customary use" da cláusula de NOTICE. Um corpo modificado sob o identificador SPDX `Apache-2.0` é, na prática, uma licença customizada. O `NOTICE` — que credita a Vercel pelo shell estrutural adaptado de `ai-elements` — não mudou. (usetheokit/theokit#316)
+
 - `scripts/validate-contrast.ts` conta os temas auditados a partir do próprio relatório em vez de anunciar "10 themes" fixo. A linha de resumo é a única coisa que o leitor tem para julgar a cobertura do gate, e ela passou a mentir no instante em que um 11º tema entrou. (brand-theme-2026-08)
 - Quality gates passam a ler a wiki no lugar de `docs/`: `validateArchitectureCensus` → `wiki/registry/component-census.md`, `validateDocsTypography` → `wiki/design-system/typography.md`, checagem de existência → `wiki/quality-gates/index.md`. `pnpm sync:readme` escreve o censo em `wiki/registry/component-census.md`. (docs-reorg-2026-08)
 - `README.md`, `CONTRIBUTING.md` e `llms.txt` reapontam para os caminhos da wiki. (docs-reorg-2026-08)

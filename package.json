@@ -5,11 +5,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/usetheodev/theokit-ui.git"
+    "url": "git+https://github.com/usetheokit/theokit-ui.git"
   },
-  "homepage": "https://usetheodev.github.io/theokit-ui/",
+  "homepage": "https://usetheokit.github.io/theokit-ui/",
   "bugs": {
-    "url": "https://github.com/usetheodev/theokit-ui/issues"
+    "url": "https://github.com/usetheokit/theokit-ui/issues"
   },
   "type": "module",
   "types": "./dist/index.d.ts",

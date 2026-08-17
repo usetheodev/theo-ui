@@ -6,10 +6,10 @@
   "description": "Vertical list of agent events.",
   "dependencies": [],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/agent-event.json",
-    "https://usetheodev.github.io/theokit-ui/r/agent-types.json",
-    "https://usetheodev.github.io/theokit-ui/r/cn.json",
-    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
+    "https://usetheokit.github.io/theokit-ui/r/agent-event.json",
+    "https://usetheokit.github.io/theokit-ui/r/agent-types.json",
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {
