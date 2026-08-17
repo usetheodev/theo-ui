@@ -5,7 +5,7 @@ description: The two input shapes, sub-component namespace, navigation contract,
 tags: [engine, slide-deck, navigation, presenter, print, api]
 sources:
   - id: rfc-0003
-    resource: "git:94d9b11:docs/rfcs/0003-slide-deck.md"
+    resource: "archive:94d9b11:docs/rfcs/0003-slide-deck.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

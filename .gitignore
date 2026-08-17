@@ -10,7 +10,6 @@ build
 out
 .ladle/dist
 .ladle/build
-playground/dist
 *.tsbuildinfo
 
 # Test / coverage
@@ -62,9 +61,6 @@ desktop.ini
 .env.production.local
 .env.*.local
 
-# Local audit raw HTML (kept under docs/audit but big)
-docs/audit/**/raw
-
 # Optional Theo / project-specific scratch
 .scratch
 .tmp
@@ -76,7 +72,8 @@ docs/audit/**/raw
 *.rej
 
 # Local agent / AI tool configuration
-# .claude/
+.claude/
+.theokit/
 .aider*
 
 # External reference repos kept locally for inspiration (open-design, ui, stitch)
@@ -89,17 +86,14 @@ src/styles/node_modules/
 test-results/
 .npmrc
 
-# Python bytecode (skills scripts)
+# Python bytecode
 __pycache__/
 *.pyc
+
+# Design-sync working files
 .ds-sync/
 ds-bundle/
-.design-sync/.cache/
-.design-sync/learnings/
-.design-sync/node_modules
+.design-sync/
 
 # Generated at CSS precompile time (build-precompiled-css.ts) — never committed
 src/styles/components-entry.generated.css
-
-
-.claude

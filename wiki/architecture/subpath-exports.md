@@ -5,12 +5,12 @@ description: What @theokit/ui/<name> resolves to today, the measured bundle hist
 tags: [architecture, bundling, tree-shaking, exports, tsup]
 sources:
   - id: arch-doc
-    resource: "git:94d9b11:docs/architecture.md"
+    resource: "archive:94d9b11:docs/architecture.md"
   - id: subpath-adr
-    resource: "git:94d9b11:.claude/knowledge-base/decisions/subpath-exports-per-component.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/decisions/subpath-exports-per-component.md"
     author: "human:theoui-maintainers"
   - id: subpath-announce
-    resource: "git:94d9b11:docs/announcements/0.10.0-next.0-subpath-tree-shaking.md"
+    resource: "archive:94d9b11:docs/announcements/0.10.0-next.0-subpath-tree-shaking.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

@@ -5,7 +5,7 @@ description: Why @theokit/ui ships no CJS build, the hydration incident that for
 tags: [adr, esm, packaging, cross-repo, root-cause]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0003-esm-only-confirmed-and-gated.md"
+    resource: "archive:94d9b11:docs/adr/0003-esm-only-confirmed-and-gated.md"
     author: "human:paulo"
     last_modified: "2026-05-28"
 generated:

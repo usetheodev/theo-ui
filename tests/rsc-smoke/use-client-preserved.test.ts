@@ -15,9 +15,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { assertDistPresent } from "../support/dist-gate.js";
 
 const DIST = join(process.cwd(), "dist");
 const hasDist = existsSync(DIST);
+assertDistPresent(hasDist, "dist/");
 
 function head(file: string): string {
   return readFileSync(join(DIST, file), "utf8").slice(0, 14);

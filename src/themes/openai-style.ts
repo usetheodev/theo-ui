@@ -6,7 +6,7 @@ import type { Theme } from "./types.js";
  * Inspired by, not affiliated with OpenAI. Pure white / charcoal canvas +
  * signature ChatGPT green (#10A37F). Minimal saturation, high contrast.
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T7.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const openaiStyle: Theme = {
   name: "openai-style",

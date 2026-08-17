@@ -5,9 +5,9 @@ description: What the Violet Forge design system commits to visually, and the ex
 tags: [design-system, identity, principles, brand]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: decisions-audit
-    resource: "git:94d9b11:docs/audit/2026-05-decisions.md"
+    resource: "archive:94d9b11:docs/audit/2026-05-decisions.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

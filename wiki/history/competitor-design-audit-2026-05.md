@@ -5,7 +5,7 @@ description: Empirical extraction of six PaaS competitors' design tokens from th
 tags: [history, design-system, competitive-analysis, empirical, provenance]
 sources:
   - id: audit
-    resource: "git:94d9b11:docs/design-audit.md"
+    resource: "archive:94d9b11:docs/design-audit.md"
     last_modified: "2026-05-13"
 generated:
   by: "claude-code/opus-5"

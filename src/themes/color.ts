@@ -16,8 +16,7 @@
  * Alpha channels are intentionally discarded — `ColorScale` is opaque;
  * compose alpha in CSS via `color-mix(in oklch, var(--primary) 50%, transparent)`.
  *
- * Original plan: `.claude/knowledge-base/plans/theming-and-sizes-plan.md` T2.2.
- * Updated by: `.claude/knowledge-base/plans/theo-ui-community-best-practices-alignment-plan.md` T2.6.
+ * RFC: `wiki/rfcs/0005-theming-and-sizes.md`.
  */
 
 function hexCharToNibble(ch: string): number {

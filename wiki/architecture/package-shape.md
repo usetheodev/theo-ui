@@ -5,13 +5,13 @@ description: What @theokit/ui publishes, why there is no CJS build, and the six 
 tags: [architecture, packaging, esm, npm, publish, contract]
 sources:
   - id: adr-0003
-    resource: "git:94d9b11:docs/adr/0003-esm-only-confirmed-and-gated.md"
+    resource: "archive:94d9b11:docs/adr/0003-esm-only-confirmed-and-gated.md"
     author: "human:paulo"
   - id: adr-0002
-    resource: "git:94d9b11:docs/adr/0002-dist-tag-hotfix-and-prepublish-validation.md"
+    resource: "archive:94d9b11:docs/adr/0002-dist-tag-hotfix-and-prepublish-validation.md"
     author: "human:paulo"
   - id: adr-0001
-    resource: "git:94d9b11:docs/adr/0001-vite-plugin-subpath-export-contract.md"
+    resource: "archive:94d9b11:docs/adr/0001-vite-plugin-subpath-export-contract.md"
     author: "human:paulo"
 generated:
   by: "claude-code/opus-5"

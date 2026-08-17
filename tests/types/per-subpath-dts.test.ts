@@ -11,9 +11,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { assertDistPresent } from "../support/dist-gate.js";
 
 const ROOT = process.cwd();
 const hasDist = existsSync(join(ROOT, "dist", "index.d.ts"));
+assertDistPresent(hasDist, "dist/index.d.ts");
 
 interface ExportObj {
   types?: string;

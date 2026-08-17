@@ -7,7 +7,7 @@ import type { Theme } from "./types.js";
  * warm cream canvas + burnt sienna primary + ink-on-paper feel. No proprietary
  * assets reproduced (font is Geist, colors are independent measurements).
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T6.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const anthropicStyle: Theme = {
   name: "anthropic-style",

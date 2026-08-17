@@ -5,7 +5,7 @@ description: The GitHub-side settings required so the quality:gates CI check can
 tags: [quality-gates, ci, github, governance, runbook]
 sources:
   - id: bp-doc
-    resource: "git:94d9b11:docs/branch-protection.md"
+    resource: "archive:94d9b11:docs/branch-protection.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

@@ -11,7 +11,7 @@ sources:
   - id: census-gate
     resource: "scripts/validate-quality-gates.ts"
   - id: arch-doc
-    resource: "git:94d9b11:docs/architecture.md"
+    resource: "archive:94d9b11:docs/architecture.md"
 generated:
   by: "process:sync-readme"
   at: "2026-08-11"

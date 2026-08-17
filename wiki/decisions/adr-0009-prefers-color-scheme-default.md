@@ -5,7 +5,7 @@ description: The respectSystemMode prop, the precedence rules between OS signal 
 tags: [adr, theming, accessibility, ssr, api, breaking-change]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0009-prefers-color-scheme-default.md"
+    resource: "archive:94d9b11:docs/adr/0009-prefers-color-scheme-default.md"
     last_modified: "2026-06-03"
 generated:
   by: "claude-code/opus-5"

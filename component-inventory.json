@@ -1,32 +1,16 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-29T14:57:06.594Z",
+  "generatedAt": "2026-08-17T12:26:40.789Z",
   "counts": {
-    "total": 128,
-    "primitives": 98,
-    "composites": 30,
-    "withStory": 128,
+    "total": 86,
+    "primitives": 64,
+    "composites": 22,
+    "withStory": 86,
     "withoutStory": 0,
-    "withTest": 128,
-    "exported": 125
+    "withTest": 86,
+    "exported": 83
   },
   "components": [
-    {
-      "name": "account-menu",
-      "path": "src/components/composites/account-menu/account-menu.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "action-bar",
-      "path": "src/components/primitives/action-bar/action-bar.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
     {
       "name": "agent-composer",
       "path": "src/components/composites/agent-composer/agent-composer.tsx",
@@ -108,9 +92,9 @@
       "exported": true
     },
     {
-      "name": "alert",
-      "path": "src/components/primitives/alert/alert.tsx",
-      "kind": "primitive",
+      "name": "agent-tool-renderer",
+      "path": "src/components/composites/agent-tool-renderer/agent-tool-renderer.tsx",
+      "kind": "composite",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -119,6 +103,14 @@
       "name": "approval-card",
       "path": "src/components/composites/approval-card/approval-card.tsx",
       "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "approval-mode-selector",
+      "path": "src/components/primitives/approval-mode-selector/approval-mode-selector.tsx",
+      "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -156,22 +148,6 @@
       "exported": true
     },
     {
-      "name": "avatar",
-      "path": "src/components/primitives/avatar/avatar.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "badge",
-      "path": "src/components/primitives/badge/badge.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "branch-indicator",
       "path": "src/components/primitives/branch-indicator/branch-indicator.tsx",
       "kind": "primitive",
@@ -196,14 +172,6 @@
       "exported": true
     },
     {
-      "name": "button",
-      "path": "src/components/primitives/button/button.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "capability-indicator",
       "path": "src/components/primitives/capability-indicator/capability-indicator.tsx",
       "kind": "primitive",
@@ -212,8 +180,8 @@
       "exported": true
     },
     {
-      "name": "card",
-      "path": "src/components/primitives/card/card.tsx",
+      "name": "channel-card",
+      "path": "src/components/primitives/channel-card/channel-card.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -244,32 +212,24 @@
       "exported": true
     },
     {
-      "name": "checkbox",
-      "path": "src/components/primitives/checkbox/checkbox.tsx",
+      "name": "choice-prompt",
+      "path": "src/components/composites/choice-prompt/choice-prompt.tsx",
+      "kind": "composite",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
+    },
+    {
+      "name": "code-review-panel",
+      "path": "src/components/primitives/code-review-panel/code-review-panel.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
       "exported": true
     },
     {
-      "name": "code-block",
-      "path": "src/components/composites/code-block/code-block.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "command-palette",
-      "path": "src/components/composites/command-palette/command-palette.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "confirm-dialog",
-      "path": "src/components/composites/confirm-dialog/confirm-dialog.tsx",
+      "name": "confirm-prompt",
+      "path": "src/components/composites/confirm-prompt/confirm-prompt.tsx",
       "kind": "composite",
       "hasStory": true,
       "hasTest": true,
@@ -286,14 +246,6 @@
     {
       "name": "context-window-bar",
       "path": "src/components/primitives/context-window-bar/context-window-bar.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "copy-button",
-      "path": "src/components/primitives/copy-button/copy-button.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -332,73 +284,9 @@
       "exported": true
     },
     {
-      "name": "danger-zone",
-      "path": "src/components/primitives/danger-zone/danger-zone.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "data-table",
-      "path": "src/components/composites/data-table/data-table.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "deployment-row",
-      "path": "src/components/composites/deployment-row/deployment-row.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "dialog",
-      "path": "src/components/primitives/dialog/dialog.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "diff-viewer",
       "path": "src/components/primitives/diff-viewer/diff-viewer.tsx",
       "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "domain-config",
-      "path": "src/components/composites/domain-config/domain-config.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "dropdown-menu",
-      "path": "src/components/primitives/dropdown-menu/dropdown-menu.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "empty-state",
-      "path": "src/components/primitives/empty-state/empty-state.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "env-var-editor",
-      "path": "src/components/composites/env-var-editor/env-var-editor.tsx",
-      "kind": "composite",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -422,14 +310,6 @@
     {
       "name": "folder-selector",
       "path": "src/components/primitives/folder-selector/folder-selector.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "form-field",
-      "path": "src/components/primitives/form-field/form-field.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -460,14 +340,6 @@
       "exported": true
     },
     {
-      "name": "input",
-      "path": "src/components/primitives/input/input.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "intent-selector",
       "path": "src/components/primitives/intent-selector/intent-selector.tsx",
       "kind": "primitive",
@@ -476,24 +348,8 @@
       "exported": true
     },
     {
-      "name": "label",
-      "path": "src/components/primitives/label/label.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "lane-board",
       "path": "src/components/primitives/lane-board/lane-board.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "login-split",
-      "path": "src/components/primitives/login-split/login-split.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -532,16 +388,16 @@
       "exported": true
     },
     {
-      "name": "metrics-panel",
-      "path": "src/components/primitives/metrics-panel/metrics-panel.tsx",
+      "name": "model-card",
+      "path": "src/components/primitives/model-card/model-card.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
       "exported": true
     },
     {
-      "name": "model-card",
-      "path": "src/components/primitives/model-card/model-card.tsx",
+      "name": "model-effort-picker",
+      "path": "src/components/primitives/model-effort-picker/model-effort-picker.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -556,17 +412,9 @@
       "exported": true
     },
     {
-      "name": "page-shell",
-      "path": "src/components/composites/page-shell/page-shell.tsx",
+      "name": "multi-select-prompt",
+      "path": "src/components/composites/multi-select-prompt/multi-select-prompt.tsx",
       "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "pagination",
-      "path": "src/components/primitives/pagination/pagination.tsx",
-      "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -588,30 +436,6 @@
       "exported": true
     },
     {
-      "name": "pin-input",
-      "path": "src/components/primitives/pin-input/pin-input.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "plan-badge",
-      "path": "src/components/primitives/plan-badge/plan-badge.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "preview-env-card",
-      "path": "src/components/composites/preview-env-card/preview-env-card.tsx",
-      "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "preview-panel",
       "path": "src/components/composites/preview-panel/preview-panel.tsx",
       "kind": "composite",
@@ -620,25 +444,9 @@
       "exported": true
     },
     {
-      "name": "progress",
-      "path": "src/components/primitives/progress/progress.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "progress-checklist",
       "path": "src/components/primitives/progress-checklist/progress-checklist.tsx",
       "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "project-card",
-      "path": "src/components/composites/project-card/project-card.tsx",
-      "kind": "composite",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -660,25 +468,9 @@
       "exported": true
     },
     {
-      "name": "radio-group",
-      "path": "src/components/primitives/radio-group/radio-group.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "recent-folders-list",
       "path": "src/components/primitives/recent-folders-list/recent-folders-list.tsx",
       "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "rollback-ui",
-      "path": "src/components/composites/rollback-ui/rollback-ui.tsx",
-      "kind": "composite",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -724,22 +516,6 @@
       "exported": true
     },
     {
-      "name": "scroll-area",
-      "path": "src/components/primitives/scroll-area/scroll-area.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "select",
-      "path": "src/components/primitives/select/select.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "session-list-item",
       "path": "src/components/primitives/session-list-item/session-list-item.tsx",
       "kind": "primitive",
@@ -750,30 +526,6 @@
     {
       "name": "session-timeline",
       "path": "src/components/primitives/session-timeline/session-timeline.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "sheet",
-      "path": "src/components/primitives/sheet/sheet.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "sidebar",
-      "path": "src/components/primitives/sidebar/sidebar.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "skeleton",
-      "path": "src/components/primitives/skeleton/skeleton.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -820,33 +572,9 @@
       "exported": false
     },
     {
-      "name": "social-auth-row",
-      "path": "src/components/primitives/social-auth-row/social-auth-row.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "stability-bundle-viewer",
       "path": "src/components/composites/stability-bundle-viewer/stability-bundle-viewer.tsx",
       "kind": "composite",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "stat-tile",
-      "path": "src/components/primitives/stat-tile/stat-tile.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "status-dot",
-      "path": "src/components/primitives/status-dot/status-dot.tsx",
-      "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -868,41 +596,9 @@
       "exported": true
     },
     {
-      "name": "switch",
-      "path": "src/components/primitives/switch/switch.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "system-prompt-editor",
       "path": "src/components/primitives/system-prompt-editor/system-prompt-editor.tsx",
       "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "table",
-      "path": "src/components/primitives/table/table.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "tabs",
-      "path": "src/components/primitives/tabs/tabs.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "task-header",
-      "path": "src/components/composites/task-header/task-header.tsx",
-      "kind": "composite",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -924,9 +620,9 @@
       "exported": true
     },
     {
-      "name": "textarea",
-      "path": "src/components/primitives/textarea/textarea.tsx",
-      "kind": "primitive",
+      "name": "text-prompt",
+      "path": "src/components/composites/text-prompt/text-prompt.tsx",
+      "kind": "composite",
       "hasStory": true,
       "hasTest": true,
       "exported": true
@@ -934,22 +630,6 @@
     {
       "name": "thinking-level-selector",
       "path": "src/components/primitives/thinking-level-selector/thinking-level-selector.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "timestamp",
-      "path": "src/components/primitives/timestamp/timestamp.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "toast",
-      "path": "src/components/primitives/toast/toast.tsx",
       "kind": "primitive",
       "hasStory": true,
       "hasTest": true,
@@ -996,30 +676,6 @@
       "exported": true
     },
     {
-      "name": "tooltip",
-      "path": "src/components/primitives/tooltip/tooltip.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "topnav",
-      "path": "src/components/primitives/topnav/topnav.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
-      "name": "update-banner",
-      "path": "src/components/primitives/update-banner/update-banner.tsx",
-      "kind": "primitive",
-      "hasStory": true,
-      "hasTest": true,
-      "exported": true
-    },
-    {
       "name": "usage-meter",
       "path": "src/components/composites/usage-meter/usage-meter.tsx",
       "kind": "composite",
@@ -1034,6 +690,14 @@
       "hasStory": true,
       "hasTest": true,
       "exported": false
+    },
+    {
+      "name": "work-log",
+      "path": "src/components/primitives/work-log/work-log.tsx",
+      "kind": "primitive",
+      "hasStory": true,
+      "hasTest": true,
+      "exported": true
     }
   ]
 }

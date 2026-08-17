@@ -7,7 +7,7 @@ import type { Theme } from "./types.js";
  * (https://github.com/vercel/geist). Light = pure white + black ink + blue
  * accent (#0070F3); dark = near-black canvas + white text + same blue.
  *
- * Plan: .claude/knowledge-base/plans/seven-themes-plan.md T2.1
+ * RFC: wiki/rfcs/0007-seven-themes.md
  */
 export const vercelMono: Theme = {
   name: "vercel-mono",

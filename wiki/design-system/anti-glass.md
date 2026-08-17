@@ -5,7 +5,7 @@ description: No surface in @theokit/ui uses backdrop-filter; overlays, dropdowns
 tags: [design-system, principle, performance, identity]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

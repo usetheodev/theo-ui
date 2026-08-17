@@ -17,7 +17,7 @@ import {
  * the public package path so consumer's installed peer-deps are reused.
  *
  * See RFC 0003 and the plan in
- * `.claude/knowledge-base/plans/slide-deck-composite-plan.md`.
+ * `wiki/rfcs/0003-slide-deck.md`.
  *
  * Two render modes:
  *   - DEFAULT layout: no children → renders canonical chrome (Slides + Controls

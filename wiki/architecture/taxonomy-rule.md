@@ -5,7 +5,7 @@ description: A component is a primitive if and only if it imports no other @theo
 tags: [architecture, taxonomy, invariant, gated]
 sources:
   - id: arch-doc
-    resource: "git:94d9b11:docs/architecture.md"
+    resource: "archive:94d9b11:docs/architecture.md"
     author: "human:paulohenriquevn"
   - id: gate-source
     resource: "scripts/validate-quality-gates.ts"

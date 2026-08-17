@@ -5,11 +5,11 @@ description: The three font roles, the fourteen typescale tiers with their exact
 tags: [design-system, tokens, typography, geist, gated]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: gate-source
     resource: "scripts/validate-quality-gates.ts"
   - id: rfc-0006
-    resource: "git:94d9b11:docs/rfcs/0006-density-faang.md"
+    resource: "archive:94d9b11:docs/rfcs/0006-density-faang.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

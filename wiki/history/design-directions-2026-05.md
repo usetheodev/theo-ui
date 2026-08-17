@@ -5,7 +5,7 @@ description: The four competing design directions, why Violet Forge was chosen, 
 tags: [history, design-system, typography, selection, superseded]
 sources:
   - id: audit
-    resource: "git:94d9b11:docs/audit/2026-05-decisions.md"
+    resource: "archive:94d9b11:docs/audit/2026-05-decisions.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

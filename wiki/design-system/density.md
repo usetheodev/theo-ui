@@ -5,11 +5,11 @@ description: The three-tier density system, the exact control heights, and the s
 tags: [design-system, density, api, invariant, wcag]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: rfc-0006
-    resource: "git:94d9b11:docs/rfcs/0006-density-faang.md"
+    resource: "archive:94d9b11:docs/rfcs/0006-density-faang.md"
   - id: density-baseline
-    resource: "git:94d9b11:.claude/knowledge-base/architecture/usetheo-ui/baseline-2026-05-22-density.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/architecture/usetheo-ui/baseline-2026-05-22-density.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

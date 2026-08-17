@@ -5,7 +5,7 @@ description: The pass conditions for a registry item and the consumer-project pr
 tags: [quality-gates, registry, shadcn, install, contract]
 sources:
   - id: gates-doc
-    resource: "git:94d9b11:docs/quality-gates.md"
+    resource: "archive:94d9b11:docs/quality-gates.md"
   - id: build-registry
     resource: "scripts/build-registry.ts"
   - id: validate-registry

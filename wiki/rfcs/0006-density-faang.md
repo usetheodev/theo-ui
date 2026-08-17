@@ -5,7 +5,7 @@ description: A 10% tightening calibrated against measured industry values rather
 tags: [rfc, density, tokens, wcag, recalibration]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0006-density-faang.md"
+    resource: "archive:94d9b11:docs/rfcs/0006-density-faang.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-22"
 generated:

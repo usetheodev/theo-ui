@@ -5,7 +5,7 @@ description: A theme switch that silently fails to propagate is a correctness de
 tags: [adr, tokens, color, theming, gated, correctness]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0004-no-literal-tailwind-colors-in-source.md"
+    resource: "archive:94d9b11:docs/adr/0004-no-literal-tailwind-colors-in-source.md"
     last_modified: "2026-06-03"
   - id: scanner
     resource: "scripts/lib/literal-color-scanner.ts"

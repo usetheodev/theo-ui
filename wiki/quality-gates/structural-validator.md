@@ -7,9 +7,9 @@ sources:
   - id: gate-source
     resource: "scripts/validate-quality-gates.ts"
   - id: gates-doc
-    resource: "git:94d9b11:docs/quality-gates.md"
+    resource: "archive:94d9b11:docs/quality-gates.md"
   - id: post-fix
-    resource: "git:94d9b11:.claude/knowledge-base/architecture/usetheo-ui/post-fix-2026-05-14.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/architecture/usetheo-ui/post-fix-2026-05-14.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

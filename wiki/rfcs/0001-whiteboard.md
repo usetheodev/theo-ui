@@ -5,7 +5,7 @@ description: A view-only hand-drawn diagram renderer built as a thin shell over 
 tags: [rfc, engine, whiteboard, svg, bundle-isolation]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0001-whiteboard.md"
+    resource: "archive:94d9b11:docs/rfcs/0001-whiteboard.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-18"
 generated:

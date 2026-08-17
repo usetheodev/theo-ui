@@ -5,7 +5,7 @@ description: Separating operational state from action result as distinct token f
 tags: [adr, tokens, color, semantics, taxonomy]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0007-status-semantic-tokens.md"
+    resource: "archive:94d9b11:docs/adr/0007-status-semantic-tokens.md"
     last_modified: "2026-06-03"
 generated:
   by: "claude-code/opus-5"

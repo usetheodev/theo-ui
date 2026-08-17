@@ -77,8 +77,11 @@ audit, the example screens, and the release record.
 ## Conventions in this bundle
 
 - **Source provenance.** Concepts carry a `sources` list. A `resource` of the form
-  `git:94d9b11:docs/architecture.md` names the file and the commit that still holds it.
-  Those paths no longer exist in the working tree.
+  `archive:94d9b11:docs/architecture.md` names the file and the commit it was transcribed
+  from. It is a scope descriptor, not a path you can follow: neither the path nor the
+  commit exists in this repository any more — the history was rewritten on 2026-08-17 and
+  those trees were purged. See [the log](/log.md) for what that means and where the
+  original files were preserved.
 - **Trust.** Every concept was `generated` by an agent. Nothing carries a `verified`
   event, because no human has signed off on the transcription. Treat concepts as
   faithful-but-unreviewed until that changes.
