@@ -10,7 +10,8 @@ day-to-day mechanics of shipping code to `@theokit/ui`.
 
 ## TL;DR
 
-1. Branch off `main` (never commit directly to `main`).
+1. Work on `workspace` — never commit directly to `develop` or `main`, and don't
+   create feature branches. See "Branch topology" below.
 2. Add or modify components under `src/components/primitives/` or `src/components/composites/`.
 3. Run `pnpm quality:gates` locally — it has to be green before you open a PR.
 4. Update `CHANGELOG.md` under `## [Unreleased]` for every visible change.
@@ -229,20 +230,49 @@ referenced by any build step.
 
 ---
 
+## Branch topology
+
+The repository has **exactly three branches**, all permanent, and they are kept
+**at the same commit**:
+
+```
+workspace ──PR──> develop ──PR + tag semver──> main
+ (todo o trabalho)  (integração)                (release)
+```
+
+- **`workspace`** is where every change is born — feature, fix, refactor, docs,
+  chore. It is never deleted and never recreated per task. There are **no feature
+  branches**; that is why `delete_branch_on_merge` is off on this repository, so
+  merging a promotion PR can never delete `workspace`.
+- **`develop`** only ever advances through the `workspace → develop` PR. No
+  direct commit, rebase, reset or cherry-pick, and nothing other than
+  `workspace` gets merged into it.
+- **`main`** is the release branch. It only receives the `develop → main`
+  promotion PR plus a semver tag. Pushing a `v*` tag triggers
+  `npm publish --provenance`, so a tag **is** a release.
+
+**Merge both promotion PRs with "Rebase and merge"** (`gh pr merge --rebase`).
+A merge commit would leave the source branch one commit behind the target, and
+that gap compounds with every promotion — the three branches drift apart even
+though their content is identical. Rebase keeps them on the same commit, which is
+the invariant to protect. If they ever do drift, the fix is a fast-forward
+(`git push origin origin/main:refs/heads/develop`) — never a back-merge, never a
+force-push.
+
+---
+
 ## Release process
 
-The library is pre-1.0 (`0.0.0`). Until 1.0:
-- Every release is `0.x.y` under `--tag next` on npm.
-- Breaking changes are allowed; document under `### Breaking` in CHANGELOG.
-- A minimum 60-90 day window of `--tag next` usage is required before
-  promoting to `latest` and tagging `1.0.0`.
+The library is at `1.3.2`, published on the npm `latest` dist-tag.
 
-`1.0.0` requires:
-- ≥3 months of external usage with no regressions (sourced from real
-  consumer feedback, not vibes).
-- Zero `BLOCKER`/`HIGH` issues open in the most recent deep review.
-- Public Quickstart Option B (`npx shadcn add ...`) verified end-to-end
-  in Next 14, Vite 5, and Astro 4 vanilla scaffolds.
+- Semantic versioning, no exceptions. Breaking changes get a major and a
+  `### Breaking` section in the CHANGELOG.
+- Every visible change lands in `## [Unreleased]` first. A release moves that
+  section under a versioned heading with a date; entries of already-released
+  versions are never edited.
+- A release is cut by the `develop → main` PR plus the semver tag. The tag is
+  what publishes, so cut it only when the CHANGELOG and the version in
+  `package.json` already say what you mean.
 
 See `wiki/quality-gates/index.md` Gate 9 for the full Release Readiness checklist.
 
