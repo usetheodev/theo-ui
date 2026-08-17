@@ -5,7 +5,7 @@ description: The producer-side contract test that blocks a publish which would b
 tags: [adr, contract, publish, cross-repo, vite]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0001-vite-plugin-subpath-export-contract.md"
+    resource: "archive:94d9b11:docs/adr/0001-vite-plugin-subpath-export-contract.md"
     author: "human:paulo"
     last_modified: "2026-05-28"
 generated:

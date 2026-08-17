@@ -5,7 +5,7 @@ description: What each kind of consumer must do (often nothing) when the canonic
 tags: [migration, color, oklch, themes, breaking-change]
 sources:
   - id: guide
-    resource: "git:94d9b11:docs/migration/hsl-to-oklch.md"
+    resource: "archive:94d9b11:docs/migration/hsl-to-oklch.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

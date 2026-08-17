@@ -5,7 +5,7 @@ description: A view-only markdown-to-themed-surface renderer over the unified ec
 tags: [rfc, engine, slide, markdown, security, sanitize]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0002-slide.md"
+    resource: "archive:94d9b11:docs/rfcs/0002-slide.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-19"
 generated:

@@ -5,7 +5,7 @@ description: Why dist-tag changes require two people and 2FA, and the six runtim
 tags: [adr, publish, npm, dist-tag, ci, governance]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0002-dist-tag-hotfix-and-prepublish-validation.md"
+    resource: "archive:94d9b11:docs/adr/0002-dist-tag-hotfix-and-prepublish-validation.md"
     author: "human:paulo"
     last_modified: "2026-05-28"
 generated:

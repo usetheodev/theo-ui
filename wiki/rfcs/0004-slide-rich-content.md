@@ -5,7 +5,7 @@ description: The plugin architecture for Slide, its error isolation and sanitize
 tags: [rfc, engine, slide, plugins, sanitize, security]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0004-slide-rich-content.md"
+    resource: "archive:94d9b11:docs/rfcs/0004-slide-rich-content.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-19"
 generated:

@@ -5,9 +5,9 @@ description: The frontmatter schema, public API, error codes, security posture a
 tags: [engine, slide, markdown, api, security, schema]
 sources:
   - id: rfc-0002
-    resource: "git:94d9b11:docs/rfcs/0002-slide.md"
+    resource: "archive:94d9b11:docs/rfcs/0002-slide.md"
   - id: rfc-0004
-    resource: "git:94d9b11:docs/rfcs/0004-slide-rich-content.md"
+    resource: "archive:94d9b11:docs/rfcs/0004-slide-rich-content.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

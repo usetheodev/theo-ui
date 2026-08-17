@@ -5,13 +5,13 @@ description: The WCAG targets @theokit/ui commits to, the automated contrast and
 tags: [design-system, accessibility, wcag, a11y, gated, forced-colors]
 sources:
   - id: gates-doc
-    resource: "git:94d9b11:docs/quality-gates.md"
+    resource: "archive:94d9b11:docs/quality-gates.md"
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: adr-0008
-    resource: "git:94d9b11:docs/adr/0008-forced-colors-whcm-support.md"
+    resource: "archive:94d9b11:docs/adr/0008-forced-colors-whcm-support.md"
   - id: rfc-0007
-    resource: "git:94d9b11:docs/rfcs/0007-seven-themes.md"
+    resource: "archive:94d9b11:docs/rfcs/0007-seven-themes.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

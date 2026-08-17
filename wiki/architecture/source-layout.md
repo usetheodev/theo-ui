@@ -5,9 +5,9 @@ description: What each top-level folder under src/ owns, and which of them are p
 tags: [architecture, layout, conventions]
 sources:
   - id: arch-doc
-    resource: "git:94d9b11:docs/architecture.md"
+    resource: "archive:94d9b11:docs/architecture.md"
   - id: screens-doc
-    resource: "git:94d9b11:docs/screens.md"
+    resource: "archive:94d9b11:docs/screens.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

@@ -5,13 +5,13 @@ description: The theme catalogue with measured contrast, the runtime API, SSR wi
 tags: [design-system, themes, api, ssr, wcag, trademark]
 sources:
   - id: ds-doc
-    resource: "git:94d9b11:docs/design-system.md"
+    resource: "archive:94d9b11:docs/design-system.md"
   - id: rfc-0007
-    resource: "git:94d9b11:docs/rfcs/0007-seven-themes.md"
+    resource: "archive:94d9b11:docs/rfcs/0007-seven-themes.md"
   - id: rfc-0005
-    resource: "git:94d9b11:docs/rfcs/0005-theming-and-sizes.md"
+    resource: "archive:94d9b11:docs/rfcs/0005-theming-and-sizes.md"
   - id: themes-baseline
-    resource: "git:94d9b11:.claude/knowledge-base/architecture/usetheo-ui/baseline-2026-05-22-themes.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/architecture/usetheo-ui/baseline-2026-05-22-themes.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

@@ -5,10 +5,10 @@ description: How @theokit/ui narrowed to AI-agent surfaces, why @usetheo/ui was 
 tags: [history, pivot, strategy, usetheo-ui, milestones, breaking-change]
 sources:
   - id: roadmap
-    resource: "git:94d9b11:.claude/knowledge-base/pivot-roadmap.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/pivot-roadmap.md"
     last_modified: "2026-07-03"
   - id: release
-    resource: "git:94d9b11:.claude/knowledge-base/releases/v1.0.0-release.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/releases/v1.0.0-release.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

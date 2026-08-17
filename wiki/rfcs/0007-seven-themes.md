@@ -5,7 +5,7 @@ description: Growing the catalogue from three to ten themes, the trademark-safe 
 tags: [rfc, themes, wcag, trademark, gate]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0007-seven-themes.md"
+    resource: "archive:94d9b11:docs/rfcs/0007-seven-themes.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-22"
 generated:

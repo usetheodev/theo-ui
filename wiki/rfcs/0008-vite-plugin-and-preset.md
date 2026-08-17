@@ -5,7 +5,7 @@ description: Implementing exactly the contract TheoKit specified for zero-config
 tags: [rfc, vite, tailwind, cross-repo, contract, bugfix]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0008-vite-plugin-and-preset.md"
+    resource: "archive:94d9b11:docs/rfcs/0008-vite-plugin-and-preset.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-22"
 generated:

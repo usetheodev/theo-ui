@@ -5,7 +5,7 @@ description: Orchestrating N Slide primitives into a navigable, presenter-aware,
 tags: [rfc, engine, slide-deck, navigation, presenter, print]
 sources:
   - id: rfc
-    resource: "git:94d9b11:docs/rfcs/0003-slide-deck.md"
+    resource: "archive:94d9b11:docs/rfcs/0003-slide-deck.md"
     author: "human:paulohenriquevn"
     last_modified: "2026-05-19"
 generated:

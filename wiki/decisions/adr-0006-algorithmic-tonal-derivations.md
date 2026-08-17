@@ -5,7 +5,7 @@ description: Deriving primary-deep, primary-glow and accent-deep in CSS with cla
 tags: [adr, color, oklch, tokens, css, theming]
 sources:
   - id: adr
-    resource: "git:94d9b11:docs/adr/0006-algorithmic-tonal-derivations.md"
+    resource: "archive:94d9b11:docs/adr/0006-algorithmic-tonal-derivations.md"
     last_modified: "2026-06-03"
 generated:
   by: "claude-code/opus-5"

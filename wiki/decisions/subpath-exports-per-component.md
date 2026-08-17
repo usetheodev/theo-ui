@@ -5,7 +5,7 @@ description: The decision record behind the tree-shaking fix, its acceptance gat
 tags: [adr, bundling, tree-shaking, exports, measurement]
 sources:
   - id: adr
-    resource: "git:94d9b11:.claude/knowledge-base/decisions/subpath-exports-per-component.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/decisions/subpath-exports-per-component.md"
     author: "human:theoui-maintainers"
     last_modified: "2026-05-25"
 generated:

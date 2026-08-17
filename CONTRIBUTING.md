@@ -2,9 +2,9 @@
 
 Welcome — this document is the operational handbook for the library. The
 strategic context (mission, narrative, four pillars) lives in this repo's
-`README.md` and `CLAUDE.md` — there is no group-level `../CLAUDE.md` in the
-current layout (verified 2026-08-06). This file is about the day-to-day mechanics
-of shipping code to `@theokit/ui`.
+`README.md`, and the normative knowledge (architecture, design system, ADRs,
+RFCs, quality gates) in `wiki/` — see `wiki/index.md`. This file is about the
+day-to-day mechanics of shipping code to `@theokit/ui`.
 
 ---
 

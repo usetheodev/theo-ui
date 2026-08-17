@@ -5,7 +5,7 @@ description: The Ladle screen compositions, what each demonstrates, and why they
 tags: [screens, ladle, examples, composition]
 sources:
   - id: screens
-    resource: "git:94d9b11:docs/screens.md"
+    resource: "archive:94d9b11:docs/screens.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"

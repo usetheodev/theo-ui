@@ -9,19 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Wiki `wiki/` — bundle Open Knowledge Format v0.2 com 56 conceitos em 9 seções (arquitetura, design system, quality gates, decisões, RFCs, engines, migrações, registry, histórico). Conformante em `okf-validate --strict`: zero links quebrados, zero órfãos. Cada conceito cita a origem via `sources[].resource` no formato `git:94d9b11:<caminho>`. (docs-reorg-2026-08)
-
-### Removed
-
-- Pastas `docs/` e `.claude/knowledge-base/` — o conhecimento normativo migrou para `wiki/`; os artefatos de processo já executados (planos, edge-case reviews, baselines, announcements) permanecem legíveis no histórico do git em `94d9b11`. A fronteira exata do que foi absorvido e do que ficou para trás está em `wiki/log.md`. (docs-reorg-2026-08)
+- Wiki `wiki/` — bundle Open Knowledge Format v0.2 com 56 conceitos em 9 seções (arquitetura, design system, quality gates, decisões, RFCs, engines, migrações, registry, histórico). Conformante em `okf-validate --strict`: zero links quebrados, zero órfãos. Cada conceito cita a origem via `sources[].resource` no formato `archive:94d9b11:<caminho>`. (docs-reorg-2026-08)
+- Campos `repository`, `homepage` e `bugs` no `package.json`. Sem `repository` o `npm publish --provenance` do workflow de release nunca poderia ter sucesso — as últimas quatro execuções de Release falharam por isso. (tooling-restore-2026-08)
+- `tests/support/dist-gate.ts` e a variável `THEOKIT_REQUIRE_DIST`: o gate de publicação falha alto quando `dist/` está ausente, em vez de passar sem asserir nada. (tooling-restore-2026-08)
 
 ### Changed
 
-- `.gitignore` passa a ignorar a saída das ferramentas de auditoria (`clear-project-output/`, `code-review-output/`). Bancos de análise e relatórios de auditoria são artefatos locais reprodutíveis: rastreá-los sujaria o `git status` e arriscaria commitar evidência de execução como se fosse fonte do projeto. (docs-reorg-2026-08)
 - Quality gates passam a ler a wiki no lugar de `docs/`: `validateArchitectureCensus` → `wiki/registry/component-census.md`, `validateDocsTypography` → `wiki/design-system/typography.md`, checagem de existência → `wiki/quality-gates/index.md`. `pnpm sync:readme` escreve o censo em `wiki/registry/component-census.md`. (docs-reorg-2026-08)
-- `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `ROADMAP.md` e `llms.txt` reapontam para os caminhos da wiki. (docs-reorg-2026-08)
-- Os ADRs 0001–0003 passam a linkar os ADRs espelho do `theokit` em `.claude/knowledge-base/adrs/`, e marcam como ausentes o spike e o plano que não existem mais. (docs-reorg-2026-08)
-- `CLAUDE.md` e `CONTRIBUTING.md` deixam de apontar para o `CLAUDE.md` de monorepo (que não existe no layout atual) e passam a citar a Locked Narrative sobrevivente em `theo-business/theo-website/CLAUDE.md`; instruções de dev cross-repo usam `../theokit-ui` no lugar do antigo `../theo-ui`. (docs-reorg-2026-08)
+- `README.md`, `CONTRIBUTING.md` e `llms.txt` reapontam para os caminhos da wiki. (docs-reorg-2026-08)
+- `pnpm test:contract` passa a cobrir `tests/contract`, `tests/rsc-smoke` e `tests/types` (antes só o primeiro) e entra em `pnpm quality:gates` depois do build. Os 15 asserts que protegem o formato do plugin, a diretiva `use client` no dist e a resolução de `.d.ts` por subpath não rodavam em lugar nenhum: `pnpm test` roda antes do build e as três suítes se auto-skipavam. (tooling-restore-2026-08)
+- `llms.txt` corrigido para a realidade publicada: versão `1.3.2` (era `0.12.0-next.0`), URLs do repositório e do registry sob `theokit-ui` (eram `theo-ui`), censo de 103 componentes (era 121) e 105 subpath exports (eram 134). O catálogo de nomes duplicado dá lugar a um ponteiro para o censo gerado, que não pode divergir. O exemplo de install passou a citar um componente que existe no registry. (tooling-restore-2026-08)
+- A landing page do registry publicado deriva a contagem de itens do próprio `index.json` e falha o deploy se o exemplo de install anunciado não estiver no catálogo. Antes anunciava 114 itens contra 100 reais e oferecia `button.json`, que saiu do registry na v1.0.0. (tooling-restore-2026-08)
+- Citações de proveniência da wiki passam de `git:<sha>:<caminho>` para `archive:<sha>:<caminho>` nas 84 entradas de 58 conceitos. O prefixo `git:` prometia um `git show` que não funciona mais. (history-rewrite-2026-08)
+- **Nota corretiva para entradas já publicadas neste arquivo.** As entradas das versões 0.x e 1.0.x citam caminhos que não existem mais — `docs/**`, `.claude/knowledge-base/**`, `CLAUDE.md`, `ROADMAP.md`, `DESIGN.md`. Elas não foram editadas, por princípio: entrada de versão released é registro histórico. Onde procurar o conteúdo hoje: as decisões e ADRs em `wiki/decisions/`, os RFCs em `wiki/rfcs/`, o design system em `wiki/design-system/`, os quality gates em `wiki/quality-gates/` e os guias de migração em `wiki/migrations/` — incluindo o `v1-usetheo-ui-split.md` que a entrada da 1.0.0 manda ler. Planos, edge-case reviews e baselines não migraram e existem só no bundle offline descrito em `wiki/log.md`. (docs-reorg-2026-08)
+- O codemod `codemod/split-usetheo.mjs`, que a entrada da 1.0.0 manda rodar na migração v0 → v1, continua no tarball publicado. (tooling-restore-2026-08)
+- Histórico do git reescrito: caminhos já deletados foram purgados de todas as árvores, 68 commits que só existiam para removê-los foram podados, trailers de atribuição de IA e assuntos gerados a partir de nome de branch foram removidos, e `main`, `develop` e `workspace` foram recriadas a partir da linha reescrita. **Consequência para quem consome:** os `gitHead` das 22 versões publicadas no npm, as 13 tags e os SHAs citados em releases do GitHub apontam para commits que não existem mais. O histórico pré-reescrita foi preservado em um bundle offline; `wiki/log.md` registra o que isso significa para a proveniência da wiki. (history-rewrite-2026-08)
+
+### Removed
+
+- Pastas `docs/` e `.claude/knowledge-base/` — o conhecimento normativo migrou para `wiki/`. Os artefatos de processo já executados (planos, edge-case reviews, baselines, announcements) **não** ficaram no histórico do git: a reescrita de 2026-08-17 os purgou. Sobrevivem apenas no bundle offline descrito em `wiki/log.md`. (docs-reorg-2026-08)
+- devDependencies `ts-morph` e `@theokit/sdk` — nenhum arquivo do projeto as importa. `@theokit/sdk` nunca foi import de runtime: `src/hooks/use-agent-stream/types.ts` espelha a superfície do SDK estruturalmente, por decisão de design. (tooling-restore-2026-08)
+- Scripts npm `playground`, `playground:build`, `playground:preview`, `playground:builder` e `dogfood:v4-real-build` — os arquivos que executavam não existem mais. (tooling-restore-2026-08)
+- Ferramental one-off que já cumpriu sua função: codemods de `data-slot`/`data-variant` aplicados, migração de temas para OKLCH concluída, rename de escopo executado, âncoras de demo que dependiam de `examples/` e o diretório `scripts/archive/`. (tooling-restore-2026-08)
+- `DESIGN.md` saiu de `package.json > files`. O conteúdo normativo que ele carregava vive em `wiki/design-system/`, e o `llms.txt` deixa de anunciá-lo como parte do tarball. (tooling-restore-2026-08)
+
+### Fixed
+
+- **`pnpm build` voltou a funcionar.** O `onSuccess` do tsup invocava `scripts/build-precompiled-css.ts` e o `build` invocava `inject-use-client.ts` e `regen-subpath-exports.ts` — os três ausentes. Sem eles o pacote saía sem o CSS de utilitários precompilados encadeado no `styles.css`, sem a diretiva `use client` nos 29 componentes client (quebrando RSC) e sem os 105 subpath exports. `prepublishOnly` e o workflow de release falhavam com o build. (tooling-restore-2026-08)
+- **`pnpm format:check` voltou ao verde.** `src/styles/tokens.css` declarava `oklch(0.50 0.16 296.97)` em quatro pontos onde o biome exige `oklch(0.5 …)`, desde a padronização de identidade da v1.3.0. Como é o primeiro elo de `pnpm quality:gates`, a cadeia inteira morria no passo 1 havia um mês. O tema JS `violetForge` foi normalizado para a mesma grafia, mantendo a paridade JS↔CSS; a cor não mudou. (tooling-restore-2026-08)
+- **115 testes voltaram à suíte** (1342 → 1457 em 163 arquivos). As dez suítes de `scripts/` — grafo de imports, contraste WCAG, varredura de cores literais, migração OKLCH, precompile de CSS, classificação de componentes, sync de README e exports — desapareceram junto com os scripts. Como os arquivos sumiram em vez de serem marcados como skip, `pnpm test` continuava reportando tudo verde. (tooling-restore-2026-08)
+- `files[]` do `package.json` não declara mais caminhos inexistentes. O npm omite entradas ausentes de `files[]` sem emitir aviso e o `publint --strict` não checa esse campo, então um publish bem-sucedido entregaria um tarball que contradizia a documentação publicada. (tooling-restore-2026-08)
+- `component-inventory.json` regenerado a partir do filesystem. Tinha 52 de 128 caminhos `src/components` pendurados e data de geração de 2026-05-29, e tanto o script que o regenera quanto o gate que detecta a divergência estavam ausentes. (tooling-restore-2026-08)
+- Os quatro workflows de CI voltaram ao verde. `deploy-ladle` e `deploy-registry` chamavam scripts inexistentes e falhavam antes de publicar o catálogo Ladle e o registry; `quality-gates` morria em `format:check`, `lint:ci` (biome apontado para diretórios ausentes) e `quality:knip`; `release` morria no build. (tooling-restore-2026-08)
+- `.gitignore`: a entrada `.claude` aparecia duas vezes com sentidos contraditórios (comentada em uma seção, crua no fim do arquivo e sem newline final). Consolidada em `.claude/` na seção de configuração de ferramentas de agente. (tooling-restore-2026-08)
+
+### Security
+
+- `.claude/settings.json`, que declarava `defaultMode: "bypassPermissions"` com `Bash(*)`, `Edit`, `Write`, `Agent` e `Task` liberados, não está mais em nenhuma branch nem em nenhuma árvore do histórico. **O arquivo continua acessível:** as refs `refs/pull/*` do GitHub são imutáveis e ainda servem o histórico pré-reescrita. Trate esse perfil de permissões como exposto — a remoção fecha o caminho do clone, não o das refs de PR. (history-rewrite-2026-08)
 
 ## [1.3.2] - 2026-07-17
 

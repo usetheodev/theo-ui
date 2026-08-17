@@ -5,9 +5,9 @@ description: Notable releases with their scope, gate evidence, and the divergenc
 tags: [history, releases, semver, npm, provenance]
 sources:
   - id: v016
-    resource: "git:94d9b11:.claude/knowledge-base/releases/v0.16.0-release.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/releases/v0.16.0-release.md"
   - id: v100
-    resource: "git:94d9b11:.claude/knowledge-base/releases/v1.0.0-release.md"
+    resource: "archive:94d9b11:.claude/knowledge-base/releases/v1.0.0-release.md"
 generated:
   by: "claude-code/opus-5"
   at: "2026-08-11"
