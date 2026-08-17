@@ -251,13 +251,31 @@ workspace ──PR──> develop ──PR + tag semver──> main
   promotion PR plus a semver tag. Pushing a `v*` tag triggers
   `npm publish --provenance`, so a tag **is** a release.
 
-**Merge both promotion PRs with "Rebase and merge"** (`gh pr merge --rebase`).
-A merge commit would leave the source branch one commit behind the target, and
-that gap compounds with every promotion — the three branches drift apart even
-though their content is identical. Rebase keeps them on the same commit, which is
-the invariant to protect. If they ever do drift, the fix is a fast-forward
-(`git push origin origin/main:refs/heads/develop`) — never a back-merge, never a
-force-push.
+### Keeping the three at the same commit
+
+A PR merge always leaves the source branch behind the target, so convergence is a
+**two-step** promotion. Both steps matter:
+
+1. **Merge the promotion PR with "Create a merge commit"** (`gh pr merge --merge`).
+2. **Fast-forward the source branch(es) to the target**, e.g. after the
+   `develop → main` merge:
+   ```bash
+   git push origin origin/main:refs/heads/develop
+   git push origin origin/main:refs/heads/workspace
+   ```
+   No `--force` — the source is an ancestor, so this is a plain fast-forward.
+
+**Do not use "Rebase and merge" or "Squash and merge" on a promotion PR.** Both
+*rewrite* the commits, so the target ends up with a different SHA for the same
+tree and the source branch stops being an ancestor of it. The branches then
+genuinely diverge, and because force-pushing `workspace`, `develop` and `main` is
+forbidden, the only way back is an extra merge commit to reconverge. Verified the
+hard way: PR #37 was rebase-merged and left `develop` at `721ac07` against
+`workspace` at `eaceeac` with an identical tree.
+
+A merge commit keeps the source as an ancestor, which is exactly what makes
+step 2 possible. Repairing drift is always a fast-forward — never a back-merge
+into `develop`, never a force-push.
 
 ---
 
