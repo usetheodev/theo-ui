@@ -20,7 +20,7 @@
  *   - `sm` and `lg` variants stay hardcoded → explicit `size` prop always
  *     wins over density.
  *
- * Plan: `.claude/knowledge-base/plans/faang-density-tightening-plan.md` T4.1.
+ * RFC: `wiki/rfcs/0006-density-faang.md`.
  */
 import { createContext, useContext } from "react";
 

@@ -36,12 +36,5 @@
     "tsup.config.ts",
     "tailwind.config.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "playground",
-    "playground/dist",
-    "scripts/m5-real-llm-demo.ts",
-    "scripts/m8-openstack-anchor.ts"
-  ]
+  "exclude": ["node_modules", "dist"]
 }

@@ -24,7 +24,7 @@
  *     dark: { primary: hex("#38BDF8") },
  *   });
  *
- * Plan: `.claude/knowledge-base/plans/theming-and-sizes-plan.md` T2.1.
+ * RFC: `wiki/rfcs/0005-theming-and-sizes.md`.
  */
 import type { ColorScale, Theme, ThemeFonts } from "./types.js";
 import { violetForge } from "./violet-forge.js";

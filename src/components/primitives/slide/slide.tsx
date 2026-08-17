@@ -14,8 +14,7 @@ import {
  * into a themed, fixed-aspect surface. Lives in the isolated subpath
  * `@theokit/ui/slide`.
  *
- * See RFC 0002 (`wiki/rfcs/0002-slide.md`) and the plan in
- * `.claude/knowledge-base/plans/slide-view-primitive-plan.md`.
+ * See RFC 0002 (`wiki/rfcs/0002-slide.md`).
  *
  * SSR note: initial render returns the section wrapper; the parsed React tree
  * fills in client-side via the useEffect → `parseSlide` chain. Consumers
@@ -233,7 +232,7 @@ export const Slide: FC<SlideProps> = ({
         1280×720 layout box doesn't inflate the host. `translate(-50%, -50%)`
         anchors the section's center to the host's center; the scale applies
         relative to that same origin. Mirrors Reveal.js transformSlides()
-        (see `.claude/knowledge-base/reference/slide.md` §4.5 / §14.2).
+        (see `wiki/engines/slide-authoring-guide.md`).
       */}
       <section
         aria-roledescription="slide"
