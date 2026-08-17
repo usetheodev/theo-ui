@@ -25,6 +25,8 @@ export {
   useDensity,
   useTheme,
   violetForge,
+  // The TheoKit brand theme — primary measured from the falcon mark.
+  falconRed,
   // 7 new themes (RFC 0007)
   vercelMono,
   githubDark,
