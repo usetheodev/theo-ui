@@ -25,10 +25,15 @@ import { spawnSync } from "node:child_process";
  * `@theme` overrides still win via the runtime CSS-var cascade.
  */
 import { existsSync, realpathSync, statSync } from "node:fs";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import {
+  extractControlClasses,
+  findUncoveredControlClasses,
+} from "./lib/control-class-coverage.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -209,10 +214,64 @@ async function chainComponentsCssFromStylesCss(): Promise<void> {
   );
 }
 
+/**
+ * Refuse to ship a stylesheet that does not cover the peer it was built against.
+ *
+ * `@usetheo/ui` ships no CSS of its own, so the emitted selectors carry the literal class
+ * strings of whichever version was resolved at build time — and those strings inline a
+ * default value. Between 0.22.0 and 0.35.1 the icon Button went from
+ * `w-[var(--theo-control-h,2.25rem)]` to `w-[var(--theo-control-h,2rem)]`, and an
+ * exact-match selector for the first does nothing for the second: the button loses its
+ * width and height. Both versions are inside the peer range we publish.
+ *
+ * This does not resolve that coupling — usetheokit/theokit-ui#50 holds the options, and
+ * choosing between them is a design call. It makes the mismatch a build failure instead of
+ * CSS that ships wrong, so it cannot reach a consumer silently.
+ */
+async function assertControlClassCoverage(): Promise<void> {
+  const dist = resolveUsetheoUiDist();
+  const sources = await Promise.all(
+    (await readdir(dist))
+      .filter((f) => /\.(js|mjs|cjs)$/.test(f) && !f.includes(".test."))
+      .map((f) => readFile(join(dist, f), "utf-8")),
+  );
+
+  // Fail on an empty sweep rather than pass it: a resolver landing somewhere without
+  // compiled JS would otherwise report full coverage having compared nothing.
+  if (sources.length === 0) {
+    throw new Error(
+      `[build-precompiled-css] found no compiled JS under ${dist}; refusing to report \
+control-class coverage over an empty scan.`,
+    );
+  }
+
+  const css = await readFile(join(ROOT, "dist/components.css"), "utf-8");
+  const uncovered = findUncoveredControlClasses(sources, css);
+
+  if (uncovered.length > 0) {
+    throw new Error(
+      [
+        "[build-precompiled-css] dist/components.css does not cover every control class the",
+        `resolved @usetheo/ui renders (${uncovered.length} uncovered):`,
+        ...uncovered.map((c) => `  ${c}`),
+        "",
+        "The peer changed a design-system default embedded in its class names, so our",
+        "exact-match selectors no longer apply and the affected controls render unstyled.",
+        "See usetheokit/theokit-ui#50 — do not silence this by loosening the check.",
+      ].join("\n"),
+    );
+  }
+
+  process.stdout.write(
+    `[build-precompiled-css] control-class coverage OK (${extractControlClasses(sources).length} class(es) checked against dist/components.css)\n`,
+  );
+}
+
 async function main(): Promise<void> {
   await ensureDistDir();
   await compileUtilities();
   await chainComponentsCssFromStylesCss();
+  await assertControlClassCoverage();
   process.stdout.write("[build-precompiled-css] done\n");
 }
 

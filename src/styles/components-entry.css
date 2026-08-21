@@ -34,7 +34,7 @@
  * will see at runtime.
  */
 
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @import "./tokens.css";
 @import "./tokens-v4.css";
 

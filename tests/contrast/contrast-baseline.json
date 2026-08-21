@@ -34,8 +34,8 @@
       {
         "fg": "accent-foreground",
         "bg": "accent",
-        "threshold": 3,
-        "ratio": 3.829530957164065
+        "threshold": 4.5,
+        "ratio": 5.162407227847299
       },
       {
         "fg": "destructive-foreground",
@@ -84,8 +84,8 @@
       {
         "fg": "accent-foreground",
         "bg": "accent",
-        "threshold": 3,
-        "ratio": 3.829530957164065
+        "threshold": 4.5,
+        "ratio": 5.162407227847299
       },
       {
         "fg": "destructive-foreground",
@@ -136,7 +136,7 @@
       {
         "fg": "accent-foreground",
         "bg": "accent",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 9.139556594812523
       },
       {
@@ -186,7 +186,7 @@
       {
         "fg": "accent-foreground",
         "bg": "accent",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 5.963482085046899
       },
       {

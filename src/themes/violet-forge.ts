@@ -34,7 +34,13 @@ export const violetForge: Theme = {
     secondary: "oklch(0.97 0 0)",
     "secondary-foreground": "oklch(0.146 0 0)",
     accent: "oklch(0.621 0.132 39)",
-    "accent-foreground": "oklch(1 0 0)",
+    // Near-black, not white. The burnt sienna sits at L=0.621, where white reaches only
+    // 3.83:1 — below the 4.5:1 WCAG AA needs for normal text, and a button label is normal
+    // text. This value is the theme's own `foreground`, and measures 5.16:1 against the same
+    // accent in both modes. The brand colour is unchanged; only what is legible on top of it
+    // is. See usetheokit/theokit-ui#47 and ADR-0006 on deriving tokens rather than hand-
+    // tuning them.
+    "accent-foreground": "oklch(0.146 0 0)",
     muted: "oklch(0.97 0 0)",
     "muted-foreground": "oklch(0.555 0 0)",
     border: "oklch(0.931 0 0)",
@@ -69,7 +75,13 @@ export const violetForge: Theme = {
     secondary: "oklch(0.227 0 0)",
     "secondary-foreground": "oklch(0.97 0 0)",
     accent: "oklch(0.621 0.132 39)",
-    "accent-foreground": "oklch(1 0 0)",
+    // Near-black, not white. The burnt sienna sits at L=0.621, where white reaches only
+    // 3.83:1 — below the 4.5:1 WCAG AA needs for normal text, and a button label is normal
+    // text. This value is the theme's own `foreground`, and measures 5.16:1 against the same
+    // accent in both modes. The brand colour is unchanged; only what is legible on top of it
+    // is. See usetheokit/theokit-ui#47 and ADR-0006 on deriving tokens rather than hand-
+    // tuning them.
+    "accent-foreground": "oklch(0.146 0 0)",
     muted: "oklch(0.227 0 0)",
     "muted-foreground": "oklch(0.683 0 0)",
     border: "oklch(0.28 0 0)",

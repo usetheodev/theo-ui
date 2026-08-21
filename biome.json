@@ -13,7 +13,9 @@
       ".ladle/dist",
       "tests/fixture-shadcn-app/src",
       "registry",
-      "component-inventory.json"
+      "component-inventory.json",
+      "src/styles/components-entry.css",
+      "src/styles/components-entry.generated.css"
     ]
   },
   "formatter": {
