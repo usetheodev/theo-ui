@@ -27,10 +27,27 @@ interface Failure {
 }
 
 const failures: Failure[] = [];
-const warnings: Failure[] = [];
+
+/**
+ * Gates that could not inspect what they exist to inspect.
+ *
+ * Several checks here depend on `dist/`, which is gitignored, and `quality:gates:fast`
+ * does not build. Before this existed they simply `return`ed, so the run printed
+ * "Quality gate structure validation passed" having looked at nothing — and a reader
+ * cannot tell that apart from a run that checked all 83 components.
+ *
+ * A skip is not a failure: on the fast lane it is the correct outcome. It just has to be
+ * SAID, with the count of what went unchecked, so "passed" never quietly means "did not
+ * look".
+ */
+const skipped: Failure[] = [];
 
 const fail = (scope: string, message: string): void => {
   failures.push({ scope, message });
+};
+
+const skip = (scope: string, message: string): void => {
+  skipped.push({ scope, message });
 };
 
 const listDirectories = async (path: string): Promise<string[]> =>
@@ -183,7 +200,14 @@ async function validateExportsMap(): Promise<void> {
   // separately). With dist/ present, broken-symlink-like exports are caught
   // before npm publish.
   const distRoot = join(ROOT, "dist");
-  if (!existsSync(distRoot)) return;
+  if (!existsSync(distRoot)) {
+    skip(
+      "package.json#exports",
+      `dist/ absent — 0 of ${Object.keys(actual).length} export subpath(s) resolved against ` +
+        "disk. The shape check above still ran; only the does-the-file-exist half was skipped.",
+    );
+    return;
+  }
   for (const [subpath, value] of Object.entries(actual)) {
     const target =
       typeof value === "string" ? value : ((value as { import?: string }).import ?? null);
@@ -943,7 +967,23 @@ async function validateNoLiteralTailwindColors(): Promise<void> {
  */
 async function validateUseClientDirective(): Promise<void> {
   const distRoot = join(ROOT, "dist");
-  if (!existsSync(distRoot)) return;
+  if (!existsSync(distRoot)) {
+    let candidates = 0;
+    for (const layer of ["primitives", "composites"] as const) {
+      const layerSrc = join(ROOT, "src/components", layer);
+      if (!existsSync(layerSrc)) continue;
+      candidates += readdirSync(layerSrc, { withFileTypes: true }).filter((d) =>
+        d.isDirectory(),
+      ).length;
+    }
+    skip(
+      "rsc/use-client",
+      `dist/ absent — 0 of ${candidates} component(s) checked for the "use client" directive. ` +
+        "`quality:gates:fast` does not build; run `pnpm build` (or full `pnpm quality:gates`) " +
+        "for this gate to mean anything.",
+    );
+    return;
+  }
 
   const hookRe =
     /\b(useState|useEffect|useRef|useContext|useReducer|useImperativeHandle|useId|useLayoutEffect|useSyncExternalStore|createContext)\b/;
@@ -1057,10 +1097,10 @@ async function main(): Promise<void> {
   await validateThemeContrast();
   validateScriptsAndCi();
 
-  if (warnings.length > 0) {
-    writeStdout(`Quality gate warnings (${warnings.length}):`);
-    for (const warning of warnings) {
-      writeStdout(`- ${warning.scope}: ${warning.message}`);
+  if (skipped.length > 0) {
+    writeStdout(`Gates that did NOT run (${skipped.length}):`);
+    for (const entry of skipped) {
+      writeStdout(`- ${entry.scope}: ${entry.message}`);
     }
     writeStdout("");
   }
@@ -1075,7 +1115,7 @@ async function main(): Promise<void> {
 
   writeStdout(
     `Quality gate structure validation passed${
-      warnings.length > 0 ? ` (with ${warnings.length} warning(s))` : ""
+      skipped.length > 0 ? ` — but ${skipped.length} gate(s) did NOT run (listed above)` : ""
     }.`,
   );
 }
