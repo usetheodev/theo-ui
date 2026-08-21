@@ -31,6 +31,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  buildControlClassFallbackLayer,
   extractControlClasses,
   findUncoveredControlClasses,
 } from "./lib/control-class-coverage.js";
@@ -245,7 +246,8 @@ control-class coverage over an empty scan.`,
     );
   }
 
-  const css = await readFile(join(ROOT, "dist/components.css"), "utf-8");
+  const cssPath = join(ROOT, "dist/components.css");
+  const css = await readFile(cssPath, "utf-8");
   const uncovered = findUncoveredControlClasses(sources, css);
 
   if (uncovered.length > 0) {
@@ -262,8 +264,17 @@ control-class coverage over an empty scan.`,
     );
   }
 
+  // Prepend the version-independent net. It is written AFTER the coverage assertion on
+  // purpose: the assertion must judge what Tailwind emitted from the resolved peer, not a
+  // file this step just widened. A gate that grades its own output is the failure mode this
+  // whole module exists to close.
+  const net = buildControlClassFallbackLayer(extractControlClasses(sources));
+  if (net.length > 0 && !css.includes("Version-independent net")) {
+    await writeFile(cssPath, `${net}${css}`);
+  }
+
   process.stdout.write(
-    `[build-precompiled-css] control-class coverage OK (${extractControlClasses(sources).length} class(es) checked against dist/components.css)\n`,
+    `[build-precompiled-css] control-class coverage OK (${extractControlClasses(sources).length} class(es) checked, net emitted for unseen peer versions)\n`,
   );
 }
 

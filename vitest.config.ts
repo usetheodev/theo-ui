@@ -8,11 +8,21 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     css: false,
-    // Barrel-wiring smoke tests use `await import("./index.js")`. Under the
-    // worker-pool contention of the full suite (and on cold CI runners) a cold
-    // dynamic import of a heavy barrel can momentarily exceed vitest's 5s
-    // default and flake (observed: 5078ms). 20s is a generous ceiling that
-    // still hard-fails a genuinely hung test without masking logic slowness.
+    // Barrel-wiring smoke tests use `await import("./index.js")`. Under the worker-pool
+    // contention of the full suite (and on cold CI runners) a cold dynamic import of a heavy
+    // barrel can momentarily exceed vitest's 5s default and flake.
+    //
+    // "observed: 5078ms" is what this said, and it is badly out of date. Re-measured
+    // 2026-08-21 on a saturated machine: `agent-stream barrel` took 47750ms and
+    // `MermaidDiagram error fallback` 33096ms, against 253-591ms when their own file runs
+    // alone. That is 60-100x, not a momentary overshoot, and 20s does not cover it.
+    //
+    // The ceiling is NOT raised to chase those numbers — a barrel import taking 47s is a
+    // performance problem, and a timeout that always passes stops being a hung-test guard.
+    // Tracked with the measurements in usetheokit/theokit-ui#51.
+    //
+    // What was fixed is the inverse: two tests carried their OWN budgets BELOW this one
+    // (10s and 3s), so the ceiling meant to absorb exactly this never applied to them.
     testTimeout: 20000,
     include: [
       "src/**/*.{test,spec}.{ts,tsx}",

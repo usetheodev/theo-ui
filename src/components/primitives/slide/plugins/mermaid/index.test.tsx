@@ -77,17 +77,21 @@ describe("mermaidPlugin (T8.1)", () => {
     // the parse error path; the host enters data-state="error" + aria-label
     // reflects the error message. Source code stays visible as fallback.
     const { container } = render(<MermaidDiagram source="this is not valid mermaid" />);
-    await waitFor(
-      () => {
-        const host = container.querySelector("[data-state='error']");
-        expect(host).toBeTruthy();
-      },
-      { timeout: 5_000 },
-    );
+    await waitFor(() => {
+      const host = container.querySelector("[data-state='error']");
+      expect(host).toBeTruthy();
+    });
     const host = container.querySelector("[data-state='error']");
     expect(host?.getAttribute("role")).toBe("img");
     expect(host?.getAttribute("aria-label")).toMatch(/render failed|not installed/i);
     // Source still visible for debugging / print fallback.
     expect(container.querySelector("pre")?.textContent).toContain("not valid mermaid");
-  }, 10_000);
+    // No per-test timeout override here on purpose. vitest.config.ts sets 20s precisely
+    // because "a cold dynamic import of a heavy barrel can momentarily exceed vitest's 5s
+    // default" under full-suite load — this test imports the whole markdown + mermaid stack
+    // and is exactly that case. A local 10s undercut the global ceiling that exists for it,
+    // and the waitFor carried its own 5s below the 5s set in src/test/setup.ts. Both made
+    // the test fail on a loaded machine while the decision meant to prevent that sat unused
+    // one file away. See usetheokit/theokit-ui#51.
+  });
 });

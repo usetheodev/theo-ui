@@ -31,14 +31,11 @@ describe("<Slide>", () => {
   it("renders parsed heading from markdown input (after useEffect parse)", async () => {
     const { container } = render(<Slide markdown="# Hello world" />);
     // Poll the container manually — DOM update happens after the async parseSlide resolves.
-    await waitFor(
-      () => {
-        const h1 = container.querySelector("h1");
-        expect(h1).toBeTruthy();
-        expect(h1?.textContent).toContain("Hello world");
-      },
-      { timeout: 3000 },
-    );
+    await waitFor(() => {
+      const h1 = container.querySelector("h1");
+      expect(h1).toBeTruthy();
+      expect(h1?.textContent).toContain("Hello world");
+    });
   });
 
   it("applies data-theo-slide-theme attribute", () => {
