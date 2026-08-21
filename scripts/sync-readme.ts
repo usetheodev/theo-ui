@@ -11,13 +11,16 @@
  * Run via: pnpm sync:readme
  */
 
+import { execFile as execFileCb } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
+const execFile = promisify(execFileCb);
 
 const writeStdout = (message: string): void => {
   process.stdout.write(`${message}\n`);
@@ -32,40 +35,48 @@ interface Counts {
   screens: number;
 }
 
-async function walkTestFiles(dir: string, acc: string[]): Promise<void> {
-  if (!existsSync(dir)) return;
-  const entries = await readdir(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      await walkTestFiles(full, acc);
-    } else if (entry.name.endsWith(".test.tsx") || entry.name.endsWith(".test.ts")) {
-      acc.push(full);
-    }
-  }
-}
-
 async function countTests(): Promise<number> {
-  // Static count: parse every `*.test.tsx` / `*.test.ts` and sum top-level `it(`
-  // and `test(` calls. This avoids running the test suite (which can take
-  // minutes and is non-hermetic in environments where happy-dom fetches leak),
-  // while still producing a number that matches `Tests N passed` within ±1.
+  // The number vitest itself reports, obtained WITHOUT running the suite.
   //
-  // Trade-off: skipped tests (`.skip` / `.todo`) and dynamically-generated
-  // `it()` calls inside loops are counted once each. In this codebase neither
-  // pattern is used, so the static and runtime counts agree.
-  const files: string[] = [];
-  await walkTestFiles(join(ROOT, "src"), files);
-  let count = 0;
-  // Match `it(`, `it.only(`, `it.skip(`, `it.todo(`, `test(`, `test.only(`, etc.
-  // and the `it.each(...)(` / `test.each(...)(` shorthands.
-  const pattern = /\b(?:it|test)(?:\.(?:only|skip|todo|concurrent|fails|each))?\s*\(/g;
-  for (const file of files) {
-    const content = await readFile(file, "utf-8");
-    const matches = content.match(pattern);
-    if (matches) count += matches.length;
+  // This used to be a regex sweep over `src/**/*.test.*` counting `it(` and `test(`
+  // literals, whose comment claimed it "matches `Tests N passed` within +/-1". Measured
+  // on 2026-08-21 it produced 1201 against an actual 1486 — off by 285, or 19%, and the
+  // README badge published the wrong figure. Two independent reasons:
+  //
+  //   1. It walked `src` only. `vitest.config.ts` includes `src`, `scripts` AND `tests`,
+  //      so 143 real tests were never in scope. Same blind spot `lint:ci` had.
+  //   2. `it.each([...])` registers one test per row. A regex counts the call site once,
+  //      so every table-driven suite was undercounted no matter which roots it walked.
+  //
+  // (2) is not fixable by widening the glob — a static counter cannot know a table's
+  // length without evaluating it. `vitest list` collects the suite and prints what would
+  // run, which is the same enumeration the reporter counts, at roughly the cost of a
+  // transform pass rather than a full run.
+  const bin = join(ROOT, "node_modules/.bin/vitest");
+  if (!existsSync(bin)) {
+    // Never `npx`: invoked outside the project it resolves a DIFFERENT vitest, or exits
+    // 0 having enumerated nothing, and the badge silently publishes that.
+    throw new Error(
+      `cannot count tests: ${bin} is missing. Run \`pnpm install\` before \`pnpm sync:readme\`.`,
+    );
   }
-  return count;
+  const { stdout } = await execFile(bin, ["list", "--json"], {
+    cwd: ROOT,
+    maxBuffer: 32 * 1024 * 1024,
+  });
+  const listed = JSON.parse(stdout) as unknown;
+  if (!Array.isArray(listed)) {
+    throw new Error("cannot count tests: `vitest list --json` did not return an array");
+  }
+  // Fail on zero rather than publish it. A collection error, a broken config or a glob
+  // that matches nothing all surface here as an empty list, and a badge reading
+  // "0 passing" is the failure this gate exists to prevent.
+  if (listed.length === 0) {
+    throw new Error(
+      "cannot count tests: `vitest list --json` enumerated 0 tests. Check `include` in vitest.config.ts.",
+    );
+  }
+  return listed.length;
 }
 
 async function countScreensInner(): Promise<number> {
