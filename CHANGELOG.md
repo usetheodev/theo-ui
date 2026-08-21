@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **O barril raiz voltou a exportar os sete primitivos genéricos que os pacotes `@theokit/*` importam.** `Alert`, `Button`, `CodeBlock`, `CopyButton`, `DropdownMenu`, `FormField` e `Tooltip` saíram do barril na 1.0.0 e nada percebeu: o `validate-exports.mjs` confere o *mapa* de exports (o subpath resolve? importa em runtime?) e nunca quais *símbolos* o barril carrega, então cinco releases saíram sem `Button`. `@theokit/plugin-canvas` e `@theokit/plugin-forms` foram publicados quebrados — 10 × TS2305 no typecheck, erro de DTS no build e 4 suítes vermelhas. Os sete vêm de `@usetheo/ui`, que já é peer dependency obrigatória (`>=0.22.0 <1`) e já é importada em produção por mais de vinte componentes, então nada novo é embutido no bundle. (usetheokit/theokit-ui#40)
+- **Os artefatos do registry shadcn voltaram a refletir o código-fonte.** `registry/r/theme-provider.json` e `registry/r/theme-script.json` ficaram parados na versão anterior à correção de FOUC do `<ThemeScript>`, então quem copiasse o componente via `npx shadcn add` recebia a implementação que pintava a página duas vezes na primeira visita. Nenhum gate detecta essa defasagem: a CI roda `registry:build` e valida o que ela mesma acabou de gerar, sem nunca comparar com o que está commitado. (usetheokit/theokit-ui#42)
+
 ### Added
 
 - **`<ThemeScript>` agora aceita `respectSystemMode` e `nonce`.** O primeiro espelha o prop de mesmo nome do `ThemeProvider`, para que desligar o sinal do sistema em um desligue nos dois — sem ele, o script e o provider resolviam o modo por regras diferentes. O segundo carimba o `nonce` no `<script>` inline: uma `script-src` baseada em nonce bloqueia script inline sem carimbo, e este é inútil se não rodar antes do primeiro paint. (usetheokit/theokit-ui#42)

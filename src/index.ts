@@ -11,6 +11,37 @@
 
 export { cn } from "./lib/cn.js";
 
+// Generic primitives re-exported from `@usetheo/ui`.
+//
+// `@usetheo/ui` is this package's non-AI foundation and holds the generic
+// primitives; this package holds the agent-specific ones. It is a REQUIRED peer
+// dependency (`>=0.22.0 <1`, not listed in `peerDependenciesMeta` as optional),
+// so every consumer of `@theokit/ui` already has it installed and the re-export
+// resolves at their node_modules — nothing is vendored, and `tsup` keeps the
+// specifier external the same way it already does for the `Toaster` import in
+// `theo-ui-provider.tsx`.
+//
+// The barrel carried these until 0.19.0 and stopped at 1.0.0. Nothing caught it:
+// `validate-exports.mjs` checks the export MAP (does the subpath resolve, does it
+// import) and never which SYMBOLS the barrel carries, so five releases shipped
+// without a Button and `@theokit/plugin-canvas` / `@theokit/plugin-forms` went out
+// broken — 10 x TS2305 on typecheck, a DTS error on build, 4 red suites.
+// See usetheokit/theokit-plugins#9 and usetheokit/theokit-ui#40.
+//
+// This list is the set those two plugins actually import — the measured consumer
+// contract, not a wishlist. `tests/contract/barrel-primitives.test.ts` is the gate
+// that keeps it from regressing again. Adding a name here widens the public API
+// deliberately; removing one is a breaking change.
+export {
+  Alert,
+  Button,
+  CodeBlock,
+  CopyButton,
+  DropdownMenu,
+  FormField,
+  Tooltip,
+} from "@usetheo/ui";
+
 // Theme system
 export {
   ThemeProvider,
