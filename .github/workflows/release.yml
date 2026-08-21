@@ -49,12 +49,42 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      # Every run of this workflow has failed since it was written, always the same way, and
+      # the error npm returns does not say why. From run 29599193784 (v1.3.2, 2026-07-17):
+      #
+      #   npm notice publish Provenance statement published to transparency log: …
+      #   npm error code E404
+      #   npm error 404 Not Found - PUT https://registry.npmjs.org/@theokit%2fui
+      #   npm error 404  '@theokit/ui@1.3.2' is not in this registry.
+      #
+      # Provenance is generated, then the PUT is refused. npm answers 404 rather than 403 for
+      # an unauthorised publish to a scoped package, so it does not disclose whether the
+      # package exists — which makes "not in this registry" read as a missing package when it
+      # means a token without publish rights. @theokit/ui has been on npm since 1.1.0.
+      #
+      # So the OIDC exchange succeeds and produces a token this package does not accept: the
+      # trusted-publisher binding named in the header above is absent, or bound to a different
+      # repository path. Worth checking whether it still names usetheodev/theokit-ui — the org
+      # moved to usetheokit in 03cbfe0, though that postdates the earliest failures.
+      #
+      # Consequence to keep in view: no published version carries a provenance attestation.
+      # `npm view @theokit/ui@<v> dist --json` returns `signatures` (the registry signs every
+      # package automatically) and no `attestations` key, for every version. The guarantee this
+      # workflow's header describes has never held. See usetheokit/theokit-ui#46.
+      #
+      # The step below prints that diagnosis on failure so the next person reads it here
+      # instead of re-deriving it from a year of logs.
       - name: Publish @theokit/ui
         run: |
+          set -o pipefail
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             npm publish --dry-run --provenance --access public --tag ${{ inputs.tag || 'next' }}
           else
             npm publish --provenance --access public --tag ${{ inputs.tag || 'next' }}
-          fi
+          fi || {
+            status=$?
+            echo "::error::npm publish failed (exit ${status}). If the error above is E404 on PUT, it is almost certainly NOT a missing package — npm returns 404 instead of 403 for an unauthorised publish to a scoped package. @theokit/ui exists on npm. Check the trusted-publisher binding at npmjs.com/package/@theokit/ui/settings: it must name usetheokit/theokit-ui and this workflow file. See usetheokit/theokit-ui#46."
+            exit "${status}"
+          }
         env:
           NPM_CONFIG_PROVENANCE: true
