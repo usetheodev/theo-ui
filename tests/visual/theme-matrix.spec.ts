@@ -61,7 +61,7 @@ import { themeFixtures } from "./theme-fixtures.js";
 const SURFACES: Array<{ slug: string; html: (scale: ThemeScale) => string }> = [
   {
     slug: "buttons",
-    html: (s) => `
+    html: () => `
       <div style="display:grid; gap:12px; grid-template-columns:repeat(3,auto);">
         <button class="btn btn-primary">Primary</button>
         <button class="btn btn-deep">Deep</button>
@@ -73,7 +73,7 @@ const SURFACES: Array<{ slug: string; html: (scale: ThemeScale) => string }> = [
   },
   {
     slug: "card-row",
-    html: (s) => `
+    html: () => `
       <div style="display:grid; gap:16px; grid-template-columns:1fr 1fr;">
         <div class="card">
           <div class="card-title">Revenue</div>
@@ -89,7 +89,7 @@ const SURFACES: Array<{ slug: string; html: (scale: ThemeScale) => string }> = [
   },
   {
     slug: "status-row",
-    html: (s) => `
+    html: () => `
       <div style="display:flex; gap:24px;">
         <span class="status"><span class="dot dot-online"></span>Online</span>
         <span class="status"><span class="dot dot-offline"></span>Offline</span>
@@ -99,7 +99,7 @@ const SURFACES: Array<{ slug: string; html: (scale: ThemeScale) => string }> = [
   },
   {
     slug: "form",
-    html: (s) => `
+    html: () => `
       <form class="form">
         <label class="label">Email
           <input class="input" value="user@example.com" />
@@ -112,7 +112,7 @@ const SURFACES: Array<{ slug: string; html: (scale: ThemeScale) => string }> = [
   },
   {
     slug: "alert-stack",
-    html: (s) => `
+    html: () => `
       <div style="display:grid; gap:8px;">
         <div class="alert alert-success">Form saved.</div>
         <div class="alert alert-warning">Disk usage at 82%.</div>

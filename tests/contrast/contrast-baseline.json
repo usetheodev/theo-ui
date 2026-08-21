@@ -23,7 +23,7 @@
         "fg": "primary-foreground",
         "bg": "primary",
         "threshold": 3,
-        "ratio": 5.674577569111959
+        "ratio": 6.44502887401781
       },
       {
         "fg": "secondary-foreground",
@@ -67,13 +67,13 @@
         "fg": "popover-foreground",
         "bg": "popover",
         "threshold": 4.5,
-        "ratio": 16.458856730652442
+        "ratio": 17.181824100876533
       },
       {
         "fg": "primary-foreground",
         "bg": "primary",
         "threshold": 3,
-        "ratio": 5.674577569111959
+        "ratio": 6.44502887401781
       },
       {
         "fg": "secondary-foreground",
@@ -92,6 +92,108 @@
         "bg": "destructive",
         "threshold": 3,
         "ratio": 6.117370727798084
+      },
+      {
+        "fg": "muted-foreground",
+        "bg": "muted",
+        "threshold": 3,
+        "ratio": 5.9745448095171705
+      }
+    ]
+  },
+  "falcon-red": {
+    "light": [
+      {
+        "fg": "foreground",
+        "bg": "background",
+        "threshold": 4.5,
+        "ratio": 19.769598292528755
+      },
+      {
+        "fg": "card-foreground",
+        "bg": "card",
+        "threshold": 4.5,
+        "ratio": 19.769598292528755
+      },
+      {
+        "fg": "popover-foreground",
+        "bg": "popover",
+        "threshold": 4.5,
+        "ratio": 19.769598292528755
+      },
+      {
+        "fg": "primary-foreground",
+        "bg": "primary",
+        "threshold": 3,
+        "ratio": 4.80128063038045
+      },
+      {
+        "fg": "secondary-foreground",
+        "bg": "secondary",
+        "threshold": 3,
+        "ratio": 18.125389044822416
+      },
+      {
+        "fg": "accent-foreground",
+        "bg": "accent",
+        "threshold": 3,
+        "ratio": 9.139556594812523
+      },
+      {
+        "fg": "destructive-foreground",
+        "bg": "destructive",
+        "threshold": 3,
+        "ratio": 6.156407434098211
+      },
+      {
+        "fg": "muted-foreground",
+        "bg": "muted",
+        "threshold": 3,
+        "ratio": 4.356895754826658
+      }
+    ],
+    "dark": [
+      {
+        "fg": "foreground",
+        "bg": "background",
+        "threshold": 4.5,
+        "ratio": 18.125389044822416
+      },
+      {
+        "fg": "card-foreground",
+        "bg": "card",
+        "threshold": 4.5,
+        "ratio": 17.181824100876533
+      },
+      {
+        "fg": "popover-foreground",
+        "bg": "popover",
+        "threshold": 4.5,
+        "ratio": 17.181824100876533
+      },
+      {
+        "fg": "primary-foreground",
+        "bg": "primary",
+        "threshold": 3,
+        "ratio": 4.882258523973695
+      },
+      {
+        "fg": "secondary-foreground",
+        "bg": "secondary",
+        "threshold": 3,
+        "ratio": 15.603217416291784
+      },
+      {
+        "fg": "accent-foreground",
+        "bg": "accent",
+        "threshold": 3,
+        "ratio": 5.963482085046899
+      },
+      {
+        "fg": "destructive-foreground",
+        "bg": "destructive",
+        "threshold": 3,
+        "ratio": 6.247601908017154
       },
       {
         "fg": "muted-foreground",

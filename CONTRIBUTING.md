@@ -6,6 +6,9 @@ strategic context (mission, narrative, four pillars) lives in this repo's
 RFCs, quality gates) in `wiki/` — see `wiki/index.md`. This file is about the
 day-to-day mechanics of shipping code to `@theokit/ui`.
 
+By taking part you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). Security
+problems do **not** go in an issue — see [SECURITY.md](./SECURITY.md).
+
 ---
 
 ## TL;DR
@@ -23,7 +26,7 @@ day-to-day mechanics of shipping code to `@theokit/ui`.
 ## Setup
 
 ```bash
-git clone https://github.com/usetheodev/theokit-ui.git
+git clone https://github.com/usetheokit/theokit-ui.git
 cd theokit-ui
 pnpm install
 pnpm dev   # Ladle on http://localhost:61000
@@ -177,7 +180,7 @@ Every component is shipped two ways:
 
 1. **As part of the package** — `pnpm add @theokit/ui`, then
    `import { AgentEvent } from "@theokit/ui"`. ESM-only, tree-shakable.
-2. **As copy-paste via shadcn CLI** — `npx shadcn add https://usetheodev.github.io/theokit-ui/r/<name>.json` (branded `ui.usetheo.dev` URL pending DNS CNAME).
+2. **As copy-paste via shadcn CLI** — `npx shadcn add https://usetheokit.github.io/theokit-ui/r/<name>.json` (branded `ui.usetheo.dev` URL pending DNS CNAME).
    The consumer's project receives the source `.tsx` file under
    `components/ui/<name>.tsx` (primitives) or `components/blocks/<name>.tsx`
    (composites).

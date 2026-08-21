@@ -1,7 +1,7 @@
 /**
  * WCAG AA contrast validator — Phase 0 T0.2 standalone runner.
  *
- * Audits all 10 built-in themes × 2 modes × 8 critical pairs against
+ * Audits every built-in theme × 2 modes × 8 critical pairs against
  * WCAG 2.x AA thresholds. Persists baseline ratios to
  * `tests/contrast/contrast-baseline.json` — subsequent runs assert each
  * pair stays ≥ baseline (tolerância para melhora, regressão = fail).
@@ -14,7 +14,7 @@
  *   large (3:1):   primary↔primary-foreground, secondary↔secondary-foreground,
  *                  accent↔accent-foreground, destructive↔destructive-foreground
  *
- * 10 themes × 2 modes × 8 pairs = 160 assertions per run.
+ * Assertions per run = themes × 2 modes × 8 pairs.
  */
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -121,6 +121,13 @@ async function main(): Promise<void> {
   const { report, failures } = await auditAll();
   const elapsed = Date.now() - t0;
 
+  // Counted from the report instead of hard-coded. The summary used to say "10 themes"
+  // whatever was actually audited, so adding an 11th made the gate's own output wrong —
+  // and that line is the only thing a reader has to judge its coverage by.
+  const summary =
+    `WCAG AA passes for all ${Object.keys(report).length} themes × 2 modes × ` +
+    `${BODY_PAIRS.length + LARGE_PAIRS.length} pairs in ${elapsed}ms.`;
+
   if (failures.length > 0) {
     console.error(`WCAG AA contrast gate FAILED (${failures.length} pair(s)):`);
     for (const f of failures) console.error(`  - ${f}`);
@@ -130,7 +137,7 @@ async function main(): Promise<void> {
   if (UPDATE || !existsSync(BASELINE_PATH)) {
     writeFileSync(BASELINE_PATH, `${JSON.stringify(report, null, 2)}\n`, "utf8");
     console.log(`Baseline ${UPDATE ? "regenerated" : "created"}: ${BASELINE_PATH}`);
-    console.log(`WCAG AA passes for all 10 themes × 2 modes × 8 pairs in ${elapsed}ms.`);
+    console.log(summary);
     return;
   }
 
@@ -143,7 +150,7 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  console.log(`WCAG AA passes for all 10 themes × 2 modes × 8 pairs in ${elapsed}ms.`);
+  console.log(summary);
   console.log(`No regressions vs ${BASELINE_PATH}`);
 }
 

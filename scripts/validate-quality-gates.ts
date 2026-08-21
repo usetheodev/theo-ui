@@ -27,10 +27,27 @@ interface Failure {
 }
 
 const failures: Failure[] = [];
-const warnings: Failure[] = [];
+
+/**
+ * Gates that could not inspect what they exist to inspect.
+ *
+ * Several checks here depend on `dist/`, which is gitignored, and `quality:gates:fast`
+ * does not build. Before this existed they simply `return`ed, so the run printed
+ * "Quality gate structure validation passed" having looked at nothing — and a reader
+ * cannot tell that apart from a run that checked all 83 components.
+ *
+ * A skip is not a failure: on the fast lane it is the correct outcome. It just has to be
+ * SAID, with the count of what went unchecked, so "passed" never quietly means "did not
+ * look".
+ */
+const skipped: Failure[] = [];
 
 const fail = (scope: string, message: string): void => {
   failures.push({ scope, message });
+};
+
+const skip = (scope: string, message: string): void => {
+  skipped.push({ scope, message });
 };
 
 const listDirectories = async (path: string): Promise<string[]> =>
@@ -183,7 +200,14 @@ async function validateExportsMap(): Promise<void> {
   // separately). With dist/ present, broken-symlink-like exports are caught
   // before npm publish.
   const distRoot = join(ROOT, "dist");
-  if (!existsSync(distRoot)) return;
+  if (!existsSync(distRoot)) {
+    skip(
+      "package.json#exports",
+      `dist/ absent — 0 of ${Object.keys(actual).length} export subpath(s) resolved against \
+disk. The shape check above still ran; only the does-the-file-exist half was skipped.`,
+    );
+    return;
+  }
   for (const [subpath, value] of Object.entries(actual)) {
     const target =
       typeof value === "string" ? value : ((value as { import?: string }).import ?? null);
@@ -636,6 +660,109 @@ async function validateCountConsistency(): Promise<void> {
   }
 }
 
+/**
+ * README prose counts must agree with the generated ones.
+ *
+ * `sync-readme.ts` owns three `<!-- BEGIN:... -->` regions and nothing else, so any
+ * count written into ordinary prose drifts silently. Measured on 2026-08-21 the README
+ * carried FOUR different figures for two facts: "99 components" in three prose spots
+ * against a generated badge of 103, and "1,131 tests passing" in the Status section
+ * against a badge of 1177 against an actual suite of 1486. The section they sit under is
+ * titled "Honest claims only".
+ *
+ * `validateCountConsistency` could not see any of it: it compares the badge with the
+ * catalog headings, both of which `sync:readme` writes, so it grades the generated
+ * output against itself and passes while the prose beside it says something else.
+ *
+ * This gate reads the generated regions as the source of truth and fails on any prose
+ * number that contradicts them. It deliberately does NOT invent a number to compare
+ * against — if the badge is missing, that is `validateCountConsistency`'s failure to
+ * report, not this one's.
+ */
+/**
+ * Every path `.ls-lint.yml` names must still exist.
+ *
+ * ls-lint exits 0 when a rule targets a directory that is not there: it walks the tree,
+ * matches nothing, and reports success. So a rename can silently retire the naming gate
+ * and the only visible signal is a green check. This is the same shape as an
+ * architecture rule pointing at a moved directory — the tool cannot tell "compliant"
+ * from "never looked".
+ *
+ * Rather than parse YAML for one key, this reads the top-level entries under `ls:` and
+ * asserts each resolves. Glob suffixes (`src/**`) are stripped to their directory.
+ */
+function validateLsLintTargets(): void {
+  const configPath = join(ROOT, ".ls-lint.yml");
+  if (!existsSync(configPath)) {
+    fail(".ls-lint.yml", "missing — the file-naming gate has no rules to run");
+    return;
+  }
+  const lines = readFileSync(configPath, "utf-8").split("\n");
+  const lsIndex = lines.findIndex((line) => line.trimEnd() === "ls:");
+  if (lsIndex === -1) {
+    fail(".ls-lint.yml", "has no top-level `ls:` block; ls-lint would check nothing and exit 0");
+    return;
+  }
+
+  let targets = 0;
+  for (const line of lines.slice(lsIndex + 1)) {
+    if (/^\S/.test(line)) break; // next top-level key (`ignore:`) ends the block
+    const match = line.match(/^ {2}(\S+):\s*$/);
+    if (!match?.[1]) continue;
+    targets += 1;
+    const dir = match[1].replace(/\/\*+$/, "");
+    if (!existsSync(join(ROOT, dir))) {
+      fail(
+        ".ls-lint.yml",
+        `rule targets \`${match[1]}\` but ${dir}/ does not exist. ls-lint exits 0 when a rule \
+matches nothing, so this retires the naming gate without failing it.`,
+      );
+    }
+  }
+  if (targets === 0) {
+    fail(
+      ".ls-lint.yml",
+      "`ls:` block declares no targets; ls-lint would exit 0 having checked nothing",
+    );
+  }
+}
+
+async function validateReadmeProseCounts(): Promise<void> {
+  const readme = readFileSync(join(ROOT, "README.md"), "utf-8");
+
+  const badgeComponents = readme.match(/components-(\d+)/)?.[1];
+  const badgeTests = readme.match(/tests-(\d+)%20passing/)?.[1];
+
+  const claims: { label: string; generated: string | undefined; pattern: RegExp }[] = [
+    {
+      label: "components",
+      generated: badgeComponents,
+      // "103 components", "**103 components**" — the digits immediately before the word.
+      pattern: /(\d[\d,]*)\s+components\b/g,
+    },
+    {
+      label: "tests",
+      generated: badgeTests,
+      pattern: /(\d[\d,]*)\s+tests\s+passing\b/g,
+    },
+  ];
+
+  for (const { label, generated, pattern } of claims) {
+    if (!generated) continue;
+    for (const match of readme.matchAll(pattern)) {
+      const raw = match[1];
+      if (!raw) continue;
+      const claimed = raw.replace(/,/g, "");
+      if (claimed !== generated) {
+        fail(
+          "README.md",
+          `prose claims "${raw} ${label}" but the generated count is ${generated}; run \`pnpm sync:readme\` and update the prose to match`,
+        );
+      }
+    }
+  }
+}
+
 async function validateArchitectureCensus(): Promise<void> {
   // T4.3 / BLOCKER-002 — wiki/registry/component-census.md census must match
   // src/index.ts named exports exactly. We compare both the headline counts
@@ -888,7 +1015,23 @@ async function validateNoLiteralTailwindColors(): Promise<void> {
  */
 async function validateUseClientDirective(): Promise<void> {
   const distRoot = join(ROOT, "dist");
-  if (!existsSync(distRoot)) return;
+  if (!existsSync(distRoot)) {
+    let candidates = 0;
+    for (const layer of ["primitives", "composites"] as const) {
+      const layerSrc = join(ROOT, "src/components", layer);
+      if (!existsSync(layerSrc)) continue;
+      candidates += readdirSync(layerSrc, { withFileTypes: true }).filter((d) =>
+        d.isDirectory(),
+      ).length;
+    }
+    skip(
+      "rsc/use-client",
+      `dist/ absent — 0 of ${candidates} component(s) checked for the "use client" directive. \
+\`quality:gates:fast\` does not build; run \`pnpm build\` (or the full \`pnpm quality:gates\`) for \
+this gate to mean anything.`,
+    );
+    return;
+  }
 
   const hookRe =
     /\b(useState|useEffect|useRef|useContext|useReducer|useImperativeHandle|useId|useLayoutEffect|useSyncExternalStore|createContext)\b/;
@@ -991,6 +1134,8 @@ async function main(): Promise<void> {
   await validateNpmTarball();
   await validatePublicExports();
   await validateCountConsistency();
+  await validateReadmeProseCounts();
+  validateLsLintTargets();
   await validateArchitectureCensus();
   await validateAxeCoverage();
   await validateUseClientDirective();
@@ -1001,10 +1146,10 @@ async function main(): Promise<void> {
   await validateThemeContrast();
   validateScriptsAndCi();
 
-  if (warnings.length > 0) {
-    writeStdout(`Quality gate warnings (${warnings.length}):`);
-    for (const warning of warnings) {
-      writeStdout(`- ${warning.scope}: ${warning.message}`);
+  if (skipped.length > 0) {
+    writeStdout(`Gates that did NOT run (${skipped.length}):`);
+    for (const entry of skipped) {
+      writeStdout(`- ${entry.scope}: ${entry.message}`);
     }
     writeStdout("");
   }
@@ -1019,7 +1164,7 @@ async function main(): Promise<void> {
 
   writeStdout(
     `Quality gate structure validation passed${
-      warnings.length > 0 ? ` (with ${warnings.length} warning(s))` : ""
+      skipped.length > 0 ? ` — but ${skipped.length} gate(s) did NOT run (listed above)` : ""
     }.`,
   );
 }

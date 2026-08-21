@@ -51,7 +51,7 @@ that produces unresolvable imports fails the build, not the user.
 The copy-paste path is:
 
 ```bash
-npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/<name>.json
+npx shadcn@latest add https://usetheokit.github.io/theokit-ui/r/<name>.json
 ```
 
 (The branded `ui.usetheo.dev` URL is pending a DNS CNAME.)

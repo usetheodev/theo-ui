@@ -1,21 +1,19 @@
 {
   "name": "@theokit/ui",
-  "version": "1.3.2",
+  "version": "1.4.1",
   "description": "Theo UI — React component library with the Violet Forge design system, built for AI-agent surfaces (coding agents and chat). Generic, auth, and cloud-ops primitives live in @usetheo/ui.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/usetheodev/theokit-ui.git"
+    "url": "git+https://github.com/usetheokit/theokit-ui.git"
   },
-  "homepage": "https://usetheodev.github.io/theokit-ui/",
+  "homepage": "https://usetheokit.github.io/theokit-ui/",
   "bugs": {
-    "url": "https://github.com/usetheodev/theokit-ui/issues"
+    "url": "https://github.com/usetheokit/theokit-ui/issues"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -421,15 +419,16 @@
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check src",
-    "lint:ci": "biome ci src scripts .ladle",
+    "lint": "biome check .",
+    "lint:ci": "biome ci .",
+    "validate:naming": "ls-lint",
     "inventory": "node scripts/inventory-components.mjs",
     "stories:check": "node scripts/generate-missing-stories.mjs --check",
     "stories:generate": "node scripts/generate-missing-stories.mjs --write",
     "stories:test": "node scripts/__tests__/generate-missing-stories.test.mjs",
-    "lint:fix": "biome check --write src",
-    "format": "biome format --write src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
-    "format:check": "biome format src scripts .ladle package.json tsconfig.json tailwind.config.ts vitest.config.ts tsup.config.ts biome.json",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
@@ -438,6 +437,7 @@
     "prepublishOnly": "pnpm build && pnpm test:contract && node scripts/validate-exports.mjs",
     "validate:exports": "node scripts/validate-exports.mjs",
     "registry:build": "tsx scripts/build-registry.ts",
+    "registry:check": "tsx scripts/build-registry.ts --check",
     "registry:validate": "tsx scripts/validate-registry.ts",
     "sync:readme": "tsx scripts/sync-readme.ts",
     "sync:exports": "tsx scripts/sync-exports.ts",
@@ -458,8 +458,8 @@
     "dogfood:slide-rich": "tsx scripts/dogfood-slide-rich.ts",
     "dogfood:v4-zero-config": "tsx scripts/dogfood-v4-zero-config.ts",
     "dogfood:precompiled-utilities": "tsx scripts/dogfood-precompiled-utilities.ts",
-    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm test:contract && pnpm quality:publint && pnpm registry:build && pnpm registry:validate && pnpm quality:structure && pnpm classify:check && pnpm quality:bundle && pnpm quality:a11y && pnpm quality:visual && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
-    "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm typecheck && pnpm quality:knip && pnpm registry:build && pnpm registry:validate && pnpm quality:structure",
+    "quality:gates": "pnpm format:check && pnpm lint:ci && pnpm validate:naming && pnpm typecheck && pnpm quality:knip && pnpm test && pnpm build && pnpm test:contract && pnpm quality:publint && pnpm registry:check && pnpm registry:validate && pnpm quality:structure && pnpm classify:check && pnpm quality:bundle && pnpm quality:a11y && pnpm quality:visual && pnpm ladle:build && pnpm dogfood:whiteboard && pnpm dogfood:slide && pnpm dogfood:slide-deck && pnpm dogfood:slide-rich && pnpm dogfood:v4-zero-config && pnpm dogfood:precompiled-utilities",
+    "quality:gates:fast": "pnpm format:check && pnpm lint:ci && pnpm validate:naming && pnpm typecheck && pnpm quality:knip && pnpm registry:check && pnpm registry:validate && pnpm quality:structure",
     "quality:knip": "knip",
     "quality:knip:fix": "knip --fix",
     "quality:publint": "publint --strict",
@@ -567,6 +567,7 @@
     "@arethetypeswrong/cli": "^0.18.2",
     "@biomejs/biome": "^1.9.4",
     "@ladle/react": "^4.1.2",
+    "@ls-lint/ls-lint": "2.3.1",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/cli": "^4.3.0",
     "@testing-library/dom": "^10.4.0",
@@ -615,11 +616,7 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "esbuild"
-    ],
+    "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "esbuild"],
     "overrides": {
       "postcss": ">=8.5.10"
     }

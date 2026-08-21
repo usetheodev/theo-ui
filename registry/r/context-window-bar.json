@@ -6,8 +6,8 @@
   "description": "Shows how much of the model's context window has been",
   "dependencies": [],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/cn.json",
-    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json"
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json"
   ],
   "files": [
     {

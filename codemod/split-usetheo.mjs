@@ -125,7 +125,7 @@ const MOVED = new Set([
 
 for (const file of process.argv.slice(2)) {
   let src = readFileSync(file, "utf8");
-  src = src.replace(/import\s+\{([^}]+)\}\s+from\s+["']@theokit\/ui["'];/g, (m, names) => {
+  src = src.replace(/import\s+\{([^}]+)\}\s+from\s+["']@theokit\/ui["'];/g, (_match, names) => {
     const list = names
       .split(",")
       .map((s) => s.trim())
@@ -138,8 +138,8 @@ for (const file of process.argv.slice(2)) {
     const stay = list.filter((n) => !MOVED.has(key(n)));
     const move = list.filter((n) => MOVED.has(key(n)));
     const out = [];
-    if (stay.length) out.push("import { " + stay.join(", ") + ' } from "@theokit/ui";');
-    if (move.length) out.push("import { " + move.join(", ") + ' } from "@usetheo/ui";');
+    if (stay.length) out.push(`import { ${stay.join(", ")} } from "@theokit/ui";`);
+    if (move.length) out.push(`import { ${move.join(", ")} } from "@usetheo/ui";`);
     return out.join("\n");
   });
   writeFileSync(file, src);

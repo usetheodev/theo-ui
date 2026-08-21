@@ -6,15 +6,15 @@
   "description": "The canonical conversation surface for a code agent.",
   "dependencies": [],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/agent-error-card.json",
-    "https://usetheodev.github.io/theokit-ui/r/agent-streaming.json",
-    "https://usetheodev.github.io/theokit-ui/r/approval-card.json",
-    "https://usetheodev.github.io/theokit-ui/r/chat-message.json",
-    "https://usetheodev.github.io/theokit-ui/r/chat-types.json",
-    "https://usetheodev.github.io/theokit-ui/r/cn.json",
-    "https://usetheodev.github.io/theokit-ui/r/tailwind-preset.json",
-    "https://usetheodev.github.io/theokit-ui/r/tool-call-card.json",
-    "https://usetheodev.github.io/theokit-ui/r/types.json"
+    "https://usetheokit.github.io/theokit-ui/r/agent-error-card.json",
+    "https://usetheokit.github.io/theokit-ui/r/agent-streaming.json",
+    "https://usetheokit.github.io/theokit-ui/r/approval-card.json",
+    "https://usetheokit.github.io/theokit-ui/r/chat-message.json",
+    "https://usetheokit.github.io/theokit-ui/r/chat-types.json",
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json",
+    "https://usetheokit.github.io/theokit-ui/r/tool-call-card.json",
+    "https://usetheokit.github.io/theokit-ui/r/types.json"
   ],
   "files": [
     {

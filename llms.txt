@@ -9,9 +9,9 @@ This file follows the [llms.txt convention](https://llmstxt.org/) and gives an L
 - **npm package:** `@theokit/ui`
 - **Current version:** `1.3.2` (npm dist-tag `latest`)
 - **License:** Apache-2.0
-- **Repository:** `https://github.com/usetheodev/theokit-ui`
+- **Repository:** `https://github.com/usetheokit/theokit-ui`
 - **Docs site:** `https://docs.usetheo.dev/theoui`
-- **Registry (shadcn CLI):** `https://usetheodev.github.io/theokit-ui/r/{slug}.json`
+- **Registry (shadcn CLI):** `https://usetheokit.github.io/theokit-ui/r/{slug}.json`
 - **Design-system codename:** Violet Forge
 - **Module format:** ESM only (no CJS). `"type": "module"`. Side-effects on `**/*.css`.
 - **React peer range:** `>=18.2.0 <20` (works with 18.x and 19.x)
@@ -24,7 +24,7 @@ This file follows the [llms.txt convention](https://llmstxt.org/) and gives an L
 pnpm add @theokit/ui@next
 
 # Per-component copy (shadcn-style)
-npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/chat-message.json
+npx shadcn@latest add https://usetheokit.github.io/theokit-ui/r/chat-message.json
 ```
 
 ## Import path canonical form
@@ -234,7 +234,7 @@ Run dev server: `pnpm dev` (Ladle on `http://localhost:61000`). Build static: `p
     - `https://docs.usetheo.dev/theoui/primitives/confirm-dialog`
 - **Theming guide:** `https://docs.usetheo.dev/theoui/theming`
 - **Engines:** `https://docs.usetheo.dev/theoui/engines/{whiteboard,slide,slide-deck}`
-- **CHANGELOG:** `https://github.com/usetheodev/theokit-ui/blob/main/CHANGELOG.md`
+- **CHANGELOG:** `https://github.com/usetheokit/theokit-ui/blob/main/CHANGELOG.md`
 
 ## Source-of-truth files (read these before claiming anything)
 

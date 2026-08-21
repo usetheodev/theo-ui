@@ -1,11 +1,16 @@
 /**
  * ThemeScript — inline `<script>` for SSR-safe theme initialization.
  *
- * Renders a synchronous script that runs BEFORE React hydration. It reads the
- * persisted theme + mode from localStorage (or falls back to the defaults) and
- * sets `data-theme` / `data-mode` on `<html>`, plus the `.dark` class when
- * mode is dark. This eliminates FOUC and avoids hydration mismatch warnings
- * when the user's persisted choice differs from the SSR defaults.
+ * Renders a synchronous script that runs BEFORE React hydration. It resolves the mode the way
+ * `ThemeProvider` does — the persisted choice first, then the OS `prefers-color-scheme` when
+ * `respectSystemMode` is on, then the default — and writes `data-theme` / `data-mode` /
+ * `data-density` on the root element, plus the `.dark` class when the mode is dark.
+ *
+ * Resolving it the SAME way is the whole point. The provider settles the mode again after
+ * hydration; if the two disagree the page paints once and repaints, which is precisely the flash
+ * this component exists to remove. Pass it the same `defaultTheme`, `defaultMode`, `storageKey`
+ * and `respectSystemMode` you pass the provider — `theme-boot-agreement.test.tsx` holds them
+ * together across the matrix.
  *
  * Place this in `<head>` ABOVE `<body>`. The component does not need to live
  * inside `<ThemeProvider>`.
@@ -44,6 +49,22 @@ interface ThemeScriptProps {
    * persistence reads (the script will always apply defaults).
    */
   storageKey?: string | null;
+  /**
+   * Follow the OS `prefers-color-scheme` when nothing is stored. Default `true`.
+   *
+   * Must match the value passed to `<ThemeProvider>`, whose default is also `true`. When the two
+   * disagree, the script applies one mode and the provider applies the other the moment React
+   * hydrates — the page repaints, which is the flash this component exists to remove.
+   */
+  respectSystemMode?: boolean;
+  /**
+   * CSP nonce for the inline `<script>`.
+   *
+   * A nonce-based `script-src` blocks an unstamped inline script outright, and this one has to run
+   * before the first paint or it is worthless. Pass the per-request nonce here on any app that
+   * serves one.
+   */
+  nonce?: string;
 }
 
 /**
@@ -69,12 +90,18 @@ function buildScript(
   defaultMode: ThemeMode,
   defaultDensity: "compact" | "comfortable" | "spacious",
   storageKey: string | null,
+  respectSystemMode: boolean,
 ): string {
   const k = safe(storageKey);
   const t = safe(defaultTheme);
   const m = safe(defaultMode);
   const dn = safe(defaultDensity);
-  return `(function(){try{var k=${k};var d=document.documentElement;var t=null;var m=null;var dn=null;if(k){t=localStorage.getItem(k+":name");m=localStorage.getItem(k+":mode");dn=localStorage.getItem(k+":density");}d.setAttribute("data-theme",t||${t});d.setAttribute("data-mode",m||${m});d.setAttribute("data-density",dn||${dn});if((m||${m})==="dark"){d.classList.add("dark");}}catch(e){}})();`;
+  const sys = respectSystemMode ? "1" : "0";
+  // Mirrors ThemeProvider's own resolution, branch for branch: a stored value only counts when it
+  // is one of the valid literals, the OS signal decides when nothing is stored and
+  // `respectSystemMode` is on, and the default is the last resort — including when the engine has
+  // no `matchMedia`, which is exactly where the provider's effect bails out.
+  return `(function(){try{var k=${k};var d=document.documentElement;var t=null;var m=null;var dn=null;if(k){t=localStorage.getItem(k+":name");m=localStorage.getItem(k+":mode");dn=localStorage.getItem(k+":density");}if(m!=="dark"&&m!=="light"){m=(${sys}&&window.matchMedia)?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):${m};}if(dn!=="compact"&&dn!=="comfortable"&&dn!=="spacious"){dn=${dn};}d.setAttribute("data-theme",t||${t});d.setAttribute("data-mode",m);d.setAttribute("data-density",dn);d.classList.toggle("dark",m==="dark");}catch(e){}})();`;
 }
 
 function ThemeScript({
@@ -82,10 +109,24 @@ function ThemeScript({
   defaultMode = "dark",
   defaultDensity = "comfortable",
   storageKey = "theo-ui:theme",
+  respectSystemMode = true,
+  nonce,
 }: ThemeScriptProps): JSX.Element {
-  const code = buildScript(defaultTheme, defaultMode, defaultDensity, storageKey);
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: payload is JSON.stringify-encoded literals (no user input); intentional for SSR theme bootstrap before React hydrates
-  return <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: code }} />;
+  const code = buildScript(
+    defaultTheme,
+    defaultMode,
+    defaultDensity,
+    storageKey,
+    respectSystemMode,
+  );
+  return (
+    <script
+      nonce={nonce}
+      suppressHydrationWarning
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: payload is JSON.stringify-encoded literals (no user input); intentional for SSR theme bootstrap before React hydrates
+      dangerouslySetInnerHTML={{ __html: code }}
+    />
+  );
 }
 
 export { ThemeScript };

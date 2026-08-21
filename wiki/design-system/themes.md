@@ -82,12 +82,17 @@ Wrap in `<ThemeProvider>` **and** inject `<ThemeScript>` in `<head>`. Without th
 you get a flash of unstyled theme and a hydration mismatch, because the script is what
 reads `matchMedia` plus `localStorage` before React hydrates.
 
+Pass both the SAME props. They resolve the mode independently — the script before the first
+paint, the provider after hydration — so any prop given to one and not the other makes them
+disagree, and the page repaints the moment React takes over. That repaint is the flash the
+script was added to remove.
+
 ```tsx
 import { ThemeProvider, ThemeScript } from "@theokit/ui";
 
 <html lang="en" suppressHydrationWarning>
   <head>
-    <ThemeScript defaultTheme="violet-forge" defaultMode="dark" />
+    <ThemeScript defaultTheme="violet-forge" defaultMode="dark" nonce={nonce} />
   </head>
   <body>
     <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
@@ -96,6 +101,10 @@ import { ThemeProvider, ThemeScript } from "@theokit/ui";
   </body>
 </html>
 ```
+
+`nonce` is required on any app serving a nonce-based `script-src`: the browser blocks an
+unstamped inline script, and this one is worthless if it does not run before the first paint.
+Omit the prop when there is no CSP nonce to give it.
 
 ## Custom themes — `defineTheme`
 

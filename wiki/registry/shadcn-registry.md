@@ -23,7 +23,7 @@ status: stable
 pnpm add @theokit/ui
 
 # 2. Copy a single component into your source tree
-npx shadcn@latest add https://usetheodev.github.io/theokit-ui/r/<name>.json
+npx shadcn@latest add https://usetheokit.github.io/theokit-ui/r/<name>.json
 ```
 
 Both are supported and neither is the "real" one. The copy-paste path is why the
@@ -47,7 +47,7 @@ rather than the user.
 
 # Hosting
 
-Served from GitHub Pages at `usetheodev.github.io/theokit-ui/r/*.json`, deployed by a
+Served from GitHub Pages at `usetheokit.github.io/theokit-ui/r/*.json`, deployed by a
 `deploy-registry.yml` workflow. The branded `ui.usetheo.dev` endpoint is planned, pending a
 DNS CNAME.
 

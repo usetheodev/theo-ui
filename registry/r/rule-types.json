@@ -13,6 +13,6 @@
     }
   ],
   "registryDependencies": [
-    "https://usetheodev.github.io/theokit-ui/r/mode-types.json"
+    "https://usetheokit.github.io/theokit-ui/r/mode-types.json"
   ]
 }
