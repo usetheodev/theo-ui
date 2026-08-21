@@ -18,10 +18,11 @@ on:
       - ".github/workflows/deploy-registry.yml"
   workflow_dispatch:
 
+# Workflow-level permissions are the floor every job inherits. `pages: write` and
+# `id-token: write` belong only to the job that deploys — granting them here hands
+# them to the build job too, which runs project code and third-party dependencies.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages-deploy
@@ -31,20 +32,24 @@ jobs:
   build-registry:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           run_install: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: pnpm
 
       - name: Install
@@ -95,17 +100,22 @@ jobs:
           echo "landing page: ${COUNT} items"
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site
 
   deploy:
     needs: build-registry
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pages: write      # actions/deploy-pages publishes the artifact
+      id-token: write   # and proves this run's identity to the Pages service
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
