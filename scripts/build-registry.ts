@@ -23,6 +23,37 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const REGISTRY_DIR = join(ROOT, "registry");
+
+/**
+ * `--check` builds exactly as usual but writes nothing, comparing each artifact against
+ * what is on disk and failing on the first divergence.
+ *
+ * It exists because `pnpm quality:gates` runs `registry:build` and then
+ * `registry:validate`, so CI regenerates the artifacts into its own workspace and
+ * validates what it just produced. The COMMITTED copies are never compared against
+ * source and can stay stale indefinitely while the gate reports green — measured on
+ * 2026-08-21: registry/ last moved at 03cbfe0, src/themes/theme-script.tsx moved after
+ * it at 6729601, and for four days `npx shadcn add .../theme-script.json` handed
+ * consumers the implementation whose first-visit FOUC that commit had fixed.
+ */
+const CHECK_ONLY = process.argv.includes("--check");
+const staleArtifacts: string[] = [];
+
+/**
+ * Write, or in check mode record a divergence. Compares bytes, not parsed JSON: the
+ * published artifact is the file, and a formatting change is still a change consumers
+ * receive.
+ */
+async function emitArtifact(path: string, contents: string): Promise<void> {
+  if (!CHECK_ONLY) {
+    await writeFile(path, contents);
+    return;
+  }
+  const current = existsSync(path) ? await readFile(path, "utf-8") : null;
+  if (current !== contents) {
+    staleArtifacts.push(relative(ROOT, path) + (current === null ? " (missing)" : ""));
+  }
+}
 const OUT_DIR = join(REGISTRY_DIR, "r");
 const SRC_DIR = join(ROOT, "src");
 
@@ -197,9 +228,11 @@ async function main(): Promise<void> {
       files: builtFiles,
     };
     const outPath = join(OUT_DIR, `${descriptor.name}.json`);
-    await writeFile(outPath, JSON.stringify(item, null, 2));
+    await emitArtifact(outPath, JSON.stringify(item, null, 2));
     built.push(item);
-    writeStdout(`Built ${descriptor.name} -> registry/r/${descriptor.name}.json`);
+    writeStdout(
+      `${CHECK_ONLY ? "Checked" : "Built"} ${descriptor.name} -> registry/r/${descriptor.name}.json`,
+    );
   }
 
   // Update the index with the names of everything built.
@@ -229,7 +262,29 @@ async function main(): Promise<void> {
       description: item.description ?? "",
     })),
   };
-  await writeFile(join(REGISTRY_DIR, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
+  await emitArtifact(join(REGISTRY_DIR, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
+
+  if (CHECK_ONLY) {
+    // Fail on zero built, not only on a divergence: a discovery bug that finds no
+    // descriptors would otherwise report "0 stale" and read as a clean check.
+    if (built.length === 0) {
+      console.error(
+        "registry:check inspected 0 items — no descriptors discovered. That is a broken " +
+          "check, not a clean one.",
+      );
+      process.exit(1);
+    }
+    if (staleArtifacts.length > 0) {
+      console.error(
+        `\nregistry artifacts are stale against src/ (${staleArtifacts.length} of ${built.length + 1} checked):`,
+      );
+      for (const stale of staleArtifacts) console.error(`- ${stale}`);
+      console.error("\nRun `pnpm registry:build` and commit the result.");
+      process.exit(1);
+    }
+    writeStdout(`\n${built.length + 1} registry artifact(s) checked, all current.`);
+    return;
+  }
 
   writeStdout(`\n${built.length} registry item(s) built.`);
 }

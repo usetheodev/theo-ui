@@ -203,8 +203,8 @@ async function validateExportsMap(): Promise<void> {
   if (!existsSync(distRoot)) {
     skip(
       "package.json#exports",
-      `dist/ absent — 0 of ${Object.keys(actual).length} export subpath(s) resolved against ` +
-        "disk. The shape check above still ran; only the does-the-file-exist half was skipped.",
+      `dist/ absent — 0 of ${Object.keys(actual).length} export subpath(s) resolved against \
+disk. The shape check above still ran; only the does-the-file-exist half was skipped.`,
     );
     return;
   }
@@ -978,9 +978,9 @@ async function validateUseClientDirective(): Promise<void> {
     }
     skip(
       "rsc/use-client",
-      `dist/ absent — 0 of ${candidates} component(s) checked for the "use client" directive. ` +
-        "`quality:gates:fast` does not build; run `pnpm build` (or full `pnpm quality:gates`) " +
-        "for this gate to mean anything.",
+      `dist/ absent — 0 of ${candidates} component(s) checked for the "use client" directive. \
+\`quality:gates:fast\` does not build; run \`pnpm build\` (or the full \`pnpm quality:gates\`) for \
+this gate to mean anything.`,
     );
     return;
   }
