@@ -6,7 +6,7 @@
 
 # The UI your agent already needs.
 
-A React component library built for AI-agent surfaces — coding agents and chat. **99 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
+A React component library built for AI-agent surfaces — coding agents and chat. **103 components** designed for what you'd otherwise build from scratch. The visual surface verb of **Chat. Build. Deploy.**
 
 *Editorial typography. Three runtime-swappable themes. shadcn-compatible registry. Apache-2.0.*
 
@@ -52,9 +52,9 @@ The agent UI gap is real — most teams reach for shadcn for the primitives and 
 | Three runtime-swappable themes | **Built-in** | DIY | DIY | DIY |
 | shadcn-compatible registry | **Yes** | Original | No | N/A |
 | ESM-only, tree-shake via barrel | **Yes** | Yes | Yes | DIY |
-| a11y enforced as a quality gate | **Yes** — 171 vitest-axe checks | Per-component, manual | Manual | Often skipped |
+| a11y enforced as a quality gate | **Yes** — axe over every story, plus a gate-enforced floor of 30 interactive primitives | Per-component, manual | Manual | Often skipped |
 
-Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 99 components you were about to write.
+Same Radix UI underneath as shadcn — no philosophy fight. We just shipped the next 103 components you were about to write.
 
 ## What you'd build
 
@@ -339,7 +339,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
-- **Production.** 99 components, 1,131 tests passing, zero a11y violations across 171 vitest-axe checks, bundle size enforced. Quality gates run on every PR.
+- **Production.** 103 components, 1486 tests passing, zero a11y violations across the axe sweep over every story, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheokit.github.io/theokit-ui/r/`](https://usetheokit.github.io/theokit-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.

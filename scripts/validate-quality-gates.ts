@@ -636,6 +636,61 @@ async function validateCountConsistency(): Promise<void> {
   }
 }
 
+/**
+ * README prose counts must agree with the generated ones.
+ *
+ * `sync-readme.ts` owns three `<!-- BEGIN:... -->` regions and nothing else, so any
+ * count written into ordinary prose drifts silently. Measured on 2026-08-21 the README
+ * carried FOUR different figures for two facts: "99 components" in three prose spots
+ * against a generated badge of 103, and "1,131 tests passing" in the Status section
+ * against a badge of 1177 against an actual suite of 1486. The section they sit under is
+ * titled "Honest claims only".
+ *
+ * `validateCountConsistency` could not see any of it: it compares the badge with the
+ * catalog headings, both of which `sync:readme` writes, so it grades the generated
+ * output against itself and passes while the prose beside it says something else.
+ *
+ * This gate reads the generated regions as the source of truth and fails on any prose
+ * number that contradicts them. It deliberately does NOT invent a number to compare
+ * against — if the badge is missing, that is `validateCountConsistency`'s failure to
+ * report, not this one's.
+ */
+async function validateReadmeProseCounts(): Promise<void> {
+  const readme = readFileSync(join(ROOT, "README.md"), "utf-8");
+
+  const badgeComponents = readme.match(/components-(\d+)/)?.[1];
+  const badgeTests = readme.match(/tests-(\d+)%20passing/)?.[1];
+
+  const claims: { label: string; generated: string | undefined; pattern: RegExp }[] = [
+    {
+      label: "components",
+      generated: badgeComponents,
+      // "103 components", "**103 components**" — the digits immediately before the word.
+      pattern: /(\d[\d,]*)\s+components\b/g,
+    },
+    {
+      label: "tests",
+      generated: badgeTests,
+      pattern: /(\d[\d,]*)\s+tests\s+passing\b/g,
+    },
+  ];
+
+  for (const { label, generated, pattern } of claims) {
+    if (!generated) continue;
+    for (const match of readme.matchAll(pattern)) {
+      const raw = match[1];
+      if (!raw) continue;
+      const claimed = raw.replace(/,/g, "");
+      if (claimed !== generated) {
+        fail(
+          "README.md",
+          `prose claims "${raw} ${label}" but the generated count is ${generated}; run \`pnpm sync:readme\` and update the prose to match`,
+        );
+      }
+    }
+  }
+}
+
 async function validateArchitectureCensus(): Promise<void> {
   // T4.3 / BLOCKER-002 — wiki/registry/component-census.md census must match
   // src/index.ts named exports exactly. We compare both the headline counts
@@ -991,6 +1046,7 @@ async function main(): Promise<void> {
   await validateNpmTarball();
   await validatePublicExports();
   await validateCountConsistency();
+  await validateReadmeProseCounts();
   await validateArchitectureCensus();
   await validateAxeCoverage();
   await validateUseClientDirective();
