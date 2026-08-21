@@ -1,14 +1,6 @@
-/* Canonical cascade-layer order — MUST stay the first rule in this file.
- *
- * CSS Cascade 5 fixes a layer's position at its first appearance. Without this statement a
- * consumer importing this file before `@import "tailwindcss"` registers the layer opened
- * below FIRST, which pushes Tailwind's `base` above `utilities` and lets preflight beat
- * every padding/margin/border utility. Declaring the order here makes the file
- * order-independent. Mirrors line 1 of Tailwind v4's index.css; `properties` is omitted
- * there too. See usetheokit/theokit-ui#20 and styles/layer-order.test.ts.
- *
- * A layer statement is one of the few rules CSS permits before `@import`.
- */
+/* Canonical cascade-layer order — MUST stay the first rule. Removing it lets a consumer
+ * who imports this file before Tailwind invert the cascade. Why, and the guard:
+ * src/styles/layer-order.test.ts + usetheokit/theokit-ui#20. */
 @layer theme, base, components, utilities;
 
 @import "./fonts.css";

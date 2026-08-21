@@ -3,9 +3,9 @@
   "files": {
     "dist/index.js": 73139,
     "dist/index.d.ts": 12382,
-    "dist/styles.css": 5090,
-    "dist/styles-v3-legacy.css": 2243,
-    "dist/tokens.css": 12678,
+    "dist/styles.css": 5371,
+    "dist/styles-v3-legacy.css": 2524,
+    "dist/tokens.css": 12959,
     "dist/tokens-v4.css": 7991,
     "dist/fonts.css": 2569,
     "dist/fonts-cdn.css": 1295,
