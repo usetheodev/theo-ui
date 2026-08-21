@@ -47,6 +47,27 @@ jobs:
           node-version: 22
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+      # OIDC trusted publishing landed in npm 11.5.1. Node 22 ships npm 10.9.7, which has no
+      # OIDC code at all — measured in theokit-plugins by unpacking the tarballs and grepping
+      # lib/ for ACTIONS_ID_TOKEN_REQUEST_URL: 10.9.7 → 0 files, 11.4.1 → 0, 11.5.1 → 2.
+      #
+      # Without it the CLI never presents the OIDC token, publishes unauthenticated, and the
+      # registry answers `E404 Not Found - PUT`. It returns 404 rather than 403 so it does not
+      # reveal that a package exists to someone who cannot publish it — which reads as "the
+      # package does not exist" and sends you hunting for a typo or a missing binding instead
+      # of a CLI too old to use one.
+      #
+      # That is what every run of this workflow has been doing, and what I concluded from it
+      # in usetheokit/theokit-ui#46 was wrong: I read the E404 as a missing trusted-publisher
+      # binding. theokit-plugins publishes on pure OIDC with no NPM_TOKEN at all — five
+      # consecutive successes, and its packages carry attestations — so the binding side of
+      # this works in this org. The difference was this line, which that repo added after the
+      # same 404 cost it two failed publishes (usetheokit/theokit-plugins#29).
+      #
+      # NOT redundant with the binding on npmjs.com: both halves are required. The binding
+      # authorises this workflow; this line is what lets the CLI present the token it checks.
+      - name: Upgrade npm to a version that supports OIDC trusted publishing
+        run: npm install -g npm@^11.5.1
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       # Every run of this workflow has failed since it was written, always the same way, and
@@ -62,10 +83,10 @@ jobs:
       # package exists — which makes "not in this registry" read as a missing package when it
       # means a token without publish rights. @theokit/ui has been on npm since 1.1.0.
       #
-      # So the OIDC exchange succeeds and produces a token this package does not accept: the
-      # trusted-publisher binding named in the header above is absent, or bound to a different
-      # repository path. Worth checking whether it still names usetheodev/theokit-ui — the org
-      # moved to usetheokit in 03cbfe0, though that postdates the earliest failures.
+      # That reading was WRONG, and the correction is above: npm 10.9.7 has no OIDC code, so
+      # the CLI never presented a token at all. I concluded "the trusted-publisher binding is
+      # absent" from an error that says nothing about bindings — the exact misdirection npm's
+      # 404-instead-of-403 is documented to cause.
       #
       # Consequence to keep in view: no published version carries a provenance attestation.
       # `npm view @theokit/ui@<v> dist --json` returns `signatures` (the registry signs every
@@ -83,7 +104,7 @@ jobs:
             npm publish --provenance --access public --tag ${{ inputs.tag || 'next' }}
           fi || {
             status=$?
-            echo "::error::npm publish failed (exit ${status}). If the error above is E404 on PUT, it is almost certainly NOT a missing package — npm returns 404 instead of 403 for an unauthorised publish to a scoped package. @theokit/ui exists on npm. Check the trusted-publisher binding at npmjs.com/package/@theokit/ui/settings: it must name usetheokit/theokit-ui and this workflow file. See usetheokit/theokit-ui#46."
+            echo "::error::npm publish failed (exit ${status}). If the error above is E404 on PUT it is NOT a missing package — npm answers 404 instead of 403 for an unauthorised publish to a scoped package, and @theokit/ui exists. Check BOTH halves of OIDC: (1) npm --version must be >= 11.5.1, since older CLIs have no OIDC code and publish unauthenticated; (2) the trusted-publisher binding at npmjs.com/package/@theokit/ui/settings must name usetheokit/theokit-ui and release.yml. See usetheokit/theokit-ui#46."
             exit "${status}"
           }
         env:
