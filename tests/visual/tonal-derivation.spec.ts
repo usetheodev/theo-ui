@@ -14,7 +14,9 @@ import { expect, test } from "@playwright/test";
  * pressed-state visually collapses into the dark background.
  */
 
-import { themeFixtures } from "./theme-fixtures.js";
+// The real themes, imported from source — see the note in theme-matrix.spec.ts on why the
+// checked-in "auto-generated" fixture was removed rather than regenerated.
+import { builtinThemes as themeFixtures } from "../../src/themes/index.js";
 
 // Themes whose dark-mode primary L is < 0.45 — most likely to hit the clamp.
 const DARK_PRIMARY_THEMES = ["aurora-terminal", "dracula", "one-dark", "vercel-mono"];

@@ -52,11 +52,21 @@ interface ThemeFixture {
   dark: ThemeScale;
 }
 
-// Static OKLCH snapshots of the 10 built-in themes (light + dark).
-// Mirrors src/themes/<name>.ts after the T2.4 migration. Kept inline so
-// this spec doesn't depend on building the package (visual gate runs
-// pre-build in the chain).
-import { themeFixtures } from "./theme-fixtures.js";
+// The real themes, imported from source.
+//
+// This used to read a checked-in `theme-fixtures.ts` headed "Auto-generated theme
+// fixtures" — which nothing generated. It was last touched 2026-07-03 and froze ten
+// themes; the package has had eleven since falcon-red landed, so that theme has never
+// been in the visual matrix, and any change to a theme's tokens produced no visual signal
+// at all. A regression suite comparing screenshots of a stale copy of its subject reports
+// on something that has not existed for weeks.
+//
+// The fixture's own comment justified itself as avoiding a dependency on the build. It
+// does not: `src/themes` is source, and Playwright transpiles TypeScript. Importing it
+// directly removes the drift instead of adding a generator to manage it.
+import { builtinThemes } from "../../src/themes/index.js";
+
+const themeFixtures = builtinThemes;
 
 const SURFACES: Array<{ slug: string; html: (scale: ThemeScale) => string }> = [
   {

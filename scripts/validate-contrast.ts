@@ -74,15 +74,19 @@ const OWN_BRAND_THEMES = new Set(["violet-forge", "falcon-red"]);
  * regression would pass again unnoticed. This raises the floor to what the shipped brand
  * already clears.
  *
- * `accent-foreground vs accent` is deliberately NOT here: violet-forge measures 3.83:1 on
- * it in both modes, so including it would fail the gate on our own default theme. That is
- * a real AA gap and a brand decision, tracked separately rather than hidden by keeping the
- * threshold low without saying so.
+ * `accent-foreground vs accent` joined the set once it could pass without touching the brand
+ * (#47). violet-forge measured 3.83:1 with a white foreground on its burnt sienna; the
+ * accent sits at L=0.621, where white cannot reach 4.5:1 at all. A near-black foreground —
+ * the theme's own `foreground` value — measures 5.16:1 against the identical accent. The
+ * colour that carries the brand did not change; the text on it did. falcon-red keeps white,
+ * where its darker accent measures 9.14:1 and black would measure 2.30:1 — which is why
+ * this is derived per theme rather than fixed globally.
  */
 const OWN_BRAND_BODY_PAIRS = new Set([
   "primary-foreground vs primary",
   "secondary-foreground vs secondary",
   "destructive-foreground vs destructive",
+  "accent-foreground vs accent",
 ]);
 
 /** The floor a given (theme, pair) must clear. */

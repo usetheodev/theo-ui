@@ -31,9 +31,20 @@ export default defineConfig({
       // counted sub-pixel font antialiasing as a difference, so the suite could
       // only pass on the exact machine that generated the baselines — it failed
       // in CI with ~488-1882 antialiased px diffing (ratio ≤0.2%, no real
-      // regression). 0.2 ignores antialiasing; `maxDiffPixels: 200` is a safety
-      // net that still fails on a genuine regression (a changed color/layout
-      // diffs thousands+ of pixels).
+      // regression). 0.2 ignores antialiasing; `maxDiffPixels: 200` is a safety net.
+      //
+      // What that net does NOT catch, measured rather than assumed: inverting a button
+      // label from white to near-black across the whole theme matrix moves exactly 72
+      // pixels per surface (2026-08-21, re-run with maxDiffPixels: 0 while fixing
+      // usetheokit/theokit-ui#47). The sentence that used to sit here — that a changed
+      // colour "diffs thousands+ of pixels" — holds for a filled surface and not for text
+      // on a small element, so this gate is blind to a text-colour change on a button,
+      // which is the class of accessibility defect #47 was about.
+      //
+      // The allowance is deliberately NOT lowered here. It exists because antialiasing
+      // once diffed 488-1882 px across machines, and one developer laptop is not evidence
+      // about CI. Recorded so the next person knows what this number protects and what it
+      // does not.
       threshold: 0.2,
       maxDiffPixels: 200,
       animations: "disabled",
