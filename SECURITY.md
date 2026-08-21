@@ -142,6 +142,20 @@ When in doubt, report it. Deciding scope is our job, not yours.
   reduces accidental information disclosure and untyped surface.
 - **The `validateNpmTarball` gate** keeps `.env`, `.git`, test files and the internal
   screens out of the published tarball.
+- **No published version carries an npm provenance attestation, and that is worth knowing
+  before you rely on one.** `npm view @theokit/ui@<version> dist --json` returns
+  `signatures` — which the registry adds to every package automatically and which is not
+  provenance — and no `attestations` key, for every version to date. The release workflow
+  requests provenance and always has; it never produced one because the npm CLI in the job
+  was older than 11.5.1 and therefore had no OIDC support at all, so it published
+  unauthenticated and the registry refused. Fixed in the workflow (usetheokit/theokit-ui#46);
+  the first version to carry an attestation will be the next one released.
+
+  Versions already on the registry cannot be given one retroactively: an attestation is
+  bound to the tarball's integrity hash at publish time, the tarballs are immutable, and
+  re-publishing a version is refused. If you need to verify the origin of a build today,
+  verify the git tag and the tree it points at rather than the tarball.
+
 - **A pre-commit hook scans staged content with TruffleHog**, fail-closed: a missing
   binary aborts the commit rather than waving it through. `.github/workflows/secret-scan.yml`
   re-runs it on push, so `--no-verify` buys time rather than a hole.
