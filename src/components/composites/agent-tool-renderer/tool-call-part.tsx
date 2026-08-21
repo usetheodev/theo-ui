@@ -7,6 +7,7 @@
  */
 import { AlertCircleIcon, CheckCircleIcon, LoaderIcon, ShieldIcon, WrenchIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import type { JSX } from "react";
 import { cn } from "../../../lib/cn.js";
 import type { ToolUIPart } from "../../../types/chat.js";
 

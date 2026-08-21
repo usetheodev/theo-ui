@@ -56,7 +56,19 @@ const STATUS_CONFIG: Record<ChannelStatus, { label: string; class: string }> = {
   error: { label: "Error", class: "border-destructive/40 bg-destructive/15 text-destructive" },
 };
 
-interface ChannelCardProps extends HTMLAttributes<HTMLElement> {
+/**
+ * `onToggle` is omitted from the inherited DOM attributes on purpose.
+ *
+ * React 19's `@types/react` added `onToggle?: ToggleEventHandler<T>` to `HTMLAttributes`
+ * for the HTML `toggle` event (`<details>`, popover). Our `onToggle` is a domain callback
+ * taking `(id, enabled)`, which is not assignable to it, so extending the interface
+ * unchanged fails to compile against React 19 — while the peer range already declares
+ * `>=18.2.0 <20`. See usetheokit/theokit-ui#45.
+ *
+ * Omitting rather than renaming: the domain name is the published API, and nothing can be
+ * passing the DOM handler today because this declaration has always shadowed it.
+ */
+interface ChannelCardProps extends Omit<HTMLAttributes<HTMLElement>, "onToggle"> {
   channel: Channel;
   onConfigure?: (id: string) => void;
   onToggle?: (id: string, enabled: boolean) => void;

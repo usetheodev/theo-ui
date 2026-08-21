@@ -22,13 +22,13 @@
       {
         "fg": "primary-foreground",
         "bg": "primary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 6.44502887401781
       },
       {
         "fg": "secondary-foreground",
         "bg": "secondary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 18.125389044822416
       },
       {
@@ -40,7 +40,7 @@
       {
         "fg": "destructive-foreground",
         "bg": "destructive",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 4.788148320984934
       },
       {
@@ -72,13 +72,13 @@
       {
         "fg": "primary-foreground",
         "bg": "primary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 6.44502887401781
       },
       {
         "fg": "secondary-foreground",
         "bg": "secondary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 15.603217416291784
       },
       {
@@ -90,7 +90,7 @@
       {
         "fg": "destructive-foreground",
         "bg": "destructive",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 6.117370727798084
       },
       {
@@ -124,13 +124,13 @@
       {
         "fg": "primary-foreground",
         "bg": "primary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 4.80128063038045
       },
       {
         "fg": "secondary-foreground",
         "bg": "secondary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 18.125389044822416
       },
       {
@@ -142,7 +142,7 @@
       {
         "fg": "destructive-foreground",
         "bg": "destructive",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 6.156407434098211
       },
       {
@@ -174,13 +174,13 @@
       {
         "fg": "primary-foreground",
         "bg": "primary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 4.882258523973695
       },
       {
         "fg": "secondary-foreground",
         "bg": "secondary",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 15.603217416291784
       },
       {
@@ -192,7 +192,7 @@
       {
         "fg": "destructive-foreground",
         "bg": "destructive",
-        "threshold": 3,
+        "threshold": 4.5,
         "ratio": 6.247601908017154
       },
       {

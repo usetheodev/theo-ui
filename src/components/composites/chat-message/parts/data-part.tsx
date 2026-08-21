@@ -6,6 +6,7 @@
  * the part renders as a compact `<details>` JSON dump (debug-friendly).
  */
 import { CodeIcon } from "lucide-react";
+import type { JSX } from "react";
 import { cn } from "../../../../lib/cn.js";
 import type { DataUIPart } from "../../../../types/chat.js";
 

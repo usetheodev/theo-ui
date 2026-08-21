@@ -13,6 +13,7 @@
  * once a math mdast extension is wired in (`mdast-util-math`, peer-dep).
  */
 import { useEffect, useState } from "react";
+import type { JSX } from "react";
 import { cn } from "../cn.js";
 
 interface KatexLib {

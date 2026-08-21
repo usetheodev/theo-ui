@@ -17,7 +17,10 @@ export default defineConfig({
     include: [
       "src/**/*.{test,spec}.{ts,tsx}",
       "scripts/**/*.{test,spec}.ts",
-      "tests/**/*.{test,spec}.ts",
+      // `.tsx` as well as `.ts`: a component test placed under tests/ was silently not
+      // collected, and vitest reports "No test files found" only when a filter matches
+      // nothing — a file added to the tree just never runs.
+      "tests/**/*.{test,spec}.{ts,tsx}",
     ],
     // tests/visual/ are Playwright specs (run via `pnpm quality:visual`).
     // Excluded from vitest to avoid duplicate runs and `expect` API mismatch.

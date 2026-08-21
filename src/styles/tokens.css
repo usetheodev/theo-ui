@@ -1,3 +1,8 @@
+/* Canonical cascade-layer order — MUST stay the first rule. Removing it lets a consumer
+ * who imports this file before Tailwind invert the cascade. Why, and the guard:
+ * src/styles/layer-order.test.ts + usetheokit/theokit-ui#20. */
+@layer theme, base, components, utilities;
+
 /* Theo UI — Design System "Violet Forge" tokens.
  *
  * Tokens normativos. Não edite valores aqui sem revisão do design system.

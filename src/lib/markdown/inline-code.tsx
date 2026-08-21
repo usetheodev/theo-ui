@@ -6,6 +6,7 @@
  * font, slight horizontal padding.
  */
 import type { HTMLAttributes } from "react";
+import type { JSX } from "react";
 import { cn } from "../cn.js";
 
 export type InlineCodeProps = HTMLAttributes<HTMLElement>;

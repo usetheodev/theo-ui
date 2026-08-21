@@ -6,6 +6,7 @@
  * to a plain text label.
  */
 import { FileIcon, ImageIcon } from "lucide-react";
+import type { JSX } from "react";
 import { cn } from "../../../../lib/cn.js";
 import { safeHref } from "../../../../lib/safe-href.js";
 import type { FileUIPart } from "../../../../types/chat.js";

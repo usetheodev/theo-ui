@@ -17,6 +17,7 @@
  * because the produced SVG goes through Mermaid's own sanitizer first.
  */
 import { useEffect, useRef, useState } from "react";
+import type { JSX } from "react";
 import { cn } from "../cn.js";
 
 interface MermaidLib {

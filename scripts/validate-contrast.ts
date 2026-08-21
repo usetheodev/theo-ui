@@ -47,6 +47,52 @@ const LARGE_PAIRS = [
 const AA_BODY = 4.5;
 const AA_LARGE = 3.0;
 
+/**
+ * Themes this project designs, as opposed to the ones it reproduces.
+ *
+ * The seven themes added by RFC 0007 (vercel-mono, github-dark, dracula, one-dark,
+ * anthropic-style, openai-style, linear-glass) exist to look like somebody else's product.
+ * Their contrast is a property of the palette being mimicked — raising it would mean no
+ * longer reproducing it, which is the one thing they are for. Measured 2026-08-21, five of
+ * them put `primary-foreground` on `primary` below 4.5:1 (anthropic-style dark 3.03,
+ * openai-style light 3.22, github-dark dark 3.44, vercel-mono dark 3.61, linear-glass dark
+ * 3.70).
+ *
+ * The themes below are ours. Their contrast is a decision we make, so they are held to the
+ * body threshold on the button-label pairs listed in OWN_BRAND_BODY_PAIRS.
+ */
+const OWN_BRAND_THEMES = new Set(["violet-forge", "falcon-red"]);
+
+/**
+ * Pairs that are button-label text on our own themes, and are therefore normal text under
+ * WCAG (a button label is ~14px; the large-text allowance starts at 24px, or 18.66px bold).
+ *
+ * usetheokit/theokit-ui#26 reported `primary-foreground vs primary` at 3.89:1 while the
+ * gate asked for 3.0 and passed it. The ratio recovered on its own when `--primary` was
+ * deep-anchored to oklch(0.5 0.16 296.97) on 2026-07-17 — it now measures 6.45:1 in both
+ * modes — but the threshold that let 3.89 through was never corrected, so the same
+ * regression would pass again unnoticed. This raises the floor to what the shipped brand
+ * already clears.
+ *
+ * `accent-foreground vs accent` is deliberately NOT here: violet-forge measures 3.83:1 on
+ * it in both modes, so including it would fail the gate on our own default theme. That is
+ * a real AA gap and a brand decision, tracked separately rather than hidden by keeping the
+ * threshold low without saying so.
+ */
+const OWN_BRAND_BODY_PAIRS = new Set([
+  "primary-foreground vs primary",
+  "secondary-foreground vs secondary",
+  "destructive-foreground vs destructive",
+]);
+
+/** The floor a given (theme, pair) must clear. */
+function thresholdFor(themeName: string, fg: string, bg: string, base: number): number {
+  if (base === AA_BODY) return AA_BODY;
+  return OWN_BRAND_THEMES.has(themeName) && OWN_BRAND_BODY_PAIRS.has(`${fg} vs ${bg}`)
+    ? AA_BODY
+    : AA_LARGE;
+}
+
 interface PairRatio {
   fg: string;
   bg: string;
@@ -81,10 +127,12 @@ async function auditAll(): Promise<{ report: Baseline; failures: string[] }> {
       }
       for (const [fg, bg] of LARGE_PAIRS) {
         const ratio = contrastRatio(scale[fg], scale[bg]);
-        themeReport[mode].push({ fg, bg, threshold: AA_LARGE, ratio });
-        if (ratio < AA_LARGE) {
+        const threshold = thresholdFor(theme.name, fg, bg, AA_LARGE);
+        themeReport[mode].push({ fg, bg, threshold, ratio });
+        if (ratio < threshold) {
+          const band = threshold === AA_BODY ? "body" : "large";
           failures.push(
-            `theme:${theme.name} (${mode}, large): ${fg} vs ${bg} = ${ratio.toFixed(2)}:1 (need >=${AA_LARGE}:1)`,
+            `theme:${theme.name} (${mode}, ${band}): ${fg} vs ${bg} = ${ratio.toFixed(2)}:1 (need >=${threshold}:1)`,
           );
         }
       }

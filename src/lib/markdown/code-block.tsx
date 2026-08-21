@@ -18,6 +18,7 @@
  */
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { JSX } from "react";
 import { cn } from "../cn.js";
 
 export interface CodeBlockProps {

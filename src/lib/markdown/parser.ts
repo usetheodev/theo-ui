@@ -83,7 +83,14 @@ export async function hastToReact(
     Fragment,
     jsx,
     jsxs,
-    components,
+    // `components` is `Record<string, unknown>` on our public surface and
+    // `Partial<Components>` here. It cannot be typed as the latter: `hast-util-to-jsx-runtime`
+    // is an OPTIONAL peer, so naming its types in our published API would make them a hard
+    // requirement for every consumer, including the ones who never render markdown. Under
+    // React 18's types the two were structurally compatible and this went unnoticed; React
+    // 19 tightened the value union and they no longer are. The cast is the adapter at that
+    // boundary — the runtime contract is unchanged, and toJsxRuntime validates what it gets.
+    components: components as Parameters<typeof toJsxRuntime>[1]["components"],
   }) as ReactElement;
 }
 

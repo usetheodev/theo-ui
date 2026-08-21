@@ -72,12 +72,54 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - name: Install (baseline lockfile)
-        run: pnpm install --frozen-lockfile
-
-      - name: Override React to 19
+      # React 19 is pinned into package.json and BOTH the lockfile and node_modules are
+      # removed, so the tree resolves from scratch with the overrides already in place.
+      #
+      # Every cheaper variant was tried and measured, and each left TWO copies of
+      # @types/react — 18.3.28 for `@usetheo/ui`'s peer alongside 19.2.18 at the root:
+      #
+      #   pnpm add -D react@^19 ...                        -> 2 copies   (the original)
+      #   + pnpm.overrides, install over the lockfile      -> 2 copies
+      #   + delete pnpm-lock.yaml, keep node_modules       -> 2 copies
+      #   + delete node_modules as well                    -> 1 copy     OK
+      #
+      # pnpm does not prune a store entry that an existing node_modules still points at, so
+      # the stale resolution survives everything short of removing it. Two copies means two
+      # `ReactNode` unions, and every value crossing between them fails to assign — which is
+      # what produced five phantom `bigint` errors here for months, while hiding 21 real
+      # ones. See usetheokit/theokit-ui#45.
+      #
+      # There is no separate baseline install: this job never uses the locked tree, and
+      # installing one only to delete it wasted a minute per run.
+      #
+      # The trade-off is deliberate. Resolving afresh means this is not byte-for-byte the
+      # tree that ships — which is what a compatibility probe wants, since the question is
+      # whether this SOURCE works against React 19, not whether today's lockfile does. The
+      # shipping tree is what `quality:gates` verifies, on the locked install, in the job
+      # above.
+      - name: Install with React 19 across the whole tree
         run: |
-          pnpm add -D react@^19 react-dom@^19 @types/react@^19 @types/react-dom@^19
+          pnpm pkg set \
+            "devDependencies.react=^19" \
+            "devDependencies.react-dom=^19" \
+            "devDependencies.@types/react=^19" \
+            "devDependencies.@types/react-dom=^19" \
+            "pnpm.overrides.react=^19" \
+            "pnpm.overrides.react-dom=^19" \
+            "pnpm.overrides.@types/react=^19" \
+            "pnpm.overrides.@types/react-dom=^19"
+          rm -rf pnpm-lock.yaml node_modules
+          pnpm install --no-frozen-lockfile
+
+      - name: Assert a single copy of @types/react
+        run: |
+          copies=$(ls -d node_modules/.pnpm/@types+react@* 2>/dev/null | wc -l)
+          echo "@types/react copies in the tree: $copies"
+          ls -d node_modules/.pnpm/@types+react@* 2>/dev/null || true
+          if [ "$copies" -ne 1 ]; then
+            echo "::error::Expected exactly 1 copy of @types/react; found $copies. Any type error below would be an artifact of the install, not a React 19 finding."
+            exit 1
+          fi
 
       - name: Typecheck against React 19
         run: pnpm typecheck
