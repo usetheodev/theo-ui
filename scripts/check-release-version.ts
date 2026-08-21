@@ -58,8 +58,8 @@ async function main(): Promise<void> {
     // Never pass on an unreachable registry: "could not check" is not "checked and clean",
     // and a publish gate that waves through when its input is missing protects nothing.
     console.error(
-      `✗ Could not reach the npm registry to check ${pkg.name}. Refusing to report this ` +
-        "version as safe to publish. Re-run with network access.",
+      `✗ Could not reach the npm registry to check ${pkg.name}. Refusing to report this \
+version as safe to publish. Re-run with network access.`,
     );
     process.exit(2);
   }
@@ -78,9 +78,8 @@ async function main(): Promise<void> {
 
   if (report.candidateAlreadyPublished) {
     console.error(
-      `\n✗ ${pkg.name}@${pkg.version} is already on the registry. Publishing would be ` +
-        "rejected, and tagging it would label this content with a version that means " +
-        "something else.",
+      `\n✗ ${pkg.name}@${pkg.version} is already on the registry. Publishing would be rejected, \
+and tagging it would label this content with a version that means something else.`,
     );
     console.error(`  Latest published: ${report.latestPublished ?? "(none)"}`);
     console.error("  Pick the next version explicitly rather than deriving it from git tags.");
