@@ -45,3 +45,60 @@ export function findUncoveredControlClasses(sources: readonly string[], css: str
   const unescaped = css.replace(/\\/g, "");
   return extractControlClasses(sources).filter((cls) => !unescaped.includes(`.${cls}`));
 }
+
+/** The CSS property each control-class utility prefix sets. */
+const UTILITY_PROPERTY: Record<string, string> = {
+  h: "height",
+  w: "width",
+  px: "padding-inline",
+  py: "padding-block",
+  p: "padding",
+  size: "inline-size",
+};
+
+/**
+ * A safety net for peer versions we did not build against.
+ *
+ * The exact selectors Tailwind emits match one arbitrary value each, so a peer that changes
+ * a default — 0.22.0's `2.25rem` became `2rem` in 0.35.1 — renders the control with no rule
+ * at all. An attribute-substring selector matches the class whatever the fallback says.
+ *
+ * Emitted BEFORE Tailwind's own output and at equal specificity, so where an exact rule
+ * exists it wins on source order and nothing changes for a version we did scan. Verified in
+ * a browser: with both present, `w-[var(--theo-control-h,2rem)]` computes 32px from the
+ * exact rule while an unseen `w-[var(--theo-control-h,3rem)]` computes 36px from the net.
+ *
+ * The trade-off, stated plainly: for a peer version we have not scanned, the control gets
+ * OUR default rather than that version's. Nobody defines `--theo-control-h` — not this
+ * package and not the peer — so the fallback in the class name IS the default, and no CSS
+ * can read it back out. Approximately right beats unstyled, and the build gate above still
+ * fails loudly whenever the peer we resolved is not covered. See usetheokit/theokit-ui#50.
+ */
+export function buildControlClassFallbackLayer(classes: readonly string[]): string {
+  const seen = new Set<string>();
+  const rules: string[] = [];
+
+  for (const cls of [...classes].sort()) {
+    const match = cls.match(/^([a-z-]+)-\[var\((--theo-[a-z-]+),\s*([^)]*)\)\]$/);
+    if (!match) continue;
+    const [, utility, variable, fallback] = match as unknown as [string, string, string, string];
+    const property = UTILITY_PROPERTY[utility];
+    if (!property || seen.has(`${utility}|${variable}`)) continue;
+    seen.add(`${utility}|${variable}`);
+    rules.push(
+      `  [class*="${utility}-[var(${variable}"] { ${property}: var(${variable}, ${fallback}); }`,
+    );
+  }
+
+  if (rules.length === 0) return "";
+  return [
+    "/* Version-independent net for @usetheo/ui control classes — see",
+    "   scripts/lib/control-class-coverage.ts and usetheokit/theokit-ui#50.",
+    "   Declared before Tailwind's output so an exact rule wins on source order. */",
+    "@layer theme, base, components, utilities;",
+    "@layer utilities {",
+    ...rules,
+    "}",
+    "",
+  ].join("\n");
+}
