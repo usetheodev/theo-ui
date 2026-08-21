@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`CODE_OF_CONDUCT.md`, `.editorconfig`, `.ls-lint.yml` e `assets/banner.svg`,** alinhando o conjunto de documentos e ferramental com o `theokit-sdk`. O Código de Conduta é o do SDK sem alteração — ele já vale para todo o `@theokit/*` e não citava nada específico daquele pacote. O `.ls-lint.yml` trava a convenção de nomes de arquivo, que já era honrada por 538 de 538 arquivos sem nada enforçando; agora uma regressão falha em vez de ser descoberta numa review. O banner foi escrito para este pacote a partir dos tokens do tema Violet Forge, não copiado — o do SDK é branded como "TheoKit SDK" —, e o README o referencia por URL absoluta, porque o npmjs.com não resolve caminho relativo de imagem e este README é o do pacote publicado.
+
+- **Um gate novo confere que cada regra do `.ls-lint.yml` aponta para um diretório que existe.** O `ls-lint` sai 0 quando uma regra não casa com nada: ele varre a árvore, não encontra ninguém e reporta sucesso. Uma renomeação de pasta aposentaria o gate de nomenclatura em silêncio, com um check verde como único sinal.
+
 ### Fixed
 
 - **Os gates regeneravam o registry e validavam a própria saída, então a defasagem contra o `src/` era invisível.** `pnpm quality:gates` rodava `registry:build && registry:validate`: a CI sobrescrevia os artefatos no workspace dela e conferia o que acabara de escrever, sem nunca comparar com o que está commitado — foi assim que `registry/r/theme-script.json` ficou quatro dias entregando a versão anterior à correção de FOUC. O `build-registry.ts` ganhou `--check`, que constrói em memória, não escreve nada, compara byte a byte com o disco e falha listando os artefatos defasados. Os dois gates passaram a usá-lo. Falha também quando inspeciona zero itens, para que um bug de descoberta não passe como conferência limpa.

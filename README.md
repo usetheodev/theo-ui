@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="https://usetheo.dev/logo-128.webp" alt="Theo" width="96" height="96" />
+<!-- Absolute raw.githubusercontent URL on purpose: this README IS the npm package
+     README, and npmjs.com does not resolve repository-relative image paths. -->
+<img src="https://raw.githubusercontent.com/usetheokit/theokit-ui/main/assets/banner.svg" alt="@theokit/ui — React components for AI-agent surfaces" width="840" />
 
 **`@theokit/ui`** · the **Build** (UI) auxiliary of the [Theo ecosystem](https://usetheo.dev)
 

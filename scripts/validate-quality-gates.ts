@@ -679,6 +679,54 @@ async function validateCountConsistency(): Promise<void> {
  * against — if the badge is missing, that is `validateCountConsistency`'s failure to
  * report, not this one's.
  */
+/**
+ * Every path `.ls-lint.yml` names must still exist.
+ *
+ * ls-lint exits 0 when a rule targets a directory that is not there: it walks the tree,
+ * matches nothing, and reports success. So a rename can silently retire the naming gate
+ * and the only visible signal is a green check. This is the same shape as an
+ * architecture rule pointing at a moved directory — the tool cannot tell "compliant"
+ * from "never looked".
+ *
+ * Rather than parse YAML for one key, this reads the top-level entries under `ls:` and
+ * asserts each resolves. Glob suffixes (`src/**`) are stripped to their directory.
+ */
+function validateLsLintTargets(): void {
+  const configPath = join(ROOT, ".ls-lint.yml");
+  if (!existsSync(configPath)) {
+    fail(".ls-lint.yml", "missing — the file-naming gate has no rules to run");
+    return;
+  }
+  const lines = readFileSync(configPath, "utf-8").split("\n");
+  const lsIndex = lines.findIndex((line) => line.trimEnd() === "ls:");
+  if (lsIndex === -1) {
+    fail(".ls-lint.yml", "has no top-level `ls:` block; ls-lint would check nothing and exit 0");
+    return;
+  }
+
+  let targets = 0;
+  for (const line of lines.slice(lsIndex + 1)) {
+    if (/^\S/.test(line)) break; // next top-level key (`ignore:`) ends the block
+    const match = line.match(/^ {2}(\S+):\s*$/);
+    if (!match?.[1]) continue;
+    targets += 1;
+    const dir = match[1].replace(/\/\*+$/, "");
+    if (!existsSync(join(ROOT, dir))) {
+      fail(
+        ".ls-lint.yml",
+        `rule targets \`${match[1]}\` but ${dir}/ does not exist. ls-lint exits 0 when a rule \
+matches nothing, so this retires the naming gate without failing it.`,
+      );
+    }
+  }
+  if (targets === 0) {
+    fail(
+      ".ls-lint.yml",
+      "`ls:` block declares no targets; ls-lint would exit 0 having checked nothing",
+    );
+  }
+}
+
 async function validateReadmeProseCounts(): Promise<void> {
   const readme = readFileSync(join(ROOT, "README.md"), "utf-8");
 
@@ -1087,6 +1135,7 @@ async function main(): Promise<void> {
   await validatePublicExports();
   await validateCountConsistency();
   await validateReadmeProseCounts();
+  validateLsLintTargets();
   await validateArchitectureCensus();
   await validateAxeCoverage();
   await validateUseClientDirective();

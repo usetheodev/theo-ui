@@ -6,6 +6,9 @@ strategic context (mission, narrative, four pillars) lives in this repo's
 RFCs, quality gates) in `wiki/` — see `wiki/index.md`. This file is about the
 day-to-day mechanics of shipping code to `@theokit/ui`.
 
+By taking part you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). Security
+problems do **not** go in an issue — see [SECURITY.md](./SECURITY.md).
+
 ---
 
 ## TL;DR
