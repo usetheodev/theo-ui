@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Workflow Lint`, a CI gate running actionlint and zizmor over `.github/workflows/` (#54)
+
+### Changed
+
+- **Breaking:** the minimum supported Node is 22.12.0, was 20. Node 20 reached end of life, and
+  the workflows already disagreed with each other — two ran 20, two ran 22 (#54)
+- The Ladle catalog deploys through `cloudflare/wrangler-action`. The previous action was
+  archived by Cloudflare with a notice pointing at this replacement (#54)
+
+### Fixed
+
+- `@theokit/ui` can publish again. The package had no npm trusted-publisher connection, so the
+  publish answered `E404 Not Found - PUT` — npm returns 404 rather than 403 for an unauthorised
+  publish to a scoped package, so the error never said what was wrong. Published versions will
+  now carry a provenance attestation (#54)
+
+### Security
+
+- The registry deploy no longer grants `pages: write` and `id-token: write` to the build job,
+  which runs project code and third-party dependencies. They sit on the deploy job alone (#54)
+- The job that publishes to npm restores no dependency cache; a cache entry written by a
+  pull-request run was restorable there (#54)
+- Every GitHub Action is pinned to a commit SHA rather than a movable tag (#54)
+
+### Added
+
 - **O CSS publicado passou a dimensionar os controles do `@usetheo/ui` em qualquer versão do peer dentro da faixa declarada.** Os seletores que o Tailwind emite casam um valor arbitrário cada, então quando o default do icon Button mudou de `2.25rem` (0.22.0) para `2rem` (0.35.1) o seletor deixou de casar e o botão renderizava **sem largura nem altura** — as duas versões dentro do `>=0.22.0 <1` que publicamos. O `components.css` agora traz uma rede por seletor de atributo (`[class*="w-[var(--theo-control-h"]`) que casa independente do fallback, emitida **antes** da saída do Tailwind e com a mesma especificidade, de modo que a regra exata vence por ordem de origem quando existe. Verificado em navegador contra o CSS real: versão escaneada 36px pela regra exata, 0.35.1 e uma versão futura dimensionadas pela rede em vez de `auto`. O custo, declarado: numa versão que não escaneamos o controle recebe o nosso default, não o dela — ninguém define `--theo-control-h`, então o fallback no nome da classe **é** o default e nenhum CSS consegue lê-lo de volta. Aproximadamente certo é melhor que sem estilo, e o gate do build continua falhando alto quando o peer resolvido não está coberto. (usetheokit/theokit-ui#50)
 
 - **O build recusa publicar um `components.css` que não cobre o peer contra o qual foi gerado.** O `@usetheo/ui` não distribui CSS nenhum — nem na 0.22.0 nem na 0.35.1 —, então nós precompilamos as utilities dele varrendo seu dist no NOSSO build, e os seletores emitidos carregam os literais de classe daquela versão. Esses literais embutem um valor default: entre 0.22.0 e 0.35.1 o icon Button passou de `w-[var(--theo-control-h,2.25rem)]` para `2rem`, e seletor de valor arbitrário casa exato — o botão perde largura e altura. As duas versões estão dentro da faixa de peer que publicamos. O build agora falha listando as classes descobertas, em vez de emitir CSS que não aplica. Não resolve o acoplamento (usetheokit/theokit-ui#50 tem as opções); impede que ele chegue silenciosamente ao consumidor.
