@@ -72,8 +72,13 @@ describe.skipIf(!distBuilt)(
       const mod = await import(pathToFileURL(DIST("vite-plugin.js")).href);
       const result = (mod.default as () => unknown)();
       const normalized = normalizePluginReturn(result);
-      expect(normalized).not.toBeNull();
-      expect(normalized!.length).toBeGreaterThan(0);
+      // A plain `expect(...).not.toBeNull()` asserts but does not narrow, which is why the
+      // next line used to need a non-null assertion. Throwing narrows for the type checker
+      // and reports the same failure with the reason attached.
+      if (normalized === null) {
+        throw new Error("normalizePluginReturn returned null for the default export");
+      }
+      expect(normalized.length).toBeGreaterThan(0);
     });
 
     it("factory({ tailwind: false }) does not throw", async () => {

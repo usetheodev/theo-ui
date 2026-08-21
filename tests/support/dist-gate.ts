@@ -24,9 +24,12 @@ export const distRequired = process.env.THEOKIT_REQUIRE_DIST === "1";
 export function assertDistPresent(present: boolean, artifact: string): void {
   if (distRequired && !present) {
     throw new Error(
-      `${artifact} is missing while THEOKIT_REQUIRE_DIST=1. Run \`pnpm build\` before ` +
-        "the publish gate — refusing to report a dist contract suite as passing when it " +
-        "would assert nothing.",
+      // One template literal, wrapped with line continuations: concatenating a template
+      // with plain strings is what `useTemplate` flags, and splitting it into several
+      // uninterpolated templates then trips `noUnusedTemplateLiteral`.
+      `${artifact} is missing while THEOKIT_REQUIRE_DIST=1. Run \`pnpm build\` before \
+the publish gate — refusing to report a dist contract suite as passing when it would \
+assert nothing.`,
     );
   }
 }

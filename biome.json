@@ -1,13 +1,20 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "vcs": {
-    "enabled": false,
+    "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false,
-    "ignore": ["dist", "node_modules", ".ladle/dist", "tests/fixture-shadcn-app/src"]
+    "ignoreUnknown": true,
+    "ignore": [
+      "dist",
+      "node_modules",
+      ".ladle/dist",
+      "tests/fixture-shadcn-app/src",
+      "registry",
+      "component-inventory.json"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -72,7 +79,8 @@
         "**/*.test.tsx",
         "**/*.test.ts",
         "scripts/**/*.ts",
-        "scripts/**/*.mjs"
+        "scripts/**/*.mjs",
+        "codemod/**/*.mjs"
       ],
       "linter": {
         "rules": {
