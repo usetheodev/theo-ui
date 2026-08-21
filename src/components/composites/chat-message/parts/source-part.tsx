@@ -3,6 +3,7 @@
  * `source-document` citations as compact link chips.
  */
 import { ExternalLinkIcon, FileTextIcon } from "lucide-react";
+import type { JSX } from "react";
 import { cn } from "../../../../lib/cn.js";
 import { safeHref } from "../../../../lib/safe-href.js";
 import type { SourceDocumentUIPart, SourceUrlUIPart } from "../../../../types/chat.js";

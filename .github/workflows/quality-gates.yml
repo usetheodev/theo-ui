@@ -75,9 +75,42 @@ jobs:
       - name: Install (baseline lockfile)
         run: pnpm install --frozen-lockfile
 
-      - name: Override React to 19
+      # `pnpm add -D` alone is NOT enough, and for months it made this job lie.
+      #
+      # It bumps the ROOT dependencies and leaves every transitive peer resolution where the
+      # lockfile put it. `@usetheo/ui` is a required peer whose own `@types/react` stayed at
+      # 18, so the tree ended up with TWO copies (measured 2026-08-21: 18.3.28 and 19.2.18).
+      # Two copies means two different `ReactNode` unions, and every value crossing between
+      # them fails to assign — producing 5 phantom `Type 'bigint' is not assignable to type
+      # 'ReactNode'` errors that say nothing about React 19 compatibility.
+      #
+      # Worse, they masked the real ones. With a coherent single-copy tree the same commit
+      # reported 24 errors, of which 21 were the real React 19 break (the global `JSX`
+      # namespace was removed). The job was UNDER-reporting incompatibility while appearing
+      # to over-report it. See usetheokit/theokit-ui#45.
+      #
+      # `pnpm.overrides` forces one copy across the whole graph, transitive peers included.
+      - name: Override React to 19 across the whole tree
         run: |
+          pnpm pkg set \
+            "pnpm.overrides.react=^19" \
+            "pnpm.overrides.react-dom=^19" \
+            "pnpm.overrides.@types/react=^19" \
+            "pnpm.overrides.@types/react-dom=^19"
           pnpm add -D react@^19 react-dom@^19 @types/react@^19 @types/react-dom@^19
+          pnpm install --no-frozen-lockfile
+
+      # Fail loudly on a tree this job cannot draw a conclusion from, rather than reporting
+      # whatever a mixed install happens to produce.
+      - name: Assert a single copy of @types/react
+        run: |
+          copies=$(ls -d node_modules/.pnpm/@types+react@* 2>/dev/null | wc -l)
+          echo "@types/react copies in the tree: $copies"
+          ls -d node_modules/.pnpm/@types+react@* 2>/dev/null || true
+          if [ "$copies" -ne 1 ]; then
+            echo "::error::Expected exactly 1 copy of @types/react; found $copies. Any type error below would be an artifact of the install, not a React 19 finding."
+            exit 1
+          fi
 
       - name: Typecheck against React 19
         run: pnpm typecheck

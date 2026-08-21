@@ -7,6 +7,7 @@
  * keyboard accessible by default, persists state via the DOM.
  */
 import { BrainCircuitIcon } from "lucide-react";
+import type { JSX } from "react";
 import { cn } from "../../../../lib/cn.js";
 import type { ReasoningUIPart } from "../../../../types/chat.js";
 import { ChatMessageResponse } from "../chat-message-response.js";

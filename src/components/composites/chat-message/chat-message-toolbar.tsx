@@ -3,6 +3,7 @@
  * Forked from `vercel/ai-elements` `<MessageToolbar>` (Apache-2.0, NOTICE).
  */
 import type { HTMLAttributes } from "react";
+import type { JSX } from "react";
 import { cn } from "../../../lib/cn.js";
 
 export type ChatMessageToolbarProps = HTMLAttributes<HTMLDivElement>;

@@ -10,6 +10,7 @@ import { Button } from "@usetheo/ui";
  * proper Tooltip primitive lands in a follow-up RFC).
  */
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
+import type { JSX } from "react";
 import { cn } from "../../../lib/cn.js";
 
 export type ChatMessageActionsProps = HTMLAttributes<HTMLDivElement>;
