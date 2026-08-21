@@ -108,6 +108,20 @@ jobs:
             "pnpm.overrides.react-dom=^19" \
             "pnpm.overrides.@types/react=^19" \
             "pnpm.overrides.@types/react-dom=^19"
+          # Pin every OTHER peer to what the lockfile resolved, so this job changes exactly
+          # one variable. Dropping the lockfile re-resolves the whole graph, which quietly
+          # turned this into a "React 19 + newest everything" probe: CI picked
+          # @usetheo/ui@0.35.1 where the lockfile pins 0.22.0, and the failure that produced
+          # was a real defect about peer drift (#50) wearing a React 19 label. One job, one
+          # question.
+          USETHEO_UI=$(grep -A2 "'@usetheo/ui':" pnpm-lock.yaml | grep 'version:' | head -1 | sed 's/.*version: //; s/(.*//')
+          if [ -z "$USETHEO_UI" ]; then
+            echo "::error::Could not read the locked @usetheo/ui version from pnpm-lock.yaml. Refusing to resolve it freely — that would make this job test more than React 19."
+            exit 1
+          fi
+          echo "Pinning @usetheo/ui to the locked $USETHEO_UI"
+          pnpm pkg set "pnpm.overrides.@usetheo/ui=$USETHEO_UI"
+
           rm -rf pnpm-lock.yaml node_modules
           pnpm install --no-frozen-lockfile
 
