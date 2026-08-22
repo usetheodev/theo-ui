@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Workflow Lint`, a CI gate running actionlint and zizmor over `.github/workflows/` (#54)
+
+### Changed
+
+- **Breaking:** the minimum supported Node is 22.12.0, was 20. Node 20 reached end of life, and
+  the workflows already disagreed with each other — two ran 20, two ran 22 (#54)
+- The Ladle catalog deploys through `cloudflare/wrangler-action`. The previous action was
+  archived by Cloudflare with a notice pointing at this replacement (#54)
+
+### Fixed
+
+- `@theokit/ui` can publish again. The package had no npm trusted-publisher connection, so the
+  publish answered `E404 Not Found - PUT` — npm returns 404 rather than 403 for an unauthorised
+  publish to a scoped package, so the error never said what was wrong. Published versions will
+  now carry a provenance attestation (#54)
+
+### Security
+
+- The registry deploy no longer grants `pages: write` and `id-token: write` to the build job,
+  which runs project code and third-party dependencies. They sit on the deploy job alone (#54)
+- The job that publishes to npm restores no dependency cache; a cache entry written by a
+  pull-request run was restorable there (#54)
+- Every GitHub Action is pinned to a commit SHA rather than a movable tag (#54)
+
+### Added
+
 - **O CSS publicado passou a dimensionar os controles do `@usetheo/ui` em qualquer versão do peer dentro da faixa declarada.** Os seletores que o Tailwind emite casam um valor arbitrário cada, então quando o default do icon Button mudou de `2.25rem` (0.22.0) para `2rem` (0.35.1) o seletor deixou de casar e o botão renderizava **sem largura nem altura** — as duas versões dentro do `>=0.22.0 <1` que publicamos. O `components.css` agora traz uma rede por seletor de atributo (`[class*="w-[var(--theo-control-h"]`) que casa independente do fallback, emitida **antes** da saída do Tailwind e com a mesma especificidade, de modo que a regra exata vence por ordem de origem quando existe. Verificado em navegador contra o CSS real: versão escaneada 36px pela regra exata, 0.35.1 e uma versão futura dimensionadas pela rede em vez de `auto`. O custo, declarado: numa versão que não escaneamos o controle recebe o nosso default, não o dela — ninguém define `--theo-control-h`, então o fallback no nome da classe **é** o default e nenhum CSS consegue lê-lo de volta. Aproximadamente certo é melhor que sem estilo, e o gate do build continua falhando alto quando o peer resolvido não está coberto. (usetheokit/theokit-ui#50)
 
 - **O build recusa publicar um `components.css` que não cobre o peer contra o qual foi gerado.** O `@usetheo/ui` não distribui CSS nenhum — nem na 0.22.0 nem na 0.35.1 —, então nós precompilamos as utilities dele varrendo seu dist no NOSSO build, e os seletores emitidos carregam os literais de classe daquela versão. Esses literais embutem um valor default: entre 0.22.0 e 0.35.1 o icon Button passou de `w-[var(--theo-control-h,2.25rem)]` para `2rem`, e seletor de valor arbitrário casa exato — o botão perde largura e altura. As duas versões estão dentro da faixa de peer que publicamos. O build agora falha listando as classes descobertas, em vez de emitir CSS que não aplica. Não resolve o acoplamento (usetheokit/theokit-ui#50 tem as opções); impede que ele chegue silenciosamente ao consumidor.
@@ -23,6 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **A suíte deixou de reivindicar todos os núcleos da máquina.** O `vitest.config.ts` não limitava workers, então o default valia: `os.availableParallelism()`, que numa máquina de 12 threads são **12 forks**, cada um subindo um `happy-dom` inteiro. Um `pnpm test` sozinho já ocupava todos os núcleos, e como `quality:gates` é uma cadeia serial de 25 gates, bastava um segundo pool aparecer — um `vitest list --json` esquecido por um runner morto — para pôr **24 forks disputando 12 núcleos**. Medido em 2026-08-21: load average 33,89 e 69% de pressão de CPU, com o desktop inutilizável. O teto agora deixa 4 núcleos livres (`Math.max(2, cpus().length - 4)`), e **não custa tempo de parede**: a suíte completa roda em 73,96s contra 74,36s com 12 forks, com o load caindo de 20+ para 7,3. A fórmula, e não o 4 medido: o 4 valia para a máquina onde foi medido, e fixar a contagem de um host num repo que também roda em runners de CI de todo tamanho é como um teto vira gargalo — nesta máquina de 12 threads a fórmula resolve para 8, e a comparação 4-vs-12 mostrou que o ganho nessa faixa já era ruído. O ganho de paralelismo já não existia porque a máquina satura antes — os 60-100x por teste registrados no comentário de `testTimeout` foram medidos exatamente sob esse colapso, e não sob contenção normal, o que muda a leitura de usetheokit/theokit-ui#51. A opção é declarada no nível de `test`, não em `poolOptions`: o vitest 4 removeu `poolOptions`, e a grafia antiga é aceita-e-ignorada — emite um `DEPRECATED` e continua abrindo 12 forks. (usetheokit/theokit-ui#51)
+
 - **Dois testes deixaram de derrotar o teto de timeout que existe justamente para eles.** O `vitest.config.ts` fixa `testTimeout: 20000` com a justificativa escrita de que "um import dinâmico frio de um barril pesado pode exceder o default de 5s do vitest sob contenção da suíte". O teste do Mermaid carregava orçamento próprio de 10s e um `waitFor` de 5s, e um do `<Slide>` um `waitFor` de 3s — todos **abaixo** desse teto, então a decisão global nunca se aplicava a eles e os dois falhavam em máquina carregada. Os overrides locais foram removidos; o teto não foi aumentado. A medição de "5078ms" registrada no config também estava desatualizada por ordem de grandeza: remedida, a mesma família chega a 47750ms, o que é problema de performance e não de timeout, e está registrado como tal. (usetheokit/theokit-ui#51)
 
 - **O workflow de release passou a explicar a própria falha.** As dez execuções dele já falharam do mesmo jeito, com um erro que não diz o motivo: `npm error 404 Not Found - PUT`, depois de a proveniência ter sido gerada. O npm responde 404 em vez de 403 para publicação não autorizada em pacote com escopo, para não revelar se ele existe — então "not in this registry" lê como pacote inexistente quando significa token sem permissão. O passo agora imprime esse diagnóstico ao falhar, com o ponteiro para a configuração de trusted publisher, em vez de deixar quem for depurar re-derivá-lo de um ano de logs. A causa raiz continua fora deste repositório. (usetheokit/theokit-ui#46)
@@ -36,6 +64,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **O contraste de rótulo de botão passou a ser garantido em AA nos temas nossos, e a exceção dos temas-espelho está declarada.** `violet-forge` e `falcon-red` agora são verificados contra 4,5:1 — o limite do WCAG para texto normal, que é o que um rótulo de botão é — nos pares `primary`, `secondary` e `destructive`; o gate `quality:contrast` passou a rodar nas duas cadeias de gates, o que antes não acontecia. Os sete temas da RFC 0007 existem para reproduzir a paleta de outro produto e cinco deles ficam abaixo de 4,5:1 em `primary` (anthropic-style escuro 3,03; openai-style claro 3,22; github-dark escuro 3,44; vercel-mono escuro 3,61; linear-glass escuro 3,70) — subir o piso deles seria deixar de reproduzir o que eles existem para reproduzir, então continuam em 3:1, agora com a lista e as medições escritas no código. **Quem escolhe um desses temas deve saber que o rótulo de botão não atende AA para texto normal.** Um par nosso também não atende e está registrado em aberto: `accent-foreground` sobre `accent` mede 3,83:1 em `violet-forge` nos dois modos (usetheokit/theokit-ui#47). (usetheokit/theokit-ui#26)
 
 ### Fixed
+
+- **O release nunca conseguiu publicar porque o npm do job era velho demais para fazer OIDC.** As dez execuções do workflow falharam com `E404 Not Found - PUT`, e o erro não diz o motivo: o npm responde 404 em vez de 403 para publicação não autorizada em pacote com escopo, de propósito, para não revelar que ele existe. O OIDC trusted publishing entrou no **npm 11.5.1**, e o Node 22 traz o **10.9.7**, que não tem código de OIDC nenhum — medido desempacotando os tarballs e procurando `ACTIONS_ID_TOKEN_REQUEST_URL`: 10.9.7 → 0 arquivos, 11.5.1 → 2. Sem isso o CLI publica sem autenticação. O job passou a atualizar o npm antes de publicar, e a mensagem de falha manda conferir a versão do CLI antes do binding. O `theokit-plugins` publica com OIDC puro, sem token, e seus pacotes têm `attestations` — o binding sempre funcionou neste org; faltava esta linha. (usetheokit/theokit-ui#46)
+
+- **O `SECURITY.md` passou a declarar que nenhuma versão publicada tem attestation de proveniência.** Quem confere hoje encontra `signatures` — que o registry adiciona automaticamente a todo pacote e que não é proveniência — e nenhuma chave `attestations`, em todas as versões. O documento agora explica a causa e diz o que não tem conserto: a attestation é ligada ao hash de um tarball imutável, então nenhuma versão já publicada vai receber uma. Para verificar a origem de um build hoje, verifique a tag e a árvore que ela aponta.
 
 - **O pacote não compilava sob React 19, apesar de o `peerDependencies` já declarar `>=18.2.0 <20`.** O `@types/react` do React 19 removeu o namespace global `JSX`, e 13 arquivos usavam `JSX.Element` sem importar o tipo — 21 erros de compilação para qualquer consumidor em React 19. Somam-se a isso o `ChannelCardProps`, que redeclarava `onToggle` colidindo com o `ToggleEventHandler` que o React 19 acrescentou a `HTMLAttributes`, e o mapa `components` repassado ao `hast-util-to-jsx-runtime`, cuja união de valores foi estreitada. Os 13 arquivos passaram a importar `JSX` de `react` — o padrão que quatro arquivos do repo já usavam, válido nas duas majors —, o `ChannelCardProps` passou a omitir o `onToggle` herdado, e a conversão no limite do `toJsxRuntime` está documentada (o tipo público não pode citar um peer opcional). `tsc --noEmit` numa árvore React 19 coerente sai de 24 erros para 0, e React 18 segue em 0. (usetheokit/theokit-ui#45)
 

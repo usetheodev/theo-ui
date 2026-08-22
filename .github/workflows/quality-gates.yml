@@ -10,6 +10,12 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: quality-gates-${{ github.ref }}
+  # A cancelled run on an integration branch leaves the commit with no verdict,
+  # which reads the same as a passing one. Only supersede elsewhere.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+
 jobs:
   quality-gates:
     name: quality:gates
@@ -18,17 +24,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           run_install: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: pnpm
 
       - name: Install
@@ -59,17 +67,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           run_install: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: pnpm
 
       # React 19 is pinned into package.json and BOTH the lockfile and node_modules are
@@ -127,9 +137,12 @@ jobs:
 
       - name: Assert a single copy of @types/react
         run: |
-          copies=$(ls -d node_modules/.pnpm/@types+react@* 2>/dev/null | wc -l)
+          # `find -maxdepth 1` rather than `ls`: ls formats for a human and its output
+          # cannot be counted safely once a name carries a space or a newline. These
+          # names never do, but the gate should not depend on that staying true.
+          copies=$(find node_modules/.pnpm -maxdepth 1 -name '@types+react@*' | wc -l)
           echo "@types/react copies in the tree: $copies"
-          ls -d node_modules/.pnpm/@types+react@* 2>/dev/null || true
+          find node_modules/.pnpm -maxdepth 1 -name '@types+react@*' || true
           if [ "$copies" -ne 1 ]; then
             echo "::error::Expected exactly 1 copy of @types/react; found $copies. Any type error below would be an artifact of the install, not a React 19 finding."
             exit 1
