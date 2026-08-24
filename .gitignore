@@ -82,7 +82,7 @@ referencia/
 
 # npm pack artifacts (publint creates these during quality:gates)
 *.tgz
-src/styles/node_modules/
+packages/ui/src/styles/node_modules/
 test-results/
 .npmrc
 
@@ -96,4 +96,4 @@ ds-bundle/
 .design-sync/
 
 # Generated at CSS precompile time (build-precompiled-css.ts) — never committed
-src/styles/components-entry.generated.css
+packages/ui/src/styles/components-entry.generated.css

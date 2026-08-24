@@ -80,10 +80,30 @@ async function ensureTailwindV4Resolvable(): Promise<void> {
   // wins the resolution race. Idempotent.
   const stylesNm = join(ROOT, "src/styles/node_modules");
   const linkPath = join(stylesNm, "tailwindcss");
-  const v4Target = join(ROOT, "node_modules/.pnpm/tailwindcss@4.3.0/node_modules/tailwindcss");
-  if (!existsSync(v4Target)) {
+  // Resolve the v4 copy through Node's module algorithm, for the same reason
+  // `resolveTailwindCliBinary` does: it is the only package-manager-agnostic contract.
+  // The previous `ROOT/node_modules/.pnpm/tailwindcss@4.3.0/...` literal encoded both a
+  // version and a store location, and a pnpm workspace puts `.pnpm` at the workspace
+  // root rather than inside the package — so it resolved to nothing here.
+  //
+  // Resolution starts FROM `@tailwindcss/cli`, never from this script: this tree also
+  // carries a v3 copy (`tailwindcss-animate`'s peer), and resolving from here would
+  // find it first — which is the very collision this symlink exists to break.
+  const req = createRequire(import.meta.url);
+  const reqFromCli = createRequire(req.resolve("@tailwindcss/cli/package.json"));
+  let v4Target: string;
+  try {
+    v4Target = dirname(reqFromCli.resolve("tailwindcss/package.json"));
+  } catch (cause) {
     throw new Error(
-      `[build-precompiled-css] tailwindcss@4 not found at expected pnpm path ${v4Target}. Run \`pnpm install\`.`,
+      "[build-precompiled-css] tailwindcss could not be resolved from @tailwindcss/cli. Run `pnpm install`.",
+      { cause },
+    );
+  }
+  const { version } = req(join(v4Target, "package.json")) as { version: string };
+  if (!version.startsWith("4.")) {
+    throw new Error(
+      `[build-precompiled-css] expected tailwindcss@4 beside @tailwindcss/cli, resolved ${version} at ${v4Target}. The symlink below exists to make v4 win the resolution race against the v3 copy; pointing it at v3 would defeat it.`,
     );
   }
   await mkdir(stylesNm, { recursive: true });

@@ -1,126 +1,141 @@
 name: Release
 
-# Per technical-hardening-sprint plan v1.1 T1.1 (NEW) + ADR D1:
-# theo-ui ships 1 root package (@theokit/ui) — simple npm publish single-pkg pattern.
-# OIDC trusted-publisher binding (configured at npmjs.com/package/@theokit/ui/settings)
-# attests provenance automatically. NPM_TOKEN intentionally NOT used —
-# per EC-2 absorbed, token env disables OIDC silently.
-
+# theokit-ui: `@theokit/ui`. Changesets-driven release, matching the other publishable
+# repositories in the framework (theokit-sdk, -di, -plugins, -studio, -gateways).
+#
+# WHAT THIS REPLACED, and why the replacement is not cosmetic. The previous workflow fired
+# on a `v*` tag and ran `npm publish` against whatever version happened to be in the
+# manifest. That put the version number, the git tag and the published artifact in three
+# different hands, and they drifted: measured 2026-08-21, npm served 1.4.0 and 1.4.1 while
+# git's newest tag was v1.3.2 — two releases with no tag, no GitHub release and no
+# provenance, and a next cut that would have computed a colliding v1.4.0
+# (usetheokit/theokit-ui#46).
+#
+# Under changesets the version is DERIVED, not typed: contributors add a changeset file
+# describing the change and its bump, changesets opens a "Version Packages" pull request
+# that applies them, and merging that pull request is what publishes and tags. One input,
+# one output, no third place to forget.
+#
+# AUTHENTICATION IS OIDC, NOT A TOKEN. `@theokit/ui` carries a Trusted Publisher connection
+# on npmjs.com naming this repository and THIS FILE. npm mints a short-lived credential
+# scoped to that package; it cannot be exported or replayed. Renaming this file, or
+# publishing from any other workflow, breaks the trust and the publish is rejected — that
+# is the point of it.
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'npm dist-tag (next | latest)'
-        type: choice
-        options: [next, latest]
-        default: next
-      dry_run:
-        description: 'Run npm publish --dry-run (validates OIDC token exchange only)'
-        type: boolean
-        default: true
 
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: read
 
 jobs:
   release:
-    name: Release @theokit/ui
+    name: Release via Changesets (theokit-ui)
     runs-on: ubuntu-latest
+    # A ceiling well under GitHub's 6-hour default keeps a wedged job from holding a
+    # runner, and this is the job it costs the most to leave open.
     timeout-minutes: 30
     permissions:
-      contents: read
+      # changesets opens and updates the version pull request, and pushes its tags.
+      contents: write
+      pull-requests: write
+      # The OIDC token npm exchanges for permission to publish. Without it there is no
+      # credential at all.
       id-token: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 # zizmor: ignore[artipacked]
         with:
+          # The one checkout in this repository that keeps its credential, and not by
+          # oversight: changesets/action pushes the version commit and the release tags
+          # with the git CLI, which authenticates from exactly this persisted token.
+          # `persist-credentials: false` breaks the release.
+          #
+          # changesets reads tags to decide what is unpublished; a shallow clone hides them.
           fetch-depth: 0
-          # This job runs `npm publish` and never pushes a commit or a tag, so the
-          # token has no consumer after checkout. Leaving it in .git/config would
-          # let any later step — including one reached through a dependency — act
-          # as this repository.
-          persist-credentials: false
+
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-        # No `version:` here — it conflicts with the `packageManager: pnpm@…`
-        # field in package.json and aborts action-setup@v4 with
-        # ERR_PNPM_BAD_PM_VERSION. Let the package.json pin be the single source
-        # of truth for the pnpm version.
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0 # zizmor: ignore[cache-poisoning]
+        # No `version:` — `packageManager` in package.json is already the authority on the
+        # pnpm version, and pinning it twice creates two places to update.
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
+          # .nvmrc, for the same single-authority reason.
           node-version-file: '.nvmrc'
-          # No dependency cache in the job that publishes. A cache entry written by
-          # a pull-request run is restorable here, and this is the one job whose
-          # output reaches the registry under the org's name. The install costs
-          # under a minute; a poisoned tarball on npm costs a revocation.
-          registry-url: 'https://registry.npmjs.org'
-      # OIDC trusted publishing landed in npm 11.5.1. Node 22 ships npm 10.9.7, which has no
-      # OIDC code at all — measured in theokit-plugins by unpacking the tarballs and grepping
-      # lib/ for ACTIONS_ID_TOKEN_REQUEST_URL: 10.9.7 → 0 files, 11.4.1 → 0, 11.5.1 → 2.
+          cache: 'pnpm'
+          # The cache key must change when the package manager does. setup-node keys the
+          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
+          # identical and the job restores a store the new pnpm reads as inconsistent —
+          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
+          # package.json carries `packageManager`, so including it ties the cache to the
+          # pnpm that wrote it.
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+            packages/ui/package.json
+          # NO `registry-url`. It looks harmless and is not: setup-node writes
+          # `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` into an npmrc
+          # UNCONDITIONALLY and points NPM_CONFIG_USERCONFIG at it, then exports
+          # NODE_AUTH_TOKEN only if the caller supplied one — which, under OIDC, nobody
+          # does. The job would publish with a config declaring a credential that does not
+          # exist. registry.npmjs.org is already the default, and `publishConfig.access:
+          # public` in the manifest already covers the scope.
+
+      # THE STEP WITHOUT WHICH THE OIDC CONFIGURATION IS CORRECT AND USELESS. setup-node
+      # ships whatever npm the Node release bundles, and Node 22 bundles npm 10.9.7. OIDC
+      # needs npm >= 11.5.1: an older npm has no OIDC code at all, never presents the token,
+      # publishes unauthenticated, and the registry answers `E404 Not Found - PUT`. It
+      # returns 404 rather than 403 so it does not reveal that a package exists to someone
+      # who cannot publish it — which reads as "the package does not exist" and sends you
+      # hunting for a typo instead of a CLI too old to use a binding. That is exactly what
+      # every run of the previous workflow did (usetheokit/theokit-ui#46).
       #
-      # Without it the CLI never presents the OIDC token, publishes unauthenticated, and the
-      # registry answers `E404 Not Found - PUT`. It returns 404 rather than 403 so it does not
-      # reveal that a package exists to someone who cannot publish it — which reads as "the
-      # package does not exist" and sends you hunting for a typo or a missing binding instead
-      # of a CLI too old to use one.
-      #
-      # That is what every run of this workflow has been doing, and what I concluded from it
-      # in usetheokit/theokit-ui#46 was wrong: I read the E404 as a missing trusted-publisher
-      # binding. theokit-plugins publishes on pure OIDC with no NPM_TOKEN at all — five
-      # consecutive successes, and its packages carry attestations — so the binding side of
-      # this works in this org. The difference was this line, which that repo added after the
-      # same 404 cost it two failed publishes (usetheokit/theokit-plugins#29).
-      #
-      # NOT redundant with the binding on npmjs.com: both halves are required. The binding
-      # authorises this workflow; this line is what lets the CLI present the token it checks.
-      - name: Upgrade npm to a version that supports OIDC trusted publishing
+      # Pinned exactly, and NOT to 12.x. npm 12 breaks this release path in two places, and
+      # the quiet one is the dangerous half:
+      #   1. It rejects the `--no-git-checks` flag changesets passes through, with
+      #      EUNKNOWNCONFIG, where every earlier npm ignored it.
+      #   2. It returns an ARRAY from `npm info --json` where earlier npm returned an
+      #      object. changesets reads `response.pkgInfo.versions || []`; on an array that is
+      #      `undefined`, the list of published versions comes back empty, every package
+      #      looks unpublished, and nothing errors — it just tries to publish everything.
+      # 11.9.0 is the newest npm that clears the OIDC floor and avoids both. Measured in
+      # theokit-di; see that repository's release.yml for the numbers.
+      - name: Install an npm that speaks OIDC (>= 11.5.1) but tolerates the publish flags
         run: npm install -g npm@11.9.0 # zizmor: ignore[adhoc-packages] — bootstrapping npm itself; no lockfile can cover it
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      # Every run of this workflow has failed since it was written, always the same way, and
-      # the error npm returns does not say why. From run 29599193784 (v1.3.2, 2026-07-17):
+
+      # `pnpm install` runs the root `prepare` script, which points core.hooksPath at
+      # `.githooks` — so the pre-commit secret scan is armed on this runner. changesets then
+      # runs `git commit -m "Version Packages"`, the hook fires, finds no `trufflehog`
+      # binary, and fails closed exactly as designed.
       #
-      #   npm notice publish Provenance statement published to transparency log: …
-      #   npm error code E404
-      #   npm error 404 Not Found - PUT https://registry.npmjs.org/@theokit%2fui
-      #   npm error 404  '@theokit/ui@1.3.2' is not in this registry.
+      # The hook is right to fail closed and wrong to be armed here. It exists for the
+      # commit a PERSON makes: CI can only catch a credential once it is already in the
+      # history, and the hook is the last point where a leak is still free to fix. This
+      # commit is made by a bot, from files it generated out of content already in the
+      # repository, onto `changeset-release/main` — which reaches `main` only through a pull
+      # request, where this repository's own gates run.
       #
-      # Provenance is generated, then the PUT is refused. npm answers 404 rather than 403 for
-      # an unauthorised publish to a scoped package, so it does not disclose whether the
-      # package exists — which makes "not in this registry" read as a missing package when it
-      # means a token without publish rights. @theokit/ui has been on npm since 1.1.0.
-      #
-      # That reading was WRONG, and the correction is above: npm 10.9.7 has no OIDC code, so
-      # the CLI never presented a token at all. I concluded "the trusted-publisher binding is
-      # absent" from an error that says nothing about bindings — the exact misdirection npm's
-      # 404-instead-of-403 is documented to cause.
-      #
-      # Consequence to keep in view: no published version carries a provenance attestation.
-      # `npm view @theokit/ui@<v> dist --json` returns `signatures` (the registry signs every
-      # package automatically) and no `attestations` key, for every version. The guarantee this
-      # workflow's header describes has never held. See usetheokit/theokit-ui#46.
-      #
-      # The step below prints that diagnosis on failure so the next person reads it here
-      # instead of re-deriving it from a year of logs.
-      - name: Publish @theokit/ui
-        run: |
-          set -o pipefail
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
-            npm publish --dry-run --provenance --access public --tag ${{ inputs.tag || 'next' }}
-          else
-            npm publish --provenance --access public --tag ${{ inputs.tag || 'next' }}
-          fi || {
-            status=$?
-            echo "::error::npm publish failed (exit ${status}). If the error above is E404 on PUT it is NOT a missing package — npm answers 404 instead of 403 for an unauthorised publish to a scoped package, and @theokit/ui exists. Check BOTH halves of OIDC: (1) npm --version must be >= 11.5.1, since older CLIs have no OIDC code and publish unauthenticated; (2) the trusted-publisher binding at npmjs.com/package/@theokit/ui/settings must name usetheokit/theokit-ui and release.yml. See usetheokit/theokit-ui#46."
-            exit "${status}"
-          }
-        # No `env:` at all. NPM_CONFIG_PROVENANCE used to sit here and is redundant:
-        # `publishConfig.provenance: true` is in the manifest, beside the package it
-        # describes, and trusted publishing attaches the attestation on its own. No
-        # npm credential belongs here either — a token would make the CLI prefer it
-        # over the OIDC token and silently drop the trusted-publisher binding.
+      # `|| true` because --unset exits 5 when the key is absent, and an absent key is
+      # already the state this step wants.
+      - name: Disarm the local pre-commit hook for the bot's version commit
+        run: git config --unset core.hooksPath || true
+
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        with:
+          publish: pnpm release
+          version: pnpm version-packages
+        env:
+          # The only credential here, and it is GitHub's own: changesets uses it to open the
+          # version pull request. Nothing here authenticates to npm.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # NPM_CONFIG_PROVENANCE is deliberately absent: `publishConfig.provenance: true`
+          # already sits in packages/ui/package.json, beside the package it describes,
+          # instead of in an environment variable this file has to remember. Unlike
+          # theokit-studio, this repository is PUBLIC, so npm will attest — the E422 that
+          # forces provenance off for a private source does not apply here.

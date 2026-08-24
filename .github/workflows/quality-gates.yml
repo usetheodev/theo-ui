@@ -56,6 +56,7 @@ jobs:
       # Linux Chromium binary is cached by the actions/setup-node step above
       # via pnpm — no separate cache needed.
       - name: Install Playwright Chromium
+        working-directory: packages/ui
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run quality gates
@@ -127,11 +128,18 @@ jobs:
       # above.
       - name: Install with React 19 across the whole tree
         run: |
-          pnpm pkg set \
+          # In a subshell rather than `pnpm --dir packages/ui`: `pnpm pkg` takes no
+          # directory flag and swallows the value as a command name, failing with
+          # `Command "packages/ui" not found` (measured, run 32776375180).
+          ( cd packages/ui && pnpm pkg set \
             "devDependencies.react=^19" \
             "devDependencies.react-dom=^19" \
             "devDependencies.@types/react=^19" \
-            "devDependencies.@types/react-dom=^19" \
+            "devDependencies.@types/react-dom=^19" )
+          # `pnpm.overrides` is only honoured in the workspace-root manifest. Setting it
+          # on the package would be accepted and then ignored — the job would go green
+          # over a tree that never saw React 19.
+          pnpm pkg set \
             "pnpm.overrides.react=^19" \
             "pnpm.overrides.react-dom=^19" \
             "pnpm.overrides.@types/react=^19" \
@@ -167,7 +175,7 @@ jobs:
           fi
 
       - name: Typecheck against React 19
-        run: pnpm typecheck
+        run: pnpm --filter=@theokit/ui run typecheck
 
       - name: Test against React 19
-        run: pnpm test
+        run: pnpm --filter=@theokit/ui run test

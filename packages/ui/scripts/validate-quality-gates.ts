@@ -16,6 +16,12 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
+// The package sits at <repo>/packages/ui. Almost everything this file checks is
+// package-scoped and resolves from ROOT — including LICENSE / CHANGELOG.md / README.md,
+// which are package-scoped precisely because they ship inside the published tarball.
+// CI configuration is the exception: it governs the whole repository and lives two
+// levels up, beside pnpm-workspace.yaml.
+const REPO_ROOT = resolve(ROOT, "../..");
 
 const writeStdout = (message: string): void => {
   process.stdout.write(`${message}\n`);
@@ -437,7 +443,7 @@ function validateScriptsAndCi(): void {
     if (!packageJson.scripts?.[script]) fail("package.json", `missing script ${script}`);
   }
 
-  const ciPath = join(ROOT, ".github/workflows/quality-gates.yml");
+  const ciPath = join(REPO_ROOT, ".github/workflows/quality-gates.yml");
   if (!existsSync(ciPath)) {
     fail(".github/workflows", "missing quality-gates.yml");
   }

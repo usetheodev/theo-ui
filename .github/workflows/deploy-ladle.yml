@@ -4,10 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/**"
-      - ".ladle/**"
+      - "packages/ui/src/**"
+      - "packages/ui/.ladle/**"
+      - "packages/ui/package.json"
+      - "packages/ui/wrangler.toml"
       - "package.json"
-      - "wrangler.toml"
       - ".github/workflows/deploy-ladle.yml"
   workflow_dispatch: {}
 
@@ -57,11 +58,13 @@ jobs:
           cache-dependency-path: |
             pnpm-lock.yaml
             package.json
+            packages/ui/package.json
 
       - name: Install
         run: pnpm install --frozen-lockfile
 
       - name: Verify story coverage (EC-5 + drift gate)
+        working-directory: packages/ui
         run: |
           pnpm inventory
           pnpm stories:check
@@ -69,6 +72,7 @@ jobs:
       - name: Build Ladle
         # EC-14 absorbed: build runs in the workflow before any deploy step.
         # Without this, pages would deploy stale ./build/ from git history.
+        working-directory: packages/ui
         run: pnpm ladle:build
 
       # `cloudflare/pages-action` was archived by Cloudflare with the notice
@@ -92,6 +96,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: packages/ui
           command: pages deploy build --project-name=theo-ui
 
       # Without this the job failed on every single run (16/16) for a missing
