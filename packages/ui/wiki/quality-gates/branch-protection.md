@@ -48,10 +48,14 @@ flowchart LR
   M["main<br/>(protected — release merges only)"]
 
   W -->|PR| D
-  D -->|"PR + semver tag"| M
+  D -->|PR| M
+  M -->|"Changesets opens<br/>'Version Packages' PR"| R["publish + tag"]
 ```
 
 `develop` **integrates** work, it never originates it: it advances only through the
-promotion PR from `workspace`. `main` receives only release merges from `develop`, each
-carrying an annotated semver tag. The release record is at
-[`/history/releases.md`](/history/releases.md).
+promotion PR from `workspace`. `main` receives only release merges from `develop`.
+
+Reaching `main` does not publish. Changesets reads the pending changesets and opens a
+"Version Packages" pull request; merging **that** applies the version bump, publishes over
+OIDC and writes the annotated tag. The tag is an output of the release, not its trigger.
+The release record is at [`/history/releases.md`](/history/releases.md).

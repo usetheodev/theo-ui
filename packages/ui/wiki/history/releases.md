@@ -68,13 +68,20 @@ functional across both packages.
 
 # Current version
 
-`1.3.2` as of 2026-08-11. Releases between 1.0.0 and 1.3.2 are recorded in `CHANGELOG.md`
-at the repository root, which remains the authoritative per-version log —
-`validateGovernanceFiles` fails the build if it is missing or lacks its `## [Unreleased]`
-section.
+`1.4.1` on npm as of 2026-08-24. Releases are recorded in `packages/ui/CHANGELOG.md`, which
+remains the authoritative per-version log — `validateGovernanceFiles` fails the build if it
+is missing or lacks its `## [Unreleased]` section.
+
+Two of those versions are not in git. `1.4.0` and `1.4.1` were published while the newest
+tag was `v1.3.2`, so they carry no tag, no GitHub release and no provenance attestation
+(usetheokit/theokit-ui#46). That drift is what moved this repository to Changesets: with the
+version derived rather than typed, the publish and the tag come from the same merge and
+cannot disagree.
 
 # Release process
 
-`workspace → develop → main`, with the release cut as a `develop → main` PR plus an
-annotated semver tag. See
-[`/quality-gates/branch-protection.md`](/quality-gates/branch-protection.md).
+`workspace → develop → main`, and then Changesets. Reaching `main` opens a "Version
+Packages" pull request; merging it applies the version bump, publishes over OIDC trusted
+publishing and writes the annotated tag. Nobody types a version number, and no tag triggers
+a publish. See [`/quality-gates/branch-protection.md`](/quality-gates/branch-protection.md)
+and the "Release process" section of `CONTRIBUTING.md`.
