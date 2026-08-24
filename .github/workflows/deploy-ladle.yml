@@ -4,16 +4,23 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/**"
-      - ".ladle/**"
+      - "packages/ui/src/**"
+      - "packages/ui/.ladle/**"
+      - "packages/ui/package.json"
+      - "packages/ui/wrangler.toml"
       - "package.json"
-      - "wrangler.toml"
       - ".github/workflows/deploy-ladle.yml"
   workflow_dispatch: {}
 
 permissions:
   contents: read
   deployments: write
+
+concurrency:
+  group: deploy-ladle-${{ github.ref }}
+  # A cancelled run on an integration branch leaves the commit with no verdict,
+  # which reads the same as a passing one. Only supersede elsewhere.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 jobs:
   deploy:
@@ -25,23 +32,39 @@ jobs:
       CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         # No `version:` — conflicts with package.json `packageManager: pnpm@…`
         # (ERR_PNPM_BAD_PM_VERSION). package.json is the single source of truth.
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0 # zizmor: ignore[cache-poisoning]
         with:
-          node-version: "22"
+          node-version-file: '.nvmrc'
+          # The pnpm store cache is keyed on the lockfile and only ever written by
+          # runs on `main`, which is the branch this workflow triggers on. A pull
+          # request cannot seed the entry this job restores.
           cache: pnpm
+          # The cache key must change when the package manager does. setup-node keys the
+          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
+          # identical and the job restores a store the new pnpm reads as inconsistent —
+          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
+          # package.json carries `packageManager`, so including it ties the cache to the
+          # pnpm that wrote it.
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+            packages/ui/package.json
 
       - name: Install
         run: pnpm install --frozen-lockfile
 
       - name: Verify story coverage (EC-5 + drift gate)
+        working-directory: packages/ui
         run: |
           pnpm inventory
           pnpm stories:check
@@ -49,21 +72,32 @@ jobs:
       - name: Build Ladle
         # EC-14 absorbed: build runs in the workflow before any deploy step.
         # Without this, pages would deploy stale ./build/ from git history.
+        working-directory: packages/ui
         run: pnpm ladle:build
 
-      # `projectName` must match the project on the Cloudflare side. This deploy
-      # has never run successfully — the repository has no `CLOUDFLARE_*` secrets
-      # — so the name below is unverified against any real project. Confirm it
-      # (or the renamed `theokit-ui`) when wiring the credentials.
+      # `cloudflare/pages-action` was archived by Cloudflare with the notice
+      # "DEPRECATED, please use wrangler-action". An archived action receives no
+      # fix if it breaks against the Pages API, and it was the one reference here
+      # that a tag could still move under. `wrangler-action` is the replacement
+      # Cloudflare names; it takes the same deploy as a `wrangler pages deploy`
+      # command rather than as inputs.
+      #
+      # The project name must match the project on the Cloudflare side. This
+      # deploy has never run successfully — the repository has no `CLOUDFLARE_*`
+      # secrets — so the name below is unverified against any real project.
+      # Confirm it (or the renamed `theokit-ui`) when wiring the credentials.
       - name: Deploy to Cloudflare Pages
         if: env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != ''
-        uses: cloudflare/pages-action@v1
+        # The pin is a git commit SHA, not a credential — but forty hex characters next to the
+        # word `cloudflare` matches TruffleHog's CloudflareApiToken detector, which cannot tell
+        # the two apart. Silenced on the line, never on the file, so a real credential added to
+        # this workflow later is still caught.
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0 trufflehog:ignore
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: theo-ui
-          directory: build
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          workingDirectory: packages/ui
+          command: pages deploy build --project-name=theo-ui
 
       # Without this the job failed on every single run (16/16) for a missing
       # secret, which trains everyone to ignore a red catalog build. The story

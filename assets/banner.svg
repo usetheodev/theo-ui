@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="@theokit/ui — React components for AI-agent surfaces" font-family="'Geist', 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B0D12"/>
+      <stop offset="1" stop-color="#16121F"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8B5FD6"/>
+      <stop offset="1" stop-color="#6F49B1"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.16" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#6F49B1" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#6F49B1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <rect width="1200" height="300" fill="url(#glow)"/>
+
+  <!-- Accent rule, echoing the primary token of the default Violet Forge theme. -->
+  <rect x="96" y="86" width="4" height="128" rx="2" fill="url(#accent)"/>
+
+  <text x="132" y="132" fill="#FAFAFA" font-size="52" font-weight="600" letter-spacing="-1.2">@theokit/ui</text>
+  <text x="132" y="176" fill="#A1A1AA" font-size="24" font-weight="400" letter-spacing="-0.2">React components for AI-agent surfaces — coding agents and chat.</text>
+  <text x="132" y="214" fill="#6F49B1" font-size="18" font-weight="500" letter-spacing="0.4">Editorial typography · runtime-swappable themes · shadcn-compatible registry</text>
+
+  <!-- Burnt sienna accent from the same theme, as a counterweight on the right edge. -->
+  <rect x="1080" y="86" width="24" height="128" rx="4" fill="#C96442" opacity="0.14"/>
+  <rect x="1112" y="118" width="24" height="64" rx="4" fill="#8B5FD6" opacity="0.20"/>
+</svg>

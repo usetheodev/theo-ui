@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-result",
+  "type": "registry:ui",
+  "title": "ToolResult",
+  "description": "Formatted output of a tool invocation.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/tool-result/tool-result.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/tool-result.tsx",
+      "content": "import { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\ntype Variant = \"text\" | \"code\" | \"json\";\n\ninterface ToolResultProps extends HTMLAttributes<HTMLDivElement> {\n  variant?: Variant;\n  /**\n   * Pre-formatted content. For `code`/`json`, the component uses mono font\n   * and preserves whitespace. For `text`, normal body font.\n   */\n  children: ReactNode;\n}\n\n/**\n * ToolResult — formatted output of a tool invocation.\n *\n * Three quick variants: plain text, code (monospace), json (monospace, tinted).\n * Always rendered as a `<div>` for predictable prop typing; code/json variants\n * wrap children in `<pre>` internally.\n */\nconst ToolResult = forwardRef<HTMLDivElement, ToolResultProps>(\n  ({ className, variant = \"text\", children, ...props }, ref) => {\n    if (variant === \"text\") {\n      return (\n        <div\n          data-slot=\"tool-result\"\n          ref={ref}\n          className={cn(\"text-body-sm text-muted-foreground\", className)}\n          {...props}\n        >\n          {children}\n        </div>\n      );\n    }\n    return (\n      <div data-slot=\"tool-result\" ref={ref} className={className} {...props}>\n        <pre\n          className={cn(\n            \"overflow-x-auto whitespace-pre-wrap font-mono text-code-sm\",\n            variant === \"json\" ? \"text-primary-glow\" : \"text-foreground\",\n          )}\n        >\n          {children}\n        </pre>\n      </div>\n    );\n  },\n);\nToolResult.displayName = \"ToolResult\";\n\nexport { ToolResult };\n"
+    }
+  ]
+}

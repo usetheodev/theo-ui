@@ -1,10 +1,13 @@
 # Contributing to `@theokit/ui`
 
 Welcome — this document is the operational handbook for the library. The
-strategic context (mission, narrative, four pillars) lives in this repo's
-`README.md`, and the normative knowledge (architecture, design system, ADRs,
-RFCs, quality gates) in `wiki/` — see `wiki/index.md`. This file is about the
-day-to-day mechanics of shipping code to `@theokit/ui`.
+strategic context (mission, narrative, four pillars) lives in the package's
+`packages/ui/README.md`, and the normative knowledge (architecture, design system,
+ADRs, RFCs, quality gates) in `packages/ui/wiki/` — see `packages/ui/wiki/index.md`.
+This file is about the day-to-day mechanics of shipping code to `@theokit/ui`.
+
+By taking part you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). Security
+problems do **not** go in an issue — see [SECURITY.md](./SECURITY.md).
 
 ---
 
@@ -12,10 +15,13 @@ day-to-day mechanics of shipping code to `@theokit/ui`.
 
 1. Work on `workspace` — never commit directly to `develop` or `main`, and don't
    create feature branches. See "Branch topology" below.
-2. Add or modify components under `src/components/primitives/` or `src/components/composites/`.
+2. Add or modify components under `packages/ui/src/components/primitives/` or
+   `packages/ui/src/components/composites/`.
 3. Run `pnpm quality:gates` locally — it has to be green before you open a PR.
-4. Update `CHANGELOG.md` under `## [Unreleased]` for every visible change.
-5. Open a PR. The reviewer will look for: taxonomy compliance, registry
+4. Update `packages/ui/CHANGELOG.md` under `## [Unreleased]` for every visible change.
+5. Run `pnpm changeset` if the change should ship — it is what decides the next
+   version number. See "Releases" below.
+6. Open a PR. The reviewer will look for: taxonomy compliance, registry
    honesty, design-system fidelity, accessibility evidence, test coverage.
 
 ---
@@ -23,16 +29,29 @@ day-to-day mechanics of shipping code to `@theokit/ui`.
 ## Setup
 
 ```bash
-git clone https://github.com/usetheodev/theokit-ui.git
+git clone https://github.com/usetheokit/theokit-ui.git
 cd theokit-ui
 pnpm install
 pnpm dev   # Ladle on http://localhost:61000
 ```
 
 Requirements:
-- Node.js >= 20
+- Node.js >= 22.12.0
 - pnpm 10.x (we pin via `packageManager`)
 - A terminal that handles UTF-8 (Geist sample text contains diacritics)
+
+### Where things live
+
+This repository is a pnpm workspace and the published package is `packages/ui`. The
+root carries CI, the git hooks and the workspace manifests; everything else — `src/`,
+`tests/`, `scripts/`, `registry/`, `wiki/`, the Ladle config — is inside the package.
+
+**Every relative path in this document is relative to `packages/ui/`**, and so is every
+command that is not one of the root-level ones below. `cd packages/ui` first, or reach
+them from the root with `pnpm --filter=@theokit/ui run <script>`.
+
+Root-level commands: `pnpm install`, `pnpm build`, `pnpm test`, `pnpm typecheck`,
+`pnpm lint`, `pnpm dev`, `pnpm quality:gates`, `pnpm changeset`.
 
 ---
 
@@ -42,7 +61,7 @@ A component goes under `primitives/` **if and only if** it does not value-import
 another `@theokit/ui` component. Otherwise it goes under `composites/`.
 
 This is enforced mechanically by `pnpm quality:structure` — there's no
-discretionary call. The full spec lives in [`wiki/architecture/index.md`](./wiki/architecture/index.md).
+discretionary call. The full spec lives in [`wiki/architecture/index.md`](./packages/ui/wiki/architecture/index.md).
 
 **Allowed imports for primitives:**
 - React (`react`, hooks)
@@ -63,7 +82,7 @@ discretionary call. The full spec lives in [`wiki/architecture/index.md`](./wiki
   so theme switching propagates. The build-gate scanner
   (`scripts/lib/literal-color-scanner.ts`) fires on `pnpm quality:structure`
   and prints suggested replacements. See
-  [`wiki/decisions/adr-0004-no-literal-tailwind-colors.md`](./wiki/decisions/adr-0004-no-literal-tailwind-colors.md).
+  [`wiki/decisions/adr-0004-no-literal-tailwind-colors.md`](./packages/ui/wiki/decisions/adr-0004-no-literal-tailwind-colors.md).
 - Whitelisted paths: `*.test.tsx`, `*.stories.tsx`, `tests/fixture-*/` (allowed
   to demonstrate raw colors).
 
@@ -155,13 +174,13 @@ Additional gates wired into `quality:gates` post-T5.3 / T5.4:
 
 Relevant ADRs to read before changing visual/theme behavior:
 
-- [ADR-0004 — No literal Tailwind colors in source](./wiki/decisions/adr-0004-no-literal-tailwind-colors.md)
-- [ADR-0005 — OKLCH as the canonical color format](./wiki/decisions/adr-0005-oklch-as-canonical-color-format.md)
-- [ADR-0006 — Algorithmic tonal derivations via `oklch(from ...)`](./wiki/decisions/adr-0006-algorithmic-tonal-derivations.md)
-- [ADR-0007 — Status semantic tokens (operational state group)](./wiki/decisions/adr-0007-status-semantic-tokens.md)
-- [ADR-0008 — Forced colors (Windows High Contrast Mode) support](./wiki/decisions/adr-0008-forced-colors-whcm-support.md)
-- [ADR-0009 — `prefers-color-scheme` respected by default](./wiki/decisions/adr-0009-prefers-color-scheme-default.md)
-- [Migration guide HSL → OKLCH](./wiki/migrations/hsl-to-oklch.md)
+- [ADR-0004 — No literal Tailwind colors in source](./packages/ui/wiki/decisions/adr-0004-no-literal-tailwind-colors.md)
+- [ADR-0005 — OKLCH as the canonical color format](./packages/ui/wiki/decisions/adr-0005-oklch-as-canonical-color-format.md)
+- [ADR-0006 — Algorithmic tonal derivations via `oklch(from ...)`](./packages/ui/wiki/decisions/adr-0006-algorithmic-tonal-derivations.md)
+- [ADR-0007 — Status semantic tokens (operational state group)](./packages/ui/wiki/decisions/adr-0007-status-semantic-tokens.md)
+- [ADR-0008 — Forced colors (Windows High Contrast Mode) support](./packages/ui/wiki/decisions/adr-0008-forced-colors-whcm-support.md)
+- [ADR-0009 — `prefers-color-scheme` respected by default](./packages/ui/wiki/decisions/adr-0009-prefers-color-scheme-default.md)
+- [Migration guide HSL → OKLCH](./packages/ui/wiki/migrations/hsl-to-oklch.md)
 
 A failing gate ≠ broken code — it usually means a doc / count / registry
 file is out of sync. The error message tells you exactly how to fix it
@@ -177,7 +196,7 @@ Every component is shipped two ways:
 
 1. **As part of the package** — `pnpm add @theokit/ui`, then
    `import { AgentEvent } from "@theokit/ui"`. ESM-only, tree-shakable.
-2. **As copy-paste via shadcn CLI** — `npx shadcn add https://usetheodev.github.io/theokit-ui/r/<name>.json` (branded `ui.usetheo.dev` URL pending DNS CNAME).
+2. **As copy-paste via shadcn CLI** — `npx shadcn add https://usetheokit.github.io/theokit-ui/r/<name>.json` (branded `ui.usetheo.dev` URL pending DNS CNAME).
    The consumer's project receives the source `.tsx` file under
    `components/ui/<name>.tsx` (primitives) or `components/blocks/<name>.tsx`
    (composites).
@@ -248,8 +267,10 @@ workspace ──PR──> develop ──PR + tag semver──> main
   direct commit, rebase, reset or cherry-pick, and nothing other than
   `workspace` gets merged into it.
 - **`main`** is the release branch. It only receives the `develop → main`
-  promotion PR plus a semver tag. Pushing a `v*` tag triggers
-  `npm publish --provenance`, so a tag **is** a release.
+  promotion PR. Reaching `main` does **not** publish: it makes Changesets open a
+  "Version Packages" PR, and merging that one publishes and writes the tag. The
+  tag is now an OUTPUT of the release rather than its trigger — see "Release
+  process". Pushing a `v*` tag by hand publishes nothing.
 
 ### Keeping the three at the same commit
 
@@ -281,18 +302,39 @@ into `develop`, never a force-push.
 
 ## Release process
 
-The library is at `1.3.2`, published on the npm `latest` dist-tag.
+Releases are driven by [Changesets](https://github.com/changesets/changesets), the
+same way as the other publishable repositories in the framework (`theokit-sdk`,
+`-di`, `-plugins`, `-studio`, `-gateways`).
 
-- Semantic versioning, no exceptions. Breaking changes get a major and a
-  `### Breaking` section in the CHANGELOG.
-- Every visible change lands in `## [Unreleased]` first. A release moves that
-  section under a versioned heading with a date; entries of already-released
-  versions are never edited.
-- A release is cut by the `develop → main` PR plus the semver tag. The tag is
-  what publishes, so cut it only when the CHANGELOG and the version in
-  `package.json` already say what you mean.
+**You never type a version number.** It is derived:
 
-See `wiki/quality-gates/index.md` Gate 9 for the full Release Readiness checklist.
+```bash
+pnpm changeset      # pick patch/minor/major, write what changed
+```
+
+That writes a small file under `.changeset/`. Commit it with your work. When the
+change reaches `main`, the Release workflow opens a "Version Packages" pull
+request that applies every pending changeset — bumping `packages/ui/package.json`
+and prepending the entry to `packages/ui/CHANGELOG.md`. Merging **that** pull
+request is what publishes to npm, tags the commit, and creates the GitHub release.
+
+- Semantic versioning, no exceptions. A breaking change is a `major` changeset.
+- Authentication is OIDC trusted publishing — there is no npm token, and the
+  binding names `.github/workflows/release.yml` specifically. Renaming that file
+  breaks publishing.
+- `prepublishOnly` still refuses a version the registry already serves, which is
+  the guard that caught the git↔npm drift in usetheokit/theokit-ui#46.
+
+### Why the CHANGELOG has two kinds of section
+
+`## [Unreleased]` is written by hand, per Keep a Changelog, and is where a visible
+change is described for a reader. Changesets prepends its generated `## X.Y.Z`
+entries above it at version time. Both are written by people — a changeset is
+prose an author wrote, not a git-log dump — and the versioned sections of an
+already-released version are never edited.
+
+See `packages/ui/wiki/quality-gates/index.md` Gate 9 for the full Release
+Readiness checklist.
 
 ---
 

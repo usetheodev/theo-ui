@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-streaming",
+  "type": "registry:ui",
+  "title": "AgentStreaming",
+  "description": "Inline \"agent is thinking / typing\" indicator.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/agent-streaming/agent-streaming.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/agent-streaming.tsx",
+      "content": "import { Sparkles } from \"lucide-react\";\nimport { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\nimport { useInLiveRegion } from \"@/lib/live-region-context\";\n\n/**\n * AgentStreaming — inline \"agent is thinking / typing\" indicator.\n *\n * Renders inside an agent stream while the model is producing a response.\n * Default visual is 3 violet dots pulsing. If `partial` is provided, renders\n * the streamed-so-far text with a caret. Optional `model` label on the right.\n */\n\ninterface AgentStreamingProps extends HTMLAttributes<HTMLDivElement> {\n  /** Streamed-so-far text. When present, replaces the dots animation. */\n  partial?: ReactNode;\n  /** Optional model name shown as a chip. */\n  model?: ReactNode;\n}\n\nconst AgentStreaming = forwardRef<HTMLDivElement, AgentStreamingProps>(\n  ({ className, partial, model, ...props }, ref) => {\n    // T4.1 (MF-4): when nested inside a live region container (AgentStream,\n    // ChatThread, etc.), omit our own aria-live to prevent double-announcement.\n    // Standalone usage keeps the live region intact.\n    const inLiveRegion = useInLiveRegion();\n    return (\n      <div\n        data-slot=\"agent-streaming\"\n        ref={ref}\n        role={inLiveRegion ? undefined : \"status\"}\n        aria-live={inLiveRegion ? undefined : \"polite\"}\n        aria-label=\"Agent is responding\"\n        className={cn(\n          \"flex w-full items-start gap-3 rounded-xl border border-border/40 bg-card/40 px-4 py-3\",\n          className,\n        )}\n        {...props}\n      >\n        <span\n          className=\"grid size-7 shrink-0 place-items-center rounded-full bg-primary/15 text-primary\"\n          aria-hidden=\"true\"\n        >\n          <Sparkles className=\"size-3.5\" />\n        </span>\n        <div className=\"grid min-w-0 flex-1 gap-1\">\n          {model ? (\n            <span className=\"font-mono text-label-caps text-muted-foreground uppercase tracking-wider\">\n              {model}\n            </span>\n          ) : null}\n          {partial ? (\n            <span className=\"break-words text-body-md text-foreground\">\n              {partial}\n              <span\n                className=\"ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 animate-pulse bg-primary align-middle\"\n                aria-hidden=\"true\"\n              />\n            </span>\n          ) : (\n            <span className=\"flex items-center gap-1.5\" aria-hidden=\"true\">\n              <Dot delay={0} />\n              <Dot delay={120} />\n              <Dot delay={240} />\n              <span className=\"ml-1 text-body-sm text-muted-foreground\">thinking…</span>\n            </span>\n          )}\n        </div>\n      </div>\n    );\n  },\n);\nAgentStreaming.displayName = \"AgentStreaming\";\n\nfunction Dot({ delay }: { delay: number }) {\n  return (\n    <span\n      className=\"size-1.5 animate-pulse rounded-full bg-primary\"\n      style={{ animationDelay: `${delay}ms` }}\n    />\n  );\n}\n\nexport { AgentStreaming };\n"
+    }
+  ]
+}

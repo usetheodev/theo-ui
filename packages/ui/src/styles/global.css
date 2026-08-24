@@ -1,0 +1,93 @@
+/* Canonical cascade-layer order — MUST stay the first rule. Removing it lets a consumer
+ * who imports this file before Tailwind invert the cascade. Why, and the guard:
+ * src/styles/layer-order.test.ts + usetheokit/theokit-ui#20. */
+@layer theme, base, components, utilities;
+
+@import "./fonts.css";
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    /* OpenType ligatures globally — Geist's "liga" feature is structural
+     * and gives the Vercel-tight glyph combinations. */
+    font-feature-settings: "liga" 1, "ss01" 1;
+  }
+
+  /* Display headings inherit theme display font (Geist by default).
+   * Per-size tracking is set in tailwind.config.ts; this is the safety net. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  /* Code surfaces: use the mono token + tabular numerals so columns of
+   * numbers line up in tables/logs/metrics. */
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1, "liga" 1;
+  }
+
+  /* Focus ring — violet (signature) */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Selection — soft violet */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.25);
+    color: hsl(var(--foreground));
+  }
+
+  /* Native scrollbar fallback (Violet Forge).
+   * Used for native browser scroll on elements that don't wrap in <ScrollArea>.
+   * Components that DO use <ScrollArea> hide the native scrollbar via Radix.
+   */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 0.25);
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 9999px;
+    transition: background-color var(--duration-fast) var(--ease-out-soft);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary) / 0.5);
+  }
+  *::-webkit-scrollbar-thumb:active {
+    background-color: hsl(var(--primary) / 0.75);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+  }
+}

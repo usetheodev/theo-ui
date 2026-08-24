@@ -1,0 +1,138 @@
+/* Canonical cascade-layer order — MUST stay the first rule. Removing it lets a consumer
+ * who imports this file before Tailwind invert the cascade. Why, and the guard:
+ * src/styles/layer-order.test.ts + usetheokit/theokit-ui#20. */
+@layer theme, base, components, utilities;
+
+/* Theo UI — Tailwind v4 prebuilt entry stylesheet.
+ *
+ * What ships at `@theokit/ui/styles.css` since RFC 0008 follow-up
+ * (`0.5.1-next.0`). Consumer imports this once and the framework's
+ * Tailwind v4 build picks up:
+ *   - `@import "tailwindcss"` — Tailwind v4 core (preflight + utilities)
+ *   - `@import "./fonts.css"` — self-hosted Geist + Geist Mono @font-face
+ *   - `@import "./tokens.css"` — runtime `--*` vars (theme cascade target)
+ *   - `@import "./tokens-v4.css"` — `@theme { --color-*, --text-*, … }`
+ *     namespace Tailwind v4 reads to emit utilities
+ *   - `@layer base` — `border-color`, body font, focus ring, scrollbar
+ *     styling that depend on the runtime vars
+ *
+ * v3-only consumers (Tailwind 3.x + the shadcn registry preset) should
+ * load `@theokit/ui/styles-v3-legacy.css` instead — that file is the
+ * unchanged `@tailwind base; @tailwind components; @tailwind utilities`
+ * variant. See RFC 0008 follow-up.
+ */
+
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./tokens-v4.css";
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  /* Tailwind v4 preflight regression compensation —
+   * v4 intentionally dropped the `button { cursor: pointer }` rule
+   * (https://tailwindcss.com/docs/upgrade-guide#default-button-cursor)
+   * so every native <button> renders with the default arrow cursor.
+   *
+   * Library authors are expected to opt in explicitly per button. The
+   * Violet Forge `<Button>` primitive does so (see its CVA). For the
+   * dozens of native <button> elements composites render directly,
+   * we restore the v3 behavior here — scoped to *interactive* buttons:
+   *
+   *   - `:not(:disabled)` skips the HTML `disabled` attribute path
+   *     (browser already shows `cursor: default` for disabled, but the
+   *     rule below stays explicit for clarity).
+   *   - `:not([aria-disabled="true"])` skips the ARIA-disabled path
+   *     (where the button stays focusable but acts as no-op).
+   *
+   * This is an EXPLICIT opt-in by the library author for consumers who
+   * imported `@theokit/ui/styles.css` — it does NOT alter Tailwind's
+   * global preflight, only this stylesheet's @layer base.
+   */
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  html {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* OpenType ligatures globally — Geist's "liga" feature is structural
+     * and gives the Vercel-tight glyph combinations. */
+    font-feature-settings: "liga" 1, "ss01" 1;
+  }
+
+  /* Display headings inherit theme display font (Geist by default).
+   * Per-size tracking is set in tokens-v4.css; this is the safety net. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  /* Code surfaces: use the mono token + tabular numerals so columns of
+   * numbers line up in tables/logs/metrics. */
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1, "liga" 1;
+  }
+
+  /* Focus ring — violet (signature) */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Selection — soft violet.
+   * v4 tokens are full oklch() colors, so use them directly / via color-mix —
+   * `hsl(var(--primary) / 0.25)` would wrap an oklch() color in hsl() → invalid
+   * CSS → transparent, making the selection highlight invisible. */
+  ::selection {
+    background-color: color-mix(in oklch, var(--primary) 25%, transparent);
+    color: var(--foreground);
+  }
+
+  /* Native scrollbar fallback (Violet Forge).
+   * Used for native browser scroll on elements that don't wrap in <ScrollArea>.
+   * Components that DO use <ScrollArea> hide the native scrollbar via Radix.
+   */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklch, var(--primary) 25%, transparent);
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 9999px;
+    transition: background-color var(--duration-fast) var(--ease-out-soft);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklch, var(--primary) 50%, transparent);
+  }
+  *::-webkit-scrollbar-thumb:active {
+    background-color: color-mix(in oklch, var(--primary) 75%, transparent);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--primary) 30%, transparent) transparent;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "recent-folders-list",
+  "type": "registry:ui",
+  "title": "RecentFoldersList",
+  "description": "Recently-used folders for the Files picker.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://usetheokit.github.io/theokit-ui/r/cn.json",
+    "https://usetheokit.github.io/theokit-ui/r/tailwind-preset.json"
+  ],
+  "files": [
+    {
+      "path": "components/primitives/recent-folders-list/recent-folders-list.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/recent-folders-list.tsx",
+      "content": "import { Folder } from \"lucide-react\";\nimport { forwardRef } from \"react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"@/lib/cn\";\n\nexport interface RecentFolder {\n  id: string;\n  name: ReactNode;\n  path: string;\n  /** When true, the row is highlighted as selected. */\n  active?: boolean;\n}\n\ninterface RecentFoldersListProps\n  extends Omit<HTMLAttributes<HTMLDivElement>, \"title\" | \"onSelect\"> {\n  title?: ReactNode;\n  folders: RecentFolder[];\n  onSelect?: (id: string) => void;\n}\n\n/**\n * RecentFoldersList — recently-used folders for the Files picker.\n *\n * Visual: a stack of rows with folder icon + name + path (smaller, muted),\n * active row highlighted with violet bg.\n */\nconst RecentFoldersList = forwardRef<HTMLDivElement, RecentFoldersListProps>(\n  ({ className, title = \"Recent folders\", folders, onSelect, ...props }, ref) => (\n    <div\n      data-slot=\"recent-folders-list\"\n      ref={ref}\n      className={cn(\"rounded-xl border border-border bg-card\", className)}\n      {...props}\n    >\n      {title ? (\n        <p className=\"border-border/40 border-b px-3 py-2 font-sans text-label-caps text-muted-foreground uppercase tracking-wider\">\n          {title}\n        </p>\n      ) : null}\n      <ul>\n        {folders.map((folder) => (\n          <li key={folder.id}>\n            <button\n              type=\"button\"\n              onClick={() => onSelect?.(folder.id)}\n              className={cn(\n                \"flex w-full items-center gap-3 px-3 py-2\",\n                \"text-left transition-colors\",\n                \"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n                folder.active ? \"bg-primary/10 text-primary\" : \"hover:bg-muted\",\n              )}\n            >\n              <Folder\n                className={cn(\n                  \"size-4 shrink-0\",\n                  folder.active ? \"text-primary\" : \"text-muted-foreground\",\n                )}\n                aria-hidden=\"true\"\n              />\n              <div className=\"min-w-0 flex-1\">\n                <p className=\"truncate font-medium text-body-sm\">{folder.name}</p>\n                <p className=\"truncate font-mono text-label text-muted-foreground\">{folder.path}</p>\n              </div>\n            </button>\n          </li>\n        ))}\n      </ul>\n    </div>\n  ),\n);\nRecentFoldersList.displayName = \"RecentFoldersList\";\n\nexport { RecentFoldersList };\n"
+    }
+  ]
+}
