@@ -13,9 +13,7 @@
   },
   "type": "module",
   "types": "./dist/index.d.ts",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
