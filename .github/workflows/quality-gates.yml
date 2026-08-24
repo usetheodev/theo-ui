@@ -128,11 +128,14 @@ jobs:
       # above.
       - name: Install with React 19 across the whole tree
         run: |
-          pnpm -C packages/ui pkg set \
+          # In a subshell rather than `pnpm --dir packages/ui`: `pnpm pkg` takes no
+          # directory flag and swallows the value as a command name, failing with
+          # `Command "packages/ui" not found` (measured, run 32776375180).
+          ( cd packages/ui && pnpm pkg set \
             "devDependencies.react=^19" \
             "devDependencies.react-dom=^19" \
             "devDependencies.@types/react=^19" \
-            "devDependencies.@types/react-dom=^19"
+            "devDependencies.@types/react-dom=^19" )
           # `pnpm.overrides` is only honoured in the workspace-root manifest. Setting it
           # on the package would be accepted and then ignored — the job would go green
           # over a tree that never saw React 19.
