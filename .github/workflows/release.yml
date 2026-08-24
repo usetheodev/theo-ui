@@ -108,6 +108,9 @@ jobs:
       # The step below prints that diagnosis on failure so the next person reads it here
       # instead of re-deriving it from a year of logs.
       - name: Publish @theokit/ui
+        # `npm publish` must run in the package. The workspace root is `private: true`,
+        # so publishing from there fails — loudly, but for the wrong reason.
+        working-directory: packages/ui
         run: |
           set -o pipefail
           if [ "${{ inputs.dry_run }}" = "true" ]; then
