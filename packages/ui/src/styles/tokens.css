@@ -17,34 +17,15 @@
  * Burnt sienna:  #C96442  →  hsl(15 54% 53%)
  */
 
-/* The token declarations live in `@layer theme` — the FIRST layer of the canonical order
- * declared at the top of this file.
+/* The palette lives in `@layer theme` — the first layer of the canonical order above.
  *
- * They were unlayered until usetheokit/theokit-ui#72, on the reasoning that unlayered rules
- * apply "regardless of whether the consumer's pipeline runs Tailwind's preflight". That is
- * true, and it had a consequence nobody wrote down: unlayered CSS outranks EVERY layered
- * rule regardless of specificity, so a consumer could not override a single token from their
- * own stylesheet. Putting them in `@layer base` did nothing; matching our selector exactly
- * did nothing (we also ship the sheet twice, so document order favours us); the only escape
- * was `!important` or a full `defineTheme`.
+ * Unlayered CSS outranks every layered rule regardless of specificity, so while these
+ * declarations sat outside a layer no consumer could override a single token from their own
+ * stylesheet, and the failure was silent: `var(--card)` kept resolving, to OUR value.
+ * usetheokit/theokit-ui#72 has the measurement; src/styles/token-override.test.ts is the guard.
  *
- * The failure mode was worse than a hard error: `var(--card)` kept resolving, to OUR value,
- * so the consumer's palette looked *almost* applied. A dark neutral is close enough to most
- * dark palettes that an app can ship in the wrong theme without anyone noticing — which is
- * exactly what happened in the app that reported this.
- *
- * `theme` still applies at the document level and still precedes preflight, so the original
- * reasoning holds. What changes is that a consumer now wins by default: unlayered CSS beats
- * every layer, and `@layer base` beats `theme`. Overriding a token is once again the boring
- * thing it should have been.
- *
- * NOT moved into the layer, deliberately:
- *   - the `forced-colors` block below (WCAG 1.4.1) — a consumer palette must not defeat the
- *     system high-contrast map;
- *   - the `prefers-reduced-motion` block (WCAG 2.3.3), for the same reason.
- * Accessibility outranks taste, and unlayered is how that is expressed in CSS.
- *
- * Guard: src/styles/token-override.test.ts.
+ * The `forced-colors` and `prefers-reduced-motion` blocks below stay UNLAYERED on purpose:
+ * WCAG 1.4.1 and 2.3.3 must outrank a consumer palette.
  */
 @layer theme {
   :root {
