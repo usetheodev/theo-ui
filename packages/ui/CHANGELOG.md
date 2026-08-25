@@ -53,6 +53,10 @@
 
 ### Changed
 
+- The CI workflow is `ci.yml` with a job named `Verify (quality gates)`, matching the six sibling
+  repositories in the framework. The job name is the status-check context, so the required checks
+  on `main` and `develop` moved with it — renaming one without the other would leave every open
+  pull request waiting on a check that never reports (#66)
 - The repository is a pnpm workspace and the package now lives at `packages/ui/`, matching the
   seven other publishable repositories in the framework. Nothing about the published package
   changes: every subpath export is relative to the package, so they survive the move untouched —
