@@ -17,7 +17,7 @@
     "quality:gates": "pnpm --filter=@theokit/ui run quality:gates",
     "quality:gates:fast": "pnpm --filter=@theokit/ui run quality:gates:fast",
     "changeset": "changeset",
-    "version-packages": "changeset version && pnpm --filter=@theokit/ui exec biome format --write package.json",
+    "version-packages": "changeset version && pnpm --filter=@theokit/ui run sync:readme && pnpm --filter=@theokit/ui exec biome format --write package.json",
     "release": "pnpm run build && changeset publish",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
