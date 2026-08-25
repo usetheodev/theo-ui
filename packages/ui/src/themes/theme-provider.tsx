@@ -120,7 +120,22 @@ function injectThemeCss(themes: Theme[]): void {
     blocks.push(colorScaleToCss(theme.name, "light", theme.light));
     blocks.push(colorScaleToCss(theme.name, "dark", theme.dark));
   }
-  style.textContent = blocks.join("\n\n");
+
+  /**
+   * Wrapped in `@layer theme` — the same layer `tokens.css` uses, and the first of the
+   * canonical order this package declares.
+   *
+   * This block is injected at the end of `<head>`, so unlayered it would outrank anything the
+   * consumer writes, at any specificity: applying a theme would silently disable their ability
+   * to adjust a single token on top of it. That is the second half of
+   * usetheokit/theokit-ui#72 — the first half being the same problem in `tokens.css`.
+   *
+   * Inside the layer, the precedence reads the way a consumer expects: our defaults, then the
+   * active theme, then whatever they wrote. The layer statement is repeated here because this
+   * element can be the first stylesheet to register `theme` in a page that lazy-loads the CSS,
+   * and a layer's position is fixed at its first appearance (see layer-order.test.ts / #20).
+   */
+  style.textContent = `@layer theme, base, components, utilities;\n\n@layer theme {\n${blocks.join("\n\n")}\n}`;
 }
 
 /**

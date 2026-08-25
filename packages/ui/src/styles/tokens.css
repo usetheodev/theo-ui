@@ -17,138 +17,143 @@
  * Burnt sienna:  #C96442  →  hsl(15 54% 53%)
  */
 
-/* `:root` and `[data-theme="dark"]` declarations are intentionally NOT wrapped
- * in `@layer base` so they apply at the document level regardless of whether
- * the consumer's CSS pipeline runs Tailwind's preflight. The texture utilities
- * below remain in `@layer utilities` because that layer affects ordering only,
- * not the cascade root.
+/* The palette lives in `@layer theme` — the first layer of the canonical order above.
+ *
+ * Unlayered CSS outranks every layered rule regardless of specificity, so while these
+ * declarations sat outside a layer no consumer could override a single token from their own
+ * stylesheet, and the failure was silent: `var(--card)` kept resolving, to OUR value.
+ * usetheokit/theokit-ui#72 has the measurement; src/styles/token-override.test.ts is the guard.
+ *
+ * The `forced-colors` and `prefers-reduced-motion` blocks below stay UNLAYERED on purpose:
+ * WCAG 1.4.1 and 2.3.3 must outrank a consumer palette.
  */
-:root {
-  /* Base palette ------------------------------------------------------- *
+@layer theme {
+  :root {
+    /* Base palette ------------------------------------------------------- *
      * Neutrals are 100% desaturated (Vercel-style). Color comes from the
      * primary (violet) + accent (burnt sienna) tokens below — never from
      * surface tints.
      */
-  --background: oklch(1 0 0); /* #FFFFFF */
-  --foreground: oklch(0.146 0 0); /* #0A0A0A */
+    --background: oklch(1 0 0); /* #FFFFFF */
+    --foreground: oklch(0.146 0 0); /* #0A0A0A */
 
-  --card: oklch(1 0 0); /* #FFFFFF */
-  --card-foreground: oklch(0.146 0 0);
+    --card: oklch(1 0 0); /* #FFFFFF */
+    --card-foreground: oklch(0.146 0 0);
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.146 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.146 0 0);
 
-  /* Primary — Theo violet (equity) ------------------------------------- *
+    /* Primary — Theo violet (equity) ------------------------------------- *
    * Post-T3.1 (ADR-0006): -deep and -glow are derived algorithmically via
    * OKLCH relative-color syntax. Themes that need a per-token override may
    * still declare these explicitly — the cascade resolves the override.
    * `max()`/`min()` clamps protect dark/light themes from L overflow (EC-7).
    */
-  --primary: oklch(0.5 0.16 296.97); /* #6F49B1 — Theo violet (deep-anchored, hue 296.97, 2026-07-17) */
-  --primary-deep: oklch(from var(--primary) max(0.05, calc(l - 0.16)) c h);
-  --primary-glow: oklch(from var(--primary) min(0.95, calc(l + 0.18)) c h);
-  --primary-foreground: oklch(1 0 0);
+    --primary: oklch(0.5 0.16 296.97); /* #6F49B1 — Theo violet (deep-anchored, hue 296.97, 2026-07-17) */
+    --primary-deep: oklch(from var(--primary) max(0.05, calc(l - 0.16)) c h);
+    --primary-glow: oklch(from var(--primary) min(0.95, calc(l + 0.18)) c h);
+    --primary-foreground: oklch(1 0 0);
 
-  /* Secondary — neutral muted ----------------------------------------- */
-  --secondary: oklch(0.97 0 0); /* #F5F5F5 */
-  --secondary-foreground: oklch(0.146 0 0);
+    /* Secondary — neutral muted ----------------------------------------- */
+    --secondary: oklch(0.97 0 0); /* #F5F5F5 */
+    --secondary-foreground: oklch(0.146 0 0);
 
-  /* Accent — burnt sienna --------------------------------------------- *
+    /* Accent — burnt sienna --------------------------------------------- *
    * T3.1: accent-deep derived. Override path identical to primary.
    */
-  --accent: oklch(0.621 0.132 39); /* #C96442 */
-  --accent-deep: oklch(from var(--accent) max(0.05, calc(l - 0.13)) c h);
-  --accent-foreground: oklch(1 0 0);
+    --accent: oklch(0.621 0.132 39); /* #C96442 */
+    --accent-deep: oklch(from var(--accent) max(0.05, calc(l - 0.13)) c h);
+    --accent-foreground: oklch(1 0 0);
 
-  /* Muted ------------------------------------------------------------- */
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.555 0 0); /* #737373 */
+    /* Muted ------------------------------------------------------------- */
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.555 0 0); /* #737373 */
 
-  /* Surfaces, borders, inputs ----------------------------------------- */
-  --border: oklch(0.931 0 0); /* #E8E8E8 — Vercel-style hairline */
-  --input: oklch(0.931 0 0);
-  --ring: oklch(0.5 0.16 296.97); /* matches primary */
+    /* Surfaces, borders, inputs ----------------------------------------- */
+    --border: oklch(0.931 0 0); /* #E8E8E8 — Vercel-style hairline */
+    --input: oklch(0.931 0 0);
+    --ring: oklch(0.5 0.16 296.97); /* matches primary */
 
-  /* Semantics --------------------------------------------------------- */
-  --success: oklch(0.611 0.161 149.7); /* #16A34A */
-  --success-foreground: oklch(1 0 0);
-  --warning: oklch(0.67 0.154 60.6); /* #D97706 */
-  --warning-foreground: oklch(1 0 0);
-  --destructive: oklch(0.579 0.214 27.2); /* #DC2626 */
-  --destructive-foreground: oklch(1 0 0);
-  --info: oklch(0.626 0.186 259.6); /* #3B82F6 */
-  --info-foreground: oklch(1 0 0);
+    /* Semantics --------------------------------------------------------- */
+    --success: oklch(0.611 0.161 149.7); /* #16A34A */
+    --success-foreground: oklch(1 0 0);
+    --warning: oklch(0.67 0.154 60.6); /* #D97706 */
+    --warning-foreground: oklch(1 0 0);
+    --destructive: oklch(0.579 0.214 27.2); /* #DC2626 */
+    --destructive-foreground: oklch(1 0 0);
+    --info: oklch(0.626 0.186 259.6); /* #3B82F6 */
+    --info-foreground: oklch(1 0 0);
 
-  /* Status (D4 — operational state group) ----------------------------- *
+    /* Status (D4 — operational state group) ----------------------------- *
    * Separate from semantic group (success/destructive/warning/info, which
    * are action-result colors). Status describes component liveness:
    * online (alive), offline (dead), degraded (alive-but-slow), info (flag).
    * Defaults mirror semantic counterparts; themes override for distinction.
    */
-  --status-online: oklch(0.611 0.161 149.7);
-  --status-online-foreground: oklch(1 0 0);
-  --status-offline: oklch(0.579 0.214 27.2);
-  --status-offline-foreground: oklch(1 0 0);
-  --status-degraded: oklch(0.67 0.154 60.6);
-  --status-degraded-foreground: oklch(1 0 0);
-  --status-info: oklch(0.626 0.186 259.6);
-  --status-info-foreground: oklch(1 0 0);
+    --status-online: oklch(0.611 0.161 149.7);
+    --status-online-foreground: oklch(1 0 0);
+    --status-offline: oklch(0.579 0.214 27.2);
+    --status-offline-foreground: oklch(1 0 0);
+    --status-degraded: oklch(0.67 0.154 60.6);
+    --status-degraded-foreground: oklch(1 0 0);
+    --status-info: oklch(0.626 0.186 259.6);
+    --status-info-foreground: oklch(1 0 0);
 
-  /* Radii ------------------------------------------------------------- */
-  --radius-none: 0px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-2xl: 20px;
-  --radius-full: 9999px;
-  /* shadcn compat */
-  --radius: 14px;
+    /* Radii ------------------------------------------------------------- */
+    --radius-none: 0px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 10px;
+    --radius-xl: 14px;
+    --radius-2xl: 20px;
+    --radius-full: 9999px;
+    /* shadcn compat */
+    --radius: 14px;
 
-  /* Spacing scale (4px base) ------------------------------------------ */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-20: 80px;
-  --space-24: 96px;
-  --space-32: 128px;
+    /* Spacing scale (4px base) ------------------------------------------ */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-32: 128px;
 
-  /* Elevation — theme-aware (uses --foreground for shadow ink,
+    /* Elevation — theme-aware (uses --foreground for shadow ink,
      * --primary for the signature glow, so swapping themes recolors them).
      * Post-T2.5: tokens are OKLCH; we compose alpha via color-mix(in oklch, ...)
      * which is perceptually correct AND works with any color-space variable.
      */
-  --shadow-sm: 0 1px 2px 0 color-mix(in oklch, var(--foreground) 6%, transparent);
-  --shadow-md: 0 2px 8px -2px color-mix(in oklch, var(--foreground) 8%, transparent), 0 1px 3px
-    color-mix(in oklch, var(--foreground) 6%, transparent);
-  --shadow-lg: 0 12px 32px -8px color-mix(in oklch, var(--foreground) 12%, transparent), 0 4px 12px
-    color-mix(in oklch, var(--foreground) 8%, transparent);
-  --shadow-glow: 0 0 24px color-mix(in oklch, var(--primary) 25%, transparent);
-  --shadow-glow-strong: 0 0 32px color-mix(in oklch, var(--primary) 40%, transparent);
+    --shadow-sm: 0 1px 2px 0 color-mix(in oklch, var(--foreground) 6%, transparent);
+    --shadow-md: 0 2px 8px -2px color-mix(in oklch, var(--foreground) 8%, transparent), 0 1px 3px
+      color-mix(in oklch, var(--foreground) 6%, transparent);
+    --shadow-lg: 0 12px 32px -8px color-mix(in oklch, var(--foreground) 12%, transparent), 0 4px
+      12px color-mix(in oklch, var(--foreground) 8%, transparent);
+    --shadow-glow: 0 0 24px color-mix(in oklch, var(--primary) 25%, transparent);
+    --shadow-glow-strong: 0 0 32px color-mix(in oklch, var(--primary) 40%, transparent);
 
-  /* Motion ------------------------------------------------------------ */
-  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-snap: cubic-bezier(0.85, 0, 0.15, 1);
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
-  --duration-slow: 360ms;
-  --stagger: 60ms;
+    /* Motion ------------------------------------------------------------ */
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-snap: cubic-bezier(0.85, 0, 0.15, 1);
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --duration-slow: 360ms;
+    --stagger: 60ms;
 
-  /* Typography (Geist family — Vercel-inspired Violet Forge) ---------- */
-  --font-display: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-}
+    /* Typography (Geist family — Vercel-inspired Violet Forge) ---------- */
+    --font-display: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
 
-/* Dark mode — dominante --------------------------------------------- *
+  /* Dark mode — dominante --------------------------------------------- *
    * Vercel-aligned grayscale: pure neutrals (0% saturation) for every
    * surface and text layer. Color only in primary (violet), accent (burnt
    * sienna), and semantic tokens (success/warning/destructive/info).
@@ -158,64 +163,65 @@
    * `[data-theme="dark"]` companion selector was dead — `data-theme` holds
    * the theme NAME, never the literal `"dark"`.
    */
-.dark {
-  --background: oklch(0.146 0 0); /* #0A0A0A */
-  --foreground: oklch(0.97 0 0); /* #F5F5F5 */
+  .dark {
+    --background: oklch(0.146 0 0); /* #0A0A0A */
+    --foreground: oklch(0.97 0 0); /* #F5F5F5 */
 
-  --card: oklch(0.182 0 0); /* #121212 */
-  --card-foreground: oklch(0.97 0 0);
+    --card: oklch(0.182 0 0); /* #121212 */
+    --card-foreground: oklch(0.97 0 0);
 
-  --popover: oklch(0.182 0 0); /* #121212 — igual ao --card: menus/popovers no tom escuro do card */
-  --popover-foreground: oklch(0.97 0 0);
+    --popover: oklch(0.182 0 0); /* #121212 — igual ao --card: menus/popovers no tom escuro do card */
+    --popover-foreground: oklch(0.97 0 0);
 
-  --primary: oklch(0.5 0.16 296.97);
-  --primary-deep: oklch(from var(--primary) max(0.05, calc(l - 0.16)) c h);
-  --primary-glow: oklch(from var(--primary) min(0.95, calc(l + 0.18)) c h);
-  --primary-foreground: oklch(1 0 0);
+    --primary: oklch(0.5 0.16 296.97);
+    --primary-deep: oklch(from var(--primary) max(0.05, calc(l - 0.16)) c h);
+    --primary-glow: oklch(from var(--primary) min(0.95, calc(l + 0.18)) c h);
+    --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.227 0 0); /* #1C1C1C */
-  --secondary-foreground: oklch(0.97 0 0);
+    --secondary: oklch(0.227 0 0); /* #1C1C1C */
+    --secondary-foreground: oklch(0.97 0 0);
 
-  --accent: oklch(0.621 0.132 39);
-  --accent-deep: oklch(from var(--accent) max(0.05, calc(l - 0.13)) c h);
-  --accent-foreground: oklch(1 0 0);
+    --accent: oklch(0.621 0.132 39);
+    --accent-deep: oklch(from var(--accent) max(0.05, calc(l - 0.13)) c h);
+    --accent-foreground: oklch(1 0 0);
 
-  --muted: oklch(0.227 0 0);
-  --muted-foreground: oklch(0.683 0 0); /* #999 — Vercel gray-500 */
+    --muted: oklch(0.227 0 0);
+    --muted-foreground: oklch(0.683 0 0); /* #999 — Vercel gray-500 */
 
-  --border: oklch(0.28 0 0); /* #292929 */
-  --input: oklch(0.34 0 0); /* #3a3a3a — borda de input perceptível (0.227 ficava a só 0.045 de luz do bg-card 0.182) */
-  --ring: oklch(0.5 0.16 296.97);
+    --border: oklch(0.28 0 0); /* #292929 */
+    --input: oklch(0.34 0 0); /* #3a3a3a — borda de input perceptível (0.227 ficava a só 0.045 de luz do bg-card 0.182) */
+    --ring: oklch(0.5 0.16 296.97);
 
-  --success: oklch(0.814 0.192 155.7); /* #22E58C */
-  --success-foreground: oklch(0.146 0 0);
-  --warning: oklch(0.77 0.165 70.6); /* #F59E0B */
-  --warning-foreground: oklch(0.146 0 0);
-  --destructive: oklch(0.677 0.213 15.6); /* #FF4F6D */
-  --destructive-foreground: oklch(0.146 0 0);
-  --info: oklch(0.732 0.142 254.4); /* #5FB3FF */
-  --info-foreground: oklch(0.146 0 0);
+    --success: oklch(0.814 0.192 155.7); /* #22E58C */
+    --success-foreground: oklch(0.146 0 0);
+    --warning: oklch(0.77 0.165 70.6); /* #F59E0B */
+    --warning-foreground: oklch(0.146 0 0);
+    --destructive: oklch(0.677 0.213 15.6); /* #FF4F6D */
+    --destructive-foreground: oklch(0.146 0 0);
+    --info: oklch(0.732 0.142 254.4); /* #5FB3FF */
+    --info-foreground: oklch(0.146 0 0);
 
-  /* Status (D4 — dark mode mirror of light defaults) ------------------ */
-  --status-online: oklch(0.814 0.192 155.7);
-  --status-online-foreground: oklch(0.146 0 0);
-  --status-offline: oklch(0.677 0.213 15.6);
-  --status-offline-foreground: oklch(0.146 0 0);
-  --status-degraded: oklch(0.77 0.165 70.6);
-  --status-degraded-foreground: oklch(0.146 0 0);
-  --status-info: oklch(0.732 0.142 254.4);
-  --status-info-foreground: oklch(0.146 0 0);
+    /* Status (D4 — dark mode mirror of light defaults) ------------------ */
+    --status-online: oklch(0.814 0.192 155.7);
+    --status-online-foreground: oklch(0.146 0 0);
+    --status-offline: oklch(0.677 0.213 15.6);
+    --status-offline-foreground: oklch(0.146 0 0);
+    --status-degraded: oklch(0.77 0.165 70.6);
+    --status-degraded-foreground: oklch(0.146 0 0);
+    --status-info: oklch(0.732 0.142 254.4);
+    --status-info-foreground: oklch(0.146 0 0);
 
-  /* In dark mode, shadows are heavier ink (against the dark surface) and
+    /* In dark mode, shadows are heavier ink (against the dark surface) and
      * the glow brightens. Both still derive from theme tokens.
      * Post-T2.5: OKLCH-aware composition via color-mix() — black ink via
      * the literal oklch(0 0 0) (no theme indirection needed).
      */
-  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.4);
-  --shadow-md: 0 2px 8px -2px oklch(0 0 0 / 0.5), 0 1px 3px oklch(0 0 0 / 0.4);
-  --shadow-lg: 0 12px 32px -8px oklch(0 0 0 / 0.6), 0 4px 12px oklch(0 0 0 / 0.4);
-  --shadow-glow: 0 0 24px color-mix(in oklch, var(--primary-glow) 40%, transparent);
-  --shadow-glow-strong: 0 0 36px color-mix(in oklch, var(--primary-glow) 60%, transparent);
+    --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.4);
+    --shadow-md: 0 2px 8px -2px oklch(0 0 0 / 0.5), 0 1px 3px oklch(0 0 0 / 0.4);
+    --shadow-lg: 0 12px 32px -8px oklch(0 0 0 / 0.6), 0 4px 12px oklch(0 0 0 / 0.4);
+    --shadow-glow: 0 0 24px color-mix(in oklch, var(--primary-glow) 40%, transparent);
+    --shadow-glow-strong: 0 0 36px color-mix(in oklch, var(--primary-glow) 60%, transparent);
+  }
 }
 
 /* Forced colors (Windows High Contrast Mode) — D7 / ADR-0008 ----------- *

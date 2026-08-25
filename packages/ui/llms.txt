@@ -1,15 +1,16 @@
 # @theokit/ui — Theo UI (Violet Forge)
 
-> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 103 components (63 primitives + 40 composites), framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
+> React component library for AI-agent surfaces and cloud (PaaS) dashboards. 103 components (63 primitives + 40 composites) — *primitive* and *composite* are structural terms here, not "generic vs specific": every one of the 103 is an agent/PaaS surface, and the generic chrome (Button, Badge, Select, Table, Sidebar, …) lives in `@usetheo/ui` — see **Which package has what** below. Framework-agnostic (React peer-dep only), ESM-only, Apache-2.0. Built on Radix UI + CVA + lucide-react + Tailwind v4. Same Radix foundation as shadcn — the wedge is the agent/PaaS-specific components built on top.
 
 This file follows the [llms.txt convention](https://llmstxt.org/) and gives an LLM the **factual ground truth** of the project: package name, import paths, component inventory, locked conventions, anti-patterns, and links to the canonical documentation. Treat the bullets below as non-negotiable contracts unless the source files contradict them — in which case the source files win and this file is stale.
 
 ## Project metadata
 
 - **npm package:** `@theokit/ui`
-- **Current version:** `1.3.2` (npm dist-tag `latest`)
+- **Current version:** `1.4.5` (npm dist-tag `latest`)
 - **License:** Apache-2.0
 - **Repository:** `https://github.com/usetheokit/theokit-ui`
+- **Companion package (generic primitives):** `@usetheo/ui` — `https://github.com/usetheodev/usetheo-ui`
 - **Docs site:** `https://docs.usetheo.dev/theoui`
 - **Registry (shadcn CLI):** `https://usetheokit.github.io/theokit-ui/r/{slug}.json`
 - **Design-system codename:** Violet Forge
@@ -17,11 +18,33 @@ This file follows the [llms.txt convention](https://llmstxt.org/) and gives an L
 - **React peer range:** `>=18.2.0 <20` (works with 18.x and 19.x)
 - **Distribution:** npm package install OR copy-paste source via shadcn CLI (registry). Both paths are first-class.
 
+## Which package has what
+
+Two packages, one design system, one token set. Reaching for the wrong one is the most common
+mistake a consumer makes, and it costs a rewrite of chrome that already exists.
+
+| You need | Package | Examples |
+|---|---|---|
+| App chrome: shell, navigation, tables, forms, feedback | **`@usetheo/ui`** | `Sidebar`, `PageShell`, `DataTable`, `Table`, `Select`, `Switch`, `Checkbox`, `FormField`, `Button`, `Badge`, `Dialog`, `Sheet`, `Tabs`, `Tooltip`, `Toast`, `EmptyState`, `Alert`, `Skeleton`, `Pagination`, `CommandPalette` |
+| Agent surfaces: the conversation and what surrounds it | **`@theokit/ui`** | `ChatThread`, `ChatMessage`, `ChatComposer`, `ToolCall`, `ToolsList`, `ApprovalCard`, `ModelCard`, `SkillsList`, `AgentTimeline`, `RunStatusPill`, `CapabilityIndicator`, `ContextWindowBar` |
+| Cloud/PaaS dashboards | **`@usetheo/ui`** | `ProjectCard`, `DeploymentRow`, `EnvVarEditor`, `MetricsPanel`, `RollbackUI`, `TrendChart` |
+
+`@theokit/ui` is built on `@usetheo/ui` and shares its tokens, so the two compose without a
+visual seam — a `<Sidebar>` beside a `<ChatThread>` reads as one product. Install both when the
+app has chrome; install only `@theokit/ui` when you are embedding an agent surface into a UI that
+already has its own.
+
+**Rule of thumb:** if the component would exist in an app with no agent in it, look in
+`@usetheo/ui` first.
+
 ## Install
 
 ```bash
-# Full package (recommended for new projects)
+# Agent surfaces
 pnpm add @theokit/ui@next
+
+# …plus the generic chrome, if the app has any (shell, tables, forms, dialogs)
+pnpm add @usetheo/ui
 
 # Per-component copy (shadcn-style)
 npx shadcn@latest add https://usetheokit.github.io/theokit-ui/r/chat-message.json
@@ -81,9 +104,41 @@ There are **105 subpath exports** in `package.json#exports` — one per componen
 
 ## Theme system
 
-- **Provider:** `<ThemeProvider initial="violet-forge">{...}</ThemeProvider>`. Wrap once at the app root.
-- **Built-in themes (10):** `violetForge` (default), `classicPaper`, `auroraTerminal`, `vercelMono`, `githubDark`, `dracula`, `oneDark`, `anthropicStyle`, `openaiStyle`, `linearGlass`.
-- **Custom themes:** `defineTheme({ name, mode, fonts, palette })` — returns a `Theme` object you pass into `<ThemeProvider extra={[myTheme]} />`.
+- **Provider:** `themes` is REQUIRED — the provider does not import the catalog for you.
+
+  ```tsx
+  import { ThemeProvider, builtinThemes } from "@theokit/ui";
+
+  <ThemeProvider themes={builtinThemes} defaultTheme="violet-forge" defaultMode="dark">
+    {children}
+  </ThemeProvider>
+  ```
+
+  Props: `themes` (required), `defaultTheme`, `defaultMode` (`"light" | "dark"`, defaults to
+  `"dark"` — the library is dark-first), `storageKey`, `defaultDensity`, `respectSystemMode`.
+- **Built-in themes (11):** `violetForge` (default), `falconRed`, `classicPaper`, `auroraTerminal`,
+  `vercelMono`, `githubDark`, `dracula`, `oneDark`, `anthropicStyle`, `openaiStyle`, `linearGlass`.
+  All eleven are re-exported as the `builtinThemes` array.
+- **Custom themes:** `defineTheme({ name, label?, description?, light?, dark?, fonts?, fontUrls? })`.
+  `light` and `dark` are `Partial<ColorScale>` — anything omitted falls back to Violet Forge, so a
+  theme can be four lines. The returned `Theme` goes into the `themes` array:
+
+  ```ts
+  export const mine = defineTheme({
+    name: "mine",
+    dark: { background: "#131314", card: "#1e1f20", success: "#81c995" },
+    fonts: { body: "Roboto, sans-serif", mono: "Roboto Mono, monospace" },
+  });
+  ```
+
+  `ColorScale` covers surfaces, semantics (`success` / `warning` / `destructive` / `info`) and the
+  `status-*` family. Components read these tokens — change `success` and every status pill,
+  capability indicator and session dot follows.
+- **Overriding a single token in your own CSS:** supported — the palette ships inside
+  `@layer theme`, so unlayered consumer CSS and `@layer base` both win. It did NOT work before the
+  fix for usetheokit/theokit-ui#72: the tokens were unlayered and silently outranked everything a
+  consumer wrote. Prefer `defineTheme` for a whole palette; reach for a CSS override when you need
+  one value in one place.
 - **Color helpers:** `hex("#7c5cff")`, `rgb(124, 92, 255)` — both return CSS-ready strings.
 - **Density:** `useDensity()` hook returns `"compact" | "comfortable" | "cozy"`. Cascading via `<DensityProvider>`.
 - **Fonts (locked):** Geist Sans (display + body) + Geist Mono (mono). Loaded via CDN by default (`dist/fonts-cdn.css`) or locally (`dist/fonts.css`).
