@@ -80,6 +80,40 @@ describe("ThemeProvider", () => {
     expect(style?.textContent ?? "").toContain('[data-theme="classic-paper"]');
   });
 
+  /**
+   * usetheokit/theokit-ui#72 — the injected block must be layered.
+   *
+   * This <style> lands at the end of <head>. Unlayered, it outranks every rule the consumer
+   * can write, at any specificity: applying a theme would silently take away their ability to
+   * nudge a single token on top of it. Inside `@layer theme`, unlayered consumer CSS wins,
+   * which is the precedence anyone using cascade layers expects.
+   *
+   * jsdom does not implement layer precedence, so this asserts the emitted text rather than a
+   * computed value — the guarantee lives in the CSS we ship, and that is what is checked.
+   */
+  it("injects the theme variables inside @layer theme, so a consumer can still override", () => {
+    render(
+      <ThemeProvider
+        respectSystemMode={false}
+        themes={[classicPaper]}
+        defaultTheme="classic-paper"
+        storageKey={null}
+      >
+        <Inspector />
+      </ThemeProvider>,
+    );
+
+    const css = document.getElementById("theo-ui-theme-vars")?.textContent ?? "";
+
+    expect(css).toContain("@layer theme, base, components, utilities;");
+    expect(css).toContain("@layer theme {");
+    // The declarations sit AFTER the layer opens — not before it, where they would be unlayered.
+    expect(css.indexOf('[data-theme="classic-paper"]')).toBeGreaterThan(
+      css.indexOf("@layer theme {"),
+    );
+    expect(css.trimEnd().endsWith("}")).toBe(true);
+  });
+
   it("throws a helpful error when themes is empty (T2.5)", () => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     expect(() =>

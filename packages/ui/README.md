@@ -15,7 +15,7 @@ A React component library built for AI-agent surfaces — coding agents and chat
 <!-- BEGIN:counts -->
 [![license](https://img.shields.io/badge/license-Apache--2.0-7C3AED?style=flat-square)](./LICENSE)
 [![react](https://img.shields.io/badge/react-18+-7C3AED?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![tests](https://img.shields.io/badge/tests-1486%20passing-success?style=flat-square)](#quality-gates)
+[![tests](https://img.shields.io/badge/tests-1526%20passing-success?style=flat-square)](#quality-gates)
 [![components](https://img.shields.io/badge/components-103-7C3AED?style=flat-square)](#component-catalog)
 [![shadcn](https://img.shields.io/badge/shadcn-compatible-000?style=flat-square)](https://ui.shadcn.com/docs/registry)
 <!-- END:counts -->
@@ -38,7 +38,7 @@ Most component libraries optimize for marketing pages. `@theokit/ui` is built fo
 
 - **Built for AI agents.** Primitives for skills, cron jobs, permission matrices, MCP servers, memory editing, hook config, audit logs, model cards, token usage charts, sub-agent dispatch — the components a transparent agent UI actually needs.
 - **Built on `@usetheo/ui`.** Generic primitives, auth surfaces, and cloud-ops composites (project cards, deployment rows, env var editors, domain config, preview environments, rollback flows, metrics panels) live in [`@usetheo/ui`](https://github.com/usetheodev/usetheo-ui) — the community-standard layer `@theokit/ui` builds on. Need those too? Install `@usetheo/ui` alongside.
-- **Themeable at runtime.** Ship three themes out of the box, swap them live via `<ThemeProvider />`, or define your own.
+- **Themeable at runtime.** Eleven themes out of the box, swapped live via `<ThemeProvider />` — or define your own with `defineTheme()`.
 - **shadcn-compatible registry.** Copy individual components into your project (`npx shadcn add …`) or install the whole package — your call.
 - **shadcn v4 conventions.** Every component emits `data-slot` (and `data-variant`/`data-size` where it varies) so you target and override styles by attribute, not Tailwind class order. The `"use client"` directive is preserved in the build, so client components are safe to import into a React Server Component tree when installed from npm.
 - **Per-subpath types.** `import { AgentEvent } from "@theokit/ui/agent-event"` resolves an isolated `AgentEvent` declaration, not the whole barrel's type surface.
@@ -88,11 +88,11 @@ pnpm add @theokit/ui
 ```
 
 ```tsx
-import { ThemeProvider, AgentEvent, ToolCall } from "@theokit/ui";
+import { ThemeProvider, builtinThemes, AgentEvent, ToolCall } from "@theokit/ui";
 
 export default function App() {
   return (
-    <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
+    <ThemeProvider themes={builtinThemes} defaultTheme="violet-forge" defaultMode="dark">
       <AgentEvent kind="thinking" text="Reading repository structure..." />
       <ToolCall name="readFile" status="completed" />
     </ThemeProvider>
@@ -120,14 +120,14 @@ props as the provider — the two resolve the mode separately, and a disagreemen
 page at hydration, which is the flash you were preventing:
 
 ```tsx
-import { ThemeProvider, ThemeScript } from "@theokit/ui";
+import { ThemeProvider, ThemeScript, builtinThemes } from "@theokit/ui";
 
 <html lang="en" suppressHydrationWarning>
   <head>
     <ThemeScript defaultTheme="violet-forge" defaultMode="dark" />
   </head>
   <body>
-    <ThemeProvider defaultTheme="violet-forge" defaultMode="dark">
+    <ThemeProvider themes={builtinThemes} defaultTheme="violet-forge" defaultMode="dark">
       {children}
     </ThemeProvider>
   </body>
@@ -198,13 +198,21 @@ pnpm playground   # http://localhost:5180
 
 ## Themes
 
-Three themes ship out of the box, all driven by HSL-split CSS variables. Swap at runtime with `<ThemeProvider />` + `<ThemeSwitcher />`.
+Eleven themes ship out of the box, all driven by the same token set. Swap at runtime with `<ThemeProvider />` + `<ThemeSwitcher />`; `builtinThemes` is the array of all of them.
 
-| Theme | Vibe | Primary | Accent |
-|---|---|---|---|
-| `violet-forge` *(default)* | Editorial dark, AI workspace energy | Theo violet `#A855F7` | Burnt sienna `#C96442` |
-| `classic-paper` | Warm light, document-first reading | Indigo `#2563EB` | Amber `#F59E0B` |
-| `aurora-terminal` | High-contrast dev terminal feel | Cyan-aurora `#3DD9D6` | Aurora pink `#FF5C8A` |
+| Theme | Vibe |
+|---|---|
+| `violet-forge` *(default)* | Editorial dark, AI workspace energy |
+| `falcon-red` | Dark with a signal-red accent |
+| `classic-paper` | Warm light, document-first reading |
+| `aurora-terminal` | High-contrast dev terminal feel |
+| `vercel-mono` | Monochrome, hairline borders |
+| `github-dark` | Familiar code-host dark |
+| `dracula` | The editor classic |
+| `one-dark` | Atom's palette |
+| `anthropic-style` | Warm neutrals, low chroma |
+| `openai-style` | Clean greys, green accent |
+| `linear-glass` | Translucent surfaces, cool blues |
 
 ```tsx
 import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@theokit/ui";
@@ -215,7 +223,30 @@ import { ThemeProvider, ThemeSwitcher, builtinThemes } from "@theokit/ui";
 </ThemeProvider>
 ```
 
-Define your own theme by extending `Theme` from `@theokit/ui` — see [`wiki/design-system/index.md`](./wiki/design-system/index.md).
+### Your own theme
+
+```ts
+import { defineTheme } from "@theokit/ui";
+
+export const mine = defineTheme({
+  name: "mine",
+  // `light` and `dark` are Partial<ColorScale> — omit what you don't change.
+  dark: { background: "#131314", card: "#1e1f20", success: "#81c995" },
+  fonts: { body: "Roboto, sans-serif", mono: "Roboto Mono, monospace" },
+});
+```
+
+Pass it in `themes={[mine]}`. Components read the tokens, so changing `success` moves every status
+pill, capability indicator and session dot with it — including the semantic and `status-*` families,
+not just surfaces.
+
+**Overriding a single token in your own CSS** also works: the palette ships inside `@layer theme`,
+so both unlayered CSS and `@layer base` in your app win over it. (Before the fix for
+[#72](https://github.com/usetheokit/theokit-ui/issues/72) the tokens were unlayered and silently
+outranked anything a consumer wrote — a full `defineTheme` was the only way through.) Use
+`defineTheme` for a palette, a CSS override for one value in one place.
+
+Full spec: [`wiki/design-system/index.md`](./wiki/design-system/index.md).
 
 ---
 
@@ -341,7 +372,7 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
-- **Production.** 103 components, 1486 tests passing, zero a11y violations across the axe sweep over every story, bundle size enforced. Quality gates run on every PR.
+- **Production.** 103 components, 1526 tests passing, zero a11y violations across the axe sweep over every story, bundle size enforced. Quality gates run on every PR.
 - **Registry distribution.** Served at [`https://usetheokit.github.io/theokit-ui/r/`](https://usetheokit.github.io/theokit-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.

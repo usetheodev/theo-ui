@@ -289,6 +289,25 @@ async function main(): Promise<void> {
   // welcome stats module
   const welcomeStats = renderWelcomeStatsModule(counts);
 
+  /**
+   * llms.txt — the published version line.
+   *
+   * That file calls itself the project's factual ground truth, and its version had drifted two
+   * minors behind before anyone noticed (usetheokit/theokit-ui#73). A number that a human has to
+   * remember to update at release time is a number that goes stale; deriving it here removes the
+   * remembering. `scripts/llms-txt.test.ts` fails if the two ever disagree again.
+   */
+  const llmsPath = join(ROOT, "llms.txt");
+  const { version } = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8")) as {
+    version: string;
+  };
+  let llms = await readFile(llmsPath, "utf-8");
+  const versionLine = /^- \*\*Current version:\*\* `[^`]+`/m;
+  if (!versionLine.test(llms)) {
+    throw new Error("llms.txt: `- **Current version:** \`x.y.z\`` line not found");
+  }
+  llms = llms.replace(versionLine, `- **Current version:** \`${version}\``);
+
   // 2. COMMIT — write all three files. We do this last so that compute failures
   //    in step 1 leave the working tree untouched.
   await writeFile(join(ROOT, "README.md"), readme);
@@ -296,9 +315,10 @@ async function main(): Promise<void> {
   // Generated output lives outside `src/` so it does not enter the npm
   // tarball when consumers install the lib (HIGH-003 / T3.3).
   await writeFile(join(ROOT, ".ladle/generated/welcome.stats.ts"), welcomeStats);
+  await writeFile(llmsPath, llms);
 
   writeStdout(
-    `synced README.md + component-census.md + .ladle/generated/welcome.stats.ts: ${counts.components} components (${counts.primitives}P + ${counts.composites}C), ${counts.tests} tests, ${counts.registryItems} registry items, ${counts.screens} screens`,
+    `synced README.md + component-census.md + .ladle/generated/welcome.stats.ts + llms.txt: ${counts.components} components (${counts.primitives}P + ${counts.composites}C), ${counts.tests} tests, ${counts.registryItems} registry items, ${counts.screens} screens`,
   );
 }
 
