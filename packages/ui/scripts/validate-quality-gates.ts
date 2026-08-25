@@ -443,9 +443,9 @@ function validateScriptsAndCi(): void {
     if (!packageJson.scripts?.[script]) fail("package.json", `missing script ${script}`);
   }
 
-  const ciPath = join(REPO_ROOT, ".github/workflows/quality-gates.yml");
+  const ciPath = join(REPO_ROOT, ".github/workflows/ci.yml");
   if (!existsSync(ciPath)) {
-    fail(".github/workflows", "missing quality-gates.yml");
+    fail(".github/workflows", "missing ci.yml");
   }
 }
 

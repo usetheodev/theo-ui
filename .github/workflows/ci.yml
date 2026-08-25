@@ -1,4 +1,4 @@
-name: Quality Gates
+name: CI
 
 on:
   pull_request:
@@ -11,14 +11,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: quality-gates-${{ github.ref }}
+  group: ci-${{ github.ref }}
   # A cancelled run on an integration branch leaves the commit with no verdict,
   # which reads the same as a passing one. Only supersede elsewhere.
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 jobs:
-  quality-gates:
-    name: quality:gates
+  verify:
+    name: Verify (quality gates)
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
