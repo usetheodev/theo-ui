@@ -264,6 +264,16 @@ async function main(): Promise<void> {
   );
   readme = replaceRegion(readme, "primitives", renderPrimitives(primitives));
   readme = replaceRegion(readme, "composites", renderComposites(composites));
+  // The prose under "Production" repeats two of the same numbers, and `quality:structure` checks
+  // it as well as the badge. While it sat outside a region this script fixed the badge and left
+  // the sentence stale, so the gate still failed after running the script its own message names —
+  // and it failed on the release pull request, which is an expensive place to find a one-word
+  // edit (usetheokit/theokit-ui#86).
+  readme = replaceRegion(
+    readme,
+    "production-stats",
+    `- **Production.** ${String(counts.components)} components, ${String(counts.tests)} tests passing, zero a11y violations across the axe sweep over every story, bundle size enforced. Quality gates run on every PR.`,
+  );
   readme = replaceRegion(
     readme,
     "component-catalog-intro",
