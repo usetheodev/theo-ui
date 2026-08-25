@@ -304,7 +304,7 @@ async function main(): Promise<void> {
   let llms = await readFile(llmsPath, "utf-8");
   const versionLine = /^- \*\*Current version:\*\* `[^`]+`/m;
   if (!versionLine.test(llms)) {
-    throw new Error("llms.txt: `- **Current version:** \`x.y.z\`` line not found");
+    throw new Error("llms.txt: `- **Current version:** `x.y.z`` line not found");
   }
   llms = llms.replace(versionLine, `- **Current version:** \`${version}\``);
 
