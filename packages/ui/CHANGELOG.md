@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.4
+
+### Patch Changes
+
+- e134f3f: A PR de versão deixa de nascer reprovando o próprio gate de formatação.
+
+  `changeset version` reescreve `packages/ui/package.json` com a formatação dele, que expande
+  `sideEffects` em três linhas onde o Biome quer uma. Como `format:check` é o primeiro passo de
+  `quality:gates`, toda PR "Version Packages" falhava ali antes de exercitar qualquer outra coisa —
+  não por um defeito no pacote, mas pelo formatador discordando de quem escreveu o arquivo.
+
+  `version-packages` passa a rodar o formatador sobre o manifesto que acabou de reescrever.
+
 ## 1.4.3
 
 ### Patch Changes
@@ -40,6 +53,10 @@
 
 ### Changed
 
+- The CI workflow is `ci.yml` with a job named `Verify (quality gates)`, matching the six sibling
+  repositories in the framework. The job name is the status-check context, so the required checks
+  on `main` and `develop` moved with it — renaming one without the other would leave every open
+  pull request waiting on a check that never reports (#66)
 - The repository is a pnpm workspace and the package now lives at `packages/ui/`, matching the
   seven other publishable repositories in the framework. Nothing about the published package
   changes: every subpath export is relative to the package, so they survive the move untouched —

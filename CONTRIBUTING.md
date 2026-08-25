@@ -163,7 +163,7 @@ pnpm ladle:build         # Ladle SSR build (story smoke)
 | `validateDesignSystemFidelity` | Geist tokens in tokens.css + preset; type scale |
 | `validateNoLiteralTailwindColors` | components MUST consume semantic tokens (ADR-0004) — `bg-emerald-500` etc. blocked |
 | `validateThemeContrast` | 10 themes × 2 modes × 8 pairs against WCAG 2.x AA (4.5:1 body / 3:1 large) |
-| `validateScriptsAndCi` | required npm scripts + `.github/workflows/quality-gates.yml` |
+| `validateScriptsAndCi` | required npm scripts + `.github/workflows/ci.yml` |
 
 Additional gates wired into `quality:gates` post-T5.3 / T5.4:
 

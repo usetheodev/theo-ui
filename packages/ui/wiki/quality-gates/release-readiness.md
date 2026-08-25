@@ -84,7 +84,7 @@ under a dedicated job.
 
 # CI
 
-`.github/workflows/quality-gates.yml` installs Playwright Chromium before running the
+`.github/workflows/ci.yml` installs Playwright Chromium before running the
 chain. Visual snapshots run under `mcr.microsoft.com/playwright:v1.49.0-jammy` so font
 rendering is deterministic. The gate is made non-bypassable by
 [branch protection](/quality-gates/branch-protection.md).
