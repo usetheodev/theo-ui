@@ -1,5 +1,58 @@
 # Changelog
 
+## 1.5.1
+
+### Patch Changes
+
+- 9bc0281: `defineTheme` warns when a theme paints one mode and omits the other entirely.
+
+  `defineTheme({ name, dark: {...} })` merges over Violet Forge, so every light-mode key comes from
+  Violet Forge — and `ThemeProvider` follows the system preference by default via
+  `respectSystemMode`. A theme that defines only `dark` therefore renders as a different product for
+  every visitor whose system is set to light: different background, different accent, different
+  brand. It is a valid `Theme`, so nothing in typecheck, lint, tests or build sees it; it surfaces
+  only when somebody opens the app in the other mode (usetheokit/theokit-ui#81).
+
+  The existing caveat covered a different case — one key overridden on one side, which yields two
+  different colours. This one is the whole palette, and it now warns in development, naming how many
+  colours were set and what the other mode falls back to.
+
+  Pass an empty object (`light: {}`) to declare the inheritance deliberate and silence it. A
+  name-only alias of Violet Forge stays silent, since nothing was lost.
+
+- 9bc0281: `ToolsList` stays readable in a narrow panel.
+
+  The enablement chip was its own `auto` grid column, and an `auto` column never yields width.
+  Measured in Chrome at a 300px side panel, a row resolved to `32px 63px 104px`: the chip held
+  104px while the tool name and its description shared 63px between them. The name overflowed onto
+  the chip and the description wrapped roughly one word per line — 398px tall for a single sentence.
+  Only the content was ever sacrificed; the chip stayed at 104px at every panel width tested, so the
+  component needed a ~450px panel to be legible, which is no longer a side panel
+  (usetheokit/theokit-ui#80).
+
+  The chip now shares the content column, inside the wrapping row that already held the name, source
+  and badge. It keeps its place at the end of that line when there is room and drops to the next line
+  when there is not, and the description always spans the full content column. The same row at 300px
+  now resolves to `32px 179px`: the description is 179px wide and 133px tall.
+
+  Long tool names break instead of overflowing.
+
+- 9bc0281: Pre-publish gate: every relative import in the tarball must resolve to a file the tarball ships.
+
+  `1.4.1` was published with a `dist/index.js` importing four chunk files the package did not
+  contain — 92 shipped against 96 referenced — and nothing detected it. The existing gates could not:
+  `test` and `test:contract` import from the working tree, where the chunks were present, and
+  `validate-exports.mjs` asks whether the entry loads here rather than whether the artefact is whole.
+  The defect only appeared when a consumer bundled the package (usetheokit/theokit-ui#79).
+
+  `validate:packaged` asks the cheaper question of the thing actually published: `npm pack --dry-run
+--json` for the file list npm itself computes, then every static relative specifier inside those
+  files must land on one of them. Offline, no consumer, no network. It runs in `prepublishOnly` and
+  in `quality:gates`.
+
+  Verified against the real defect: removing one chunk from `dist/` fails the gate naming
+  `dist/index.js → ./chunk-….js`, the same shape as the original report.
+
 ## 1.5.0
 
 ### Minor Changes
