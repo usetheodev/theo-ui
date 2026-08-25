@@ -73,14 +73,22 @@ const ToolsList = forwardRef<HTMLDivElement, ToolsListProps>(
           return (
             <li
               key={tool.id}
-              className="grid grid-cols-[auto_1fr_auto] items-start gap-3 px-4 py-3"
+              className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-4 py-3"
             >
               <span className="mt-0.5 grid size-8 place-items-center rounded-md bg-muted text-muted-foreground">
                 <Icon className="size-4" aria-hidden="true" />
               </span>
               <div className="min-w-0">
+                {/*
+                  The enablement chip lives in this wrapping row rather than in a third grid
+                  column. As its own `auto` column it never yielded width: in a 300px panel it
+                  held 104px while the tool name and description shared 63px, so the name
+                  overlapped the chip and the description wrapped a word per line. Here it takes
+                  the line when there is room and drops to the next one when there is not, and
+                  the description always spans the full content column.
+                */}
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-medium font-mono text-body-sm text-foreground">
+                  <span className="min-w-0 break-all font-medium font-mono text-body-sm text-foreground">
                     {tool.name}
                   </span>
                   {tool.source ? (
@@ -93,32 +101,32 @@ const ToolsList = forwardRef<HTMLDivElement, ToolsListProps>(
                       {tool.badge}
                     </span>
                   ) : null}
+                  <button
+                    type="button"
+                    onClick={() => onEnablementChange?.(tool.id, cycle(state))}
+                    className={cn(
+                      "ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1",
+                      "font-mono text-label uppercase tracking-wider transition-colors",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      ENABLEMENT_CLASS[state],
+                      !onEnablementChange && "pointer-events-none",
+                    )}
+                    aria-label={`Cycle enablement for ${tool.name}`}
+                  >
+                    {state === "enabled" ? (
+                      <Eye className="size-3" aria-hidden="true" />
+                    ) : state === "ask" ? (
+                      <Settings2 className="size-3" aria-hidden="true" />
+                    ) : (
+                      <Lock className="size-3" aria-hidden="true" />
+                    )}
+                    {ENABLEMENT_LABEL[state]}
+                  </button>
                 </div>
                 {tool.description ? (
                   <p className="mt-0.5 text-body-sm text-muted-foreground">{tool.description}</p>
                 ) : null}
               </div>
-              <button
-                type="button"
-                onClick={() => onEnablementChange?.(tool.id, cycle(state))}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1",
-                  "font-mono text-label uppercase tracking-wider transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  ENABLEMENT_CLASS[state],
-                  !onEnablementChange && "pointer-events-none",
-                )}
-                aria-label={`Cycle enablement for ${tool.name}`}
-              >
-                {state === "enabled" ? (
-                  <Eye className="size-3" aria-hidden="true" />
-                ) : state === "ask" ? (
-                  <Settings2 className="size-3" aria-hidden="true" />
-                ) : (
-                  <Lock className="size-3" aria-hidden="true" />
-                )}
-                {ENABLEMENT_LABEL[state]}
-              </button>
             </li>
           );
         })}
