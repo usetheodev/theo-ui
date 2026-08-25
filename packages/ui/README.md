@@ -372,7 +372,9 @@ tests/             fixture-shadcn-app/ (registry install integration test)
 
 Honest claims only.
 
+<!-- BEGIN:production-stats -->
 - **Production.** 103 components, 1547 tests passing, zero a11y violations across the axe sweep over every story, bundle size enforced. Quality gates run on every PR.
+<!-- END:production-stats -->
 - **Registry distribution.** Served at [`https://usetheokit.github.io/theokit-ui/r/`](https://usetheokit.github.io/theokit-ui/r/) (GitHub Pages, auto-deploy on every push to `main`). The branded `https://ui.usetheo.dev/r/` URL is a single DNS CNAME away — point `ui.usetheo.dev` at `usetheodev.github.io` and add it as a custom domain in Pages settings.
 - **ESM-only.** Modern bundlers only. Consumers on CommonJS Node need to transpile or use a bundler.
 - **Component count is the floor, not the ceiling.** New AI-agent surfaces ship through PRs; every addition runs the same quality gates.
