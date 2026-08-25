@@ -16,6 +16,13 @@
  * Violet Forge's default in dark. That's intentional. Pass both sides
  * to keep them in sync.
  *
+ * Omitting a mode *entirely* is the same rule with a much larger blast
+ * radius, so it warns in development: a theme that defines only `dark`
+ * renders as Violet Forge for every visitor whose system is set to light,
+ * which `ThemeProvider` follows by default via `respectSystemMode`. Pass
+ * an empty object (`light: {}`) to say the inheritance is deliberate and
+ * silence the warning.
+ *
  * @example
  *   import { defineTheme, hex } from "@theokit/ui";
  *   export const corp = defineTheme({
@@ -26,6 +33,7 @@
  *
  * RFC: `wiki/rfcs/0005-theming-and-sizes.md`.
  */
+import { isDev } from "../lib/env.js";
 import type { ColorScale, Theme, ThemeFonts } from "./types.js";
 import { violetForge } from "./violet-forge.js";
 
@@ -47,11 +55,17 @@ export interface DefineThemeInput {
   /**
    * Override light-mode colours. Any key omitted is inherited from
    * `violetForge.light`. See `ColorScale` for the full list.
+   *
+   * Leaving this out while `dark` is set warns in development — pass `{}`
+   * to declare the inheritance deliberate.
    */
   light?: Partial<ColorScale>;
   /**
    * Override dark-mode colours. Any key omitted is inherited from
    * `violetForge.dark`.
+   *
+   * Leaving this out while `light` is set warns in development — pass `{}`
+   * to declare the inheritance deliberate.
    */
   dark?: Partial<ColorScale>;
   /**
@@ -72,6 +86,36 @@ function defaultLabel(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+/**
+ * Warn when a theme paints one mode and leaves the other entirely absent.
+ *
+ * The merge below is documented and deliberate, but the failure it produces is silent and total:
+ * every key of the missing mode comes from Violet Forge, so a theme that defines only `dark` is a
+ * different product in light — different background, different accent, different brand. Nothing
+ * in `tsc`, lint, tests or build sees it, because it is a valid `Theme`; it surfaces only when
+ * somebody opens the app on a system set to the other mode.
+ *
+ * `undefined` (forgot) is distinguished from `{}` (meant it), so the escape hatch costs two
+ * characters and reads as intent at the call site.
+ */
+function warnOneSidedTheme(name: string, input: DefineThemeInput): void {
+  if (!isDev()) return;
+
+  const given = input.light !== undefined ? "light" : "dark";
+  const missing = given === "light" ? "dark" : "light";
+  const overrides = Object.keys(
+    given === "light" ? (input.light ?? {}) : (input.dark ?? {}),
+  ).length;
+  if (overrides === 0) return;
+
+  // biome-ignore lint/suspicious/noConsole: dev-only authoring diagnostic (#81)
+  console.warn(
+    `[@theokit/ui] defineTheme("${name}") sets ${String(overrides)} ${given}-mode colour${
+      overrides === 1 ? "" : "s"
+    } but omits \`${missing}\` entirely, so every ${missing}-mode key falls back to Violet Forge — a different palette, not a dimmer or brighter version of yours. ThemeProvider follows the system preference by default (respectSystemMode), so visitors in ${missing} mode see Violet Forge. Define \`${missing}\`, or pass \`${missing}: {}\` if inheriting it is deliberate.`,
+  );
+}
+
 export function defineTheme(input: DefineThemeInput): Theme {
   if (typeof input?.name !== "string" || input.name.length === 0) {
     throw new Error("defineTheme: `name` is required and cannot be empty.");
@@ -81,6 +125,9 @@ export function defineTheme(input: DefineThemeInput): Theme {
       `defineTheme: invalid name "${input.name}". Must match /^[a-z][a-z0-9-]*$/i — letters, digits, and hyphens only, starting with a letter.`,
     );
   }
+
+  const oneSided = (input.light === undefined) !== (input.dark === undefined);
+  if (oneSided) warnOneSidedTheme(input.name, input);
 
   const lightOverride = input.light ?? {};
   const darkOverride = input.dark ?? {};
