@@ -125,6 +125,23 @@ jobs:
       - name: Disarm the local pre-commit hook for the bot's version commit
         run: git config --unset core.hooksPath || true
 
+      # THE VERSION PULL REQUEST OPENS WITH NO CHECKS RUNNING, AND THAT IS NOT A BUG.
+      # changesets opens it with `secrets.GITHUB_TOKEN`, and GitHub deliberately does not
+      # start workflow runs from GITHUB_TOKEN-authored events — otherwise a workflow could
+      # trigger itself forever. So the Version Packages pull request appears with only the
+      # external GitHub Apps reporting (Socket here); TruffleHog, actionlint and
+      # `Verify (quality gates)` never fire on their own.
+      #
+      # The pull request is therefore BLOCKED rather than green-and-mergeable: those three
+      # are required checks on `main`, and a required check that never reports cannot be
+      # satisfied. A person releases the runs — closing and reopening the pull request is
+      # the usual gesture, and re-triggers them as a human-authored event.
+      #
+      # Keep it that way. The obvious "fix" is to hand this action a personal access token
+      # so the pull request looks human-authored and the checks fire by themselves; that
+      # puts a long-lived credential back into the job that publishes to npm, which is the
+      # thing OIDC was adopted to remove. One manual gesture per release is the cheaper
+      # side of that trade.
       - name: Create Release Pull Request or Publish
         uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
