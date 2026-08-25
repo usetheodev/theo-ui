@@ -325,6 +325,22 @@ request is what publishes to npm, tags the commit, and creates the GitHub releas
 - `prepublishOnly` still refuses a version the registry already serves, which is
   the guard that caught the git↔npm drift in usetheokit/theokit-ui#46.
 
+### The Version PR opens with no checks running — release them
+
+It appears BLOCKED, with only the external GitHub Apps reporting. That is expected:
+changesets opens it with `GITHUB_TOKEN`, and GitHub does not start workflow runs from
+GITHUB_TOKEN-authored events, so `TruffleHog`, `actionlint + zizmor` and
+`Verify (quality gates)` never fire on their own. Being required checks, they cannot
+be satisfied by never reporting.
+
+**Close and reopen the pull request.** That re-triggers them as a human-authored
+event, and once they pass the merge publishes.
+
+This is the one manual gesture left in a release, and it is deliberate. The obvious
+alternative — giving the workflow a personal access token so the PR looks
+human-authored — puts a long-lived credential back in the job that publishes to npm,
+which is exactly what OIDC was adopted to remove.
+
 ### Why the CHANGELOG has two kinds of section
 
 `## [Unreleased]` is written by hand, per Keep a Changelog, and is where a visible
