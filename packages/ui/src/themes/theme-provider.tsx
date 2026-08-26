@@ -615,4 +615,15 @@ function useTheme(): ThemeContextValue {
  * with no DOM in it. Calling it directly tests the thing itself instead of a render that happens
  * to reach it.
  */
+/**
+ * Whether a font stack will pass the injection allowlist.
+ *
+ * Exported so a UI collecting one can check BEFORE applying rather than after: the provider throws
+ * in development, which is right for a theme written in a file and wrong for a text field somebody
+ * is still typing into. A single `(` would otherwise take the page down mid-word.
+ */
+export function isValidFontFamily(value: string): boolean {
+  return FONT_FAMILY_PATTERN.test(value);
+}
+
 export { ThemeProvider, shapeToCss, useTheme };

@@ -11,8 +11,8 @@ import { defineTheme } from "./define.js";
 import { useDensity } from "./density.js";
 import type { Density } from "./density.js";
 import { deriveColorScale } from "./derive.js";
-import { useTheme } from "./theme-provider.js";
-import type { ColorScale, RadiusScale, Theme, ThemeMode } from "./types.js";
+import { isValidFontFamily, useTheme } from "./theme-provider.js";
+import type { ColorScale, RadiusScale, Theme, ThemeFonts, ThemeMode } from "./types.js";
 
 /**
  * ThemeEditor — build a theme by hand, with the accessibility check running while you do it.
@@ -242,6 +242,10 @@ export interface ThemeEditorLabels {
   elevation: Record<ElevationKey, string>;
   motionSection: string;
   typographySection: string;
+  customFont: string;
+  customFontPlaceholder: string;
+  customFontHint: string;
+  fontSlots: Record<keyof ThemeFonts, string>;
   motion: Record<MotionKey, string>;
   typography: Record<TypographyKey, string>;
   corners: Record<(typeof RADIUS_VALUES)[number], string>;
@@ -311,6 +315,10 @@ const DEFAULT_LABELS: ThemeEditorLabels = {
   elevation: { inherit: "Inherit", flat: "Flat", soft: "Soft", strong: "Strong" },
   motionSection: "Motion",
   typographySection: "Typeface",
+  customFont: "Use my own typeface",
+  customFontPlaceholder: '"My Font", Helvetica, sans-serif',
+  customFontHint: "End the stack with a generic family, so a missing face still renders.",
+  fontSlots: { display: "Display", body: "Body", mono: "Mono" },
   motion: { inherit: "Inherit", none: "None", snappy: "Snappy", relaxed: "Relaxed" },
   typography: {
     inherit: "Inherit",
@@ -366,7 +374,14 @@ export interface ThemeEditorProps {
 type DeepPartialLabels = Partial<
   Omit<
     ThemeEditorLabels,
-    "colours" | "corners" | "density" | "groups" | "elevation" | "motion" | "typography"
+    | "colours"
+    | "corners"
+    | "density"
+    | "groups"
+    | "elevation"
+    | "motion"
+    | "typography"
+    | "fontSlots"
   >
 > & {
   colours?: Partial<ThemeEditorLabels["colours"]>;
@@ -376,6 +391,7 @@ type DeepPartialLabels = Partial<
   elevation?: Partial<ThemeEditorLabels["elevation"]>;
   motion?: Partial<ThemeEditorLabels["motion"]>;
   typography?: Partial<ThemeEditorLabels["typography"]>;
+  fontSlots?: Partial<ThemeEditorLabels["fontSlots"]>;
 };
 
 /** One level of merge for the nested groups; a plain spread would drop the untranslated keys. */
@@ -391,6 +407,7 @@ function mergeLabels(overrides: DeepPartialLabels | undefined): ThemeEditorLabel
     elevation: { ...DEFAULT_LABELS.elevation, ...overrides.elevation },
     motion: { ...DEFAULT_LABELS.motion, ...overrides.motion },
     typography: { ...DEFAULT_LABELS.typography, ...overrides.typography },
+    fontSlots: { ...DEFAULT_LABELS.fontSlots, ...overrides.fontSlots },
   };
 }
 
@@ -456,6 +473,16 @@ function ThemeEditor({
   const [elevation, setElevation] = useState<ElevationKey>("inherit");
   const [motion, setMotion] = useState<MotionKey>("inherit");
   const [typography, setTypography] = useState<TypographyKey>("inherit");
+  /**
+   * A custom stack, for when none of the presets is the brand's typeface.
+   *
+   * Presets cover the common case and keep the three faces agreeing with each other; this is the
+   * escape hatch for the case a preset cannot serve, which for a design system is most of the ones
+   * that matter — a company with its own type does not want "Geometric", it wants its own.
+   *
+   * Empty means unused, so the preset stays in charge until somebody types something.
+   */
+  const [customFonts, setCustomFonts] = useState<Partial<ThemeFonts>>({});
   const [openGroup, setOpenGroup] = useState<string>(COLOR_GROUPS[0].id);
 
   // Audited against the palette the editor opened on, not the live one — the live one already
@@ -473,6 +500,7 @@ function ThemeEditor({
       nextElevation: ElevationKey = elevation,
       nextMotion: MotionKey = motion,
       nextTypography: TypographyKey = typography,
+      nextCustom: Partial<ThemeFonts> = customFonts,
     ): Theme =>
       defineTheme({
         name,
@@ -487,9 +515,11 @@ function ThemeEditor({
         spacing: nextSpacing,
         shadows: ELEVATION_PRESETS[nextElevation],
         motion: MOTION_PRESETS[nextMotion],
-        fonts: TYPOGRAPHY_PRESETS[nextTypography],
+        // Preset first, then whatever was typed — per slot, so a custom display face can sit over
+        // a preset's body and mono rather than forcing all three to be re-entered.
+        fonts: mergeFonts(TYPOGRAPHY_PRESETS[nextTypography], nextCustom),
       }),
-    [name, elevation, motion, typography],
+    [name, elevation, motion, typography, customFonts],
   );
 
   /** Applies live: the page repaints from the cascade, with no rebuild and no reload. */
@@ -501,6 +531,7 @@ function ThemeEditor({
       nextElevation?: ElevationKey,
       nextMotion?: MotionKey,
       nextTypography?: TypographyKey,
+      nextCustom?: Partial<ThemeFonts>,
     ) => {
       const next = build(
         nextByMode,
@@ -509,6 +540,7 @@ function ThemeEditor({
         nextElevation,
         nextMotion,
         nextTypography,
+        nextCustom,
       );
       registerTheme(next);
       setTheme(next.name);
@@ -601,6 +633,40 @@ function ThemeEditor({
     [colorsByMode, radius, spacing, elevation, apply],
   );
 
+  /**
+   * Typed text is kept as typed, and applied only when it is valid.
+   *
+   * The provider throws on a stack that could break out of the declaration, which is correct for a
+   * theme written in a file and wrong here — somebody typing `Font (Bold)` would take the page down
+   * on the `(`. So the field always shows what was typed, and the theme only receives it once it
+   * would survive injection. Invalid text is marked, not swallowed: the value stays visible with
+   * `aria-invalid` on the field, rather than silently doing nothing.
+   */
+  const onCustomFontChange = useCallback(
+    (slot: keyof ThemeFonts) => (event: ChangeEvent<HTMLInputElement>) => {
+      const typed = event.target.value;
+      const next = { ...customFonts, [slot]: typed };
+      setCustomFonts(next);
+
+      const applicable = Object.fromEntries(
+        Object.entries(next).filter(
+          ([, v]) => typeof v === "string" && (v.trim() === "" || isValidFontFamily(v)),
+        ),
+      );
+      apply(colorsByMode, radius, spacing, elevation, motion, typography, applicable);
+    },
+    [customFonts, colorsByMode, radius, spacing, elevation, motion, typography, apply],
+  );
+
+  /** A slot with text that cannot be injected — shown as invalid rather than applied. */
+  const invalidFontSlot = useCallback(
+    (slot: keyof ThemeFonts): boolean => {
+      const v = customFonts[slot];
+      return typeof v === "string" && v.trim() !== "" && !isValidFontFamily(v);
+    },
+    [customFonts],
+  );
+
   const onTypographyChange = useCallback(
     (value: TypographyKey) => {
       setTypography(value);
@@ -617,7 +683,8 @@ function ThemeEditor({
     setElevation("inherit");
     setMotion("inherit");
     setTypography("inherit");
-    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING, "inherit", "inherit", "inherit");
+    setCustomFonts({});
+    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING, "inherit", "inherit", "inherit", {});
   }, [origin, apply, setDensity]);
 
   return (
@@ -819,6 +886,44 @@ function ThemeEditor({
           labels={labels.typography}
           onChange={onTypographyChange}
         />
+
+        {/*
+          The escape hatch. Presets keep the three faces agreeing with each other and cover the
+          common case; a company with its own type does not want "Geometric", it wants its own, and
+          a design system that cannot express that is one people fork.
+
+          Per slot, so a custom display face can sit over a preset's body and mono. Blank means
+          unused — the preset stays in charge until somebody types.
+        */}
+        <details className="rounded-lg border border-border/60">
+          <summary className="cursor-pointer px-3 py-2 font-medium text-body-sm marker:text-muted-foreground">
+            {labels.customFont}
+          </summary>
+          <div className="flex flex-col gap-2 border-border/40 border-t px-3 py-3">
+            {(["display", "body", "mono"] as const).map((slot) => (
+              <label key={slot} className="flex items-center gap-2 text-body-sm">
+                <span className="w-20 shrink-0 font-mono text-label text-muted-foreground uppercase">
+                  {labels.fontSlots[slot]}
+                </span>
+                <input
+                  type="text"
+                  value={customFonts[slot] ?? ""}
+                  onChange={onCustomFontChange(slot)}
+                  placeholder={labels.customFontPlaceholder}
+                  spellCheck={false}
+                  aria-invalid={invalidFontSlot(slot)}
+                  className={cn(
+                    "min-w-0 flex-1 rounded-md border border-input bg-card px-2 py-1",
+                    "font-mono text-code-sm text-foreground",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    invalidFontSlot(slot) && "border-destructive",
+                  )}
+                />
+              </label>
+            ))}
+            <p className="text-label text-muted-foreground">{labels.customFontHint}</p>
+          </div>
+        </details>
       </fieldset>
 
       <ContrastReport findings={findings} labels={labels} />
@@ -957,6 +1062,24 @@ function ContrastReport({
       </ul>
     </div>
   );
+}
+
+/**
+ * A preset, with anything typed overriding it slot by slot.
+ *
+ * Returns `undefined` when there is nothing to say, so `inherit` with no custom entry keeps
+ * emitting nothing and `tokens.css` holds its own faces. Blank strings are dropped rather than
+ * emitted: an empty `font-family` is a declaration that erases the face instead of leaving it.
+ */
+function mergeFonts(
+  preset: Readonly<Partial<ThemeFonts>> | undefined,
+  custom: Partial<ThemeFonts>,
+): Partial<ThemeFonts> | undefined {
+  const typed = Object.fromEntries(
+    Object.entries(custom).filter(([, v]) => typeof v === "string" && v.trim() !== ""),
+  );
+  if (!preset && Object.keys(typed).length === 0) return undefined;
+  return { ...preset, ...typed };
 }
 
 /** One slider value becomes the whole radius scale, kept in proportion. */
