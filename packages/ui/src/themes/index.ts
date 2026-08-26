@@ -17,6 +17,7 @@ export {
   auditColorScale,
   contrastLevel,
   contrastRatio,
+  cssColorToHex,
   relativeLuminance,
   type ContrastFinding,
   type ContrastLevel,
