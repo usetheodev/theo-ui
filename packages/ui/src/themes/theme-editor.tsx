@@ -32,29 +32,102 @@ import type { ColorScale, RadiusScale, Theme, ThemeMode } from "./types.js";
 
 /** The colour tokens the editor exposes. Everything else is derived or inherited. */
 const EDITABLE_COLORS = [
-  { token: "background", label: "Background" },
-  { token: "foreground", label: "Text" },
-  { token: "card", label: "Surface" },
-  { token: "card-foreground", label: "Surface text" },
-  { token: "primary", label: "Primary" },
-  { token: "primary-foreground", label: "On primary" },
-  { token: "accent", label: "Accent" },
-  { token: "accent-foreground", label: "On accent" },
-  { token: "muted", label: "Muted" },
-  { token: "muted-foreground", label: "Muted text" },
-  { token: "border", label: "Border" },
-] as const satisfies readonly { token: keyof ColorScale; label: string }[];
+  "background",
+  "foreground",
+  "card",
+  "card-foreground",
+  "primary",
+  "primary-foreground",
+  "accent",
+  "accent-foreground",
+  "muted",
+  "muted-foreground",
+  "border",
+] as const satisfies readonly (keyof ColorScale)[];
 
 /** Where the corner control starts, and what Reset returns to. */
 const DEFAULT_RADIUS = "10px";
 
-const RADIUS_STEPS = [
-  { label: "Square", value: "0px" },
-  { label: "Slight", value: "4px" },
-  { label: "Soft", value: "10px" },
-  { label: "Round", value: "16px" },
-  { label: "Pill", value: "24px" },
-] as const;
+const RADIUS_VALUES = ["0px", "4px", "10px", "16px", "24px"] as const;
+
+/** Where the density control starts. `4px` is the scale every spacing utility multiplies. */
+const DEFAULT_SPACING = "4px";
+
+const SPACING_VALUES = ["3px", "4px", "5px"] as const;
+
+/**
+ * Every string the editor renders.
+ *
+ * A component that hard-codes its own copy is only usable in the language it was written in — this
+ * one shipped into a Portuguese product and rendered "Save theme" in the middle of it. Making the
+ * strings a prop is the difference between a component a team can adopt and one they have to fork.
+ *
+ * `Partial`, so a consumer overrides the words they care about and inherits the rest, rather than
+ * restating eleven colour names to translate one button.
+ */
+export interface ThemeEditorLabels {
+  heading: string;
+  /** Receives the mode being edited, e.g. `dark`. */
+  subtitle: (mode: ThemeMode) => string;
+  reset: string;
+  colourSection: string;
+  cornerSection: string;
+  densitySection: string;
+  contrastSection: string;
+  allPass: string;
+  /** Receives how many pairs fall below their threshold. */
+  belowMinimum: (count: number) => string;
+  save: string;
+  /** Receives how many pairs are unreadable, for the opted-in failing case. */
+  saveAnyway: (count: number) => string;
+  unreadable: string;
+  /** Receives the required ratio, e.g. `4.5`. */
+  needs: (minimum: number) => string;
+  colours: Record<(typeof EDITABLE_COLORS)[number], string>;
+  corners: Record<(typeof RADIUS_VALUES)[number], string>;
+  density: Record<(typeof SPACING_VALUES)[number], string>;
+}
+
+const DEFAULT_LABELS: ThemeEditorLabels = {
+  heading: "Theme",
+  subtitle: (mode) => `Editing the ${mode} palette. Changes apply as you make them.`,
+  reset: "Reset",
+  colourSection: "Colour",
+  cornerSection: "Corners",
+  densitySection: "Density",
+  contrastSection: "Contrast",
+  allPass: "All pairs pass",
+  belowMinimum: (count) => `${String(count)} below WCAG AA`,
+  save: "Save theme",
+  saveAnyway: (count) => `Save anyway (${String(count)} unreadable)`,
+  unreadable: "unreadable",
+  needs: (minimum) => `needs ${String(minimum)}`,
+  colours: {
+    background: "Background",
+    foreground: "Text",
+    card: "Surface",
+    "card-foreground": "Surface text",
+    primary: "Primary",
+    "primary-foreground": "On primary",
+    accent: "Accent",
+    "accent-foreground": "On accent",
+    muted: "Muted",
+    "muted-foreground": "Muted text",
+    border: "Border",
+  },
+  corners: {
+    "0px": "Square",
+    "4px": "Slight",
+    "10px": "Soft",
+    "16px": "Round",
+    "24px": "Pill",
+  },
+  density: {
+    "3px": "Compact",
+    "4px": "Comfortable",
+    "5px": "Spacious",
+  },
+};
 
 export interface ThemeEditorProps {
   className?: string;
@@ -76,6 +149,32 @@ export interface ThemeEditorProps {
   allowFailing?: boolean;
   /** Name for the theme being built. Defaults to `custom`. */
   name?: string;
+  /**
+   * Override any of the strings the editor renders.
+   *
+   * Partial: pass the words you care about, inherit the rest. Nested groups merge one level, so
+   * translating two colour names does not mean restating eleven.
+   */
+  labels?: DeepPartialLabels;
+}
+
+/** `labels` accepts a subset, including a subset of each nested group. */
+type DeepPartialLabels = Partial<Omit<ThemeEditorLabels, "colours" | "corners" | "density">> & {
+  colours?: Partial<ThemeEditorLabels["colours"]>;
+  corners?: Partial<ThemeEditorLabels["corners"]>;
+  density?: Partial<ThemeEditorLabels["density"]>;
+};
+
+/** One level of merge for the nested groups; a plain spread would drop the untranslated keys. */
+function mergeLabels(overrides: DeepPartialLabels | undefined): ThemeEditorLabels {
+  if (!overrides) return DEFAULT_LABELS;
+  return {
+    ...DEFAULT_LABELS,
+    ...overrides,
+    colours: { ...DEFAULT_LABELS.colours, ...overrides.colours },
+    corners: { ...DEFAULT_LABELS.corners, ...overrides.corners },
+    density: { ...DEFAULT_LABELS.density, ...overrides.density },
+  };
 }
 
 /**
@@ -95,8 +194,10 @@ function ThemeEditor({
   onCommit,
   allowFailing = false,
   name = "custom",
+  labels: labelOverrides,
 }: ThemeEditorProps): JSX.Element {
   const { theme: active, mode, registerTheme, setTheme } = useTheme();
+  const labels = useMemo(() => mergeLabels(labelOverrides), [labelOverrides]);
 
   /**
    * Seeded from the active theme, so the editor opens on what the person is already looking at
@@ -110,12 +211,13 @@ function ThemeEditor({
   const [origin] = useState<Partial<ColorScale>>(() => {
     const scale = active[mode];
     const seed: Partial<ColorScale> = {};
-    for (const { token } of EDITABLE_COLORS) seed[token] = scale[token];
+    for (const token of EDITABLE_COLORS) seed[token] = scale[token];
     return seed;
   });
   const [baseScale] = useState<ColorScale>(() => active[mode]);
   const [colors, setColors] = useState<Partial<ColorScale>>(origin);
   const [radius, setRadius] = useState<string>(DEFAULT_RADIUS);
+  const [spacing, setSpacing] = useState<string>(DEFAULT_SPACING);
 
   // Audited against the palette the editor opened on, not the live one — the live one already
   // contains these edits, so folding it in would compare a change against itself.
@@ -125,12 +227,13 @@ function ThemeEditor({
   const readable = failing.length === 0;
 
   const build = useCallback(
-    (nextColors: Partial<ColorScale>, nextRadius: string): Theme =>
+    (nextColors: Partial<ColorScale>, nextRadius: string, nextSpacing: string): Theme =>
       defineTheme({
         name,
         label: "Custom",
         [mode]: nextColors,
         radius: buildRadius(nextRadius),
+        spacing: nextSpacing,
         // The mode not being edited inherits, which `defineTheme` warns about in development. The
         // warning is right for a theme written in a file and wrong here: this editor edits one
         // mode at a time by design, and the person can switch modes and edit the other.
@@ -141,8 +244,8 @@ function ThemeEditor({
 
   /** Applies live: the page repaints from the cascade, with no rebuild and no reload. */
   const apply = useCallback(
-    (nextColors: Partial<ColorScale>, nextRadius: string) => {
-      const next = build(nextColors, nextRadius);
+    (nextColors: Partial<ColorScale>, nextRadius: string, nextSpacing: string) => {
+      const next = build(nextColors, nextRadius, nextSpacing);
       registerTheme(next);
       setTheme(next.name);
     },
@@ -153,23 +256,32 @@ function ThemeEditor({
     (token: keyof ColorScale) => (event: ChangeEvent<HTMLInputElement>) => {
       const next = { ...colors, [token]: event.target.value };
       setColors(next);
-      apply(next, radius);
+      apply(next, radius, spacing);
     },
-    [colors, radius, apply],
+    [colors, radius, spacing, apply],
   );
 
   const onRadiusChange = useCallback(
     (value: string) => {
       setRadius(value);
-      apply(colors, value);
+      apply(colors, value, spacing);
     },
-    [colors, apply],
+    [colors, spacing, apply],
+  );
+
+  const onSpacingChange = useCallback(
+    (value: string) => {
+      setSpacing(value);
+      apply(colors, radius, value);
+    },
+    [colors, radius, apply],
   );
 
   const reset = useCallback(() => {
     setColors(origin);
     setRadius(DEFAULT_RADIUS);
-    apply(origin, DEFAULT_RADIUS);
+    setSpacing(DEFAULT_SPACING);
+    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING);
   }, [origin, apply]);
 
   return (
@@ -180,9 +292,7 @@ function ThemeEditor({
       <header className="flex items-center justify-between gap-3">
         <div>
           <h3 className="font-display text-title-md tracking-tight">Theme</h3>
-          <p className="text-body-sm text-muted-foreground">
-            Editing the {mode} palette. Changes apply as you make them.
-          </p>
+          <p className="text-body-sm text-muted-foreground">{labels.subtitle(mode)}</p>
         </div>
         <button
           type="button"
@@ -194,25 +304,25 @@ function ThemeEditor({
           )}
         >
           <RotateCcw className="size-4" aria-hidden="true" />
-          Reset
+          {labels.reset}
         </button>
       </header>
 
       <fieldset className="flex flex-col gap-2">
         <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
-          Colour
+          {labels.colourSection}
         </legend>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-2">
-          {EDITABLE_COLORS.map(({ token, label }) => (
+          {EDITABLE_COLORS.map((token) => (
             <label key={token} className="flex items-center gap-2 text-body-sm">
               <input
                 type="color"
                 value={asSwatch(colors[token])}
                 onChange={onColorChange(token)}
-                aria-label={label}
+                aria-label={labels.colours[token]}
                 className="size-7 shrink-0 cursor-pointer rounded-md border border-border/60 bg-transparent"
               />
-              <span className="min-w-0 truncate">{label}</span>
+              <span className="min-w-0 truncate">{labels.colours[token]}</span>
             </label>
           ))}
         </div>
@@ -220,7 +330,7 @@ function ThemeEditor({
 
       <fieldset className="flex flex-col gap-2">
         <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
-          Corners
+          {labels.cornerSection}
         </legend>
         {/*
           Real radio inputs rather than buttons carrying `role="radio"`. The ARIA role would
@@ -232,43 +342,80 @@ function ThemeEditor({
           accessibility tree along with the focus ring.
         */}
         <div className="flex flex-wrap gap-2">
-          {RADIUS_STEPS.map((step) => (
+          {RADIUS_VALUES.map((value) => (
             <label
-              key={step.value}
+              key={value}
               className={cn(
                 "inline-flex h-9 cursor-pointer items-center px-3",
                 "font-medium text-body-sm transition-colors",
                 "border has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
-                radius === step.value
+                radius === value
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border/60 hover:bg-muted",
               )}
-              style={{ borderRadius: step.value }}
+              style={{ borderRadius: value }}
             >
               <input
                 type="radio"
                 name="theme-editor-radius"
-                value={step.value}
-                checked={radius === step.value}
+                value={value}
+                checked={radius === value}
                 onChange={() => {
-                  onRadiusChange(step.value);
+                  onRadiusChange(value);
                 }}
                 className="sr-only"
               />
-              {step.label}
+              {labels.corners[value]}
             </label>
           ))}
         </div>
       </fieldset>
 
-      <ContrastReport findings={findings} />
+      <fieldset className="flex flex-col gap-2">
+        <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
+          {labels.densitySection}
+        </legend>
+        {/*
+          One value, and every `p-*`, `gap-*` and `m-*` utility moves with it: they all compile to
+          `calc(var(--spacing) * n)`. A whole-UI rhythm control for one custom property.
+        */}
+        <div className="flex flex-wrap gap-2">
+          {SPACING_VALUES.map((value) => (
+            <label
+              key={value}
+              className={cn(
+                "inline-flex h-9 cursor-pointer items-center rounded-lg px-3",
+                "font-medium text-body-sm transition-colors",
+                "border has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
+                spacing === value
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border/60 hover:bg-muted",
+              )}
+            >
+              <input
+                type="radio"
+                name="theme-editor-spacing"
+                value={value}
+                checked={spacing === value}
+                onChange={() => {
+                  onSpacingChange(value);
+                }}
+                className="sr-only"
+              />
+              {labels.density[value]}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <ContrastReport findings={findings} labels={labels} />
 
       {onCommit ? (
         <button
           type="button"
           disabled={!readable && !allowFailing}
           onClick={() => {
-            onCommit(build(colors, radius));
+            onCommit(build(colors, radius, spacing));
           }}
           className={cn(
             "inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4",
@@ -279,7 +426,7 @@ function ThemeEditor({
           )}
         >
           <Check className="size-4" aria-hidden="true" />
-          {readable ? "Save theme" : `Save anyway (${String(failing.length)} unreadable)`}
+          {readable ? labels.save : labels.saveAnyway(failing.length)}
         </button>
       ) : null}
     </section>
@@ -292,7 +439,13 @@ function ThemeEditor({
  * Someone dragging a colour wants to watch the ratio approach 4.5, not discover at the end that it
  * never got there. Failures are listed first because they are what needs action.
  */
-function ContrastReport({ findings }: { findings: ContrastFinding[] }): JSX.Element {
+function ContrastReport({
+  findings,
+  labels,
+}: {
+  findings: ContrastFinding[];
+  labels: ThemeEditorLabels;
+}): JSX.Element {
   const failing = findings.filter((f) => !f.passes);
   const ordered = [...failing, ...findings.filter((f) => f.passes)];
 
@@ -300,17 +453,17 @@ function ContrastReport({ findings }: { findings: ContrastFinding[] }): JSX.Elem
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <span className="font-mono text-label text-muted-foreground uppercase tracking-wider">
-          Contrast
+          {labels.contrastSection}
         </span>
         {failing.length > 0 ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-destructive/15 px-2 py-0.5 font-mono text-destructive text-label uppercase">
             <AlertTriangle className="size-3" aria-hidden="true" />
-            {failing.length} below WCAG AA
+            {labels.belowMinimum(failing.length)}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 font-mono text-label text-success uppercase">
             <Check className="size-3" aria-hidden="true" />
-            All pairs pass
+            {labels.allPass}
           </span>
         )}
       </div>
@@ -333,8 +486,8 @@ function ContrastReport({ findings }: { findings: ContrastFinding[] }): JSX.Elem
               )}
             >
               {finding.ratio === null
-                ? "unreadable"
-                : `${finding.ratio.toFixed(2)}:1 · needs ${String(finding.minimum)}`}
+                ? labels.unreadable
+                : `${finding.ratio.toFixed(2)}:1 · ${labels.needs(finding.minimum)}`}
             </span>
           </li>
         ))}
