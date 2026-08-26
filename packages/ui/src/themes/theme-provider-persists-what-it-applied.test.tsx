@@ -2,11 +2,18 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { Theme } from "./types.js";
 import { builtinThemes } from "./index.js";
 import { ThemeProvider, useTheme } from "./theme-provider.js";
+import type { Theme } from "./types.js";
 
 /**
+ * NOTE — the commit that added this file (6fbd412) claimed the divergence was visible through
+ * `useTheme().themeName` and through a theme switcher highlighting the wrong entry. Both are FALSE
+ * and the claim is corrected here rather than left standing: the context exposes `theme: active`,
+ * where `active` is already `themes.find(...) ?? themes[0]`, so the public API always reported the
+ * applied theme. Only the internal `themeName` state diverged, and its one observable consequence
+ * is the persistence path the third test covers. The reconciliation is justified by that alone.
+ *
  * usetheokit/theokit-ui#116 — the provider persisted a theme and a mode it never applied, and the
  * app lost its theme on the second visit.
  *
@@ -33,10 +40,9 @@ const APP_THEME: Theme = {
 };
 
 function Inspector() {
-  const { themeName, mode, toggleMode } = useTheme();
+  const { mode, toggleMode } = useTheme();
   return (
     <div>
-      <p data-testid="theme">{themeName}</p>
       <p data-testid="mode">{mode}</p>
       <button type="button" onClick={toggleMode}>
         toggle
