@@ -156,8 +156,45 @@ const MOTION_PRESETS = {
   relaxed: { "duration-fast": "160ms", "duration-base": "280ms", "duration-slow": "480ms" },
 } as const;
 
+/**
+ * Typography presets: a display face, a body face and a mono face that belong together.
+ *
+ * Three named faces rather than three free-text fields, for the same reason elevation is a preset —
+ * a display serif over a geometric body over a slab mono is three decisions that have to agree, and
+ * a picker that lets them disagree mostly produces themes that look broken rather than themes that
+ * look different.
+ *
+ * Every stack ends in a generic family, so a theme still renders when the first choice is missing.
+ * Nothing here loads a webfont: `fontUrls` is where a theme asks for one, and a control that
+ * silently fetched from a third party would be a surprising thing for a colour picker to do.
+ */
+const TYPOGRAPHY_PRESETS = {
+  inherit: undefined,
+  system: {
+    display: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+    body: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+    mono: 'ui-monospace, "SF Mono", "Cascadia Mono", monospace',
+  },
+  geometric: {
+    display: 'Inter, "Helvetica Neue", Arial, sans-serif',
+    body: 'Inter, "Helvetica Neue", Arial, sans-serif',
+    mono: 'ui-monospace, "JetBrains Mono", monospace',
+  },
+  editorial: {
+    display: 'Georgia, "Times New Roman", serif',
+    body: 'Georgia, "Times New Roman", serif',
+    mono: 'ui-monospace, "Courier New", monospace',
+  },
+  monospaced: {
+    display: 'ui-monospace, "JetBrains Mono", "SF Mono", monospace',
+    body: 'ui-monospace, "JetBrains Mono", "SF Mono", monospace',
+    mono: 'ui-monospace, "JetBrains Mono", "SF Mono", monospace',
+  },
+} as const;
+
 type ElevationKey = keyof typeof ELEVATION_PRESETS;
 type MotionKey = keyof typeof MOTION_PRESETS;
+type TypographyKey = keyof typeof TYPOGRAPHY_PRESETS;
 
 /**
  * Every string the editor renders.
@@ -195,7 +232,9 @@ export interface ThemeEditorLabels {
   elevationSection: string;
   elevation: Record<ElevationKey, string>;
   motionSection: string;
+  typographySection: string;
   motion: Record<MotionKey, string>;
+  typography: Record<TypographyKey, string>;
   corners: Record<(typeof RADIUS_VALUES)[number], string>;
   density: Record<(typeof SPACING_VALUES)[number], string>;
 }
@@ -262,7 +301,15 @@ const DEFAULT_LABELS: ThemeEditorLabels = {
   elevationSection: "Elevation",
   elevation: { inherit: "Inherit", flat: "Flat", soft: "Soft", strong: "Strong" },
   motionSection: "Motion",
+  typographySection: "Typeface",
   motion: { inherit: "Inherit", none: "None", snappy: "Snappy", relaxed: "Relaxed" },
+  typography: {
+    inherit: "Inherit",
+    system: "System",
+    geometric: "Geometric",
+    editorial: "Editorial",
+    monospaced: "Monospaced",
+  },
   corners: {
     "0px": "Square",
     "4px": "Slight",
@@ -308,7 +355,10 @@ export interface ThemeEditorProps {
 
 /** `labels` accepts a subset, including a subset of each nested group. */
 type DeepPartialLabels = Partial<
-  Omit<ThemeEditorLabels, "colours" | "corners" | "density" | "groups" | "elevation" | "motion">
+  Omit<
+    ThemeEditorLabels,
+    "colours" | "corners" | "density" | "groups" | "elevation" | "motion" | "typography"
+  >
 > & {
   colours?: Partial<ThemeEditorLabels["colours"]>;
   corners?: Partial<ThemeEditorLabels["corners"]>;
@@ -316,6 +366,7 @@ type DeepPartialLabels = Partial<
   groups?: Partial<ThemeEditorLabels["groups"]>;
   elevation?: Partial<ThemeEditorLabels["elevation"]>;
   motion?: Partial<ThemeEditorLabels["motion"]>;
+  typography?: Partial<ThemeEditorLabels["typography"]>;
 };
 
 /** One level of merge for the nested groups; a plain spread would drop the untranslated keys. */
@@ -330,6 +381,7 @@ function mergeLabels(overrides: DeepPartialLabels | undefined): ThemeEditorLabel
     groups: { ...DEFAULT_LABELS.groups, ...overrides.groups },
     elevation: { ...DEFAULT_LABELS.elevation, ...overrides.elevation },
     motion: { ...DEFAULT_LABELS.motion, ...overrides.motion },
+    typography: { ...DEFAULT_LABELS.typography, ...overrides.typography },
   };
 }
 
@@ -364,82 +416,119 @@ function ThemeEditor({
    * it again in `reset` restored the broken palette instead of the original one, which made the
    * button do nothing visible after the first edit.
    */
-  const [origin] = useState<Partial<ColorScale>>(() => {
-    const scale = active[mode];
-    const seed: Partial<ColorScale> = {};
-    for (const token of EDITABLE_COLORS) seed[token] = scale[token];
-    return seed;
+  const [origin] = useState<Record<ThemeMode, Partial<ColorScale>>>(() => {
+    const seedFor = (m: ThemeMode): Partial<ColorScale> => {
+      const scale = active[m];
+      const seed: Partial<ColorScale> = {};
+      for (const token of EDITABLE_COLORS) seed[token] = scale[token];
+      return seed;
+    };
+    return { light: seedFor("light"), dark: seedFor("dark") };
   });
-  const [baseScale] = useState<ColorScale>(() => active[mode]);
-  const [colors, setColors] = useState<Partial<ColorScale>>(origin);
+  const [baseScales] = useState<Record<ThemeMode, ColorScale>>(() => ({
+    light: active.light,
+    dark: active.dark,
+  }));
+
+  /**
+   * Both modes are held, and both are emitted.
+   *
+   * The editor edits whichever mode is active, but a theme is not one palette — it is two, and a
+   * person who tunes the dark one and switches to light should not find their work replaced by
+   * Violet Forge. Keeping a single scale meant the mode not being edited was emitted as `{}`, which
+   * inherits: exactly the silent one-sided theme that `defineTheme` warns about
+   * (usetheokit/theokit-ui#81), produced by the tool that is supposed to prevent it.
+   */
+  const [colorsByMode, setColorsByMode] = useState<Record<ThemeMode, Partial<ColorScale>>>(origin);
+  const colors = colorsByMode[mode];
   const [radius, setRadius] = useState<string>(DEFAULT_RADIUS);
   const [spacing, setSpacing] = useState<string>(DEFAULT_SPACING);
   const [elevation, setElevation] = useState<ElevationKey>("inherit");
   const [motion, setMotion] = useState<MotionKey>("inherit");
+  const [typography, setTypography] = useState<TypographyKey>("inherit");
   const [openGroup, setOpenGroup] = useState<string>(COLOR_GROUPS[0].id);
 
   // Audited against the palette the editor opened on, not the live one — the live one already
   // contains these edits, so folding it in would compare a change against itself.
-  const scale = useMemo(() => ({ ...baseScale, ...colors }), [baseScale, colors]);
+  const scale = useMemo(() => ({ ...baseScales[mode], ...colors }), [baseScales, mode, colors]);
   const findings = useMemo(() => auditColorScale(scale), [scale]);
   const failing = findings.filter((f) => !f.passes);
   const readable = failing.length === 0;
 
   const build = useCallback(
     (
-      nextColors: Partial<ColorScale>,
+      nextByMode: Record<ThemeMode, Partial<ColorScale>>,
       nextRadius: string,
       nextSpacing: string,
       nextElevation: ElevationKey = elevation,
       nextMotion: MotionKey = motion,
+      nextTypography: TypographyKey = typography,
     ): Theme =>
       defineTheme({
         name,
         label: "Custom",
-        [mode]: nextColors,
+        // BOTH modes, always. Emitting `{}` for the one not being edited inherits it from Violet
+        // Forge — the silent one-sided theme `defineTheme` warns about, produced by the very tool
+        // meant to prevent it. Seeded from the active theme, so an untouched mode carries what it
+        // already had rather than nothing.
+        light: nextByMode.light,
+        dark: nextByMode.dark,
         radius: buildRadius(nextRadius),
         spacing: nextSpacing,
         shadows: ELEVATION_PRESETS[nextElevation],
         motion: MOTION_PRESETS[nextMotion],
-        // The mode not being edited inherits, which `defineTheme` warns about in development. The
-        // warning is right for a theme written in a file and wrong here: this editor edits one
-        // mode at a time by design, and the person can switch modes and edit the other.
-        [mode === "dark" ? "light" : "dark"]: {},
-      } as Parameters<typeof defineTheme>[0]),
-    [mode, name, elevation, motion],
+        fonts: TYPOGRAPHY_PRESETS[nextTypography],
+      }),
+    [name, elevation, motion, typography],
   );
 
   /** Applies live: the page repaints from the cascade, with no rebuild and no reload. */
   const apply = useCallback(
     (
-      nextColors: Partial<ColorScale>,
+      nextByMode: Record<ThemeMode, Partial<ColorScale>>,
       nextRadius: string,
       nextSpacing: string,
       nextElevation?: ElevationKey,
       nextMotion?: MotionKey,
+      nextTypography?: TypographyKey,
     ) => {
-      const next = build(nextColors, nextRadius, nextSpacing, nextElevation, nextMotion);
+      const next = build(
+        nextByMode,
+        nextRadius,
+        nextSpacing,
+        nextElevation,
+        nextMotion,
+        nextTypography,
+      );
       registerTheme(next);
       setTheme(next.name);
     },
     [build, registerTheme, setTheme],
   );
 
+  /** Writes a palette for the mode being edited, leaving the other one as it was. */
+  const commitColors = useCallback(
+    (next: Partial<ColorScale>) => {
+      const byMode = { ...colorsByMode, [mode]: next };
+      setColorsByMode(byMode);
+      return byMode;
+    },
+    [colorsByMode, mode],
+  );
+
   const onColorChange = useCallback(
     (token: keyof ColorScale) => (event: ChangeEvent<HTMLInputElement>) => {
-      const next = { ...colors, [token]: event.target.value };
-      setColors(next);
-      apply(next, radius, spacing);
+      apply(commitColors({ ...colors, [token]: event.target.value }), radius, spacing);
     },
-    [colors, radius, spacing, apply],
+    [colors, radius, spacing, apply, commitColors],
   );
 
   const onRadiusChange = useCallback(
     (value: string) => {
       setRadius(value);
-      apply(colors, value, spacing);
+      apply(colorsByMode, value, spacing);
     },
-    [colors, spacing, apply],
+    [colorsByMode, spacing, apply],
   );
 
   /**
@@ -461,43 +550,51 @@ function ThemeEditor({
 
       const next: Partial<ColorScale> = { ...colors };
       for (const token of EDITABLE_COLORS) next[token] = derived[token];
-      setColors(next);
-      apply(next, radius, spacing);
+      apply(commitColors(next), radius, spacing);
     },
-    [colors, radius, spacing, mode, apply],
+    [colors, radius, spacing, mode, apply, commitColors],
   );
 
   const onSpacingChange = useCallback(
     (value: string) => {
       setSpacing(value);
-      apply(colors, radius, value);
+      apply(colorsByMode, radius, value);
     },
-    [colors, radius, apply],
+    [colorsByMode, radius, apply],
   );
 
   const onElevationChange = useCallback(
     (value: ElevationKey) => {
       setElevation(value);
-      apply(colors, radius, spacing, value, motion);
+      apply(colorsByMode, radius, spacing, value, motion);
     },
-    [colors, radius, spacing, motion, apply],
+    [colorsByMode, radius, spacing, motion, apply],
   );
 
   const onMotionChange = useCallback(
     (value: MotionKey) => {
       setMotion(value);
-      apply(colors, radius, spacing, elevation, value);
+      apply(colorsByMode, radius, spacing, elevation, value);
     },
-    [colors, radius, spacing, elevation, apply],
+    [colorsByMode, radius, spacing, elevation, apply],
+  );
+
+  const onTypographyChange = useCallback(
+    (value: TypographyKey) => {
+      setTypography(value);
+      apply(colorsByMode, radius, spacing, elevation, motion, value);
+    },
+    [colorsByMode, radius, spacing, elevation, motion, apply],
   );
 
   const reset = useCallback(() => {
-    setColors(origin);
+    setColorsByMode(origin);
     setRadius(DEFAULT_RADIUS);
     setSpacing(DEFAULT_SPACING);
     setElevation("inherit");
     setMotion("inherit");
-    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING, "inherit", "inherit");
+    setTypography("inherit");
+    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING, "inherit", "inherit", "inherit");
   }, [origin, apply]);
 
   return (
@@ -688,6 +785,19 @@ function ThemeEditor({
         />
       </fieldset>
 
+      <fieldset className="flex flex-col gap-2">
+        <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
+          {labels.typographySection}
+        </legend>
+        <PresetRow
+          name="theme-editor-typography"
+          options={Object.keys(TYPOGRAPHY_PRESETS) as TypographyKey[]}
+          value={typography}
+          labels={labels.typography}
+          onChange={onTypographyChange}
+        />
+      </fieldset>
+
       <ContrastReport findings={findings} labels={labels} />
 
       {onCommit ? (
@@ -695,7 +805,7 @@ function ThemeEditor({
           type="button"
           disabled={!readable && !allowFailing}
           onClick={() => {
-            onCommit(build(colors, radius, spacing, elevation, motion));
+            onCommit(build(colorsByMode, radius, spacing, elevation, motion, typography));
           }}
           className={cn(
             "inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4",
