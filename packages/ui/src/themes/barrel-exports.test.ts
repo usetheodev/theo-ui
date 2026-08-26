@@ -94,4 +94,4 @@ describe("themes barrel reaches the package root", () => {
 
     expect(Object.keys(themes).length).toBeGreaterThan(15);
   });
-})
+});
