@@ -1,5 +1,98 @@
 # Changelog
 
+## 1.10.0
+
+### Minor Changes
+
+- 42024ef: The typeface control takes your own stack, not only a preset.
+
+  Presets keep the three faces agreeing with each other and cover the common case. They cannot cover
+  the case a design system exists for: a company with its own type does not want "Geometric", it wants
+  its own, and a control that cannot express that is one people fork around.
+
+  Each slot — display, body, mono — takes a stack, and overrides the preset for that slot alone, so a
+  custom display face can sit over a preset's body and mono rather than forcing all three to be
+  re-entered. Blank means unused; whitespace is dropped rather than emitted, because an empty
+  `font-family` erases the face instead of leaving it.
+
+  **Validated before applying, not after.** The provider throws on a stack that could break out of the
+  declaration — correct for a theme written in a file, and wrong for a field somebody is still typing
+  into, where `Font (Bold)` would take the page down on the `(`. The field keeps what was typed, marks
+  it with `aria-invalid`, and the theme receives it once it would survive injection.
+  `isValidFontFamily` is exported for anything else collecting one.
+
+- cc6fc50: Density reaches the controls, and the editor moves it with the spacing.
+
+  **`useDensity` controlled nothing.** It set `data-density` on `<html>` and injected
+  `--theo-control-h` / `--theo-control-px` under each value, and `density.ts` documented form-control
+  variants reading them. A grep for those variables across `src/components` returned zero matches: the
+  switch worked, the CSS was correct, the tests asserted the injection, and no pixel moved. The `md`
+  tier of ten controls now reads them, with the current value as the fallback so nothing changes for a
+  consumer who never touches density. `h-8` tiers stay fixed, as `density.ts` says they should — an
+  explicit size beats density.
+
+  **The editor moves both mechanisms.** Density is one decision to the person making it, and was two
+  in the implementation: `--spacing` (a theme token) scales `p-*`/`gap-*`/`m-*`, `data-density` sets
+  control height. Choosing "compact" tightened the layout and left every input at its comfortable
+  height. They stay separate mechanisms — `useDensity` still works on its own, without the editor —
+  but the editor's one control now drives both.
+
+  **Not covered:** `@usetheo/ui` has 26 fixed control heights of its own and does not know about these
+  variables. Density stops at the boundary between the two packages, which is a real limit rather than
+  an oversight to discover later.
+
+- 3736604: The editor writes both modes, and offers a typeface.
+
+  **Both modes.** It held one palette — the mode being edited — and emitted `{}` for the other, which
+  inherits from Violet Forge. That is the silent one-sided theme `defineTheme` warns about
+  (usetheokit/theokit-ui#81), produced by the tool built to prevent it: somebody who tuned dark and
+  switched to light would have found their work replaced by another product's palette. Both scales are
+  now held and both are emitted, seeded from the active theme so an untouched mode carries what it
+  already had.
+
+  **Typeface.** Four presets — system, geometric, editorial, monospaced — plus `inherit`, which emits
+  nothing so `tokens.css` keeps its own faces. Named sets rather than three free-text fields, for the
+  same reason elevation is a preset: a display serif over a geometric body over a slab mono is three
+  decisions that have to agree. Every stack ends in a generic family, and nothing here loads a webfont
+  — `fontUrls` is where a theme asks for one, and a typeface picker that quietly fetched from a third
+  party would be a surprising thing for it to do.
+
+- 3fc622a: Every token the package declares can be set through `Theme`.
+
+  Thirteen `--space-*` steps and `--stagger` were declared in `tokens.css` and had no field. Nothing
+  inside the package reads them, which is what kept it invisible — they exist for a consumer writing
+  `var(--space-6)` in their own CSS, and a consumer holding a `Theme` object had no way to move them
+  without writing a stylesheet that outranks ours. That works, and it is not what a design system
+  should ask of somebody already holding the API.
+
+  `space` and `motion.stagger` close it.
+
+  The completeness is now a test rather than a claim: `token-coverage.test.ts` reads every `--token`
+  out of `tokens.css`, emits a theme that sets every field the API exposes, and fails naming any token
+  the two do not share. A token added tomorrow without a field fails there instead of being found by
+  whoever needed it.
+
+### Patch Changes
+
+- 8a6669e: `readStoredTheme` — the half that makes a saved theme actually apply.
+
+  `useStoredTheme` restored a theme from an effect, and an effect is too late: `ThemeProvider`
+  resolves the active theme NAME in its own effect, from its own storage key, and falls back to the
+  default for a name it has no theme for. Measured after a reload — the palette was in `localStorage`,
+  the "forget it" affordance appeared, and `data-theme` was the built-in theme. The registry had it;
+  the page did not.
+
+  `readStoredTheme(key)` reads synchronously, so a consumer can hand the theme to the provider on the
+  way in and fix the ordering rather than race it:
+
+  ```tsx
+  const stored = readStoredTheme("my-app:theme")
+  <ThemeProvider themes={stored ? [base, stored] : [base]} defaultTheme={stored?.name ?? base.name}>
+  ```
+
+  It shares its parsing with the hook, so the two cannot disagree about what counts as a valid stored
+  theme, and returns `undefined` on a server where there is no storage to read.
+
 ## 1.9.0
 
 ### Minor Changes

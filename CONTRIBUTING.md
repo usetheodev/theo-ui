@@ -325,21 +325,33 @@ request is what publishes to npm, tags the commit, and creates the GitHub releas
 - `prepublishOnly` still refuses a version the registry already serves, which is
   the guard that caught the git↔npm drift in usetheokit/theokit-ui#46.
 
-### The Version PR opens with no checks running — release them
+### The Version PR and its checks
 
-It appears BLOCKED, with only the external GitHub Apps reporting. That is expected:
-changesets opens it with `GITHUB_TOKEN`, and GitHub does not start workflow runs from
-GITHUB_TOKEN-authored events, so `TruffleHog`, `actionlint + zizmor` and
-`Verify (quality gates)` never fire on their own. Being required checks, they cannot
-be satisfied by never reporting.
+It opens by itself, with its checks running, and merging it publishes. Nothing to do
+by hand.
 
-**Close and reopen the pull request.** That re-triggers them as a human-authored
-event, and once they pass the merge publishes.
+That took a GitHub App to achieve, and the reason is worth knowing because it explains
+a failure mode you may still meet elsewhere. GitHub does not start workflow runs from
+events authored by `GITHUB_TOKEN` — otherwise a workflow could trigger itself forever.
+While changesets opened the pull request with that token, it arrived BLOCKED with only
+the external Apps reporting: `TruffleHog`, `actionlint + zizmor` and
+`Verify (quality gates)` never fired, and being required checks they could not be
+satisfied by never reporting. The workaround was to close and reopen the pull request,
+which re-triggers them as a human-authored event.
 
-This is the one manual gesture left in a release, and it is deliberate. The obvious
-alternative — giving the workflow a personal access token so the PR looks
-human-authored — puts a long-lived credential back in the job that publishes to npm,
-which is exactly what OIDC was adopted to remove.
+The release workflow now mints a short-lived token from the **`theokit-release`** App
+(`actions/create-github-app-token`), used in two places that must agree — the checkout
+and the changesets step. An App-authored event does start workflows.
+
+What this costs, stated plainly: the App's private key is a long-lived secret. It is a
+smaller one than the personal access token this deliberately avoids — attached to no
+person, scoped to three repository permissions, revocable without affecting anyone's
+access — but it is a secret the publishing job did not have before. Publishing to npm
+is untouched and still uses OIDC with no token at all.
+
+If the Version PR ever opens BLOCKED again with no checks, the App token is not
+reaching one of those two places; close and reopen to unblock the release, then fix the
+workflow.
 
 ### Why the CHANGELOG has two kinds of section
 
