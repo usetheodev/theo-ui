@@ -64,14 +64,16 @@ const THEME_NAME_PATTERN = /^[a-z][a-z0-9-]*$/;
 // Covers what a radius, a spacing base or a duration can be. Excludes semicolons and braces (which
 // would break out of the declaration) and `url(` (which would exfiltrate), on the same reasoning
 // as the colour allowlist above: themes are code, but a theme object can arrive from a CMS.
-const LENGTH_PATTERN = /^(?:0|calc|min|max|clamp|[\d.]+(?:px|rem|em|%|vh|vw|vmin|vmax|s|ms|ch|ex))[\w\s%.,()+*/-]*$/;
+const LENGTH_PATTERN =
+  /^(?:0|calc|min|max|clamp|[\d.]+(?:px|rem|em|%|vh|vw|vmin|vmax|s|ms|ch|ex))[\w\s%.,()+*/-]*$/;
 
 // A shadow is a list of offsets and colours, so it admits far more than a length — but the same
 // two exclusions apply, and they are what the pattern is for.
 const SHADOW_PATTERN = /^(?!.*url\()[^;{}<>]+$/;
 
 // An easing: a keyword or a cubic-bezier()/steps()/linear() function over numbers.
-const EASING_PATTERN = /^(?:linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|cubic-bezier\([\d\s.,-]+\)|steps\([\d\s,a-z-]+\)|linear\([\d\s%.,-]+\))$/;
+const EASING_PATTERN =
+  /^(?:linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|cubic-bezier\([\d\s.,-]+\)|steps\([\d\s,a-z-]+\)|linear\([\d\s%.,-]+\))$/;
 
 const IS_DEV = isDev();
 

@@ -69,9 +69,10 @@ describe("tokens-v4.css — @theme entries defer to runtime variables", () => {
 
     expect(radii.length).toBeGreaterThan(4);
     for (const token of radii) {
-      expect(decls.get(token), `${token} must defer to a runtime variable, not hold a literal`).toMatch(
-        /^var\(--/,
-      );
+      expect(
+        decls.get(token),
+        `${token} must defer to a runtime variable, not hold a literal`,
+      ).toMatch(/^var\(--/);
     }
   });
 

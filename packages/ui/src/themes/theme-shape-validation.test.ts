@@ -19,7 +19,10 @@ import { defineTheme } from "./define.js";
 
 describe("shapeToCss rejects values that would escape the declaration", () => {
   it("rejects a radius that closes the rule and opens its own", () => {
-    const theme = defineTheme({ name: "evil", radius: { DEFAULT: "0px } html { display: none; " } });
+    const theme = defineTheme({
+      name: "evil",
+      radius: { DEFAULT: "0px } html { display: none; " },
+    });
 
     expect(() => shapeToCss(theme)).toThrow(/invalid length/i);
   });
@@ -31,7 +34,10 @@ describe("shapeToCss rejects values that would escape the declaration", () => {
   });
 
   it("rejects url() in a shadow — the exfiltration route the colour allowlist also blocks", () => {
-    const theme = defineTheme({ name: "evil", shadows: { md: "0 0 1px url(https://evil.test/x)" } });
+    const theme = defineTheme({
+      name: "evil",
+      shadows: { md: "0 0 1px url(https://evil.test/x)" },
+    });
 
     expect(() => shapeToCss(theme)).toThrow(/invalid shadow/i);
   });
@@ -43,7 +49,10 @@ describe("shapeToCss rejects values that would escape the declaration", () => {
   });
 
   it("rejects a theme name that would break out of the attribute selector", () => {
-    const theme = { ...defineTheme({ name: "ok", radius: { sm: "2px" } }), name: 'x"] { color: red' };
+    const theme = {
+      ...defineTheme({ name: "ok", radius: { sm: "2px" } }),
+      name: 'x"] { color: red',
+    };
 
     expect(() => shapeToCss(theme)).toThrow(/invalid theme\.name/i);
   });

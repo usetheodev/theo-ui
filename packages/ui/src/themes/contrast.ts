@@ -84,11 +84,7 @@ function parseHex(value: string): [number, number, number] | null {
     return [expand(hex[0] ?? ""), expand(hex[1] ?? ""), expand(hex[2] ?? "")];
   }
   if (hex.length === 6 || hex.length === 8) {
-    return [
-      expand(hex.slice(0, 2)),
-      expand(hex.slice(2, 4)),
-      expand(hex.slice(4, 6)),
-    ];
+    return [expand(hex.slice(0, 2)), expand(hex.slice(2, 4)), expand(hex.slice(4, 6))];
   }
   return null;
 }
@@ -98,7 +94,12 @@ function parseRgb(value: string): [number, number, number] | null {
   const inner = /^rgba?\(([^)]+)\)$/i.exec(value.trim())?.[1];
   if (inner === undefined) return null;
 
-  const parts = inner.split("/")[0]?.trim().split(/[\s,]+/).filter(Boolean) ?? [];
+  const parts =
+    inner
+      .split("/")[0]
+      ?.trim()
+      .split(/[\s,]+/)
+      .filter(Boolean) ?? [];
   if (parts.length < 3) return null;
 
   const channel = (raw: string): number =>

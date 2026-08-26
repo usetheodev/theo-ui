@@ -81,11 +81,15 @@ describe("the runtime pair list matches the build gate", () => {
   });
 
   it("holds each pair to the same threshold the build gate uses", () => {
-    const body = new Set(["foreground vs background", "card-foreground vs card", "popover-foreground vs popover"]);
+    const body = new Set([
+      "foreground vs background",
+      "card-foreground vs card",
+      "popover-foreground vs popover",
+    ]);
 
     for (const pair of CONTRAST_PAIRS) {
       const key = `${pair.foreground} vs ${pair.background}`;
       expect(pair.minimum, key).toBe(body.has(key) ? WCAG_AA.normalText : WCAG_AA.largeText);
     }
   });
-})
+});

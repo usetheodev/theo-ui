@@ -164,4 +164,4 @@ describe("buildRadius", () => {
   it("falls back to the raw value when it is not a number it can scale", () => {
     expect(buildRadius("var(--x)")).toEqual({ DEFAULT: "var(--x)" });
   });
-})
+});

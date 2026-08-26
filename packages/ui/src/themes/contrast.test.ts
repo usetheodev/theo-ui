@@ -96,4 +96,4 @@ describe("contrastLevel", () => {
     expect(ratio ?? 0).toBeLessThan(WCAG_AA.normalText);
     expect(contrastLevel(ratio ?? 0)).toBe("fail");
   });
-})
+});
