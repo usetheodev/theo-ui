@@ -10,7 +10,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { cssColorToHex } from "./contrast.js";
-import { ThemeEditor, buildRadius } from "./theme-editor.js";
+import { DEFAULT_LABELS, ThemeEditor, buildRadius } from "./theme-editor.js";
 import { ThemeProvider } from "./theme-provider.js";
 import type { Theme } from "./types.js";
 import { violetForge } from "./violet-forge.js";
@@ -266,5 +266,66 @@ describe("ThemeEditor density", () => {
     const theme = onCommit.mock.calls[0]?.[0] as Theme;
     expect(theme.radius?.DEFAULT).toBe("0px");
     expect(theme.spacing).toBe("5px");
+  });
+});
+
+describe("ThemeEditor labels are exhaustive", () => {
+  it("renders NO default string once every label is overridden", () => {
+    // The specific defect this catches: `labels.heading` existed, was documented, and the JSX still
+    // rendered the literal "Theme". A label that is defined and never read looks like support for
+    // translation and is not. Overriding everything and asserting no English survives finds any
+    // such gap, including ones added later.
+    mount({
+      onCommit: vi.fn(),
+      labels: {
+        heading: "«título»",
+        subtitle: () => "«subtítulo»",
+        reset: "«repor»",
+        colourSection: "«cor»",
+        cornerSection: "«cantos»",
+        densitySection: "«densidade»",
+        contrastSection: "«contraste»",
+        allPass: "«todosPassam»",
+        belowMinimum: () => "«abaixo»",
+        save: "«guardar»",
+        saveAnyway: () => "«guardarAssim»",
+        unreadable: "«ilegível»",
+        needs: () => "«mínimo»",
+        colours: Object.fromEntries(
+          Object.keys(DEFAULT_LABELS.colours).map((k, i) => [k, `«cor${String(i)}»`]),
+        ) as never,
+        corners: {
+          "0px": "«c0»",
+          "4px": "«c4»",
+          "10px": "«c10»",
+          "16px": "«c16»",
+          "24px": "«c24»",
+        },
+        density: { "3px": "«d3»", "4px": "«d4»", "5px": "«d5»" },
+      },
+    });
+
+    // The component marks itself with `data-slot`, the convention this package uses instead of
+    // `data-testid`.
+    const rendered = document.querySelector('[data-slot="theme-editor"]');
+    const text = rendered?.textContent ?? "";
+    expect(text.length, "the editor rendered nothing").toBeGreaterThan(50);
+
+    for (const english of [
+      "Theme",
+      "Reset",
+      "Colour",
+      "Corners",
+      "Density",
+      "Contrast",
+      "All pairs pass",
+      "Save theme",
+      "Background",
+      "Square",
+      "Comfortable",
+      "needs",
+    ]) {
+      expect(text, `"${english}" is still hard-coded`).not.toContain(english);
+    }
   });
 });
