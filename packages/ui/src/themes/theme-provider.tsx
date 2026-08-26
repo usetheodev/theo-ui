@@ -60,6 +60,21 @@ const FONT_FAMILY_PATTERN = /^[\w\s,"'\-.]+$/;
 // of an attribute selector or inject additional rules.
 const THEME_NAME_PATTERN = /^[a-z][a-z0-9-]*$/;
 
+// A CSS length or unitless zero, optionally wrapped in calc()/min()/max()/clamp() over the same.
+// Covers what a radius, a spacing base or a duration can be. Excludes semicolons and braces (which
+// would break out of the declaration) and `url(` (which would exfiltrate), on the same reasoning
+// as the colour allowlist above: themes are code, but a theme object can arrive from a CMS.
+const LENGTH_PATTERN =
+  /^(?:0|calc|min|max|clamp|[\d.]+(?:px|rem|em|%|vh|vw|vmin|vmax|s|ms|ch|ex))[\w\s%.,()+*/-]*$/;
+
+// A shadow is a list of offsets and colours, so it admits far more than a length — but the same
+// two exclusions apply, and they are what the pattern is for.
+const SHADOW_PATTERN = /^(?!.*url\()[^;{}<>]+$/;
+
+// An easing: a keyword or a cubic-bezier()/steps()/linear() function over numbers.
+const EASING_PATTERN =
+  /^(?:linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|cubic-bezier\([\d\s.,-]+\)|steps\([\d\s,a-z-]+\)|linear\([\d\s%.,-]+\))$/;
+
 const IS_DEV = isDev();
 
 function rejectOrFallback(scope: string, value: string, fallback: string): string {
@@ -86,6 +101,21 @@ function validatedThemeName(value: string): string {
   return rejectOrFallback("theme.name", value, "invalid-theme");
 }
 
+function validatedLength(token: string, value: string): string {
+  if (LENGTH_PATTERN.test(value)) return value;
+  return rejectOrFallback(`length "${token}"`, value, "0px");
+}
+
+function validatedShadow(token: string, value: string): string {
+  if (value === "none" || SHADOW_PATTERN.test(value)) return value;
+  return rejectOrFallback(`shadow "${token}"`, value, "none");
+}
+
+function validatedEasing(token: string, value: string): string {
+  if (EASING_PATTERN.test(value)) return value;
+  return rejectOrFallback(`easing "${token}"`, value, "ease");
+}
+
 function colorScaleToCss(name: string, mode: ThemeMode, colors: ColorScale): string {
   const safeName = validatedThemeName(name);
   const selector =
@@ -106,6 +136,48 @@ function fontsToCss(name: string, fonts: Theme["fonts"]): string {
   return `[data-theme="${safeName}"] {\n  --font-display: ${display};\n  --font-body: ${body};\n  --font-mono: ${mono};\n}`;
 }
 
+/**
+ * The non-colour half of a theme: radii, spacing base, elevation and motion.
+ *
+ * Emitted from one selector and only for the keys a theme actually declares, so a theme that says
+ * nothing about shape adds no declarations and `tokens.css` stands. Unlike colour, none of this is
+ * mode-dependent — a rounder theme is rounder in both modes — so there is a single block rather
+ * than a light and a dark one.
+ *
+ * Returns an empty string when there is nothing to say, and the caller drops it: an empty rule in
+ * the injected sheet is noise for anyone reading the page's styles.
+ */
+function shapeToCss(theme: Theme): string {
+  const safeName = validatedThemeName(theme.name);
+  const decls: string[] = [];
+
+  for (const [key, value] of Object.entries(theme.radius ?? {})) {
+    if (typeof value !== "string") continue;
+    const token = key === "DEFAULT" ? "--radius" : `--radius-${key}`;
+    decls.push(`  ${token}: ${validatedLength(token, value)};`);
+  }
+
+  if (typeof theme.spacing === "string") {
+    decls.push(`  --spacing: ${validatedLength("--spacing", theme.spacing)};`);
+  }
+
+  for (const [key, value] of Object.entries(theme.shadows ?? {})) {
+    if (typeof value !== "string") continue;
+    decls.push(`  --shadow-${key}: ${validatedShadow(`--shadow-${key}`, value)};`);
+  }
+
+  for (const [key, value] of Object.entries(theme.motion ?? {})) {
+    if (typeof value !== "string") continue;
+    const isEasing = key.startsWith("ease");
+    const token = `--${key}`;
+    const safe = isEasing ? validatedEasing(token, value) : validatedLength(token, value);
+    decls.push(`  ${token}: ${safe};`);
+  }
+
+  if (decls.length === 0) return "";
+  return `[data-theme="${safeName}"] {\n${decls.join("\n")}\n}`;
+}
+
 function injectThemeCss(themes: Theme[]): void {
   if (typeof document === "undefined") return;
   let style = document.getElementById(STYLE_ELEMENT_ID) as HTMLStyleElement | null;
@@ -117,6 +189,8 @@ function injectThemeCss(themes: Theme[]): void {
   const blocks: string[] = [];
   for (const theme of themes) {
     blocks.push(fontsToCss(theme.name, theme.fonts));
+    const shape = shapeToCss(theme);
+    if (shape !== "") blocks.push(shape);
     blocks.push(colorScaleToCss(theme.name, "light", theme.light));
     blocks.push(colorScaleToCss(theme.name, "dark", theme.dark));
   }
@@ -529,4 +603,16 @@ function useTheme(): ThemeContextValue {
   return ctx;
 }
 
-export { ThemeProvider, useTheme };
+/**
+ * `shapeToCss` is exported for its own tests, not as public API — it is deliberately absent from
+ * the package barrel.
+ *
+ * Testing it through a mounted provider does not work: when validation throws mid-render, React is
+ * left working, and testing-library's automatic `cleanup` then throws "Should not already be
+ * working" over it. The real failure is replaced by a misleading one that names the wrong test.
+ *
+ * The behaviour under test is "given a theme, what CSS comes out" — a pure function of its input,
+ * with no DOM in it. Calling it directly tests the thing itself instead of a render that happens
+ * to reach it.
+ */
+export { ThemeProvider, shapeToCss, useTheme };
