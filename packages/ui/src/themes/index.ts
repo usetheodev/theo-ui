@@ -11,6 +11,7 @@ export { ThemeProvider, useTheme } from "./theme-provider.js";
 export { ThemeScript } from "./theme-script.js";
 export { ThemeSwitcher } from "./theme-switcher.js";
 export { ThemeEditor, type ThemeEditorProps } from "./theme-editor.js";
+export { deriveColorScale, toOklch, type DeriveOptions } from "./derive.js";
 export {
   CONTRAST_PAIRS,
   WCAG_AA,

@@ -20,7 +20,18 @@ jobs:
   verify:
     name: Verify (quality gates)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 40, not 20, and the number is measured rather than picked.
+    #
+    # `quality:gates` runs twenty-five steps in series — lint, types, 1673 tests, build, contract
+    # tests, packaging, registry, bundle, contrast, a11y, visual, a Ladle build and five dogfood
+    # scaffolds. Recent runs took 7, 8, 12, 15, 15, 16 minutes, and one hit 20m26s and was killed
+    # at exactly the ceiling. A suite that grows past its own timeout reports `cancelled`, which
+    # reads like an infrastructure hiccup and is not one — I attributed two of these to runner
+    # contention before measuring.
+    #
+    # Raising the ceiling buys room; it does not make the job faster. The real fix is splitting
+    # those twenty-five steps into parallel jobs, so a red lint does not wait behind a Ladle build.
+    timeout-minutes: 40
 
     steps:
       - name: Checkout
