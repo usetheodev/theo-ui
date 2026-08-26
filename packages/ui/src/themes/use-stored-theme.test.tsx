@@ -6,6 +6,7 @@
  * which is the difference between a demo and a feature.
  */
 import { cleanup, render, screen } from "@testing-library/react";
+import type { JSX } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { defineTheme } from "./define.js";
