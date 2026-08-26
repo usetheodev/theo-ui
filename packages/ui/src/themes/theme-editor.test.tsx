@@ -273,59 +273,102 @@ describe("ThemeEditor labels are exhaustive", () => {
   it("renders NO default string once every label is overridden", () => {
     // The specific defect this catches: `labels.heading` existed, was documented, and the JSX still
     // rendered the literal "Theme". A label that is defined and never read looks like support for
-    // translation and is not. Overriding everything and asserting no English survives finds any
-    // such gap, including ones added later.
-    mount({
-      onCommit: vi.fn(),
-      labels: {
-        heading: "«título»",
-        subtitle: () => "«subtítulo»",
-        reset: "«repor»",
-        colourSection: "«cor»",
-        cornerSection: "«cantos»",
-        densitySection: "«densidade»",
-        contrastSection: "«contraste»",
-        allPass: "«todosPassam»",
-        belowMinimum: () => "«abaixo»",
-        save: "«guardar»",
-        saveAnyway: () => "«guardarAssim»",
-        unreadable: "«ilegível»",
-        needs: () => "«mínimo»",
-        colours: Object.fromEntries(
-          Object.keys(DEFAULT_LABELS.colours).map((k, i) => [k, `«cor${String(i)}»`]),
-        ) as never,
-        corners: {
-          "0px": "«c0»",
-          "4px": "«c4»",
-          "10px": "«c10»",
-          "16px": "«c16»",
-          "24px": "«c24»",
-        },
-        density: { "3px": "«d3»", "4px": "«d4»", "5px": "«d5»" },
-      },
-    });
+    // translation and is not.
+    //
+    // Both halves are DERIVED from `DEFAULT_LABELS` rather than listed by hand — the overrides and
+    // the words to search for. A hand-written list covers the labels that existed when it was
+    // written, which is how `brandSection` was added and missed by this very test.
+    const mark = (key: string): string => `«${key}»`;
+    const marked = <T extends Record<string, unknown>>(group: T): T =>
+      Object.fromEntries(Object.keys(group).map((k) => [k, mark(k)])) as T;
 
-    // The component marks itself with `data-slot`, the convention this package uses instead of
-    // `data-testid`.
+    const overrides = {
+      ...Object.fromEntries(
+        Object.entries(DEFAULT_LABELS)
+          .filter(([, v]) => typeof v !== "object")
+          .map(([k, v]) => [k, typeof v === "function" ? () => mark(k) : mark(k)]),
+      ),
+      colours: marked(DEFAULT_LABELS.colours),
+      corners: marked(DEFAULT_LABELS.corners),
+      density: marked(DEFAULT_LABELS.density),
+    } as Parameters<typeof ThemeEditor>[0]["labels"];
+
+    mount({ onCommit: vi.fn(), labels: overrides });
+
     const rendered = document.querySelector('[data-slot="theme-editor"]');
     const text = rendered?.textContent ?? "";
     expect(text.length, "the editor rendered nothing").toBeGreaterThan(50);
 
-    for (const english of [
-      "Theme",
-      "Reset",
-      "Colour",
-      "Corners",
-      "Density",
-      "Contrast",
-      "All pairs pass",
-      "Save theme",
-      "Background",
-      "Square",
-      "Comfortable",
-      "needs",
-    ]) {
-      expect(text, `"${english}" is still hard-coded`).not.toContain(english);
+    /** Every default string, flattened — including the nested groups. */
+    const defaults = Object.entries(DEFAULT_LABELS).flatMap(([key, value]) => {
+      if (typeof value === "string") return [{ key, text: value }];
+      if (typeof value === "function") return [];
+      return Object.entries(value as Record<string, string>).map(([k, v]) => ({
+        key: `${key}.${k}`,
+        text: v,
+      }));
+    });
+
+    for (const { key, text: english } of defaults) {
+      expect(text, `${key} ("${english}") is still hard-coded`).not.toContain(english);
     }
+  });
+});
+
+/**
+ * One colour, whole palette.
+ *
+ * The control that decides whether a non-designer can use this: choosing twenty-nine colours is a
+ * design job, choosing one is a preference. It only works because the derivation solves for
+ * contrast — an interpolated scale would look plausible and fail the audit for half the hues.
+ */
+describe("ThemeEditor brand seed", () => {
+  function setColour(label: string, value: string): void {
+    const input = screen.getByLabelText(label) as HTMLInputElement;
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+    setter?.call(input, value);
+    fireEvent.change(input, { target: { value } });
+  }
+
+  it("rewrites every swatch the editor shows", () => {
+    mount();
+    const before = (screen.getByLabelText("Background") as HTMLInputElement).value;
+
+    setColour("Brand colour", "#7C3AED");
+
+    expect((screen.getByLabelText("Background") as HTMLInputElement).value).not.toBe(before);
+    expect((screen.getByLabelText("Primary") as HTMLInputElement).value).not.toBe("#000000");
+  });
+
+  it("produces a palette that passes the audit, which is the whole point", () => {
+    mount();
+
+    // Yellow is the hue a naive derivation gets wrong: bright at every lightness a brand wants.
+    setColour("Brand colour", "#facc15");
+
+    expect(screen.getByText(/All pairs pass/i)).toBeInTheDocument();
+  });
+
+  it("recovers a broken palette — deriving is also the way back", () => {
+    mount();
+    // Near-white text: the editor opens on the LIGHT palette, so near-black would read fine here.
+    setColour("Text", "#fefefe");
+    expect(screen.getByText(/below WCAG AA/i)).toBeInTheDocument();
+
+    setColour("Brand colour", "#10b981");
+
+    expect(screen.getByText(/All pairs pass/i)).toBeInTheDocument();
+  });
+
+  it("carries the derived colours into the committed theme", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    setColour("Brand colour", "#DE2329");
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+    expect(theme.light.primary).toBeDefined();
+    expect(theme.light.primary).not.toBe(violetForge.light.primary);
   });
 });

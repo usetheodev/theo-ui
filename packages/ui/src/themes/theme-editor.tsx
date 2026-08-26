@@ -8,6 +8,7 @@ import { cn } from "../lib/cn.js";
 import { auditColorScale, cssColorToHex } from "./contrast.js";
 import type { ContrastFinding } from "./contrast.js";
 import { defineTheme } from "./define.js";
+import { deriveColorScale } from "./derive.js";
 import { useTheme } from "./theme-provider.js";
 import type { ColorScale, RadiusScale, Theme, ThemeMode } from "./types.js";
 
@@ -67,6 +68,9 @@ const SPACING_VALUES = ["3px", "4px", "5px"] as const;
  */
 export interface ThemeEditorLabels {
   heading: string;
+  brandSection: string;
+  brandColour: string;
+  brandHint: string;
   /** Receives the mode being edited, e.g. `dark`. */
   subtitle: (mode: ThemeMode) => string;
   reset: string;
@@ -90,6 +94,9 @@ export interface ThemeEditorLabels {
 
 const DEFAULT_LABELS: ThemeEditorLabels = {
   heading: "Theme",
+  brandSection: "Brand",
+  brandColour: "Brand colour",
+  brandHint: "Pick one colour and the rest is derived, contrast included.",
   subtitle: (mode) => `Editing the ${mode} palette. Changes apply as you make them.`,
   reset: "Reset",
   colourSection: "Colour",
@@ -269,6 +276,31 @@ function ThemeEditor({
     [colors, spacing, apply],
   );
 
+  /**
+   * One colour becomes the whole palette.
+   *
+   * This is the control that makes the editor usable by someone who is not a designer. Choosing
+   * twenty-nine colours is a design job; choosing one and deriving the rest is what Radix and
+   * Material 3 do, and it only works because the derivation solves for contrast rather than
+   * interpolating — the result clears the audit by construction.
+   *
+   * Only the tokens this editor shows are taken. The derivation produces the full scale, but
+   * writing tokens the person cannot see back into their theme would change things they never
+   * chose and cannot undo from here.
+   */
+  const onSeedChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const derived = deriveColorScale({ seed: event.target.value, mode });
+      if (!derived) return;
+
+      const next: Partial<ColorScale> = { ...colors };
+      for (const token of EDITABLE_COLORS) next[token] = derived[token];
+      setColors(next);
+      apply(next, radius, spacing);
+    },
+    [colors, radius, spacing, mode, apply],
+  );
+
   const onSpacingChange = useCallback(
     (value: string) => {
       setSpacing(value);
@@ -307,6 +339,21 @@ function ThemeEditor({
           {labels.reset}
         </button>
       </header>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
+          {labels.brandSection}
+        </legend>
+        <label className="flex items-center gap-3 text-body-sm">
+          <input
+            type="color"
+            onChange={onSeedChange}
+            aria-label={labels.brandColour}
+            className="size-9 shrink-0 cursor-pointer rounded-md border border-border/60 bg-transparent"
+          />
+          <span className="min-w-0 text-muted-foreground">{labels.brandHint}</span>
+        </label>
+      </fieldset>
 
       <fieldset className="flex flex-col gap-2">
         <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
