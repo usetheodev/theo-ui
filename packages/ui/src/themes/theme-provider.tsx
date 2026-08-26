@@ -511,6 +511,12 @@ function ThemeProvider({
     if (typeof document === "undefined") return;
     const active = themes.find((t) => t.name === themeName) ?? themes[0];
     if (!active) return;
+    // #116 — the `?? themes[0]` fallback used to apply one theme while state kept naming another,
+    // so `useTheme().themeName` disagreed with `data-theme` and a theme switcher highlighted a
+    // theme that was not on screen. Worse, the next user action persisted the name in STATE, which
+    // is how a theme nobody applied reached storage. Reconcile once: the second pass finds `active`
+    // by name and stops.
+    if (active.name !== themeName) setThemeName(active.name);
     document.documentElement.setAttribute("data-theme", active.name);
     document.documentElement.setAttribute("data-mode", mode);
     document.documentElement.setAttribute("data-density", density);
