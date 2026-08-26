@@ -128,14 +128,18 @@ describe("ThemeEditor", () => {
     expect((screen.getByRole("radio", { name: "Square" }) as HTMLInputElement).checked).toBe(false);
   });
 
-  it("groups the corner options under one accessible name", () => {
+  it("groups each control under its own name, so the two never share state", () => {
     mount();
 
-    // `<fieldset>` + `<legend>` is the grouping; every radio shares a `name`, which is what makes
-    // them one control rather than five checkboxes.
+    // `<fieldset>` + `<legend>` is the grouping; the shared `name` is what makes a set of radios
+    // one control rather than several checkboxes. Corners and density are separate sets, so there
+    // are exactly two names — if they collided, choosing a corner would clear the density.
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];
-    expect(radios.length).toBe(5);
-    expect(new Set(radios.map((r) => r.name)).size).toBe(1);
+    const groups = new Set(radios.map((r) => r.name));
+
+    expect(groups.size).toBe(2);
+    expect(radios.filter((r) => r.name === "theme-editor-radius")).toHaveLength(5);
+    expect(radios.filter((r) => r.name === "theme-editor-spacing")).toHaveLength(3);
   });
 
   it("resets back to the theme it opened on", () => {
@@ -173,5 +177,94 @@ describe("buildRadius", () => {
 
   it("falls back to the raw value when it is not a number it can scale", () => {
     expect(buildRadius("var(--x)")).toEqual({ DEFAULT: "var(--x)" });
+  });
+});
+
+/**
+ * Copy is a prop, not a constant.
+ *
+ * The component shipped into a Portuguese product and rendered "Save theme" in the middle of it —
+ * usable only in the language it was written in, which for a component library is the difference
+ * between adoption and a fork.
+ */
+describe("ThemeEditor labels", () => {
+  it("renders English by default, so the common case needs no configuration", () => {
+    // `onCommit` because the save button only exists when there is somewhere for the theme to go.
+    mount({ onCommit: vi.fn() });
+
+    expect(screen.getByRole("button", { name: /save theme/i })).toBeInTheDocument();
+    expect(screen.getByText("All pairs pass")).toBeInTheDocument();
+  });
+
+  it("takes a full translation", () => {
+    mount({
+      onCommit: vi.fn(),
+      labels: {
+        heading: "Aparência",
+        save: "Guardar tema",
+        allPass: "Todos os pares passam",
+        colours: { background: "Fundo" },
+        corners: { "0px": "Quadrado" },
+      },
+    });
+
+    expect(screen.getByRole("button", { name: "Guardar tema" })).toBeInTheDocument();
+    expect(screen.getByText("Todos os pares passam")).toBeInTheDocument();
+    expect(screen.getByLabelText("Fundo")).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Quadrado" })).toBeInTheDocument();
+  });
+
+  it("merges nested groups one level, so translating one colour keeps the other ten", () => {
+    mount({ labels: { colours: { background: "Fundo" } } });
+
+    expect(screen.getByLabelText("Fundo")).toBeInTheDocument();
+    // Untranslated siblings survive — a plain spread would have dropped them.
+    expect(screen.getByLabelText("Primary")).toBeInTheDocument();
+    expect(screen.getByLabelText("Border")).toBeInTheDocument();
+  });
+
+  it("passes the mode and the counts into the strings that need them", () => {
+    mount({
+      labels: {
+        subtitle: (mode) => `modo: ${mode}`,
+        needs: (minimum) => `mínimo ${String(minimum)}`,
+      },
+    });
+
+    expect(screen.getByText("modo: light")).toBeInTheDocument();
+    expect(screen.getAllByText(/mínimo 4.5/).length).toBeGreaterThan(0);
+  });
+});
+
+describe("ThemeEditor density", () => {
+  it("offers the spacing base, which every p-*/gap-*/m-* utility multiplies", () => {
+    mount();
+
+    for (const name of ["Compact", "Comfortable", "Spacious"]) {
+      expect(screen.getByRole("radio", { name })).toBeInTheDocument();
+    }
+  });
+
+  it("carries the choice into the committed theme", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("radio", { name: "Compact" }));
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    expect((onCommit.mock.calls[0]?.[0] as Theme).spacing).toBe("3px");
+  });
+
+  it("keeps corners and density independent — they are separate radio groups", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("radio", { name: "Square" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Spacious" }));
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+    expect(theme.radius?.DEFAULT).toBe("0px");
+    expect(theme.spacing).toBe("5px");
   });
 });
