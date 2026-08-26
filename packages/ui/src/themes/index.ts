@@ -3,6 +3,7 @@ export type {
   MotionScale,
   RadiusScale,
   ShadowScale,
+  SpaceScale,
   Theme,
   ThemeFonts,
   ThemeMode,

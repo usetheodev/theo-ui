@@ -161,6 +161,12 @@ function shapeToCss(theme: Theme): string {
     decls.push(`  --spacing: ${validatedLength("--spacing", theme.spacing)};`);
   }
 
+  for (const [key, value] of Object.entries(theme.space ?? {})) {
+    if (typeof value !== "string") continue;
+    const token = `--space-${key}`;
+    decls.push(`  ${token}: ${validatedLength(token, value)};`);
+  }
+
   for (const [key, value] of Object.entries(theme.shadows ?? {})) {
     if (typeof value !== "string") continue;
     decls.push(`  --shadow-${key}: ${validatedShadow(`--shadow-${key}`, value)};`);
