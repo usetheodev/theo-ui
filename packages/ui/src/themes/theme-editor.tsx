@@ -31,20 +31,80 @@ import type { ColorScale, RadiusScale, Theme, ThemeMode } from "./types.js";
  * opinion about where a theme lives.
  */
 
-/** The colour tokens the editor exposes. Everything else is derived or inherited. */
-const EDITABLE_COLORS = [
-  "background",
-  "foreground",
-  "card",
-  "card-foreground",
-  "primary",
-  "primary-foreground",
-  "accent",
-  "accent-foreground",
-  "muted",
-  "muted-foreground",
-  "border",
-] as const satisfies readonly (keyof ColorScale)[];
+/**
+ * Every colour a theme has, grouped by the question a person is answering.
+ *
+ * The editor used to show eleven of the twenty-nine, which meant the other eighteen could only be
+ * changed by writing a theme file — a "customise your theme" screen that quietly could not.
+ * Showing all of them as one flat wall of swatches is the other failure, so they are grouped and
+ * the groups after the first are collapsed: the common case stays two decisions, and the rest is
+ * one click away instead of unreachable.
+ *
+ * The optional tonal variants (`primary-deep`, `accent-deep`, `primary-glow`) are deliberately
+ * absent — they are derived in CSS from their base via `oklch(from ...)`, and offering a control
+ * that silently stops that derivation would trade a feature for a footgun.
+ */
+const COLOR_GROUPS = [
+  {
+    id: "surfaces",
+    tokens: [
+      "background",
+      "foreground",
+      "card",
+      "card-foreground",
+      "popover",
+      "popover-foreground",
+    ],
+  },
+  {
+    id: "brand",
+    tokens: [
+      "primary",
+      "primary-foreground",
+      "secondary",
+      "secondary-foreground",
+      "accent",
+      "accent-foreground",
+    ],
+  },
+  { id: "neutrals", tokens: ["muted", "muted-foreground", "border", "input", "ring"] },
+  {
+    id: "semantic",
+    tokens: [
+      "destructive",
+      "destructive-foreground",
+      "success",
+      "success-foreground",
+      "warning",
+      "warning-foreground",
+      "info",
+      "info-foreground",
+    ],
+  },
+  {
+    id: "status",
+    tokens: [
+      "status-online",
+      "status-online-foreground",
+      "status-offline",
+      "status-offline-foreground",
+      "status-degraded",
+      "status-degraded-foreground",
+      "status-info",
+      "status-info-foreground",
+    ],
+  },
+] as const satisfies readonly { id: string; tokens: readonly (keyof ColorScale)[] }[];
+
+/**
+ * Flat list, for seeding and for the derivation to write into.
+ *
+ * Typed from the groups rather than as `keyof ColorScale`, so the label record covers exactly the
+ * tokens with a control and not the three optional tonal variants — those are derived in CSS from
+ * their base and have no swatch here.
+ */
+type EditableColor = (typeof COLOR_GROUPS)[number]["tokens"][number];
+const EDITABLE_COLORS: readonly EditableColor[] = COLOR_GROUPS.flatMap((g) => [...g.tokens]);
 
 /** Where the corner control starts, and what Reset returns to. */
 const DEFAULT_RADIUS = "10px";
@@ -55,6 +115,49 @@ const RADIUS_VALUES = ["0px", "4px", "10px", "16px", "24px"] as const;
 const DEFAULT_SPACING = "4px";
 
 const SPACING_VALUES = ["3px", "4px", "5px"] as const;
+
+/**
+ * Elevation presets, as whole languages rather than five separate shadows.
+ *
+ * `none` is a real design position — flat interfaces exist — and the reason this is a preset and
+ * not a shadow-per-slot control: five independent shadows that do not agree with each other read
+ * as a bug, not as a theme.
+ *
+ * `inherit` leaves `tokens.css` alone, where the shadows are composed from `--foreground` via
+ * `color-mix` and therefore already follow a palette change.
+ */
+const ELEVATION_PRESETS = {
+  inherit: undefined,
+  flat: { sm: "none", md: "none", lg: "none" },
+  soft: {
+    sm: "0 1px 2px 0 rgb(0 0 0 / 0.04)",
+    md: "0 2px 6px -2px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04)",
+    lg: "0 8px 24px -8px rgb(0 0 0 / 0.10), 0 3px 8px rgb(0 0 0 / 0.06)",
+  },
+  strong: {
+    sm: "0 1px 3px 0 rgb(0 0 0 / 0.12)",
+    md: "0 4px 12px -2px rgb(0 0 0 / 0.18), 0 2px 4px rgb(0 0 0 / 0.10)",
+    lg: "0 16px 40px -12px rgb(0 0 0 / 0.28), 0 6px 14px rgb(0 0 0 / 0.14)",
+  },
+} as const;
+
+/**
+ * Motion presets. Durations move together because a UI where hovers are instant and panels are
+ * slow reads as unfinished rather than as deliberate.
+ *
+ * `none` sets every duration to zero rather than removing the transitions, so a component that
+ * animates on a class change still lands in the right final state. It is not a substitute for
+ * `prefers-reduced-motion`, which `global.css` honours regardless of what a theme says here.
+ */
+const MOTION_PRESETS = {
+  inherit: undefined,
+  none: { "duration-fast": "0ms", "duration-base": "0ms", "duration-slow": "0ms" },
+  snappy: { "duration-fast": "80ms", "duration-base": "140ms", "duration-slow": "220ms" },
+  relaxed: { "duration-fast": "160ms", "duration-base": "280ms", "duration-slow": "480ms" },
+} as const;
+
+type ElevationKey = keyof typeof ELEVATION_PRESETS;
+type MotionKey = keyof typeof MOTION_PRESETS;
 
 /**
  * Every string the editor renders.
@@ -87,7 +190,12 @@ export interface ThemeEditorLabels {
   unreadable: string;
   /** Receives the required ratio, e.g. `4.5`. */
   needs: (minimum: number) => string;
-  colours: Record<(typeof EDITABLE_COLORS)[number], string>;
+  colours: Record<EditableColor, string>;
+  groups: Record<(typeof COLOR_GROUPS)[number]["id"], string>;
+  elevationSection: string;
+  elevation: Record<ElevationKey, string>;
+  motionSection: string;
+  motion: Record<MotionKey, string>;
   corners: Record<(typeof RADIUS_VALUES)[number], string>;
   density: Record<(typeof SPACING_VALUES)[number], string>;
 }
@@ -114,14 +222,47 @@ const DEFAULT_LABELS: ThemeEditorLabels = {
     foreground: "Text",
     card: "Surface",
     "card-foreground": "Surface text",
+    popover: "Overlay",
+    "popover-foreground": "Overlay text",
     primary: "Primary",
     "primary-foreground": "On primary",
+    secondary: "Secondary",
+    "secondary-foreground": "On secondary",
     accent: "Accent",
     "accent-foreground": "On accent",
     muted: "Muted",
     "muted-foreground": "Muted text",
     border: "Border",
+    input: "Input border",
+    ring: "Focus ring",
+    destructive: "Destructive",
+    "destructive-foreground": "On destructive",
+    success: "Success",
+    "success-foreground": "On success",
+    warning: "Warning",
+    "warning-foreground": "On warning",
+    info: "Info",
+    "info-foreground": "On info",
+    "status-online": "Online",
+    "status-online-foreground": "On online",
+    "status-offline": "Offline",
+    "status-offline-foreground": "On offline",
+    "status-degraded": "Degraded",
+    "status-degraded-foreground": "On degraded",
+    "status-info": "Status info",
+    "status-info-foreground": "On status info",
   },
+  groups: {
+    surfaces: "Surfaces",
+    brand: "Brand",
+    neutrals: "Neutrals",
+    semantic: "Semantic",
+    status: "Status",
+  },
+  elevationSection: "Elevation",
+  elevation: { inherit: "Inherit", flat: "Flat", soft: "Soft", strong: "Strong" },
+  motionSection: "Motion",
+  motion: { inherit: "Inherit", none: "None", snappy: "Snappy", relaxed: "Relaxed" },
   corners: {
     "0px": "Square",
     "4px": "Slight",
@@ -166,10 +307,15 @@ export interface ThemeEditorProps {
 }
 
 /** `labels` accepts a subset, including a subset of each nested group. */
-type DeepPartialLabels = Partial<Omit<ThemeEditorLabels, "colours" | "corners" | "density">> & {
+type DeepPartialLabels = Partial<
+  Omit<ThemeEditorLabels, "colours" | "corners" | "density" | "groups" | "elevation" | "motion">
+> & {
   colours?: Partial<ThemeEditorLabels["colours"]>;
   corners?: Partial<ThemeEditorLabels["corners"]>;
   density?: Partial<ThemeEditorLabels["density"]>;
+  groups?: Partial<ThemeEditorLabels["groups"]>;
+  elevation?: Partial<ThemeEditorLabels["elevation"]>;
+  motion?: Partial<ThemeEditorLabels["motion"]>;
 };
 
 /** One level of merge for the nested groups; a plain spread would drop the untranslated keys. */
@@ -181,6 +327,9 @@ function mergeLabels(overrides: DeepPartialLabels | undefined): ThemeEditorLabel
     colours: { ...DEFAULT_LABELS.colours, ...overrides.colours },
     corners: { ...DEFAULT_LABELS.corners, ...overrides.corners },
     density: { ...DEFAULT_LABELS.density, ...overrides.density },
+    groups: { ...DEFAULT_LABELS.groups, ...overrides.groups },
+    elevation: { ...DEFAULT_LABELS.elevation, ...overrides.elevation },
+    motion: { ...DEFAULT_LABELS.motion, ...overrides.motion },
   };
 }
 
@@ -225,6 +374,9 @@ function ThemeEditor({
   const [colors, setColors] = useState<Partial<ColorScale>>(origin);
   const [radius, setRadius] = useState<string>(DEFAULT_RADIUS);
   const [spacing, setSpacing] = useState<string>(DEFAULT_SPACING);
+  const [elevation, setElevation] = useState<ElevationKey>("inherit");
+  const [motion, setMotion] = useState<MotionKey>("inherit");
+  const [openGroup, setOpenGroup] = useState<string>(COLOR_GROUPS[0].id);
 
   // Audited against the palette the editor opened on, not the live one — the live one already
   // contains these edits, so folding it in would compare a change against itself.
@@ -234,25 +386,39 @@ function ThemeEditor({
   const readable = failing.length === 0;
 
   const build = useCallback(
-    (nextColors: Partial<ColorScale>, nextRadius: string, nextSpacing: string): Theme =>
+    (
+      nextColors: Partial<ColorScale>,
+      nextRadius: string,
+      nextSpacing: string,
+      nextElevation: ElevationKey = elevation,
+      nextMotion: MotionKey = motion,
+    ): Theme =>
       defineTheme({
         name,
         label: "Custom",
         [mode]: nextColors,
         radius: buildRadius(nextRadius),
         spacing: nextSpacing,
+        shadows: ELEVATION_PRESETS[nextElevation],
+        motion: MOTION_PRESETS[nextMotion],
         // The mode not being edited inherits, which `defineTheme` warns about in development. The
         // warning is right for a theme written in a file and wrong here: this editor edits one
         // mode at a time by design, and the person can switch modes and edit the other.
         [mode === "dark" ? "light" : "dark"]: {},
       } as Parameters<typeof defineTheme>[0]),
-    [mode, name],
+    [mode, name, elevation, motion],
   );
 
   /** Applies live: the page repaints from the cascade, with no rebuild and no reload. */
   const apply = useCallback(
-    (nextColors: Partial<ColorScale>, nextRadius: string, nextSpacing: string) => {
-      const next = build(nextColors, nextRadius, nextSpacing);
+    (
+      nextColors: Partial<ColorScale>,
+      nextRadius: string,
+      nextSpacing: string,
+      nextElevation?: ElevationKey,
+      nextMotion?: MotionKey,
+    ) => {
+      const next = build(nextColors, nextRadius, nextSpacing, nextElevation, nextMotion);
       registerTheme(next);
       setTheme(next.name);
     },
@@ -309,11 +475,29 @@ function ThemeEditor({
     [colors, radius, apply],
   );
 
+  const onElevationChange = useCallback(
+    (value: ElevationKey) => {
+      setElevation(value);
+      apply(colors, radius, spacing, value, motion);
+    },
+    [colors, radius, spacing, motion, apply],
+  );
+
+  const onMotionChange = useCallback(
+    (value: MotionKey) => {
+      setMotion(value);
+      apply(colors, radius, spacing, elevation, value);
+    },
+    [colors, radius, spacing, elevation, apply],
+  );
+
   const reset = useCallback(() => {
     setColors(origin);
     setRadius(DEFAULT_RADIUS);
     setSpacing(DEFAULT_SPACING);
-    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING);
+    setElevation("inherit");
+    setMotion("inherit");
+    apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING, "inherit", "inherit");
   }, [origin, apply]);
 
   return (
@@ -359,20 +543,43 @@ function ThemeEditor({
         <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
           {labels.colourSection}
         </legend>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-2">
-          {EDITABLE_COLORS.map((token) => (
-            <label key={token} className="flex items-center gap-2 text-body-sm">
-              <input
-                type="color"
-                value={asSwatch(colors[token])}
-                onChange={onColorChange(token)}
-                aria-label={labels.colours[token]}
-                className="size-7 shrink-0 cursor-pointer rounded-md border border-border/60 bg-transparent"
-              />
-              <span className="min-w-0 truncate">{labels.colours[token]}</span>
-            </label>
-          ))}
-        </div>
+        {/*
+          Grouped and collapsed rather than one wall of thirty-three swatches. `<details>` because
+          it is a disclosure and the browser already knows how to do one — keyboard, screen reader
+          and the open/closed state come free, and none of them survive a hand-rolled version
+          intact.
+        */}
+        {COLOR_GROUPS.map((group) => (
+          <details
+            key={group.id}
+            open={openGroup === group.id}
+            onToggle={(event) => {
+              if (event.currentTarget.open) setOpenGroup(group.id);
+            }}
+            className="rounded-lg border border-border/60"
+          >
+            <summary className="cursor-pointer px-3 py-2 font-medium text-body-sm marker:text-muted-foreground">
+              {labels.groups[group.id]}
+              <span className="ml-2 font-mono text-label text-muted-foreground">
+                {group.tokens.length}
+              </span>
+            </summary>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-2 px-3 pt-1 pb-3">
+              {group.tokens.map((token) => (
+                <label key={token} className="flex items-center gap-2 text-body-sm">
+                  <input
+                    type="color"
+                    value={asSwatch(colors[token])}
+                    onChange={onColorChange(token)}
+                    aria-label={labels.colours[token]}
+                    className="size-7 shrink-0 cursor-pointer rounded-md border border-border/60 bg-transparent"
+                  />
+                  <span className="min-w-0 truncate">{labels.colours[token]}</span>
+                </label>
+              ))}
+            </div>
+          </details>
+        ))}
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
@@ -455,6 +662,32 @@ function ThemeEditor({
         </div>
       </fieldset>
 
+      <fieldset className="flex flex-col gap-2">
+        <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
+          {labels.elevationSection}
+        </legend>
+        <PresetRow
+          name="theme-editor-elevation"
+          options={Object.keys(ELEVATION_PRESETS) as ElevationKey[]}
+          value={elevation}
+          labels={labels.elevation}
+          onChange={onElevationChange}
+        />
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
+          {labels.motionSection}
+        </legend>
+        <PresetRow
+          name="theme-editor-motion"
+          options={Object.keys(MOTION_PRESETS) as MotionKey[]}
+          value={motion}
+          labels={labels.motion}
+          onChange={onMotionChange}
+        />
+      </fieldset>
+
       <ContrastReport findings={findings} labels={labels} />
 
       {onCommit ? (
@@ -462,7 +695,7 @@ function ThemeEditor({
           type="button"
           disabled={!readable && !allowFailing}
           onClick={() => {
-            onCommit(build(colors, radius, spacing));
+            onCommit(build(colors, radius, spacing, elevation, motion));
           }}
           className={cn(
             "inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4",
@@ -477,6 +710,56 @@ function ThemeEditor({
         </button>
       ) : null}
     </section>
+  );
+}
+
+/**
+ * A row of radios sharing one name.
+ *
+ * Extracted because elevation, motion and density are the same control three times, and three
+ * copies of a native radio group is three chances to forget the shared `name` that makes it one.
+ */
+function PresetRow<T extends string>({
+  name,
+  options,
+  value,
+  labels,
+  onChange,
+}: {
+  name: string;
+  options: readonly T[];
+  value: T;
+  labels: Record<T, string>;
+  onChange: (next: T) => void;
+}): JSX.Element {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((option) => (
+        <label
+          key={option}
+          className={cn(
+            "inline-flex h-9 cursor-pointer items-center rounded-lg px-3",
+            "font-medium text-body-sm transition-colors",
+            "border has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
+            value === option
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border/60 hover:bg-muted",
+          )}
+        >
+          <input
+            type="radio"
+            name={name}
+            value={option}
+            checked={value === option}
+            onChange={() => {
+              onChange(option);
+            }}
+            className="sr-only"
+          />
+          {labels[option]}
+        </label>
+      ))}
+    </div>
   );
 }
 
