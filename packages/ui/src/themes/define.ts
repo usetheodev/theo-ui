@@ -39,6 +39,7 @@ import type {
   MotionScale,
   RadiusScale,
   ShadowScale,
+  SpaceScale,
   Theme,
   ThemeFonts,
 } from "./types.js";
@@ -100,6 +101,8 @@ export interface DefineThemeInput {
   spacing?: string;
   /** Elevation. Omitted keys keep the palette-derived shadows. */
   shadows?: ShadowScale;
+  /** The named spacing steps a consumer reads directly. Omitted keys keep the defaults. */
+  space?: SpaceScale;
   /** Durations and easings. Omitted keys keep the defaults. */
   motion?: MotionScale;
 }
@@ -172,6 +175,7 @@ export function defineTheme(input: DefineThemeInput): Theme {
   if (input.radius !== undefined) theme.radius = input.radius;
   if (input.spacing !== undefined) theme.spacing = input.spacing;
   if (input.shadows !== undefined) theme.shadows = input.shadows;
+  if (input.space !== undefined) theme.space = input.space;
   if (input.motion !== undefined) theme.motion = input.motion;
 
   return theme;

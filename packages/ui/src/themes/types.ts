@@ -120,6 +120,30 @@ export interface ShadowScale {
  * every component. `prefers-reduced-motion` is handled in `global.css` and is not affected by what
  * a theme declares here — a theme cannot re-enable motion for someone who asked for less.
  */
+/**
+ * The named spacing steps.
+ *
+ * Separate from `spacing`, which is the base every `p-*`/`gap-*` utility multiplies. These are the
+ * fixed rungs a consumer reads directly — `var(--space-6)` in their own CSS — and nothing inside
+ * this package uses them, which is exactly why they belong here: a token that only a consumer reads
+ * is a token only a consumer can be surprised by.
+ */
+export interface SpaceScale {
+  1?: string;
+  2?: string;
+  3?: string;
+  4?: string;
+  5?: string;
+  6?: string;
+  8?: string;
+  10?: string;
+  12?: string;
+  16?: string;
+  20?: string;
+  24?: string;
+  32?: string;
+}
+
 export interface MotionScale {
   "duration-fast"?: string;
   "duration-base"?: string;
@@ -127,6 +151,8 @@ export interface MotionScale {
   "ease-out-soft"?: string;
   "ease-snap"?: string;
   "ease-in-out"?: string;
+  /** Delay between items in a staggered sequence. `prefers-reduced-motion` zeroes it regardless. */
+  stagger?: string;
 }
 
 export interface Theme {
@@ -158,6 +184,8 @@ export interface Theme {
   spacing?: string;
   /** Elevation. Omitted keys keep the palette-derived shadows from `tokens.css`. */
   shadows?: ShadowScale;
+  /** The named spacing steps a consumer reads directly. Omitted keys keep the defaults. */
+  space?: SpaceScale;
   /** Durations and easings. Omitted keys keep the defaults. */
   motion?: MotionScale;
 }
