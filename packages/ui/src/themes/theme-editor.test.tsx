@@ -137,9 +137,13 @@ describe("ThemeEditor", () => {
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];
     const groups = new Set(radios.map((r) => r.name));
 
-    expect(groups.size).toBe(2);
+    // Four independent controls: corners, density, elevation, motion. A shared `name` would make
+    // choosing a corner clear the density, which is why this counts rather than assumes.
+    expect(groups.size).toBe(4);
     expect(radios.filter((r) => r.name === "theme-editor-radius")).toHaveLength(5);
     expect(radios.filter((r) => r.name === "theme-editor-spacing")).toHaveLength(3);
+    expect(radios.filter((r) => r.name === "theme-editor-elevation")).toHaveLength(4);
+    expect(radios.filter((r) => r.name === "theme-editor-motion")).toHaveLength(4);
   });
 
   it("resets back to the theme it opened on", () => {
@@ -282,16 +286,16 @@ describe("ThemeEditor labels are exhaustive", () => {
     const marked = <T extends Record<string, unknown>>(group: T): T =>
       Object.fromEntries(Object.keys(group).map((k) => [k, mark(k)])) as T;
 
-    const overrides = {
-      ...Object.fromEntries(
-        Object.entries(DEFAULT_LABELS)
-          .filter(([, v]) => typeof v !== "object")
-          .map(([k, v]) => [k, typeof v === "function" ? () => mark(k) : mark(k)]),
-      ),
-      colours: marked(DEFAULT_LABELS.colours),
-      corners: marked(DEFAULT_LABELS.corners),
-      density: marked(DEFAULT_LABELS.density),
-    } as Parameters<typeof ThemeEditor>[0]["labels"];
+    // Every nested group is discovered, not listed. Naming `colours`, `corners` and `density` by
+    // hand is what let `groups`, `elevation` and `motion` be added and slip past this test — the
+    // exact failure it exists to prevent, committed inside the test itself.
+    const overrides = Object.fromEntries(
+      Object.entries(DEFAULT_LABELS).map(([key, value]) => {
+        if (typeof value === "function") return [key, () => mark(key)];
+        if (typeof value === "object") return [key, marked(value as Record<string, unknown>)];
+        return [key, mark(key)];
+      }),
+    ) as Parameters<typeof ThemeEditor>[0]["labels"];
 
     mount({ onCommit: vi.fn(), labels: overrides });
 
@@ -370,5 +374,84 @@ describe("ThemeEditor brand seed", () => {
     const theme = onCommit.mock.calls[0]?.[0] as Theme;
     expect(theme.light.primary).toBeDefined();
     expect(theme.light.primary).not.toBe(violetForge.light.primary);
+  });
+});
+
+/**
+ * Everything a theme has, reachable from the editor.
+ *
+ * It used to show eleven of the thirty-three required colour tokens, which made "customise your
+ * theme" a screen that quietly could not — the other twenty-two were editable only by writing a
+ * theme file. The count is derived from `ColorScale` rather than written down, so a token added to
+ * the type without a control fails here.
+ */
+describe("ThemeEditor covers the whole theme", () => {
+  it("offers a control for every required colour token", () => {
+    mount();
+
+    const required = Object.keys(violetForge.light).filter(
+      // The tonal variants are derived in CSS from their base; a control would stop that.
+      (k) => !k.endsWith("-deep") && !k.endsWith("-glow"),
+    );
+    const swatches = document.querySelectorAll('[data-slot="theme-editor"] input[type="color"]');
+
+    // One per token, plus the brand seed.
+    expect(swatches.length).toBe(required.length + 1);
+  });
+
+  it("groups them, so thirty-three swatches are not one wall", () => {
+    mount();
+    const groups = document.querySelectorAll('[data-slot="theme-editor"] details');
+
+    expect(groups.length).toBeGreaterThan(3);
+    // Only the first is open: the common case stays short, the rest is one click away.
+    expect([...groups].filter((d) => (d as HTMLDetailsElement).open)).toHaveLength(1);
+  });
+
+  it("carries elevation into the committed theme", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("radio", { name: "Flat" }));
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    expect((onCommit.mock.calls[0]?.[0] as Theme).shadows?.md).toBe("none");
+  });
+
+  it("carries motion into the committed theme", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("radio", { name: "Snappy" }));
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    expect((onCommit.mock.calls[0]?.[0] as Theme).motion?.["duration-base"]).toBe("140ms");
+  });
+
+  it("leaves elevation and motion alone unless asked", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+
+    // `inherit` must emit nothing, so `tokens.css` — where shadows are composed from the palette —
+    // keeps working. An empty object here would override it with silence.
+    expect(theme.shadows).toBeUndefined();
+    expect(theme.motion).toBeUndefined();
+  });
+
+  it("resets elevation and motion with everything else", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("radio", { name: "Strong" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Relaxed" }));
+    fireEvent.click(screen.getByRole("button", { name: /reset/i }));
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+    expect(theme.shadows).toBeUndefined();
+    expect(theme.motion).toBeUndefined();
   });
 });
