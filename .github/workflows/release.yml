@@ -46,12 +46,46 @@ jobs:
       # credential at all.
       id-token: write
     steps:
+      # Mint a short-lived token from the `theokit-release` GitHub App instead of using
+      # the job's own GITHUB_TOKEN. This exists for ONE reason: GitHub does not start
+      # workflow runs from GITHUB_TOKEN-authored events, so the Version Packages pull
+      # request opened by changesets arrived with none of the required checks running,
+      # permanently BLOCKED until a person closed and reopened it to re-trigger them.
+      #
+      # An App token is authored by the App, not by the Actions bot, so the events it
+      # creates DO start workflows. The token is minted per run and expires with it; what
+      # is long-lived is the App's private key, held as a secret, scoped to exactly three
+      # repository permissions (contents, pull-requests, metadata) on this repository
+      # alone. That is the cost, and it is smaller than a personal access token: it is
+      # attached to no human, and revoking it breaks nobody's access to anything else.
+      #
+      # NOT used for npm. Publishing stays OIDC trusted publishing, with no token at all.
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          # Narrow the token to what this job does, rather than inheriting whatever the
+          # installation happens to hold. The App is scoped to these two today, so the
+          # lines look redundant — they are not: they are what keeps a later widening of
+          # the App from silently widening this job too. zizmor flags the unrestricted
+          # form as high severity for exactly that reason.
+          permission-contents: write
+          permission-pull-requests: write
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 # zizmor: ignore[artipacked]
         with:
           # The one checkout in this repository that keeps its credential, and not by
           # oversight: changesets/action pushes the version commit and the release tags
           # with the git CLI, which authenticates from exactly this persisted token.
           # `persist-credentials: false` breaks the release.
+          #
+          # It must be the APP's token, not the default one. The push of
+          # `changeset-release/main` is what the pull request is opened against, so a push
+          # carrying the Actions bot's credential produces a bot-authored branch and the
+          # checks stay dormant even though the pull request itself was opened by the App.
+          # Both halves have to be the App or neither is.
+          token: ${{ steps.app-token.outputs.token }}
           #
           # changesets reads tags to decide what is unpublished; a shallow clone hides them.
           fetch-depth: 0
@@ -148,9 +182,11 @@ jobs:
           publish: pnpm release
           version: pnpm version-packages
         env:
-          # The only credential here, and it is GitHub's own: changesets uses it to open the
-          # version pull request. Nothing here authenticates to npm.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The App's token, so the Version Packages pull request is authored by the App and
+          # its required checks actually run. With `secrets.GITHUB_TOKEN` here the pull
+          # request opens BLOCKED with nothing but the external Apps reporting, and stays
+          # that way until a person closes and reopens it. Nothing here authenticates to npm.
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           # NPM_CONFIG_PROVENANCE is deliberately absent: `publishConfig.provenance: true`
           # already sits in packages/ui/package.json, beside the package it describes,
           # instead of in an environment variable this file has to remember. Unlike
