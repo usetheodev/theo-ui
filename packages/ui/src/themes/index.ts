@@ -12,7 +12,7 @@ export { ThemeScript } from "./theme-script.js";
 export { ThemeSwitcher } from "./theme-switcher.js";
 export { ThemeEditor, type ThemeEditorProps } from "./theme-editor.js";
 export { deriveColorScale, toOklch, type DeriveOptions } from "./derive.js";
-export { useStoredTheme, type StoredThemeApi } from "./use-stored-theme.js";
+export { readStoredTheme, useStoredTheme, type StoredThemeApi } from "./use-stored-theme.js";
 export {
   CONTRAST_PAIRS,
   WCAG_AA,
