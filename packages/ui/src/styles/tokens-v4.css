@@ -156,14 +156,15 @@
   --text-code-sm--line-height: 1.54;
   --text-code-sm--font-weight: 500;
 
-  /* Radii — Tailwind v4 reads the value directly (no var indirection). */
-  --radius-none: 0px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-2xl: 20px;
-  --radius-full: 9999px;
+  /* Radii — indirection, like every other family here. Literals compiled `.rounded-xl` to a fixed
+   * `14px`, leaving the `--radius-*` variables inert (usetheokit/theokit-ui#88). */
+  --radius-none: var(--radius-none);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
 
   /* Shadows — alias to tokens.css computed values (which already use
      * `hsl(var(--foreground) / …)` so theme-switch keeps them in step). */

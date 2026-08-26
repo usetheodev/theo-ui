@@ -34,7 +34,14 @@
  * RFC: `wiki/rfcs/0005-theming-and-sizes.md`.
  */
 import { isDev } from "../lib/env.js";
-import type { ColorScale, Theme, ThemeFonts } from "./types.js";
+import type {
+  ColorScale,
+  MotionScale,
+  RadiusScale,
+  ShadowScale,
+  Theme,
+  ThemeFonts,
+} from "./types.js";
 import { violetForge } from "./violet-forge.js";
 
 const NAME_PATTERN = /^[a-z][a-z0-9-]*$/i;
@@ -79,6 +86,22 @@ export interface DefineThemeInput {
    * omitted (so consumers that don't care still get Geist preloaded).
    */
   fontUrls?: string[];
+  /**
+   * Corner radii. Unlike the colour scales, these do NOT inherit from Violet Forge: an omitted
+   * key emits nothing and the scale in `tokens.css` stands.
+   *
+   * The difference is deliberate. Colour has to be complete — a palette missing `background` is
+   * not a palette — so the merge fills the gaps. Shape is a set of independent adjustments, and
+   * inheriting them from another theme would mean a theme that only wants square corners silently
+   * adopts Violet Forge's spacing and elevation too.
+   */
+  radius?: RadiusScale;
+  /** The spacing base every `p-*`/`gap-*`/`m-*` utility multiplies. Omitted leaves it alone. */
+  spacing?: string;
+  /** Elevation. Omitted keys keep the palette-derived shadows. */
+  shadows?: ShadowScale;
+  /** Durations and easings. Omitted keys keep the defaults. */
+  motion?: MotionScale;
 }
 
 function defaultLabel(name: string): string {
@@ -142,6 +165,14 @@ export function defineTheme(input: DefineThemeInput): Theme {
     dark: { ...violetForge.dark, ...darkOverride },
     fontUrls: input.fontUrls ?? violetForge.fontUrls,
   };
+
+  // Carried through only when present, so `theme.radius` stays `undefined` rather than becoming an
+  // empty object. `shapeToCss` reads that difference: nothing declared means no rule emitted, and
+  // an empty rule in the injected sheet is noise for whoever reads the page's styles.
+  if (input.radius !== undefined) theme.radius = input.radius;
+  if (input.spacing !== undefined) theme.spacing = input.spacing;
+  if (input.shadows !== undefined) theme.shadows = input.shadows;
+  if (input.motion !== undefined) theme.motion = input.motion;
 
   return theme;
 }
