@@ -12,7 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defineTheme } from "./define.js";
 import { ThemeProvider } from "./theme-provider.js";
 import type { Theme } from "./types.js";
-import { useStoredTheme } from "./use-stored-theme.js";
+import { readStoredTheme, useStoredTheme } from "./use-stored-theme.js";
 import { violetForge } from "./violet-forge.js";
 
 const KEY = "test:custom-theme";
@@ -131,5 +131,54 @@ describe("useStoredTheme refuses what it cannot trust", () => {
     expect(screen.getByTestId("stored").textContent).toBe("none");
 
     getItem.mockRestore();
+  });
+});
+
+/**
+ * `readStoredTheme` is the half that makes a saved theme actually apply.
+ *
+ * Registering from an effect is too late: `ThemeProvider` resolves the active theme NAME in its own
+ * effect and falls back to the default for a name it has no theme for. Measured before this
+ * existed — after a reload the palette was in storage, the "forget it" affordance appeared, and
+ * `data-theme` was the built-in theme. The registry had it; the page did not.
+ */
+describe("readStoredTheme", () => {
+  it("returns the theme for passing into `themes` at mount", () => {
+    window.localStorage.setItem(KEY, JSON.stringify(CUSTOM));
+
+    expect(readStoredTheme(KEY)?.name).toBe("brand");
+  });
+
+  it("returns undefined when there is nothing stored", () => {
+    expect(readStoredTheme(KEY)).toBeUndefined();
+  });
+
+  it("shares its parsing with the hook, so the two cannot disagree about what is valid", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    window.localStorage.setItem(KEY, JSON.stringify({ name: "brand", colours: {} }));
+
+    expect(readStoredTheme(KEY)).toBeUndefined();
+    mount();
+    expect(screen.getByTestId("stored").textContent).toBe("none");
+
+    warn.mockRestore();
+  });
+
+  it("applies when passed in via `themes`, which is the ordering that works", () => {
+    window.localStorage.setItem(KEY, JSON.stringify(CUSTOM));
+    const stored = readStoredTheme(KEY);
+
+    render(
+      <ThemeProvider
+        themes={stored ? [violetForge, stored] : [violetForge]}
+        defaultTheme={stored?.name ?? violetForge.name}
+        respectSystemMode={false}
+        storageKey={null}
+      >
+        <Probe />
+      </ThemeProvider>,
+    );
+
+    expect(document.documentElement.getAttribute("data-theme")).toBe("brand");
   });
 });

@@ -43,6 +43,45 @@ function warn(message: string, error: unknown): void {
   console.warn(`[@theokit/ui] ${message}`, error);
 }
 
+/**
+ * Read a stored theme synchronously, for passing to `ThemeProvider` on the way in.
+ *
+ * This exists because registering a theme from an effect is too late. `ThemeProvider` resolves the
+ * active theme NAME in its own effect, from its own storage key, and a name it does not have a
+ * theme for falls back to the default — so a custom theme registered after that resolution is in
+ * the registry and not applied. Measured: after a reload the editor's saved palette was in
+ * `localStorage`, the "forget it" affordance appeared, and `data-theme` was the built-in one.
+ *
+ * Passing the result into `themes` fixes the ordering rather than racing it:
+ *
+ *   const stored = readStoredTheme("my-app:theme")
+ *   <ThemeProvider themes={stored ? [base, stored] : [base]} defaultTheme={base.name}>
+ *
+ * Returns `undefined` on a server, where there is no storage to read — the client re-renders with
+ * the real value, which is the same trade every theme system makes for this.
+ */
+export function readStoredTheme(storageKey = "theo-ui:theme:custom"): Theme | undefined {
+  if (typeof window === "undefined") return undefined;
+
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(storageKey);
+  } catch (error) {
+    warn(`could not read stored theme (${storageKey})`, error);
+    return undefined;
+  }
+  if (raw === null) return undefined;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (looksLikeTheme(parsed)) return parsed;
+    warn(`stored theme has the wrong shape and was ignored (${storageKey})`, parsed);
+  } catch (error) {
+    warn(`stored theme is not valid JSON (${storageKey})`, error);
+  }
+  return undefined;
+}
+
 export interface StoredThemeApi {
   /** The theme read from storage on mount, or `undefined` if there was none. */
   stored: Theme | undefined;
@@ -64,34 +103,15 @@ export function useStoredTheme(storageKey = "theo-ui:theme:custom"): StoredTheme
   const [stored, setStored] = useState<Theme | undefined>(undefined);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    const theme = readStoredTheme(storageKey);
+    if (!theme) return;
 
-    let raw: string | null = null;
-    try {
-      raw = window.localStorage.getItem(storageKey);
-    } catch (error) {
-      // Private mode, a full quota, a blocked origin. None of them are worth breaking the app for.
-      warn(`could not read stored theme (${storageKey})`, error);
-      return;
-    }
-    if (raw === null) return;
-
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(raw);
-    } catch (error) {
-      warn(`stored theme is not valid JSON (${storageKey})`, error);
-      return;
-    }
-
-    if (!looksLikeTheme(parsed)) {
-      warn(`stored theme has the wrong shape and was ignored (${storageKey})`, parsed);
-      return;
-    }
-
-    setStored(parsed);
-    registerTheme(parsed);
-    setTheme(parsed.name);
+    setStored(theme);
+    // Registering here still matters for the case where the consumer did NOT pass the theme in via
+    // `themes` — it makes the theme available even though the name may already have resolved
+    // elsewhere. `readStoredTheme` at mount is what makes it actually apply.
+    registerTheme(theme);
+    setTheme(theme.name);
   }, [storageKey, registerTheme, setTheme]);
 
   const save = useCallback(

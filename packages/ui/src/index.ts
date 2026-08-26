@@ -78,6 +78,7 @@ export {
   cssColorToHex,
   relativeLuminance,
   toOklch,
+  readStoredTheme,
   useStoredTheme,
   type ColorScale,
   type ContrastFinding,
