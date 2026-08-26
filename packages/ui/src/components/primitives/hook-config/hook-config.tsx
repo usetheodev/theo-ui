@@ -87,7 +87,7 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
               value={event}
               onChange={(e) => setEvent(e.target.value as HookEvent)}
               aria-label="Event"
-              className="h-9 rounded-md border border-input bg-card px-2 font-mono text-code-sm"
+              className="h-[var(--theo-control-h,2.25rem)] rounded-md border border-input bg-card px-[var(--theo-control-px,0.5rem)] font-mono text-code-sm"
             >
               {HOOK_EVENTS.map((evt) => (
                 <option key={evt} value={evt}>
@@ -101,7 +101,7 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
               onChange={(e) => setMatcher(e.target.value)}
               placeholder="matcher (Bash, Write, *)"
               aria-label="Matcher"
-              className="h-9 rounded-md border border-input bg-card px-2 font-mono text-code-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-[var(--theo-control-h,2.25rem)] rounded-md border border-input bg-card px-[var(--theo-control-px,0.5rem)] font-mono text-code-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             <input
               type="text"
@@ -109,11 +109,11 @@ const HookConfig = forwardRef<HTMLDivElement, HookConfigProps>(
               onChange={(e) => setCommand(e.target.value)}
               placeholder='command (e.g. "./scripts/audit.sh")'
               aria-label="Command"
-              className="h-9 rounded-md border border-input bg-card px-2 font-mono text-code-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-[var(--theo-control-h,2.25rem)] rounded-md border border-input bg-card px-[var(--theo-control-px,0.5rem)] font-mono text-code-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             <button
               type="submit"
-              className="inline-flex h-9 items-center gap-1 rounded-md bg-primary px-3 font-sans text-label text-primary-foreground hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-[var(--theo-control-h,2.25rem)] items-center gap-1 rounded-md bg-primary px-[var(--theo-control-px,0.75rem)] font-sans text-label text-primary-foreground hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Plus className="size-3.5" /> Add
             </button>

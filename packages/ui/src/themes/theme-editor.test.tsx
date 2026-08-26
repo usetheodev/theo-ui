@@ -7,11 +7,12 @@
  * looks at colour. Typecheck, lint, tests and build all pass on an unreadable theme.
  */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import type { JSX } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { cssColorToHex } from "./contrast.js";
 import { DEFAULT_LABELS, ThemeEditor, buildRadius } from "./theme-editor.js";
-import { ThemeProvider } from "./theme-provider.js";
+import { ThemeProvider, useTheme } from "./theme-provider.js";
 import type { Theme } from "./types.js";
 import { violetForge } from "./violet-forge.js";
 
@@ -132,18 +133,19 @@ describe("ThemeEditor", () => {
     mount();
 
     // `<fieldset>` + `<legend>` is the grouping; the shared `name` is what makes a set of radios
-    // one control rather than several checkboxes. Corners and density are separate sets, so there
-    // are exactly two names — if they collided, choosing a corner would clear the density.
+    // one control rather than several checkboxes.
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];
     const groups = new Set(radios.map((r) => r.name));
 
-    // Four independent controls: corners, density, elevation, motion. A shared `name` would make
-    // choosing a corner clear the density, which is why this counts rather than assumes.
-    expect(groups.size).toBe(4);
+    // Five independent controls: corners, density, elevation, motion, typeface. A shared `name`
+    // across two of them would make choosing in one clear the other, which is why this counts
+    // rather than assumes.
+    expect(groups.size).toBe(5);
     expect(radios.filter((r) => r.name === "theme-editor-radius")).toHaveLength(5);
     expect(radios.filter((r) => r.name === "theme-editor-spacing")).toHaveLength(3);
     expect(radios.filter((r) => r.name === "theme-editor-elevation")).toHaveLength(4);
     expect(radios.filter((r) => r.name === "theme-editor-motion")).toHaveLength(4);
+    expect(radios.filter((r) => r.name === "theme-editor-typography")).toHaveLength(5);
   });
 
   it("resets back to the theme it opened on", () => {
@@ -453,5 +455,125 @@ describe("ThemeEditor covers the whole theme", () => {
     const theme = onCommit.mock.calls[0]?.[0] as Theme;
     expect(theme.shadows).toBeUndefined();
     expect(theme.motion).toBeUndefined();
+  });
+});
+
+/**
+ * A theme is two palettes, and the editor emits both.
+ *
+ * Holding one scale meant the mode not being edited went out as `{}`, which inherits from Violet
+ * Forge — the silent one-sided theme `defineTheme` warns about (usetheokit/theokit-ui#81), produced
+ * by the tool built to prevent it. Somebody tuning dark and switching to light would have found
+ * their work replaced by another product's palette.
+ */
+describe("ThemeEditor emits both modes", () => {
+  it("keeps an edit made in the other mode after switching", () => {
+    // The test that actually distinguishes the two implementations. Asserting that the untouched
+    // mode "still looks like Violet Forge" proves nothing: emitting `{}` inherits from Violet
+    // Forge, so both the broken and the fixed version pass it. The difference only shows once BOTH
+    // modes have been edited — which is why this switches modes mid-edit.
+    const onCommit = vi.fn();
+
+    function ModeSwitch(): JSX.Element {
+      const { toggleMode } = useTheme();
+      return (
+        <button type="button" onClick={toggleMode}>
+          switch mode
+        </button>
+      );
+    }
+
+    render(
+      <ThemeProvider
+        themes={[violetForge]}
+        defaultTheme={violetForge.name}
+        defaultMode="light"
+        respectSystemMode={false}
+        storageKey={null}
+      >
+        <ModeSwitch />
+        <ThemeEditor onCommit={onCommit} />
+      </ThemeProvider>,
+    );
+
+    // Edit light, switch to dark, edit dark, commit.
+    fireEvent.change(screen.getByLabelText("Background"), { target: { value: "#f7f7f5" } });
+    fireEvent.click(screen.getByRole("button", { name: "switch mode" }));
+    fireEvent.change(screen.getByLabelText("Background"), { target: { value: "#0b0b0d" } });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls.at(-1)?.[0] as Theme;
+    expect(theme.dark.background).toBe("#0b0b0d");
+    // The one that regresses when only the active mode is emitted.
+    expect(theme.light.background).toBe("#f7f7f5");
+  });
+
+  it("keeps an edit to one mode out of the other", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    // A light background, because the editor opens on the light palette and the commit is gated on
+    // contrast — `#123456` under dark text fails, and the button correctly refuses to fire.
+    fireEvent.change(screen.getByLabelText("Background"), { target: { value: "#f7f7f5" } });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+
+    expect(theme.light.background).toBe("#f7f7f5");
+    expect(theme.dark.background).toBe(violetForge.dark.background);
+  });
+});
+
+describe("ThemeEditor typography", () => {
+  it("offers a typeface control", () => {
+    mount();
+
+    for (const name of ["Inherit", "System", "Geometric", "Editorial", "Monospaced"]) {
+      expect(screen.getAllByRole("radio", { name }).length).toBeGreaterThan(0);
+    }
+  });
+
+  it("emits nothing for `inherit`, so tokens.css keeps its own faces", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+
+    // `defineTheme` fills fonts from Violet Forge when the input omits them — which is the point:
+    // an untouched typeface control must not overwrite what the theme already had.
+    expect(theme.fonts).toEqual(violetForge.fonts);
+  });
+
+  it("carries a chosen typeface into the committed theme", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    const editorial = screen
+      .getAllByRole("radio", { name: "Editorial" })
+      .find((r) => (r as HTMLInputElement).name === "theme-editor-typography");
+    fireEvent.click(editorial as HTMLElement);
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls[0]?.[0] as Theme;
+    expect(theme.fonts.body).toContain("Georgia");
+    expect(theme.fonts.mono).toContain("monospace");
+  });
+
+  it("every stack ends in a generic family, so a missing face still renders", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    for (const preset of ["System", "Geometric", "Editorial", "Monospaced"]) {
+      const radio = screen
+        .getAllByRole("radio", { name: preset })
+        .find((r) => (r as HTMLInputElement).name === "theme-editor-typography");
+      fireEvent.click(radio as HTMLElement);
+    }
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls.at(-1)?.[0] as Theme;
+    for (const slot of ["display", "body", "mono"] as const) {
+      expect(theme.fonts[slot]).toMatch(/(sans-serif|serif|monospace)$/);
+    }
   });
 });
