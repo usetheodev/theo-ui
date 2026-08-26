@@ -91,6 +91,7 @@ export {
   type MotionScale,
   type RadiusScale,
   type ShadowScale,
+  type SpaceScale,
   type Theme,
   type ThemeEditorProps,
   type ThemeFonts,

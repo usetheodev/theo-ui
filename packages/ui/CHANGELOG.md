@@ -291,6 +291,11 @@
 
 ### Added
 
+- `space` and `motion.stagger` on `Theme`, so every token the package declares can be set through
+  the API. The thirteen `--space-*` steps and `--stagger` were declared in `tokens.css` with no
+  field: a consumer writing `var(--space-6)` in their own CSS had no way to move them without a
+  stylesheet that outranks ours. `token-coverage.test.ts` now fails naming any token the two do not
+  share, so a token added without a field is caught instead of found by whoever needed it
 - `Workflow Lint`, a CI gate running actionlint and zizmor over `.github/workflows/` (#54)
 
 ### Changed

@@ -577,3 +577,97 @@ describe("ThemeEditor typography", () => {
     }
   });
 });
+
+/**
+ * The escape hatch from the presets.
+ *
+ * Presets keep the three faces agreeing and cover the common case; they cannot cover the case that
+ * matters most to a design system, which is a company with its own type. "Geometric" is not a brand.
+ */
+describe("ThemeEditor custom typeface", () => {
+  it("offers a field per slot", () => {
+    mount();
+
+    for (const slot of ["Display", "Body", "Mono"]) {
+      expect(screen.getByText(slot)).toBeInTheDocument();
+    }
+  });
+
+  it("a typed stack reaches the theme", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    const bodyField = screen.getByText("Body").parentElement?.querySelector("input");
+    fireEvent.change(bodyField as HTMLElement, {
+      target: { value: '"Brand Sans", Arial, sans-serif' },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    expect((onCommit.mock.calls.at(-1)?.[0] as Theme).fonts.body).toBe(
+      '"Brand Sans", Arial, sans-serif',
+    );
+  });
+
+  it("overrides a preset per slot, leaving the others as the preset set them", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    const editorial = screen
+      .getAllByRole("radio", { name: "Editorial" })
+      .find((r) => (r as HTMLInputElement).name === "theme-editor-typography");
+    fireEvent.click(editorial as HTMLElement);
+
+    const displayField = screen.getByText("Display").parentElement?.querySelector("input");
+    fireEvent.change(displayField as HTMLElement, { target: { value: '"Brand Display", serif' } });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    const theme = onCommit.mock.calls.at(-1)?.[0] as Theme;
+    expect(theme.fonts.display).toBe('"Brand Display", serif');
+    // The preset still owns the slots that were not typed into.
+    expect(theme.fonts.body).toContain("Georgia");
+  });
+
+  it("ignores a blank field rather than emitting an empty font-family", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    const bodyField = screen.getByText("Body").parentElement?.querySelector("input");
+    fireEvent.change(bodyField as HTMLElement, { target: { value: "   " } });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    // An empty `font-family` erases the face instead of leaving it alone, so whitespace is dropped
+    // and the theme keeps what it had.
+    expect((onCommit.mock.calls.at(-1)?.[0] as Theme).fonts.body).toBe(violetForge.fonts.body);
+  });
+
+  it("marks a stack that cannot be injected, instead of taking the page down", () => {
+    // The provider throws on a value that could break out of the declaration — right for a theme
+    // written in a file, wrong for a field somebody is still typing into. `Font (Bold)` would take
+    // the page down on the `(`. So the editor checks first: the text stays, the theme does not
+    // receive it, and the field says so.
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    const monoField = screen.getByText("Mono").parentElement?.querySelector("input");
+
+    expect(() => {
+      fireEvent.change(monoField as HTMLElement, { target: { value: "Mono (Bold)" } });
+    }).not.toThrow();
+
+    expect(monoField).toHaveValue("Mono (Bold)");
+    expect(monoField).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("applies it once the text becomes valid again", () => {
+    const onCommit = vi.fn();
+    mount({ onCommit });
+
+    const monoField = screen.getByText("Mono").parentElement?.querySelector("input");
+    fireEvent.change(monoField as HTMLElement, { target: { value: "Mono (Bold)" } });
+    fireEvent.change(monoField as HTMLElement, { target: { value: '"Mono Bold", monospace' } });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+
+    expect(monoField).toHaveAttribute("aria-invalid", "false");
+    expect((onCommit.mock.calls.at(-1)?.[0] as Theme).fonts.mono).toBe('"Mono Bold", monospace');
+  });
+});
