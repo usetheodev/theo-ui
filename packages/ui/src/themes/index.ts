@@ -1,7 +1,26 @@
-export type { ColorScale, Theme, ThemeFonts, ThemeMode } from "./types.js";
+export type {
+  ColorScale,
+  MotionScale,
+  RadiusScale,
+  ShadowScale,
+  Theme,
+  ThemeFonts,
+  ThemeMode,
+} from "./types.js";
 export { ThemeProvider, useTheme } from "./theme-provider.js";
 export { ThemeScript } from "./theme-script.js";
 export { ThemeSwitcher } from "./theme-switcher.js";
+export { ThemeEditor, type ThemeEditorProps } from "./theme-editor.js";
+export {
+  CONTRAST_PAIRS,
+  WCAG_AA,
+  auditColorScale,
+  contrastLevel,
+  contrastRatio,
+  relativeLuminance,
+  type ContrastFinding,
+  type ContrastLevel,
+} from "./contrast.js";
 export { violetForge } from "./violet-forge.js";
 export { classicPaper } from "./classic-paper.js";
 export { auroraTerminal } from "./aurora-terminal.js";
