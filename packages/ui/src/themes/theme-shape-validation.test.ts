@@ -14,8 +14,8 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { shapeToCss } from "./theme-provider.js";
 import { defineTheme } from "./define.js";
+import { shapeToCss } from "./theme-provider.js";
 
 describe("shapeToCss rejects values that would escape the declaration", () => {
   it("rejects a radius that closes the rule and opens its own", () => {

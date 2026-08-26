@@ -9,8 +9,8 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { ThemeProvider } from "./theme-provider.js";
 import { defineTheme } from "./define.js";
+import { ThemeProvider } from "./theme-provider.js";
 import { violetForge } from "./violet-forge.js";
 
 afterEach(cleanup);

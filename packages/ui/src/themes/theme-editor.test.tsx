@@ -6,14 +6,14 @@
  * build it — a badge at 1.61:1 is still a badge, just quiet — and no other gate in this repository
  * looks at colour. Typecheck, lint, tests and build all pass on an unreadable theme.
  */
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { cssColorToHex } from "./contrast.js";
 import { ThemeEditor, buildRadius } from "./theme-editor.js";
 import { ThemeProvider } from "./theme-provider.js";
-import { violetForge } from "./violet-forge.js";
 import type { Theme } from "./types.js";
+import { violetForge } from "./violet-forge.js";
 
 afterEach(cleanup);
 
@@ -116,16 +116,26 @@ describe("ThemeEditor", () => {
     expect(theme.radius?.none).toBe("0px");
   });
 
-  it("marks the selected corner for assistive tech, not only visually", () => {
+  it("uses real radios, so the selection is state rather than an ARIA claim", () => {
     mount();
-    const group = screen.getByRole("radiogroup", { name: /corner radius/i });
 
-    fireEvent.click(within(group).getByRole("radio", { name: "Pill" }));
+    // Native inputs give one tab stop and arrow-key movement for free. A set of buttons carrying
+    // `role="radio"` announces that behaviour without providing it.
+    const pill = screen.getByRole("radio", { name: "Pill" }) as HTMLInputElement;
+    fireEvent.click(pill);
 
-    expect(within(group).getByRole("radio", { name: "Pill" })).toHaveAttribute(
-      "aria-checked",
-      "true",
-    );
+    expect(pill.checked).toBe(true);
+    expect((screen.getByRole("radio", { name: "Square" }) as HTMLInputElement).checked).toBe(false);
+  });
+
+  it("groups the corner options under one accessible name", () => {
+    mount();
+
+    // `<fieldset>` + `<legend>` is the grouping; every radio shares a `name`, which is what makes
+    // them one control rather than five checkboxes.
+    const radios = screen.getAllByRole("radio") as HTMLInputElement[];
+    expect(radios.length).toBe(5);
+    expect(new Set(radios.map((r) => r.name)).size).toBe(1);
   });
 
   it("resets back to the theme it opened on", () => {

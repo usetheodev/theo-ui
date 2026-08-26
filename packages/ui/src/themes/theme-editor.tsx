@@ -222,27 +222,41 @@ function ThemeEditor({
         <legend className="pb-2 font-mono text-label text-muted-foreground uppercase tracking-wider">
           Corners
         </legend>
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Corner radius">
+        {/*
+          Real radio inputs rather than buttons carrying `role="radio"`. The ARIA role would
+          describe the behaviour without providing it: a native radio group is one tab stop with
+          arrow-key movement between options, which a set of buttons is not, and rebuilding that
+          by hand is how a control ends up announcing one thing and doing another.
+
+          The input is visually hidden rather than `display: none`, which would take it out of the
+          accessibility tree along with the focus ring.
+        */}
+        <div className="flex flex-wrap gap-2">
           {RADIUS_STEPS.map((step) => (
-            <button
+            <label
               key={step.value}
-              type="button"
-              role="radio"
-              aria-checked={radius === step.value}
-              onClick={() => {
-                onRadiusChange(step.value);
-              }}
               className={cn(
-                "inline-flex h-9 items-center px-3 font-medium text-body-sm transition-colors",
-                "border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "inline-flex h-9 cursor-pointer items-center px-3",
+                "font-medium text-body-sm transition-colors",
+                "border has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
                 radius === step.value
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border/60 hover:bg-muted",
               )}
-              style={{ borderRadius: step.value === "0px" ? "0px" : step.value }}
+              style={{ borderRadius: step.value }}
             >
+              <input
+                type="radio"
+                name="theme-editor-radius"
+                value={step.value}
+                checked={radius === step.value}
+                onChange={() => {
+                  onRadiusChange(step.value);
+                }}
+                className="sr-only"
+              />
               {step.label}
-            </button>
+            </label>
           ))}
         </div>
       </fieldset>
