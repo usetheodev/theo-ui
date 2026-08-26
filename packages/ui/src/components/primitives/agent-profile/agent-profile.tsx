@@ -53,7 +53,7 @@ const AgentProfile = forwardRef<HTMLButtonElement, AgentProfileProps>(
             ref={ref}
             type="button"
             className={cn(
-              "inline-flex h-9 items-center gap-2 rounded-full border border-border/60 bg-card pr-3 pl-1",
+              "inline-flex h-[var(--theo-control-h,2.25rem)] items-center gap-2 rounded-full border border-border/60 bg-card pr-3 pl-1",
               "transition-colors hover:bg-muted",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               className,

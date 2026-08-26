@@ -39,7 +39,7 @@ const QuickActionChips = forwardRef<HTMLDivElement, QuickActionChipsProps>(
             type="button"
             onClick={() => onSelect?.(a.id)}
             className={cn(
-              "inline-flex h-9 items-center gap-2 rounded-full border px-4",
+              "inline-flex h-[var(--theo-control-h,2.25rem)] items-center gap-2 rounded-full border px-4",
               "font-medium font-sans text-body-sm",
               "transition-[box-shadow,background-color,border-color,color] duration-base ease-out-soft",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",

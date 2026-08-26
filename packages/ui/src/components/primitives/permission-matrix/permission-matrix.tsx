@@ -115,7 +115,7 @@ const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
               value={newTool}
               onChange={(e) => setNewTool(e.target.value)}
               aria-label="Tool"
-              className="h-9 rounded-md border border-input bg-card px-2 font-mono text-code-sm"
+              className="h-[var(--theo-control-h,2.25rem)] rounded-md border border-input bg-card px-[var(--theo-control-px,0.5rem)] font-mono text-code-sm"
             >
               <option value="*">* (any tool)</option>
               {toolOptions.map((t) => (
@@ -130,13 +130,13 @@ const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
               onChange={(e) => setNewPath(e.target.value)}
               placeholder="path glob (e.g. src/**/*.ts)"
               aria-label="Path"
-              className="h-9 rounded-md border border-input bg-card px-2 font-mono text-code-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-[var(--theo-control-h,2.25rem)] rounded-md border border-input bg-card px-[var(--theo-control-px,0.5rem)] font-mono text-code-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             <select
               value={newDecision}
               onChange={(e) => setNewDecision(e.target.value as PermissionDecisionKind)}
               aria-label="Decision"
-              className="h-9 rounded-md border border-input bg-card px-2 font-mono text-code-sm uppercase"
+              className="h-[var(--theo-control-h,2.25rem)] rounded-md border border-input bg-card px-[var(--theo-control-px,0.5rem)] font-mono text-code-sm uppercase"
             >
               <option value="allow">allow</option>
               <option value="ask">ask</option>
@@ -144,7 +144,7 @@ const PermissionMatrix = forwardRef<HTMLDivElement, PermissionMatrixProps>(
             </select>
             <button
               type="submit"
-              className="inline-flex h-9 items-center gap-1 rounded-md bg-primary px-3 font-sans text-label text-primary-foreground hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-[var(--theo-control-h,2.25rem)] items-center gap-1 rounded-md bg-primary px-[var(--theo-control-px,0.75rem)] font-sans text-label text-primary-foreground hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Plus className="size-3.5" /> Add
             </button>

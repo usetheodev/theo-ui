@@ -8,6 +8,8 @@ import { cn } from "../lib/cn.js";
 import { auditColorScale, cssColorToHex } from "./contrast.js";
 import type { ContrastFinding } from "./contrast.js";
 import { defineTheme } from "./define.js";
+import { useDensity } from "./density.js";
+import type { Density } from "./density.js";
 import { deriveColorScale } from "./derive.js";
 import { useTheme } from "./theme-provider.js";
 import type { ColorScale, RadiusScale, Theme, ThemeMode } from "./types.js";
@@ -115,6 +117,13 @@ const RADIUS_VALUES = ["0px", "4px", "10px", "16px", "24px"] as const;
 const DEFAULT_SPACING = "4px";
 
 const SPACING_VALUES = ["3px", "4px", "5px"] as const;
+
+/** The density each spacing step implies, so one choice moves layout AND control height. */
+const SPACING_TO_DENSITY: Record<string, Density> = {
+  "3px": "compact",
+  "4px": "comfortable",
+  "5px": "spacious",
+};
 
 /**
  * Elevation presets, as whole languages rather than five separate shadows.
@@ -405,6 +414,7 @@ function ThemeEditor({
   labels: labelOverrides,
 }: ThemeEditorProps): JSX.Element {
   const { theme: active, mode, registerTheme, setTheme } = useTheme();
+  const { setDensity } = useDensity();
   const labels = useMemo(() => mergeLabels(labelOverrides), [labelOverrides]);
 
   /**
@@ -555,12 +565,24 @@ function ThemeEditor({
     [colors, radius, spacing, mode, apply, commitColors],
   );
 
+  /**
+   * Density is one decision and two mechanisms, so this control moves both.
+   *
+   * `--spacing` (a theme token) scales `p-*`, `gap-*` and `m-*`; `data-density` (the provider's own
+   * attribute) drives `--theo-control-h` / `--theo-control-px`, which is what sets the height of a
+   * control. Leaving them on separate controls meant "compact" tightened the layout and left every
+   * input at its comfortable height — half a change, and the half nobody would think to look for.
+   *
+   * They are kept as separate mechanisms deliberately: density outlives a theme, so a consumer can
+   * still drive it directly with `useDensity` without going through the editor at all.
+   */
   const onSpacingChange = useCallback(
     (value: string) => {
       setSpacing(value);
+      setDensity(SPACING_TO_DENSITY[value] ?? "comfortable");
       apply(colorsByMode, radius, value);
     },
-    [colorsByMode, radius, apply],
+    [colorsByMode, radius, apply, setDensity],
   );
 
   const onElevationChange = useCallback(
@@ -591,11 +613,12 @@ function ThemeEditor({
     setColorsByMode(origin);
     setRadius(DEFAULT_RADIUS);
     setSpacing(DEFAULT_SPACING);
+    setDensity(SPACING_TO_DENSITY[DEFAULT_SPACING] ?? "comfortable");
     setElevation("inherit");
     setMotion("inherit");
     setTypography("inherit");
     apply(origin, DEFAULT_RADIUS, DEFAULT_SPACING, "inherit", "inherit", "inherit");
-  }, [origin, apply]);
+  }, [origin, apply, setDensity]);
 
   return (
     <section
