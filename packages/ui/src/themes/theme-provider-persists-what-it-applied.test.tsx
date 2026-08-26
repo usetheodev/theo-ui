@@ -118,4 +118,26 @@ describe("ThemeProvider persists only what it actually applied (#116)", () => {
     expect(window.localStorage.getItem("theo-ui:theme:name")).toBe("devrel-desk");
   });
 
+  it("does not persist a mode the operating system chose, so defaultMode survives a reload", async () => {
+    systemPrefers(false); // system is light; the app asks for dark
+    const { unmount } = render(
+      <ThemeProvider themes={[APP_THEME]} defaultMode="dark">
+        <Inspector />
+      </ThemeProvider>,
+    );
+    await waitFor(() => expect(screen.getByTestId("mode")).toBeTruthy());
+    unmount();
+
+    // Second visit. Nothing the user decided was stored, so the app's own default must win again.
+    systemPrefers(false);
+    render(
+      <ThemeProvider themes={[APP_THEME]} defaultMode="dark" respectSystemMode={false}>
+        <Inspector />
+      </ThemeProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("mode").textContent).toBe("dark");
+    });
+  });
 });

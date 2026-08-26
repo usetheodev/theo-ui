@@ -448,6 +448,16 @@ function ThemeProvider({
   // persists normally.
   const skipFirstPersistRef = useRef(true);
 
+  // #116 — persistence is gated on an actual DECISION, not on a change.
+  //
+  // The provider's state changes for three reasons, and only one of them is a preference: the user
+  // acting, the post-mount hydration promoting what was already stored, and the operating system's
+  // `prefers-color-scheme`. The effect below used to write on all three, so a mode the OS chose
+  // landed in storage — and on the next load the hydration effect reads it, sets
+  // `userOverrodeModeRef`, and that OS-derived value then outranks the app's `defaultMode` and
+  // survives `respectSystemMode={false}`, which is the very switch an app flips to stop this.
+  const userDecidedRef = useRef(false);
+
   // Post-mount hydration: read localStorage and promote stored values to
   // state. Runs ONCE on mount. If `storageKey` is null or no value is
   // stored, this is a no-op — state stays at the SSR defaults.
@@ -539,6 +549,9 @@ function ThemeProvider({
       skipFirstPersistRef.current = false;
       return;
     }
+    // Nothing the user decided yet — see `userDecidedRef`. A hydration echo would rewrite a value
+    // that is already there, and an OS-derived mode is not a preference to remember.
+    if (!userDecidedRef.current) return;
     if (typeof window === "undefined" || !storageKey) return;
     try {
       window.localStorage.setItem(`${storageKey}:name`, themeName);
@@ -552,17 +565,25 @@ function ThemeProvider({
     }
   }, [themeName, mode, density, storageKey]);
 
-  const setTheme = useCallback((name: string) => setThemeName(name), []);
+  const setTheme = useCallback((name: string) => {
+    userDecidedRef.current = true;
+    setThemeName(name);
+  }, []);
   const setMode = useCallback((next: ThemeMode) => {
     // T5.1 / D6: fix the user preference; subsequent system changes no longer override.
     userOverrodeModeRef.current = true;
+    userDecidedRef.current = true;
     setModeState(next);
   }, []);
   const toggleMode = useCallback(() => {
     userOverrodeModeRef.current = true;
+    userDecidedRef.current = true;
     setModeState((cur) => (cur === "light" ? "dark" : "light"));
   }, []);
-  const setDensity = useCallback((next: Density) => setDensityState(next), []);
+  const setDensity = useCallback((next: Density) => {
+    userDecidedRef.current = true;
+    setDensityState(next);
+  }, []);
   const registerTheme = useCallback((theme: Theme) => {
     setThemes((cur) => {
       const idx = cur.findIndex((t) => t.name === theme.name);
