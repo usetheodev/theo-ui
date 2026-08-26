@@ -291,7 +291,7 @@ function ThemeEditor({
     >
       <header className="flex items-center justify-between gap-3">
         <div>
-          <h3 className="font-display text-title-md tracking-tight">Theme</h3>
+          <h3 className="font-display text-title-md tracking-tight">{labels.heading}</h3>
           <p className="text-body-sm text-muted-foreground">{labels.subtitle(mode)}</p>
         </div>
         <button
@@ -514,5 +514,5 @@ function buildRadius(base: string): RadiusScale {
   };
 }
 
-export { ThemeEditor, buildRadius };
+export { DEFAULT_LABELS, ThemeEditor, buildRadius };
 export type { ThemeMode };
