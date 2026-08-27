@@ -28,7 +28,7 @@ import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { assertDistPresent } from "../support/dist-gate.js";
 
 const PKG_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -58,24 +58,43 @@ assertDistPresent(distBuilt, "dist/index.js");
 describe.skipIf(!distBuilt)(
   "Contract: barrel root re-exports the consumed generic primitives",
   () => {
-    it("exports every primitive the @theokit/* packages import", async () => {
+    // Loaded once, here, rather than inside each case. Both assertions inspect the same
+    // module, and the expensive part is not the assertion — it is the dynamic import of a
+    // whole compiled React component library.
+    //
+    // That import is why this suite flaked (usetheokit/theokit-ui#124). Under vitest's 20s
+    // default it timed out four times, every occurrence on `workspace` — the branch with the
+    // most concurrent pushes and so the most contended runners — while `main` and `develop`
+    // passed. One run reported `environment 21.22s`: the environment alone outlasted the
+    // per-test budget.
+    //
+    // The 60s here is sized for what this does, not for a unit test. It is deliberately not
+    // a fix for slowness: if this import ever genuinely takes a minute that is a real defect
+    // and the ceiling should catch it. What it stops is a gate failing for a reason other
+    // than the one it measures — the message read "Test timed out", which sounds like
+    // infrastructure and invites a re-run, and a gate people learn to re-run is a gate that
+    // has stopped gating. This one measures something real: a missing symbol here is a
+    // consumer whose build is already broken.
+    let mod: Record<string, unknown>;
+
+    beforeAll(async () => {
+      mod = (await import(pathToFileURL(DIST_INDEX).href)) as Record<string, unknown>;
+    }, 60_000);
+
+    it("exports every primitive the @theokit/* packages import", () => {
       // Given the plugins import these seven symbols from '@theokit/ui',
       // When we import the built barrel,
       // Then each one must be present — a missing name is a broken consumer.
-      const mod = (await import(pathToFileURL(DIST_INDEX).href)) as Record<string, unknown>;
-
       const missing = CONSUMED_PRIMITIVES.filter((name) => mod[name] === undefined);
 
       expect(missing).toEqual([]);
     });
 
-    it("exports them as renderable values, not types erased at build time", async () => {
+    it("exports them as renderable values, not types erased at build time", () => {
       // Given a `export type { Button }` would satisfy the check above at the type
       // level while leaving nothing at runtime,
       // When we inspect each export,
       // Then every one must be a function or object (React component / namespace).
-      const mod = (await import(pathToFileURL(DIST_INDEX).href)) as Record<string, unknown>;
-
       const notRenderable = CONSUMED_PRIMITIVES.filter((name) => {
         const value = mod[name];
         return typeof value !== "function" && typeof value !== "object";
