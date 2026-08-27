@@ -411,6 +411,11 @@
 
 ### Fixed
 
+- The barrel-primitives contract gate stopped failing for a reason other than the one it
+  measures. It loaded the built barrel inside each test case, under a timeout sized for unit
+  tests, and timed out four times on the busiest branch while passing everywhere else — reporting
+  "Test timed out", which reads as infrastructure and invites a re-run. The import now happens
+  once, with a budget proportionate to loading a compiled component library (#124)
 - `@theokit/ui` can publish again. The package had no npm trusted-publisher connection, so the
   publish answered `E404 Not Found - PUT` — npm returns 404 rather than 403 for an unauthorised
   publish to a scoped package, so the error never said what was wrong. Published versions will

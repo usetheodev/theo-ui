@@ -3,9 +3,16 @@ name: CI
 on:
   pull_request:
   push:
+    # `master` used to be listed here and this repository has never had one — its branches are
+    # main, develop and workspace. A trigger naming a branch that does not exist is not an error
+    # anywhere; it simply never fires, and reads like coverage.
+    #
+    # `develop` is the branch that was missing. Both promotion legs are pull requests
+    # (workspace -> develop, develop -> main) and those are covered below, but a push that lands
+    # on develop — a back-merge, a direct correction — left no record of what develop passed.
     branches:
       - main
-      - master
+      - develop
 
 permissions:
   contents: read
@@ -39,28 +46,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-        with:
-          run_install: false
-
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: '.nvmrc'
-          cache: pnpm
-          # The cache key must change when the package manager does. setup-node keys the
-          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
-          # identical and the job restores a store the new pnpm reads as inconsistent —
-          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
-          # package.json carries `packageManager`, so including it ties the cache to the
-          # pnpm that wrote it.
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            package.json
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
+      # The install spine — Node, the package manager this repository DECLARES, a cache keyed
+      # so it cannot outlive that manager, and a frozen install. Shared because it was the
+      # same four steps in nine repositories, and because the knowledge inside them was not:
+      # theokit-sdk pinned pnpm 9.15.0 in four workflows while its manifest said 10.34.1, so
+      # every gate there validated a tree no contributor had (usetheokit/theokit-sdk#415).
+      #
+      # @v1 is a moving major and the blanket SHA-pinning policy is suppressed for it: that
+      # policy defends against a THIRD PARTY moving a ref under us, and this is the same
+      # organisation. What a SHA would buy is a guarantee we already have; what it would cost
+      # is one correction becoming nine pull requests. What the action RUNS stays pinned —
+      # every action inside it by digest, and the package manager by this repository's manifest.
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
 
       # T5.3 (community-best-practices plan, ADR-0005 cohort): install Playwright
       # Chromium so `pnpm quality:visual` runs as part of `pnpm quality:gates`.
