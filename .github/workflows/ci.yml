@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+    branches: [main, develop]
   push:
     # `master` used to be listed here and this repository has never had one — its branches are
     # main, develop and workspace. A trigger naming a branch that does not exist is not an error
@@ -24,63 +25,88 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 jobs:
-  verify:
-    name: Verify (quality gates)
+  static:
+    name: Static gates
     runs-on: ubuntu-latest
-    # 40, not 20, and the number is measured rather than picked.
-    #
-    # `quality:gates` runs twenty-five steps in series — lint, types, 1673 tests, build, contract
-    # tests, packaging, registry, bundle, contrast, a11y, visual, a Ladle build and five dogfood
-    # scaffolds. Recent runs took 7, 8, 12, 15, 15, 16 minutes, and one hit 20m26s and was killed
-    # at exactly the ceiling. A suite that grows past its own timeout reports `cancelled`, which
-    # reads like an infrastructure hiccup and is not one — I attributed two of these to runner
-    # contention before measuring.
-    #
-    # Raising the ceiling buys room; it does not make the job faster. The real fix is splitting
-    # those twenty-five steps into parallel jobs, so a red lint does not wait behind a Ladle build.
-    timeout-minutes: 40
-
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      # The install spine — Node, the package manager this repository DECLARES, a cache keyed
-      # so it cannot outlive that manager, and a frozen install. Shared because it was the
-      # same four steps in nine repositories, and because the knowledge inside them was not:
-      # theokit-sdk pinned pnpm 9.15.0 in four workflows while its manifest said 10.34.1, so
-      # every gate there validated a tree no contributor had (usetheokit/theokit-sdk#415).
-      #
-      # @v1 is a moving major and the blanket SHA-pinning policy is suppressed for it: that
-      # policy defends against a THIRD PARTY moving a ref under us, and this is the same
-      # organisation. What a SHA would buy is a guarantee we already have; what it would cost
-      # is one correction becoming nine pull requests. What the action RUNS stays pinned —
-      # every action inside it by digest, and the package manager by this repository's manifest.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
       - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - run: pnpm --filter=@theokit/ui format:check
+      - run: pnpm --filter=@theokit/ui lint:ci
+      - run: pnpm --filter=@theokit/ui validate:naming
+      - run: pnpm --filter=@theokit/ui typecheck
+      - run: pnpm --filter=@theokit/ui quality:knip
+      - run: pnpm --filter=@theokit/ui registry:check
+      - run: pnpm --filter=@theokit/ui registry:validate
+      - run: pnpm --filter=@theokit/ui quality:structure
+      - run: pnpm --filter=@theokit/ui classify:check
+      - run: pnpm --filter=@theokit/ui quality:contrast
 
-      # T5.3 (community-best-practices plan, ADR-0005 cohort): install Playwright
-      # Chromium so `pnpm quality:visual` runs as part of `pnpm quality:gates`.
-      # Linux Chromium binary is cached by the actions/setup-node step above
-      # via pnpm — no separate cache needed.
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - run: pnpm --filter=@theokit/ui test
 
-      # NO TURBO CACHE HERE, and that is a measurement rather than an omission.
-      #
-      # One was added and removed the same day. It ran correctly — restore and save both fired —
-      # and in `theokit-sdk`, where the same step was tested by disabling it on an unchanged
-      # commit, the job took 2.3 minutes with it and 2.3 minutes without. It saved nothing
-      # measurable there, and it was added here on the strength of that borrowed number rather
-      # than on one measured in this repository.
-      #
-      # The pnpm store is already cached by the setup action above, which is most likely what
-      # was doing the work all along. Worth re-testing only against a measurement, not against
-      # the intuition that a cache must help.
+  package:
+    name: Build + package contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - run: pnpm --filter=@theokit/ui build
+      - run: pnpm --filter=@theokit/ui test:contract
+      - run: pnpm --filter=@theokit/ui validate:packaged
+      - run: pnpm --filter=@theokit/ui quality:publint
+      - run: pnpm --filter=@theokit/ui quality:bundle
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ui-dist
+          path: packages/ui/dist
+          retention-days: 1
+
+  browser:
+    name: Browser + stories
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
       - name: Install Playwright Chromium
         working-directory: packages/ui
         run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm --filter=@theokit/ui quality:a11y
+      - run: pnpm --filter=@theokit/ui quality:visual
+      - run: pnpm --filter=@theokit/ui ladle:build
 
-      - name: Run quality gates
-        run: pnpm quality:gates
+  dogfood:
+    name: Dogfood scaffolds
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        with:
+          name: ui-dist
+          path: packages/ui/dist
+      - run: pnpm --filter=@theokit/ui dogfood:whiteboard
+      - run: pnpm --filter=@theokit/ui dogfood:slide
+      - run: pnpm --filter=@theokit/ui dogfood:slide-deck
+      - run: pnpm --filter=@theokit/ui dogfood:slide-rich
+      - run: pnpm --filter=@theokit/ui dogfood:v4-zero-config
+      - run: pnpm --filter=@theokit/ui dogfood:precompiled-utilities
 
   # T6.3 (agent-team-audit-fixes plan): React 19 compatibility job.
   # Overrides React to 19.x over the locked tree, then runs typecheck +
@@ -94,6 +120,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     continue-on-error: true
+    # Forward-compatibility is signal rather than a merge gate; run it once after integration
+    # instead of resolving an unlocked dependency tree for every pull request.
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: Checkout
@@ -218,7 +247,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: always()
-    needs: [verify]
+    needs: [static, unit, package, browser, dogfood]
     steps:
       - name: Report
         env:
