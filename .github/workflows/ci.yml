@@ -63,6 +63,21 @@ jobs:
       # Chromium so `pnpm quality:visual` runs as part of `pnpm quality:gates`.
       # Linux Chromium binary is cached by the actions/setup-node step above
       # via pnpm — no separate cache needed.
+
+      # Turbo's task cache. `turbo.json` declares explicit `inputs` per task and turbo folds each
+      # package's dependency hashes into its own, so a hit means the same sources produced the same
+      # task before — not that a timestamp matched. Without it the runner is cold on every push and
+      # rebuilds every package to answer a change in one of them.
+      #
+      # Measured in a sibling repository with the same setup: the job that carried the build and
+      # test went from 9.5 minutes to 2.3 on a warm cache.
+      - name: Turbo cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.job }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ github.job }}-
       - name: Install Playwright Chromium
         working-directory: packages/ui
         run: pnpm exec playwright install --with-deps chromium
@@ -187,3 +202,39 @@ jobs:
 
       - name: Test against React 19
         run: pnpm --filter=@theokit/ui run test
+
+  # The one check branch protection should require.
+  #
+  # Requiring individual jobs works only while each runs on every event. The moment a job becomes
+  # conditional — a matrix leg skipped on pull requests, a path filter, an allow-failure lane — a
+  # required check that never reports sits at "Expected — Waiting for status to be reported" and
+  # the pull request can never merge. Branch protection cannot tell "deliberately skipped" from
+  # "not reported yet". A sibling repository hit exactly that and had to revert rather than fix.
+  #
+  # A SKIPPED dependency counts as a pass; a failed or cancelled one does not. `cancelled` is
+  # checked too, or the concurrency group's own cancellations would report green.
+  #
+  # `react-19-compat` is deliberately NOT in `needs`: it is an allow-failure lane, and gating on
+  # it would turn a forward-compatibility signal into a merge blocker.
+  ci-ok:
+    name: CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs: [verify]
+    steps:
+      - name: Report
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          set -euo pipefail
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -q '"result": *"failure"'; then
+            echo "::error::a required job failed"
+            exit 1
+          fi
+          if echo "$RESULTS" | grep -q '"result": *"cancelled"'; then
+            echo "::error::a required job was cancelled"
+            exit 1
+          fi
+          echo "no required job failed or was cancelled"
