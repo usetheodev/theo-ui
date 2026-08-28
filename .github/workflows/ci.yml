@@ -64,20 +64,17 @@ jobs:
       # Linux Chromium binary is cached by the actions/setup-node step above
       # via pnpm — no separate cache needed.
 
-      # Turbo's task cache. `turbo.json` declares explicit `inputs` per task and turbo folds each
-      # package's dependency hashes into its own, so a hit means the same sources produced the same
-      # task before — not that a timestamp matched. Without it the runner is cold on every push and
-      # rebuilds every package to answer a change in one of them.
+      # NO TURBO CACHE HERE, and that is a measurement rather than an omission.
       #
-      # Measured in a sibling repository with the same setup: the job that carried the build and
-      # test went from 9.5 minutes to 2.3 on a warm cache.
-      - name: Turbo cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          path: .turbo
-          key: turbo-${{ runner.os }}-${{ github.job }}-${{ github.sha }}
-          restore-keys: |
-            turbo-${{ runner.os }}-${{ github.job }}-
+      # One was added and removed the same day. It ran correctly — restore and save both fired —
+      # and in `theokit-sdk`, where the same step was tested by disabling it on an unchanged
+      # commit, the job took 2.3 minutes with it and 2.3 minutes without. It saved nothing
+      # measurable there, and it was added here on the strength of that borrowed number rather
+      # than on one measured in this repository.
+      #
+      # The pnpm store is already cached by the setup action above, which is most likely what
+      # was doing the work all along. Worth re-testing only against a measurement, not against
+      # the intuition that a cache must help.
       - name: Install Playwright Chromium
         working-directory: packages/ui
         run: pnpm exec playwright install --with-deps chromium
