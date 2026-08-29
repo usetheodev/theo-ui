@@ -75,12 +75,20 @@ jobs:
 
   browser:
     name: Browser + stories
+    needs: package
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with: {persist-credentials: false}
       - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      # `quality:visual` reads the real `dist/components.css` rather than a fixture, because the
+      # defect it guards was in what ships. Locally `quality:gates` builds first; this job runs
+      # `quality:visual` directly, so the dist has to arrive from the job that produced it.
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        with:
+          name: ui-dist
+          path: packages/ui/dist
       - name: Install Playwright Chromium
         working-directory: packages/ui
         run: pnpm exec playwright install --with-deps chromium
