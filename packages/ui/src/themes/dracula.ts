@@ -21,9 +21,6 @@ export const dracula: Theme = {
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
-  fontUrls: [
-    "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
-  ],
   light: {
     background: "oklch(0.977 0.008 106.5)",
     foreground: "oklch(0.284 0.022 277.1)",

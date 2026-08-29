@@ -49,9 +49,6 @@ export const falconRed: Theme = {
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
-  fontUrls: [
-    "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
-  ],
   light: {
     background: "oklch(1 0 0)",
     foreground: "oklch(0.146 0 0)",

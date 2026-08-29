@@ -18,9 +18,6 @@ export const oneDark: Theme = {
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
-  fontUrls: [
-    "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
-  ],
   light: {
     background: "oklch(0.985 0 0)",
     foreground: "oklch(0.35 0.014 276.7)",
