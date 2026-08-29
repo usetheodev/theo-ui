@@ -15,9 +15,6 @@ on:
       - main
       - develop
 
-permissions:
-  contents: read
-
 concurrency:
   group: ci-${{ github.ref }}
   # A cancelled run on an integration branch leaves the commit with no verdict,
@@ -26,6 +23,8 @@ concurrency:
 
 jobs:
   static:
+    permissions:
+      contents: read
     name: Static gates
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -45,6 +44,8 @@ jobs:
       - run: pnpm --filter=@theokit/ui quality:contrast
 
   unit:
+    permissions:
+      contents: read
     name: Unit tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -55,6 +56,8 @@ jobs:
       - run: pnpm --filter=@theokit/ui test
 
   package:
+    permissions:
+      contents: read
     name: Build + package contracts
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -74,6 +77,8 @@ jobs:
           retention-days: 1
 
   browser:
+    permissions:
+      contents: read
     name: Browser + stories
     needs: package
     runs-on: ubuntu-latest
@@ -97,6 +102,8 @@ jobs:
       - run: pnpm --filter=@theokit/ui ladle:build
 
   dogfood:
+    permissions:
+      contents: read
     name: Dogfood scaffolds
     needs: package
     runs-on: ubuntu-latest
@@ -124,6 +131,8 @@ jobs:
   # `"react": ">=18.2.0"` already permits 19 numerically; this proves
   # the library actually compiles and tests against it.
   react-19-compat:
+    permissions:
+      contents: read
     name: react@19 compat (allow-failure)
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -251,6 +260,7 @@ jobs:
   # `react-19-compat` is deliberately NOT in `needs`: it is an allow-failure lane, and gating on
   # it would turn a forward-compatibility signal into a merge blocker.
   ci-ok:
+    permissions: {}
     name: CI
     runs-on: ubuntu-latest
     timeout-minutes: 5
