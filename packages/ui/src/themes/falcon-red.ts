@@ -49,9 +49,14 @@ export const falconRed: Theme = {
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
-  fontUrls: [
-    "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
-  ],
+  // No `fontUrls`: Geist and Geist Mono are self-hosted. `@theokit/ui/styles.css` imports
+  // `fonts.css`, whose six `@font-face` rules point at woff2 that ship in the package — verified
+  // in a browser, `document.fonts` reports Geist 400/500/600 loaded with no network request.
+  //
+  // The CDN <link> this used to carry was therefore redundant, and not harmless: theokit's default
+  // CSP is `style-src 'self' 'unsafe-inline'`, so the browser blocked it and logged a violation on
+  // every page load (usetheokit/theokit-ui#125). `fonts.css` already documented self-hosting as the
+  // default (HIGH-002 / D6); the decision landed in the CSS and never reached the theme registry.
   light: {
     background: "oklch(1 0 0)",
     foreground: "oklch(0.146 0 0)",
