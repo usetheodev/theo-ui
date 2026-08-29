@@ -16,14 +16,6 @@ export const auroraTerminal: Theme = {
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
-  // No `fontUrls`: Geist and Geist Mono are self-hosted. `@theokit/ui/styles.css` imports
-  // `fonts.css`, whose six `@font-face` rules point at woff2 that ship in the package — verified
-  // in a browser, `document.fonts` reports Geist 400/500/600 loaded with no network request.
-  //
-  // The CDN <link> this used to carry was therefore redundant, and not harmless: theokit's default
-  // CSP is `style-src 'self' 'unsafe-inline'`, so the browser blocked it and logged a violation on
-  // every page load (usetheokit/theokit-ui#125). `fonts.css` already documented self-hosting as the
-  // default (HIGH-002 / D6); the decision landed in the CSS and never reached the theme registry.
   light: {
     background: "oklch(0.966 0.006 264.5)",
     foreground: "oklch(0.206 0.039 265.5)",
