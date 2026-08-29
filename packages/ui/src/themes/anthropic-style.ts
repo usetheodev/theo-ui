@@ -19,9 +19,6 @@ export const anthropicStyle: Theme = {
     body: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
-  fontUrls: [
-    "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
-  ],
   light: {
     background: "oklch(0.982 0.005 106.5)",
     foreground: "oklch(0.216 0 0)",

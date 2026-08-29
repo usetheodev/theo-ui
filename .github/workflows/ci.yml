@@ -2,13 +2,18 @@ name: CI
 
 on:
   pull_request:
+    branches: [main, develop]
   push:
+    # `master` used to be listed here and this repository has never had one — its branches are
+    # main, develop and workspace. A trigger naming a branch that does not exist is not an error
+    # anywhere; it simply never fires, and reads like coverage.
+    #
+    # `develop` is the branch that was missing. Both promotion legs are pull requests
+    # (workspace -> develop, develop -> main) and those are covered below, but a push that lands
+    # on develop — a back-merge, a direct correction — left no record of what develop passed.
     branches:
       - main
-      - master
-
-permissions:
-  contents: read
+      - develop
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -17,61 +22,106 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 jobs:
-  verify:
-    name: Verify (quality gates)
+  static:
+    permissions:
+      contents: read
+    name: Static gates
     runs-on: ubuntu-latest
-    # 40, not 20, and the number is measured rather than picked.
-    #
-    # `quality:gates` runs twenty-five steps in series — lint, types, 1673 tests, build, contract
-    # tests, packaging, registry, bundle, contrast, a11y, visual, a Ladle build and five dogfood
-    # scaffolds. Recent runs took 7, 8, 12, 15, 15, 16 minutes, and one hit 20m26s and was killed
-    # at exactly the ceiling. A suite that grows past its own timeout reports `cancelled`, which
-    # reads like an infrastructure hiccup and is not one — I attributed two of these to runner
-    # contention before measuring.
-    #
-    # Raising the ceiling buys room; it does not make the job faster. The real fix is splitting
-    # those twenty-five steps into parallel jobs, so a red lint does not wait behind a Ladle build.
-    timeout-minutes: 40
-
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - run: pnpm --filter=@theokit/ui format:check
+      - run: pnpm --filter=@theokit/ui lint:ci
+      - run: pnpm --filter=@theokit/ui validate:naming
+      - run: pnpm --filter=@theokit/ui typecheck
+      - run: pnpm --filter=@theokit/ui quality:knip
+      - run: pnpm --filter=@theokit/ui registry:check
+      - run: pnpm --filter=@theokit/ui registry:validate
+      - run: pnpm --filter=@theokit/ui quality:structure
+      - run: pnpm --filter=@theokit/ui classify:check
+      - run: pnpm --filter=@theokit/ui quality:contrast
+
+  unit:
+    permissions:
+      contents: read
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - run: pnpm --filter=@theokit/ui test
+
+  package:
+    permissions:
+      contents: read
+    name: Build + package contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - run: pnpm --filter=@theokit/ui build
+      - run: pnpm --filter=@theokit/ui test:contract
+      - run: pnpm --filter=@theokit/ui validate:packaged
+      - run: pnpm --filter=@theokit/ui quality:publint
+      - run: pnpm --filter=@theokit/ui quality:bundle
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          persist-credentials: false
+          name: ui-dist
+          path: packages/ui/dist
+          retention-days: 1
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+  browser:
+    permissions:
+      contents: read
+    name: Browser + stories
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      # `quality:visual` reads the real `dist/components.css` rather than a fixture, because the
+      # defect it guards was in what ships. Locally `quality:gates` builds first; this job runs
+      # `quality:visual` directly, so the dist has to arrive from the job that produced it.
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
-          run_install: false
-
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: '.nvmrc'
-          cache: pnpm
-          # The cache key must change when the package manager does. setup-node keys the
-          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
-          # identical and the job restores a store the new pnpm reads as inconsistent —
-          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
-          # package.json carries `packageManager`, so including it ties the cache to the
-          # pnpm that wrote it.
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            package.json
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      # T5.3 (community-best-practices plan, ADR-0005 cohort): install Playwright
-      # Chromium so `pnpm quality:visual` runs as part of `pnpm quality:gates`.
-      # Linux Chromium binary is cached by the actions/setup-node step above
-      # via pnpm — no separate cache needed.
+          name: ui-dist
+          path: packages/ui/dist
       - name: Install Playwright Chromium
         working-directory: packages/ui
         run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm --filter=@theokit/ui quality:a11y
+      - run: pnpm --filter=@theokit/ui quality:visual
+      - run: pnpm --filter=@theokit/ui ladle:build
 
-      - name: Run quality gates
-        run: pnpm quality:gates
+  dogfood:
+    permissions:
+      contents: read
+    name: Dogfood scaffolds
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        with:
+          name: ui-dist
+          path: packages/ui/dist
+      - run: pnpm --filter=@theokit/ui dogfood:whiteboard
+      - run: pnpm --filter=@theokit/ui dogfood:slide
+      - run: pnpm --filter=@theokit/ui dogfood:slide-deck
+      - run: pnpm --filter=@theokit/ui dogfood:slide-rich
+      - run: pnpm --filter=@theokit/ui dogfood:v4-zero-config
+      - run: pnpm --filter=@theokit/ui dogfood:precompiled-utilities
 
   # T6.3 (agent-team-audit-fixes plan): React 19 compatibility job.
   # Overrides React to 19.x over the locked tree, then runs typecheck +
@@ -81,10 +131,15 @@ jobs:
   # `"react": ">=18.2.0"` already permits 19 numerically; this proves
   # the library actually compiles and tests against it.
   react-19-compat:
+    permissions:
+      contents: read
     name: react@19 compat (allow-failure)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     continue-on-error: true
+    # Forward-compatibility is signal rather than a merge gate; run it once after integration
+    # instead of resolving an unlocked dependency tree for every pull request.
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: Checkout
@@ -190,3 +245,40 @@ jobs:
 
       - name: Test against React 19
         run: pnpm --filter=@theokit/ui run test
+
+  # The one check branch protection should require.
+  #
+  # Requiring individual jobs works only while each runs on every event. The moment a job becomes
+  # conditional — a matrix leg skipped on pull requests, a path filter, an allow-failure lane — a
+  # required check that never reports sits at "Expected — Waiting for status to be reported" and
+  # the pull request can never merge. Branch protection cannot tell "deliberately skipped" from
+  # "not reported yet". A sibling repository hit exactly that and had to revert rather than fix.
+  #
+  # A SKIPPED dependency counts as a pass; a failed or cancelled one does not. `cancelled` is
+  # checked too, or the concurrency group's own cancellations would report green.
+  #
+  # `react-19-compat` is deliberately NOT in `needs`: it is an allow-failure lane, and gating on
+  # it would turn a forward-compatibility signal into a merge blocker.
+  ci-ok:
+    permissions: {}
+    name: CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs: [static, unit, package, browser, dogfood]
+    steps:
+      - name: Report
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          set -euo pipefail
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -q '"result": *"failure"'; then
+            echo "::error::a required job failed"
+            exit 1
+          fi
+          if echo "$RESULTS" | grep -q '"result": *"cancelled"'; then
+            echo "::error::a required job was cancelled"
+            exit 1
+          fi
+          echo "no required job failed or was cancelled"

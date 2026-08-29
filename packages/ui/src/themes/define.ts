@@ -82,9 +82,16 @@ export interface DefineThemeInput {
    */
   fonts?: Partial<ThemeFonts>;
   /**
-   * Replace the default remote font URLs. Pass an empty array to skip
-   * font fetching entirely. Defaults to `violetForge.fontUrls` when
-   * omitted (so consumers that don't care still get Geist preloaded).
+   * Remote stylesheets to load for this theme's fonts, injected as
+   * `<link rel="stylesheet">`.
+   *
+   * Omit it, which is what every built-in theme except `classicPaper` now does: Geist and Geist
+   * Mono are self-hosted by `@theokit/ui/styles.css`, so no request is needed and none is made.
+   * This used to default to `violetForge.fontUrls` and fetch from a CDN — redundant, and blocked
+   * by theokit's default `style-src 'self' 'unsafe-inline'` (#125).
+   *
+   * Supplying one is a deliberate choice with a consequence: the consumer must widen their CSP to
+   * admit the stylesheet host in `style-src` and the font host in `font-src`.
    */
   fontUrls?: string[];
   /**
@@ -166,7 +173,9 @@ export function defineTheme(input: DefineThemeInput): Theme {
     fonts: { ...violetForge.fonts, ...fontsOverride },
     light: { ...violetForge.light, ...lightOverride },
     dark: { ...violetForge.dark, ...darkOverride },
-    fontUrls: input.fontUrls ?? violetForge.fontUrls,
+    // No `?? violetForge.fontUrls` any more: Violet Forge no longer carries any, so the
+    // fallback resolved to `undefined` while reading as though a default existed (#125).
+    fontUrls: input.fontUrls,
   };
 
   // Carried through only when present, so `theme.radius` stays `undefined` rather than becoming an

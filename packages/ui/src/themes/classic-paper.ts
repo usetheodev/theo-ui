@@ -24,6 +24,11 @@ export const classicPaper: Theme = {
     body: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   },
+  // The one theme that still fetches. Inter and JetBrains Mono are NOT among the six woff2 the
+  // package self-hosts — those are Geist and Geist Mono — so dropping this would leave the
+  // theme on system fonts. A consumer choosing it must widen `style-src` AND `font-src`, since
+  // theokit's default CSP admits neither host (#125). Every other built-in theme is self-hosted
+  // and needs no such change.
   fontUrls: [
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap",
   ],
