@@ -137,7 +137,7 @@ jobs:
       # 11.9.0 is the newest npm that clears the OIDC floor and avoids both. Measured in
       # theokit-di; see that repository's release.yml for the numbers.
       - name: Install an npm that speaks OIDC (>= 11.5.1) but tolerates the publish flags
-        uses: usetheokit/shared-workflows/actions/npm-oidc@v1 # zizmor: ignore[unpinned-uses]
+        uses: usetheokit/shared-workflows/actions/npm-oidc@b4fe772314cc16e1faa8a3f0f19ea13b9bddcb15 # v1
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
