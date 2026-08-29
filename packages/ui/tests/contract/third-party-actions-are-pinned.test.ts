@@ -15,7 +15,7 @@
  * So the narrow part of the rule moves here, where it can fail. An exemption whose remaining
  * scope nothing verifies is an exemption that quietly becomes total.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
