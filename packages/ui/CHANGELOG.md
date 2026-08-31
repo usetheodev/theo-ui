@@ -440,6 +440,7 @@
 ## [Unreleased]
 
 ### Added
+- **ci:** `Promotion gate` refuses a pull request into `develop` that does not come from this repository's own `workspace`. `git-safety.md` has always said so and `validate-command.sh:245` has always blocked it — for a `git merge` typed locally, which is not how any of this repository's 45 promotions landed (usetheokit/theokit#606)
 
 - `space` and `motion.stagger` on `Theme`, so every token the package declares can be set through
   the API. The thirteen `--space-*` steps and `--stagger` were declared in `tokens.css` with no
