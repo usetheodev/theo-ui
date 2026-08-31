@@ -1,5 +1,62 @@
 # Changelog
 
+## 1.10.2
+
+### Patch Changes
+
+- 49fc15b: Built-in themes no longer inject a `<link>` to Google Fonts.
+
+  Ten of the eleven use Geist and Geist Mono, which this package already self-hosts: `styles.css`
+  imports `fonts.css`, whose six `@font-face` rules point at woff2 that ship in the tarball. The CDN
+  link was therefore redundant — and not harmless, because theokit's default CSP is
+  `style-src 'self' 'unsafe-inline'`, so the browser blocked it and logged a violation on every page
+  load.
+
+  Verified in a browser rather than by reading the bundle: with the link blocked, `document.fonts`
+  already reported Geist 400/500/600 `loaded` and `body` computed to `Geist, -apple-system, …`. The
+  fonts were arriving from the package the whole time; the request bought nothing.
+
+  `fonts.css` had documented self-hosting as the default since HIGH-002 / D6. The decision landed in
+  the CSS and never reached the theme registry.
+
+  `classicPaper` keeps its `fontUrls`: Inter and JetBrains Mono are not among the self-hosted faces,
+  so dropping them would leave that theme on system fonts. A consumer choosing it must widen both
+  `style-src` and `font-src`, and the theme now says so.
+
+  Also removed a `fontUrls: input.fontUrls ?? violetForge.fontUrls` fallback in `defineTheme` that
+  resolved to `undefined` once Violet Forge stopped carrying any, while reading as though a default
+  existed.
+
+- 741e426: O gate de contrato do barrel deixa de falhar por um motivo diferente do que mede.
+
+  Cada um dos dois casos carregava o barrel compilado por conta própria, sob o timeout que o vitest
+  dimensiona para testes unitários. Sob contenção de runner isso estourava: quatro falhas, todas no
+  branch com mais pushes simultâneos, enquanto os demais passavam — e a mensagem dizia "Test timed
+  out", que soa a infraestrutura e convida a re-executar em vez de olhar. Um gate que as pessoas
+  aprendem a re-executar deixou de ser um gate, e este mede algo real: um símbolo em falta aqui é um
+  consumidor com o build já partido.
+
+  O import passa a acontecer uma vez, com um teto proporcional ao que ele faz. O teto não existe para
+  acomodar lentidão — se este import passar mesmo a demorar um minuto, isso é um defeito e o teto
+  apanha-o.
+
+## 1.10.1
+
+### Patch Changes
+
+- e80503a: O release deixa de precisar de um gesto manual para os seus próprios testes correrem.
+
+  A PR "Version Packages" nascia bloqueada: o GitHub não inicia workflow runs a partir de eventos
+  autorados por `GITHUB_TOKEN` — senão um workflow disparava-se a si próprio em ciclo — e a PR
+  chegava com nenhum dos checks obrigatórios a correr, sem forma de os satisfazer. Alguém tinha de
+  a fechar e reabrir para os disparar como evento humano, em todos os releases.
+
+  O workflow passa a emitir um token efémero de uma GitHub App. O que isso custa está dito onde é
+  lido: a chave privada da App é um segredo de longa duração, menor que o token pessoal que isto
+  evita, e a publicação no npm continua a ser OIDC sem token nenhum.
+
+- 0103373: `ThemeProvider` no longer stores a theme or a mode it never applied. An app that ships its own theme kept its palette on the second visit instead of falling back to the kit's light one, and `respectSystemMode={false}` now actually prevents the operating system from deciding the mode. Two causes, fixed independently: state that disagreed with the theme on screen, and persistence that fired on any state change rather than on a human decision.
+
 ## 1.10.0
 
 ### Minor Changes
