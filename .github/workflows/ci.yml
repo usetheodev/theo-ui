@@ -156,25 +156,23 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      # `@v1` is a moving ref by design — a policy fix in shared-workflows must reach every
+      # caller without nine pull requests, which is the reason that repository exists. What the
+      # action RUNS stays pinned: every action inside it by digest, and the package manager by
+      # this repository's manifest.
+      #
+      # It replaces the pnpm/setup-node pair verbatim, including the part most likely to be lost
+      # in a hand rewrite: `cache-dependency-path` lists `package.json` beside `pnpm-lock.yaml`,
+      # because setup-node keys the pnpm store on the lockfile alone — so a pnpm 9 → 10 bump
+      # leaves the key identical and the job restores a store the new pnpm reads as inconsistent
+      # (`ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list).
+      #
+      # `install: false` because this job does its OWN install below, deliberately and
+      # differently. A frozen install here would resolve the tree twice and the second one would
+      # undo the first.
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
         with:
-          run_install: false
-
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: '.nvmrc'
-          cache: pnpm
-          # The cache key must change when the package manager does. setup-node keys the
-          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
-          # identical and the job restores a store the new pnpm reads as inconsistent —
-          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
-          # package.json carries `packageManager`, so including it ties the cache to the
-          # pnpm that wrote it.
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            package.json
+          install: 'false'
 
       # React 19 is pinned into package.json and BOTH the lockfile and node_modules are
       # removed, so the tree resolves from scratch with the overrides already in place.
