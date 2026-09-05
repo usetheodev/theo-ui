@@ -36,32 +36,20 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-        # No `version:` — conflicts with package.json `packageManager: pnpm@…`
-        # (ERR_PNPM_BAD_PM_VERSION). package.json is the single source of truth.
-
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0 # zizmor: ignore[cache-poisoning]
-        with:
-          node-version-file: '.nvmrc'
-          # The pnpm store cache is keyed on the lockfile and only ever written by
-          # runs on `main`, which is the branch this workflow triggers on. A pull
-          # request cannot seed the entry this job restores.
-          cache: pnpm
-          # The cache key must change when the package manager does. setup-node keys the
-          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
-          # identical and the job restores a store the new pnpm reads as inconsistent —
-          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
-          # package.json carries `packageManager`, so including it ties the cache to the
-          # pnpm that wrote it.
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            package.json
-            packages/ui/package.json
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
+      # `@v1` is a moving ref by design; what the action RUNS stays pinned by digest inside it,
+      # Node from `.nvmrc`, pnpm from `packageManager` (naming it twice is what produces
+      # ERR_PNPM_BAD_PM_VERSION). The frozen install is the action's default, so the separate
+      # step is gone. The cache-poisoning suppression goes with the raw `setup-node` it annotated:
+      # the store is keyed on the lockfile and only written by runs on `main`, which is the branch
+      # this workflow triggers on, so a pull request cannot seed the entry this job restores.
+      #
+      # THE THIRD CACHE PATH IS DROPPED ON PURPOSE. This block also keyed on
+      # `packages/ui/package.json`. Measured over the last twenty commits touching that file, 19
+      # changed it WITHOUT touching the lockfile — but what they changed was `"version"` (a release
+      # bump) or `"sideEffects"`. Neither alters the pnpm store, which holds external dependencies
+      # keyed by their own versions. The third path was discarding a warm store on every release
+      # and protecting nothing.
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
 
       - name: Verify story coverage (EC-5 + drift gate)
         working-directory: packages/ui

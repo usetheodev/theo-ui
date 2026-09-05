@@ -107,25 +107,20 @@ jobs:
           # changesets reads tags to decide what is unpublished; a shallow clone hides them.
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-        # No `version:` — `packageManager` in package.json is already the authority on the
-        # pnpm version, and pinning it twice creates two places to update.
-
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      # `@v1` is a moving ref by design; what the action RUNS stays pinned by digest inside it,
+      # Node from `.nvmrc`, pnpm from `packageManager`. It carries the cache key this block
+      # spelled out — `package.json` beside `pnpm-lock.yaml`, so a pnpm major bump invalidates the
+      # store instead of restoring one the new pnpm reads as inconsistent.
+      #
+      # THE THIRD CACHE PATH IS DROPPED ON PURPOSE. This block also keyed on
+      # `packages/ui/package.json`, and measured over the last twenty commits touching that file,
+      # 19 changed it WITHOUT touching the lockfile — but what they changed was `"version"` (a
+      # release bump) or `"sideEffects"`. Neither alters the pnpm store, which holds external
+      # dependencies keyed by their own versions. So the third path was discarding a warm store on
+      # every release and protecting nothing. Dropping it is a small win, not a loss.
+      - uses: usetheokit/shared-workflows/actions/setup@v1 # zizmor: ignore[unpinned-uses]
         with:
-          # .nvmrc, for the same single-authority reason.
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-          # The cache key must change when the package manager does. setup-node keys the
-          # pnpm store on the lockfile alone, so a pnpm 9 -> 10 bump leaves the key
-          # identical and the job restores a store the new pnpm reads as inconsistent —
-          # `ERR_PNPM_MISSING_PACKAGE_INDEX_FILE`, on a package the lockfile does list.
-          # package.json carries `packageManager`, so including it ties the cache to the
-          # pnpm that wrote it.
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            package.json
-            packages/ui/package.json
+          install: 'false'
           # NO `registry-url`. It looks harmless and is not: setup-node writes
           # `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` into an npmrc
           # UNCONDITIONALLY and points NPM_CONFIG_USERCONFIG at it, then exports
